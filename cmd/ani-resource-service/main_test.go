@@ -60,6 +60,7 @@ func TestRuntimeLoggerIncludesProcessIdentityAndSource(t *testing.T) {
 }
 
 func TestMainProcessHandlesSignalAndClosesListeners(t *testing.T) {
+	tlsFixture := testenv.NewServiceTLS(t)
 	fixture := testenv.NewDatabase(t)
 	provider := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { http.Error(w, "unavailable", 503) }))
 	defer provider.Close()
@@ -92,6 +93,10 @@ func TestMainProcessHandlesSignalAndClosesListeners(t *testing.T) {
 	process.Stdout = &stdout
 	process.Stderr = &stderr
 	process.Env = runtimeEnvironment(
+		"ANI_NETWORK_CLIENT_CA="+tlsFixture.CAFile,
+		"ANI_NETWORK_TLS_CERT="+tlsFixture.CertFile,
+		"ANI_NETWORK_TLS_KEY="+tlsFixture.KeyFile,
+		"ANI_NETWORK_MODE=full",
 		"ANI_NETWORK_DATABASE_DSN="+fixture.RuntimeDSN,
 		"ANI_NETWORK_KUBECONFIG="+kubeconfig,
 		"ANI_NETWORK_CLUSTER_ID=test-cluster",
@@ -117,7 +122,7 @@ func TestMainProcessHandlesSignalAndClosesListeners(t *testing.T) {
 	})
 
 	waitForHTTP(t, "http://"+adminAddress+"/readyz")
-	assertProductionGRPCHealth(t, grpcAddress)
+	assertProductionGRPCBoundary(t, grpcAddress, tlsFixture.Client)
 	if err := process.Process.Signal(os.Interrupt); err != nil {
 		t.Fatalf("send interrupt: %v", err)
 	}

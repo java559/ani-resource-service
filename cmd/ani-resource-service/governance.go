@@ -8,7 +8,6 @@ import (
 	"time"
 
 	kratos "github.com/go-kratos/kratos/v3"
-	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/google/uuid"
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
@@ -85,23 +84,23 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	configured = true
 	defer func() {
 		if err := observability.Shutdown(context.Background()); err != nil {
 			logger.Error("observability shutdown", "error", err)
 		}
 	}()
 	middlewares := observability.ServerMiddleware(logger)
-	gs := kratosgrpc.NewServer(kratosgrpc.Network(bc.Server.Grpc.Network), kratosgrpc.Address(bc.Server.Grpc.Addr),
-		kratosgrpc.Timeout(bc.Server.Grpc.Timeout.AsDuration()), kratosgrpc.TLSConfig(tlsConfig),
-		kratosgrpc.UnaryInterceptor(server.GovernanceUnary()), kratosgrpc.StreamInterceptor(server.DenyGovernanceStreams),
-		kratosgrpc.DisableReflection(), kratosgrpc.Middleware(middlewares...))
+	gs, err := server.NewGRPCServer(bc.Server.Grpc, readiness, tlsConfig, false, middlewares...)
+	if err != nil {
+		return err
+	}
 	networkv1.RegisterNetworkServiceServer(gs, networkService.NewNetworkService(networkUC))
 	networkv1.RegisterTenantEgressServiceServer(gs, networkService.NewTenantEgressService(egress))
 	networkv1.RegisterTenantLoadBalancerServiceServer(gs, networkService.NewTenantLoadBalancerService(lbs))
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(gs, images.tenant)
 	}
+	configured = true
 	admin := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
 	return kratos.New(kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Logger(logger),
 		kratos.Server(gs, admin, execution),

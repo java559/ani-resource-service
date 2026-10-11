@@ -1,6 +1,14 @@
 # Network 执行状态
 
-更新日期：2026-10-10。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+更新日期：2026-10-11。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+
+## 2026-10-11：Gov → Resource 调用规范收敛
+
+本批只修改 Resource 和 Governance。full、governance、vpc-read 的内部业务 gRPC 共用 TLS 1.3/mTLS 构造，严格校验已登记 SAN、可信 metadata/Attribution 与精确 RPC 允许清单；vpc-read 只允许 GetVPC。既有 Network 25 + Image 11 RPC、业务持久化/幂等与 Image 平台只读目录不扩大；调用登记见 [governance-calls](../specs/governance-calls.md)。full 不再提供明文业务入口，候选部署必须有合规证书，admin `/readyz` 保持。
+
+两仓 `codex/res-gov-call-rules` 的基线分别为 Resource `b258907ac8ac2071f909ae116a0f2839b2d7f55f`、Governance `8724a32ab7dda903e1c67def28ad206a06d09c44`，验收快照时尚未提交/推送；用户随后授权将两仓相关修改提交并推送 main，实际发布版本以 Git 历史和远端引用为准。未部署，Resource 主工作区的 Image 清理材料保持。本轮 Ubuntu 定向接收端/进程/调用端 race、两仓生产入口编译与 Network、Image 联合真实业务链路通过；Provider/Harbor 在外部边界使用替身，真实数据面和生产验收未执行。具体命令、日志入口、构建传输失败及清理边界统一记录在 [Governance S2S-RES-01](https://github.com/zhangzhe-ctrl/ani-governance/blob/main/docs/interface-integration-register.md#s2s-res-01)，不重复验收台账；源码发布不代表部署或真实 Provider 验收。
+
+提交前 Ubuntu 完整 `make verify` 已执行，**FAIL**：生成/边界/故障构建/tidy 与其余单元包通过，但 5 个旧 LB 否定断言与当前合同冲突；固定远端 main 基线独立复现相同失败。本批未修改该业务包或放宽测试，原失败保留。被中断的 vet、build、模块校验与 Git 差异检查另行完成并通过；具体失败、基线 CI 和命令统一见上述 Governance 记录。发布后的 CI 尚需按对应提交判定，不称全仓门禁已绿。
 
 ## 2026-10-10：固定三规格、多监听器与 VPC 预设后端
 
