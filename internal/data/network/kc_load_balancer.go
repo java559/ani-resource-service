@@ -22,6 +22,12 @@ import (
 var lbGateways = schema.GroupVersionResource{Group: "gateway.networking.k8s.io", Version: "v1", Resource: "gateways"}
 var lbRoutes = schema.GroupVersionResource{Group: "gateway.networking.k8s.io", Version: "v1", Resource: "httproutes"}
 var lbBackends = schema.GroupVersionResource{Group: "gateway.envoyproxy.io", Version: "v1alpha1", Resource: "backends"}
+var lbTCPRoutes = schema.GroupVersionResource{Group: lbRoutes.Group, Version: "v1alpha2", Resource: "tcproutes"}
+var lbUDPRoutes = schema.GroupVersionResource{Group: lbRoutes.Group, Version: "v1alpha2", Resource: "udproutes"}
+var lbClientPolicies = schema.GroupVersionResource{Group: lbBackends.Group, Version: "v1alpha1", Resource: "clienttrafficpolicies"}
+var lbPatchPolicies = schema.GroupVersionResource{Group: lbBackends.Group, Version: "v1alpha1", Resource: "envoypatchpolicies"}
+var lbSecrets = schema.GroupVersionResource{Version: "v1", Resource: "secrets"}
+var lbExtendedObservationGVRs = []schema.GroupVersionResource{lbTCPRoutes, lbUDPRoutes, lbClientPolicies, lbPatchPolicies}
 var lbPolicies = schema.GroupVersionResource{Group: "gateway.envoyproxy.io", Version: "v1alpha1", Resource: "backendtrafficpolicies"}
 var lbDeployments = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}
 var lbReplicaSets = schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "replicasets"}
@@ -38,6 +44,14 @@ func lbGVR(kind string) schema.GroupVersionResource {
 		return lbGateways
 	case "route":
 		return lbRoutes
+	case "tcp_route":
+		return lbTCPRoutes
+	case "udp_route":
+		return lbUDPRoutes
+	case "client_policy":
+		return lbClientPolicies
+	case "patch_policy":
+		return lbPatchPolicies
 	case "policy":
 		return lbPolicies
 	case "backend":
@@ -51,6 +65,14 @@ func lbKind(kind string) string {
 		return "Gateway"
 	case "route":
 		return "HTTPRoute"
+	case "tcp_route":
+		return "TCPRoute"
+	case "udp_route":
+		return "UDPRoute"
+	case "client_policy":
+		return "ClientTrafficPolicy"
+	case "patch_policy":
+		return "EnvoyPatchPolicy"
 	case "policy":
 		return "BackendTrafficPolicy"
 	case "backend":
@@ -143,7 +165,7 @@ func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalanc
 		}
 		listeners := []any{}
 		for _, listener := range biz.EffectiveLoadBalancerListeners(l) {
-			listeners = append(listeners, map[string]any{"name": listener.Name, "protocol": "HTTP", "port": int64(listener.Port), "allowedRoutes": map[string]any{"namespaces": map[string]any{"from": "Same"}}})
+			listeners = append(listeners, lbGatewayListener(listener))
 		}
 		spec = map[string]any{"gatewayClassName": class, "infrastructure": map[string]any{"annotations": a}, "listeners": listeners}
 	case "backend":
@@ -153,7 +175,7 @@ func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalanc
 				spec = map[string]any{"type": "Endpoints", "endpoints": []any{map[string]any{"ip": map[string]any{"address": m.Address, "port": int64(m.Port)}}}}
 			}
 		}
-	case "route":
+	case "route", "tcp_route", "udp_route":
 		listener := lbComponentListener(r.work, c)
 		refs := []any{}
 		for _, m := range listener.Backends {
@@ -165,19 +187,29 @@ func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalanc
 				}
 			}
 		}
-		rule := map[string]any{"matches": []any{map[string]any{"path": map[string]any{"type": "PathPrefix", "value": "/"}}}}
-		// No legitimate targets produces the Gateway API's no-backend response.
-		// It never falls back to the old IP or a default service.
-		if len(refs) > 0 {
-			rule["backendRefs"] = refs
+		rule := lbRouteRule(listener, refs)
+		if listener.Parameters.HTTPSRedirectStatusCode != 0 {
+			var port uint32
+			for _, target := range biz.EffectiveLoadBalancerListeners(l) {
+				if target.Protocol == "HTTPS" {
+					port = target.Port
+					if port == 443 {
+						break
+					}
+				}
+			}
+			rule["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["port"] = int64(port)
 		}
+
 		spec = map[string]any{"parentRefs": []any{map[string]any{"group": lbGateways.Group, "kind": "Gateway", "name": r.binding.ProviderName, "sectionName": listener.Name}}, "rules": []any{rule}}
 	case "policy":
-		h := lbComponentListener(r.work, c).Health
-		spec = map[string]any{"targetRefs": []any{map[string]any{"group": lbRoutes.Group, "kind": "HTTPRoute", "name": lbListenerRouteName(r.work, c.ListenerID)}}, "loadBalancer": map[string]any{"type": "RoundRobin"}, "healthCheck": map[string]any{"panicThreshold": int64(0), "active": map[string]any{"type": "TCP", "interval": fmt.Sprintf("%ds", h.IntervalSeconds), "timeout": fmt.Sprintf("%ds", h.TimeoutSeconds), "unhealthyThreshold": int64(h.UnhealthyThreshold), "healthyThreshold": int64(h.HealthyThreshold), "tcp": map[string]any{}}}}
-		if h.Port != 0 {
-			spec["healthCheck"].(map[string]any)["active"].(map[string]any)["overrides"] = map[string]any{"port": int64(h.Port)}
-		}
+		spec = lbBackendPolicy(r, c)
+	case "client_policy":
+		listener := lbComponentListener(r.work, c)
+		spec = map[string]any{"targetRefs": []any{map[string]any{"group": lbGateways.Group, "kind": "Gateway", "name": r.binding.ProviderName, "sectionName": listener.Name}}, "connection": map[string]any{"connectionLimit": map[string]any{"value": int64(listener.Parameters.MaxConnections)}}}
+	case "patch_policy":
+		spec = lbUDPHealthPolicy(r, c)
+
 	}
 	gvr := lbGVR(c.Kind)
 	return &unstructured.Unstructured{Object: map[string]any{"apiVersion": gvr.Group + "/" + gvr.Version, "kind": lbKind(c.Kind), "metadata": map[string]any{"name": c.Name, "namespace": r.binding.Namespace, "labels": map[string]any{ownerLabel: "ani-network-service", tenantLabel: r.work.Resource.TenantID, resourceLabel: r.work.Resource.ID, bindingLabel: c.ID}, "annotations": map[string]any{lbVersionAnnotation: strconv.FormatInt(version, 10)}}, "spec": spec}}
@@ -234,8 +266,12 @@ func lbObjectReady(obj *unstructured.Unstructured, c biz.LoadBalancerComponent, 
 		}
 		return len(names) == 0 && lbConditions(conditions, obj.GetGeneration(), "Accepted", "Programmed")
 	}
+	if c.Kind == "patch_policy" {
+		conditions, _, _ := unstructured.NestedSlice(obj.Object, "status", "conditions")
+		return lbConditions(conditions, obj.GetGeneration(), "Accepted", "Programmed")
+	}
 	field, refField := "parents", "parentRef"
-	if c.Kind == "policy" {
+	if c.Kind == "policy" || c.Kind == "client_policy" {
 		field, refField = "ancestors", "ancestorRef"
 	}
 	entries, _, _ := unstructured.NestedSlice(obj.Object, "status", field)
@@ -252,11 +288,11 @@ func lbObjectReady(obj *unstructured.Unstructured, c biz.LoadBalancerComponent, 
 		if ref["name"] != gateway || ns != namespace || ref["kind"] != "Gateway" || ref["group"] != lbGateways.Group {
 			continue
 		}
-		if c.Kind == "route" && c.ListenerName != "" && ref["sectionName"] != c.ListenerName {
+		if biz.LoadBalancerIsRoute(c.Kind) && c.ListenerName != "" && ref["sectionName"] != c.ListenerName {
 			continue
 		}
 		conditions, _, _ := unstructured.NestedSlice(e, "conditions")
-		if c.Kind == "policy" {
+		if c.Kind == "policy" || c.Kind == "client_policy" {
 			return lbConditions(conditions, obj.GetGeneration(), "Accepted")
 		}
 		return lbConditions(conditions, obj.GetGeneration(), "Accepted", "ResolvedRefs")
@@ -326,6 +362,23 @@ func (p *KCProvider) observeLoadBalancerOnce(ctx context.Context, w biz.Work, re
 		return o, readFailure(err)
 	}
 	resources := []schema.GroupVersionResource{kcVPCs, kcSubnets, pods, observationGVRs[3], observationGVRs[4], kcEIPs, kcSnats, kcNats, kcServices, lbGateways, lbBackends, lbRoutes, lbPolicies, lbDeployments, lbReplicaSets, lbEndpointSlices}
+	for _, c := range w.Resource.LoadBalancer.Components {
+		gvr := lbGVR(c.Kind)
+		known := false
+		for _, existing := range resources {
+			known = known || existing == gvr
+		}
+		if !known {
+			resources = append(resources, gvr)
+		}
+	}
+	for _, listener := range biz.EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer) {
+		if w.Resource.State != biz.Deleting && w.Resource.State != biz.Deleted && listener.Parameters.Certificate != nil {
+			if err := p.validateLBCertificate(ctx, r, listener); err != nil {
+				return o, err
+			}
+		}
+	}
 	var view *auditView
 	keys := []string{"load-balancer:" + r.binding.Namespace + "/" + w.Resource.ID, "uid:" + r.binding.ProviderUid, "lb-capability"}
 	if p.observation != nil && p.loadBalancerInstallation != nil {
@@ -534,7 +587,7 @@ func (p *KCProvider) MutateLoadBalancer(ctx context.Context, w biz.Work, c biz.L
 			v.Deleting = true
 			return v, nil
 		}
-		if action != "update" || (c.Kind != "route" && c.Kind != "policy" && c.Kind != "gateway") {
+		if action != "update" || (!biz.LoadBalancerIsRoute(c.Kind) && c.Kind != "policy" && c.Kind != "client_policy" && c.Kind != "patch_policy" && c.Kind != "gateway") {
 			return v, &biz.ProviderError{Kind: biz.ProviderConflict}
 		}
 		annotations := obj.GetAnnotations()
@@ -591,7 +644,7 @@ func lbComponentListener(w biz.Work, c biz.LoadBalancerComponent) biz.LoadBalanc
 }
 func lbListenerRouteName(w biz.Work, id string) string {
 	for _, c := range w.Resource.LoadBalancer.Components {
-		if c.Kind == "route" && c.ListenerID == id && !c.Deleted {
+		if biz.LoadBalancerIsRoute(c.Kind) && c.ListenerID == id && !c.Deleted && c.Kind == biz.LoadBalancerRouteKind(lbComponentListener(w, c).Protocol) {
 			return c.Name
 		}
 	}

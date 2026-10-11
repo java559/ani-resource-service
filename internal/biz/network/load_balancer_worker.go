@@ -111,10 +111,15 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 				break
 			}
 			for _, c := range work.Resource.LoadBalancer.Components {
-				retiredListener := (c.Kind == "route" || c.Kind == "policy") && !lbDesiredListener(work, c.ListenerID)
+				retiredListener := c.ListenerID != "" && !lbDesiredListenerComponent(work, c)
 				selectedKind := c.Kind
+				if LoadBalancerIsRoute(c.Kind) {
+					selectedKind = "route"
+				} else if c.Kind == "client_policy" || c.Kind == "patch_policy" {
+					selectedKind = "policy"
+				}
 				if retiredListener && !deleting {
-					selectedKind = "retired_" + c.Kind
+					selectedKind = "retired_" + selectedKind
 				}
 				if selectedKind != kind {
 					continue
@@ -293,7 +298,7 @@ func lbDesiredMember(w Work, id string) bool {
 func lbRouteCurrent(w Work, o LoadBalancerObservation) bool {
 	found := false
 	for _, c := range w.Resource.LoadBalancer.Components {
-		if c.Kind == "route" && !c.Deleted && lbDesiredListener(w, c.ListenerID) {
+		if LoadBalancerIsRoute(c.Kind) && !c.Deleted && lbDesiredListenerComponent(w, c) {
 			found = true
 			v, ok := lbComponentObservation(o, c.ID)
 			if !ok || !v.Exists || !v.Matches || !v.Ready {
@@ -315,3 +320,16 @@ func lbDesiredListener(w Work, id string) bool {
 
 // Keep the contract explicit: configuration observations provide no continuous
 // application health source. The repository always leaves data_plane unknown.
+
+func lbDesiredListenerComponent(w Work, c LoadBalancerComponent) bool {
+	for _, l := range EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer) {
+		if l.ID == c.ListenerID {
+			for _, kind := range LoadBalancerListenerComponentKinds(l) {
+				if c.Kind == kind {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}

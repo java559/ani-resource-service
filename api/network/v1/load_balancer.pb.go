@@ -80,6 +80,10 @@ type LoadBalancerListenerProtocol int32
 const (
 	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED LoadBalancerListenerProtocol = 0
 	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTP        LoadBalancerListenerProtocol = 1
+	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTPS       LoadBalancerListenerProtocol = 2
+	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_TCP         LoadBalancerListenerProtocol = 3
+	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UDP         LoadBalancerListenerProtocol = 4
+	LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_SSL         LoadBalancerListenerProtocol = 5
 )
 
 // Enum value maps for LoadBalancerListenerProtocol.
@@ -87,10 +91,18 @@ var (
 	LoadBalancerListenerProtocol_name = map[int32]string{
 		0: "LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED",
 		1: "LOAD_BALANCER_LISTENER_PROTOCOL_HTTP",
+		2: "LOAD_BALANCER_LISTENER_PROTOCOL_HTTPS",
+		3: "LOAD_BALANCER_LISTENER_PROTOCOL_TCP",
+		4: "LOAD_BALANCER_LISTENER_PROTOCOL_UDP",
+		5: "LOAD_BALANCER_LISTENER_PROTOCOL_SSL",
 	}
 	LoadBalancerListenerProtocol_value = map[string]int32{
 		"LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED": 0,
 		"LOAD_BALANCER_LISTENER_PROTOCOL_HTTP":        1,
+		"LOAD_BALANCER_LISTENER_PROTOCOL_HTTPS":       2,
+		"LOAD_BALANCER_LISTENER_PROTOCOL_TCP":         3,
+		"LOAD_BALANCER_LISTENER_PROTOCOL_UDP":         4,
+		"LOAD_BALANCER_LISTENER_PROTOCOL_SSL":         5,
 	}
 )
 
@@ -124,8 +136,10 @@ func (LoadBalancerListenerProtocol) EnumDescriptor() ([]byte, []int) {
 type LoadBalancerAlgorithm int32
 
 const (
-	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_UNSPECIFIED LoadBalancerAlgorithm = 0
-	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_ROUND_ROBIN LoadBalancerAlgorithm = 1
+	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_UNSPECIFIED   LoadBalancerAlgorithm = 0
+	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_ROUND_ROBIN   LoadBalancerAlgorithm = 1
+	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_LEAST_REQUEST LoadBalancerAlgorithm = 2
+	LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_SOURCE_IP     LoadBalancerAlgorithm = 3
 )
 
 // Enum value maps for LoadBalancerAlgorithm.
@@ -133,10 +147,14 @@ var (
 	LoadBalancerAlgorithm_name = map[int32]string{
 		0: "LOAD_BALANCER_ALGORITHM_UNSPECIFIED",
 		1: "LOAD_BALANCER_ALGORITHM_ROUND_ROBIN",
+		2: "LOAD_BALANCER_ALGORITHM_LEAST_REQUEST",
+		3: "LOAD_BALANCER_ALGORITHM_SOURCE_IP",
 	}
 	LoadBalancerAlgorithm_value = map[string]int32{
-		"LOAD_BALANCER_ALGORITHM_UNSPECIFIED": 0,
-		"LOAD_BALANCER_ALGORITHM_ROUND_ROBIN": 1,
+		"LOAD_BALANCER_ALGORITHM_UNSPECIFIED":   0,
+		"LOAD_BALANCER_ALGORITHM_ROUND_ROBIN":   1,
+		"LOAD_BALANCER_ALGORITHM_LEAST_REQUEST": 2,
+		"LOAD_BALANCER_ALGORITHM_SOURCE_IP":     3,
 	}
 )
 
@@ -172,6 +190,7 @@ type LoadBalancerHealthCheckProtocol int32
 const (
 	LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED LoadBalancerHealthCheckProtocol = 0
 	LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP         LoadBalancerHealthCheckProtocol = 1
+	LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP        LoadBalancerHealthCheckProtocol = 2
 )
 
 // Enum value maps for LoadBalancerHealthCheckProtocol.
@@ -179,10 +198,12 @@ var (
 	LoadBalancerHealthCheckProtocol_name = map[int32]string{
 		0: "LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED",
 		1: "LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP",
+		2: "LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP",
 	}
 	LoadBalancerHealthCheckProtocol_value = map[string]int32{
 		"LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED": 0,
 		"LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP":         1,
+		"LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP":        2,
 	}
 )
 
@@ -325,24 +346,186 @@ func (LoadBalancerDataPlaneState) EnumDescriptor() ([]byte, []int) {
 	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{5}
 }
 
-// Each HTTP listener uses the default Prefix("/") route. The legacy singular
-// field defaults to HTTP/8080. The listener set permits port/backend/health
-// changes, with stable retained IDs and names and unique listener ports.
-type LoadBalancerListenerInput struct {
-	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Protocol      LoadBalancerListenerProtocol `protobuf:"varint,1,opt,name=protocol,proto3,enum=network.v1.LoadBalancerListenerProtocol" json:"protocol,omitempty"`
-	Port          *uint32                      `protobuf:"varint,2,opt,name=port,proto3,oneof" json:"port,omitempty"`
-	Id            string                       `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                       `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Backends      []*LoadBalancerBackendInput  `protobuf:"bytes,5,rep,name=backends,proto3" json:"backends,omitempty"`
-	HealthCheck   *LoadBalancerHealthCheck     `protobuf:"bytes,6,opt,name=health_check,json=healthCheck,proto3" json:"health_check,omitempty"`
+// HTTP/HTTPS use Prefix("/"). TCP/UDP use their typed routes; SSL terminates
+// TLS before TCPRoute. The legacy singular field defaults to HTTP/8080; new
+// parameters use the listener set, with stable IDs/names and unique ports.
+type LoadBalancerSessionMode int32
+
+const (
+	LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_UNSPECIFIED    LoadBalancerSessionMode = 0
+	LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_DISABLED       LoadBalancerSessionMode = 3
+	LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT LoadBalancerSessionMode = 1
+	LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION LoadBalancerSessionMode = 2
+)
+
+// Enum value maps for LoadBalancerSessionMode.
+var (
+	LoadBalancerSessionMode_name = map[int32]string{
+		0: "LOAD_BALANCER_SESSION_MODE_UNSPECIFIED",
+		3: "LOAD_BALANCER_SESSION_MODE_DISABLED",
+		1: "LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT",
+		2: "LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION",
+	}
+	LoadBalancerSessionMode_value = map[string]int32{
+		"LOAD_BALANCER_SESSION_MODE_UNSPECIFIED":    0,
+		"LOAD_BALANCER_SESSION_MODE_DISABLED":       3,
+		"LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT": 1,
+		"LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION": 2,
+	}
+)
+
+func (x LoadBalancerSessionMode) Enum() *LoadBalancerSessionMode {
+	p := new(LoadBalancerSessionMode)
+	*p = x
+	return p
+}
+
+func (x LoadBalancerSessionMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (LoadBalancerSessionMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_network_v1_load_balancer_proto_enumTypes[6].Descriptor()
+}
+
+func (LoadBalancerSessionMode) Type() protoreflect.EnumType {
+	return &file_network_v1_load_balancer_proto_enumTypes[6]
+}
+
+func (x LoadBalancerSessionMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use LoadBalancerSessionMode.Descriptor instead.
+func (LoadBalancerSessionMode) EnumDescriptor() ([]byte, []int) {
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{6}
+}
+
+type LoadBalancerCertificateRef struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Namespace     string                 `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *LoadBalancerCertificateRef) Reset() {
+	*x = LoadBalancerCertificateRef{}
+	mi := &file_network_v1_load_balancer_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadBalancerCertificateRef) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadBalancerCertificateRef) ProtoMessage() {}
+
+func (x *LoadBalancerCertificateRef) ProtoReflect() protoreflect.Message {
+	mi := &file_network_v1_load_balancer_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadBalancerCertificateRef.ProtoReflect.Descriptor instead.
+func (*LoadBalancerCertificateRef) Descriptor() ([]byte, []int) {
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *LoadBalancerCertificateRef) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *LoadBalancerCertificateRef) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+type LoadBalancerSessionPersistence struct {
+	state               protoimpl.MessageState  `protogen:"open.v1"`
+	Mode                LoadBalancerSessionMode `protobuf:"varint,1,opt,name=mode,proto3,enum=network.v1.LoadBalancerSessionMode" json:"mode,omitempty"`
+	CookieExpirySeconds uint32                  `protobuf:"varint,2,opt,name=cookie_expiry_seconds,json=cookieExpirySeconds,proto3" json:"cookie_expiry_seconds,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *LoadBalancerSessionPersistence) Reset() {
+	*x = LoadBalancerSessionPersistence{}
+	mi := &file_network_v1_load_balancer_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadBalancerSessionPersistence) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadBalancerSessionPersistence) ProtoMessage() {}
+
+func (x *LoadBalancerSessionPersistence) ProtoReflect() protoreflect.Message {
+	mi := &file_network_v1_load_balancer_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadBalancerSessionPersistence.ProtoReflect.Descriptor instead.
+func (*LoadBalancerSessionPersistence) Descriptor() ([]byte, []int) {
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *LoadBalancerSessionPersistence) GetMode() LoadBalancerSessionMode {
+	if x != nil {
+		return x.Mode
+	}
+	return LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_UNSPECIFIED
+}
+
+func (x *LoadBalancerSessionPersistence) GetCookieExpirySeconds() uint32 {
+	if x != nil {
+		return x.CookieExpirySeconds
+	}
+	return 0
+}
+
+type LoadBalancerListenerInput struct {
+	state                   protoimpl.MessageState          `protogen:"open.v1"`
+	Protocol                LoadBalancerListenerProtocol    `protobuf:"varint,1,opt,name=protocol,proto3,enum=network.v1.LoadBalancerListenerProtocol" json:"protocol,omitempty"`
+	Port                    *uint32                         `protobuf:"varint,2,opt,name=port,proto3,oneof" json:"port,omitempty"`
+	Id                      string                          `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	Name                    string                          `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Backends                []*LoadBalancerBackendInput     `protobuf:"bytes,5,rep,name=backends,proto3" json:"backends,omitempty"`
+	HealthCheck             *LoadBalancerHealthCheck        `protobuf:"bytes,6,opt,name=health_check,json=healthCheck,proto3" json:"health_check,omitempty"`
+	CertificateRef          *LoadBalancerCertificateRef     `protobuf:"bytes,7,opt,name=certificate_ref,json=certificateRef,proto3" json:"certificate_ref,omitempty"`
+	Algorithm               LoadBalancerAlgorithm           `protobuf:"varint,8,opt,name=algorithm,proto3,enum=network.v1.LoadBalancerAlgorithm" json:"algorithm,omitempty"`
+	SessionPersistence      *LoadBalancerSessionPersistence `protobuf:"bytes,9,opt,name=session_persistence,json=sessionPersistence,proto3" json:"session_persistence,omitempty"`
+	MaxConnections          *uint32                         `protobuf:"varint,10,opt,name=max_connections,json=maxConnections,proto3,oneof" json:"max_connections,omitempty"`
+	GzipEnabled             bool                            `protobuf:"varint,11,opt,name=gzip_enabled,json=gzipEnabled,proto3" json:"gzip_enabled,omitempty"`
+	HttpsRedirectStatusCode uint32                          `protobuf:"varint,12,opt,name=https_redirect_status_code,json=httpsRedirectStatusCode,proto3" json:"https_redirect_status_code,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
 func (x *LoadBalancerListenerInput) Reset() {
 	*x = LoadBalancerListenerInput{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[0]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -354,7 +537,7 @@ func (x *LoadBalancerListenerInput) String() string {
 func (*LoadBalancerListenerInput) ProtoMessage() {}
 
 func (x *LoadBalancerListenerInput) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[0]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -367,7 +550,7 @@ func (x *LoadBalancerListenerInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerListenerInput.ProtoReflect.Descriptor instead.
 func (*LoadBalancerListenerInput) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{0}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoadBalancerListenerInput) GetProtocol() LoadBalancerListenerProtocol {
@@ -412,21 +595,69 @@ func (x *LoadBalancerListenerInput) GetHealthCheck() *LoadBalancerHealthCheck {
 	return nil
 }
 
+func (x *LoadBalancerListenerInput) GetCertificateRef() *LoadBalancerCertificateRef {
+	if x != nil {
+		return x.CertificateRef
+	}
+	return nil
+}
+
+func (x *LoadBalancerListenerInput) GetAlgorithm() LoadBalancerAlgorithm {
+	if x != nil {
+		return x.Algorithm
+	}
+	return LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_UNSPECIFIED
+}
+
+func (x *LoadBalancerListenerInput) GetSessionPersistence() *LoadBalancerSessionPersistence {
+	if x != nil {
+		return x.SessionPersistence
+	}
+	return nil
+}
+
+func (x *LoadBalancerListenerInput) GetMaxConnections() uint32 {
+	if x != nil && x.MaxConnections != nil {
+		return *x.MaxConnections
+	}
+	return 0
+}
+
+func (x *LoadBalancerListenerInput) GetGzipEnabled() bool {
+	if x != nil {
+		return x.GzipEnabled
+	}
+	return false
+}
+
+func (x *LoadBalancerListenerInput) GetHttpsRedirectStatusCode() uint32 {
+	if x != nil {
+		return x.HttpsRedirectStatusCode
+	}
+	return 0
+}
+
 type LoadBalancerListener struct {
-	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Id            string                       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Protocol      LoadBalancerListenerProtocol `protobuf:"varint,2,opt,name=protocol,proto3,enum=network.v1.LoadBalancerListenerProtocol" json:"protocol,omitempty"`
-	Port          uint32                       `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
-	Name          string                       `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Backends      []*LoadBalancerBackendMember `protobuf:"bytes,5,rep,name=backends,proto3" json:"backends,omitempty"`
-	HealthCheck   *LoadBalancerHealthCheck     `protobuf:"bytes,6,opt,name=health_check,json=healthCheck,proto3" json:"health_check,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                   protoimpl.MessageState          `protogen:"open.v1"`
+	Id                      string                          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Protocol                LoadBalancerListenerProtocol    `protobuf:"varint,2,opt,name=protocol,proto3,enum=network.v1.LoadBalancerListenerProtocol" json:"protocol,omitempty"`
+	Port                    uint32                          `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty"`
+	Name                    string                          `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Backends                []*LoadBalancerBackendMember    `protobuf:"bytes,5,rep,name=backends,proto3" json:"backends,omitempty"`
+	HealthCheck             *LoadBalancerHealthCheck        `protobuf:"bytes,6,opt,name=health_check,json=healthCheck,proto3" json:"health_check,omitempty"`
+	CertificateRef          *LoadBalancerCertificateRef     `protobuf:"bytes,7,opt,name=certificate_ref,json=certificateRef,proto3" json:"certificate_ref,omitempty"`
+	Algorithm               LoadBalancerAlgorithm           `protobuf:"varint,8,opt,name=algorithm,proto3,enum=network.v1.LoadBalancerAlgorithm" json:"algorithm,omitempty"`
+	SessionPersistence      *LoadBalancerSessionPersistence `protobuf:"bytes,9,opt,name=session_persistence,json=sessionPersistence,proto3" json:"session_persistence,omitempty"`
+	MaxConnections          *uint32                         `protobuf:"varint,10,opt,name=max_connections,json=maxConnections,proto3,oneof" json:"max_connections,omitempty"`
+	GzipEnabled             bool                            `protobuf:"varint,11,opt,name=gzip_enabled,json=gzipEnabled,proto3" json:"gzip_enabled,omitempty"`
+	HttpsRedirectStatusCode uint32                          `protobuf:"varint,12,opt,name=https_redirect_status_code,json=httpsRedirectStatusCode,proto3" json:"https_redirect_status_code,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *LoadBalancerListener) Reset() {
 	*x = LoadBalancerListener{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[1]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -438,7 +669,7 @@ func (x *LoadBalancerListener) String() string {
 func (*LoadBalancerListener) ProtoMessage() {}
 
 func (x *LoadBalancerListener) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[1]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -451,7 +682,7 @@ func (x *LoadBalancerListener) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerListener.ProtoReflect.Descriptor instead.
 func (*LoadBalancerListener) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{1}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LoadBalancerListener) GetId() string {
@@ -496,6 +727,48 @@ func (x *LoadBalancerListener) GetHealthCheck() *LoadBalancerHealthCheck {
 	return nil
 }
 
+func (x *LoadBalancerListener) GetCertificateRef() *LoadBalancerCertificateRef {
+	if x != nil {
+		return x.CertificateRef
+	}
+	return nil
+}
+
+func (x *LoadBalancerListener) GetAlgorithm() LoadBalancerAlgorithm {
+	if x != nil {
+		return x.Algorithm
+	}
+	return LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_UNSPECIFIED
+}
+
+func (x *LoadBalancerListener) GetSessionPersistence() *LoadBalancerSessionPersistence {
+	if x != nil {
+		return x.SessionPersistence
+	}
+	return nil
+}
+
+func (x *LoadBalancerListener) GetMaxConnections() uint32 {
+	if x != nil && x.MaxConnections != nil {
+		return *x.MaxConnections
+	}
+	return 0
+}
+
+func (x *LoadBalancerListener) GetGzipEnabled() bool {
+	if x != nil {
+		return x.GzipEnabled
+	}
+	return false
+}
+
+func (x *LoadBalancerListener) GetHttpsRedirectStatusCode() uint32 {
+	if x != nil {
+		return x.HttpsRedirectStatusCode
+	}
+	return 0
+}
+
 // The backend must resolve to a current, allocated business address in this VPC
 // using Attachment plus Provider identity facts. CIDR membership alone is not
 // sufficient. ID is empty for new members; update can retain an existing member
@@ -515,7 +788,7 @@ type LoadBalancerBackendInput struct {
 
 func (x *LoadBalancerBackendInput) Reset() {
 	*x = LoadBalancerBackendInput{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[2]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +800,7 @@ func (x *LoadBalancerBackendInput) String() string {
 func (*LoadBalancerBackendInput) ProtoMessage() {}
 
 func (x *LoadBalancerBackendInput) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[2]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +813,7 @@ func (x *LoadBalancerBackendInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerBackendInput.ProtoReflect.Descriptor instead.
 func (*LoadBalancerBackendInput) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{2}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *LoadBalancerBackendInput) GetId() string {
@@ -597,7 +870,7 @@ type LoadBalancerBackendMember struct {
 
 func (x *LoadBalancerBackendMember) Reset() {
 	*x = LoadBalancerBackendMember{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[3]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -609,7 +882,7 @@ func (x *LoadBalancerBackendMember) String() string {
 func (*LoadBalancerBackendMember) ProtoMessage() {}
 
 func (x *LoadBalancerBackendMember) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[3]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -622,7 +895,7 @@ func (x *LoadBalancerBackendMember) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerBackendMember.ProtoReflect.Descriptor instead.
 func (*LoadBalancerBackendMember) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{3}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *LoadBalancerBackendMember) GetId() string {
@@ -695,10 +968,9 @@ func (x *LoadBalancerBackendMember) GetObservationStale() bool {
 	return false
 }
 
-// First release: TCP active health checking, defaults 5s interval, 3s timeout,
-// unhealthy threshold 3 and healthy threshold 1. Explicit values must be positive
-// and timeout_seconds must be less than interval_seconds. The algorithm is
-// RoundRobin and panicThreshold=0; neither is an arbitrary Provider policy.
+// TCP/HTTP active health checks (UDP uses a TCP EnvoyPatchPolicy).
+// Defaults: 5s interval, 3s timeout, unhealthy=3, healthy=1. Positive
+// timeout and interval are independent; HTTP requires path and accepts hostname.
 type LoadBalancerHealthCheck struct {
 	state              protoimpl.MessageState          `protogen:"open.v1"`
 	Protocol           LoadBalancerHealthCheckProtocol `protobuf:"varint,1,opt,name=protocol,proto3,enum=network.v1.LoadBalancerHealthCheckProtocol" json:"protocol,omitempty"`
@@ -706,16 +978,18 @@ type LoadBalancerHealthCheck struct {
 	TimeoutSeconds     *uint32                         `protobuf:"varint,3,opt,name=timeout_seconds,json=timeoutSeconds,proto3,oneof" json:"timeout_seconds,omitempty"`
 	UnhealthyThreshold *uint32                         `protobuf:"varint,4,opt,name=unhealthy_threshold,json=unhealthyThreshold,proto3,oneof" json:"unhealthy_threshold,omitempty"`
 	HealthyThreshold   *uint32                         `protobuf:"varint,5,opt,name=healthy_threshold,json=healthyThreshold,proto3,oneof" json:"healthy_threshold,omitempty"`
-	// Required on create/update: 1..65535, equal to every backend service port.
-	// Absent on legacy records that use the endpoint serving port.
+	// Missing or 0 uses the endpoint serving port; 1..65535 is an independent
+	// check port, not required to match the backend business port.
 	Port          *uint32 `protobuf:"varint,6,opt,name=port,proto3,oneof" json:"port,omitempty"`
+	Path          string  `protobuf:"bytes,7,opt,name=path,proto3" json:"path,omitempty"`
+	Hostname      string  `protobuf:"bytes,8,opt,name=hostname,proto3" json:"hostname,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *LoadBalancerHealthCheck) Reset() {
 	*x = LoadBalancerHealthCheck{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[4]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -727,7 +1001,7 @@ func (x *LoadBalancerHealthCheck) String() string {
 func (*LoadBalancerHealthCheck) ProtoMessage() {}
 
 func (x *LoadBalancerHealthCheck) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[4]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -740,7 +1014,7 @@ func (x *LoadBalancerHealthCheck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerHealthCheck.ProtoReflect.Descriptor instead.
 func (*LoadBalancerHealthCheck) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{4}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *LoadBalancerHealthCheck) GetProtocol() LoadBalancerHealthCheckProtocol {
@@ -783,6 +1057,20 @@ func (x *LoadBalancerHealthCheck) GetPort() uint32 {
 		return *x.Port
 	}
 	return 0
+}
+
+func (x *LoadBalancerHealthCheck) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *LoadBalancerHealthCheck) GetHostname() string {
+	if x != nil {
+		return x.Hostname
+	}
+	return ""
 }
 
 type LoadBalancer struct {
@@ -829,7 +1117,7 @@ type LoadBalancer struct {
 
 func (x *LoadBalancer) Reset() {
 	*x = LoadBalancer{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[5]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -841,7 +1129,7 @@ func (x *LoadBalancer) String() string {
 func (*LoadBalancer) ProtoMessage() {}
 
 func (x *LoadBalancer) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[5]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -854,7 +1142,7 @@ func (x *LoadBalancer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancer.ProtoReflect.Descriptor instead.
 func (*LoadBalancer) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{5}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LoadBalancer) GetId() string {
@@ -1096,7 +1384,7 @@ type CreateLoadBalancerRequest struct {
 
 func (x *CreateLoadBalancerRequest) Reset() {
 	*x = CreateLoadBalancerRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[6]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1108,7 +1396,7 @@ func (x *CreateLoadBalancerRequest) String() string {
 func (*CreateLoadBalancerRequest) ProtoMessage() {}
 
 func (x *CreateLoadBalancerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[6]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1121,7 +1409,7 @@ func (x *CreateLoadBalancerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLoadBalancerRequest.ProtoReflect.Descriptor instead.
 func (*CreateLoadBalancerRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{6}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateLoadBalancerRequest) GetTargetTenantId() string {
@@ -1235,7 +1523,7 @@ type CreateLoadBalancerResponse struct {
 
 func (x *CreateLoadBalancerResponse) Reset() {
 	*x = CreateLoadBalancerResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[7]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1247,7 +1535,7 @@ func (x *CreateLoadBalancerResponse) String() string {
 func (*CreateLoadBalancerResponse) ProtoMessage() {}
 
 func (x *CreateLoadBalancerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[7]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1260,7 +1548,7 @@ func (x *CreateLoadBalancerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateLoadBalancerResponse.ProtoReflect.Descriptor instead.
 func (*CreateLoadBalancerResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{7}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateLoadBalancerResponse) GetLoadBalancer() *LoadBalancer {
@@ -1287,7 +1575,7 @@ type GetLoadBalancerRequest struct {
 
 func (x *GetLoadBalancerRequest) Reset() {
 	*x = GetLoadBalancerRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[8]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1299,7 +1587,7 @@ func (x *GetLoadBalancerRequest) String() string {
 func (*GetLoadBalancerRequest) ProtoMessage() {}
 
 func (x *GetLoadBalancerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[8]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1312,7 +1600,7 @@ func (x *GetLoadBalancerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLoadBalancerRequest.ProtoReflect.Descriptor instead.
 func (*GetLoadBalancerRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{8}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetLoadBalancerRequest) GetTargetTenantId() string {
@@ -1338,7 +1626,7 @@ type GetLoadBalancerResponse struct {
 
 func (x *GetLoadBalancerResponse) Reset() {
 	*x = GetLoadBalancerResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[9]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1350,7 +1638,7 @@ func (x *GetLoadBalancerResponse) String() string {
 func (*GetLoadBalancerResponse) ProtoMessage() {}
 
 func (x *GetLoadBalancerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[9]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1363,7 +1651,7 @@ func (x *GetLoadBalancerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLoadBalancerResponse.ProtoReflect.Descriptor instead.
 func (*GetLoadBalancerResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{9}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetLoadBalancerResponse) GetLoadBalancer() *LoadBalancer {
@@ -1389,7 +1677,7 @@ type ListLoadBalancersRequest struct {
 
 func (x *ListLoadBalancersRequest) Reset() {
 	*x = ListLoadBalancersRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[10]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1401,7 +1689,7 @@ func (x *ListLoadBalancersRequest) String() string {
 func (*ListLoadBalancersRequest) ProtoMessage() {}
 
 func (x *ListLoadBalancersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[10]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1414,7 +1702,7 @@ func (x *ListLoadBalancersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLoadBalancersRequest.ProtoReflect.Descriptor instead.
 func (*ListLoadBalancersRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{10}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListLoadBalancersRequest) GetTargetTenantId() string {
@@ -1484,7 +1772,7 @@ type ListLoadBalancersResponse struct {
 
 func (x *ListLoadBalancersResponse) Reset() {
 	*x = ListLoadBalancersResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[11]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1496,7 +1784,7 @@ func (x *ListLoadBalancersResponse) String() string {
 func (*ListLoadBalancersResponse) ProtoMessage() {}
 
 func (x *ListLoadBalancersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[11]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1509,7 +1797,7 @@ func (x *ListLoadBalancersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLoadBalancersResponse.ProtoReflect.Descriptor instead.
 func (*ListLoadBalancersResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{11}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListLoadBalancersResponse) GetItems() []*LoadBalancer {
@@ -1558,7 +1846,7 @@ type UpdateLoadBalancerRequest struct {
 
 func (x *UpdateLoadBalancerRequest) Reset() {
 	*x = UpdateLoadBalancerRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[12]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1570,7 +1858,7 @@ func (x *UpdateLoadBalancerRequest) String() string {
 func (*UpdateLoadBalancerRequest) ProtoMessage() {}
 
 func (x *UpdateLoadBalancerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[12]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1583,7 +1871,7 @@ func (x *UpdateLoadBalancerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateLoadBalancerRequest.ProtoReflect.Descriptor instead.
 func (*UpdateLoadBalancerRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{12}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateLoadBalancerRequest) GetTargetTenantId() string {
@@ -1673,7 +1961,7 @@ type UpdateLoadBalancerResponse struct {
 
 func (x *UpdateLoadBalancerResponse) Reset() {
 	*x = UpdateLoadBalancerResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[13]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1685,7 +1973,7 @@ func (x *UpdateLoadBalancerResponse) String() string {
 func (*UpdateLoadBalancerResponse) ProtoMessage() {}
 
 func (x *UpdateLoadBalancerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[13]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1698,7 +1986,7 @@ func (x *UpdateLoadBalancerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateLoadBalancerResponse.ProtoReflect.Descriptor instead.
 func (*UpdateLoadBalancerResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{13}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UpdateLoadBalancerResponse) GetLoadBalancer() *LoadBalancer {
@@ -1730,7 +2018,7 @@ type DeleteLoadBalancerRequest struct {
 
 func (x *DeleteLoadBalancerRequest) Reset() {
 	*x = DeleteLoadBalancerRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[14]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1742,7 +2030,7 @@ func (x *DeleteLoadBalancerRequest) String() string {
 func (*DeleteLoadBalancerRequest) ProtoMessage() {}
 
 func (x *DeleteLoadBalancerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[14]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1755,7 +2043,7 @@ func (x *DeleteLoadBalancerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteLoadBalancerRequest.ProtoReflect.Descriptor instead.
 func (*DeleteLoadBalancerRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{14}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteLoadBalancerRequest) GetTargetTenantId() string {
@@ -1782,7 +2070,7 @@ type DeleteLoadBalancerResponse struct {
 
 func (x *DeleteLoadBalancerResponse) Reset() {
 	*x = DeleteLoadBalancerResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[15]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1794,7 +2082,7 @@ func (x *DeleteLoadBalancerResponse) String() string {
 func (*DeleteLoadBalancerResponse) ProtoMessage() {}
 
 func (x *DeleteLoadBalancerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[15]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1807,7 +2095,7 @@ func (x *DeleteLoadBalancerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteLoadBalancerResponse.ProtoReflect.Descriptor instead.
 func (*DeleteLoadBalancerResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{15}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *DeleteLoadBalancerResponse) GetLoadBalancer() *LoadBalancer {
@@ -1836,7 +2124,7 @@ type GetLoadBalancerOperationRequest struct {
 
 func (x *GetLoadBalancerOperationRequest) Reset() {
 	*x = GetLoadBalancerOperationRequest{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[16]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1848,7 +2136,7 @@ func (x *GetLoadBalancerOperationRequest) String() string {
 func (*GetLoadBalancerOperationRequest) ProtoMessage() {}
 
 func (x *GetLoadBalancerOperationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[16]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1861,7 +2149,7 @@ func (x *GetLoadBalancerOperationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLoadBalancerOperationRequest.ProtoReflect.Descriptor instead.
 func (*GetLoadBalancerOperationRequest) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{16}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetLoadBalancerOperationRequest) GetTargetTenantId() string {
@@ -1887,7 +2175,7 @@ type GetLoadBalancerOperationResponse struct {
 
 func (x *GetLoadBalancerOperationResponse) Reset() {
 	*x = GetLoadBalancerOperationResponse{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[17]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1899,7 +2187,7 @@ func (x *GetLoadBalancerOperationResponse) String() string {
 func (*GetLoadBalancerOperationResponse) ProtoMessage() {}
 
 func (x *GetLoadBalancerOperationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[17]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1912,7 +2200,7 @@ func (x *GetLoadBalancerOperationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLoadBalancerOperationResponse.ProtoReflect.Descriptor instead.
 func (*GetLoadBalancerOperationResponse) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{17}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetLoadBalancerOperationResponse) GetOperation() *Operation {
@@ -1932,7 +2220,7 @@ type LoadBalancerListenerSet struct {
 
 func (x *LoadBalancerListenerSet) Reset() {
 	*x = LoadBalancerListenerSet{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[18]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1944,7 +2232,7 @@ func (x *LoadBalancerListenerSet) String() string {
 func (*LoadBalancerListenerSet) ProtoMessage() {}
 
 func (x *LoadBalancerListenerSet) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[18]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1957,7 +2245,7 @@ func (x *LoadBalancerListenerSet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerListenerSet.ProtoReflect.Descriptor instead.
 func (*LoadBalancerListenerSet) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{18}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *LoadBalancerListenerSet) GetItems() []*LoadBalancerListenerInput {
@@ -1978,7 +2266,7 @@ type LoadBalancerMutableData struct {
 
 func (x *LoadBalancerMutableData) Reset() {
 	*x = LoadBalancerMutableData{}
-	mi := &file_network_v1_load_balancer_proto_msgTypes[19]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1990,7 +2278,7 @@ func (x *LoadBalancerMutableData) String() string {
 func (*LoadBalancerMutableData) ProtoMessage() {}
 
 func (x *LoadBalancerMutableData) ProtoReflect() protoreflect.Message {
-	mi := &file_network_v1_load_balancer_proto_msgTypes[19]
+	mi := &file_network_v1_load_balancer_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2003,7 +2291,7 @@ func (x *LoadBalancerMutableData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoadBalancerMutableData.ProtoReflect.Descriptor instead.
 func (*LoadBalancerMutableData) Descriptor() ([]byte, []int) {
-	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{19}
+	return file_network_v1_load_balancer_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *LoadBalancerMutableData) GetName() string {
@@ -2032,22 +2320,44 @@ var File_network_v1_load_balancer_proto protoreflect.FileDescriptor
 const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\n" +
 	"\x1enetwork/v1/load_balancer.proto\x12\n" +
-	"network.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x18network/v1/network.proto\"\xb1\x02\n" +
+	"network.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/field_mask.proto\x1a\x18network/v1/network.proto\"N\n" +
+	"\x1aLoadBalancerCertificateRef\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
+	"\tnamespace\x18\x02 \x01(\tR\tnamespace\"\x8d\x01\n" +
+	"\x1eLoadBalancerSessionPersistence\x127\n" +
+	"\x04mode\x18\x01 \x01(\x0e2#.network.v1.LoadBalancerSessionModeR\x04mode\x122\n" +
+	"\x15cookie_expiry_seconds\x18\x02 \x01(\rR\x13cookieExpirySeconds\"\xc2\x05\n" +
 	"\x19LoadBalancerListenerInput\x12D\n" +
 	"\bprotocol\x18\x01 \x01(\x0e2(.network.v1.LoadBalancerListenerProtocolR\bprotocol\x12\x17\n" +
 	"\x04port\x18\x02 \x01(\rH\x00R\x04port\x88\x01\x01\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12@\n" +
 	"\bbackends\x18\x05 \x03(\v2$.network.v1.LoadBalancerBackendInputR\bbackends\x12F\n" +
-	"\fhealth_check\x18\x06 \x01(\v2#.network.v1.LoadBalancerHealthCheckR\vhealthCheckB\a\n" +
-	"\x05_port\"\x9f\x02\n" +
+	"\fhealth_check\x18\x06 \x01(\v2#.network.v1.LoadBalancerHealthCheckR\vhealthCheck\x12O\n" +
+	"\x0fcertificate_ref\x18\a \x01(\v2&.network.v1.LoadBalancerCertificateRefR\x0ecertificateRef\x12?\n" +
+	"\talgorithm\x18\b \x01(\x0e2!.network.v1.LoadBalancerAlgorithmR\talgorithm\x12[\n" +
+	"\x13session_persistence\x18\t \x01(\v2*.network.v1.LoadBalancerSessionPersistenceR\x12sessionPersistence\x12,\n" +
+	"\x0fmax_connections\x18\n" +
+	" \x01(\rH\x01R\x0emaxConnections\x88\x01\x01\x12!\n" +
+	"\fgzip_enabled\x18\v \x01(\bR\vgzipEnabled\x12;\n" +
+	"\x1ahttps_redirect_status_code\x18\f \x01(\rR\x17httpsRedirectStatusCodeB\a\n" +
+	"\x05_portB\x12\n" +
+	"\x10_max_connections\"\xb0\x05\n" +
 	"\x14LoadBalancerListener\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12D\n" +
 	"\bprotocol\x18\x02 \x01(\x0e2(.network.v1.LoadBalancerListenerProtocolR\bprotocol\x12\x12\n" +
 	"\x04port\x18\x03 \x01(\rR\x04port\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12A\n" +
 	"\bbackends\x18\x05 \x03(\v2%.network.v1.LoadBalancerBackendMemberR\bbackends\x12F\n" +
-	"\fhealth_check\x18\x06 \x01(\v2#.network.v1.LoadBalancerHealthCheckR\vhealthCheck\"\x9d\x01\n" +
+	"\fhealth_check\x18\x06 \x01(\v2#.network.v1.LoadBalancerHealthCheckR\vhealthCheck\x12O\n" +
+	"\x0fcertificate_ref\x18\a \x01(\v2&.network.v1.LoadBalancerCertificateRefR\x0ecertificateRef\x12?\n" +
+	"\talgorithm\x18\b \x01(\x0e2!.network.v1.LoadBalancerAlgorithmR\talgorithm\x12[\n" +
+	"\x13session_persistence\x18\t \x01(\v2*.network.v1.LoadBalancerSessionPersistenceR\x12sessionPersistence\x12,\n" +
+	"\x0fmax_connections\x18\n" +
+	" \x01(\rH\x00R\x0emaxConnections\x88\x01\x01\x12!\n" +
+	"\fgzip_enabled\x18\v \x01(\bR\vgzipEnabled\x12;\n" +
+	"\x1ahttps_redirect_status_code\x18\f \x01(\rR\x17httpsRedirectStatusCodeB\x12\n" +
+	"\x10_max_connections\"\x9d\x01\n" +
 	"\x18LoadBalancerBackendInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\tsubnet_id\x18\x02 \x01(\tR\bsubnetId\x12\x18\n" +
@@ -2067,14 +2377,16 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\vobserved_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"observedAt\x12+\n" +
 	"\x11observation_stale\x18\n" +
-	" \x01(\bR\x10observationStale\"\xa1\x03\n" +
+	" \x01(\bR\x10observationStale\"\xd1\x03\n" +
 	"\x17LoadBalancerHealthCheck\x12G\n" +
 	"\bprotocol\x18\x01 \x01(\x0e2+.network.v1.LoadBalancerHealthCheckProtocolR\bprotocol\x12.\n" +
 	"\x10interval_seconds\x18\x02 \x01(\rH\x00R\x0fintervalSeconds\x88\x01\x01\x12,\n" +
 	"\x0ftimeout_seconds\x18\x03 \x01(\rH\x01R\x0etimeoutSeconds\x88\x01\x01\x124\n" +
 	"\x13unhealthy_threshold\x18\x04 \x01(\rH\x02R\x12unhealthyThreshold\x88\x01\x01\x120\n" +
 	"\x11healthy_threshold\x18\x05 \x01(\rH\x03R\x10healthyThreshold\x88\x01\x01\x12\x17\n" +
-	"\x04port\x18\x06 \x01(\rH\x04R\x04port\x88\x01\x01B\x13\n" +
+	"\x04port\x18\x06 \x01(\rH\x04R\x04port\x88\x01\x01\x12\x12\n" +
+	"\x04path\x18\a \x01(\tR\x04path\x12\x1a\n" +
+	"\bhostname\x18\b \x01(\tR\bhostnameB\x13\n" +
 	"\x11_interval_secondsB\x12\n" +
 	"\x10_timeout_secondsB\x16\n" +
 	"\x14_unhealthy_thresholdB\x14\n" +
@@ -2193,16 +2505,23 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\"LOAD_BALANCER_EXPOSURE_UNSPECIFIED\x10\x00\x12\"\n" +
 	"\x1eLOAD_BALANCER_EXPOSURE_PRIVATE\x10\x01\x12!\n" +
 	"\x1dLOAD_BALANCER_EXPOSURE_PUBLIC\x10\x02\x12)\n" +
-	"%LOAD_BALANCER_EXPOSURE_PUBLIC_PRIVATE\x10\x03*y\n" +
+	"%LOAD_BALANCER_EXPOSURE_PUBLIC_PRIVATE\x10\x03*\x9f\x02\n" +
 	"\x1cLoadBalancerListenerProtocol\x12/\n" +
 	"+LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED\x10\x00\x12(\n" +
-	"$LOAD_BALANCER_LISTENER_PROTOCOL_HTTP\x10\x01*i\n" +
+	"$LOAD_BALANCER_LISTENER_PROTOCOL_HTTP\x10\x01\x12)\n" +
+	"%LOAD_BALANCER_LISTENER_PROTOCOL_HTTPS\x10\x02\x12'\n" +
+	"#LOAD_BALANCER_LISTENER_PROTOCOL_TCP\x10\x03\x12'\n" +
+	"#LOAD_BALANCER_LISTENER_PROTOCOL_UDP\x10\x04\x12'\n" +
+	"#LOAD_BALANCER_LISTENER_PROTOCOL_SSL\x10\x05*\xbb\x01\n" +
 	"\x15LoadBalancerAlgorithm\x12'\n" +
 	"#LOAD_BALANCER_ALGORITHM_UNSPECIFIED\x10\x00\x12'\n" +
-	"#LOAD_BALANCER_ALGORITHM_ROUND_ROBIN\x10\x01*\x83\x01\n" +
+	"#LOAD_BALANCER_ALGORITHM_ROUND_ROBIN\x10\x01\x12)\n" +
+	"%LOAD_BALANCER_ALGORITHM_LEAST_REQUEST\x10\x02\x12%\n" +
+	"!LOAD_BALANCER_ALGORITHM_SOURCE_IP\x10\x03*\xb1\x01\n" +
 	"\x1fLoadBalancerHealthCheckProtocol\x123\n" +
 	"/LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED\x10\x00\x12+\n" +
-	"'LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP\x10\x01*\xc3\x02\n" +
+	"'LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP\x10\x01\x12,\n" +
+	"(LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP\x10\x02*\xc3\x02\n" +
 	"\x1eLoadBalancerConfigurationState\x121\n" +
 	"-LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED\x10\x00\x12-\n" +
 	")LOAD_BALANCER_CONFIGURATION_STATE_PENDING\x10\x01\x12.\n" +
@@ -2214,7 +2533,12 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"*LOAD_BALANCER_DATA_PLANE_STATE_UNSPECIFIED\x10\x00\x12*\n" +
 	"&LOAD_BALANCER_DATA_PLANE_STATE_UNKNOWN\x10\x01\x12*\n" +
 	"&LOAD_BALANCER_DATA_PLANE_STATE_HEALTHY\x10\x02\x12,\n" +
-	"(LOAD_BALANCER_DATA_PLANE_STATE_UNHEALTHY\x10\x032\xff\x04\n" +
+	"(LOAD_BALANCER_DATA_PLANE_STATE_UNHEALTHY\x10\x03*\xcc\x01\n" +
+	"\x17LoadBalancerSessionMode\x12*\n" +
+	"&LOAD_BALANCER_SESSION_MODE_UNSPECIFIED\x10\x00\x12'\n" +
+	"#LOAD_BALANCER_SESSION_MODE_DISABLED\x10\x03\x12-\n" +
+	")LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT\x10\x01\x12-\n" +
+	")LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION\x10\x022\xff\x04\n" +
 	"\x19TenantLoadBalancerService\x12c\n" +
 	"\x12CreateLoadBalancer\x12%.network.v1.CreateLoadBalancerRequest\x1a&.network.v1.CreateLoadBalancerResponse\x12Z\n" +
 	"\x0fGetLoadBalancer\x12\".network.v1.GetLoadBalancerRequest\x1a#.network.v1.GetLoadBalancerResponse\x12`\n" +
@@ -2235,8 +2559,8 @@ func file_network_v1_load_balancer_proto_rawDescGZIP() []byte {
 	return file_network_v1_load_balancer_proto_rawDescData
 }
 
-var file_network_v1_load_balancer_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
-var file_network_v1_load_balancer_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_network_v1_load_balancer_proto_enumTypes = make([]protoimpl.EnumInfo, 7)
+var file_network_v1_load_balancer_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_network_v1_load_balancer_proto_goTypes = []any{
 	(LoadBalancerExposure)(0),                // 0: network.v1.LoadBalancerExposure
 	(LoadBalancerListenerProtocol)(0),        // 1: network.v1.LoadBalancerListenerProtocol
@@ -2244,93 +2568,103 @@ var file_network_v1_load_balancer_proto_goTypes = []any{
 	(LoadBalancerHealthCheckProtocol)(0),     // 3: network.v1.LoadBalancerHealthCheckProtocol
 	(LoadBalancerConfigurationState)(0),      // 4: network.v1.LoadBalancerConfigurationState
 	(LoadBalancerDataPlaneState)(0),          // 5: network.v1.LoadBalancerDataPlaneState
-	(*LoadBalancerListenerInput)(nil),        // 6: network.v1.LoadBalancerListenerInput
-	(*LoadBalancerListener)(nil),             // 7: network.v1.LoadBalancerListener
-	(*LoadBalancerBackendInput)(nil),         // 8: network.v1.LoadBalancerBackendInput
-	(*LoadBalancerBackendMember)(nil),        // 9: network.v1.LoadBalancerBackendMember
-	(*LoadBalancerHealthCheck)(nil),          // 10: network.v1.LoadBalancerHealthCheck
-	(*LoadBalancer)(nil),                     // 11: network.v1.LoadBalancer
-	(*CreateLoadBalancerRequest)(nil),        // 12: network.v1.CreateLoadBalancerRequest
-	(*CreateLoadBalancerResponse)(nil),       // 13: network.v1.CreateLoadBalancerResponse
-	(*GetLoadBalancerRequest)(nil),           // 14: network.v1.GetLoadBalancerRequest
-	(*GetLoadBalancerResponse)(nil),          // 15: network.v1.GetLoadBalancerResponse
-	(*ListLoadBalancersRequest)(nil),         // 16: network.v1.ListLoadBalancersRequest
-	(*ListLoadBalancersResponse)(nil),        // 17: network.v1.ListLoadBalancersResponse
-	(*UpdateLoadBalancerRequest)(nil),        // 18: network.v1.UpdateLoadBalancerRequest
-	(*UpdateLoadBalancerResponse)(nil),       // 19: network.v1.UpdateLoadBalancerResponse
-	(*DeleteLoadBalancerRequest)(nil),        // 20: network.v1.DeleteLoadBalancerRequest
-	(*DeleteLoadBalancerResponse)(nil),       // 21: network.v1.DeleteLoadBalancerResponse
-	(*GetLoadBalancerOperationRequest)(nil),  // 22: network.v1.GetLoadBalancerOperationRequest
-	(*GetLoadBalancerOperationResponse)(nil), // 23: network.v1.GetLoadBalancerOperationResponse
-	(*LoadBalancerListenerSet)(nil),          // 24: network.v1.LoadBalancerListenerSet
-	(*LoadBalancerMutableData)(nil),          // 25: network.v1.LoadBalancerMutableData
-	(*timestamppb.Timestamp)(nil),            // 26: google.protobuf.Timestamp
-	(ResourceState)(0),                       // 27: network.v1.ResourceState
-	(*Operation)(nil),                        // 28: network.v1.Operation
-	(*fieldmaskpb.FieldMask)(nil),            // 29: google.protobuf.FieldMask
+	(LoadBalancerSessionMode)(0),             // 6: network.v1.LoadBalancerSessionMode
+	(*LoadBalancerCertificateRef)(nil),       // 7: network.v1.LoadBalancerCertificateRef
+	(*LoadBalancerSessionPersistence)(nil),   // 8: network.v1.LoadBalancerSessionPersistence
+	(*LoadBalancerListenerInput)(nil),        // 9: network.v1.LoadBalancerListenerInput
+	(*LoadBalancerListener)(nil),             // 10: network.v1.LoadBalancerListener
+	(*LoadBalancerBackendInput)(nil),         // 11: network.v1.LoadBalancerBackendInput
+	(*LoadBalancerBackendMember)(nil),        // 12: network.v1.LoadBalancerBackendMember
+	(*LoadBalancerHealthCheck)(nil),          // 13: network.v1.LoadBalancerHealthCheck
+	(*LoadBalancer)(nil),                     // 14: network.v1.LoadBalancer
+	(*CreateLoadBalancerRequest)(nil),        // 15: network.v1.CreateLoadBalancerRequest
+	(*CreateLoadBalancerResponse)(nil),       // 16: network.v1.CreateLoadBalancerResponse
+	(*GetLoadBalancerRequest)(nil),           // 17: network.v1.GetLoadBalancerRequest
+	(*GetLoadBalancerResponse)(nil),          // 18: network.v1.GetLoadBalancerResponse
+	(*ListLoadBalancersRequest)(nil),         // 19: network.v1.ListLoadBalancersRequest
+	(*ListLoadBalancersResponse)(nil),        // 20: network.v1.ListLoadBalancersResponse
+	(*UpdateLoadBalancerRequest)(nil),        // 21: network.v1.UpdateLoadBalancerRequest
+	(*UpdateLoadBalancerResponse)(nil),       // 22: network.v1.UpdateLoadBalancerResponse
+	(*DeleteLoadBalancerRequest)(nil),        // 23: network.v1.DeleteLoadBalancerRequest
+	(*DeleteLoadBalancerResponse)(nil),       // 24: network.v1.DeleteLoadBalancerResponse
+	(*GetLoadBalancerOperationRequest)(nil),  // 25: network.v1.GetLoadBalancerOperationRequest
+	(*GetLoadBalancerOperationResponse)(nil), // 26: network.v1.GetLoadBalancerOperationResponse
+	(*LoadBalancerListenerSet)(nil),          // 27: network.v1.LoadBalancerListenerSet
+	(*LoadBalancerMutableData)(nil),          // 28: network.v1.LoadBalancerMutableData
+	(*timestamppb.Timestamp)(nil),            // 29: google.protobuf.Timestamp
+	(ResourceState)(0),                       // 30: network.v1.ResourceState
+	(*Operation)(nil),                        // 31: network.v1.Operation
+	(*fieldmaskpb.FieldMask)(nil),            // 32: google.protobuf.FieldMask
 }
 var file_network_v1_load_balancer_proto_depIdxs = []int32{
-	1,  // 0: network.v1.LoadBalancerListenerInput.protocol:type_name -> network.v1.LoadBalancerListenerProtocol
-	8,  // 1: network.v1.LoadBalancerListenerInput.backends:type_name -> network.v1.LoadBalancerBackendInput
-	10, // 2: network.v1.LoadBalancerListenerInput.health_check:type_name -> network.v1.LoadBalancerHealthCheck
-	1,  // 3: network.v1.LoadBalancerListener.protocol:type_name -> network.v1.LoadBalancerListenerProtocol
-	9,  // 4: network.v1.LoadBalancerListener.backends:type_name -> network.v1.LoadBalancerBackendMember
-	10, // 5: network.v1.LoadBalancerListener.health_check:type_name -> network.v1.LoadBalancerHealthCheck
-	26, // 6: network.v1.LoadBalancerBackendMember.observed_at:type_name -> google.protobuf.Timestamp
-	3,  // 7: network.v1.LoadBalancerHealthCheck.protocol:type_name -> network.v1.LoadBalancerHealthCheckProtocol
-	0,  // 8: network.v1.LoadBalancer.exposure:type_name -> network.v1.LoadBalancerExposure
-	7,  // 9: network.v1.LoadBalancer.listener:type_name -> network.v1.LoadBalancerListener
-	9,  // 10: network.v1.LoadBalancer.backends:type_name -> network.v1.LoadBalancerBackendMember
-	10, // 11: network.v1.LoadBalancer.health_check:type_name -> network.v1.LoadBalancerHealthCheck
-	2,  // 12: network.v1.LoadBalancer.algorithm:type_name -> network.v1.LoadBalancerAlgorithm
-	27, // 13: network.v1.LoadBalancer.state:type_name -> network.v1.ResourceState
-	4,  // 14: network.v1.LoadBalancer.configuration_state:type_name -> network.v1.LoadBalancerConfigurationState
-	5,  // 15: network.v1.LoadBalancer.data_plane_state:type_name -> network.v1.LoadBalancerDataPlaneState
-	26, // 16: network.v1.LoadBalancer.observed_at:type_name -> google.protobuf.Timestamp
-	26, // 17: network.v1.LoadBalancer.created_at:type_name -> google.protobuf.Timestamp
-	26, // 18: network.v1.LoadBalancer.updated_at:type_name -> google.protobuf.Timestamp
-	26, // 19: network.v1.LoadBalancer.data_plane_observed_at:type_name -> google.protobuf.Timestamp
-	7,  // 20: network.v1.LoadBalancer.listeners:type_name -> network.v1.LoadBalancerListener
-	0,  // 21: network.v1.CreateLoadBalancerRequest.exposure:type_name -> network.v1.LoadBalancerExposure
-	6,  // 22: network.v1.CreateLoadBalancerRequest.listener:type_name -> network.v1.LoadBalancerListenerInput
-	8,  // 23: network.v1.CreateLoadBalancerRequest.backends:type_name -> network.v1.LoadBalancerBackendInput
-	10, // 24: network.v1.CreateLoadBalancerRequest.health_check:type_name -> network.v1.LoadBalancerHealthCheck
-	24, // 25: network.v1.CreateLoadBalancerRequest.listeners:type_name -> network.v1.LoadBalancerListenerSet
-	11, // 26: network.v1.CreateLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
-	28, // 27: network.v1.CreateLoadBalancerResponse.operation:type_name -> network.v1.Operation
-	11, // 28: network.v1.GetLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
-	0,  // 29: network.v1.ListLoadBalancersRequest.exposure:type_name -> network.v1.LoadBalancerExposure
-	27, // 30: network.v1.ListLoadBalancersRequest.state:type_name -> network.v1.ResourceState
-	11, // 31: network.v1.ListLoadBalancersResponse.items:type_name -> network.v1.LoadBalancer
-	8,  // 32: network.v1.UpdateLoadBalancerRequest.backends:type_name -> network.v1.LoadBalancerBackendInput
-	10, // 33: network.v1.UpdateLoadBalancerRequest.health_check:type_name -> network.v1.LoadBalancerHealthCheck
-	24, // 34: network.v1.UpdateLoadBalancerRequest.listeners:type_name -> network.v1.LoadBalancerListenerSet
-	29, // 35: network.v1.UpdateLoadBalancerRequest.update_mask:type_name -> google.protobuf.FieldMask
-	25, // 36: network.v1.UpdateLoadBalancerRequest.data:type_name -> network.v1.LoadBalancerMutableData
-	11, // 37: network.v1.UpdateLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
-	28, // 38: network.v1.UpdateLoadBalancerResponse.operation:type_name -> network.v1.Operation
-	11, // 39: network.v1.DeleteLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
-	28, // 40: network.v1.DeleteLoadBalancerResponse.operation:type_name -> network.v1.Operation
-	28, // 41: network.v1.GetLoadBalancerOperationResponse.operation:type_name -> network.v1.Operation
-	6,  // 42: network.v1.LoadBalancerListenerSet.items:type_name -> network.v1.LoadBalancerListenerInput
-	24, // 43: network.v1.LoadBalancerMutableData.listeners:type_name -> network.v1.LoadBalancerListenerSet
-	12, // 44: network.v1.TenantLoadBalancerService.CreateLoadBalancer:input_type -> network.v1.CreateLoadBalancerRequest
-	14, // 45: network.v1.TenantLoadBalancerService.GetLoadBalancer:input_type -> network.v1.GetLoadBalancerRequest
-	16, // 46: network.v1.TenantLoadBalancerService.ListLoadBalancers:input_type -> network.v1.ListLoadBalancersRequest
-	18, // 47: network.v1.TenantLoadBalancerService.UpdateLoadBalancer:input_type -> network.v1.UpdateLoadBalancerRequest
-	20, // 48: network.v1.TenantLoadBalancerService.DeleteLoadBalancer:input_type -> network.v1.DeleteLoadBalancerRequest
-	22, // 49: network.v1.TenantLoadBalancerService.GetLoadBalancerOperation:input_type -> network.v1.GetLoadBalancerOperationRequest
-	13, // 50: network.v1.TenantLoadBalancerService.CreateLoadBalancer:output_type -> network.v1.CreateLoadBalancerResponse
-	15, // 51: network.v1.TenantLoadBalancerService.GetLoadBalancer:output_type -> network.v1.GetLoadBalancerResponse
-	17, // 52: network.v1.TenantLoadBalancerService.ListLoadBalancers:output_type -> network.v1.ListLoadBalancersResponse
-	19, // 53: network.v1.TenantLoadBalancerService.UpdateLoadBalancer:output_type -> network.v1.UpdateLoadBalancerResponse
-	21, // 54: network.v1.TenantLoadBalancerService.DeleteLoadBalancer:output_type -> network.v1.DeleteLoadBalancerResponse
-	23, // 55: network.v1.TenantLoadBalancerService.GetLoadBalancerOperation:output_type -> network.v1.GetLoadBalancerOperationResponse
-	50, // [50:56] is the sub-list for method output_type
-	44, // [44:50] is the sub-list for method input_type
-	44, // [44:44] is the sub-list for extension type_name
-	44, // [44:44] is the sub-list for extension extendee
-	0,  // [0:44] is the sub-list for field type_name
+	6,  // 0: network.v1.LoadBalancerSessionPersistence.mode:type_name -> network.v1.LoadBalancerSessionMode
+	1,  // 1: network.v1.LoadBalancerListenerInput.protocol:type_name -> network.v1.LoadBalancerListenerProtocol
+	11, // 2: network.v1.LoadBalancerListenerInput.backends:type_name -> network.v1.LoadBalancerBackendInput
+	13, // 3: network.v1.LoadBalancerListenerInput.health_check:type_name -> network.v1.LoadBalancerHealthCheck
+	7,  // 4: network.v1.LoadBalancerListenerInput.certificate_ref:type_name -> network.v1.LoadBalancerCertificateRef
+	2,  // 5: network.v1.LoadBalancerListenerInput.algorithm:type_name -> network.v1.LoadBalancerAlgorithm
+	8,  // 6: network.v1.LoadBalancerListenerInput.session_persistence:type_name -> network.v1.LoadBalancerSessionPersistence
+	1,  // 7: network.v1.LoadBalancerListener.protocol:type_name -> network.v1.LoadBalancerListenerProtocol
+	12, // 8: network.v1.LoadBalancerListener.backends:type_name -> network.v1.LoadBalancerBackendMember
+	13, // 9: network.v1.LoadBalancerListener.health_check:type_name -> network.v1.LoadBalancerHealthCheck
+	7,  // 10: network.v1.LoadBalancerListener.certificate_ref:type_name -> network.v1.LoadBalancerCertificateRef
+	2,  // 11: network.v1.LoadBalancerListener.algorithm:type_name -> network.v1.LoadBalancerAlgorithm
+	8,  // 12: network.v1.LoadBalancerListener.session_persistence:type_name -> network.v1.LoadBalancerSessionPersistence
+	29, // 13: network.v1.LoadBalancerBackendMember.observed_at:type_name -> google.protobuf.Timestamp
+	3,  // 14: network.v1.LoadBalancerHealthCheck.protocol:type_name -> network.v1.LoadBalancerHealthCheckProtocol
+	0,  // 15: network.v1.LoadBalancer.exposure:type_name -> network.v1.LoadBalancerExposure
+	10, // 16: network.v1.LoadBalancer.listener:type_name -> network.v1.LoadBalancerListener
+	12, // 17: network.v1.LoadBalancer.backends:type_name -> network.v1.LoadBalancerBackendMember
+	13, // 18: network.v1.LoadBalancer.health_check:type_name -> network.v1.LoadBalancerHealthCheck
+	2,  // 19: network.v1.LoadBalancer.algorithm:type_name -> network.v1.LoadBalancerAlgorithm
+	30, // 20: network.v1.LoadBalancer.state:type_name -> network.v1.ResourceState
+	4,  // 21: network.v1.LoadBalancer.configuration_state:type_name -> network.v1.LoadBalancerConfigurationState
+	5,  // 22: network.v1.LoadBalancer.data_plane_state:type_name -> network.v1.LoadBalancerDataPlaneState
+	29, // 23: network.v1.LoadBalancer.observed_at:type_name -> google.protobuf.Timestamp
+	29, // 24: network.v1.LoadBalancer.created_at:type_name -> google.protobuf.Timestamp
+	29, // 25: network.v1.LoadBalancer.updated_at:type_name -> google.protobuf.Timestamp
+	29, // 26: network.v1.LoadBalancer.data_plane_observed_at:type_name -> google.protobuf.Timestamp
+	10, // 27: network.v1.LoadBalancer.listeners:type_name -> network.v1.LoadBalancerListener
+	0,  // 28: network.v1.CreateLoadBalancerRequest.exposure:type_name -> network.v1.LoadBalancerExposure
+	9,  // 29: network.v1.CreateLoadBalancerRequest.listener:type_name -> network.v1.LoadBalancerListenerInput
+	11, // 30: network.v1.CreateLoadBalancerRequest.backends:type_name -> network.v1.LoadBalancerBackendInput
+	13, // 31: network.v1.CreateLoadBalancerRequest.health_check:type_name -> network.v1.LoadBalancerHealthCheck
+	27, // 32: network.v1.CreateLoadBalancerRequest.listeners:type_name -> network.v1.LoadBalancerListenerSet
+	14, // 33: network.v1.CreateLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
+	31, // 34: network.v1.CreateLoadBalancerResponse.operation:type_name -> network.v1.Operation
+	14, // 35: network.v1.GetLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
+	0,  // 36: network.v1.ListLoadBalancersRequest.exposure:type_name -> network.v1.LoadBalancerExposure
+	30, // 37: network.v1.ListLoadBalancersRequest.state:type_name -> network.v1.ResourceState
+	14, // 38: network.v1.ListLoadBalancersResponse.items:type_name -> network.v1.LoadBalancer
+	11, // 39: network.v1.UpdateLoadBalancerRequest.backends:type_name -> network.v1.LoadBalancerBackendInput
+	13, // 40: network.v1.UpdateLoadBalancerRequest.health_check:type_name -> network.v1.LoadBalancerHealthCheck
+	27, // 41: network.v1.UpdateLoadBalancerRequest.listeners:type_name -> network.v1.LoadBalancerListenerSet
+	32, // 42: network.v1.UpdateLoadBalancerRequest.update_mask:type_name -> google.protobuf.FieldMask
+	28, // 43: network.v1.UpdateLoadBalancerRequest.data:type_name -> network.v1.LoadBalancerMutableData
+	14, // 44: network.v1.UpdateLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
+	31, // 45: network.v1.UpdateLoadBalancerResponse.operation:type_name -> network.v1.Operation
+	14, // 46: network.v1.DeleteLoadBalancerResponse.load_balancer:type_name -> network.v1.LoadBalancer
+	31, // 47: network.v1.DeleteLoadBalancerResponse.operation:type_name -> network.v1.Operation
+	31, // 48: network.v1.GetLoadBalancerOperationResponse.operation:type_name -> network.v1.Operation
+	9,  // 49: network.v1.LoadBalancerListenerSet.items:type_name -> network.v1.LoadBalancerListenerInput
+	27, // 50: network.v1.LoadBalancerMutableData.listeners:type_name -> network.v1.LoadBalancerListenerSet
+	15, // 51: network.v1.TenantLoadBalancerService.CreateLoadBalancer:input_type -> network.v1.CreateLoadBalancerRequest
+	17, // 52: network.v1.TenantLoadBalancerService.GetLoadBalancer:input_type -> network.v1.GetLoadBalancerRequest
+	19, // 53: network.v1.TenantLoadBalancerService.ListLoadBalancers:input_type -> network.v1.ListLoadBalancersRequest
+	21, // 54: network.v1.TenantLoadBalancerService.UpdateLoadBalancer:input_type -> network.v1.UpdateLoadBalancerRequest
+	23, // 55: network.v1.TenantLoadBalancerService.DeleteLoadBalancer:input_type -> network.v1.DeleteLoadBalancerRequest
+	25, // 56: network.v1.TenantLoadBalancerService.GetLoadBalancerOperation:input_type -> network.v1.GetLoadBalancerOperationRequest
+	16, // 57: network.v1.TenantLoadBalancerService.CreateLoadBalancer:output_type -> network.v1.CreateLoadBalancerResponse
+	18, // 58: network.v1.TenantLoadBalancerService.GetLoadBalancer:output_type -> network.v1.GetLoadBalancerResponse
+	20, // 59: network.v1.TenantLoadBalancerService.ListLoadBalancers:output_type -> network.v1.ListLoadBalancersResponse
+	22, // 60: network.v1.TenantLoadBalancerService.UpdateLoadBalancer:output_type -> network.v1.UpdateLoadBalancerResponse
+	24, // 61: network.v1.TenantLoadBalancerService.DeleteLoadBalancer:output_type -> network.v1.DeleteLoadBalancerResponse
+	26, // 62: network.v1.TenantLoadBalancerService.GetLoadBalancerOperation:output_type -> network.v1.GetLoadBalancerOperationResponse
+	57, // [57:63] is the sub-list for method output_type
+	51, // [51:57] is the sub-list for method input_type
+	51, // [51:51] is the sub-list for extension type_name
+	51, // [51:51] is the sub-list for extension extendee
+	0,  // [0:51] is the sub-list for field type_name
 }
 
 func init() { file_network_v1_load_balancer_proto_init() }
@@ -2339,16 +2673,17 @@ func file_network_v1_load_balancer_proto_init() {
 		return
 	}
 	file_network_v1_network_proto_init()
-	file_network_v1_load_balancer_proto_msgTypes[0].OneofWrappers = []any{}
 	file_network_v1_load_balancer_proto_msgTypes[2].OneofWrappers = []any{}
+	file_network_v1_load_balancer_proto_msgTypes[3].OneofWrappers = []any{}
 	file_network_v1_load_balancer_proto_msgTypes[4].OneofWrappers = []any{}
+	file_network_v1_load_balancer_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_network_v1_load_balancer_proto_rawDesc), len(file_network_v1_load_balancer_proto_rawDesc)),
-			NumEnums:      6,
-			NumMessages:   20,
+			NumEnums:      7,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

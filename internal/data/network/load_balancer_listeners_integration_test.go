@@ -2,6 +2,7 @@ package data_test
 
 import (
 	"github.com/google/uuid"
+	"reflect"
 	"testing"
 
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
@@ -184,4 +185,156 @@ func TestLBMultipleListenersMainFlow(t *testing.T) {
 	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT (SELECT count(*) FROM network_lb_subnet_refs WHERE tenant_id=$1 AND lb_id=$2 AND released_at IS NULL)+(SELECT count(*) FROM network_lb_vip_intents WHERE tenant_id=$1 AND lb_id=$2 AND released_at IS NULL)+(SELECT count(*) FROM network_lb_components WHERE tenant_id=$1 AND lb_id=$2 AND deleted_at IS NULL)`, f.f.tenant, lb.ID).Scan(&active); err != nil || active != 0 {
 		t.Fatal("LB cleanup leaked occupancy or components", active, err)
 	}
+}
+
+// Parameters traverse the production admission/PG/worker path. CRD/controller
+// status and the tenant TLS Secret are the only controlled external facts.
+func TestLBListenerParametersMainFlow(t *testing.T) {
+	c := &lbControllerFixture{}
+	f := newLBAdmissionFixture(t, c.http)
+	port := func(v uint32) *uint32 { return &v }
+	check := func(err error) {
+		t.Helper()
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	equal := func(got, want any) {
+		t.Helper()
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("got %#v; want %#v", got, want)
+		}
+	}
+	var ns string
+	check(f.f.owner.QueryRow(f.f.ctx, `SELECT namespace FROM network_provider_bindings WHERE tenant_id=$1 AND subnet_id=$2 AND resource_kind='subnet'`, f.f.tenant, f.subnet.ID).Scan(&ns))
+	f.api.Change("secrets", map[string]any{"apiVersion": "v1", "kind": "Secret", "metadata": map[string]any{"name": "tenant-tls", "namespace": ns, "uid": uuid.NewString(), "labels": map[string]any{"network.ani.io/tenant-id": f.f.tenant}}, "type": "kubernetes.io/tls", "data": map[string]any{"tls.crt": "external-cert", "tls.key": "external-key"}}, false)
+	listener := func(name, protocol string, p uint32) biz.LoadBalancerListenerInput {
+		return biz.LoadBalancerListenerInput{Name: name, Protocol: protocol, Port: port(p), Backends: f.request.Backends, Health: biz.LoadBalancerHealthInput{Port: port(0)}}
+	}
+	a := listener("a-http", "HTTP", 80)
+	a.Parameters = biz.LoadBalancerListenerParameters{Algorithm: "LeastRequest", SessionMode: "CookieTimeout", CookieExpirySeconds: 600, MaxConnections: 100, GzipEnabled: true}
+	a.Health = biz.LoadBalancerHealthInput{Protocol: "HTTP", Path: "/ready", Port: port(9090), IntervalSeconds: port(2), TimeoutSeconds: port(5), HealthyThreshold: port(2), UnhealthyThreshold: port(4)}
+	b := listener("b-https", "HTTPS", 443)
+	b.Parameters = biz.LoadBalancerListenerParameters{Algorithm: "SourceIP", Certificate: &biz.LoadBalancerCertificateRef{Name: "tenant-tls"}, SessionMode: "CookieSession", MaxConnections: 200, GzipEnabled: true}
+	tcp := listener("c-tcp", "TCP", 3001)
+	tcp.Parameters = biz.LoadBalancerListenerParameters{Algorithm: "LeastRequest", MaxConnections: 300}
+	udp := listener("d-udp", "UDP", 3002)
+	udp.Health.Port = port(9091)
+	udp.Parameters.Algorithm = "SourceIP"
+	ssl := listener("e-ssl", "SSL", 3003)
+	ssl.Parameters = biz.LoadBalancerListenerParameters{Certificate: &biz.LoadBalancerCertificateRef{Name: "tenant-tls", Namespace: ns}, MaxConnections: 400}
+	r := f.request
+	r.LoadBalancerMutableInput = biz.LoadBalancerMutableInput{Name: "parameters", Listeners: []biz.LoadBalancerListenerInput{a, b, tcp, udp, ssl}}
+	bad := r
+	bad.IdempotencyKey = "foreign-cert"
+	bad.Listeners = []biz.LoadBalancerListenerInput{b}
+	bad.Listeners[0].Parameters.Certificate = &biz.LoadBalancerCertificateRef{Name: "tenant-tls", Namespace: "foreign"}
+	if _, err := f.lbs.Create(f.f.ctx, bad); err == nil {
+		t.Fatal("cross-namespace certificate accepted")
+	}
+	created, err := f.lbs.Create(f.f.ctx, r)
+	check(err)
+	lb := lbState(t, f, created.LoadBalancer.ID, biz.Available)
+	equal(len(lb.Listeners), 5)
+	equal(lb.AppliedVersion, int64(1))
+	equal(lb.Listeners[0].Parameters, a.Parameters)
+	equal(lb.Listeners[0].Health.Port, uint32(9090))
+	equal(lb.Listeners[0].Health.TimeoutSeconds, uint32(5))
+	equal(lb.Listeners[1].Parameters.Certificate.Namespace, ns)
+	replay, err := f.lbs.Create(f.f.ctx, r)
+	check(err)
+	equal(replay.LoadBalancer.ID, lb.ID)
+	obj := func(listenerID, kind string) map[string]any {
+		t.Helper()
+		var name string
+		check(f.f.owner.QueryRow(f.f.ctx, `SELECT provider_name FROM network_lb_components WHERE tenant_id=$1 AND lb_id=$2 AND listener_id=$3 AND kind=$4 AND deleted_at IS NULL`, f.f.tenant, lb.ID, listenerID, kind).Scan(&name))
+		resource := map[string]string{"route": "httproutes", "tcp_route": "tcproutes", "udp_route": "udproutes", "policy": "backendtrafficpolicies", "client_policy": "clienttrafficpolicies", "patch_policy": "envoypatchpolicies"}[kind]
+		value := f.api.Object(resource, ns, name)
+		if value == nil {
+			t.Fatalf("missing %s", kind)
+		}
+		return value["spec"].(map[string]any)
+	}
+	rule := func(id, kind string) map[string]any { return obj(id, kind)["rules"].([]any)[0].(map[string]any) }
+	first := lb.Listeners[0].ID
+	httpRule := rule(first, "route")
+	equal(httpRule["name"], "default-rule")
+	persistence := httpRule["sessionPersistence"].(map[string]any)
+	equal(persistence["absoluteTimeout"], "600s")
+	equal(persistence["cookieConfig"].(map[string]any)["lifetimeType"], "Permanent")
+	policy := obj(first, "policy")
+	target := policy["targetRefs"].([]any)[0].(map[string]any)
+	equal(target["sectionName"], "default-rule")
+	equal(target["kind"], "HTTPRoute")
+	equal(policy["loadBalancer"].(map[string]any)["type"], "LeastRequest")
+	equal(policy["compressor"].([]any)[0].(map[string]any)["type"], "Gzip")
+	active := policy["healthCheck"].(map[string]any)["active"].(map[string]any)
+	equal(active["overrides"].(map[string]any)["port"], float64(9090))
+	equal(active["interval"], "2s")
+	equal(active["timeout"], "5s")
+	equal(active["http"].(map[string]any)["path"], "/ready")
+	equal(active["http"].(map[string]any)["hostname"], nil)
+	connection := obj(first, "client_policy")
+	equal(connection["targetRefs"].([]any)[0].(map[string]any)["sectionName"], "a-http")
+	equal(connection["connection"].(map[string]any)["connectionLimit"].(map[string]any)["value"], float64(100))
+	equal(rule(lb.Listeners[1].ID, "route")["sessionPersistence"].(map[string]any)["cookieConfig"].(map[string]any)["lifetimeType"], "Session")
+	equal(obj(lb.Listeners[1].ID, "policy")["loadBalancer"].(map[string]any)["consistentHash"].(map[string]any)["type"], "SourceIP")
+	equal(rule(lb.Listeners[2].ID, "tcp_route")["matches"], nil)
+	equal(obj(lb.Listeners[2].ID, "policy")["healthCheck"].(map[string]any)["active"].(map[string]any)["overrides"], nil)
+	equal(obj(lb.Listeners[3].ID, "policy")["healthCheck"], nil)
+	patches := obj(lb.Listeners[3].ID, "patch_policy")["jsonPatches"].([]any)
+	equal(len(patches), 3)
+	equal(patches[1].(map[string]any)["operation"].(map[string]any)["value"].(map[string]any)["port_value"], float64(9091))
+	equal(rule(lb.Listeners[4].ID, "tcp_route")["matches"], nil)
+	var gateway string
+	check(f.f.owner.QueryRow(f.f.ctx, `SELECT provider_name FROM network_provider_bindings WHERE tenant_id=$1 AND lb_id=$2 AND resource_kind='load_balancer'`, f.f.tenant, lb.ID).Scan(&gateway))
+	gl := f.api.Object("gateways", ns, gateway)["spec"].(map[string]any)["listeners"].([]any)
+	equal(gl[4].(map[string]any)["protocol"], "TLS")
+	equal(gl[4].(map[string]any)["tls"].(map[string]any)["mode"], "Terminate")
+	equal(gl[1].(map[string]any)["tls"].(map[string]any)["certificateRefs"].([]any)[0].(map[string]any)["name"], "tenant-tls")
+	update := func(key string, items []biz.LoadBalancerListenerInput) {
+		t.Helper()
+		accepted, err := f.lbs.Update(f.f.ctx, biz.UpdateLoadBalancer{ID: lb.ID, ExpectedVersion: lb.Version, IdempotencyKey: key, LoadBalancerMutableInput: biz.LoadBalancerMutableInput{Listeners: items, UpdateMask: []string{"listeners"}}})
+		check(err)
+		f.f.drive(t, func() bool {
+			lb, err = f.lbs.Get(f.f.ctx, "", lb.ID)
+			return err == nil && lb.ConfigurationState == "configured" && lb.AppliedVersion == accepted.LoadBalancer.DesiredVersion
+		})
+	}
+	a.ID = first
+	b.ID = lb.Listeners[1].ID
+	tcp.ID = lb.Listeners[2].ID
+	udp.ID = lb.Listeners[3].ID
+	ssl.ID = lb.Listeners[4].ID
+	a.Parameters = biz.LoadBalancerListenerParameters{}
+	a.Health = biz.LoadBalancerHealthInput{Port: port(0)}
+	// Clearing parameters removes their fields and the independently owned CTP.
+	tcp.Protocol = "HTTP"
+	udp.Protocol = "TCP"
+	udp.Health.Port = port(0)
+	update("clear-and-switch", []biz.LoadBalancerListenerInput{a, b, tcp, udp, ssl})
+	equal(lb.Listeners[0].ID, first)
+	equal(rule(first, "route")["sessionPersistence"], nil)
+	equal(obj(first, "policy")["compressor"], nil)
+	equal(obj(first, "policy")["loadBalancer"].(map[string]any)["type"], "RoundRobin")
+	var obsolete int
+	check(f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_lb_components WHERE tenant_id=$1 AND lb_id=$2 AND deleted_at IS NULL AND ((listener_id=$3 AND kind='client_policy') OR (listener_id=$4 AND kind='tcp_route') OR (listener_id=$5 AND kind IN ('udp_route','patch_policy')))`, f.f.tenant, lb.ID, a.ID, tcp.ID, udp.ID).Scan(&obsolete))
+	equal(obsolete, 0)
+	a.Parameters.HTTPSRedirectStatusCode = 301
+	if _, err := f.lbs.Update(f.f.ctx, biz.UpdateLoadBalancer{ID: lb.ID, ExpectedVersion: lb.Version, IdempotencyKey: "redirect-backend-conflict", LoadBalancerMutableInput: biz.LoadBalancerMutableInput{Listeners: []biz.LoadBalancerListenerInput{a, b}, UpdateMask: []string{"listeners"}}}); err == nil {
+		t.Fatal("redirect with backend accepted")
+	}
+	a.Backends = nil
+	update("redirect", []biz.LoadBalancerListenerInput{a, b})
+	equal(rule(first, "route")["backendRefs"], nil)
+	equal(rule(first, "route")["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["statusCode"], float64(301))
+	a.Parameters.HTTPSRedirectStatusCode = 302
+	update("redirect-302", []biz.LoadBalancerListenerInput{a, b})
+	equal(rule(first, "route")["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["statusCode"], float64(302))
+	equal(rule(first, "route")["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["port"], float64(443))
+	_, err = f.lbs.Delete(f.f.ctx, "", lb.ID)
+	check(err)
+	lbState(t, f, lb.ID, biz.Deleted)
+	check(f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_lb_components WHERE tenant_id=$1 AND lb_id=$2 AND deleted_at IS NULL`, f.f.tenant, lb.ID).Scan(&obsolete))
+	equal(obsolete, 0)
 }

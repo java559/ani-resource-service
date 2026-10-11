@@ -10,8 +10,8 @@ import (
 )
 
 const insertLBConfigurationListener = `-- name: InsertLBConfigurationListener :exec
-INSERT INTO network_lb_configuration_listeners(tenant_id,cluster_id,namespace,lb_id,config_version,listener_id,protocol,port,interval_seconds,timeout_seconds,unhealthy_threshold,healthy_threshold,health_check_port)
-VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+INSERT INTO network_lb_configuration_listeners(tenant_id,cluster_id,namespace,lb_id,config_version,listener_id,protocol,port,interval_seconds,timeout_seconds,unhealthy_threshold,healthy_threshold,health_check_port,parameters,health_protocol,health_path,health_hostname)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
 `
 
 type InsertLBConfigurationListenerParams struct {
@@ -28,6 +28,10 @@ type InsertLBConfigurationListenerParams struct {
 	UnhealthyThreshold int64
 	HealthyThreshold   int64
 	HealthCheckPort    int32
+	Parameters         []byte
+	HealthProtocol     string
+	HealthPath         string
+	HealthHostname     string
 }
 
 func (q *Queries) InsertLBConfigurationListener(ctx context.Context, arg InsertLBConfigurationListenerParams) error {
@@ -45,6 +49,10 @@ func (q *Queries) InsertLBConfigurationListener(ctx context.Context, arg InsertL
 		arg.UnhealthyThreshold,
 		arg.HealthyThreshold,
 		arg.HealthCheckPort,
+		arg.Parameters,
+		arg.HealthProtocol,
+		arg.HealthPath,
+		arg.HealthHostname,
 	)
 	return err
 }
@@ -76,7 +84,7 @@ func (q *Queries) InsertLBListenerMember(ctx context.Context, arg InsertLBListen
 }
 
 const listLBConfigurationListeners = `-- name: ListLBConfigurationListeners :many
-SELECT l.tenant_id, l.cluster_id, l.namespace, l.lb_id, l.listener_id, l.protocol, l.port, l.name,c.tenant_id, c.cluster_id, c.namespace, c.lb_id, c.config_version, c.listener_id, c.protocol, c.port, c.interval_seconds, c.timeout_seconds, c.unhealthy_threshold, c.healthy_threshold, c.health_check_port FROM network_lb_listeners l
+SELECT l.tenant_id, l.cluster_id, l.namespace, l.lb_id, l.listener_id, l.protocol, l.port, l.name,c.tenant_id, c.cluster_id, c.namespace, c.lb_id, c.config_version, c.listener_id, c.protocol, c.port, c.interval_seconds, c.timeout_seconds, c.unhealthy_threshold, c.healthy_threshold, c.health_check_port, c.parameters, c.health_protocol, c.health_path, c.health_hostname FROM network_lb_listeners l
 JOIN network_lb_configuration_listeners c USING(tenant_id,lb_id,listener_id)
 WHERE c.tenant_id=$1 AND c.lb_id=$2 AND c.config_version=$3 ORDER BY l.name
 `
@@ -123,6 +131,10 @@ func (q *Queries) ListLBConfigurationListeners(ctx context.Context, arg ListLBCo
 			&i.NetworkLbConfigurationListener.UnhealthyThreshold,
 			&i.NetworkLbConfigurationListener.HealthyThreshold,
 			&i.NetworkLbConfigurationListener.HealthCheckPort,
+			&i.NetworkLbConfigurationListener.Parameters,
+			&i.NetworkLbConfigurationListener.HealthProtocol,
+			&i.NetworkLbConfigurationListener.HealthPath,
+			&i.NetworkLbConfigurationListener.HealthHostname,
 		); err != nil {
 			return nil, err
 		}

@@ -177,6 +177,8 @@ message Subnet {
   string vpc_id = 14;
   string reason_message = 15;
   string gateway = 16;
+  optional int64 available_ip_count = 17;
+  optional int64 used_ip_count = 18;
 }
 message CreateSubnetRequest {
  string tenant_id = 1;

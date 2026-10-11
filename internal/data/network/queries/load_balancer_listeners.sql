@@ -9,8 +9,8 @@ SELECT sqlc.embed(m),lm.weight FROM network_lb_listener_members lm
 JOIN network_lb_members m USING(tenant_id,lb_id,member_id)
 WHERE lm.tenant_id=$1 AND lm.lb_id=$2 AND lm.config_version=$3 AND lm.listener_id=$4 ORDER BY m.member_id;
 -- name: InsertLBConfigurationListener :exec
-INSERT INTO network_lb_configuration_listeners(tenant_id,cluster_id,namespace,lb_id,config_version,listener_id,protocol,port,interval_seconds,timeout_seconds,unhealthy_threshold,healthy_threshold,health_check_port)
-VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13);
+INSERT INTO network_lb_configuration_listeners(tenant_id,cluster_id,namespace,lb_id,config_version,listener_id,protocol,port,interval_seconds,timeout_seconds,unhealthy_threshold,healthy_threshold,health_check_port,parameters,health_protocol,health_path,health_hostname)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17);
 -- name: InsertLBListenerMember :exec
 INSERT INTO network_lb_listener_members(tenant_id,lb_id,config_version,listener_id,member_id,weight)
 VALUES($1,$2,$3,$4,$5,$6);

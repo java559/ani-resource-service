@@ -38,17 +38,24 @@ func (c *lbControllerFixture) http(w http.ResponseWriter, r *http.Request, api *
 	if len(parts) < 4 {
 		return false
 	}
-	kind := parts[3]
-	ns, name := "", ""
-	if kind == "namespaces" && len(parts) > 5 {
-		ns, kind = parts[4], parts[5]
-		if len(parts) > 6 {
-			name = parts[6]
-		}
-	} else if len(parts) > 4 {
-		name = parts[4]
+	offset := 3
+	if parts[0] == "api" {
+		offset = 2
 	}
-	kinds := map[string]string{"gateways": "Gateway", "backends": "Backend", "httproutes": "HTTPRoute", "backendtrafficpolicies": "BackendTrafficPolicy"}
+	if len(parts) <= offset {
+		return false
+	}
+	kind := parts[offset]
+	ns, name := "", ""
+	if kind == "namespaces" && len(parts) > offset+2 {
+		ns, kind = parts[offset+1], parts[offset+2]
+		if len(parts) > offset+3 {
+			name = parts[offset+3]
+		}
+	} else if len(parts) > offset+1 {
+		name = parts[offset+1]
+	}
+	kinds := map[string]string{"gateways": "Gateway", "backends": "Backend", "httproutes": "HTTPRoute", "backendtrafficpolicies": "BackendTrafficPolicy", "tcproutes": "TCPRoute", "udproutes": "UDPRoute", "clienttrafficpolicies": "ClientTrafficPolicy", "envoypatchpolicies": "EnvoyPatchPolicy", "secrets": "Secret"}
 	if _, ok := kinds[kind]; !ok {
 		return false
 	}
@@ -160,11 +167,12 @@ func (c *lbControllerFixture) http(w http.ResponseWriter, r *http.Request, api *
 			statusListeners = append(statusListeners, map[string]any{"name": listener["name"], "conditions": lbTestConditions(g, "Accepted", "Programmed", "ResolvedRefs")})
 		}
 		obj["status"] = map[string]any{"conditions": lbTestConditions(g, "Accepted", "Programmed"), "listeners": statusListeners}
-	case "httproutes":
+	case "httproutes", "tcproutes", "udproutes":
 		obj["status"] = map[string]any{"parents": []any{map[string]any{"parentRef": spec["parentRefs"].([]any)[0], "controllerName": "gateway.envoyproxy.io/gatewayclass-controller", "conditions": lbTestConditions(g, "Accepted", "ResolvedRefs")}}}
 	case "backendtrafficpolicies":
 		routeName := spec["targetRefs"].([]any)[0].(map[string]any)["name"].(string)
-		route := api.Object("httproutes", ns, routeName)
+		routeKind := map[string]string{"HTTPRoute": "httproutes", "TCPRoute": "tcproutes", "UDPRoute": "udproutes"}[spec["targetRefs"].([]any)[0].(map[string]any)["kind"].(string)]
+		route := api.Object(routeKind, ns, routeName)
 		gateway := ""
 		if route != nil {
 			gateway = route["spec"].(map[string]any)["parentRefs"].([]any)[0].(map[string]any)["name"].(string)
@@ -174,12 +182,17 @@ func (c *lbControllerFixture) http(w http.ResponseWriter, r *http.Request, api *
 			gateway = "pending-route"
 		}
 		obj["status"] = map[string]any{"ancestors": []any{map[string]any{"ancestorRef": map[string]any{"group": "gateway.networking.k8s.io", "kind": "Gateway", "name": gateway, "namespace": ns}, "controllerName": "gateway.envoyproxy.io/gatewayclass-controller", "conditions": lbTestConditions(g, "Accepted")}}}
+	case "clienttrafficpolicies":
+		ref := spec["targetRefs"].([]any)[0].(map[string]any)
+		obj["status"] = map[string]any{"ancestors": []any{map[string]any{"ancestorRef": ref, "controllerName": "gateway.envoyproxy.io/gatewayclass-controller", "conditions": lbTestConditions(g, "Accepted")}}}
+	case "envoypatchpolicies":
+		obj["status"] = map[string]any{"conditions": lbTestConditions(g, "Accepted", "Programmed")}
 	}
 	api.Change(kind, obj, false)
 	if kind == "gateways" && !c.holdGenerated {
 		c.generated(api, obj, false)
 	}
-	if kind == "httproutes" {
+	if kind == "httproutes" || kind == "tcproutes" || kind == "udproutes" {
 		c.refreshPolicies(api, ns, name, spec["parentRefs"].([]any)[0].(map[string]any)["name"].(string))
 	}
 	code := 200
@@ -229,8 +242,12 @@ func (c *lbControllerFixture) generated(api *controlled.Server, gateway map[stri
 		if target < 1024 {
 			target += 10000
 		}
-		servicePorts = append(servicePorts, map[string]any{"name": listener["name"], "port": port, "targetPort": target, "protocol": "TCP"})
-		slicePorts = append(slicePorts, map[string]any{"name": listener["name"], "port": target, "protocol": "TCP"})
+		protocol := "TCP"
+		if listener["protocol"] == "UDP" {
+			protocol = "UDP"
+		}
+		servicePorts = append(servicePorts, map[string]any{"name": listener["name"], "port": port, "targetPort": target, "protocol": protocol})
+		slicePorts = append(slicePorts, map[string]any{"name": listener["name"], "port": target, "protocol": protocol})
 	}
 	owner := func(kind, name, id string) []any {
 		version := "apps/v1"

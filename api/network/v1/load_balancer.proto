@@ -30,14 +30,21 @@ enum LoadBalancerExposure {
 enum LoadBalancerListenerProtocol {
   LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED = 0;
   LOAD_BALANCER_LISTENER_PROTOCOL_HTTP = 1;
+  LOAD_BALANCER_LISTENER_PROTOCOL_HTTPS = 2;
+  LOAD_BALANCER_LISTENER_PROTOCOL_TCP = 3;
+  LOAD_BALANCER_LISTENER_PROTOCOL_UDP = 4;
+  LOAD_BALANCER_LISTENER_PROTOCOL_SSL = 5;
 }
 enum LoadBalancerAlgorithm {
   LOAD_BALANCER_ALGORITHM_UNSPECIFIED = 0;
   LOAD_BALANCER_ALGORITHM_ROUND_ROBIN = 1;
+  LOAD_BALANCER_ALGORITHM_LEAST_REQUEST = 2;
+  LOAD_BALANCER_ALGORITHM_SOURCE_IP = 3;
 }
 enum LoadBalancerHealthCheckProtocol {
   LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED = 0;
   LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP = 1;
+  LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP = 2;
 }
 // Configuration completion and observed traffic health are independent of the
 // resource lifecycle and operation history. UNSPECIFIED is never a ready result.
@@ -56,9 +63,23 @@ enum LoadBalancerDataPlaneState {
   LOAD_BALANCER_DATA_PLANE_STATE_UNHEALTHY = 3;
 }
 
-// Each HTTP listener uses the default Prefix("/") route. The legacy singular
-// field defaults to HTTP/8080. The listener set permits port/backend/health
-// changes, with stable retained IDs and names and unique listener ports.
+// HTTP/HTTPS use Prefix("/"). TCP/UDP use their typed routes; SSL terminates
+// TLS before TCPRoute. The legacy singular field defaults to HTTP/8080; new
+// parameters use the listener set, with stable IDs/names and unique ports.
+enum LoadBalancerSessionMode {
+  LOAD_BALANCER_SESSION_MODE_UNSPECIFIED = 0;
+  LOAD_BALANCER_SESSION_MODE_DISABLED = 3;
+  LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT = 1;
+  LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION = 2;
+}
+message LoadBalancerCertificateRef {
+  string name = 1;
+  string namespace = 2;
+}
+message LoadBalancerSessionPersistence {
+  LoadBalancerSessionMode mode = 1;
+  uint32 cookie_expiry_seconds = 2;
+}
 message LoadBalancerListenerInput {
   LoadBalancerListenerProtocol protocol = 1;
   optional uint32 port = 2;
@@ -66,6 +87,12 @@ message LoadBalancerListenerInput {
   string name = 4;
   repeated LoadBalancerBackendInput backends = 5;
   LoadBalancerHealthCheck health_check = 6;
+  LoadBalancerCertificateRef certificate_ref = 7;
+  LoadBalancerAlgorithm algorithm = 8;
+  LoadBalancerSessionPersistence session_persistence = 9;
+  optional uint32 max_connections = 10;
+  bool gzip_enabled = 11;
+  uint32 https_redirect_status_code = 12;
 }
 message LoadBalancerListener {
   string id = 1;
@@ -74,6 +101,12 @@ message LoadBalancerListener {
   string name = 4;
   repeated LoadBalancerBackendMember backends = 5;
   LoadBalancerHealthCheck health_check = 6;
+  LoadBalancerCertificateRef certificate_ref = 7;
+  LoadBalancerAlgorithm algorithm = 8;
+  LoadBalancerSessionPersistence session_persistence = 9;
+  optional uint32 max_connections = 10;
+  bool gzip_enabled = 11;
+  uint32 https_redirect_status_code = 12;
 }
 // The backend must resolve to a current, allocated business address in this VPC
 // using Attachment plus Provider identity facts. CIDR membership alone is not
@@ -101,19 +134,20 @@ message LoadBalancerBackendMember {
   google.protobuf.Timestamp observed_at = 9;
   bool observation_stale = 10;
 }
-// First release: TCP active health checking, defaults 5s interval, 3s timeout,
-// unhealthy threshold 3 and healthy threshold 1. Explicit values must be positive
-// and timeout_seconds must be less than interval_seconds. The algorithm is
-// RoundRobin and panicThreshold=0; neither is an arbitrary Provider policy.
+// TCP/HTTP active health checks (UDP uses a TCP EnvoyPatchPolicy).
+// Defaults: 5s interval, 3s timeout, unhealthy=3, healthy=1. Positive
+// timeout and interval are independent; HTTP requires path and accepts hostname.
 message LoadBalancerHealthCheck {
   LoadBalancerHealthCheckProtocol protocol = 1;
   optional uint32 interval_seconds = 2;
   optional uint32 timeout_seconds = 3;
   optional uint32 unhealthy_threshold = 4;
   optional uint32 healthy_threshold = 5;
-  // Required on create/update: 1..65535, equal to every backend service port.
-  // Absent on legacy records that use the endpoint serving port.
+  // Missing or 0 uses the endpoint serving port; 1..65535 is an independent
+  // check port, not required to match the backend business port.
   optional uint32 port = 6;
+  string path = 7;
+  string hostname = 8;
 }
 
 message LoadBalancer {

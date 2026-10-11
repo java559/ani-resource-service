@@ -8,7 +8,7 @@ Network 实施基础为 `d8835a22d905e358b7f60756d3113baa97d7c762`（既有 EIP/
 
 本方案覆盖：平台基础网络准备、已有 VPC 创建/删除/观察的调整、既有 Public EIP/SNAT 的调整、三种类型租户 LB 的新生命周期，以及 API/界面接入任务。Network 保持唯一网络产品写入者；ANI Gateway/Console 只调用契约和展示结果；实例 owner 仍创建 Pod/VM；kc 与 Envoy Gateway 各自负责其数据面资源。
 
-本批 LB 交付范围为 IPv4、单集群、三种入口类型、1～64 个独立 HTTP 监听器、固定 small/medium/large、同 VPC 的 IP 后端、权重、RoundRobin 和 TCP 主动健康检查。旧单监听器默认 8080 输入继续兼容。HTTPS/证书、TCP/UDP、复杂路由、会话保持/限流、在线切换 LB 类型/规格、HA/容量和 Underlay 物理验收仍属后续单独任务，不预埋不必要的通用策略系统。
+本批 LB 交付范围为 IPv4、单集群、三种入口类型、1～64 个独立 HTTP/HTTPS/TCP/UDP/SSL 监听器、固定 small/medium/large、同 VPC 的 IP 后端、权重与监听参数。旧单监听器默认 HTTP/8080 输入继续兼容。复杂路由、证书管理、在线切换 LB 类型/规格、HA/容量和 Underlay 物理验收仍属后续单独任务。
 
 已有 VPC/Subnet/Attachment 的未冲突规则、Public EIP 的独立申请/保留/释放语义、平台 Public 网络模式和证据要求继续适用。本文替代旧方案中“每 VPC 总共一个 SNAT”“VPC Ready 即整个创建完成”“任何 SNAT 都直接阻塞 VPC 删除”“EIP 只能用于 SNAT”的相关限制。
 
@@ -114,7 +114,7 @@ CreateVPC 的租户输入保持名称/CIDR/描述/幂等键，不让用户选择
 
 ### 6.1 资源和租户输入
 
-LB 归属于一个租户/VPC/Subnet，包含 1～64 个 HTTP Listener，每个监听器拥有稳定 ID/name、端口、默认 `/` 前缀规则、独立 Backend Members 和健康检查配置。一期不开放任意 Provider YAML。建议创建输入：
+LB 归属于一个租户/VPC/Subnet，包含 1～64 个 HTTP/HTTPS/TCP/UDP/SSL Listener，每个监听器拥有稳定 ID/name、端口、独立 Backend Members 和健康检查配置；HTTP/HTTPS 使用默认 `/` 前缀规则。一期不开放任意 Provider YAML。建议创建输入：
 
 | 字段 | 规则 |
 |---|---|
@@ -124,10 +124,16 @@ LB 归属于一个租户/VPC/Subnet，包含 1～64 个 HTTP Listener，每个�
 | flavor | 固定 small/medium/large；空值兼容 small，未知值拒绝，不能直接传 Class 名 |
 | public_eip_id | public/public_private 必填，private 禁止；已分配且未占用的本租户 Public EIP |
 | private_ip | private/public_private 必填，属于所选 Subnet 且非网关/保留地址；public 禁止 |
-| listeners | `{items:[...]}`；1～64 个 HTTP 监听器，name 遵守安装 CRD 的 253 字符 DNS 名称限制，name/port 不重复，端口范围 1–65535 |
+| listeners | `{items:[...]}`；1～64 个监听器，protocol 为 HTTP/HTTPS/TCP/UDP/SSL；name 遵守安装 CRD 的 253 字符 DNS 名称限制，name/port 不重复，端口范围 1–65535 |
 | listener | 旧单监听器输入仍兼容，规范化为 `http`；不得与 listeners 同时提供 |
-| backends | 每监听器非空；成员含 subnet_id、IPv4、port、weight，须验证归属本 VPC 的已分配业务地址，禁止直接指定平台/节点/跨租户地址；顶层字段仅用于旧输入 |
-| health_check | 创建/更新必须显式提供 port（1–65535），与全部后端成员服务端口相同；与前端 listener.port 独立。首批 TCP，默认 interval=5s、timeout=3s、unhealthy=3、healthy=1；RoundRobin 和 panicThreshold=0 为明确默认 |
+| backends | 转发监听器非空，HTTP 重定向监听器必须为空；成员含 subnet_id、IPv4、port、weight，须验证归属本 VPC 的已分配业务地址，禁止直接指定平台/节点/跨租户地址；顶层字段仅用于旧输入 |
+| health_check | TCP/HTTP；UDP 仅 TCP。port 缺失或 0 使用后端业务端口，非零 1–65535 可以独立于业务端口；HTTP 要求 path，可选 DNS hostname。默认 interval=5s、timeout=3s、unhealthy=3、healthy=1，时间与阈值分别为正数；panicThreshold=0 |
+| algorithm | 每监听器 RoundRobin（旧请求默认）、LeastRequest、SourceIP ConsistentHash，详情返回保存的实际算法 |
+| certificate_ref | HTTPS/SSL 必填 TLS Secret name，可选 namespace 必须等于资源绑定 namespace；Secret 需具有相同租户标签。只引用，不签发或上传 |
+| session_persistence | HTTP/HTTPS 可停用、COOKIE_TIMEOUT（正 cookie_expiry_seconds）、COOKIE_SESSION；关闭删除旧字段 |
+| max_connections | 可选正数，0/省略关闭；HTTP/HTTPS/TCP/SSL 映射 CTP；UDP 不接受该字段 |
+| gzip_enabled | HTTP/HTTPS 开启 Gzip；false 清除 compressor |
+| https_redirect_status_code | HTTP 的 301/302，0 关闭；与 backends 互斥，HTTPS 目标优先 443，否则必须唯一，重定向包含目标端口 |
 
 Backend 地址的归属校验结合已持久化 Attachment 与 Provider VNicIP/UID 事实，不仅用 CIDR 判断业务归属。Network 不创建或删除业务 Pod/VM；实例 owner 返回的接入信息用于地址确认。后端删除/地址变化触发成员退化与配置更新，固定 IP 成员不会静默转发到复用同一 IP 的另一身份。需要未纳管静态后端时另行定义管理员准入，不默认为任意 IP 放行。
 
@@ -151,11 +157,26 @@ Backend 地址的归属校验结合已持久化 Attachment 与 Provider VNicIP/U
 | medium | 4 | 2 CPU / 2Gi | 4 CPU / 4Gi | lb-medium | lb-medium-noeip |
 | large | 6 | 4 CPU / 4Gi | 8 CPU / 8Gi | lb-large | lb-large-noeip |
 
-Gateway `spec.infrastructure.annotations` 的 `lb_vpc`/`subnet` 使用 namespace/name。Gateway、HTTPRoute、Backend、BackendTrafficPolicy 放在固定租户 namespace；GatewayNamespace 模式由 Envoy Gateway 在同 namespace 生成 Service/Deployment/Pod。Network 只写自己拥有的 Gateway/Route/Backend/Policy，不直接成为生成 Service/Deployment 的第二个 spec 写入者。
+Gateway `spec.infrastructure.annotations` 的 `lb_vpc`/`subnet` 使用 namespace/name。Gateway、各协议 Route、Backend、BackendTrafficPolicy 及所需 ClientTrafficPolicy/EnvoyPatchPolicy 放在固定租户 namespace；GatewayNamespace 模式由 Envoy Gateway 在同 namespace 生成 Service/Deployment/Pod。Network 只写自己拥有的 Gateway/Route/Backend/Policy，不直接成为生成 Service/Deployment 的第二个 spec 写入者。
 
-2026-09-17 用户明确健康检查端口由用户传入，并与后端服务端口一致。同一监听器要求其全部后端使用与健康端口相同的服务端口；不同监听器可以使用不同后端服务端口。健康端口随配置版本持久化并在查询中返回，Provider 显式生成 `healthCheck.active.overrides.port`。迁移前旧配置以内部值 0 保留 endpoint 默认检查行为，查询不返回该占位值；创建/更新不允许缺失或 0。
+监听参数随配置版本持久化，旧行参数默认为空对象，旧回执与 fingerprint 不重写。健康端口缺失/0 时省略 `overrides.port`，非零独立端口显式写入；不再要求与后端端口相同或 timeout 小于 interval。
 
-HTTPRoute 按 Listener 绑定 Gateway 并引用本 LB 的 Backend Members；每条 Route 的 BackendTrafficPolicy 独立指向正确对象，包含明确算法及检查参数。自有 CR 的名称/UID入持久映射；生成 Service/Deployment 的归属通过 Gateway UID/owner链和预期名称核对，观察结果保存后用于 EIP 绑定验证。未经证明的同名 Service 不是合法目标。
+| 协议/参数 | 生成对象及字段 |
+|---|---|
+| HTTP / HTTPS | Gateway HTTP / HTTPS（TLS Terminate）+ HTTPRoute |
+| TCP / UDP / SSL | Gateway TCP / UDP / TLS（TLS Terminate）+ TCPRoute / UDPRoute / TCPRoute |
+| algorithm | BackendTrafficPolicy `loadBalancer`；SourceIP 使用 `ConsistentHash` + `consistentHash.type=SourceIP` |
+| Cookie | HTTPRoute `rules[].sessionPersistence`，Permanent + absoluteTimeout 或 Session |
+| 健康检查 | 非 UDP：BackendTrafficPolicy `healthCheck.active`；UDP：EnvoyPatchPolicy TCP health_checks、可选 endpoint 检查端口及 panic=0 |
+| 最大连接数 | ClientTrafficPolicy 指向 Gateway 与 listener sectionName，`connection.connectionLimit.value` |
+| Gzip / HTTPS 重定向 | BackendTrafficPolicy compressor / HTTPRoute RequestRedirect，无 backendRefs |
+
+HTTPRoute rule 名固定 `default-rule`，HTTP BackendTrafficPolicy 的 sectionName 指向该 rule；Gateway parentRef 与 ClientTrafficPolicy 的 sectionName 指向 listener name。TCP/UDP policy 不填写不存在的 Route rule sectionName。每个 listener 继续拥有独立 Route/Policy 组件，协议切换与关闭参数只清理对应自有组件。生成 Service/Deployment 的归属仍通过 Gateway UID/owner 链核对，不直接写这些对象。
+
+最大连接数是 Envoy 每 Pod 的限制，不是全局协调额度。ClientTrafficPolicy 只写所需 connectionLimit，保留平台已有可信代理/clientIPDetection 以及 HTTP2/WebSocket 默认行为。TLS 引用需要资源绑定 namespace 内对选定 Secret 的 `get` 权限，可通过带 resourceNames 的 Role/RoleBinding 授予，不扩大为全局 Secret list/watch。UDP 健康策略要求底层开启 `extensionApis.enableEnvoyPatchPolicy`；缺失时保留失败/未就绪证据，由底层处理，应用不更改安装配置。
+
+
+本次 Fedora 具名验证：`TestLBMultipleListenersMainFlow`、`TestLBListenerParametersMainFlow`，以及两仓 `TestNetworkJointHTTP/multiple_listeners` 均通过。测试使用真实 admission、PostgreSQL、Worker、RPC/HTTP/auth；Kubernetes/控制器边界为 fixture。未运行全量测试。真实集群/数据面验收仍为 `not_verified`，不以 fixture Accepted/Programmed 代替。
 
 ### 6.3 创建事务和执行顺序
 
@@ -163,7 +184,7 @@ HTTPRoute 按 Listener 绑定 Gateway 并引用本 LB 的 Backend Members；每�
 
 Backend Member 引用同VPC内其他Subnet时，也登记该Subnet的网络引用占用；删除该Subnet前先移除相关成员或LB并确认配置释放，不能只保护LB入口所在Subnet。成员关系不取得业务实例生命周期所有权，实例owner仍可删除业务实例，Network观察后标记成员不可用。
 
-worker 按稳定依赖推进 Backend → Gateway → HTTPRoute/BackendTrafficPolicy，观察控制器生成的数据面和 kc VIP/EIP 绑定。独立步骤重试不能重新申请另一个 Public EIP或另一个 VIP，不能留下未登记 CR。
+worker 按稳定依赖推进 Backend → Gateway → 各协议 Route/Policy，观察控制器生成的数据面和 kc VIP/EIP 绑定。独立步骤重试不能重新申请另一个 Public EIP或另一个 VIP，不能留下未登记 CR。
 
 LB 配置完成需：自有 CR 身份与期望一致，Gateway Accepted/Programmed，Route Accepted/ResolvedRefs，Policy Accepted且代次匹配；数据面存在并关联正确；Service 类型、端口、EndpointSlice、VIP分配或Public EIP绑定符合 exposure；EIP claim 目标和 Provider实际 Service一致；父基础连接和观测新鲜。原附件关闭数据面探针，Running 不证明监听器真正加载，因此响应还需分别记录 `configuration_state`、`data_plane_state`、`observed_at`，无实际健康来源时 data_plane_state=unknown。
 
@@ -171,7 +192,7 @@ LB 配置完成需：自有 CR 身份与期望一致，Gateway Accepted/Programm
 
 ### 6.4 更新与删除
 
-本批允许更新名称/描述、增删监听器、修改监听端口和各监听器的后端/健康检查；沿用 expected_version + 幂等键、desired/applied 配置版本和同一 LB 的 lease。新更新使用 `{data:{...},update_mask:...}`；监听器集合遗漏时保持原值，提供时整体替换，空集合拒绝。保留的监听器 ID/name 稳定；VPC、Subnet、exposure、Public EIP、VIP、flavor 和 HTTP 协议保持不可变。更新部分完成/响应未知不得抹掉旧 applied 状态，退化和失败原因可查询。
+本批允许更新名称/描述、增删监听器、修改监听端口和各监听器的后端/健康检查；沿用 expected_version + 幂等键、desired/applied 配置版本和同一 LB 的 lease。新更新使用 `{data:{...},update_mask:...}`；监听器集合遗漏时保持原值，提供时整体替换，空集合拒绝。保留的监听器 ID/name 稳定；协议及适用参数可以更新，VPC、Subnet、exposure、Public EIP、VIP、flavor 保持不可变。更新部分完成/响应未知不得抹掉旧 applied 状态，退化和失败原因可查询。
 
 监听器变更使用 Gateway UID/resourceVersion CAS，只允许 listener 集合和对应版本标记变化；Class、placement、VIP/EIP 等不可变条件继续核对。新增先准备后端，再更新 Gateway、Route/Policy 并确认观察。移除先撤转发和 Route/Policy，确认 Gateway/Service 对应端口已撤除后，才能释放不再被任何监听器引用的 Backend 和子网占用。不能删除整个 Gateway 来删除一个监听器。
 

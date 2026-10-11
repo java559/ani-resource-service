@@ -12,6 +12,8 @@ sql:
       - migrations/0008_lb_health_check_port.sql
       - migrations/0009_lb_fixed_flavors.sql
       - migrations/0010_lb_listeners.sql
+      - migrations/0011_subnet_ip_counts.sql
+      - migrations/0012_lb_listener_parameters.sql
     queries: internal/data/network/queries
     gen:
       go:

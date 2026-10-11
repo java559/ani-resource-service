@@ -226,7 +226,7 @@ func (p *KCProvider) lbGenerated(ctx context.Context, r lbResolved, o *biz.LoadB
 				port, _ := raw.(map[string]any)
 				value, _, _ := unstructured.NestedInt64(port, "port")
 				name, _ := port["name"].(string)
-				if value > 0 && value <= 65535 && slicePods[uint32(value)] != nil && port["protocol"] == "TCP" && name == targetPorts[uint32(value)] {
+				if value > 0 && value <= 65535 && slicePods[uint32(value)] != nil && port["protocol"] == lbServiceProtocol(service, name) && name == targetPorts[uint32(value)] {
 					slicePorts = append(slicePorts, uint32(value))
 				} else {
 					portsReady = false
@@ -308,9 +308,13 @@ func lbServiceTargets(s *unstructured.Unstructured, l biz.LoadBalancer, pods map
 		return result, false
 	}
 	ports, _, _ := unstructured.NestedSlice(s.Object, "spec", "ports")
-	wanted := map[int64]bool{}
+	wanted := map[int64]string{}
 	for _, listener := range biz.EffectiveLoadBalancerListeners(l) {
-		wanted[int64(listener.Port)] = true
+		protocol := "TCP"
+		if listener.Protocol == "UDP" {
+			protocol = "UDP"
+		}
+		wanted[int64(listener.Port)] = protocol
 	}
 	if len(ports) != len(wanted) {
 		return result, false
@@ -321,7 +325,8 @@ func lbServiceTargets(s *unstructured.Unstructured, l biz.LoadBalancer, pods map
 			return result, false
 		}
 		exposed, _, _ := unstructured.NestedInt64(port, "port")
-		if !wanted[exposed] || port["protocol"] != "TCP" {
+		protocol := wanted[exposed]
+		if protocol == "" || port["protocol"] != protocol {
 			return result, false
 		}
 		delete(wanted, exposed)
@@ -354,7 +359,7 @@ func lbServiceTargets(s *unstructured.Unstructured, l biz.LoadBalancer, pods map
 							}
 							if entry["name"] == value {
 								number, _, _ := unstructured.NestedInt64(entry, "containerPort")
-								if resolved != 0 || (entry["protocol"] != nil && entry["protocol"] != "TCP") {
+								if resolved != 0 || (entry["protocol"] != nil && entry["protocol"] != protocol) {
 									return result, false
 								}
 								resolved = number
@@ -419,4 +424,19 @@ func lbAddressConflict(r lbResolved, expected *unstructured.Unstructured) bool {
 		}
 	}
 	return false
+}
+
+func lbServiceProtocol(service *unstructured.Unstructured, name string) string {
+	if service == nil {
+		return ""
+	}
+	ports, _, _ := unstructured.NestedSlice(service.Object, "spec", "ports")
+	for _, raw := range ports {
+		port, ok := raw.(map[string]any)
+		if ok && port["name"] == name {
+			protocol, _ := port["protocol"].(string)
+			return protocol
+		}
+	}
+	return ""
 }

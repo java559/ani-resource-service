@@ -153,7 +153,14 @@ func advanceResource(ctx context.Context, q *sqlcgen.Queries, r biz.ResourceWork
 	}
 
 	if r.Kind == "subnet" {
-		s, err := q.AdvanceSubnet(ctx, sqlcgen.AdvanceSubnetParams{TenantID: r.TenantID, SubnetID: r.ID, Version: r.Version, State: string(p.State), Reason: string(p.Reason), Observed: p.Observed, ObservedAt: proofTime(p.Observed, p.Proof)})
+		available, used := pgtype.Int8{}, pgtype.Int8{}
+		if p.SubnetIPCounts.Available != nil && *p.SubnetIPCounts.Available >= 0 {
+			available = pgtype.Int8{Int64: *p.SubnetIPCounts.Available, Valid: true}
+		}
+		if p.SubnetIPCounts.Used != nil && *p.SubnetIPCounts.Used >= 0 {
+			used = pgtype.Int8{Int64: *p.SubnetIPCounts.Used, Valid: true}
+		}
+		s, err := q.AdvanceSubnet(ctx, sqlcgen.AdvanceSubnetParams{TenantID: r.TenantID, SubnetID: r.ID, Version: r.Version, State: string(p.State), Reason: string(p.Reason), Observed: p.Observed, ObservedAt: proofTime(p.Observed, p.Proof), AvailableIpCount: available, UsedIpCount: used})
 		return subnetWork(s), err
 	}
 	v, err := q.AdvanceVPC(ctx, sqlcgen.AdvanceVPCParams{TenantID: r.TenantID, VpcID: r.ID, Version: r.Version, State: string(p.State), Reason: string(p.Reason), Observed: p.Observed, ObservedAt: proofTime(p.Observed, p.Proof)})

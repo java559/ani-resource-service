@@ -40,10 +40,14 @@ func lbExposure(v networkv1.LoadBalancerExposure) (string, error) {
 func lbMutable(name, description string, backends []*networkv1.LoadBalancerBackendInput, h *networkv1.LoadBalancerHealthCheck) (biz.LoadBalancerMutableInput, error) {
 	r := biz.LoadBalancerMutableInput{Name: name, Description: description}
 	if h != nil {
-		if h.Protocol != networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED && h.Protocol != networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP {
+		if h.Protocol != networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED && h.Protocol != networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP && h.Protocol != networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP {
 			return r, biz.Fail(biz.InvalidArgument, "invalid health protocol")
 		}
-		r.Health = biz.LoadBalancerHealthInput{Port: h.Port, Protocol: "TCP", IntervalSeconds: h.IntervalSeconds, TimeoutSeconds: h.TimeoutSeconds, UnhealthyThreshold: h.UnhealthyThreshold, HealthyThreshold: h.HealthyThreshold}
+		protocol := "TCP"
+		if h.Protocol == networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP {
+			protocol = "HTTP"
+		}
+		r.Health = biz.LoadBalancerHealthInput{Path: h.Path, Hostname: h.Hostname, Port: h.Port, Protocol: protocol, IntervalSeconds: h.IntervalSeconds, TimeoutSeconds: h.TimeoutSeconds, UnhealthyThreshold: h.UnhealthyThreshold, HealthyThreshold: h.HealthyThreshold}
 	}
 	for _, b := range backends {
 		if b == nil {
@@ -87,6 +91,11 @@ func wireLoadBalancer(v biz.LoadBalancer) *networkv1.LoadBalancer {
 	for _, l := range biz.EffectiveLoadBalancerListeners(v) {
 		r.Listeners = append(r.Listeners, wireLBListener(l))
 	}
+	if len(r.Listeners) > 0 {
+		r.Listener = r.Listeners[0]
+		r.HealthCheck = r.Listener.HealthCheck
+		r.Algorithm = r.Listener.Algorithm
+	}
 	return r
 }
 func lbListenersInput(set *networkv1.LoadBalancerListenerSet) ([]biz.LoadBalancerListenerInput, error) {
@@ -95,20 +104,50 @@ func lbListenersInput(set *networkv1.LoadBalancerListenerSet) ([]biz.LoadBalance
 	}
 	items := make([]biz.LoadBalancerListenerInput, 0, len(set.Items))
 	for _, l := range set.Items {
-		if l == nil || (l.Protocol != networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED && l.Protocol != networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTP) {
-			return nil, biz.Fail(biz.InvalidArgument, "invalid HTTP listener")
+		if l == nil {
+			return nil, biz.Fail(biz.InvalidArgument, "missing listener")
+		}
+		protocol, err := lbListenerProtocol(l.Protocol)
+		if err != nil {
+			return nil, err
+		}
+		parameters, err := lbListenerParameters(l)
+		if err != nil {
+			return nil, err
 		}
 		mutable, err := lbMutable("listener", "", l.Backends, l.HealthCheck)
 		if err != nil {
 			return nil, err
 		}
-		items = append(items, biz.LoadBalancerListenerInput{ID: l.Id, Name: l.Name, Protocol: "HTTP", Port: l.Port, Backends: mutable.Backends, Health: mutable.Health})
+		items = append(items, biz.LoadBalancerListenerInput{ID: l.Id, Name: l.Name, Protocol: protocol, Port: l.Port, Backends: mutable.Backends, Health: mutable.Health, Parameters: parameters})
 	}
 	return items, nil
 }
 func wireLBListener(l biz.LoadBalancerListener) *networkv1.LoadBalancerListener {
 	h := l.Health
-	v := &networkv1.LoadBalancerListener{Id: l.ID, Name: l.Name, Protocol: networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTP, Port: l.Port, HealthCheck: &networkv1.LoadBalancerHealthCheck{Protocol: networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP, IntervalSeconds: &h.IntervalSeconds, TimeoutSeconds: &h.TimeoutSeconds, UnhealthyThreshold: &h.UnhealthyThreshold, HealthyThreshold: &h.HealthyThreshold}}
+	v := &networkv1.LoadBalancerListener{Id: l.ID, Name: l.Name, Protocol: lbProtocolToWire(l.Protocol), Port: l.Port, HealthCheck: &networkv1.LoadBalancerHealthCheck{Protocol: networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP, IntervalSeconds: &h.IntervalSeconds, TimeoutSeconds: &h.TimeoutSeconds, UnhealthyThreshold: &h.UnhealthyThreshold, HealthyThreshold: &h.HealthyThreshold}}
+	v.Algorithm = lbAlgorithmToWire(l.Parameters.Algorithm)
+	v.GzipEnabled = l.Parameters.GzipEnabled
+	v.HttpsRedirectStatusCode = l.Parameters.HTTPSRedirectStatusCode
+	if l.Parameters.Certificate != nil {
+		v.CertificateRef = &networkv1.LoadBalancerCertificateRef{Name: l.Parameters.Certificate.Name, Namespace: l.Parameters.Certificate.Namespace}
+	}
+	if l.Parameters.SessionMode != "" {
+		mode := networkv1.LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_COOKIE_SESSION
+		if l.Parameters.SessionMode == "CookieTimeout" {
+			mode = networkv1.LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_COOKIE_TIMEOUT
+		}
+		v.SessionPersistence = &networkv1.LoadBalancerSessionPersistence{Mode: mode, CookieExpirySeconds: l.Parameters.CookieExpirySeconds}
+	}
+	if l.Parameters.MaxConnections != 0 {
+		value := l.Parameters.MaxConnections
+		v.MaxConnections = &value
+	}
+	if h.Protocol == "HTTP" {
+		v.HealthCheck.Protocol = networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP
+		v.HealthCheck.Path = h.Path
+		v.HealthCheck.Hostname = h.Hostname
+	}
 	if h.Port != 0 {
 		v.HealthCheck.Port = &h.Port
 	}
@@ -135,7 +174,7 @@ func (s *TenantLoadBalancerService) CreateLoadBalancer(ctx context.Context, r *n
 	}
 	i := biz.CreateLoadBalancer{LoadBalancerMutableInput: mutable, TenantID: r.GetTargetTenantId(), VPCID: r.GetVpcId(), SubnetID: r.GetSubnetId(), Exposure: exposure, Flavor: r.GetFlavor(), PublicEIPID: r.GetPublicEipId(), PrivateIP: r.GetPrivateIp(), IdempotencyKey: r.GetIdempotencyKey()}
 	if v := r.GetListener(); v != nil {
-		if r.Listeners != nil || v.Id != "" || v.Name != "" || len(v.Backends) > 0 || v.HealthCheck != nil {
+		if r.Listeners != nil || v.Id != "" || v.Name != "" || len(v.Backends) > 0 || v.HealthCheck != nil || v.CertificateRef != nil || v.Algorithm != 0 || v.SessionPersistence != nil || v.MaxConnections != nil || v.GzipEnabled || v.HttpsRedirectStatusCode != 0 {
 			return nil, rpcError(biz.Fail(biz.InvalidArgument, "legacy listener cannot contain collection fields or coexist with listeners"))
 		}
 		if v.Protocol != networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UNSPECIFIED && v.Protocol != networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTP {

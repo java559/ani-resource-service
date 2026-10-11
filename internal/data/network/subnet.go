@@ -205,5 +205,12 @@ func (p *Postgres) DeleteSubnet(ctx context.Context, tenant, id string) (biz.Sub
 	return subnet(row), nil
 }
 func subnet(row sqlcgen.NetworkSubnet) biz.Subnet {
-	return biz.Subnet{ID: row.SubnetID, TenantID: row.TenantID, VPCID: row.VpcID, Name: row.Name, Description: row.Description, CIDR: row.Cidr, Gateway: row.Gateway, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: row.LastOperationID}
+	value := biz.Subnet{ID: row.SubnetID, TenantID: row.TenantID, VPCID: row.VpcID, Name: row.Name, Description: row.Description, CIDR: row.Cidr, Gateway: row.Gateway, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: row.LastOperationID}
+	if row.AvailableIpCount.Valid {
+		value.AvailableIPCount = &row.AvailableIpCount.Int64
+	}
+	if row.UsedIpCount.Valid {
+		value.UsedIPCount = &row.UsedIpCount.Int64
+	}
+	return value
 }

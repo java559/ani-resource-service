@@ -242,6 +242,10 @@ type NetworkLbConfigurationListener struct {
 	UnhealthyThreshold int64
 	HealthyThreshold   int64
 	HealthCheckPort    int32
+	Parameters         []byte
+	HealthProtocol     string
+	HealthPath         string
+	HealthHostname     string
 }
 
 type NetworkLbConfigurationMember struct {
@@ -557,20 +561,22 @@ type NetworkSnatBinding struct {
 }
 
 type NetworkSubnet struct {
-	TenantID        string
-	SubnetID        string
-	VpcID           string
-	Name            string
-	Description     string
-	Cidr            string
-	Gateway         string
-	State           string
-	Reason          string
-	Version         int64
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
-	ObservedAt      *time.Time
-	LastOperationID string
+	TenantID         string
+	SubnetID         string
+	VpcID            string
+	Name             string
+	Description      string
+	Cidr             string
+	Gateway          string
+	State            string
+	Reason           string
+	Version          int64
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
+	ObservedAt       *time.Time
+	LastOperationID  string
+	AvailableIpCount pgtype.Int8
+	UsedIpCount      pgtype.Int8
 }
 
 type NetworkTenantNamespace struct {

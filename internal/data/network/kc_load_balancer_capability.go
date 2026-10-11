@@ -302,6 +302,21 @@ func (o *KCObservation) collectLB(ctx context.Context, v *auditView) error {
 		}
 		v.indices[gvr] = index
 	}
+	// Extra listener CRDs are observed by the existing periodic audit. A missing
+	// optional source blocks only LBs using it, preserving the HTTP baseline.
+	for _, gvr := range lbExtendedObservationGVRs {
+		objects, err := o.provider.listAll(optional, gvr)
+		if err != nil {
+			continue
+		}
+		index := cache.NewIndexer(cache.MetaNamespaceKeyFunc, cache.Indexers{relationshipIndex: relationshipKeys})
+		for _, obj := range objects {
+			if err = index.Add(obj.DeepCopy()); err != nil {
+				return err
+			}
+		}
+		v.indices[gvr] = index
+	}
 	ready, fingerprint, images := o.provider.inspectLBCapability(optional, v)
 	ready = ready && complete
 	reason := ""

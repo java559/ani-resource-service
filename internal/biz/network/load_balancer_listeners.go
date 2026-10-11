@@ -7,6 +7,7 @@ import (
 )
 
 type LoadBalancerListenerInput struct {
+	Parameters         LoadBalancerListenerParameters
 	ID, Name, Protocol string
 	Port               *uint32
 	Backends           []LoadBalancerBackendInput
@@ -28,15 +29,21 @@ func EffectiveLoadBalancerListeners(v LoadBalancer) []LoadBalancerListener {
 
 func normalizeLBListeners(i *LoadBalancerIntent, input []LoadBalancerListenerInput, creating bool) error {
 	if len(input) < 1 || len(input) > 64 {
-		return Fail(InvalidArgument, "listeners must contain 1..64 HTTP listeners; delete the LB to remove its last listener")
+		return Fail(InvalidArgument, "listeners must contain 1..64 listeners; delete the LB to remove its last listener")
 	}
 	names, ports, ids := map[string]bool{}, map[uint32]bool{}, map[string]bool{}
 	for _, r := range input {
 		if len(r.Name) > 253 || !lbListenerName.MatchString(r.Name) || names[r.Name] {
 			return Fail(InvalidArgument, "listener names must be unique DNS names within 1..253 characters")
 		}
-		if r.Protocol != "" && r.Protocol != "HTTP" {
-			return Fail(InvalidArgument, "only HTTP listeners are supported")
+		if r.Protocol == "" {
+			r.Protocol = "HTTP"
+		}
+		if r.Protocol != "HTTP" && r.Protocol != "HTTPS" && r.Protocol != "TCP" && r.Protocol != "UDP" && r.Protocol != "SSL" {
+			return Fail(InvalidArgument, "invalid listener protocol")
+		}
+		if err := validateLBListenerParameters(r); err != nil {
+			return err
 		}
 		if r.Port == nil || *r.Port == 0 || *r.Port > 65535 || ports[*r.Port] {
 			return Fail(InvalidArgument, "listener ports must be unique and within 1..65535")
@@ -48,12 +55,28 @@ func normalizeLBListeners(i *LoadBalancerIntent, input []LoadBalancerListenerInp
 			}
 		}
 		normalized := LoadBalancerIntent{IdempotencyKey: i.IdempotencyKey}
-		if err := normalizeLBMutable(&normalized, LoadBalancerMutableInput{Name: i.Name, Description: i.Description, Backends: r.Backends, Health: r.Health}, creating); err != nil {
+		if err := normalizeLBMutable(&normalized, LoadBalancerMutableInput{Name: i.Name, Description: i.Description, Backends: r.Backends, Health: r.Health}, creating, r.Parameters.HTTPSRedirectStatusCode != 0); err != nil {
 			return err
 		}
 		names[r.Name], ports[*r.Port], ids[r.ID] = true, true, true
-		i.Listeners = append(i.Listeners, LoadBalancerListener{ID: r.ID, Name: r.Name, Protocol: "HTTP", Port: *r.Port, Backends: normalized.Backends, Health: normalized.Health})
+		i.Listeners = append(i.Listeners, LoadBalancerListener{ID: r.ID, Name: r.Name, Protocol: r.Protocol, Port: *r.Port, Backends: normalized.Backends, Health: normalized.Health, Parameters: r.Parameters})
 	}
+	for _, l := range i.Listeners {
+		if l.Parameters.HTTPSRedirectStatusCode == 0 {
+			continue
+		}
+		count, standard := 0, false
+		for _, target := range i.Listeners {
+			if target.Protocol == "HTTPS" {
+				count++
+				standard = standard || target.Port == 443
+			}
+		}
+		if count == 0 || (count > 1 && !standard) {
+			return Fail(InvalidArgument, "HTTPS redirect requires port 443 or a single HTTPS target in the same load balancer")
+		}
+	}
+
 	slices.SortFunc(i.Listeners, func(a, b LoadBalancerListener) int {
 		if a.Name < b.Name {
 			return -1
@@ -68,12 +91,12 @@ func normalizeLBListeners(i *LoadBalancerIntent, input []LoadBalancerListenerInp
 
 func lbHasLegacyMutable(r LoadBalancerMutableInput) bool {
 	h := r.Health
-	return r.Backends != nil || h.Protocol != "" || h.Port != nil || h.IntervalSeconds != nil || h.TimeoutSeconds != nil || h.UnhealthyThreshold != nil || h.HealthyThreshold != nil
+	return r.Backends != nil || h.Protocol != "" || h.Path != "" || h.Hostname != "" || h.Port != nil || h.IntervalSeconds != nil || h.TimeoutSeconds != nil || h.UnhealthyThreshold != nil || h.HealthyThreshold != nil
 }
 
 func normalizeLBInput(i *LoadBalancerIntent, r LoadBalancerMutableInput, creating bool) error {
 	if r.Listeners == nil && len(r.UpdateMask) == 0 && (creating || lbHasLegacyMutable(r)) {
-		return normalizeLBMutable(i, r, creating)
+		return normalizeLBMutable(i, r, creating, false)
 	}
 	if r.Listeners != nil && lbHasLegacyMutable(r) {
 		return Fail(InvalidArgument, "listeners cannot be combined with legacy backend or health fields")

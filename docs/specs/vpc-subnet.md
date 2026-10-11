@@ -117,8 +117,9 @@ Delete 天然按资源目标幂等，无需 body 或额外幂等键；进行中�
 
 VPC/Subnet 公共字段：`id,tenant_id,name,description,cidr,state,reason,created_at,updated_at,version,observed_at,observation_stale,last_operation_id`。
 其中 `reason` 为可空的稳定原因码，RPC 以 `reason_message` 给出固定的脱敏说明（无原因时两者为空字符串），`observed_at` 尚未观察时为 null，时间均为 UTC RFC3339。
-Subnet 增加 `vpc_id,gateway`。VPC 增加 `subnet_count`，由同一查询快照统计未 deleted 子网。
-`available_ip_count` 不在首片响应承诺内，不以容量减 attachment 数量伪装 IPAM 真相；`zone`、`dev_profile`、Provider 对象和命名空间均删除。
+Subnet 增加 `vpc_id,gateway,available_ip_count,used_ip_count`。VPC 增加 `subnet_count`，由同一查询快照统计未 deleted 子网。
+`available_ip_count`/`used_ip_count` 分别来自匹配 KCN Subnet.status 的 `v4availableIPs`/`v4usingIPs`，通过现有观测链和受保护事务持久化为可空非负 bigint，Get/List 读取数据库，不同步访问 KCN。实际观测到 0 保留 presence；缺失、负数或非整数为未知（字段缺失），有效新观测会清除对应旧值。读取失败不续鲜，历史值以 `observation_stale` 表达过期；租户、binding、namespace、UID、generation、lease 和观测时间围栏继续生效。计数单独变化也刷新。不得从 CIDR 或 Attachment 数量推算。`zone`、`dev_profile`、Provider 对象和命名空间均不公开。
+`TestSubnetKCIPCountsDetailsAndFences`、`TestSubnetIPCountsMigrationPreservesUnknownOldRows` 和两仓 `TestNetworkJointHTTP/subnet_ip_counts` 在 Fedora 独占库通过；KCN 为外部 HTTP fixture，真实集群验收 `not_verified`。
 `version` 是业务记录并发版本，不是 Kubernetes resourceVersion；客户端不解释 Provider generation。
 
 Operation 字段：`id,tenant_id,kind,resource_type,resource_id,state,reason,created_at,updated_at,completed_at,next_attempt_at`。
@@ -159,7 +160,7 @@ Gateway 延续 ANI 统一错误 envelope，将上述稳定 reason 放入对应�
 ### 4.4 与旧契约的显式差异
 
 保留路径、产品 ID 前缀、name/cidr/gateway、创建 201、资源查询形式；新增 operation 查询和可恢复异步语义。
-破坏性差异：CIDR 必填、严格输入规范化、移除 zone/dev_profile/available_ip_count、永久保留首片幂等键、删除 202、`pending` 改 `provisioning` 并新增 degraded。
+破坏性差异：CIDR 必填、严格输入规范化、移除 zone/dev_profile（available_ip_count 已通过真实观测合同重新接入）、永久保留首片幂等键、删除 202、`pending` 改 `provisioning` 并新增 degraded。
 Subnet description、可靠分页、subnet_count 是明确实现项。未知/已移除的请求字段返回 400，不通过接受并忽略来兼容旧客户端。
 Console 需更新生成类型与状态展示；对进行中的资源/operation 定时查询（建议 2 秒起、上限 10 秒退避），终态停止，恢复页面时重新查询。
 POST 的幂等键在一次逻辑提交及网络重试中保持稳定；新意图才生成新键。

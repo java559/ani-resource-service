@@ -6,6 +6,7 @@ import (
 	"net/netip"
 	"slices"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,22 +19,25 @@ const (
 )
 
 type LoadBalancerHealth struct {
+	Protocol, Path, Hostname                                              string `json:",omitempty"`
 	IntervalSeconds, TimeoutSeconds, UnhealthyThreshold, HealthyThreshold uint32
 	// Zero is reserved for persisted legacy configurations using endpoint ports.
 	Port uint32 `json:"Port,omitempty"`
 }
 type LoadBalancerHealthInput struct {
+	Path, Hostname                                                        string
 	Protocol                                                              string
 	IntervalSeconds, TimeoutSeconds, UnhealthyThreshold, HealthyThreshold *uint32
 	Port                                                                  *uint32
 }
 type LoadBalancerListener struct {
-	ID       string
-	Port     uint32
-	Name     string                `json:"Name,omitempty"`
-	Protocol string                `json:"Protocol,omitempty"`
-	Backends []LoadBalancerBackend `json:"Backends,omitempty"`
-	Health   LoadBalancerHealth    `json:"Health,omitzero"`
+	Parameters LoadBalancerListenerParameters `json:"Parameters,omitzero"`
+	ID         string
+	Port       uint32
+	Name       string                `json:"Name,omitempty"`
+	Protocol   string                `json:"Protocol,omitempty"`
+	Backends   []LoadBalancerBackend `json:"Backends,omitempty"`
+	Health     LoadBalancerHealth    `json:"Health,omitzero"`
 }
 type LoadBalancerBackendInput struct {
 	ID, SubnetID, Address string
@@ -135,7 +139,7 @@ func lbDefault(v *uint32, fallback uint32) uint32 {
 	}
 	return *v
 }
-func normalizeLBMutable(i *LoadBalancerIntent, r LoadBalancerMutableInput, creating bool) error {
+func normalizeLBMutable(i *LoadBalancerIntent, r LoadBalancerMutableInput, creating, redirecting bool) error {
 	var err error
 	i.Name, err = normalizeEgressName(r.Name, r.Description, i.IdempotencyKey)
 	if err != nil {
@@ -143,17 +147,25 @@ func normalizeLBMutable(i *LoadBalancerIntent, r LoadBalancerMutableInput, creat
 	}
 	i.Description = r.Description
 	h := r.Health
-	if h.Protocol != "" && h.Protocol != "TCP" {
-		return Fail(InvalidArgument, "only TCP health checks are supported")
+	if h.Protocol != "" && h.Protocol != "TCP" && h.Protocol != "HTTP" {
+		return Fail(InvalidArgument, "health check protocol must be TCP or HTTP")
 	}
-	if h.Port == nil || *h.Port == 0 || *h.Port > 65535 {
-		return Fail(InvalidArgument, "health_check.port is required and must be within 1..65535")
+	if h.Port != nil && *h.Port > 65535 {
+		return Fail(InvalidArgument, "health_check.port must be within 0..65535")
 	}
-	i.Health = LoadBalancerHealth{IntervalSeconds: lbDefault(h.IntervalSeconds, 5), TimeoutSeconds: lbDefault(h.TimeoutSeconds, 3), UnhealthyThreshold: lbDefault(h.UnhealthyThreshold, 3), HealthyThreshold: lbDefault(h.HealthyThreshold, 1), Port: *h.Port}
-	if i.Health.TimeoutSeconds == 0 || i.Health.IntervalSeconds <= i.Health.TimeoutSeconds || i.Health.UnhealthyThreshold == 0 || i.Health.HealthyThreshold == 0 {
-		return Fail(InvalidArgument, "positive health parameters and timeout less than interval are required")
+	i.Health = LoadBalancerHealth{IntervalSeconds: lbDefault(h.IntervalSeconds, 5), TimeoutSeconds: lbDefault(h.TimeoutSeconds, 3), UnhealthyThreshold: lbDefault(h.UnhealthyThreshold, 3), HealthyThreshold: lbDefault(h.HealthyThreshold, 1), Port: lbDefault(h.Port, 0)}
+	if h.Protocol == "HTTP" {
+		if len(h.Path) == 0 || len(h.Path) > 1024 || !strings.HasPrefix(h.Path, "/") || strings.ContainsAny(h.Path, "\r\n") || len(h.Hostname) > 253 || (h.Hostname != "" && !lbListenerName.MatchString(h.Hostname)) {
+			return Fail(InvalidArgument, "HTTP health check requires a path and an optional DNS hostname")
+		}
+		i.Health.Protocol, i.Health.Path, i.Health.Hostname = "HTTP", h.Path, h.Hostname
+	} else if h.Path != "" || h.Hostname != "" {
+		return Fail(InvalidArgument, "TCP health check does not accept HTTP parameters")
 	}
-	if len(r.Backends) == 0 {
+	if i.Health.TimeoutSeconds == 0 || i.Health.IntervalSeconds == 0 || i.Health.UnhealthyThreshold == 0 || i.Health.HealthyThreshold == 0 {
+		return Fail(InvalidArgument, "positive health parameters are required")
+	}
+	if len(r.Backends) == 0 && !redirecting {
 		return Fail(InvalidArgument, "a nonempty backend set is required")
 	}
 	ids, endpoints := map[string]bool{}, map[string]bool{}
@@ -164,9 +176,6 @@ func normalizeLBMutable(i *LoadBalancerIntent, r LoadBalancerMutableInput, creat
 		ip, err := netip.ParseAddr(b.Address)
 		if err != nil || !ip.Is4() || !ip.IsPrivate() || ip.String() != b.Address || b.Port < 1 || b.Port > 65535 {
 			return Fail(InvalidArgument, "backend requires a canonical private IPv4 address and a valid port")
-		}
-		if b.Port != i.Health.Port {
-			return Fail(InvalidArgument, "health_check.port must equal every backend service port")
 		}
 		if b.ID != "" {
 			id, err := uuid.Parse(b.ID)

@@ -647,7 +647,7 @@ func (q *Queries) LockDueAttachmentParent(ctx context.Context) (NetworkVpc, erro
 }
 
 const lockDueAttachmentSubnet = `-- name: LockDueAttachmentSubnet :one
-SELECT s.tenant_id, s.subnet_id, s.vpc_id, s.name, s.description, s.cidr, s.gateway, s.state, s.reason, s.version, s.created_at, s.updated_at, s.observed_at, s.last_operation_id FROM network_subnets s WHERE s.tenant_id=$1 AND s.vpc_id=$2 AND EXISTS(SELECT 1 FROM network_attachments a WHERE a.tenant_id=s.tenant_id AND a.subnet_id=s.subnet_id AND a.next_check_at<=clock_timestamp() AND (a.lease_until IS NULL OR a.lease_until<=clock_timestamp()))
+SELECT s.tenant_id, s.subnet_id, s.vpc_id, s.name, s.description, s.cidr, s.gateway, s.state, s.reason, s.version, s.created_at, s.updated_at, s.observed_at, s.last_operation_id, s.available_ip_count, s.used_ip_count FROM network_subnets s WHERE s.tenant_id=$1 AND s.vpc_id=$2 AND EXISTS(SELECT 1 FROM network_attachments a WHERE a.tenant_id=s.tenant_id AND a.subnet_id=s.subnet_id AND a.next_check_at<=clock_timestamp() AND (a.lease_until IS NULL OR a.lease_until<=clock_timestamp()))
 ORDER BY (SELECT min(a.next_check_at) FROM network_attachments a WHERE a.tenant_id=s.tenant_id AND a.subnet_id=s.subnet_id AND (a.lease_until IS NULL OR a.lease_until<=clock_timestamp())),s.subnet_id LIMIT 1 FOR UPDATE OF s SKIP LOCKED
 `
 
@@ -674,6 +674,8 @@ func (q *Queries) LockDueAttachmentSubnet(ctx context.Context, arg LockDueAttach
 		&i.UpdatedAt,
 		&i.ObservedAt,
 		&i.LastOperationID,
+		&i.AvailableIpCount,
+		&i.UsedIpCount,
 	)
 	return i, err
 }

@@ -50,12 +50,20 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 			_, _ = w.Write([]byte(`{"apiVersion":"authorization.k8s.io/v1","kind":"SubjectAccessReview","status":{"allowed":true}}`))
 			return true
 		}
+		if networkJointSubnetStatus(w, r, api) {
+			return true
+		}
 		if networkJointSnatMutation(w, r, api) {
 			return true
 		}
 		return controller.http(w, r, api)
 	})
 	addLBBackend(t, f, f.backendSubnet, "lb-second", "10.42.2.3")
+	var boundNamespace string
+	if err := f.f.owner.QueryRow(f.f.ctx, `SELECT namespace FROM network_provider_bindings WHERE tenant_id=$1 AND subnet_id=$2 AND resource_kind='subnet'`, f.f.tenant, f.subnet.ID).Scan(&boundNamespace); err != nil {
+		t.Fatal(err)
+	}
+	f.api.Change("secrets", map[string]any{"apiVersion": "v1", "kind": "Secret", "metadata": map[string]any{"name": "tenant-tls", "namespace": boundNamespace, "uid": uuid.NewString(), "labels": map[string]any{"network.ani.io/tenant-id": f.f.tenant}}, "type": "kubernetes.io/tls", "data": map[string]any{"tls.crt": "external-cert", "tls.key": "external-key"}}, false)
 	// Replace the admission helper's U05 capability record with actual observation
 	// of the external fixture before any Governance request can reach Resource.
 	if _, err := f.f.owner.Exec(f.f.ctx, "DELETE FROM network_lb_capabilities WHERE cluster_id='test-cluster'"); err != nil {
@@ -145,7 +153,7 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 			}
 		}
 	}()
-	info := map[string]string{"Address": listener.Addr().String(), "CAFile": ca, "CertFile": clientCert, "KeyFile": clientKey, "RuntimeDSN": f.runtimeDSN, "TenantID": f.f.tenant, "ParentVPC": f.vpc.ID, "EntrySubnet": f.subnet.ID, "BackendSubnet": f.backendSubnet.ID, "BackendAddress": "10.42.2.2", "SecondBackendAddress": "10.42.2.3"}
+	info := map[string]string{"ProviderURL": cfg.Host, "CertificateName": "tenant-tls", "Namespace": boundNamespace, "Address": listener.Addr().String(), "CAFile": ca, "CertFile": clientCert, "KeyFile": clientKey, "RuntimeDSN": f.runtimeDSN, "TenantID": f.f.tenant, "ParentVPC": f.vpc.ID, "EntrySubnet": f.subnet.ID, "BackendSubnet": f.backendSubnet.ID, "BackendAddress": "10.42.2.2", "SecondBackendAddress": "10.42.2.3"}
 	raw, err := json.Marshal(info)
 	if err != nil {
 		t.Fatal(err)
@@ -367,4 +375,34 @@ func networkJointCertificates(t *testing.T, dir string) (string, string, string,
 	cp, kp := issue("ani-network-service", x509.ExtKeyUsageServerAuth, 2)
 	clientCP, clientKP := issue("ani-governance", x509.ExtKeyUsageClientAuth, 3)
 	return caPath, cp, kp, clientCP, clientKP
+}
+
+// Standard Kubernetes status subresource, only in this external fixture. The
+// production observer/worker still validates and persists every fact.
+func networkJointSubnetStatus(w http.ResponseWriter, r *http.Request, api *controlled.Server) bool {
+	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
+	if r.Method != http.MethodPut || len(parts) != 8 || parts[0] != "apis" || parts[1] != "networking.kubercloud.com" || parts[3] != "namespaces" || parts[5] != "subnets" || parts[7] != "status" {
+		return false
+	}
+	obj := api.Object("subnets", parts[4], parts[6])
+	if obj == nil {
+		http.Error(w, "not found", 404)
+		return true
+	}
+	var input map[string]any
+	if json.NewDecoder(r.Body).Decode(&input) != nil {
+		http.Error(w, "invalid body", 400)
+		return true
+	}
+	old := obj["metadata"].(map[string]any)
+	m, _ := input["metadata"].(map[string]any)
+	if m == nil || m["uid"] != old["uid"] || m["resourceVersion"] != old["resourceVersion"] {
+		http.Error(w, "conflict", 409)
+		return true
+	}
+	obj["status"] = input["status"]
+	api.Change("subnets", obj, false)
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(api.Object("subnets", parts[4], parts[6]))
+	return true
 }

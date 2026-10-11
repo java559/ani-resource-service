@@ -5,6 +5,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"io/fs"
+	"sort"
 	"testing"
 	"time"
 
@@ -99,5 +101,55 @@ func TestSubnetMigrationUpgradesNET01WithoutChangingDurableFacts(t *testing.T) {
 	}
 	if err := fixture.Repository.CheckReady(ctx); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSubnetIPCountsMigrationPreservesUnknownOldRows(t *testing.T) {
+	ctx := context.Background()
+	tenant := uuid.NewString()
+	f := testenv.NewDatabase(t, func(owner *pgxpool.Pool, _ string) {
+		tx, e := owner.Begin(ctx)
+		if e != nil {
+			t.Fatal(e)
+		}
+		defer tx.Rollback(ctx)
+		if _, e = tx.Exec(ctx, `CREATE TABLE network_schema_version(version integer PRIMARY KEY,checksum text NOT NULL,applied_at timestamptz NOT NULL DEFAULT clock_timestamp())`); e != nil {
+			t.Fatal(e)
+		}
+		files, e := fs.Glob(migrations.Files, "*.sql")
+		if e != nil {
+			t.Fatal(e)
+		}
+		sort.Strings(files)
+		for i, name := range files {
+			if name >= "0004_observation.sql" {
+				break
+			}
+			body, e := migrations.Files.ReadFile(name)
+			if e != nil {
+				t.Fatal(e)
+			}
+			if _, e = tx.Exec(ctx, string(body)); e != nil {
+				t.Fatal(e)
+			}
+			hash := sha256.Sum256(body)
+			if _, e = tx.Exec(ctx, `INSERT INTO network_schema_version(version,checksum)VALUES($1,$2)`, i+1, hex.EncodeToString(hash[:])); e != nil {
+				t.Fatal(e)
+			}
+		}
+		seedNET05AUpgrade(t, tx, tenant, uuid.NewString())
+		if e = tx.Commit(ctx); e != nil {
+			t.Fatal(e)
+		}
+	})
+	var available, used *int64
+	var version int64
+	if e := f.Owner.QueryRow(ctx, `SELECT available_ip_count,used_ip_count,version FROM network_subnets WHERE tenant_id=$1`, tenant).Scan(&available, &used, &version); e != nil || available != nil || used != nil || version != 9 {
+		t.Fatal("migration invented counts or changed old row", available, used, version, e)
+	}
+	for _, field := range []string{"available_ip_count", "used_ip_count"} {
+		if _, e := f.Owner.Exec(ctx, "UPDATE network_subnets SET "+field+"=-1 WHERE tenant_id=$1", tenant); e == nil {
+			t.Fatal("negative count accepted", field)
+		}
 	}
 }

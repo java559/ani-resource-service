@@ -53,6 +53,17 @@ func TestLBListenerSetWire(t *testing.T) {
 	if _, err = lbListenersInput(&networkv1.LoadBalancerListenerSet{Items: []*networkv1.LoadBalancerListenerInput{nil}}); biz.ReasonOf(err) != biz.InvalidArgument {
 		t.Fatal("nil listener accepted", err)
 	}
+	for _, protocol := range []networkv1.LoadBalancerListenerProtocol{networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_TCP, networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UDP, networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_SSL} {
+		l := &networkv1.LoadBalancerListenerInput{Protocol: protocol, SessionPersistence: &networkv1.LoadBalancerSessionPersistence{Mode: networkv1.LoadBalancerSessionMode_LOAD_BALANCER_SESSION_MODE_DISABLED}}
+		if _, err := lbListenersInput(&networkv1.LoadBalancerListenerSet{Items: []*networkv1.LoadBalancerListenerInput{l}}); biz.ReasonOf(err) != biz.InvalidArgument {
+			t.Fatal("non-HTTP Cookie accepted", protocol, err)
+		}
+	}
+	zero := uint32(0)
+	if _, err := lbListenersInput(&networkv1.LoadBalancerListenerSet{Items: []*networkv1.LoadBalancerListenerInput{{Protocol: networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_UDP, MaxConnections: &zero}}}); biz.ReasonOf(err) != biz.InvalidArgument {
+		t.Fatal("UDP connection parameter accepted", err)
+	}
+
 }
 
 func TestLBWireNeverInfersHealthFromConfiguration(t *testing.T) {

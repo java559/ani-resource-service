@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"strings"
 	"time"
@@ -183,8 +184,36 @@ func inspectResource(object *unstructured.Unstructured, binding sqlcgen.NetworkP
 	subnets, _, _ := unstructured.NestedMap(object.Object, "status", "subnets")
 	eips, _, _ := unstructured.NestedMap(object.Object, "status", "eips")
 	used, _, _ := unstructured.NestedInt64(object.Object, "status", "v4usingIPs")
-	return biz.ProviderObservation{Exists: true, Identity: string(object.GetUID()), HasDependencies: len(subnets) > 0 || len(eips) > 0 || used > 0,
+	counts := biz.SubnetIPCounts{}
+	if binding.ResourceKind == "subnet" && object.GetGeneration() > 0 && observed == object.GetGeneration() {
+		counts.Available = subnetIPCount(object, "v4availableIPs")
+		counts.Used = subnetIPCount(object, "v4usingIPs")
+	}
+	return biz.ProviderObservation{SubnetIPCounts: counts, Exists: true, Identity: string(object.GetUID()), HasDependencies: len(subnets) > 0 || len(eips) > 0 || used > 0,
 		Ready: object.GetDeletionTimestamp() == nil && object.GetGeneration() > 0 && observed == object.GetGeneration() && router != "" && good["Valid"] && good["Initialized"] && good["Ready"]}, nil
+}
+
+func subnetIPCount(object *unstructured.Unstructured, field string) *int64 {
+	raw, found, err := unstructured.NestedFieldNoCopy(object.Object, "status", field)
+	if err != nil || !found {
+		return nil
+	}
+	var value int64
+	switch v := raw.(type) {
+	case int64:
+		value = v
+	case float64:
+		if math.IsNaN(v) || math.IsInf(v, 0) || v < 0 || v >= 9223372036854775808.0 || math.Trunc(v) != v {
+			return nil
+		}
+		value = int64(v)
+	default:
+		return nil
+	}
+	if value < 0 {
+		return nil
+	}
+	return &value
 }
 
 func (p *KCProvider) EnsureVPC(ctx context.Context, target biz.ProviderTarget) (biz.ProviderObservation, error) {

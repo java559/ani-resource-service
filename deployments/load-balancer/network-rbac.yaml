@@ -7,10 +7,10 @@ metadata:
   name: ani-network-load-balancer
 rules:
   - apiGroups: [gateway.networking.k8s.io]
-    resources: [gateways, httproutes]
+    resources: [gateways, httproutes, tcproutes, udproutes]
     verbs: [get, list, watch, create, patch, delete]
   - apiGroups: [gateway.envoyproxy.io]
-    resources: [backends, backendtrafficpolicies]
+    resources: [backends, backendtrafficpolicies, clienttrafficpolicies, envoypatchpolicies]
     verbs: [get, list, watch, create, patch, delete]
   - apiGroups: [gateway.networking.k8s.io]
     resources: [gatewayclasses]
@@ -30,3 +30,6 @@ rules:
   - apiGroups: [authorization.k8s.io]
     resources: [subjectaccessreviews]
     verbs: [create]
+
+  # Prefer a namespaced Role granting get to the tenant's selected TLS Secrets.
+  # No Secret list/watch or Secret mutation is needed by the listener adapter.

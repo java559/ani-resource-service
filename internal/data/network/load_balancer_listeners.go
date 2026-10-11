@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
@@ -21,6 +22,10 @@ func loadLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 	for _, item := range rows {
 		l, c := item.NetworkLbListener, item.NetworkLbConfigurationListener
 		listener := biz.LoadBalancerListener{ID: l.ListenerID, Name: l.Name, Protocol: c.Protocol, Port: uint32(c.Port), Health: biz.LoadBalancerHealth{Port: uint32(c.HealthCheckPort), IntervalSeconds: uint32(c.IntervalSeconds), TimeoutSeconds: uint32(c.TimeoutSeconds), UnhealthyThreshold: uint32(c.UnhealthyThreshold), HealthyThreshold: uint32(c.HealthyThreshold)}}
+		if err := json.Unmarshal(c.Parameters, &listener.Parameters); err != nil {
+			return databaseFailure(fmt.Errorf("decode listener parameters: %w", err))
+		}
+		listener.Health.Protocol, listener.Health.Path, listener.Health.Hostname = c.HealthProtocol, c.HealthPath, c.HealthHostname
 		members, err := q.ListLBListenerMembers(ctx, sqlcgen.ListLBListenerMembersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: row.DesiredVersion, ListenerID: l.ListenerID})
 		if err != nil {
 			return databaseFailure(err)
@@ -32,7 +37,7 @@ func loadLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 		v.Listeners = append(v.Listeners, listener)
 	}
 	first := v.Listeners[0]
-	v.Listener = biz.LoadBalancerListener{ID: first.ID, Port: first.Port}
+	v.Listener = first
 	v.Health = first.Health
 	return nil
 }
@@ -141,11 +146,27 @@ func saveLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 				return databaseFailure(err)
 			}
 		}
-		h := l.Health
-		if err = q.InsertLBConfigurationListener(ctx, sqlcgen.InsertLBConfigurationListenerParams{TenantID: row.TenantID, ClusterID: row.ClusterID, Namespace: row.Namespace, LbID: row.LbID, ConfigVersion: row.DesiredVersion, ListenerID: l.ID, Protocol: l.Protocol, Port: int32(l.Port), IntervalSeconds: int64(h.IntervalSeconds), TimeoutSeconds: int64(h.TimeoutSeconds), UnhealthyThreshold: int64(h.UnhealthyThreshold), HealthyThreshold: int64(h.HealthyThreshold), HealthCheckPort: int32(h.Port)}); err != nil {
+		if l.Parameters.Certificate != nil {
+			if l.Parameters.Certificate.Namespace != "" && l.Parameters.Certificate.Namespace != row.Namespace {
+				return biz.Fail(biz.InvalidArgument, "certificate reference must use the bound resource namespace")
+			}
+			certificate := *l.Parameters.Certificate
+			certificate.Namespace = row.Namespace
+			l.Parameters.Certificate = &certificate
+		}
+		parameters, err := json.Marshal(l.Parameters)
+		if err != nil {
 			return databaseFailure(err)
 		}
-		for _, kind := range []string{"route", "policy"} {
+		h := l.Health
+		healthProtocol := h.Protocol
+		if healthProtocol == "" {
+			healthProtocol = "TCP"
+		}
+		if err = q.InsertLBConfigurationListener(ctx, sqlcgen.InsertLBConfigurationListenerParams{TenantID: row.TenantID, ClusterID: row.ClusterID, Namespace: row.Namespace, LbID: row.LbID, ConfigVersion: row.DesiredVersion, ListenerID: l.ID, Protocol: l.Protocol, Port: int32(l.Port), IntervalSeconds: int64(h.IntervalSeconds), TimeoutSeconds: int64(h.TimeoutSeconds), UnhealthyThreshold: int64(h.UnhealthyThreshold), HealthyThreshold: int64(h.HealthyThreshold), HealthCheckPort: int32(h.Port), Parameters: parameters, HealthProtocol: healthProtocol, HealthPath: h.Path, HealthHostname: h.Hostname}); err != nil {
+			return databaseFailure(err)
+		}
+		for _, kind := range biz.LoadBalancerListenerComponentKinds(l) {
 			if !slices.ContainsFunc(components, func(c sqlcgen.NetworkLbComponent) bool {
 				return c.Kind == kind && textValue(c.ListenerID) == l.ID && c.DeletedAt == nil
 			}) {

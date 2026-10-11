@@ -18,6 +18,7 @@ const (
 )
 
 type Subnet struct {
+	AvailableIPCount, UsedIPCount                         *int64
 	ID, TenantID, VPCID, Name, CIDR, Gateway, Description string
 	State                                                 ResourceState
 	Reason                                                Reason
@@ -26,6 +27,11 @@ type Subnet struct {
 	ObservedAt                                            *time.Time
 	ObservationStale                                      bool
 	LastOperationID                                       string
+}
+
+// SubnetIPCounts are facts from the matching provider status. Nil means unknown.
+type SubnetIPCounts struct {
+	Available, Used *int64
 }
 
 type CreateSubnet struct {

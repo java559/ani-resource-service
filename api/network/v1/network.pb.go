@@ -1461,6 +1461,8 @@ type Subnet struct {
 	VpcId            string                 `protobuf:"bytes,14,opt,name=vpc_id,json=vpcId,proto3" json:"vpc_id,omitempty"`
 	ReasonMessage    string                 `protobuf:"bytes,15,opt,name=reason_message,json=reasonMessage,proto3" json:"reason_message,omitempty"`
 	Gateway          string                 `protobuf:"bytes,16,opt,name=gateway,proto3" json:"gateway,omitempty"`
+	AvailableIpCount *int64                 `protobuf:"varint,17,opt,name=available_ip_count,json=availableIpCount,proto3,oneof" json:"available_ip_count,omitempty"`
+	UsedIpCount      *int64                 `protobuf:"varint,18,opt,name=used_ip_count,json=usedIpCount,proto3,oneof" json:"used_ip_count,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1605,6 +1607,20 @@ func (x *Subnet) GetGateway() string {
 		return x.Gateway
 	}
 	return ""
+}
+
+func (x *Subnet) GetAvailableIpCount() int64 {
+	if x != nil && x.AvailableIpCount != nil {
+		return *x.AvailableIpCount
+	}
+	return 0
+}
+
+func (x *Subnet) GetUsedIpCount() int64 {
+	if x != nil && x.UsedIpCount != nil {
+		return *x.UsedIpCount
+	}
+	return 0
 }
 
 type CreateSubnetRequest struct {
@@ -3358,7 +3374,7 @@ const file_network_v1_network_proto_rawDesc = "" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12!\n" +
 	"\foperation_id\x18\x02 \x01(\tR\voperationId\"K\n" +
 	"\x14GetOperationResponse\x123\n" +
-	"\toperation\x18\x01 \x01(\v2\x15.network.v1.OperationR\toperation\"\xc6\x04\n" +
+	"\toperation\x18\x01 \x01(\v2\x15.network.v1.OperationR\toperation\"\xcb\x05\n" +
 	"\x06Subnet\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\ttenant_id\x18\x02 \x01(\tR\btenantId\x12\x12\n" +
@@ -3379,7 +3395,11 @@ const file_network_v1_network_proto_rawDesc = "" +
 	"\x11last_operation_id\x18\r \x01(\tR\x0flastOperationId\x12\x15\n" +
 	"\x06vpc_id\x18\x0e \x01(\tR\x05vpcId\x12%\n" +
 	"\x0ereason_message\x18\x0f \x01(\tR\rreasonMessage\x12\x18\n" +
-	"\agateway\x18\x10 \x01(\tR\agateway\"\xa2\x02\n" +
+	"\agateway\x18\x10 \x01(\tR\agateway\x121\n" +
+	"\x12available_ip_count\x18\x11 \x01(\x03H\x00R\x10availableIpCount\x88\x01\x01\x12'\n" +
+	"\rused_ip_count\x18\x12 \x01(\x03H\x01R\vusedIpCount\x88\x01\x01B\x15\n" +
+	"\x13_available_ip_countB\x10\n" +
+	"\x0e_used_ip_count\"\xa2\x02\n" +
 	"\x13CreateSubnetRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -3783,6 +3803,7 @@ func file_network_v1_network_proto_init() {
 	if File_network_v1_network_proto != nil {
 		return
 	}
+	file_network_v1_network_proto_msgTypes[14].OneofWrappers = []any{}
 	file_network_v1_network_proto_msgTypes[15].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
