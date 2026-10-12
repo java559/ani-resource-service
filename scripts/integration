@@ -2,8 +2,8 @@
 set -Eeuo pipefail
 
 if [[ ${1:-} == --ci-shard ]]; then
-  [[ $# -eq 2 && ( $2 == core || $2 == lb ) ]] || {
-    echo 'usage: scripts/integration --ci-shard core|lb' >&2
+  [[ $# -eq 2 && ( $2 == core || $2 == lb || $2 == recovery ) ]] || {
+    echo 'usage: scripts/integration --ci-shard core|lb|recovery' >&2
     exit 2
   }
 fi

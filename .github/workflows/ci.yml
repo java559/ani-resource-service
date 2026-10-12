@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [core, lb]
+        shard: [core, lb, recovery]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -59,7 +59,7 @@ jobs:
       - name: Install pinned SQL generator
         run: make check-sqlc
       - name: Real PostgreSQL and process recovery with race detector
-        # The two selectors are complementary; each invocation owns its PostgreSQL.
+        # The three selectors partition the tests; each invocation owns its PostgreSQL.
         run: ./scripts/integration --ci-shard '${{ matrix.shard }}'
       - name: Tenant predicate mutations
         if: ${{ matrix.shard == 'core' }}

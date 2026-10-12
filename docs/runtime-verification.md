@@ -16,7 +16,7 @@ make audit
 
 `make integration` 使用固定 PostgreSQL 18.6 amd64 镜像，启动 loopback 随机端口的独占容器。每个测试创建独立数据库、owner/runtime 角色，迁移和 fixture 通过 owner 执行，业务通过 runtime 角色运行。容器和角色均由本次测试清理；凭据随机生成且不打印。镜像 digest、容器 ID 和清理结果进入命令输出。无需宿主 psql、sudo 或 kind。
 
-没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替带真实数据库的入口。CI 用两路 `scripts/integration --ci-shard core|lb` 执行完整测试范围及竞态检查，再在 core 路执行一次租户谓词变异门禁。`make race` 保留为开发时的全包 race 入口，`make integration` 为不带 race 的入口，不在 CI 重复执行同一套集成测试。不要使用 `-short` 或删除检查绕过它们。
+没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替带真实数据库的入口。CI 用三路 `scripts/integration --ci-shard core|lb|recovery` 执行完整测试范围及竞态检查，再在 core 路执行一次租户谓词变异门禁。`make race` 保留为开发时的全包 race 入口，`make integration` 为不带 race 的入口，不在 CI 重复执行同一套集成测试。不要使用 `-short` 或删除检查绕过它们。
 
 `make race` 在同一真实 PostgreSQL 设施下执行全包 race 测试。恢复测试还构建带 race detector 的实际服务二进制，保留同一数据库与受控 Provider 事实，在 T1 之后、Provider 成功但 T4 之前、删除结果未知时终止进程并恢复；不会重建空库冒充重启。测试还覆盖不同服务进程共享持久租约，以及墓碑处理保留历史 operation。
 
@@ -41,7 +41,7 @@ make image-tenant-mutations
 
 `scripts/image-integration` 创建独占 PostgreSQL、owner/runtime 角色和私有 DSN 文件，覆盖 Image 持久化、生命周期、并发与凭据合同；`-race` 同时执行竞态检查。`make image-integration` 保留为不带 race 的开发入口。Image 租户变异门禁使用同一数据库准备入口，测试结束恢复变异并清理自有资源。
 
-CI 对 PR 和 `main` push 执行独立的源码/单测、Network 数据库与隔离、Image 数据库与隔离、供应链 jobs。Network 两个 matrix jobs 各有独占 PostgreSQL；data/network 的 `^Test(LB|LoadBalancer)` 用例在 lb 路执行，其余用例以同一正则的 `-skip` 补集在 core 路执行。其他 Go 包只在 core 路全量执行；新增测试自动归入其中一路，Example/Fuzz 的默认回归在 core 路。两个分片不因另一片失败而提前取消；最终 `verify` 要求 Network matrix 和其他门禁均成功，失败、取消或跳过均不能通过。连续更新同一 PR 会取消过时执行，各 job 有明确时间预算；任务分支 push 不再重复触发整套流水线。
+CI 对 PR 和 `main` push 执行独立的源码/单测、Network 数据库与隔离、Image 数据库与隔离、供应链 jobs。Network 三个 matrix jobs 各有独占 PostgreSQL；data/network 的 `^Test.*(Processes|ProcessRestart|SchemaCompatibleSameDatabaseRollback)` 用例在 recovery 路执行；`^Test(LB|LoadBalancer)` 排除 recovery 后在 lb 路执行；两组的 `-skip` 补集在 core 路执行。其他 Go 包只在 core 路全量执行；新增测试自动归入其中一路，Example/Fuzz 的默认回归在 core 路。分片不因另一片失败而提前取消；最终 `verify` 要求 Network matrix 和其他门禁均成功，失败、取消或跳过均不能通过。连续更新同一 PR 会取消过时执行，各 job 有明确时间预算；任务分支 push 不再重复触发整套流水线。
 
 主要测试入口：
 
