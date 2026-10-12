@@ -192,7 +192,9 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			config.QPS, config.Burst = 10, 20
+			// Audit invalidation and caller deadlines are under test, not client
+			// rate limiting against this in-memory HTTP fixture.
+			config.QPS, config.Burst = 1000, 1000
 			config.WrapTransport = func(rt http.RoundTripper) http.RoundTripper { return lbAuditRetryTransport{rt} }
 			provider, err := data.NewKCProvider(f.f.p, config)
 			if err != nil {

@@ -444,9 +444,10 @@ func TestLBActualAdapterThreeExposuresUpdateAndDelete(t *testing.T) {
 				})
 			}
 			// Creation must pass the real adapter's GeneratedReady checks for
-			// each flavor, including resources and replicas. Update/replay is
-			// exposure-specific, so run that matrix once per exposure on small.
-			if scenario.flavor == "small" {
+			// each flavor, including resources and replicas. Weight updates and
+			// receipt replay share the same path across exposures; exercise them
+			// once with both public and private entries present.
+			if exposure == "public_private" && scenario.flavor == "small" {
 				zero := uint32(0)
 				update := biz.UpdateLoadBalancer{ID: lb.ID, ExpectedVersion: lb.Version, IdempotencyKey: "weight-zero", LoadBalancerMutableInput: biz.LoadBalancerMutableInput{Health: f.request.Health, Name: "updated", Backends: []biz.LoadBalancerBackendInput{{ID: lb.Backends[0].ID, SubnetID: lb.Backends[0].SubnetID, Address: lb.Backends[0].Address, Port: lb.Backends[0].Port, Weight: &zero}}}}
 				updated, err := f.lbs.Update(f.f.ctx, update)

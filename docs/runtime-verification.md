@@ -16,15 +16,15 @@ make audit
 
 `make integration` 使用固定 PostgreSQL 18.6 amd64 镜像，启动 loopback 随机端口的独占容器。每个测试创建独立数据库、owner/runtime 角色，迁移和 fixture 通过 owner 执行，业务通过 runtime 角色运行。容器和角色均由本次测试清理；凭据随机生成且不打印。镜像 digest、容器 ID 和清理结果进入命令输出。无需宿主 psql、sudo 或 kind。
 
-没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替带真实数据库的入口。CI 用 `make race` 执行这些用例及竞态检查，再执行租户谓词变异门禁；`make integration` 保留为开发时不带 race 的入口，不在 CI 重复执行同一套集成测试。不要使用 `-short` 或删除检查绕过它们。
+没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替带真实数据库的入口。CI 用两路 `scripts/integration --ci-shard core|lb` 执行完整测试范围及竞态检查，再在 core 路执行一次租户谓词变异门禁。`make race` 保留为开发时的全包 race 入口，`make integration` 为不带 race 的入口，不在 CI 重复执行同一套集成测试。不要使用 `-short` 或删除检查绕过它们。
 
 `make race` 在同一真实 PostgreSQL 设施下执行全包 race 测试。恢复测试还构建带 race detector 的实际服务二进制，保留同一数据库与受控 Provider 事实，在 T1 之后、Provider 成功但 T4 之前、删除结果未知时终止进程并恢复；不会重建空库冒充重启。测试还覆盖不同服务进程共享持久租约，以及墓碑处理保留历史 operation。
 
-VPC、Subnet 的两种创建崩溃分别验证恢复；每种资源的删除结果未知与墓碑再恢复完整演练一次，另一创建用例仍通过真实 API 删除并检查完成状态和 operation。普通数据库 fixture 只执行初次迁移；`TestNetworkMigrationReplayPreservesLedgerAndRestoresRuntimeGrants` 独立验证再次迁移不改变版本、checksum、应用时间，并恢复被撤销的 runtime 授权。进程用例另保留 CLI 迁移重放。
+VPC 保留两种创建崩溃，Subnet 保留 Provider 成功后的创建崩溃；每种资源的删除结果未知与墓碑再恢复完整演练一次。Subnet 特定 T1 的完整进程演练退役，其 CIDR 占用和旧 epoch 拒绝由数据库测试保留，通用 T1 进程恢复由 VPC 保留。普通数据库 fixture 只执行初次迁移；`TestNetworkMigrationReplayPreservesLedgerAndRestoresRuntimeGrants` 独立验证再次迁移不改变版本、checksum、应用时间，并恢复被撤销的 runtime 授权。进程用例另保留 CLI 迁移重放。
 
-Base 保留 EIP 迟到创建、未知 EIP 创建期间删除、SNAT 删除响应丢失三种实际进程崩溃；LB 保留 Gateway 迟到创建、更新/删除响应丢失、未知创建期间删除四种。其余逐资源响应丢失使用真实 PostgreSQL、生产 Worker 和实际 KC adapter 的短测试：旧调用结束、关闭旧 runtime 后，同库创建新 Repository、Provider、observer 和 worker 恢复，检查持久 pending、身份、回执、占用和清理。LB 组件另验证旧 runtime 无法完成提交时的真实租约到期与双 worker 恢复。这些短测试保留业务故障断言，但不代替每种资源各自经历完整服务进程崩溃的证据。
+Base 保留未知 EIP 创建期间删除、SNAT 删除响应丢失两种实际进程崩溃；普通 EIP 迟到创建的完整进程演练退役，更复杂的未知创建期间删除仍包含迟到写入与占用保持。LB 保留 Gateway 迟到创建、更新/删除响应丢失、未知创建期间删除四种。其余逐资源响应丢失使用真实 PostgreSQL、生产 Worker 和实际 KC adapter 的短测试：旧调用结束、关闭旧 runtime 后，同库创建新 Repository、Provider、observer 和 worker 恢复，检查持久 pending、身份、回执、占用和清理。LB 组件另验证旧 runtime 无法完成提交时的真实租约到期与双 worker 恢复。这些短测试保留业务故障断言，但不代替每种资源各自经历完整服务进程崩溃的证据。
 
-连续 Watch 审计故障集中在 `public_private` exposure；其他生命周期测试仍覆盖三种 exposure。SNAT/LB 占用竞争保留真实并发的两种到达顺序，包含资源投影检查。medium/large flavor 验证创建、规格、GeneratedReady 和删除，重复的更新与回执回放集中在 small 的三种 exposure。零 Provider 写入的取消场景集中在 Base 短测试。租户、鉴权、UID/CAS、ownership 与跨租户负向门禁仍独立执行。
+连续 Watch 审计故障集中在 `public_private` exposure；其他生命周期测试仍覆盖三种 exposure。SNAT/LB 占用竞争保留真实并发的两种到达顺序，包含资源投影检查。所有曝光和 flavor 验证创建、规格、GeneratedReady 和删除；共享 route/policy 权重更新与回执回放集中在 `public_private/small`，组件故障测试另保留零权重恢复。非节流测试的受控 HTTP fixture 使用较高 QPS，不改变生产配置。零 Provider 写入的取消场景集中在 Base 短测试。租户、鉴权、UID/CAS、ownership 与跨租户负向门禁仍独立执行。
 
 候选进程使用独占测试 CA、服务端证书和 Governance 客户端证书，调用经生产 mTLS 与可信 metadata 校验。历史客户端固定为 `66f787b` 的生成契约，仅通过临时编译 overlay 适配测试驱动的 TLS/context；原件与 protobuf 摘要保持不变。同库回滚使用支持第 13 次迁移的已发布固定基线 `a57b676`，不把缺少后续迁移的旧服务作为当前数据库的可运行回滚目标；迁移版本、checksum、应用时间、回执、cursor 和 Provider 身份仍须保持。后续数据库迁移需要重新核对并固定可运行的回滚版本。
 
@@ -41,7 +41,7 @@ make image-tenant-mutations
 
 `scripts/image-integration` 创建独占 PostgreSQL、owner/runtime 角色和私有 DSN 文件，覆盖 Image 持久化、生命周期、并发与凭据合同；`-race` 同时执行竞态检查。`make image-integration` 保留为不带 race 的开发入口。Image 租户变异门禁使用同一数据库准备入口，测试结束恢复变异并清理自有资源。
 
-CI 对 PR 和 `main` push 执行独立的源码/单测、Network 数据库与隔离、Image 数据库与隔离、供应链 jobs。最终 `verify` 汇总要求每一项成功，失败、取消或跳过均不能通过。连续更新同一 PR 会取消过时执行，各 job 有明确时间预算；任务分支 push 不再重复触发整套流水线。
+CI 对 PR 和 `main` push 执行独立的源码/单测、Network 数据库与隔离、Image 数据库与隔离、供应链 jobs。Network 两个 matrix jobs 各有独占 PostgreSQL；data/network 的 `^Test(LB|LoadBalancer)` 用例在 lb 路执行，其余用例以同一正则的 `-skip` 补集在 core 路执行。其他 Go 包只在 core 路全量执行；新增测试自动归入其中一路，Example/Fuzz 的默认回归在 core 路。两个分片不因另一片失败而提前取消；最终 `verify` 要求 Network matrix 和其他门禁均成功，失败、取消或跳过均不能通过。连续更新同一 PR 会取消过时执行，各 job 有明确时间预算；任务分支 push 不再重复触发整套流水线。
 
 主要测试入口：
 

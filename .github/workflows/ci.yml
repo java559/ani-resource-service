@@ -34,6 +34,10 @@ jobs:
   network:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [core, lb]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -55,9 +59,10 @@ jobs:
       - name: Install pinned SQL generator
         run: make check-sqlc
       - name: Real PostgreSQL and process recovery with race detector
-        # This executes the same integration tests and fixtures as make integration.
-        run: make race
+        # The two selectors are complementary; each invocation owns its PostgreSQL.
+        run: ./scripts/integration --ci-shard '${{ matrix.shard }}'
       - name: Tenant predicate mutations
+        if: ${{ matrix.shard == 'core' }}
         run: make tenant-mutations
       - name: Clean private temporary directory
         if: ${{ always() }}

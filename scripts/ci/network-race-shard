@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+[[ $# -eq 1 && ( $1 == core || $1 == lb ) ]] || {
+  echo 'usage: scripts/ci/network-race-shard core|lb' >&2
+  exit 2
+}
+[[ -n ${NETWORK_TEST_ADMIN_DSN:-} ]] || {
+  echo 'requires scripts/integration --ci-shard core|lb' >&2
+  exit 2
+}
+root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)
+cd "$root"
+
+readonly shard=$1
+readonly selector='^Test(LB|LoadBalancer)'
+readonly network_directory='./internal/data/network'
+network_package=$(go list -race "$network_directory")
+listed_packages=$(go list -race ./...)
+listed_tests=$(go test -race -list . "$network_directory")
+mapfile -t packages <<< "$listed_packages"
+other_packages=()
+network_count=0
+for package in "${packages[@]}"; do
+  [[ -n $package ]] || { echo 'empty package discovery result' >&2; exit 1; }
+  if [[ $package == "$network_package" ]]; then
+    network_count=$((network_count + 1))
+  else
+    other_packages+=("$package")
+  fi
+done
+[[ -n $network_package && $network_count -eq 1 ]] || {
+  echo 'Network package is missing or duplicated in discovery' >&2
+  exit 1
+}
+
+# New TestLB/TestLoadBalancer functions enter lb automatically. Every other test,
+# example and fuzz seed stays in core. These flags apply only to this one package.
+if [[ $shard == lb ]]; then
+  selected_tests=$(awk '/^Test(LB|LoadBalancer)/ {print}' <<< "$listed_tests")
+  [[ -n $selected_tests ]] || { echo 'empty lb test shard' >&2; exit 1; }
+  printf 'Network race shard=lb package=%s selector=%s\n' "$network_package" "$selector"
+  printf '%s\n' "$selected_tests"
+  go test -count=1 -race -timeout "${INTEGRATION_TIMEOUT:-20m}" -run "$selector" "$network_package"
+else
+  selected_tests=$(awk '/^Test/ && !/^Test(LB|LoadBalancer)/ {print}' <<< "$listed_tests")
+  [[ -n $selected_tests ]] || { echo 'empty core test shard' >&2; exit 1; }
+  printf 'Network race shard=core package=%s skip=%s\n' "$network_package" "$selector"
+  printf '%s\n' "$selected_tests"
+  if [[ ${#other_packages[@]} -gt 0 ]]; then
+    printf 'Core also runs every other package once:\n'
+    printf '%s\n' "${other_packages[@]}"
+    go test -count=1 -race -timeout "${INTEGRATION_TIMEOUT:-20m}" "${other_packages[@]}"
+  fi
+  go test -count=1 -race -timeout "${INTEGRATION_TIMEOUT:-20m}" -skip "$selector" "$network_package"
+fi

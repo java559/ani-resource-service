@@ -51,6 +51,8 @@ func newLBAdmissionFixture(t *testing.T, interceptors ...func(http.ResponseWrite
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Parent/attachment setup uses the actual adapter without testing throttling.
+	config.QPS, config.Burst = 1000, 1000
 	provider, err := data.NewKCProvider(f.p, config)
 	if err != nil {
 		t.Fatal(err)

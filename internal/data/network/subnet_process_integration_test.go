@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T) {
+func TestSubnetProcessesRecoverProviderSuccessAndUnknownDeletion(t *testing.T) {
 	if os.Getenv("NETWORK_TEST_ADMIN_DSN") == "" {
 		t.Skip("requires isolated PostgreSQL")
 	}
@@ -33,193 +33,179 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build recovery process: %v\n%s", err, output)
 	}
-	for _, fault := range []string{"after-T1", "after-provider-success"} {
-		t.Run(fault, func(t *testing.T) {
-			fixture := testenv.NewDatabase(t)
-			signingKey := testenv.SigningKey()
-			// Both creation crash points must recover independently. Once available,
-			// they share the same deletion path, so exercise its crashes and CLI
-			// migration replay once rather than repeating them for each create fault.
-			exerciseDeleteRecovery := fault == "after-provider-success"
-			if exerciseDeleteRecovery {
-				migration := exec.Command(binary, "-migrate")
-				migration.Env = append(os.Environ(), "ANI_NETWORK_MIGRATION_DSN="+fixture.Owner.Config().ConnString(), "ANI_NETWORK_RUNTIME_ROLE="+fixture.RuntimeRole)
-				if output, err := migration.CombinedOutput(); err != nil {
-					t.Fatalf("explicit migration replay failed: %v %s", err, output)
+	t.Run("after-provider-success", func(t *testing.T) {
+		const fault = "after-provider-success"
+		fixture := testenv.NewDatabase(t)
+		signingKey := testenv.SigningKey()
+		// Keep Subnet-specific post-write recovery, unknown deletion and tombstones.
+		// Generic T1 process recovery remains in the VPC process test; Subnet CIDR
+		// occupancy and expired-writer rejection remain in the database tests.
+		migration := exec.Command(binary, "-migrate")
+		migration.Env = append(os.Environ(), "ANI_NETWORK_MIGRATION_DSN="+fixture.Owner.Config().ConnString(), "ANI_NETWORK_RUNTIME_ROLE="+fixture.RuntimeRole)
+		if output, err := migration.CombinedOutput(); err != nil {
+			t.Fatalf("explicit migration replay failed: %v %s", err, output)
+		}
+		protocol := controlled.New()
+		renewFacts := seedProcessVPCPlatformFacts(t, protocol)
+		config := processVPCPresetConfig(t, root, "10.42.0.0/16")
+		api := protocol.Backend
+		reached := make(chan struct{})
+		release := make(chan struct{})
+		var captured atomic.Bool
+		deleteReached := make(chan struct{})
+		deleteRelease := make(chan struct{})
+		var capturedDelete atomic.Bool
+		host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			renewFacts(r)
+			isObject := strings.Contains(r.URL.Path, "/subnets/")
+			captureCreate := r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/subnets")
+			if captureCreate && captured.CompareAndSwap(false, true) {
+				recorder := httptest.NewRecorder()
+				api.ServeHTTP(recorder, r)
+				close(reached)
+				<-release
+				for key, values := range recorder.Header() {
+					w.Header()[key] = values
 				}
-			}
-			protocol := controlled.New()
-			renewFacts := seedProcessVPCPlatformFacts(t, protocol)
-			config := processVPCPresetConfig(t, root, "10.42.0.0/16")
-			api := protocol.Backend
-			reached := make(chan struct{})
-			release := make(chan struct{})
-			var captured atomic.Bool
-			deleteReached := make(chan struct{})
-			deleteRelease := make(chan struct{})
-			var capturedDelete atomic.Bool
-			host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				renewFacts(r)
-				isObject := strings.Contains(r.URL.Path, "/subnets/")
-				captureCreate := (fault == "after-T1" && r.Method == "GET" && isObject) || (fault == "after-provider-success" && r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/subnets"))
-				if captureCreate && captured.CompareAndSwap(false, true) {
-					recorder := httptest.NewRecorder()
-					api.ServeHTTP(recorder, r)
-					close(reached)
-					<-release
-					for key, values := range recorder.Header() {
-						w.Header()[key] = values
-					}
-					w.WriteHeader(recorder.Code)
-					_, _ = w.Write(recorder.Body.Bytes())
-					return
-				}
-				if exerciseDeleteRecovery && r.Method == "DELETE" && isObject && capturedDelete.CompareAndSwap(false, true) {
-					recorder := httptest.NewRecorder()
-					api.ServeHTTP(recorder, r)
-					close(deleteReached)
-					<-deleteRelease
-					for key, values := range recorder.Header() {
-						w.Header()[key] = values
-					}
-					w.WriteHeader(recorder.Code)
-					_, _ = w.Write(recorder.Body.Bytes())
-					return
-				}
-				protocol.ServeHTTP(w, r)
-			}))
-			defer host.Close()
-			defer close(release)
-			defer close(deleteRelease)
-			kubeconfig := testenv.Kubeconfig(t, host.URL)
-			start := func() *networkProcess {
-				return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey, "subnet", "config="+config)
-			}
-			first := start()
-			tenant := uuid.NewString()
-			client, closeClient := first.client(t, tenant)
-			parent, err := client.CreateVPC(context.Background(), &networkv1.CreateVPCRequest{TenantId: tenant, Name: "parent", Cidr: "10.42.0.0/16", IdempotencyKey: "parent"})
-			if err != nil {
-				t.Fatal(err)
-			}
-			waitRPCState(t, client, tenant, parent.Vpc.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
-			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-			accepted, err := client.CreateSubnet(ctx, &networkv1.CreateSubnetRequest{TenantId: tenant, VpcId: parent.Vpc.Id, Name: fault, Cidr: "10.42.1.0/24", IdempotencyKey: "restart"})
-			cancel()
-			if err != nil {
-				t.Fatal(err)
-			}
-			select {
-			case <-reached:
-			case <-time.After(8 * time.Second):
-				t.Fatal("process did not reach selected crash point")
-			}
-			first.kill(t)
-			closeClient() // No Gateway/Core or original requester remains.
-			release <- struct{}{}
-			api.Mu.Lock()
-			createCountBefore := api.Creates["subnets"]
-			api.Mu.Unlock()
-			second := start()
-			contender := start() // A distinct service process shares the same PG lease authority.
-			resumed, closeResumed := second.client(t, tenant)
-			defer closeResumed()
-			current := waitSubnetRPCState(t, resumed, tenant, accepted.Subnet.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
-			if current.LastOperationId != accepted.Subnet.LastOperationId {
-				t.Fatal("restart changed operation identity")
-			}
-			api.Mu.Lock()
-			creates := api.Creates["subnets"]
-			var saved []byte
-			var savedKey string
-			for key, object := range api.Objects {
-				metadata, _ := object["metadata"].(map[string]any)
-				labels, _ := metadata["labels"].(map[string]any)
-				if object["kind"] == "Subnet" && labels["network.ani.io/resource-id"] == accepted.Subnet.Id {
-					saved, _ = json.Marshal(object)
-					savedKey = key
-				}
-			}
-			api.Mu.Unlock()
-			if len(saved) == 0 {
-				t.Fatal("created tenant Subnet fixture is missing")
-			}
-			if creates != 1 {
-				t.Fatalf("provider success replay created %d objects", creates)
-			}
-			contender.stop(t)
-			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
-			deleting, err := resumed.DeleteSubnet(ctx, &networkv1.DeleteSubnetRequest{TenantId: tenant, SubnetId: current.Id})
-			cancel()
-			if err != nil {
-				t.Fatal(err)
-			}
-			cleanup := resumed
-			deletionProcess := second
-			if exerciseDeleteRecovery {
-				select {
-				case <-deleteReached:
-				case <-time.After(8 * time.Second):
-					output, _ := os.ReadFile(second.logPath)
-					t.Fatalf("process never issued DELETE; process trace: %s", output)
-				}
-				second.kill(t)
-				deleteRelease <- struct{}{}
-				deletionProcess = start()
-				var closeCleanup func()
-				cleanup, closeCleanup = deletionProcess.client(t, tenant)
-				defer closeCleanup()
-			}
-			deleted := waitSubnetRPCState(t, cleanup, tenant, current.Id, networkv1.ResourceState_RESOURCE_STATE_DELETED)
-			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
-			completed, err := cleanup.GetOperation(ctx, &networkv1.GetOperationRequest{TenantId: tenant, OperationId: deleting.Subnet.LastOperationId})
-			cancel()
-			if err != nil || completed.Operation.State != networkv1.OperationState_OPERATION_STATE_SUCCEEDED {
-				t.Fatalf("delete did not complete: %v %v", completed, err)
-			}
-			if deleted.LastOperationId != deleting.Subnet.LastOperationId {
-				t.Fatal("delete recovery changed operation identity")
-			}
-			if !exerciseDeleteRecovery {
-				deletionProcess.stop(t)
-				t.Logf("%s: Subnet=%s create_op=%s create_count_before_crash=%d final_creates=%d delete_op=%s; three distinct service processes (including two concurrent replicas) recovered creation and completed normal deletion", fault, current.Id, accepted.Subnet.LastOperationId, createCountBefore, creates, deleting.Subnet.LastOperationId)
+				w.WriteHeader(recorder.Code)
+				_, _ = w.Write(recorder.Body.Bytes())
 				return
 			}
-			// A controlled stale/late same-UID object verifies retained tombstone
-			// handling. Real Kubernetes UID/visibility semantics remain unverified here.
-			deletionProcess.kill(t)
-			api.Mu.Lock()
-			var restored map[string]any
-			_ = json.Unmarshal(saved, &restored)
-			api.Objects[savedKey] = restored
-			api.Mu.Unlock()
-			fourth := start()
-			tombstone, closeTombstone := fourth.client(t, tenant)
-			defer closeTombstone()
-			deadline := time.Now().Add(12 * time.Second)
-			cleaned := false
-			for time.Now().Before(deadline) {
-				api.Mu.Lock()
-				cleaned = api.Objects[savedKey] == nil && api.Deletes["subnets"] == 2
-				api.Mu.Unlock()
-				if cleaned {
-					break
+			if r.Method == "DELETE" && isObject && capturedDelete.CompareAndSwap(false, true) {
+				recorder := httptest.NewRecorder()
+				api.ServeHTTP(recorder, r)
+				close(deleteReached)
+				<-deleteRelease
+				for key, values := range recorder.Header() {
+					w.Header()[key] = values
 				}
-				time.Sleep(10 * time.Millisecond)
+				w.WriteHeader(recorder.Code)
+				_, _ = w.Write(recorder.Body.Bytes())
+				return
 			}
-			if !cleaned {
-				t.Fatal("tombstone did not clean late owned object without caller")
+			protocol.ServeHTTP(w, r)
+		}))
+		defer host.Close()
+		defer close(release)
+		defer close(deleteRelease)
+		kubeconfig := testenv.Kubeconfig(t, host.URL)
+		start := func() *networkProcess {
+			return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey, "subnet", "config="+config)
+		}
+		first := start()
+		tenant := uuid.NewString()
+		client, closeClient := first.client(t, tenant)
+		parent, err := client.CreateVPC(context.Background(), &networkv1.CreateVPCRequest{TenantId: tenant, Name: "parent", Cidr: "10.42.0.0/16", IdempotencyKey: "parent"})
+		if err != nil {
+			t.Fatal(err)
+		}
+		waitRPCState(t, client, tenant, parent.Vpc.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		accepted, err := client.CreateSubnet(ctx, &networkv1.CreateSubnetRequest{TenantId: tenant, VpcId: parent.Vpc.Id, Name: fault, Cidr: "10.42.1.0/24", IdempotencyKey: "restart"})
+		cancel()
+		if err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case <-reached:
+		case <-time.After(8 * time.Second):
+			t.Fatal("process did not reach selected crash point")
+		}
+		first.kill(t)
+		closeClient() // No Gateway/Core or original requester remains.
+		release <- struct{}{}
+		api.Mu.Lock()
+		createCountBefore := api.Creates["subnets"]
+		api.Mu.Unlock()
+		second := start()
+		contender := start() // A distinct service process shares the same PG lease authority.
+		resumed, closeResumed := second.client(t, tenant)
+		defer closeResumed()
+		current := waitSubnetRPCState(t, resumed, tenant, accepted.Subnet.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
+		if current.LastOperationId != accepted.Subnet.LastOperationId {
+			t.Fatal("restart changed operation identity")
+		}
+		api.Mu.Lock()
+		creates := api.Creates["subnets"]
+		var saved []byte
+		var savedKey string
+		for key, object := range api.Objects {
+			metadata, _ := object["metadata"].(map[string]any)
+			labels, _ := metadata["labels"].(map[string]any)
+			if object["kind"] == "Subnet" && labels["network.ani.io/resource-id"] == accepted.Subnet.Id {
+				saved, _ = json.Marshal(object)
+				savedKey = key
 			}
-			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
-			historic, err := tombstone.GetOperation(ctx, &networkv1.GetOperationRequest{TenantId: tenant, OperationId: deleting.Subnet.LastOperationId})
-			cancel()
-			if err != nil || !historic.Operation.CompletedAt.AsTime().Equal(completed.Operation.CompletedAt.AsTime()) {
-				t.Fatalf("tombstone rewrote historic operation: %v %v", historic, err)
+		}
+		api.Mu.Unlock()
+		if len(saved) == 0 {
+			t.Fatal("created tenant Subnet fixture is missing")
+		}
+		if creates != 1 {
+			t.Fatalf("provider success replay created %d objects", creates)
+		}
+		contender.stop(t)
+		ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
+		deleting, err := resumed.DeleteSubnet(ctx, &networkv1.DeleteSubnetRequest{TenantId: tenant, SubnetId: current.Id})
+		cancel()
+		if err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case <-deleteReached:
+		case <-time.After(8 * time.Second):
+			output, _ := os.ReadFile(second.logPath)
+			t.Fatalf("process never issued DELETE; process trace: %s", output)
+		}
+		second.kill(t)
+		deleteRelease <- struct{}{}
+		deletionProcess := start()
+		cleanup, closeCleanup := deletionProcess.client(t, tenant)
+		defer closeCleanup()
+		deleted := waitSubnetRPCState(t, cleanup, tenant, current.Id, networkv1.ResourceState_RESOURCE_STATE_DELETED)
+		ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
+		completed, err := cleanup.GetOperation(ctx, &networkv1.GetOperationRequest{TenantId: tenant, OperationId: deleting.Subnet.LastOperationId})
+		cancel()
+		if err != nil || completed.Operation.State != networkv1.OperationState_OPERATION_STATE_SUCCEEDED {
+			t.Fatalf("delete did not complete: %v %v", completed, err)
+		}
+		if deleted.LastOperationId != deleting.Subnet.LastOperationId {
+			t.Fatal("delete recovery changed operation identity")
+		}
+		// A controlled stale/late same-UID object verifies retained tombstone
+		// handling. Real Kubernetes UID/visibility semantics remain unverified here.
+		deletionProcess.kill(t)
+		api.Mu.Lock()
+		var restored map[string]any
+		_ = json.Unmarshal(saved, &restored)
+		api.Objects[savedKey] = restored
+		api.Mu.Unlock()
+		fourth := start()
+		tombstone, closeTombstone := fourth.client(t, tenant)
+		defer closeTombstone()
+		deadline := time.Now().Add(12 * time.Second)
+		cleaned := false
+		for time.Now().Before(deadline) {
+			api.Mu.Lock()
+			cleaned = api.Objects[savedKey] == nil && api.Deletes["subnets"] == 2
+			api.Mu.Unlock()
+			if cleaned {
+				break
 			}
-			fourth.stop(t)
-			t.Logf("%s: Subnet=%s create_op=%s create_count_before_crash=%d final_creates=%d delete_op=%s; five distinct service processes (including two concurrent replicas) used the same database and API state", fault, current.Id, accepted.Subnet.LastOperationId, createCountBefore, creates, deleting.Subnet.LastOperationId)
-		})
-	}
+			time.Sleep(10 * time.Millisecond)
+		}
+		if !cleaned {
+			t.Fatal("tombstone did not clean late owned object without caller")
+		}
+		ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
+		historic, err := tombstone.GetOperation(ctx, &networkv1.GetOperationRequest{TenantId: tenant, OperationId: deleting.Subnet.LastOperationId})
+		cancel()
+		if err != nil || !historic.Operation.CompletedAt.AsTime().Equal(completed.Operation.CompletedAt.AsTime()) {
+			t.Fatalf("tombstone rewrote historic operation: %v %v", historic, err)
+		}
+		fourth.stop(t)
+		t.Logf("%s: Subnet=%s create_op=%s create_count_before_crash=%d final_creates=%d delete_op=%s; five distinct service processes (including two concurrent replicas) used the same database and API state", fault, current.Id, accepted.Subnet.LastOperationId, createCountBefore, creates, deleting.Subnet.LastOperationId)
+	})
 }
 func waitSubnetRPCState(t *testing.T, client networkv1.NetworkServiceClient, tenant, id string, state networkv1.ResourceState) *networkv1.Subnet {
 	t.Helper()
