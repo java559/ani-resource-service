@@ -104,7 +104,7 @@ func TestSubnetMigrationUpgradesNET01WithoutChangingDurableFacts(t *testing.T) {
 	}
 }
 
-func TestSubnetIPCountsMigrationPreservesUnknownOldRows(t *testing.T) {
+func TestSubnetIPRangesMigrationPreservesUnknownOldRows(t *testing.T) {
 	ctx := context.Background()
 	tenant := uuid.NewString()
 	f := testenv.NewDatabase(t, func(owner *pgxpool.Pool, _ string) {
@@ -142,10 +142,16 @@ func TestSubnetIPCountsMigrationPreservesUnknownOldRows(t *testing.T) {
 			t.Fatal(e)
 		}
 	})
-	var available, used *int64
+	var available, used *string
 	var version int64
-	if e := f.Owner.QueryRow(ctx, `SELECT available_ip_count,used_ip_count,version FROM network_subnets WHERE tenant_id=$1`, tenant).Scan(&available, &used, &version); e != nil || available != nil || used != nil || version != 9 {
-		t.Fatal("migration invented counts or changed old row", available, used, version, e)
+	if e := f.Owner.QueryRow(ctx, `SELECT available_ip_range,used_ip_range,version FROM network_subnets WHERE tenant_id=$1`, tenant).Scan(&available, &used, &version); e != nil || available != nil || used != nil || version != 9 {
+		t.Fatal("migration invented ranges or changed old row", available, used, version, e)
+	}
+	if _, e := f.Owner.Exec(ctx, `UPDATE network_subnets SET available_ip_range='',used_ip_range='' WHERE tenant_id=$1`, tenant); e != nil {
+		t.Fatal(e)
+	}
+	if e := f.Owner.QueryRow(ctx, `SELECT available_ip_range,used_ip_range FROM network_subnets WHERE tenant_id=$1`, tenant).Scan(&available, &used); e != nil || available == nil || used == nil || *available != "" || *used != "" {
+		t.Fatal("migration lost known-empty range", available, used, e)
 	}
 	for _, field := range []string{"available_ip_count", "used_ip_count"} {
 		if _, e := f.Owner.Exec(ctx, "UPDATE network_subnets SET "+field+"=-1 WHERE tenant_id=$1", tenant); e == nil {

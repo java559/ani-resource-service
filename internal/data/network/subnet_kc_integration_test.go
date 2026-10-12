@@ -94,8 +94,8 @@ func TestSubnetKCContractAndResidualReferencesBlockCleanup(t *testing.T) {
 	}
 }
 
-func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
-	p, owner := database(t)
+func TestSubnetKCIPRangesDetailsAndFences(t *testing.T) {
+	p, _ := database(t)
 	n := newNetwork(t, p, time.Minute)
 	api := &testenv.KC{}
 	var unavailable atomic.Bool
@@ -121,8 +121,8 @@ func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
 	}
 	ctx := context.Background()
 	tenant := uuid.NewString()
-	vpc := availableVPC(t, n, worker, tenant, "counts-parent")
-	accepted, err := n.CreateSubnet(ctx, biz.CreateSubnet{TenantID: tenant, VPCID: vpc.ID, Name: "counts", CIDR: "10.42.1.0/24", IdempotencyKey: "counts"})
+	vpc := availableVPC(t, n, worker, tenant, "ranges-parent")
+	accepted, err := n.CreateSubnet(ctx, biz.CreateSubnet{TenantID: tenant, VPCID: vpc.ID, Name: "ranges", CIDR: "10.42.1.0/24", IdempotencyKey: "ranges"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -136,8 +136,8 @@ func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
 		}
 		return reply.Subnet
 	}
-	if got := details(); got.AvailableIpCount != nil || got.UsedIpCount != nil {
-		t.Fatal("missing status invented counts", got)
+	if got := details(); got.AvailableIpRange != nil || got.UsedIpRange != nil {
+		t.Fatal("missing status invented ranges", got)
 	}
 	var object map[string]any
 	api.Mu.Lock()
@@ -162,59 +162,78 @@ func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
 			t.Fatal(e)
 		}
 	}
-	refresh(func() { statusFields["v4availableIPs"] = int64(240); statusFields["v4usingIPs"] = int64(12) })
+	refresh(func() {
+		statusFields["v4availableIPrange"] = "10.42.1.20-10.42.1.254"
+		statusFields["v4usingIPrange"] = "10.42.1.2,10.42.1.4-10.42.1.19"
+	})
 	before := details()
-	if before.AvailableIpCount == nil || before.GetAvailableIpCount() != 240 || before.UsedIpCount == nil || before.GetUsedIpCount() != 12 {
-		t.Fatal("counts not persisted to detail", before)
+	if before.AvailableIpRange == nil || before.GetAvailableIpRange() != "10.42.1.20-10.42.1.254" || before.UsedIpRange == nil || before.GetUsedIpRange() != "10.42.1.2,10.42.1.4-10.42.1.19" {
+		t.Fatal("ranges not persisted to detail", before)
 	}
-	refresh(func() { statusFields["v4availableIPs"] = int64(239); statusFields["v4usingIPs"] = int64(13) })
-	if got := details(); got.GetAvailableIpCount() != 239 || got.GetUsedIpCount() != 13 || got.State != before.State || !got.ObservedAt.AsTime().After(before.ObservedAt.AsTime()) {
-		t.Fatal("count-only refresh lost", got)
+	refresh(func() {
+		statusFields["v4availableIPrange"] = "10.42.1.21-10.42.1.254"
+		statusFields["v4usingIPrange"] = "10.42.1.2-10.42.1.20"
+	})
+	if got := details(); got.GetAvailableIpRange() != "10.42.1.21-10.42.1.254" || got.GetUsedIpRange() != "10.42.1.2-10.42.1.20" || got.State != before.State || !got.ObservedAt.AsTime().After(before.ObservedAt.AsTime()) {
+		t.Fatal("range-only refresh lost", got)
 	}
-	refresh(func() { statusFields["v4availableIPs"] = int64(0); statusFields["v4usingIPs"] = int64(0) })
-	if got := details(); got.AvailableIpCount == nil || got.UsedIpCount == nil || got.GetAvailableIpCount() != 0 || got.GetUsedIpCount() != 0 {
-		t.Fatal("zero lost presence", got)
+	refresh(func() { statusFields["v4availableIPrange"] = ""; statusFields["v4usingIPrange"] = "" })
+	if got := details(); got.AvailableIpRange == nil || got.UsedIpRange == nil || got.GetAvailableIpRange() != "" || got.GetUsedIpRange() != "" {
+		t.Fatal("empty range lost presence", got)
 	}
-	refresh(func() { delete(statusFields, "v4availableIPs"); statusFields["v4usingIPs"] = "invalid" })
-	if got := details(); got.AvailableIpCount != nil || got.UsedIpCount != nil {
-		t.Fatal("new missing/invalid counts retained old values", got)
+	refresh(func() {
+		delete(statusFields, "v4availableIPrange")
+		statusFields["v4usingIPrange"] = int64(123)
+		statusFields["v4availableIPs"] = int64(999)
+	})
+	if got := details(); got.AvailableIpRange != nil || got.UsedIpRange != nil {
+		t.Fatal("new missing/invalid ranges retained old values", got)
 	}
-	refresh(func() { statusFields["v4availableIPs"] = int64(-1); statusFields["v4usingIPs"] = 1.5 })
-	if got := details(); got.AvailableIpCount != nil || got.UsedIpCount != nil {
-		t.Fatal("invalid numeric counts accepted", got)
+	refresh(func() { statusFields["v4availableIPrange"] = int64(-1); statusFields["v4usingIPrange"] = 1.5 })
+	if got := details(); got.AvailableIpRange != nil || got.UsedIpRange != nil {
+		t.Fatal("non-string ranges accepted", got)
 	}
-	refresh(func() { statusFields["v4availableIPs"] = int64(200); statusFields["v4usingIPs"] = int64(20) })
+	refresh(func() {
+		statusFields["v4availableIPrange"] = "10.42.1.30-10.42.1.254"
+		statusFields["v4usingIPrange"] = "10.42.1.2-10.42.1.29"
+	})
 	before = details()
 	oldUID := metadata["uid"]
-	refresh(func() { metadata["uid"] = uuid.NewString(); statusFields["v4availableIPs"] = int64(999) })
-	if got := details(); got.GetAvailableIpCount() != 200 || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
-		t.Fatal("foreign UID renewed counts", got)
+	refresh(func() {
+		metadata["uid"] = uuid.NewString()
+		statusFields["v4availableIPrange"] = "10.42.1.2-10.42.1.254"
+	})
+	if got := details(); got.GetAvailableIpRange() != "10.42.1.30-10.42.1.254" || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
+		t.Fatal("foreign UID renewed ranges", got)
 	}
 	time.Sleep(policy.RetryMin)
 	refresh(func() { metadata["uid"] = oldUID; labels["network.ani.io/tenant-id"] = uuid.NewString() })
-	if got := details(); got.GetAvailableIpCount() != 200 || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
-		t.Fatal("foreign tenant renewed counts", got)
+	if got := details(); got.GetAvailableIpRange() != "10.42.1.30-10.42.1.254" || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
+		t.Fatal("foreign tenant renewed ranges", got)
 	}
 	time.Sleep(policy.RetryMin)
 	refresh(func() { labels["network.ani.io/tenant-id"] = tenant; statusFields["observedGeneration"] = int64(0) })
-	if got := details(); got.AvailableIpCount != nil || got.UsedIpCount != nil {
+	if got := details(); got.AvailableIpRange != nil || got.UsedIpRange != nil {
 		t.Fatal("unobserved generation trusted", got)
 	}
 	time.Sleep(policy.RetryMin)
-	refresh(func() { statusFields["observedGeneration"] = int64(1); statusFields["v4availableIPs"] = int64(200) })
+	refresh(func() {
+		statusFields["observedGeneration"] = int64(1)
+		statusFields["v4availableIPrange"] = "10.42.1.30-10.42.1.254"
+	})
 	before = details()
 	unavailable.Store(true)
 	refresh(func() {})
-	if got := details(); got.GetAvailableIpCount() != 200 || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
-		t.Fatal("read failure refreshed counts", got)
+	if got := details(); got.GetAvailableIpRange() != "10.42.1.30-10.42.1.254" || !got.ObservedAt.AsTime().Equal(before.ObservedAt.AsTime()) {
+		t.Fatal("read failure refreshed ranges", got)
 	}
 	staleNetwork, e := biz.NewNetwork(p, []byte("0123456789abcdef0123456789abcdef"), time.Minute, func() time.Time { return time.Now().Add(2 * time.Minute) })
 	if e != nil {
 		t.Fatal(e)
 	}
 	stale, e := service.NewNetworkService(staleNetwork).GetSubnet(ctx, &networkv1.GetSubnetRequest{TenantId: tenant, SubnetId: current.ID})
-	if e != nil || !stale.Subnet.ObservationStale || stale.Subnet.GetAvailableIpCount() != 200 {
-		t.Fatal("historical counts lost stale marker", stale, e)
+	if e != nil || !stale.Subnet.ObservationStale || stale.Subnet.GetAvailableIpRange() != "10.42.1.30-10.42.1.254" {
+		t.Fatal("historical ranges lost stale marker", stale, e)
 	}
 	if _, e := rpc.GetSubnet(ctx, &networkv1.GetSubnetRequest{TenantId: uuid.NewString(), SubnetId: current.ID}); status.Code(e) != codes.NotFound {
 		t.Fatal("cross-tenant detail", e)
@@ -226,10 +245,10 @@ func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
 	}
 	work, found, e := p.Claim(ctx, uuid.NewString(), time.Minute)
 	if e != nil || !found || work.Resource.ID != current.ID {
-		t.Fatal("count fence claim", work, found, e)
+		t.Fatal("range fence claim", work, found, e)
 	}
-	zero := int64(0)
-	progress := biz.Progress{State: work.Resource.State, Observed: true, Identity: work.KnownIdentity, NextDelay: time.Hour, SubnetIPCounts: biz.SubnetIPCounts{Available: &zero, Used: &zero}, Proof: biz.ObservationProof{CollectedAt: before.ObservedAt.AsTime().Add(-time.Second), CoveredGeneration: work.Requirement.RequestedGeneration}}
+	empty := ""
+	progress := biz.Progress{State: work.Resource.State, Observed: true, Identity: work.KnownIdentity, NextDelay: time.Hour, SubnetIPRanges: biz.SubnetIPRanges{Available: &empty, Used: &empty}, Proof: biz.ObservationProof{CollectedAt: before.ObservedAt.AsTime().Add(-time.Second), CoveredGeneration: work.Requirement.RequestedGeneration}}
 	if e := p.Finish(ctx, work, progress); !errors.Is(e, biz.ErrLeaseLost) {
 		t.Fatal("older observation accepted", e)
 	}
@@ -239,10 +258,7 @@ func TestSubnetKCIPCountsDetailsAndFences(t *testing.T) {
 	if e := p.Finish(ctx, oldWork, progress); !errors.Is(e, biz.ErrLeaseLost) {
 		t.Fatal("older lease accepted", e)
 	}
-	if got := details(); got.GetAvailableIpCount() != 200 {
-		t.Fatal("fenced completion changed counts", got)
-	}
-	if _, e := owner.Exec(ctx, `UPDATE network_subnets SET used_ip_count=-1 WHERE tenant_id=$1 AND subnet_id=$2`, tenant, current.ID); e == nil {
-		t.Fatal("negative count bypassed SQL constraint")
+	if got := details(); got.GetAvailableIpRange() != "10.42.1.30-10.42.1.254" {
+		t.Fatal("fenced completion changed ranges", got)
 	}
 }

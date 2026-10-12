@@ -46,5 +46,5 @@ func (s *NetworkService) DeleteSubnet(ctx context.Context, r *networkv1.DeleteSu
 	return &networkv1.DeleteSubnetResponse{Subnet: wireSubnet(value)}, nil
 }
 func wireSubnet(v biz.Subnet) *networkv1.Subnet {
-	return &networkv1.Subnet{AvailableIpCount: v.AvailableIPCount, UsedIpCount: v.UsedIPCount, Id: v.ID, TenantId: v.TenantID, Name: v.Name, Description: v.Description, Cidr: v.CIDR, State: statesToWire[v.State], Reason: string(v.Reason), ReasonMessage: v.Reason.Message(), CreatedAt: timestamppb.New(v.CreatedAt), UpdatedAt: timestamppb.New(v.UpdatedAt), Version: v.Version, ObservedAt: optionalTime(v.ObservedAt), ObservationStale: v.ObservationStale, LastOperationId: v.LastOperationID, VpcId: v.VPCID, Gateway: v.Gateway}
+	return &networkv1.Subnet{AvailableIpRange: v.AvailableIPRange, UsedIpRange: v.UsedIPRange, Id: v.ID, TenantId: v.TenantID, Name: v.Name, Description: v.Description, Cidr: v.CIDR, State: statesToWire[v.State], Reason: string(v.Reason), ReasonMessage: v.Reason.Message(), CreatedAt: timestamppb.New(v.CreatedAt), UpdatedAt: timestamppb.New(v.UpdatedAt), Version: v.Version, ObservedAt: optionalTime(v.ObservedAt), ObservationStale: v.ObservationStale, LastOperationId: v.LastOperationID, VpcId: v.VPCID, Gateway: v.Gateway}
 }

@@ -49,7 +49,7 @@ type ProviderTarget struct {
 }
 
 type ProviderObservation struct {
-	SubnetIPCounts                 SubnetIPCounts
+	SubnetIPRanges                 SubnetIPRanges
 	Egress                         *EgressAppliedFacts
 	NeedsUpdate                    bool
 	Proof                          ObservationProof
@@ -98,7 +98,7 @@ type Work struct {
 }
 
 type Progress struct {
-	SubnetIPCounts SubnetIPCounts
+	SubnetIPRanges SubnetIPRanges
 	LoadBalancer   *LoadBalancerObservation
 	Egress         *EgressAppliedFacts
 	Proof          ObservationProof
@@ -216,7 +216,7 @@ func (w *Worker) Step(ctx context.Context) (worked bool, stepErr error) {
 		}
 	} else {
 		progress = applyEgressFacts(progress, observation)
-		progress.SubnetIPCounts = observation.SubnetIPCounts
+		progress.SubnetIPRanges = observation.SubnetIPRanges
 		progress.Observed = true
 		progress.Proof = observation.Proof
 		if progress.Proof.CollectedAt.IsZero() {
@@ -314,7 +314,7 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		}
 		observed = value
 		progress = applyEgressFacts(progress, value)
-		progress.SubnetIPCounts = value.SubnetIPCounts
+		progress.SubnetIPRanges = value.SubnetIPRanges
 		if !value.Proof.CollectedAt.IsZero() {
 			progress.Proof = value.Proof
 		}
@@ -350,7 +350,7 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		}
 		observed = value
 		progress = applyEgressFacts(progress, value)
-		progress.SubnetIPCounts = value.SubnetIPCounts
+		progress.SubnetIPRanges = value.SubnetIPRanges
 		if !value.Proof.CollectedAt.IsZero() {
 			progress.Proof = value.Proof
 		}

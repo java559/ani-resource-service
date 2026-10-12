@@ -18,7 +18,7 @@ const (
 )
 
 type Subnet struct {
-	AvailableIPCount, UsedIPCount                         *int64
+	AvailableIPRange, UsedIPRange                         *string
 	ID, TenantID, VPCID, Name, CIDR, Gateway, Description string
 	State                                                 ResourceState
 	Reason                                                Reason
@@ -29,9 +29,9 @@ type Subnet struct {
 	LastOperationID                                       string
 }
 
-// SubnetIPCounts are facts from the matching provider status. Nil means unknown.
-type SubnetIPCounts struct {
-	Available, Used *int64
+// SubnetIPRanges are facts from the matching provider status. Nil means unknown; a present empty string is an observed empty range.
+type SubnetIPRanges struct {
+	Available, Used *string
 }
 
 type CreateSubnet struct {

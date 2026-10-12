@@ -577,6 +577,8 @@ type NetworkSubnet struct {
 	LastOperationID  string
 	AvailableIpCount pgtype.Int8
 	UsedIpCount      pgtype.Int8
+	AvailableIpRange *string
+	UsedIpRange      *string
 }
 
 type NetworkTenantNamespace struct {
