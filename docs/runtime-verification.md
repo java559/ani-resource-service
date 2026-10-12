@@ -20,7 +20,13 @@ make audit
 
 `make race` 在同一真实 PostgreSQL 设施下执行全包 race 测试。恢复测试还构建带 race detector 的实际服务二进制，保留同一数据库与受控 Provider 事实，在 T1 之后、Provider 成功但 T4 之前、删除结果未知时终止进程并恢复；不会重建空库冒充重启。测试还覆盖不同服务进程共享持久租约，以及墓碑处理保留历史 operation。
 
-候选进程使用独占测试 CA、服务端证书和 Governance 客户端证书，调用经生产 mTLS 与可信 metadata 校验。历史客户端固定为 `66f787b` 的生成契约，仅通过临时编译 overlay 适配测试驱动的 TLS/context；原件与 protobuf 摘要保持不变。同库回滚使用 schema 兼容的固定基线 `b258907`，不把缺少后续迁移的旧服务作为当前数据库的可运行回滚目标；迁移版本、checksum、应用时间、回执、cursor 和 Provider 身份仍须保持。
+VPC、Subnet 的两种创建崩溃分别验证恢复；每种资源的删除结果未知与墓碑再恢复完整演练一次，另一创建用例仍通过真实 API 删除并检查完成状态和 operation。普通数据库 fixture 只执行初次迁移；`TestNetworkMigrationReplayPreservesLedgerAndRestoresRuntimeGrants` 独立验证再次迁移不改变版本、checksum、应用时间，并恢复被撤销的 runtime 授权。进程用例另保留 CLI 迁移重放。
+
+Base 保留 EIP 迟到创建、未知 EIP 创建期间删除、SNAT 删除响应丢失三种实际进程崩溃；LB 保留 Gateway 迟到创建、更新/删除响应丢失、未知创建期间删除四种。其余逐资源响应丢失使用真实 PostgreSQL、生产 Worker 和实际 KC adapter 的短测试：旧调用结束、关闭旧 runtime 后，同库创建新 Repository、Provider、observer 和 worker 恢复，检查持久 pending、身份、回执、占用和清理。LB 组件另验证旧 runtime 无法完成提交时的真实租约到期与双 worker 恢复。这些短测试保留业务故障断言，但不代替每种资源各自经历完整服务进程崩溃的证据。
+
+连续 Watch 审计故障集中在 `public_private` exposure；其他生命周期测试仍覆盖三种 exposure。SNAT/LB 占用竞争保留真实并发的两种到达顺序，包含资源投影检查。medium/large flavor 验证创建、规格、GeneratedReady 和删除，重复的更新与回执回放集中在 small 的三种 exposure。零 Provider 写入的取消场景集中在 Base 短测试。租户、鉴权、UID/CAS、ownership 与跨租户负向门禁仍独立执行。
+
+候选进程使用独占测试 CA、服务端证书和 Governance 客户端证书，调用经生产 mTLS 与可信 metadata 校验。历史客户端固定为 `66f787b` 的生成契约，仅通过临时编译 overlay 适配测试驱动的 TLS/context；原件与 protobuf 摘要保持不变。同库回滚使用支持第 13 次迁移的已发布固定基线 `a57b676`，不把缺少后续迁移的旧服务作为当前数据库的可运行回滚目标；迁移版本、checksum、应用时间、回执、cursor 和 Provider 身份仍须保持。后续数据库迁移需要重新核对并固定可运行的回滚版本。
 
 `make tenant-mutations` 分别破坏 GetVPC、GetOperation、ListVPCs、GetSubnet、ListSubnets 和 GetAttachment 的 tenant 过滤，再用 sqlc 生成并执行真实数据库行为测试。只有相应跨租户断言实际失败才算识别成功；编译失败或其他测试错误不能充数。脚本始终恢复输入 SQL 和生成物，变异不留在最终代码。
 

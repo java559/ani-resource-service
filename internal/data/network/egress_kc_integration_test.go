@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -73,12 +74,16 @@ func newEgressKCFixture(t *testing.T, intercept func(http.ResponseWriter, *http.
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan error, 1)
 	go func() { done <- obs.Start(ctx) }()
-	t.Cleanup(func() {
-		cancel()
-		if err := <-done; err != nil {
-			t.Error(err)
-		}
-	})
+	var stopOnce sync.Once
+	f.stopObservation = func() {
+		stopOnce.Do(func() {
+			cancel()
+			if err := <-done; err != nil {
+				t.Error(err)
+			}
+		})
+	}
+	t.Cleanup(f.stopObservation)
 	awaitNET05A(t, 3*time.Second, func() bool { return obs.Snapshot()["source_synced"] == 1 })
 	return f, api, db, testenv.Kubeconfig(t, host.URL)
 }

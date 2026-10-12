@@ -66,6 +66,18 @@ func TestLBConcurrentSNATClaimBothArrivalOrders(t *testing.T) {
 			if err = <-results[second]; biz.ReasonOf(err) != biz.EIPInUse {
 				t.Fatal("second claim did not lose", err)
 			}
+			// Both arrival orders retain the EIP projection contract previously
+			// checked in a separate sequential admission fixture.
+			value, err := f.f.e.GetEIP(f.f.ctx, "", eip.ID)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if value.BindingState != "reserved" || value.BindingTarget == nil {
+				t.Fatal("claim projection missing", value)
+			}
+			if first == "lb" && (value.BindingID != "" || value.BindingTarget.Kind != "load_balancer") {
+				t.Fatal("legacy field made LB EIP appear free", value)
+			}
 			var count int
 			if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_eip_claims WHERE tenant_id=$1 AND eip_id=$2 AND released_at IS NULL`, f.f.tenant, eip.ID).Scan(&count); err != nil || count != 1 {
 				t.Fatal("not one durable claim", count, err)

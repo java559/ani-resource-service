@@ -103,15 +103,16 @@ func (testEgressInfrastructure) ListNodeInterfaces(context.Context) (biz.Interfa
 }
 
 type egressFixture struct {
-	p        *data.Postgres
-	owner    *pgxpool.Pool
-	e        *biz.Egress
-	n        *biz.Network
-	provider *egressProvider
-	w        *biz.Worker
-	ctx      context.Context
-	tenant   string
-	pool     biz.PlatformResource
+	stopObservation func()
+	p               *data.Postgres
+	owner           *pgxpool.Pool
+	e               *biz.Egress
+	n               *biz.Network
+	provider        *egressProvider
+	w               *biz.Worker
+	ctx             context.Context
+	tenant          string
+	pool            biz.PlatformResource
 }
 
 func egressWorker(t *testing.T, p *data.Postgres, provider *egressProvider) *biz.Worker {

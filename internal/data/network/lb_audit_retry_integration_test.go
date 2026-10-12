@@ -77,7 +77,9 @@ func lbAuditRetryObjects(api *controlled.Server) string {
 }
 
 func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
-	for _, exposure := range []string{"private", "public_private"} {
+	// The retry policy is exposure-independent. Keep the combined public/private
+	// entry here; all three exposures retain actual-adapter lifecycle coverage.
+	for _, exposure := range []string{"public_private"} {
 		t.Run(exposure, func(t *testing.T) {
 			type watchSession struct {
 				ctx    context.Context

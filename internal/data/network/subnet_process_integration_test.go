@@ -37,10 +37,16 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 		t.Run(fault, func(t *testing.T) {
 			fixture := testenv.NewDatabase(t)
 			signingKey := testenv.SigningKey()
-			migration := exec.Command(binary, "-migrate")
-			migration.Env = append(os.Environ(), "ANI_NETWORK_MIGRATION_DSN="+fixture.Owner.Config().ConnString(), "ANI_NETWORK_RUNTIME_ROLE="+fixture.RuntimeRole)
-			if output, err := migration.CombinedOutput(); err != nil {
-				t.Fatalf("explicit migration replay failed: %v %s", err, output)
+			// Both creation crash points must recover independently. Once available,
+			// they share the same deletion path, so exercise its crashes and CLI
+			// migration replay once rather than repeating them for each create fault.
+			exerciseDeleteRecovery := fault == "after-provider-success"
+			if exerciseDeleteRecovery {
+				migration := exec.Command(binary, "-migrate")
+				migration.Env = append(os.Environ(), "ANI_NETWORK_MIGRATION_DSN="+fixture.Owner.Config().ConnString(), "ANI_NETWORK_RUNTIME_ROLE="+fixture.RuntimeRole)
+				if output, err := migration.CombinedOutput(); err != nil {
+					t.Fatalf("explicit migration replay failed: %v %s", err, output)
+				}
 			}
 			protocol := controlled.New()
 			renewFacts := seedProcessVPCPlatformFacts(t, protocol)
@@ -68,7 +74,7 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 					_, _ = w.Write(recorder.Body.Bytes())
 					return
 				}
-				if r.Method == "DELETE" && isObject && capturedDelete.CompareAndSwap(false, true) {
+				if exerciseDeleteRecovery && r.Method == "DELETE" && isObject && capturedDelete.CompareAndSwap(false, true) {
 					recorder := httptest.NewRecorder()
 					api.ServeHTTP(recorder, r)
 					close(deleteReached)
@@ -148,30 +154,40 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			if err != nil {
 				t.Fatal(err)
 			}
-			select {
-			case <-deleteReached:
-			case <-time.After(8 * time.Second):
-				output, _ := os.ReadFile(second.logPath)
-				t.Fatalf("process never issued DELETE; process trace: %s", output)
+			cleanup := resumed
+			deletionProcess := second
+			if exerciseDeleteRecovery {
+				select {
+				case <-deleteReached:
+				case <-time.After(8 * time.Second):
+					output, _ := os.ReadFile(second.logPath)
+					t.Fatalf("process never issued DELETE; process trace: %s", output)
+				}
+				second.kill(t)
+				deleteRelease <- struct{}{}
+				deletionProcess = start()
+				var closeCleanup func()
+				cleanup, closeCleanup = deletionProcess.client(t, tenant)
+				defer closeCleanup()
 			}
-			second.kill(t)
-			deleteRelease <- struct{}{}
-			third := start()
-			cleanup, closeCleanup := third.client(t, tenant)
-			defer closeCleanup()
 			deleted := waitSubnetRPCState(t, cleanup, tenant, current.Id, networkv1.ResourceState_RESOURCE_STATE_DELETED)
 			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
 			completed, err := cleanup.GetOperation(ctx, &networkv1.GetOperationRequest{TenantId: tenant, OperationId: deleting.Subnet.LastOperationId})
 			cancel()
 			if err != nil || completed.Operation.State != networkv1.OperationState_OPERATION_STATE_SUCCEEDED {
-				t.Fatalf("unknown delete not recovered: %v %v", completed, err)
+				t.Fatalf("delete did not complete: %v %v", completed, err)
 			}
 			if deleted.LastOperationId != deleting.Subnet.LastOperationId {
 				t.Fatal("delete recovery changed operation identity")
 			}
+			if !exerciseDeleteRecovery {
+				deletionProcess.stop(t)
+				t.Logf("%s: Subnet=%s create_op=%s create_count_before_crash=%d final_creates=%d delete_op=%s; three distinct service processes (including two concurrent replicas) recovered creation and completed normal deletion", fault, current.Id, accepted.Subnet.LastOperationId, createCountBefore, creates, deleting.Subnet.LastOperationId)
+				return
+			}
 			// A controlled stale/late same-UID object verifies retained tombstone
 			// handling. Real Kubernetes UID/visibility semantics remain unverified here.
-			third.kill(t)
+			deletionProcess.kill(t)
 			api.Mu.Lock()
 			var restored map[string]any
 			_ = json.Unmarshal(saved, &restored)
