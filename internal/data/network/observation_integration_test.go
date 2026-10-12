@@ -17,7 +17,7 @@ func TestNET05ANotificationsDuringLeasePreservePendingAndPublicVersion(t *testin
 			ctx := context.Background()
 			n := newNetwork(t, p, time.Minute)
 			tenant := uuid.NewString()
-			v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "notify", CIDR: "10.1.0.0/16", IdempotencyKey: "notify"})
+			v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "notify", CIDR: "10.42.0.0/16", IdempotencyKey: "notify"})
 			if e != nil {
 				t.Fatal(e)
 			}
@@ -65,7 +65,7 @@ func TestNET05AStormCannotBypassBackoffOrCrossTenant(t *testing.T) {
 	ctx := context.Background()
 	n := newNetwork(t, p, time.Minute)
 	tenant := uuid.NewString()
-	v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "backoff", CIDR: "10.2.0.0/16", IdempotencyKey: "backoff"})
+	v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "backoff", CIDR: "10.42.0.0/16", IdempotencyKey: "backoff"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -96,7 +96,7 @@ func TestNET05AOldCacheAfterNewClaimCannotRegressOrCompleteNotification(t *testi
 	ctx := context.Background()
 	n := newNetwork(t, p, time.Minute)
 	tenant := uuid.NewString()
-	v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "proof", CIDR: "10.3.0.0/16", IdempotencyKey: "proof"})
+	v, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "proof", CIDR: "10.42.0.0/16", IdempotencyKey: "proof"})
 	if e != nil {
 		t.Fatal(e)
 	}

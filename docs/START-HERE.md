@@ -55,6 +55,7 @@ NET-05A 的观察、时效、调度与增量验收统一见[持续观察规格](
 ## 运行与来源
 
 - [Governance VPC 只读接入](specs/governance-vpc-read.md)：用户/API Key 的受信 mTLS 查询入口；原始验证见 [2026-09-22 记录](execution/records/governance-aksk-vpc-20260922/README.md)。
+- [Governance → Resource 调用登记](specs/governance-calls.md)：现有 Network/Image 方法、唯一证书身份、租户范围、超时和幂等，以及各装配模式共用业务 mTLS 的边界。
 
 - [NET-VPC-LB-02 实现与分层验收](execution/records/NET-VPC-LB-02/README.md)：固定输入、LB 持久生命周期及受控/真实数据面边界；[隔离产品 API 操作](../deployments/load-balancer/README.md)；[Public 转发失败排查交接](execution/records/NET-VPC-LB-02/device-registration-20260915/public-forwarding-followup.md)。
 

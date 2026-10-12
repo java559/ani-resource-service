@@ -22,12 +22,13 @@ import (
 )
 
 const GovernanceSAN = "ani-governance"
+const NetworkSAN = "ani-network-service"
 const OperatorHeader = "x-ani-operator"
 
-// governanceReadMethods is the authoritative per-domain allowlist for the
-// governance mode. Domain = one allowlist group; adding a domain adds a group,
-// never a new transport or trust contract. Keep in sync with
-// docs/plans/governance-integration.md (the plan table is authoritative).
+// governanceReadMethods enforces the registered per-domain allowlist for the
+// internal business listener. Domain = one allowlist group; adding a domain
+// adds a group, never a new transport or trust contract. Keep in sync with
+// docs/specs/governance-calls.md (the registered method table is authoritative).
 var governanceReadMethods = map[string]struct{}{
 	// Network domain: tenant VPC/Subnet read+write and operation lookup.
 	"/network.v1.NetworkService/GetVPC":             {},
@@ -80,12 +81,12 @@ func GovernanceTLS(caFile, certFile, keyFile string) (*tls.Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !exactDNS(leaf, "ani-network-service") {
+	if !exactDNS(leaf, NetworkSAN) {
 		return nil, fmt.Errorf("network server certificate requires exact DNS SAN ani-network-service")
 	}
 	return &tls.Config{MinVersion: tls.VersionTLS13, Certificates: []tls.Certificate{cert}, ClientCAs: roots, ClientAuth: tls.RequireAndVerifyClientCert,
 		VerifyConnection: func(cs tls.ConnectionState) error {
-			if len(cs.VerifiedChains) == 0 || len(cs.PeerCertificates) == 0 || !exactDNS(cs.PeerCertificates[0], GovernanceSAN) {
+			if cs.Version != tls.VersionTLS13 || len(cs.VerifiedChains) == 0 || len(cs.PeerCertificates) == 0 || !exactClientDNS(cs.PeerCertificates[0], GovernanceSAN) {
 				return fmt.Errorf("untrusted governance service identity")
 			}
 			return nil
@@ -93,27 +94,41 @@ func GovernanceTLS(caFile, certFile, keyFile string) (*tls.Config, error) {
 }
 
 func exactDNS(cert *x509.Certificate, name string) bool {
+	if cert == nil {
+		return false
+	}
+	matched := false
 	for _, dns := range cert.DNSNames {
+		if strings.Contains(dns, "*") {
+			return false
+		}
 		if dns == name {
-			return true
+			matched = true
 		}
 	}
-	return false
+	return matched
+}
+
+func exactClientDNS(cert *x509.Certificate, name string) bool {
+	return cert != nil && len(cert.DNSNames) == 1 && len(cert.URIs) == 0 &&
+		len(cert.IPAddresses) == 0 && len(cert.EmailAddresses) == 0 &&
+		cert.DNSNames[0] == name && !strings.Contains(name, "*")
 }
 
 // This identity is asserted by the authenticated Governance workload, not IAM.
 type governancePrincipal struct{ TenantID, Actor, RequestID, Operator, Workload string }
+type governancePrincipalKey struct{}
 
 type GovernanceResolver struct{}
 
 func (GovernanceResolver) Resolve(ctx context.Context) (governancePrincipal, error) {
 	denied := status.Error(codes.Unauthenticated, "trusted governance identity required")
 	p, ok := peer.FromContext(ctx)
-	if !ok {
+	if !ok || p == nil {
 		return governancePrincipal{}, denied
 	}
 	ti, ok := p.AuthInfo.(credentials.TLSInfo)
-	if !ok || len(ti.State.VerifiedChains) == 0 || len(ti.State.PeerCertificates) == 0 || !exactDNS(ti.State.PeerCertificates[0], GovernanceSAN) {
+	if !ok || ti.State.Version != tls.VersionTLS13 || len(ti.State.VerifiedChains) == 0 || len(ti.State.PeerCertificates) == 0 || !exactClientDNS(ti.State.PeerCertificates[0], GovernanceSAN) {
 		return governancePrincipal{}, denied
 	}
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -132,13 +147,16 @@ func (GovernanceResolver) Resolve(ctx context.Context) (governancePrincipal, err
 	if !validUUID(tenant) || !validUUID(request) || !validGovernanceActor(actor) {
 		return governancePrincipal{}, denied
 	}
-	// The operator header is optional for deployed vpc-read clients, but when
-	// present it must be a single non-empty value (duplicates are rejected by
-	// value() above returning "").
-	if len(md.Get(OperatorHeader)) > 1 || (len(md.Get(OperatorHeader)) == 1 && strings.TrimSpace(operator) == "") {
+	// Legacy operator values name the same actor; they cannot replace the
+	// independently validated request ID or assert another operator.
+	expectedOperator := strings.Replace(actor, "governance:user:", "gov-user-", 1)
+	if strings.HasPrefix(actor, "governance:access-key:") {
+		expectedOperator = strings.Replace(actor, "governance:access-key:", "gov-ak-", 1)
+	}
+	if len(md.Get(OperatorHeader)) > 1 || (len(md.Get(OperatorHeader)) == 1 && operator != expectedOperator) {
 		return governancePrincipal{}, denied
 	}
-	return governancePrincipal{TenantID: tenant, Actor: actor, RequestID: request, Operator: strings.TrimSpace(operator), Workload: GovernanceSAN}, nil
+	return governancePrincipal{TenantID: tenant, Actor: actor, RequestID: request, Operator: operator, Workload: GovernanceSAN}, nil
 }
 
 // Actor namespaces keep human and API Key identities distinct. Both are
@@ -160,19 +178,27 @@ func validGovernanceActor(actor string) bool {
 // (same pattern as the controlled lb-api socket adapter), bound to the
 // authenticated principal — never to request fields.
 func GovernanceUnary() grpc.UnaryServerInterceptor {
+	return governanceUnary(false)
+}
+
+func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
 		p, err := (GovernanceResolver{}).Resolve(ctx)
 		if err != nil {
 			return nil, err
+		}
+		if readOnly && info.FullMethod != GetVPCMethod {
+			return nil, status.Error(codes.PermissionDenied, "read-only composition permits only GetVPC")
 		}
 		_, imageMethod := imageGovernanceMethods[info.FullMethod]
 		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)
-		if !ok {
+		if !ok || !r.ProtoReflect().IsValid() {
 			return nil, status.Error(codes.PermissionDenied, "governance requests must be proto messages")
 		}
+		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
 		if imageMethod {
 			ctx, err = withImageGovernanceCaller(ctx, p, r)
 			if err != nil {
@@ -181,6 +207,18 @@ func GovernanceUnary() grpc.UnaryServerInterceptor {
 			return next(ctx, req)
 		}
 		value := r.ProtoReflect()
+		if fd := value.Descriptor().Fields().ByName("attribution"); fd != nil {
+			if !value.Has(fd) {
+				return nil, status.Error(codes.PermissionDenied, "authenticated request attribution required")
+			}
+			attribution := value.Get(fd).Message()
+			for field, expected := range map[protoreflect.Name]string{"actor": p.Actor, "direct_caller": p.Workload, "correlation_id": p.RequestID} {
+				fieldDescriptor := attribution.Descriptor().Fields().ByName(field)
+				if fieldDescriptor == nil || attribution.Get(fieldDescriptor).String() != expected {
+					return nil, status.Error(codes.PermissionDenied, "request attribution differs from authenticated governance scope")
+				}
+			}
+		}
 		// Bind the request's tenant field to the authenticated governance
 		// scope. Empty tenant is only accepted for NetworkService reads where
 		// the legacy contract sends it explicitly; Egress/LB always carry
@@ -215,9 +253,6 @@ func GovernanceUnary() grpc.UnaryServerInterceptor {
 					DirectCaller:  p.Workload,
 					CorrelationID: p.RequestID,
 				},
-			}
-			if p.Operator != "" {
-				caller.Attribution.CorrelationID = p.Operator
 			}
 			ctx = biz.WithEgressCaller(ctx, caller)
 		}

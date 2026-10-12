@@ -614,6 +614,7 @@ func TestNET05ASilentWatchAndReplicaWithOlderAuditCannotRegress(t *testing.T) {
 func TestNET05APostgresOutageAndLostMemoryHintsRestartDurableIntents(t *testing.T) {
 	fixture := testenv.NewDatabase(t)
 	p, db := fixture.Repository, fixture.Owner
+	configureRepositoryVPCPresets(t, p)
 	ctx := context.Background()
 	api := controlled.New()
 	host := httptest.NewServer(api)
@@ -633,7 +634,7 @@ func TestNET05APostgresOutageAndLostMemoryHintsRestartDurableIntents(t *testing.
 	n := newNetwork(t, p, time.Minute)
 	tenant := uuid.NewString()
 	v := availableVPC(t, n, worker, tenant, "before-outage")
-	missing, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "no-cr-yet", CIDR: "10.43.0.0/16", IdempotencyKey: "no-cr-yet"})
+	missing, e := n.CreateVPC(ctx, biz.CreateVPC{TenantID: tenant, Name: "no-cr-yet", CIDR: "10.0.0.0/16", IdempotencyKey: "no-cr-yet"})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -703,6 +704,9 @@ func TestNET05APostgresOutageAndLostMemoryHintsRestartDurableIntents(t *testing.
 		t.Fatal(e)
 	}
 	defer replacement.Close()
+	// Startup restores policy and external facts on each new repository;
+	// neither lives in the discarded observer or the persistent database.
+	configureRepositoryVPCPresets(t, replacement)
 	provider, e = data.NewKCProvider(replacement, &rest.Config{Host: host.URL, QPS: 1000, Burst: 1000})
 	if e != nil {
 		t.Fatal(e)

@@ -75,4 +75,4 @@ Kratos 同时启动 gRPC、admin、共享观察与 worker。请求方退出不�
 
 ## Governance VPC 只读入口
 
-`ANI_NETWORK_MODE=vpc-read` 使用真实 PostgreSQL 查询与 Governance mTLS，装配边界、环境变量及身份合同见 [只读接入规格](specs/governance-vpc-read.md)。它不运行 KC、worker 或云网络创建。结构仍由 `-migrate` 使用独立 owner 显式执行；运行角色只能读取本片数据，不因服务启动迁移或播种。
+所有服务运行模式的内部业务 gRPC 均要求 [Governance → Resource 调用登记](specs/governance-calls.md) 中的 mTLS 配置；默认/full 不再提供明文入口。`ANI_NETWORK_MODE=vpc-read` 使用真实 PostgreSQL 查询与相同安全构造器，装配边界、环境变量及只允许 GetVPC 的合同见 [只读接入规格](specs/governance-vpc-read.md)。它不运行 KC、worker 或云网络创建。结构仍由 `-migrate` 使用独立 owner 显式执行；运行角色只能读取本片数据，不因服务启动迁移或播种。

@@ -27,11 +27,36 @@ func TestLBListenerSetContract(t *testing.T) {
 	if first.Fingerprint() != repo.accepted[1].Fingerprint() {
 		t.Fatal("listener order changed set fingerprint")
 	}
+	t.Run("tcp_protocol", func(t *testing.T) {
+		r := request
+		r.Listeners = slices.Clone(request.Listeners)
+		r.Listeners[0].Protocol = "TCP"
+		before := len(repo.accepted)
+		if _, err := l.Create(ctx, r); err != nil {
+			t.Fatal("TCP listener create rejected", err)
+		}
+		if _, err := l.Update(ctx, UpdateLoadBalancer{ID: "lb_11111111111111111111111111111111", ExpectedVersion: 1, IdempotencyKey: "update-tcp", LoadBalancerMutableInput: r.LoadBalancerMutableInput}); err != nil {
+			t.Fatal("TCP listener update rejected", err)
+		}
+		if len(repo.accepted) != before+2 {
+			t.Fatal("TCP listener create or update did not reach persistence")
+		}
+		for _, intent := range repo.accepted[before:] {
+			index := slices.IndexFunc(intent.Listeners, func(v LoadBalancerListener) bool { return v.Name == r.Listeners[0].Name })
+			if len(intent.Listeners) != 2 || index < 0 {
+				t.Fatalf("TCP listener set was changed: %+v", intent)
+			}
+			listener := intent.Listeners[index]
+			if listener.Protocol != "TCP" || listener.Port != *r.Listeners[0].Port || listener.Health.Port != *r.Listeners[0].Health.Port || len(listener.Backends) != 1 || listener.Backends[0].Address != r.Listeners[0].Backends[0].Address || listener.Backends[0].Port != r.Listeners[0].Backends[0].Port {
+				t.Fatalf("TCP listener/backend/health intent was changed: %+v", listener)
+			}
+		}
+	})
 	for name, change := range map[string]func(*CreateLoadBalancer){
 		"empty":                func(r *CreateLoadBalancer) { r.Listeners = []LoadBalancerListenerInput{} },
 		"duplicate_name":       func(r *CreateLoadBalancer) { r.Listeners[1].Name = r.Listeners[0].Name },
 		"duplicate_port":       func(r *CreateLoadBalancer) { r.Listeners[1].Port = r.Listeners[0].Port },
-		"unsupported_protocol": func(r *CreateLoadBalancer) { r.Listeners[0].Protocol = "TCP" },
+		"unsupported_protocol": func(r *CreateLoadBalancer) { r.Listeners[0].Protocol = "SCTP" },
 		"mixed_legacy":         func(r *CreateLoadBalancer) { r.Backends = lbTestRequest().Backends },
 		"too_many":             func(r *CreateLoadBalancer) { r.Listeners = make([]LoadBalancerListenerInput, 65) },
 	} {

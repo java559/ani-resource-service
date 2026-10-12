@@ -22,6 +22,7 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
@@ -192,13 +193,15 @@ func TestLBServiceProcessesRecoverUnknownMutationsWithTwoWorkers(t *testing.T) {
 				err := f.f.owner.QueryRow(f.f.ctx, `SELECT ready FROM network_lb_capabilities WHERE cluster_id='test-cluster' AND fingerprint=$1`, expected.Fingerprint).Scan(&ready)
 				return err == nil && ready
 			})
-			// The production service registers the isolated RPC, but an arbitrary
-			// caller still cannot manufacture the authorization context.
-			conn, err := grpc.NewClient(first.grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+			// A verified Governance workload without delegated metadata still
+			// cannot manufacture the production authorization context.
+			conn, err := grpc.NewClient(first.grpcAddress, grpc.WithTransportCredentials(credentials.NewTLS(first.serviceTLS.Client.Clone())))
 			if err != nil {
 				t.Fatal(err)
 			}
-			_, err = networkv1.NewTenantLoadBalancerServiceClient(conn).ListLoadBalancers(context.Background(), &networkv1.ListLoadBalancersRequest{})
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			_, err = networkv1.NewTenantLoadBalancerServiceClient(conn).ListLoadBalancers(ctx, &networkv1.ListLoadBalancersRequest{})
+			cancel()
 			_ = conn.Close()
 			if status.Code(err) != codes.PermissionDenied && status.Code(err) != codes.Unauthenticated {
 				t.Fatal("standard LB service did not deny missing authorization", err)

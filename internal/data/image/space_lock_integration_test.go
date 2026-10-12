@@ -108,11 +108,47 @@ func TestSpaceLockEightSpacesLifecycleProgress(t *testing.T) {
 	if err := f.Runtime.QueryRow(context.Background(), `SELECT count(*) FROM pg_stat_activity WHERE usename=current_user AND pid<>pg_backend_pid()`).Scan(&connections); err != nil || connections > writers {
 		t.Fatalf("connection budget exceeded: %d %v", connections, err)
 	}
-	// Close must return and leave no runtime connection other than this
-	// independently owned observer; an unreturned connection would hang Close.
-	f.Repo.Close()
-	if err := f.Runtime.QueryRow(context.Background(), `SELECT count(*) FROM pg_stat_activity WHERE usename=current_user AND pid<>pg_backend_pid()`).Scan(&connections); err != nil || connections != 0 {
-		t.Fatalf("connections remain after close: %d %v", connections, err)
+	// The fixture's observer and repository use independent pools with the same
+	// runtime role. Close the observer too, and inspect from the distinct owner
+	// role so none of the observer's own connections count as repository leaks.
+	f.Runtime.Close()
+	closed := make(chan struct{})
+	go func() {
+		f.Repo.Close()
+		close(closed)
+	}()
+	select {
+	case <-closed:
+	case <-time.After(5 * time.Second):
+		t.Fatal("repository Close did not return after all space writers completed")
+	}
+	// pgx closes the client sockets before PostgreSQL necessarily removes their
+	// backends. Observe that asynchronous cleanup within one bounded assertion;
+	// every connection and advisory lock for this fixture's role must disappear.
+	cleanupCtx, cleanupCancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cleanupCancel()
+	ticker := time.NewTicker(10 * time.Millisecond)
+	defer ticker.Stop()
+	var locks int
+	var backendPIDs []int32
+	for {
+		err := f.Owner.QueryRow(cleanupCtx, `WITH runtime_connections AS (
+ SELECT pid FROM pg_stat_activity WHERE usename=$1
+)
+SELECT count(*), ARRAY(SELECT pid FROM runtime_connections ORDER BY pid),
+ (SELECT count(*) FROM pg_locks WHERE locktype='advisory' AND pid IN (SELECT pid FROM runtime_connections))
+FROM runtime_connections`, f.RuntimeRole).Scan(&connections, &backendPIDs, &locks)
+		if err != nil {
+			t.Fatalf("inspect repository cleanup: connections=%d backend_pids=%v advisory_locks=%d err=%v", connections, backendPIDs, locks, err)
+		}
+		if connections == 0 && locks == 0 {
+			break
+		}
+		select {
+		case <-ticker.C:
+		case <-cleanupCtx.Done():
+			t.Fatalf("repository cleanup deadline: connections=%d backend_pids=%v advisory_locks=%d", connections, backendPIDs, locks)
+		}
 	}
 }
 

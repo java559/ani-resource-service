@@ -3,13 +3,107 @@ name: ci
 on:
   pull_request:
   push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
 
 jobs:
-  verify:
+  source:
     runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Install CI prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends python3
+      - name: Install pinned tools
+        run: make tools
+      - name: Verify
+        run: make verify
+
+  network:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # The rollback test archives a fixed pre-rename commit.
+          fetch-depth: 0
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Install CI prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends python3
+      - name: Prepare private short temporary directory
+        run: |
+          umask 077
+          temporary=$(mktemp -d /tmp/ani-ci.XXXXXX)
+          printf 'TMPDIR=%s\n' "$temporary" >> "$GITHUB_ENV"
+      - name: Install pinned SQL generator
+        run: make check-sqlc
+      - name: Real PostgreSQL and process recovery with race detector
+        # This executes the same integration tests and fixtures as make integration.
+        run: make race
+      - name: Tenant predicate mutations
+        run: make tenant-mutations
+      - name: Clean private temporary directory
+        if: ${{ always() }}
+        run: |
+          case "${TMPDIR:-}" in
+            /tmp/ani-ci.*) rm -rf -- "$TMPDIR" ;;
+            '') ;;
+            *) echo 'refusing unexpected temporary directory' >&2; exit 1 ;;
+          esac
+
+  image:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Install CI prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends python3
+      - name: Prepare private short temporary directory
+        run: |
+          umask 077
+          temporary=$(mktemp -d /tmp/ani-ci.XXXXXX)
+          printf 'TMPDIR=%s\n' "$temporary" >> "$GITHUB_ENV"
+      - name: Install pinned SQL generator
+        run: make check-sqlc
+      - name: Real Image PostgreSQL and lifecycle recovery with race detector
+        run: ./scripts/image-integration -race
+      - name: Image tenant and platform mutations
+        run: make image-tenant-mutations
+      - name: Clean private temporary directory
+        if: ${{ always() }}
+        run: |
+          case "${TMPDIR:-}" in
+            /tmp/ani-ci.*) rm -rf -- "$TMPDIR" ;;
+            '') ;;
+            *) echo 'refusing unexpected temporary directory' >&2; exit 1 ;;
+          esac
+
+  supply-chain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -21,19 +115,30 @@ jobs:
       - name: Install CI prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends ripgrep jq python3
-      - name: Install pinned tools
-        run: make tools supply-chain-tools
-      - name: Verify
-        run: make verify
-      - name: Real PostgreSQL and process recovery
-        run: make integration
-      - name: Race detector with real PostgreSQL
-        run: make race
-      - name: Tenant predicate mutations
-        run: make tenant-mutations
+          sudo apt-get install --yes --no-install-recommends ripgrep jq
+      - name: Install pinned supply-chain tools
+        run: make supply-chain-tools
       - name: Supply-chain verification
         run: |
           make audit
           git diff --exit-code -- docs/scaffold/bom.cdx.json
           test -z "$(git status --porcelain --untracked-files=all -- docs/scaffold/bom.cdx.json)"
+
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    needs: [source, network, image, supply-chain]
+    if: ${{ always() }}
+    steps:
+      - name: Require every quality gate to succeed
+        env:
+          SOURCE_RESULT: ${{ needs.source.result }}
+          NETWORK_RESULT: ${{ needs.network.result }}
+          IMAGE_RESULT: ${{ needs.image.result }}
+          SUPPLY_CHAIN_RESULT: ${{ needs['supply-chain'].result }}
+        run: |
+          printf 'source=%s network=%s image=%s supply-chain=%s\n' \
+            "$SOURCE_RESULT" "$NETWORK_RESULT" "$IMAGE_RESULT" "$SUPPLY_CHAIN_RESULT"
+          for result in "$SOURCE_RESULT" "$NETWORK_RESULT" "$IMAGE_RESULT" "$SUPPLY_CHAIN_RESULT"; do
+            test "$result" = success || exit 1
+          done

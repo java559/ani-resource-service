@@ -4,9 +4,9 @@
 
 ## 入口
 
-使用现有 `/network.v1.NetworkService/GetVPC`。`ANI_NETWORK_MODE=vpc-read` 只装配真实 PostgreSQL repository、Network 用例、gRPC 和 admin；不启动 KC、观察器、worker、实例 owner 客户端。未设置 mode 或 full 保留历史入口及其认证延期边界；未知 mode 拒绝启动。部署本片必须显式指定 vpc-read，不能把 full 暴露给治理查询客户端。
+使用现有 `/network.v1.NetworkService/GetVPC`。`ANI_NETWORK_MODE=vpc-read` 只装配真实 PostgreSQL repository、Network 用例、gRPC 和 admin；不启动 KC、观察器、worker、实例 owner 客户端。默认/full、governance 和 vpc-read 是互斥装配模式，均使用同一个安全构造器提供内部业务 mTLS，不保留 full 明文入口；未知 mode 拒绝启动。完整调用登记和身份边界见 [Governance → Resource 调用登记](governance-calls.md)。本只读模式进一步只允许 GetVPC。
 
-TLS 1.3，`ANI_NETWORK_CLIENT_CA` / `ANI_NETWORK_TLS_CERT` / `ANI_NETWORK_TLS_KEY` 必需；server 精确 SAN ani-network-service。入站证书须经 CA 验证且精确 SAN ani-governance。只接受单值的 `x-ani-tenant-id`（非零规范 UUID）、`x-ani-actor`（`governance:user:<id>` 或 `governance:access-key:<id>`，id 为非零规范 uint32）、`x-ani-request-id`（非零规范 UUID）。缺失、重复、非法身份 Unauthenticated；请求 tenant 与可信委托范围不同 PermissionDenied；除 GetVPC 以外 RPC 和全部 stream PermissionDenied。以上在业务处理/SQL 之前执行。
+TLS 1.3，`ANI_NETWORK_CLIENT_CA` / `ANI_NETWORK_TLS_CERT` / `ANI_NETWORK_TLS_KEY` 必需；server 字面 SAN ani-network-service，禁止通配符。入站证书须经 CA 验证且只有 DNS SAN ani-governance，无其他类型身份。只接受单值的 `x-ani-tenant-id`（非零规范 UUID）、`x-ani-actor`（`governance:user:<id>` 或 `governance:access-key:<id>`，id 为非零规范 uint32）、`x-ani-request-id`（非零规范 UUID）。缺失、重复、非法身份 Unauthenticated；请求 tenant 与可信委托范围不同 PermissionDenied；除 GetVPC 以外 RPC 和全部 stream PermissionDenied。以上在业务处理/SQL 之前执行。
 
 这是复用 Governance 已有的受信服务委托协议；用户登录、角色和权限由 Governance 负责。本服务不复制 IAM Principal/Membership/Grant，不声称能独立复核 Governance 所断言的用户或 Key 的租户关系。它只信任专用 CA 下指定 workload；CA/私钥管控和生命周期是部署责任。
 

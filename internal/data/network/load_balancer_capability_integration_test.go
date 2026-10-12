@@ -168,7 +168,7 @@ func TestLBCapabilityUsesSharedAuditAndKeepsVPCIndependent(t *testing.T) {
 		return true
 	})
 	lbState(t, f, lb.ID, biz.Degraded)
-	v, err := f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "lb-independent-vpc", CIDR: "10.43.0.0/16", IdempotencyKey: "lb-independent-vpc"})
+	v, err := f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "lb-independent-vpc", CIDR: "10.61.0.0/16", IdempotencyKey: "lb-independent-vpc"})
 	if err != nil {
 		t.Fatal("LB capability blocked ordinary VPC", err)
 	}

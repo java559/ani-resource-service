@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"io"
 	"net"
@@ -16,14 +17,22 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/durationpb"
 
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
 )
 
 func TestBuildAppRunsProductionComposition(t *testing.T) {
+	tlsFixture := testenv.NewServiceTLS(t)
+	t.Setenv("ANI_NETWORK_CLIENT_CA", tlsFixture.CAFile)
+	t.Setenv("ANI_NETWORK_TLS_CERT", tlsFixture.CertFile)
+	t.Setenv("ANI_NETWORK_TLS_KEY", tlsFixture.KeyFile)
 	fixture := testenv.NewDatabase(t)
 	provider := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "unavailable", http.StatusServiceUnavailable)
@@ -57,7 +66,7 @@ func TestBuildAppRunsProductionComposition(t *testing.T) {
 	go func() { runResult <- app.Run() }()
 	waitForHTTP(t, "http://"+adminAddress+"/readyz")
 	assertProductionAdmin(t, adminAddress)
-	assertProductionGRPCHealth(t, grpcAddress)
+	assertProductionGRPCBoundary(t, grpcAddress, tlsFixture.Client)
 
 	if err := app.Stop(); err != nil {
 		t.Fatalf("Stop() error = %v", err)
@@ -137,20 +146,30 @@ func assertProductionAdmin(t *testing.T, address string) {
 	}
 }
 
-func assertProductionGRPCHealth(t *testing.T, address string) {
+// Admin owns health checks. A business listener rejects both plaintext and
+// an authenticated service's unregistered health method.
+func assertProductionGRPCBoundary(t *testing.T, address string, clientTLS *tls.Config) {
 	t.Helper()
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	connection, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		t.Fatalf("dial production gRPC: %v", err)
-	}
-	defer connection.Close()
-	response, err := grpc_health_v1.NewHealthClient(connection).Check(ctx, &grpc_health_v1.HealthCheckRequest{})
-	if err != nil {
-		t.Fatalf("production gRPC health: %v", err)
-	}
-	if response.Status != grpc_health_v1.HealthCheckResponse_SERVING {
-		t.Fatalf("production gRPC health = %s", response.Status)
+	for _, test := range []struct {
+		name        string
+		credentials credentials.TransportCredentials
+		want        codes.Code
+	}{
+		{"plaintext", insecure.NewCredentials(), codes.Unavailable},
+		{"unregistered-health", credentials.NewTLS(clientTLS), codes.PermissionDenied},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(metadata.NewOutgoingContext(context.Background(), metadata.Pairs("x-ani-tenant-id", "11111111-1111-4111-8111-111111111111", "x-ani-actor", "governance:user:7", "x-ani-request-id", "22222222-2222-4222-8222-222222222222")), time.Second)
+			defer cancel()
+			connection, err := grpc.NewClient(address, grpc.WithTransportCredentials(test.credentials))
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer connection.Close()
+			_, err = grpc_health_v1.NewHealthClient(connection).Check(ctx, &grpc_health_v1.HealthCheckRequest{})
+			if status.Code(err) != test.want {
+				t.Fatalf("health status=%s, want=%s: %v", status.Code(err), test.want, err)
+			}
+		})
 	}
 }

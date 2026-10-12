@@ -33,6 +33,7 @@ type governanceModeProbe struct {
 	networkv1.UnimplementedTenantEgressServiceServer
 	gotTenant  string
 	gotActor   string
+	gotTrace   string
 	gotCaller  bool
 	gotRequest *networkv1.GetEIPRequest
 }
@@ -45,6 +46,7 @@ func (p *governanceModeProbe) GetEIP(ctx context.Context, req *networkv1.GetEIPR
 	p.gotCaller = true
 	p.gotTenant = caller.TenantID
 	p.gotActor = caller.Attribution.Actor
+	p.gotTrace = caller.Attribution.CorrelationID
 	p.gotRequest = req
 	return &networkv1.GetEIPResponse{Eip: &networkv1.EIP{TenantId: caller.TenantID}}, nil
 }
@@ -172,7 +174,7 @@ func TestGovernanceAllowlistMatrix(t *testing.T) {
 	if e := conn.Invoke(ctx, "/network.v1.TenantEgressService/GetEIP", &networkv1.GetEIPRequest{TargetTenantId: tenant, EipId: "eip-1"}, out); e != nil {
 		t.Fatalf("GetEIP admitted call failed: %v", e)
 	}
-	if !probe.gotCaller || probe.gotTenant != tenant || probe.gotActor != "governance:access-key:42" {
+	if !probe.gotCaller || probe.gotTenant != tenant || probe.gotActor != "governance:access-key:42" || probe.gotTrace != request {
 		t.Fatalf("EgressCaller not bound to principal: caller=%+v", probe)
 	}
 	if probe.gotRequest.TargetTenantId != tenant {

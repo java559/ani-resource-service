@@ -43,6 +43,8 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 				t.Fatalf("explicit migration replay failed: %v %s", err, output)
 			}
 			protocol := controlled.New()
+			renewFacts := seedProcessVPCPlatformFacts(t, protocol)
+			config := processVPCPresetConfig(t, root, "10.42.0.0/16")
 			api := protocol.Backend
 			reached := make(chan struct{})
 			release := make(chan struct{})
@@ -51,6 +53,7 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			deleteRelease := make(chan struct{})
 			var capturedDelete atomic.Bool
 			host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				renewFacts(r)
 				isObject := strings.Contains(r.URL.Path, "/subnets/")
 				captureCreate := (fault == "after-T1" && r.Method == "GET" && isObject) || (fault == "after-provider-success" && r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/subnets"))
 				if captureCreate && captured.CompareAndSwap(false, true) {
@@ -84,11 +87,11 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			defer close(deleteRelease)
 			kubeconfig := testenv.Kubeconfig(t, host.URL)
 			start := func() *networkProcess {
-				return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey, "subnet")
+				return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey, "subnet", "config="+config)
 			}
 			first := start()
 			tenant := uuid.NewString()
-			client, closeClient := first.client(t)
+			client, closeClient := first.client(t, tenant)
 			parent, err := client.CreateVPC(context.Background(), &networkv1.CreateVPCRequest{TenantId: tenant, Name: "parent", Cidr: "10.42.0.0/16", IdempotencyKey: "parent"})
 			if err != nil {
 				t.Fatal(err)
@@ -113,7 +116,7 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			api.Mu.Unlock()
 			second := start()
 			contender := start() // A distinct service process shares the same PG lease authority.
-			resumed, closeResumed := second.client(t)
+			resumed, closeResumed := second.client(t, tenant)
 			defer closeResumed()
 			current := waitSubnetRPCState(t, resumed, tenant, accepted.Subnet.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
 			if current.LastOperationId != accepted.Subnet.LastOperationId {
@@ -124,12 +127,17 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			var saved []byte
 			var savedKey string
 			for key, object := range api.Objects {
-				if object["kind"] == "Subnet" {
+				metadata, _ := object["metadata"].(map[string]any)
+				labels, _ := metadata["labels"].(map[string]any)
+				if object["kind"] == "Subnet" && labels["network.ani.io/resource-id"] == accepted.Subnet.Id {
 					saved, _ = json.Marshal(object)
 					savedKey = key
 				}
 			}
 			api.Mu.Unlock()
+			if len(saved) == 0 {
+				t.Fatal("created tenant Subnet fixture is missing")
+			}
 			if creates != 1 {
 				t.Fatalf("provider success replay created %d objects", creates)
 			}
@@ -149,7 +157,7 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			second.kill(t)
 			deleteRelease <- struct{}{}
 			third := start()
-			cleanup, closeCleanup := third.client(t)
+			cleanup, closeCleanup := third.client(t, tenant)
 			defer closeCleanup()
 			deleted := waitSubnetRPCState(t, cleanup, tenant, current.Id, networkv1.ResourceState_RESOURCE_STATE_DELETED)
 			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
@@ -170,7 +178,7 @@ func TestSubnetProcessesRecoverT1ProviderSuccessAndUnknownDeletion(t *testing.T)
 			api.Objects[savedKey] = restored
 			api.Mu.Unlock()
 			fourth := start()
-			tombstone, closeTombstone := fourth.client(t)
+			tombstone, closeTombstone := fourth.client(t, tenant)
 			defer closeTombstone()
 			deadline := time.Now().Add(12 * time.Second)
 			cleaned := false

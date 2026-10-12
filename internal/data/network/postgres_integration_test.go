@@ -24,10 +24,15 @@ func database(t *testing.T) (*data.Postgres, *pgxpool.Pool) {
 	// This replaces only external platform facts; admission, locking and SQL
 	// still run through the production implementation. KC policy tests use
 	// their protocol fixture instead, and NewDatabase itself remains closed.
-	if err := fixture.Repository.ConfigureVPCCIDRPresets([]string{"10.0.0.0/16", "10.42.0.0/16"}, repositoryPlatformFacts{}); err != nil {
+	configureRepositoryVPCPresets(t, fixture.Repository)
+	return fixture.Repository, fixture.Owner
+}
+
+func configureRepositoryVPCPresets(t *testing.T, repository *data.Postgres) {
+	t.Helper()
+	if err := repository.ConfigureVPCCIDRPresets([]string{"10.0.0.0/16", "10.42.0.0/16"}, repositoryPlatformFacts{}); err != nil {
 		t.Fatal(err)
 	}
-	return fixture.Repository, fixture.Owner
 }
 
 type repositoryPlatformFacts struct{}

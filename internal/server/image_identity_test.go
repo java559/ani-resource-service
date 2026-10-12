@@ -23,7 +23,7 @@ import (
 func TestImageGovernanceAllowlistAndScope(t *testing.T) {
 	tenant := "11111111-1111-4111-8111-111111111111"
 	cert := &x509.Certificate{DNSNames: []string{GovernanceSAN}}
-	ctx := peer.NewContext(context.Background(), &peer.Peer{AuthInfo: credentials.TLSInfo{State: tls.ConnectionState{PeerCertificates: []*x509.Certificate{cert}, VerifiedChains: [][]*x509.Certificate{{cert}}}}})
+	ctx := peer.NewContext(context.Background(), &peer.Peer{AuthInfo: credentials.TLSInfo{State: tls.ConnectionState{Version: tls.VersionTLS13, PeerCertificates: []*x509.Certificate{cert}, VerifiedChains: [][]*x509.Certificate{{cert}}}}})
 	ctx = metadata.NewIncomingContext(ctx, metadata.Pairs("x-ani-tenant-id", tenant, "x-ani-actor", "governance:user:7", "x-ani-request-id", "22222222-2222-4222-8222-222222222222"))
 	if len(imageGovernanceMethods) != 11 {
 		t.Fatal("unexpected Image surface")

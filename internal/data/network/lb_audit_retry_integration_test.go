@@ -86,6 +86,7 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 			var observer atomic.Pointer[data.KCObservation]
 			var armed, captured, repeat, deny atomic.Bool
 			var denied atomic.Int32
+			var fallbackCollections atomic.Int32
 			var boundaries atomic.Int32
 			var mu sync.Mutex
 			active := map[*watchSession]bool{}
@@ -122,6 +123,9 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 				}
 				if !armed.Load() || r.Method != http.MethodGet || !strings.HasSuffix(r.URL.Path, "/eips") || r.URL.Query().Get("watch") == "true" || r.URL.Query().Get("resourceVersion") != "" || (!repeat.Load() && !captured.CompareAndSwap(false, true)) {
 					return controller.http(w, r, api)
+				}
+				if repeat.Load() {
+					fallbackCollections.Add(1)
 				}
 				response := httptest.NewRecorder()
 				api.ServeHTTP(response, r)
@@ -318,17 +322,70 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 			if !errors.Is(failure, context.DeadlineExceeded) || !blocked.Proof.CollectedAt.IsZero() || time.Since(started) > 7*time.Second {
 				t.Fatalf("audit retry exceeded deadline or returned proof: %+v %v", blocked, failure)
 			}
+			armed.Store(false)
+			repeat.Store(false)
+			// Cancellation only detaches the caller from a shared audit. Stop
+			// that observer before measuring the no-deadline fallback, so the
+			// preceding canceled collection cannot consume this case's budget.
+			stopCtx, stopObserver := context.WithTimeout(f.f.ctx, options.AuditTimeout+time.Second)
+			if err = obs.Stop(stopCtx); err != nil {
+				stopObserver()
+				t.Fatal(err)
+			}
+			stopObserver()
+			fallbackConfig := *config
+			// Rate limiting is not under test. Complete fixture LISTs promptly
+			// while retaining the actual watch renewals and audit timeouts.
+			fallbackConfig.QPS, fallbackConfig.Burst = 1000, 1000
+			fallbackProvider, err := data.NewKCProvider(f.f.p, &fallbackConfig)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err = fallbackProvider.ConfigureLoadBalancer(expected); err != nil {
+				t.Fatal(err)
+			}
+			fallbackOptions := options
+			fallbackOptions.AuditTimeout = 3 * time.Second
+			// Only the measured request initiates collections after startup.
+			fallbackOptions.AuditInterval, fallbackOptions.AuditJitter = time.Minute, time.Millisecond
+			fallbackObserver, err := fallbackProvider.EnableObservation(fallbackOptions)
+			if err != nil {
+				t.Fatal(err)
+			}
+			observer.Store(fallbackObserver)
+			fallbackCtx, cancelFallback := context.WithCancel(f.f.ctx)
+			fallbackDone := make(chan error, 1)
+			go func() { fallbackDone <- fallbackObserver.Start(fallbackCtx) }()
+			t.Cleanup(func() {
+				cancelFallback()
+				if err := <-fallbackDone; err != nil {
+					t.Error(err)
+				}
+			})
+			awaitNET05A(t, 2*fallbackOptions.AuditTimeout+time.Second, func() bool {
+				metrics := fallbackObserver.Snapshot()
+				_, collected := metrics["audit_evidence_age_seconds"]
+				_, collecting := metrics["audit_collecting_seconds"]
+				return metrics["source_synced"] == 1 && collected && !collecting
+			})
+			fallbackCollections.Store(0)
+			repeat.Store(true)
+			armed.Store(true)
+			// One initial collection plus at most one fresh fallback, each
+			// bounded by AuditTimeout; allow one second for local scheduling.
+			fallbackBudget := 2*fallbackOptions.AuditTimeout + time.Second
 			started = time.Now()
-			blocked, failure = provider.ObserveLoadBalancer(f.f.ctx, work)
-			if failure == nil || !blocked.Proof.CollectedAt.IsZero() || time.Since(started) > 15*time.Second {
-				t.Fatalf("unbounded caller did not stop after fallback: %+v %v", blocked, failure)
+			blocked, failure = fallbackProvider.ObserveLoadBalancer(f.f.ctx, work)
+			elapsed, collections := time.Since(started), fallbackCollections.Load()
+			if failure == nil || !blocked.Proof.CollectedAt.IsZero() || elapsed > fallbackBudget || collections < 1 || collections > 2 {
+				t.Fatalf("unbounded caller did not stop after bounded fallback: elapsed=%s budget=%s collections=%d observation=%+v err=%v", elapsed, fallbackBudget, collections, blocked, failure)
 			}
 			armed.Store(false)
 			repeat.Store(false)
 			// A real read error is not an audit invalidation retry signal.
 			deny.Store(true)
 			bounded, stop := context.WithTimeout(f.f.ctx, 10*time.Second)
-			blocked, failure = provider.ObserveLoadBalancer(bounded, work)
+			blocked, failure = fallbackProvider.ObserveLoadBalancer(bounded, work)
 			stop()
 			deny.Store(false)
 			if failure == nil || errors.Is(failure, context.DeadlineExceeded) || denied.Load() != 1 || !blocked.Proof.CollectedAt.IsZero() {
@@ -336,7 +393,7 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 			}
 			canceled, stop := context.WithCancel(f.f.ctx)
 			stop()
-			blocked, failure = provider.ObserveLoadBalancer(canceled, work)
+			blocked, failure = fallbackProvider.ObserveLoadBalancer(canceled, work)
 			if !errors.Is(failure, context.Canceled) || !blocked.Proof.CollectedAt.IsZero() {
 				t.Fatalf("cancellation returned usable proof: %+v %v", blocked, failure)
 			}

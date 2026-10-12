@@ -8,7 +8,6 @@ import (
 	"time"
 
 	kratos "github.com/go-kratos/kratos/v3"
-	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
@@ -54,10 +53,10 @@ func runVPCRead(bc *conf.Bootstrap, logger *slog.Logger) error {
 		}
 	}()
 	middlewares := obs.ServerMiddleware(logger)
-	gs := kratosgrpc.NewServer(kratosgrpc.Network(bc.Server.Grpc.Network), kratosgrpc.Address(bc.Server.Grpc.Addr),
-		kratosgrpc.Timeout(bc.Server.Grpc.Timeout.AsDuration()), kratosgrpc.TLSConfig(tlsConfig),
-		kratosgrpc.UnaryInterceptor(server.GovernanceUnary()), kratosgrpc.StreamInterceptor(server.DenyVPCStreams),
-		kratosgrpc.DisableReflection(), kratosgrpc.Middleware(middlewares...))
+	gs, err := server.NewGRPCServer(bc.Server.Grpc, readiness, tlsConfig, true, middlewares...)
+	if err != nil {
+		return err
+	}
 	networkv1.RegisterNetworkServiceServer(gs, service.NewNetworkService(network))
 	admin := server.NewAdminServer(bc.Server.Admin, readiness, obs.Gatherer(), middlewares...)
 	return kratos.New(kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Logger(logger),

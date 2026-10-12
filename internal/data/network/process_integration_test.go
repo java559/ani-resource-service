@@ -18,9 +18,15 @@ import (
 
 	"github.com/google/uuid"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
+	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
+	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network"
+	controlled "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider"
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/protobuf/proto"
 )
 
 func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) {
@@ -47,6 +53,9 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 				t.Fatalf("explicit migration replay failed: %v %s", err, output)
 			}
 			api := &controlledKC{}
+			platform := controlled.New()
+			renewFacts := seedProcessVPCPlatformFacts(t, platform)
+			config := processVPCPresetConfig(t, root, "10.42.0.0/16")
 			reached := make(chan struct{})
 			release := make(chan struct{})
 			var captured atomic.Bool
@@ -54,6 +63,14 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 			deleteRelease := make(chan struct{})
 			var capturedDelete atomic.Bool
 			host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				renewFacts(r)
+				if r.Method == "GET" {
+					switch r.URL.Path {
+					case "/api/v1/nodes", "/api/v1/configmaps", "/api/v1/pods", "/apis/networking.k8s.io/v1/servicecidrs", "/apis/networking.kubercloud.com/v1/subnets":
+						platform.ServeHTTP(w, r)
+						return
+					}
+				}
 				isObject := strings.Contains(r.URL.Path, "/vpcs/")
 				captureCreate := (fault == "after-T1" && r.Method == "GET" && isObject) || (fault == "after-provider-success" && r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/vpcs"))
 				if captureCreate && captured.CompareAndSwap(false, true) {
@@ -87,11 +104,11 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 			defer close(deleteRelease)
 			kubeconfig := testenv.Kubeconfig(t, host.URL)
 			start := func() *networkProcess {
-				return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey)
+				return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, signingKey, "config="+config)
 			}
 			first := start()
 			tenant := uuid.NewString()
-			client, closeClient := first.client(t)
+			client, closeClient := first.client(t, tenant)
 			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 			accepted, err := client.CreateVPC(ctx, &networkv1.CreateVPCRequest{TenantId: tenant, Name: fault, Cidr: "10.42.0.0/16", IdempotencyKey: "restart"})
 			cancel()
@@ -111,7 +128,7 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 			api.mu.Unlock()
 			second := start()
 			contender := start() // A distinct service process shares the same PG lease authority.
-			resumed, closeResumed := second.client(t)
+			resumed, closeResumed := second.client(t, tenant)
 			defer closeResumed()
 			current := waitRPCState(t, resumed, tenant, accepted.Vpc.Id, networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
 			if current.LastOperationId != accepted.Vpc.LastOperationId {
@@ -140,7 +157,7 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 			second.kill(t)
 			deleteRelease <- struct{}{}
 			third := start()
-			cleanup, closeCleanup := third.client(t)
+			cleanup, closeCleanup := third.client(t, tenant)
 			defer closeCleanup()
 			deleted := waitRPCState(t, cleanup, tenant, current.Id, networkv1.ResourceState_RESOURCE_STATE_DELETED)
 			ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
@@ -159,7 +176,7 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 			_ = json.Unmarshal(saved, &api.object)
 			api.mu.Unlock()
 			fourth := start()
-			tombstone, closeTombstone := fourth.client(t)
+			tombstone, closeTombstone := fourth.client(t, tenant)
 			defer closeTombstone()
 			deadline := time.Now().Add(6 * time.Second)
 			cleaned := false
@@ -187,12 +204,67 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 	}
 }
 
+// These positive process tests declare their own administrator-selected
+// presets. Other callers' configuration and the formal example stay unchanged.
+func processVPCPresetConfig(t *testing.T, root string, presets ...string) string {
+	t.Helper()
+	body, err := os.ReadFile(filepath.Join(root, "configs/config.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	const empty = "vpc_cidr_presets: []"
+	if len(presets) == 0 || strings.Count(string(body), empty) != 1 {
+		t.Fatal("positive process fixture requires explicit presets and the unchanged example config")
+	}
+	values, err := json.Marshal(presets)
+	if err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, "config.yaml"), []byte(strings.Replace(string(body), empty, "vpc_cidr_presets: "+string(values), 1)), 0600); err != nil {
+		t.Fatal(err)
+	}
+	return dir
+}
+
+// Only the existing external KC/NodeFacts boundary is controlled. The actual
+// adapter, preset admission, conflict checks and SQL remain production code.
+func seedProcessVPCPlatformFacts(t *testing.T, api *controlled.Server) func(*http.Request) {
+	t.Helper()
+	const nodeName = "process-platform-node"
+	nodeUID := uuid.NewString()
+	api.Change("nodes", map[string]any{"apiVersion": "v1", "kind": "Node", "metadata": map[string]any{"name": nodeName, "uid": nodeUID}, "status": map[string]any{"addresses": []any{map[string]any{"type": "InternalIP", "address": "172.16.101.10"}}}}, false)
+	api.Change("servicecidrs", map[string]any{"apiVersion": "networking.k8s.io/v1", "kind": "ServiceCIDR", "metadata": map[string]any{"name": "kubernetes", "uid": uuid.NewString()}, "spec": map[string]any{"cidrs": []any{"10.96.0.0/12"}}}, false)
+	api.Change("pods", map[string]any{"apiVersion": "v1", "kind": "Pod", "metadata": map[string]any{"name": "process-platform-controller", "namespace": "kcn-system", "uid": uuid.NewString(), "labels": map[string]any{"networking.kubercloud.com/app": "controller"}}, "spec": map[string]any{"containers": []any{map[string]any{"name": "controller", "command": []any{"/kcn/controller"}, "args": []any{"--default-subnet=kcn-default"}}}}}, false)
+	api.Change("subnets", map[string]any{"apiVersion": "networking.kubercloud.com/v1", "kind": "Subnet", "metadata": map[string]any{"namespace": "kcn-system", "name": "kcn-default", "uid": uuid.NewString()}, "spec": map[string]any{"type": "VPC", "cidrBlock": "10.16.0.0/16", "gateway": "kcn-cluster"}}, false)
+	cm := map[string]any{"apiVersion": "v1", "kind": "ConfigMap", "metadata": map[string]any{"namespace": "kcn-system", "name": "node-facts-" + nodeName, "uid": uuid.NewString(), "labels": map[string]any{"network.ani.io/managed-by": "ani-network-node-facts", "network.ani.io/node-uid": nodeUID}}}
+	renew := func() {
+		doc := data.NodeFactsDocument{Version: 1, NodeName: nodeName, NodeUID: nodeUID, CollectedAt: time.Now(), Interfaces: []biz.NodeInterface{{NodeName: nodeName, NodeUID: nodeUID, Name: "eth0", Kind: "device", Management: true, Addresses: []string{"172.16.101.10/24"}}}}
+		raw, err := json.Marshal(doc)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+		// Each renewal uses its own map while concurrent worker reads occur.
+		value := map[string]any{"apiVersion": cm["apiVersion"], "kind": cm["kind"], "metadata": cm["metadata"], "data": map[string]any{"facts.json": string(raw)}}
+		api.Change("configmaps", value, false)
+	}
+	renew()
+	return func(r *http.Request) {
+		if r.Method == "GET" && r.URL.Path == "/api/v1/configmaps" && r.URL.Query().Get("watch") != "true" {
+			renew()
+		}
+	}
+}
+
 type networkProcess struct {
 	command                   *exec.Cmd
 	done                      chan error
 	exited                    bool
 	grpcAddress, adminAddress string
 	logPath                   string
+	serviceTLS                *testenv.ServiceTLS
+	legacyPlaintext           bool
 }
 
 func freeAddress(t *testing.T) string {
@@ -209,10 +281,23 @@ func startNetworkProcess(t *testing.T, root, binary, dsn, kubeconfig, signingKey
 	t.Helper()
 	grpcAddress := freeAddress(t)
 	adminAddress := freeAddress(t)
+	legacyPlaintext := false
+	dependentResources := false
 	for adminAddress == grpcAddress {
 		adminAddress = freeAddress(t)
 	}
 	for _, option := range resourceKinds {
+		if option == "subnet" || option == "egress" || option == "base" || option == "load_balancer" {
+			dependentResources = true
+		}
+		if option == "legacy-plaintext" {
+			// Only the fixed schema-compatible pre-contract executable in the
+			// rollback fixture keeps its original transport. Candidates use mTLS.
+			if filepath.Base(binary) != "baseline" {
+				t.Fatal("legacy plaintext is reserved for the fixed baseline binary")
+			}
+			legacyPlaintext = true
+		}
 		if strings.HasPrefix(option, "grpc-address=") {
 			grpcAddress = strings.TrimPrefix(option, "grpc-address=")
 		}
@@ -246,7 +331,16 @@ func startNetworkProcess(t *testing.T, root, binary, dsn, kubeconfig, signingKey
 		"ANI_WORKER_LEASE=3s", "ANI_WORKER_REQUEST_TIMEOUT=1s", "ANI_WORKER_OBSERVE_EVERY=0.1s", "ANI_WORKER_STALE_AFTER=2s",
 		"ANI_OBSERVATION_AUDIT_INTERVAL=0.2s", "ANI_OBSERVATION_AUDIT_JITTER=0.1s", "ANI_OBSERVATION_AUDIT_TIMEOUT=1s", "ANI_OBSERVATION_FLUSH_INTERVAL=0.02s", "ANI_OBSERVATION_REQUEST_QPS=40", "ANI_OBSERVATION_REQUEST_BURST=80",
 		"ANI_WORKER_RETRY_MIN=0.02s", "ANI_WORKER_RETRY_MAX=0.05s", "ANI_WORKER_POLL_INTERVAL=0.01s", "ANI_SERVER_SHUTDOWN_TIMEOUT=3s")
-	if len(resourceKinds) > 0 {
+	var serviceTLS *testenv.ServiceTLS
+	if !legacyPlaintext {
+		fixture := testenv.NewServiceTLS(t)
+		serviceTLS = &fixture
+		command.Env = append(command.Env,
+			"ANI_NETWORK_CLIENT_CA="+fixture.CAFile,
+			"ANI_NETWORK_TLS_CERT="+fixture.CertFile,
+			"ANI_NETWORK_TLS_KEY="+fixture.KeyFile)
+	}
+	if dependentResources {
 		// The Subnet adapter reads multiple dependent resource lists per deletion.
 		// This fixture budgets for client-go's default rate limiter without changing
 		// production QPS, bypassing checks, or removing dependency assertions.
@@ -279,7 +373,7 @@ func startNetworkProcess(t *testing.T, root, binary, dsn, kubeconfig, signingKey
 	if err := command.Start(); err != nil {
 		t.Fatal(err)
 	}
-	process := &networkProcess{command: command, done: make(chan error, 1), grpcAddress: grpcAddress, adminAddress: adminAddress, logPath: logPath}
+	process := &networkProcess{command: command, done: make(chan error, 1), grpcAddress: grpcAddress, adminAddress: adminAddress, logPath: logPath, serviceTLS: serviceTLS, legacyPlaintext: legacyPlaintext}
 	go func() { process.done <- command.Wait() }()
 	t.Cleanup(func() {
 		if !process.exited {
@@ -338,9 +432,49 @@ func (p *networkProcess) stop(t *testing.T) {
 		t.Fatal("process did not stop")
 	}
 }
-func (p *networkProcess) client(t *testing.T) (networkv1.NetworkServiceClient, func()) {
+func (p *networkProcess) client(t *testing.T, tenant string) (networkv1.NetworkServiceClient, func()) {
 	t.Helper()
-	conn, err := grpc.NewClient(p.grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	parsed, err := uuid.Parse(tenant)
+	if err != nil || parsed == uuid.Nil || parsed.String() != tenant {
+		t.Fatal("process fixture client requires an explicit canonical trusted tenant")
+	}
+	options := []grpc.DialOption{grpc.WithDisableRetry(), grpc.WithDisableServiceConfig()}
+	if p.legacyPlaintext {
+		options = append(options, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		if p.serviceTLS == nil {
+			t.Fatal("candidate process fixture is missing mTLS credentials")
+		}
+		options = append(options, grpc.WithTransportCredentials(credentials.NewTLS(p.serviceTLS.Client.Clone())), grpc.WithUnaryInterceptor(func(ctx context.Context, method string, request, response any, conn *grpc.ClientConn, invoke grpc.UnaryInvoker, callOptions ...grpc.CallOption) error {
+			requestID := uuid.NewString()
+			const actor = "governance:user:7"
+			attribution := &networkv1.Attribution{Actor: actor, DirectCaller: "ani-governance", CorrelationId: requestID}
+			// These are test-owned requests delegated by the explicit fixture
+			// principal. Scope is never inferred from incoming request fields.
+			switch original := request.(type) {
+			case *networkv1.CreateVPCRequest:
+				if original != nil && original.Attribution == nil {
+					delegated := proto.Clone(original).(*networkv1.CreateVPCRequest)
+					delegated.Attribution = attribution
+					request = delegated
+				}
+			case *networkv1.CreateSubnetRequest:
+				if original != nil && original.Attribution == nil {
+					delegated := proto.Clone(original).(*networkv1.CreateSubnetRequest)
+					delegated.Attribution = attribution
+					request = delegated
+				}
+			}
+			ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("x-ani-tenant-id", tenant, "x-ani-actor", actor, "x-ani-request-id", requestID))
+			if _, ok := ctx.Deadline(); !ok {
+				var cancel context.CancelFunc
+				ctx, cancel = context.WithTimeout(ctx, 3*time.Second)
+				defer cancel()
+			}
+			return invoke(ctx, method, request, response, conn, callOptions...)
+		}))
+	}
+	conn, err := grpc.NewClient(p.grpcAddress, options...)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -9,10 +9,13 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"math/big"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -28,6 +31,7 @@ import (
 
 type vpcIdentityProbe struct {
 	networkv1.UnimplementedNetworkServiceServer
+	calls *atomic.Int32
 }
 
 type imageIdentityProbe struct {
@@ -42,7 +46,10 @@ func (imageIdentityProbe) GetImageSpace(ctx context.Context, r *imagev1.GetImage
 	return &imagev1.GetImageSpaceResponse{Space: &imagev1.ImageSpace{TenantId: c.TenantID, SpaceId: c.Actor, State: string(c.Kind), ProjectName: c.Subject}}, nil
 }
 
-func (vpcIdentityProbe) GetVPC(ctx context.Context, req *networkv1.GetVPCRequest) (*networkv1.GetVPCResponse, error) {
+func (p vpcIdentityProbe) GetVPC(ctx context.Context, req *networkv1.GetVPCRequest) (*networkv1.GetVPCResponse, error) {
+	if p.calls != nil {
+		p.calls.Add(1)
+	}
 	return &networkv1.GetVPCResponse{Vpc: &networkv1.VPC{TenantId: req.TenantId}}, nil
 }
 
@@ -70,7 +77,7 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 	roots = x509.NewCertPool()
 	roots.AddCert(ca)
 	serial := int64(1)
-	issue := func(name string, usage x509.ExtKeyUsage) (tls.Certificate, string, string) {
+	issue := func(name string, usage x509.ExtKeyUsage, mutate ...func(*x509.Certificate)) (tls.Certificate, string, string) {
 		t.Helper()
 		serial++
 		k, e := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
@@ -78,6 +85,9 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 			t.Fatal(e)
 		}
 		tmpl := &x509.Certificate{SerialNumber: big.NewInt(serial), DNSNames: []string{name}, NotBefore: time.Now().Add(-time.Minute), NotAfter: time.Now().Add(time.Hour), KeyUsage: x509.KeyUsageDigitalSignature, ExtKeyUsage: []x509.ExtKeyUsage{usage}}
+		for _, change := range mutate {
+			change(tmpl)
+		}
 		d, e := x509.CreateCertificate(rand.Reader, tmpl, ca, &k.PublicKey, key)
 		if e != nil {
 			t.Fatal(e)
@@ -103,6 +113,17 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 	good, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth)
 	wrong, _, _ := issue("wrong-service", x509.ExtKeyUsageClientAuth)
 	wrongUsage, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageServerAuth)
+	extraDNS, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.DNSNames = append(c.DNSNames, "other-service") })
+	mixedURI, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.URIs = []*url.URL{{Scheme: "spiffe", Host: "ani", Path: "/governance"}} })
+	mixedIP, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.IPAddresses = []net.IP{net.ParseIP("127.0.0.1")} })
+	mixedEmail, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.EmailAddresses = []string{"governance@example.test"} })
+	cnOnly, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.DNSNames = nil; c.Subject.CommonName = GovernanceSAN })
+	expired, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) {
+		c.NotBefore = time.Now().Add(-2 * time.Hour)
+		c.NotAfter = time.Now().Add(-time.Hour)
+	})
+	wildcard, _, _ := issue(GovernanceSAN, x509.ExtKeyUsageClientAuth, func(c *x509.Certificate) { c.DNSNames = []string{"*.ani-governance"} })
+	wrongCA := testenv.NewServiceTLS(t).Client.Certificates[0]
 	serverTLS, err := GovernanceTLS(caPath, cp, kp)
 	if err != nil {
 		t.Fatal(err)
@@ -112,7 +133,8 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 		t.Fatal(err)
 	}
 	srv := grpc.NewServer(grpc.Creds(credentials.NewTLS(serverTLS)), grpc.UnaryInterceptor(GovernanceUnary()))
-	networkv1.RegisterNetworkServiceServer(srv, vpcIdentityProbe{})
+	var calls atomic.Int32
+	networkv1.RegisterNetworkServiceServer(srv, vpcIdentityProbe{calls: &calls})
 	imagev1.RegisterTenantImageServiceServer(srv, imageIdentityProbe{})
 	go func() {
 		if err := srv.Serve(lis); err != nil {
@@ -134,6 +156,14 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 		{"valid-access-key", []tls.Certificate{good}, func(m metadata.MD) { m.Set("x-ani-actor", "governance:access-key:42") }, tenant, "", codes.OK},
 		{"no-cert", nil, nil, tenant, "", codes.Unavailable},
 		{"wrong-san", []tls.Certificate{wrong}, nil, tenant, "", codes.Unavailable},
+		{"multiple-client-dns", []tls.Certificate{extraDNS}, nil, tenant, "", codes.Unavailable},
+		{"mixed-uri-san", []tls.Certificate{mixedURI}, nil, tenant, "", codes.Unavailable},
+		{"mixed-ip-san", []tls.Certificate{mixedIP}, nil, tenant, "", codes.Unavailable},
+		{"mixed-email-san", []tls.Certificate{mixedEmail}, nil, tenant, "", codes.Unavailable},
+		{"cn-only", []tls.Certificate{cnOnly}, nil, tenant, "", codes.Unavailable},
+		{"expired", []tls.Certificate{expired}, nil, tenant, "", codes.Unavailable},
+		{"wrong-ca", []tls.Certificate{wrongCA}, nil, tenant, "", codes.Unavailable},
+		{"wildcard-client", []tls.Certificate{wildcard}, nil, tenant, "", codes.Unavailable},
 		{"wrong-usage", []tls.Certificate{wrongUsage}, nil, tenant, "", codes.Unavailable},
 		{"duplicate", []tls.Certificate{good}, func(m metadata.MD) { m.Append("x-ani-tenant-id", tenant) }, tenant, "", codes.Unauthenticated},
 		{"duplicate-actor", []tls.Certificate{good}, func(m metadata.MD) { m.Append("x-ani-actor", "governance:access-key:42") }, tenant, "", codes.Unauthenticated},
@@ -148,6 +178,7 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 		{"wrong-method", []tls.Certificate{good}, nil, tenant, "/network.v1.NetworkService/PrepareAttachment", codes.PermissionDenied},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
+			before := calls.Load()
 			conn, e := grpc.NewClient(lis.Addr().String(), grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS13, RootCAs: roots, ServerName: "ani-network-service", Certificates: tc.certs})))
 			if e != nil {
 				t.Fatal(e)
@@ -168,6 +199,9 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 			if status.Code(e) != tc.want {
 				t.Fatalf("code=%s want=%s err=%v", status.Code(e), tc.want, e)
 			}
+			if tc.want != codes.OK && calls.Load() != before {
+				t.Fatal("rejected request reached handler")
+			}
 			if e == nil && (out.Vpc == nil || out.Vpc.TenantId != tenant) {
 				t.Fatalf("principal lost: %v", out)
 			}
@@ -183,6 +217,18 @@ func TestGovernanceMTLSBoundary(t *testing.T) {
 			}
 		})
 	}
+	t.Run("tls12", func(t *testing.T) {
+		conn, err := grpc.NewClient(lis.Addr().String(), grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS12, MaxVersion: tls.VersionTLS12, RootCAs: roots, ServerName: NetworkSAN, Certificates: []tls.Certificate{good}})))
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer conn.Close()
+		ctx, cancel := context.WithTimeout(metadata.NewOutgoingContext(context.Background(), base), time.Second)
+		defer cancel()
+		if err := conn.Invoke(ctx, GetVPCMethod, &networkv1.GetVPCRequest{TenantId: tenant}, &networkv1.GetVPCResponse{}); status.Code(err) != codes.Unavailable {
+			t.Fatalf("TLS12 accepted: %v", err)
+		}
+	})
 	if _, e := GovernanceTLS("", cp, kp); e == nil {
 		t.Fatal("missing CA accepted")
 	}
