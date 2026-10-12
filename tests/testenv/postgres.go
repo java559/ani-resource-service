@@ -74,10 +74,8 @@ func NewDatabase(t *testing.T, beforeMigrate ...func(*pgxpool.Pool, string)) *Da
 	if err := data.Migrate(ctx, owner, runtimeRole); err != nil {
 		t.Fatal(err)
 	}
-	// A real second execution proves migration replay, including role grants.
-	if err := data.Migrate(ctx, owner, runtimeRole); err != nil {
-		t.Fatal(err)
-	}
+	// Migration replay and grant repair have a dedicated integration test;
+	// ordinary fixtures need only the real initial migration.
 	address.User = url.UserPassword(runtimeRole, password)
 	repository, err := data.OpenPostgres(ctx, address.String(), data.Placement{ClusterID: "test-cluster", NamespacePrefix: "tenant-"})
 	if err != nil {

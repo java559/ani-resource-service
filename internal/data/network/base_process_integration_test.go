@@ -20,9 +20,12 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 )
 
-// These boundaries execute the production service, durable PostgreSQL state,
+// Critical boundaries execute the production service, durable PostgreSQL state,
 // and actual KC adapter against a controlled HTTP API. They prove recovery of
 // provider contracts only; they never assert live network traffic or kc health.
+// Per-resource POST/late DELETE recovery is covered with fresh production
+// runtimes in base_recovery_integration_test.go; zero-write cancellation has
+// its own shorter actual-adapter test in base_connectivity_integration_test.go.
 type baseProcessFault struct {
 	method, kind               string
 	delayed                    bool
@@ -214,7 +217,7 @@ func requireBaseProcessCleanup(t *testing.T, f *egressFixture, api *controlled.S
 	}
 }
 
-func TestBaseConnectivityServiceProcessesRecoverEveryDurableBoundary(t *testing.T) {
+func TestBaseConnectivityServiceProcessesRecoverCriticalDurableBoundaries(t *testing.T) {
 	if os.Getenv("NETWORK_TEST_ADMIN_DSN") == "" {
 		t.Skip("requires isolated PostgreSQL")
 	}
@@ -227,92 +230,6 @@ func TestBaseConnectivityServiceProcessesRecoverEveryDurableBoundary(t *testing.
 	build.Dir = root
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build base recovery service: %v\n%s", err, output)
-	}
-	for _, tc := range []struct {
-		name, kind string
-		delayed    bool
-	}{{"vpc_POST_success_response_lost", "vpcs", false}, {"eip_POST_success_response_lost", "eips", false}, {"snat_POST_success_response_lost", "snats", false}, {"eip_POST_accepted_success_after_process_kill", "eips", true}} {
-		t.Run(tc.name, func(t *testing.T) {
-			fault := newBaseProcessFault(http.MethodPost, tc.kind, tc.delayed)
-			f, api, db, kube := newBaseKCFixture(t, fault.intercept)
-			// Registered after the server cleanup so held requests are released first.
-			t.Cleanup(fault.unblock)
-			start := func() *networkProcess {
-				return startNetworkProcess(t, root, binary, db.RuntimeDSN, kube, testenv.SigningKey(), "base")
-			}
-			first := start()
-			fault.armed.Store(true)
-			accepted := createBaseVPC(t, f, tc.name)
-			eip, snat := baseIDs(t, f, accepted.ID)
-			waitBaseFault(t, fault, first)
-			first.kill(t)
-			if baseProcessClaimCount(t, f, eip) != 1 {
-				t.Fatal("unknown create outcome released the accepted EIP claim")
-			}
-			targetID := accepted.ID
-			if tc.kind == "eips" {
-				targetID = eip
-			}
-			if tc.kind == "snats" {
-				targetID = snat
-			}
-			var dispatched bool
-			var pending string
-			if err := f.owner.QueryRow(f.ctx, `SELECT create_dispatched,pending_action FROM network_provider_bindings WHERE tenant_id=$1 AND coalesce(vpc_id,subnet_id,eip_id,snat_id)=$2`, f.tenant, targetID).Scan(&dispatched, &pending); err != nil || !dispatched || pending != "create" {
-				t.Fatal("unknown create was not durably fenced", dispatched, pending, err)
-			}
-			prior := map[string]string{}
-			for _, target := range []struct{ id, kind string }{{accepted.ID, "vpcs"}, {eip, "eips"}, {snat, "snats"}} {
-				prior[target.kind] = baseProcessProviderIdentity(t, f, api, target.id, target.kind)
-			}
-			if tc.delayed && prior["eips"] != "" {
-				t.Fatal("delayed request executed before the process was killed")
-			}
-			fault.unblock()
-			select {
-			case <-fault.executed:
-			case <-time.After(3 * time.Second):
-				t.Fatal("accepted delayed request did not finish independently of its caller")
-			}
-			if fault.status.Load() < 200 || fault.status.Load() >= 300 {
-				t.Fatal("intercepted Provider request failed", fault.status.Load())
-			}
-			if tc.delayed {
-				prior["eips"] = baseProcessProviderIdentity(t, f, api, eip, "eips")
-				if prior["eips"] == "" {
-					t.Fatal("late success failed to materialize the original EIP")
-				}
-			}
-			second := start()
-			current := waitBaseProcessState(t, f, accepted.ID, biz.Available, second)
-			if current.LastOperationID != accepted.LastOperationID {
-				t.Fatal("restart changed parent creation operation")
-			}
-			requireBaseProcessFixedIdentities(t, f, api, accepted.ID, eip, snat, prior)
-			for _, kind := range []string{"vpcs", "eips", "snats"} {
-				requireBaseProcessRequestCount(t, api, fault, http.MethodPost, kind, 1)
-			}
-			operations := baseProcessCreationOperations(t, f, accepted.ID, eip, snat)
-			history := baseProcessHistory(t, f, operations)
-			replay := createBaseVPC(t, f, tc.name)
-			if replay.ID != accepted.ID || replay.LastOperationID != accepted.LastOperationID || replay.State != biz.Provisioning {
-				t.Fatal("restart changed the immutable creation receipt", replay)
-			}
-			deleting, err := f.n.DeleteVPC(f.ctx, f.tenant, accepted.ID)
-			if err != nil {
-				t.Fatal(err)
-			}
-			deleted := waitBaseProcessState(t, f, accepted.ID, biz.Deleted, second)
-			if deleted.LastOperationID != deleting.LastOperationID {
-				t.Fatal("cleanup operation identity drift")
-			}
-			requireBaseProcessCleanup(t, f, api, accepted.ID, eip, snat)
-			if after := baseProcessHistory(t, f, operations); after != history {
-				t.Fatal("cleanup rewrote successful creation operations")
-			}
-			second.stop(t)
-			t.Logf("controlled_process_boundary=%s vpc=%s eip=%s snat=%s stable_identity=pass cleanup=pass data_plane=not_verified", tc.name, accepted.ID, eip, snat)
-		})
 	}
 	t.Run("partial_unknown_EIP_termination_before_late_success", func(t *testing.T) {
 		fault := newBaseProcessFault(http.MethodPost, "eips", true)
@@ -404,7 +321,7 @@ func TestBaseConnectivityServiceProcessesRecoverEveryDurableBoundary(t *testing.
 		second.stop(t)
 		t.Logf("controlled_process_boundary=partial_unknown_EIP_termination vpc=%s eip=%s late_uid=%s snat=%s snat_create_requests=0 data_plane=not_verified", accepted.ID, eip, lateUID, snat)
 	})
-	for _, kind := range []string{"snats", "eips", "vpcs"} {
+	for _, kind := range []string{"snats"} {
 		t.Run(kind+"_DELETE_success_response_lost", func(t *testing.T) {
 			fault := newBaseProcessFault(http.MethodDelete, kind, false)
 			f, api, db, kube := newBaseKCFixture(t, fault.intercept)
@@ -466,34 +383,4 @@ func TestBaseConnectivityServiceProcessesRecoverEveryDurableBoundary(t *testing.
 			t.Logf("controlled_process_boundary=%s_DELETE_response_lost vpc=%s claim_cleanup=pass data_plane=not_verified", kind, accepted.ID)
 		})
 	}
-	t.Run("termination_before_any_CR_process_recovery", func(t *testing.T) {
-		f, api, db, kube := newBaseKCFixture(t, nil)
-		accepted := createBaseVPC(t, f, "process-never-dispatched")
-		eip, snat := baseIDs(t, f, accepted.ID)
-		if _, err := f.n.DeleteVPC(f.ctx, f.tenant, accepted.ID); err != nil {
-			t.Fatal(err)
-		}
-		process := startNetworkProcess(t, root, binary, db.RuntimeDSN, kube, testenv.SigningKey(), "base")
-		waitBaseProcessState(t, f, accepted.ID, biz.Deleted, process)
-		requireBaseProcessCleanup(t, f, api, accepted.ID, eip, snat)
-		for _, kind := range []string{"vpcs", "eips", "snats"} {
-			api.Backend.Mu.Lock()
-			creates, deletes := api.Backend.Creates[kind], api.Backend.Deletes[kind]
-			api.Backend.Mu.Unlock()
-			if creates != 0 || deletes != 0 {
-				t.Fatal("never-dispatched termination wrote Provider resources", kind, creates, deletes)
-			}
-			requireBaseProcessRequestCount(t, api, nil, http.MethodPost, kind, 0)
-			requireBaseProcessRequestCount(t, api, nil, http.MethodDelete, kind, 0)
-		}
-		var unsent int
-		if err := f.owner.QueryRow(f.ctx, `SELECT count(*) FROM network_provider_bindings WHERE tenant_id=$1 AND coalesce(vpc_id,subnet_id,eip_id,snat_id)=ANY($2::text[]) AND NOT create_dispatched AND provider_uid='' AND pending_action=''`, f.tenant, []string{accepted.ID, eip, snat}).Scan(&unsent); err != nil || unsent != 3 {
-			t.Fatal("unsent cancellation evidence changed", unsent, err)
-		}
-		operation, err := f.n.GetOperation(f.ctx, f.tenant, accepted.LastOperationID)
-		if err != nil || operation.State != biz.OpFailed || operation.Reason != "CREATE_TERMINATED" {
-			t.Fatal("terminated create history", operation, err)
-		}
-		process.stop(t)
-	})
 }

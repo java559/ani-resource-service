@@ -26,9 +26,9 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 )
 
-// Fixed pre-rename generated client and schema-compatible pre-contract server,
-// with separate executables and descriptor registries. Schema-8 servers are not
-// valid rollback targets for the current database schema.
+// Fixed pre-rename generated client and released schema-13-compatible server,
+// with separate executables and descriptor registries. Earlier schema-8 and
+// schema-12 servers are not valid rollback targets for this database schema.
 // This controlled PG/HTTP check does not replace real Kubernetes R4 evidence.
 func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	if os.Getenv("NETWORK_TEST_ADMIN_DSN") == "" {
@@ -55,7 +55,7 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	if rollbackRoot == "" {
 		rollbackRoot = t.TempDir()
 		archive := filepath.Join(t.TempDir(), "rollback-baseline.tar")
-		command := exec.Command("git", "archive", "--output", archive, "b258907ac8ac2071f909ae116a0f2839b2d7f55f")
+		command := exec.Command("git", "archive", "--output", archive, "a57b6760bf2dd7dd7e682d340db226037f529d5c")
 		command.Dir = root
 		if output, err := command.CombinedOutput(); err != nil {
 			t.Fatalf("fixed schema-compatible server archive: %v %s", err, output)
@@ -64,11 +64,11 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 			t.Fatalf("schema-compatible server extraction: %v %s", err, output)
 		}
 	}
-	// Guard the pre-contract composition even when a supplied archive avoids
+	// Guard the released schema-13 composition even when a supplied archive avoids
 	// accessing Git history on an isolated remote test host.
 	serverSource, err := os.ReadFile(filepath.Join(rollbackRoot, "cmd/ani-resource-service/app.go"))
-	if err != nil || fmt.Sprintf("%x", sha256.Sum256(serverSource)) != "29b3f64964d4f7daa993e58acbf015fb0d6353c50dbfb995dc4d02f17085d0e4" {
-		t.Fatalf("fixed b258907 server composition guard failed: %v", err)
+	if err != nil || fmt.Sprintf("%x", sha256.Sum256(serverSource)) != "af99d7274ac7b87ac5d4970f79dca347bd6b41f4003a8e0b6ae3131c5aa87620" {
+		t.Fatalf("fixed a57b676 schema-13 server composition guard failed: %v", err)
 	}
 	build := func(dir, target, name string) string {
 		binary := filepath.Join(t.TempDir(), name)
@@ -144,9 +144,6 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	var activeProcess *networkProcess
 	start := func(binary string) *networkProcess {
 		options := []string{"subnet", "config=" + config, "grpc-address=" + grpcAddress, "admin-address=" + adminAddress}
-		if binary == oldBinary {
-			options = append(options, "legacy-plaintext")
-		}
 		activeProcess = startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, key, options...)
 		return activeProcess
 	}
@@ -171,15 +168,11 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 			}
 		}
 		command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_TENANT="+scopeTenant, "ANI_TEST_OLD_CLIENT_ACTOR="+actor, "ANI_TEST_OLD_CLIENT_REQUEST_ID="+requestID)
-		if activeProcess.legacyPlaintext {
-			command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_MODE=legacy")
-		} else {
-			if activeProcess.serviceTLS == nil {
-				t.Fatal("candidate old-client fixture requires mTLS credentials")
-			}
-			command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_MODE=mtls", "ANI_TEST_OLD_CLIENT_CA="+activeProcess.serviceTLS.CAFile,
-				"ANI_TEST_OLD_CLIENT_CERT="+activeProcess.serviceTLS.ClientCertFile, "ANI_TEST_OLD_CLIENT_KEY="+activeProcess.serviceTLS.ClientKeyFile)
+		if activeProcess.serviceTLS == nil || activeProcess.legacyPlaintext {
+			t.Fatal("both released and candidate old-client fixtures require mTLS credentials")
 		}
+		command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_MODE=mtls", "ANI_TEST_OLD_CLIENT_CA="+activeProcess.serviceTLS.CAFile,
+			"ANI_TEST_OLD_CLIENT_CERT="+activeProcess.serviceTLS.ClientCertFile, "ANI_TEST_OLD_CLIENT_KEY="+activeProcess.serviceTLS.ClientKeyFile)
 		command.Stdin = bytes.NewReader(body)
 		var stderr bytes.Buffer
 		command.Stderr = &stderr
@@ -291,7 +284,7 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 			t.Fatalf("Provider resource remains after API cleanup: %s", name)
 		}
 	}
-	t.Log("fixed 66f787 generated client with test-only transport/context overlay: schema-compatible b258907 plaintext -> candidate mTLS -> b258907 rollback with pending work -> candidate mTLS; same schema-compatible DB, endpoint, config, cursor key; identities, receipts, migration rows/checksums/timestamps preserved; API cleanup complete; older incompatible server rollback not asserted")
+	t.Log("fixed 66f787 generated client with test-only transport/context overlay: released schema-13 a57b676 mTLS -> candidate mTLS -> a57b676 rollback with pending work -> candidate mTLS; same schema-13 DB, endpoint, config, cursor key; identities, receipts, migration rows/checksums/timestamps preserved; API cleanup complete; older incompatible server rollback not asserted")
 
 	// Candidate outbound adapter talks to an independent old generated owner.
 	ownerDir, err := os.MkdirTemp("", "rename-owner-")

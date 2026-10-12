@@ -77,7 +77,9 @@ func lbAuditRetryObjects(api *controlled.Server) string {
 }
 
 func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
-	for _, exposure := range []string{"private", "public_private"} {
+	// The retry policy is exposure-independent. Keep the combined public/private
+	// entry here; all three exposures retain actual-adapter lifecycle coverage.
+	for _, exposure := range []string{"public_private"} {
 		t.Run(exposure, func(t *testing.T) {
 			type watchSession struct {
 				ctx    context.Context
@@ -190,7 +192,9 @@ func TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			config.QPS, config.Burst = 10, 20
+			// Audit invalidation and caller deadlines are under test, not client
+			// rate limiting against this in-memory HTTP fixture.
+			config.QPS, config.Burst = 1000, 1000
 			config.WrapTransport = func(rt http.RoundTripper) http.RoundTripper { return lbAuditRetryTransport{rt} }
 			provider, err := data.NewKCProvider(f.f.p, config)
 			if err != nil {

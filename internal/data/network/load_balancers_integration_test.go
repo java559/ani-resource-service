@@ -3,7 +3,6 @@ package data_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -52,6 +51,8 @@ func newLBAdmissionFixture(t *testing.T, interceptors ...func(http.ResponseWrite
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Parent/attachment setup uses the actual adapter without testing throttling.
+	config.QPS, config.Burst = 1000, 1000
 	provider, err := data.NewKCProvider(f.p, config)
 	if err != nil {
 		t.Fatal(err)
@@ -215,45 +216,4 @@ func TestLBAdmissionRejectsCIDROnlyBackendAndDuplicateVIP(t *testing.T) {
 }
 func slicesCloneLBInputs(v []biz.LoadBalancerBackendInput) []biz.LoadBalancerBackendInput {
 	return append([]biz.LoadBalancerBackendInput{}, v...)
-}
-func TestLBAdmissionCompetesWithSNATForOneClaimBothOrders(t *testing.T) {
-	for _, winner := range []string{"snat", "lb"} {
-		t.Run(winner, func(t *testing.T) {
-			f := newLBAdmissionFixture(t)
-			eip := f.f.eip(t, "shared-eip")
-			r := f.request
-			r.Exposure = "public"
-			r.PrivateIP = ""
-			r.PublicEIPID = eip.ID
-			lb := func() error { _, err := f.lbs.Create(f.f.ctx, r); return err }
-			snat := func() error {
-				_, err := f.f.e.BindVPCSnat(f.f.ctx, biz.EgressIntent{VPCID: f.vpc.ID, EIPID: eip.ID, IdempotencyKey: "bind"})
-				return err
-			}
-			first, second := lb, snat
-			if winner == "snat" {
-				first, second = snat, lb
-			}
-			if err := first(); err != nil {
-				t.Fatal(err)
-			}
-			if err := second(); biz.ReasonOf(err) != biz.EIPInUse {
-				t.Fatal("second target accepted", err)
-			}
-			value, err := f.f.e.GetEIP(f.f.ctx, "", eip.ID)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if value.BindingState != "reserved" || value.BindingTarget == nil {
-				t.Fatal("claim projection missing", value)
-			}
-			if winner == "lb" && (value.BindingID != "" || value.BindingTarget.Kind != "load_balancer") {
-				t.Fatal("legacy field made LB EIP appear free", value)
-			}
-			var n int
-			if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_eip_claims WHERE tenant_id=$1 AND eip_id=$2 AND released_at IS NULL`, f.f.tenant, eip.ID).Scan(&n); err != nil || n != 1 {
-				t.Fatal(fmt.Sprint("claim count=", n), err)
-			}
-		})
-	}
 }

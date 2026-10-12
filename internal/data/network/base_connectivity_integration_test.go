@@ -147,20 +147,27 @@ func TestBaseConnectivityTerminationBeforeAnyProviderCreate(t *testing.T) {
 		t.Fatal(err)
 	}
 	baseState(t, f, v.ID, biz.Deleted)
-	api.Backend.Mu.Lock()
-	ec, sc := api.Backend.Creates["eips"], api.Backend.Creates["snats"]
-	api.Backend.Mu.Unlock()
-	if ec != 0 || sc != 0 {
-		t.Fatal("termination allocated child resources", ec, sc)
+	requireBaseProcessCleanup(t, f, api, v.ID, e, s)
+	for _, kind := range []string{"vpcs", "eips", "snats"} {
+		api.Backend.Mu.Lock()
+		creates, deletes := api.Backend.Creates[kind], api.Backend.Deletes[kind]
+		api.Backend.Mu.Unlock()
+		if creates != 0 || deletes != 0 {
+			t.Fatal("never-dispatched termination wrote Provider resources", kind, creates, deletes)
+		}
+		requireBaseProcessRequestCount(t, api, nil, http.MethodPost, kind, 0)
+		requireBaseProcessRequestCount(t, api, nil, http.MethodDelete, kind, 0)
 	}
 	var retired int
-	if err := f.owner.QueryRow(f.ctx, `SELECT count(*) FROM network_provider_bindings WHERE tenant_id=$1 AND (eip_id=$2 OR snat_id=$3) AND NOT create_dispatched AND provider_uid='' AND pending_action=''`, f.tenant, e, s).Scan(&retired); err != nil || retired != 2 {
+	if err := f.owner.QueryRow(f.ctx, `SELECT count(*) FROM network_provider_bindings WHERE tenant_id=$1 AND coalesce(vpc_id,subnet_id,eip_id,snat_id)=ANY($2::text[]) AND NOT create_dispatched AND provider_uid='' AND pending_action=''`, f.tenant, []string{v.ID, e, s}).Scan(&retired); err != nil || retired != 3 {
 		t.Fatal("never-dispatched evidence lost", retired, err)
 	}
 	var unscheduled int
 	if err := f.owner.QueryRow(f.ctx, `SELECT count(*) FROM network_reconciliations WHERE tenant_id=$1 AND (eip_id=$2 OR snat_id=$3) AND retired AND next_run_at='infinity' AND processed_generation=requested_generation`, f.tenant, e, s).Scan(&unscheduled); err != nil || unscheduled != 2 {
 		t.Fatal("cancelled children still scheduled", unscheduled, err)
 	}
+	operations := baseProcessCreationOperations(t, f, v.ID, e, s)
+	history := baseProcessHistory(t, f, operations)
 	for i := 0; i < 8; i++ {
 		if _, err := f.w.Step(f.ctx); err != nil {
 			t.Fatal(err)
@@ -173,7 +180,15 @@ func TestBaseConnectivityTerminationBeforeAnyProviderCreate(t *testing.T) {
 	if err != nil || op.State != biz.OpFailed || op.Reason != "CREATE_TERMINATED" {
 		t.Fatal("create termination result", op, err)
 	}
+	if after := baseProcessHistory(t, f, operations); after != history {
+		t.Fatal("retired cancellation rewrote parent/child operation history")
+	}
+	replay := createBaseVPC(t, f, "never-dispatched")
+	if replay.ID != v.ID || replay.LastOperationID != v.LastOperationID || replay.State != biz.Provisioning {
+		t.Fatal("termination changed the immutable acceptance receipt", replay)
+	}
 }
+
 func TestBaseConnectivityPinsPoolAndChildrenAcrossRetryAndDefaultSwitch(t *testing.T) {
 	f, api, _, _ := newBaseKCFixture(t, nil)
 	v := createBaseVPC(t, f, "pinned")

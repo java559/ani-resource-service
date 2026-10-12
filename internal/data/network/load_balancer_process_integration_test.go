@@ -171,11 +171,15 @@ func TestLBServiceProcessesRecoverUnknownMutationsWithTwoWorkers(t *testing.T) {
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("build LB process: %v\n%s", err, output)
 	}
+	// Gateway owns generated resources and address release, so its four distinct
+	// crash/termination boundaries remain full service-process tests. Component
+	// response loss uses the same PG/adapter/Worker path in the shorter recovery
+	// matrix without rebuilding and restarting the whole service for each kind.
 	for _, tc := range []struct {
 		name, method, kind string
 		late               bool
 		terminate          bool
-	}{{"backend_POST_response_lost", "POST", "backends", false, false}, {"gateway_POST_late_success", "POST", "gateways", true, false}, {"policy_POST_response_lost", "POST", "backendtrafficpolicies", false, false}, {"route_UPDATE_response_lost", "PATCH", "httproutes", false, false}, {"gateway_UPDATE_response_lost", "PATCH", "gateways", false, false}, {"gateway_DELETE_response_lost", "DELETE", "gateways", false, false}, {"delete_during_unknown_gateway_POST", "POST", "gateways", true, true}} {
+	}{{"gateway_POST_late_success", "POST", "gateways", true, false}, {"gateway_UPDATE_response_lost", "PATCH", "gateways", false, false}, {"gateway_DELETE_response_lost", "DELETE", "gateways", false, false}, {"delete_during_unknown_gateway_POST", "POST", "gateways", true, true}} {
 		t.Run(tc.name, func(t *testing.T) {
 			fault := newBaseProcessFault(tc.method, tc.kind, tc.late)
 			controller := &lbControllerFixture{}
@@ -195,16 +199,18 @@ func TestLBServiceProcessesRecoverUnknownMutationsWithTwoWorkers(t *testing.T) {
 			})
 			// A verified Governance workload without delegated metadata still
 			// cannot manufacture the production authorization context.
-			conn, err := grpc.NewClient(first.grpcAddress, grpc.WithTransportCredentials(credentials.NewTLS(first.serviceTLS.Client.Clone())))
-			if err != nil {
-				t.Fatal(err)
-			}
-			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-			_, err = networkv1.NewTenantLoadBalancerServiceClient(conn).ListLoadBalancers(ctx, &networkv1.ListLoadBalancersRequest{})
-			cancel()
-			_ = conn.Close()
-			if status.Code(err) != codes.PermissionDenied && status.Code(err) != codes.Unauthenticated {
-				t.Fatal("standard LB service did not deny missing authorization", err)
+			if tc.name == "gateway_POST_late_success" {
+				conn, err := grpc.NewClient(first.grpcAddress, grpc.WithTransportCredentials(credentials.NewTLS(first.serviceTLS.Client.Clone())))
+				if err != nil {
+					t.Fatal(err)
+				}
+				ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+				_, err = networkv1.NewTenantLoadBalancerServiceClient(conn).ListLoadBalancers(ctx, &networkv1.ListLoadBalancersRequest{})
+				cancel()
+				_ = conn.Close()
+				if status.Code(err) != codes.PermissionDenied && status.Code(err) != codes.Unauthenticated {
+					t.Fatal("standard LB service did not deny missing authorization", err)
+				}
 			}
 			if tc.method == "POST" {
 				fault.armed.Store(true)

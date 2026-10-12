@@ -38,6 +38,8 @@ func TestLBBackendObservationUsesCurrentDatabaseTime(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	// Freshness and identity are under test, not client-side rate limiting.
+	config.QPS, config.Burst = 1000, 1000
 	provider, err := data.NewKCProvider(f.f.p, config)
 	if err != nil {
 		t.Fatal(err)
