@@ -76,7 +76,6 @@ func TestLBTrustedContextDefaultsAndExplicitZero(t *testing.T) {
 }
 func TestLBNormalizationRejectsAmbiguousOrUnsupportedInputs(t *testing.T) {
 	zero := uint32(0)
-	three := uint32(3)
 	for name, change := range map[string]func(*CreateLoadBalancer){
 		"private_with_eip":         func(r *CreateLoadBalancer) { r.PublicEIPID = "eip_" + strings.Repeat("3", 32) },
 		"public_with_vip":          func(r *CreateLoadBalancer) { r.Exposure = "public" },
@@ -90,7 +89,9 @@ func TestLBNormalizationRejectsAmbiguousOrUnsupportedInputs(t *testing.T) {
 		"invalid_backend_ip":       func(r *CreateLoadBalancer) { r.Backends[0].Address = "127.0.0.1" },
 		"injected_member_identity": func(r *CreateLoadBalancer) { r.Backends[0].ID = "11111111-1111-4111-8111-111111111111" },
 		"zero_health_threshold":    func(r *CreateLoadBalancer) { r.Health.HealthyThreshold = &zero },
-		"timeout_equal_interval":   func(r *CreateLoadBalancer) { r.Health.IntervalSeconds = &three },
+		"zero_unhealthy_threshold": func(r *CreateLoadBalancer) { r.Health.UnhealthyThreshold = &zero },
+		"zero_health_interval":     func(r *CreateLoadBalancer) { r.Health.IntervalSeconds = &zero },
+		"zero_health_timeout":      func(r *CreateLoadBalancer) { r.Health.TimeoutSeconds = &zero },
 	} {
 		t.Run(name, func(t *testing.T) {
 			l, repo, ctx := lbTestSetup(t)
@@ -101,6 +102,36 @@ func TestLBNormalizationRejectsAmbiguousOrUnsupportedInputs(t *testing.T) {
 			}
 			if len(repo.accepted) != 0 {
 				t.Fatal("invalid input reached repository")
+			}
+		})
+	}
+}
+func TestLBHealthTimingParametersAreIndependent(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		timeout uint32
+	}{
+		{"timeout-equals-interval", 3},
+		{"timeout-exceeds-interval", 6},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			l, repo, ctx := lbTestSetup(t)
+			r := lbTestRequest()
+			interval := uint32(3)
+			r.Health.IntervalSeconds, r.Health.TimeoutSeconds = &interval, &tc.timeout
+			if _, err := l.Create(ctx, r); err != nil {
+				t.Fatal("independent positive health timing rejected on create", err)
+			}
+			if _, err := l.Update(ctx, UpdateLoadBalancer{ID: "lb_11111111111111111111111111111111", ExpectedVersion: 1, IdempotencyKey: "update-timing", LoadBalancerMutableInput: r.LoadBalancerMutableInput}); err != nil {
+				t.Fatal("independent positive health timing rejected on update", err)
+			}
+			if len(repo.accepted) != 2 {
+				t.Fatal("health timing create or update did not reach persistence")
+			}
+			for _, intent := range repo.accepted {
+				if intent.Health.IntervalSeconds != interval || intent.Health.TimeoutSeconds != tc.timeout {
+					t.Fatalf("positive health timing was changed in persisted intent: %+v", intent.Health)
+				}
 			}
 		})
 	}

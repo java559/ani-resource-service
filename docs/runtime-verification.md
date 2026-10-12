@@ -1,4 +1,4 @@
-# Network 运行验证
+# Resource 运行验证
 
 重任务按 [远程约定](remote-execution.md) 优先在 ubuntu 的独立快照执行。可复现入口：
 
@@ -16,11 +16,26 @@ make audit
 
 `make integration` 使用固定 PostgreSQL 18.6 amd64 镜像，启动 loopback 随机端口的独占容器。每个测试创建独立数据库、owner/runtime 角色，迁移和 fixture 通过 owner 执行，业务通过 runtime 角色运行。容器和角色均由本次测试清理；凭据随机生成且不打印。镜像 digest、容器 ID 和清理结果进入命令输出。无需宿主 psql、sudo 或 kind。
 
-没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替 `make integration`。CI 强制执行 integration、race 和租户谓词变异门禁。不要使用 `-short` 或删除检查绕过它们。
+没有 `NETWORK_TEST_ADMIN_DSN` 时，普通 `go test` 会明确 skip 真实数据库/生产组合根/独立进程测试；它不能代替带真实数据库的入口。CI 用 `make race` 执行这些用例及竞态检查，再执行租户谓词变异门禁；`make integration` 保留为开发时不带 race 的入口，不在 CI 重复执行同一套集成测试。不要使用 `-short` 或删除检查绕过它们。
 
 `make race` 在同一真实 PostgreSQL 设施下执行全包 race 测试。恢复测试还构建带 race detector 的实际服务二进制，保留同一数据库与受控 Provider 事实，在 T1 之后、Provider 成功但 T4 之前、删除结果未知时终止进程并恢复；不会重建空库冒充重启。测试还覆盖不同服务进程共享持久租约，以及墓碑处理保留历史 operation。
 
+候选进程使用独占测试 CA、服务端证书和 Governance 客户端证书，调用经生产 mTLS 与可信 metadata 校验。历史客户端固定为 `66f787b` 的生成契约，仅通过临时编译 overlay 适配测试驱动的 TLS/context；原件与 protobuf 摘要保持不变。同库回滚使用 schema 兼容的固定基线 `b258907`，不把缺少后续迁移的旧服务作为当前数据库的可运行回滚目标；迁移版本、checksum、应用时间、回执、cursor 和 Provider 身份仍须保持。
+
 `make tenant-mutations` 分别破坏 GetVPC、GetOperation、ListVPCs、GetSubnet、ListSubnets 和 GetAttachment 的 tenant 过滤，再用 sqlc 生成并执行真实数据库行为测试。只有相应跨租户断言实际失败才算识别成功；编译失败或其他测试错误不能充数。脚本始终恢复输入 SQL 和生成物，变异不留在最终代码。
+
+Image 的真实数据库用例使用 `imageintegration` build tag，普通 `go test ./...` 和 Network 数据库入口均不包含它们。单独执行：
+
+```bash
+export TMPDIR=$(mktemp -d /tmp/ani-image-checks.XXXXXX)
+trap 'rmdir "$TMPDIR"' EXIT
+scripts/image-integration -race
+make image-tenant-mutations
+```
+
+`scripts/image-integration` 创建独占 PostgreSQL、owner/runtime 角色和私有 DSN 文件，覆盖 Image 持久化、生命周期、并发与凭据合同；`-race` 同时执行竞态检查。`make image-integration` 保留为不带 race 的开发入口。Image 租户变异门禁使用同一数据库准备入口，测试结束恢复变异并清理自有资源。
+
+CI 对 PR 和 `main` push 执行独立的源码/单测、Network 数据库与隔离、Image 数据库与隔离、供应链 jobs。最终 `verify` 汇总要求每一项成功，失败、取消或跳过均不能通过。连续更新同一 PR 会取消过时执行，各 job 有明确时间预算；任务分支 push 不再重复触发整套流水线。
 
 主要测试入口：
 

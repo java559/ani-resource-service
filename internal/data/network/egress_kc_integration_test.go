@@ -25,6 +25,7 @@ func seedEgressInfrastructure(api *controlled.Server) {
 func newEgressKCFixture(t *testing.T, intercept func(http.ResponseWriter, *http.Request, *controlled.Server) bool) (*egressFixture, *controlled.Server, *testenv.Database, string) {
 	t.Helper()
 	db := testenv.NewDatabase(t)
+	configureRepositoryVPCPresets(t, db.Repository)
 	api := controlled.New()
 	seedEgressInfrastructure(api)
 	host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

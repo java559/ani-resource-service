@@ -95,6 +95,7 @@ func TestBaseBackfillCLIProcessRestartKeepsReviewedPlanAndSingleAdmission(t *tes
 func newBackfillFixture(t *testing.T) (*egressFixture, *testenv.Database) {
 	t.Helper()
 	db := testenv.NewDatabase(t)
+	configureRepositoryVPCPresets(t, db.Repository)
 	infra := testEgressInfrastructure{}
 	db.Repository.UseEgressInfrastructure(infra)
 	e, err := biz.NewEgress(db.Repository, infra, biz.ContextEgressAuthorization{}, []byte("0123456789abcdef0123456789abcdef"), time.Minute, time.Now)

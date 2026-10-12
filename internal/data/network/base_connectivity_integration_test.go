@@ -196,7 +196,7 @@ func TestBaseConnectivityPinsPoolAndChildrenAcrossRetryAndDefaultSwitch(t *testi
 	}
 	baseState(t, f, v.ID, biz.Available)
 	setIntranetPool(t, f, biz.PlatformIntent{Kind: "set_intranet_pool_allocation", ID: next.ID, IdempotencyKey: "disable-new", Enabled: false})
-	if _, err := f.n.CreateVPC(context.Background(), biz.CreateVPC{TenantID: f.tenant, Name: "closed", CIDR: "10.43.0.0/16", IdempotencyKey: "closed"}); biz.ReasonOf(err) != biz.BaseConnectivityNotReady {
+	if _, err := f.n.CreateVPC(context.Background(), biz.CreateVPC{TenantID: f.tenant, Name: "closed", CIDR: "10.61.0.0/16", IdempotencyKey: "closed"}); biz.ReasonOf(err) != biz.BaseConnectivityNotReady {
 		t.Fatal("closed pool accepted allocation", err)
 	}
 	var name string

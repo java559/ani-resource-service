@@ -3,7 +3,9 @@ package data_test
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -24,9 +26,11 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 )
 
-// Fixed pre-rename source, separate executables and descriptor registries.
+// Fixed pre-rename generated client and schema-compatible pre-contract server,
+// with separate executables and descriptor registries. Schema-8 servers are not
+// valid rollback targets for the current database schema.
 // This controlled PG/HTTP check does not replace real Kubernetes R4 evidence.
-func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
+func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	if os.Getenv("NETWORK_TEST_ADMIN_DSN") == "" {
 		t.Skip("requires scripts/integration isolated PostgreSQL")
 	}
@@ -47,6 +51,25 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 			t.Fatalf("baseline extraction: %v %s", err, output)
 		}
 	}
+	rollbackRoot := os.Getenv("ANI_RESOURCE_ROLLBACK_ROOT")
+	if rollbackRoot == "" {
+		rollbackRoot = t.TempDir()
+		archive := filepath.Join(t.TempDir(), "rollback-baseline.tar")
+		command := exec.Command("git", "archive", "--output", archive, "b258907ac8ac2071f909ae116a0f2839b2d7f55f")
+		command.Dir = root
+		if output, err := command.CombinedOutput(); err != nil {
+			t.Fatalf("fixed schema-compatible server archive: %v %s", err, output)
+		}
+		if output, err := exec.Command("tar", "-xf", archive, "-C", rollbackRoot).CombinedOutput(); err != nil {
+			t.Fatalf("schema-compatible server extraction: %v %s", err, output)
+		}
+	}
+	// Guard the pre-contract composition even when a supplied archive avoids
+	// accessing Git history on an isolated remote test host.
+	serverSource, err := os.ReadFile(filepath.Join(rollbackRoot, "cmd/ani-resource-service/app.go"))
+	if err != nil || fmt.Sprintf("%x", sha256.Sum256(serverSource)) != "29b3f64964d4f7daa993e58acbf015fb0d6353c50dbfb995dc4d02f17085d0e4" {
+		t.Fatalf("fixed b258907 server composition guard failed: %v", err)
+	}
 	build := func(dir, target, name string) string {
 		binary := filepath.Join(t.TempDir(), name)
 		command := exec.Command("go", "build", "-race", "-trimpath", "-o", binary, target)
@@ -56,8 +79,8 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 		}
 		return binary
 	}
-	oldBinary := build(oldRoot, "./cmd/ani-network-service", "baseline")
-	oldClient := build(oldRoot, "./scripts/lb-api", "old-client")
+	oldBinary := build(rollbackRoot, "./cmd/ani-resource-service", "baseline")
+	oldClient := buildOldClientTransportFixture(t, oldRoot)
 	candidate := build(root, "./cmd/ani-resource-service", "candidate")
 	migrate := func(binary string, owner *pgxpool.Pool, role string) {
 		command := exec.Command(binary, "-migrate")
@@ -84,9 +107,22 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	}
 	checkSchema()
 	protocol := controlled.New()
+	renewFacts := seedProcessVPCPlatformFacts(t, protocol)
+	config := processVPCPresetConfig(t, root, "10.42.0.0/16", "10.43.0.0/16", "10.44.0.0/16")
+	// These independently seeded platform objects predate tenant activity.
+	// Cleanup must preserve them while deleting all tenant-owned resources.
+	platformObjects := map[string]string{}
+	protocol.Backend.Mu.Lock()
+	for key, object := range protocol.Backend.Objects {
+		m := object["metadata"].(map[string]any)
+		content, _ := json.Marshal(map[string]any{"uid": m["uid"], "labels": m["labels"], "spec": object["spec"]})
+		platformObjects[key] = string(content)
+	}
+	protocol.Backend.Mu.Unlock()
 	var armed, captured atomic.Bool
 	reached, release := make(chan struct{}), make(chan struct{})
 	host := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		renewFacts(r)
 		if armed.Load() && r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/vpcs") && captured.CompareAndSwap(false, true) {
 			recorder := httptest.NewRecorder()
 			protocol.ServeHTTP(recorder, r)
@@ -105,13 +141,45 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	defer close(release)
 	kubeconfig, key := testenv.Kubeconfig(t, host.URL), testenv.SigningKey()
 	grpcAddress, adminAddress := freeAddress(t), freeAddress(t)
+	var activeProcess *networkProcess
 	start := func(binary string) *networkProcess {
-		return startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, key, "subnet", "grpc-address="+grpcAddress, "admin-address="+adminAddress)
+		options := []string{"subnet", "config=" + config, "grpc-address=" + grpcAddress, "admin-address=" + adminAddress}
+		if binary == oldBinary {
+			options = append(options, "legacy-plaintext")
+		}
+		activeProcess = startNetworkProcess(t, root, binary, fixture.RuntimeDSN, kubeconfig, key, options...)
+		return activeProcess
 	}
 	tenant := uuid.NewString()
-	call := func(method string, request map[string]any, want string) map[string]any {
-		body, _ := json.Marshal(request)
+	callWithTenant := func(scopeTenant, method string, request map[string]any, want string) map[string]any {
+		requestID := uuid.NewString()
+		const actor = "governance:user:7"
+		delegated := make(map[string]any, len(request)+1)
+		for k, v := range request {
+			delegated[k] = v
+		}
+		if method == "CreateVPC" || method == "CreateSubnet" {
+			if _, supplied := delegated["attribution"]; !supplied {
+				delegated["attribution"] = map[string]any{"actor": actor, "direct_caller": "ani-governance", "correlation_id": requestID}
+			}
+		}
+		body, _ := json.Marshal(delegated)
 		command := exec.Command(oldClient, "call", "-target", grpcAddress, "-service", "NetworkService", "-method", method)
+		for _, entry := range os.Environ() {
+			if !strings.HasPrefix(entry, "ANI_TEST_OLD_CLIENT_") {
+				command.Env = append(command.Env, entry)
+			}
+		}
+		command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_TENANT="+scopeTenant, "ANI_TEST_OLD_CLIENT_ACTOR="+actor, "ANI_TEST_OLD_CLIENT_REQUEST_ID="+requestID)
+		if activeProcess.legacyPlaintext {
+			command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_MODE=legacy")
+		} else {
+			if activeProcess.serviceTLS == nil {
+				t.Fatal("candidate old-client fixture requires mTLS credentials")
+			}
+			command.Env = append(command.Env, "ANI_TEST_OLD_CLIENT_MODE=mtls", "ANI_TEST_OLD_CLIENT_CA="+activeProcess.serviceTLS.CAFile,
+				"ANI_TEST_OLD_CLIENT_CERT="+activeProcess.serviceTLS.ClientCertFile, "ANI_TEST_OLD_CLIENT_KEY="+activeProcess.serviceTLS.ClientKeyFile)
+		}
 		command.Stdin = bytes.NewReader(body)
 		var stderr bytes.Buffer
 		command.Stderr = &stderr
@@ -125,6 +193,9 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 		}
 		return result.Response
 	}
+	call := func(method string, request map[string]any, want string) map[string]any {
+		return callWithTenant(tenant, method, request, want)
+	}
 	create := func(name, cidr string) map[string]any {
 		return map[string]any{"tenant_id": tenant, "name": name, "cidr": cidr, "idempotency_key": "rename-" + name}
 	}
@@ -133,7 +204,7 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	receiptA := call("CreateVPC", a, "OK")
 	receiptB := call("CreateVPC", b, "OK")
 	id := func(r map[string]any) string { return r["vpc"].(map[string]any)["id"].(string) }
-	client, closeClient := first.client(t)
+	client, closeClient := first.client(t, tenant)
 	waitRPCState(t, client, tenant, id(receiptA), networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
 	waitRPCState(t, client, tenant, id(receiptB), networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
 	closeClient()
@@ -165,7 +236,11 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	if resumedPage["items"].([]any)[0].(map[string]any)["id"] != pageTwo["items"].([]any)[0].(map[string]any)["id"] {
 		t.Fatal("old cursor changed")
 	}
-	call("GetVPC", map[string]any{"tenant_id": uuid.NewString(), "vpc_id": id(receiptA)}, "NotFound")
+	otherTenant := uuid.NewString()
+	callWithTenant(otherTenant, "GetVPC", map[string]any{"tenant_id": otherTenant, "vpc_id": id(receiptA)}, "NotFound")
+	call("GetVPC", map[string]any{"tenant_id": otherTenant, "vpc_id": id(receiptA)}, "PermissionDenied")
+	call("CreateVPC", map[string]any{"tenant_id": tenant, "name": "untrusted-attribution", "cidr": "10.45.0.0/16", "idempotency_key": "untrusted-attribution",
+		"attribution": map[string]any{"actor": "governance:user:99", "direct_caller": "ani-governance", "correlation_id": uuid.NewString()}}, "PermissionDenied")
 	if !reflect.DeepEqual(originalObjects, identities()) {
 		t.Fatal("candidate replaced original Provider identity/spec")
 	}
@@ -182,7 +257,7 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	migrate(oldBinary, fixture.Owner, fixture.RuntimeRole)
 	checkSchema()
 	third := start(oldBinary)
-	client, closeClient = third.client(t)
+	client, closeClient = third.client(t, tenant)
 	waitRPCState(t, client, tenant, id(receiptC), networkv1.ResourceState_RESOURCE_STATE_AVAILABLE)
 	closeClient()
 	if !reflect.DeepEqual(receiptC, call("CreateVPC", c, "OK")) {
@@ -198,19 +273,25 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 	for _, r := range []map[string]any{receiptA, receiptB, receiptC} {
 		call("DeleteVPC", map[string]any{"tenant_id": tenant, "vpc_id": id(r)}, "OK")
 	}
-	client, closeClient = fourth.client(t)
+	client, closeClient = fourth.client(t, tenant)
 	for _, r := range []map[string]any{receiptA, receiptB, receiptC} {
 		waitRPCState(t, client, tenant, id(r), networkv1.ResourceState_RESOURCE_STATE_DELETED)
 	}
 	closeClient()
 	fourth.stop(t)
 	checkSchema()
-	for name := range identities() {
-		if !strings.HasPrefix(name, "namespaces/") {
+	remaining := identities()
+	for name, content := range platformObjects {
+		if remaining[name] != content {
+			t.Fatalf("API cleanup changed an external platform identity/spec: %s", name)
+		}
+	}
+	for name := range remaining {
+		if _, platform := platformObjects[name]; !platform && !strings.HasPrefix(name, "namespaces/") {
 			t.Fatalf("Provider resource remains after API cleanup: %s", name)
 		}
 	}
-	t.Log("old client: old -> candidate -> old rollback with pending work -> candidate; same DB, endpoint, config, cursor key; identities, receipts, schema timestamps preserved; API cleanup complete")
+	t.Log("fixed 66f787 generated client with test-only transport/context overlay: schema-compatible b258907 plaintext -> candidate mTLS -> b258907 rollback with pending work -> candidate mTLS; same schema-compatible DB, endpoint, config, cursor key; identities, receipts, migration rows/checksums/timestamps preserved; API cleanup complete; older incompatible server rollback not asserted")
 
 	// Candidate outbound adapter talks to an independent old generated owner.
 	ownerDir, err := os.MkdirTemp("", "rename-owner-")
@@ -252,4 +333,106 @@ func TestResourceRenameOldClientSameDatabaseRollback(t *testing.T) {
 		t.Fatalf("old reverse consumer changed: %+v %v", submission, err)
 	}
 	t.Log("candidate outbound adapter -> independent old generated consumer: pass")
+}
+
+// The pinned historical CLI predates the required mTLS transport. Adapt only
+// that test driver's dialing/context through a temporary compiler overlay;
+// its archived source, generated protobuf/descriptor, and old service stay intact.
+func buildOldClientTransportFixture(t *testing.T, oldRoot string) string {
+	t.Helper()
+	// SHA-256 values from git show 66f787bd30134141726c596612501a83cf75bdb7:<path>.
+	guards := map[string]string{
+		"scripts/lb-api/main.go":       "df42be7110cfdd2a3e3bd29bf67b9de51100ecbf9fcd4692861dcf3e12b4c78e",
+		"api/network/v1/network.pb.go": "540c62e3e83caf1507a0f2a8090791a357d142f2853a83a293e513079b301d35",
+	}
+	checkOriginal := func() {
+		t.Helper()
+		for path, want := range guards {
+			body, err := os.ReadFile(filepath.Join(oldRoot, path))
+			if err != nil || fmt.Sprintf("%x", sha256.Sum256(body)) != want {
+				t.Fatalf("fixed old source guard failed for %s: %v", path, err)
+			}
+		}
+	}
+	checkOriginal()
+	t.Cleanup(checkOriginal)
+	original := filepath.Join(oldRoot, "scripts/lb-api/main.go")
+	body, err := os.ReadFile(original)
+	if err != nil {
+		t.Fatal(err)
+	}
+	source := string(body)
+	replace := func(before, after string) {
+		t.Helper()
+		if strings.Count(source, before) != 1 {
+			t.Fatalf("fixed old transport hook changed: %q", before)
+		}
+		source = strings.Replace(source, before, after, 1)
+	}
+	replace("\"context\"", "\"context\"\n\t\"crypto/tls\"\n\t\"crypto/x509\"")
+	replace("\"google.golang.org/grpc/codes\"", "\"google.golang.org/grpc/codes\"\n\t\"google.golang.org/grpc/credentials\"\n\t\"google.golang.org/grpc/metadata\"")
+	replace("conn, err := grpc.NewClient(*target, grpc.WithTransportCredentials(insecure.NewCredentials()))", `transport, err := oldFixtureCredentials()
+	if err != nil {
+		return err
+	}
+	conn, err := grpc.NewClient(*target, grpc.WithTransportCredentials(transport), grpc.WithDisableRetry(), grpc.WithDisableServiceConfig())`)
+	replace("context.WithTimeout(context.Background(), 15*time.Second)", "context.WithTimeout(oldFixtureContext(context.Background()), 15*time.Second)")
+	source += `
+// These credentials and delegated values belong only to the isolated test.
+// The candidate verifies them through its unchanged production listener.
+func oldFixtureCredentials() (credentials.TransportCredentials, error) {
+	switch os.Getenv("ANI_TEST_OLD_CLIENT_MODE") {
+	case "legacy":
+		return insecure.NewCredentials(), nil
+	case "mtls":
+		ca, err := os.ReadFile(os.Getenv("ANI_TEST_OLD_CLIENT_CA"))
+		if err != nil {
+			return nil, err
+		}
+		roots := x509.NewCertPool()
+		if !roots.AppendCertsFromPEM(ca) {
+			return nil, errors.New("isolated old-client CA is invalid")
+		}
+		cert, err := tls.LoadX509KeyPair(os.Getenv("ANI_TEST_OLD_CLIENT_CERT"), os.Getenv("ANI_TEST_OLD_CLIENT_KEY"))
+		if err != nil {
+			return nil, err
+		}
+		for _, key := range []string{"ANI_TEST_OLD_CLIENT_TENANT", "ANI_TEST_OLD_CLIENT_ACTOR", "ANI_TEST_OLD_CLIENT_REQUEST_ID"} {
+			if os.Getenv(key) == "" {
+				return nil, errors.New("isolated old-client trusted scope is required")
+			}
+		}
+		return credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS13, RootCAs: roots, Certificates: []tls.Certificate{cert}, ServerName: "ani-network-service"}), nil
+	default:
+		return nil, errors.New("isolated old-client transport mode must be explicit")
+	}
+}
+func oldFixtureContext(ctx context.Context) context.Context {
+	return metadata.NewOutgoingContext(ctx, metadata.Pairs(
+		"x-ani-tenant-id", os.Getenv("ANI_TEST_OLD_CLIENT_TENANT"),
+		"x-ani-actor", os.Getenv("ANI_TEST_OLD_CLIENT_ACTOR"),
+		"x-ani-request-id", os.Getenv("ANI_TEST_OLD_CLIENT_REQUEST_ID")))
+}
+`
+	dir := t.TempDir()
+	replacement := filepath.Join(dir, "main.go")
+	if err := os.WriteFile(replacement, []byte(source), 0600); err != nil {
+		t.Fatal(err)
+	}
+	overlayBody, err := json.Marshal(map[string]any{"Replace": map[string]string{original: replacement}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	overlay := filepath.Join(dir, "overlay.json")
+	if err := os.WriteFile(overlay, overlayBody, 0600); err != nil {
+		t.Fatal(err)
+	}
+	binary := filepath.Join(dir, "old-client")
+	command := exec.Command("go", "build", "-overlay", overlay, "-race", "-trimpath", "-o", binary, "./scripts/lb-api")
+	command.Dir = oldRoot
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("build fixed old protobuf client with test transport overlay: %v %s", err, output)
+	}
+	checkOriginal()
+	return binary
 }

@@ -49,7 +49,7 @@ func TestLBPinsExistingAddressesAcrossBothDefaultPoolSwitchesAndClosure(t *testi
 	if _, err = f.f.e.CreateEIP(f.f.ctx, biz.EgressIntent{Name: "blocked-eip", IdempotencyKey: "blocked-eip"}); biz.ReasonOf(err) != biz.PublicEgressNotReady {
 		t.Fatal("closed default accepted EIP", err)
 	}
-	if _, err = f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "blocked-vpc", CIDR: "10.45.0.0/16", IdempotencyKey: "blocked-vpc"}); biz.ReasonOf(err) != biz.BaseConnectivityNotReady {
+	if _, err = f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "blocked-vpc", CIDR: "10.62.0.0/16", IdempotencyKey: "blocked-vpc"}); biz.ReasonOf(err) != biz.BaseConnectivityNotReady {
 		t.Fatal("closed default accepted new base allocation", err)
 	}
 	lb = lbState(t, f, lb.ID, biz.Available)
@@ -100,7 +100,7 @@ func TestLBAndPublicBindingCoexistWithBackfillPauseResumeAndDeleteRace(t *testin
 	if _, err = f.f.p.SetNewVPCBaseConnectivity(f.f.ctx, false); err != nil {
 		t.Fatal(err)
 	}
-	legacy, err := f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "legacy-with-lb", CIDR: "10.43.0.0/16", IdempotencyKey: "legacy-with-lb"})
+	legacy, err := f.f.n.CreateVPC(f.f.ctx, biz.CreateVPC{TenantID: f.f.tenant, Name: "legacy-with-lb", CIDR: "10.61.0.0/16", IdempotencyKey: "legacy-with-lb"})
 	if err != nil {
 		t.Fatal(err)
 	}

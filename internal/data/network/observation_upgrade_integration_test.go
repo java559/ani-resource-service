@@ -9,11 +9,14 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/zhangzhe-ctrl/ani-resource-service/migrations"
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
+	"io/fs"
+	"slices"
 	"testing"
 )
 
 func TestNET05AMigrationUpgradesAllThreeHistoricalChecksums(t *testing.T) {
 	before := map[int]string{}
+	var historicalSchema string
 	facts := map[string]string{}
 	tenant, leaseOwner := uuid.NewString(), uuid.NewString()
 	tables := []string{"network_vpcs", "network_subnets", "network_operations", "network_reconciliations", "network_provider_bindings", "network_attachments", "network_attachment_history"}
@@ -45,6 +48,9 @@ func TestNET05AMigrationUpgradesAllThreeHistoricalChecksums(t *testing.T) {
 		if e = tx.Commit(ctx); e != nil {
 			t.Fatal(e)
 		}
+		if e = owner.QueryRow(ctx, "SELECT jsonb_agg(to_jsonb(v) ORDER BY version)::text FROM network_schema_version v").Scan(&historicalSchema); e != nil {
+			t.Fatal(e)
+		}
 		for _, table := range tables {
 			var body string
 			if e = owner.QueryRow(ctx, "SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]')::text FROM (SELECT * FROM "+table+" ORDER BY tenant_id) t").Scan(&body); e != nil {
@@ -55,12 +61,16 @@ func TestNET05AMigrationUpgradesAllThreeHistoricalChecksums(t *testing.T) {
 	})
 	for _, table := range tables {
 		var body string
-		if e := f.Owner.QueryRow(ctx, "SELECT coalesce(jsonb_agg(to_jsonb(t)-'eip_id'-'snat_id'-'lb_id'-'requested_generation'-'processed_generation'-'retry_not_before'-'evidence_hash'-'evidence_applied_at'-'base_connectivity_required'-'create_dispatched'-'retired'),'[]')::text FROM (SELECT * FROM "+table+" ORDER BY tenant_id) t").Scan(&body); e != nil {
+		if e := f.Owner.QueryRow(ctx, "SELECT coalesce(jsonb_agg(to_jsonb(t)-'eip_id'-'snat_id'-'lb_id'-'requested_generation'-'processed_generation'-'retry_not_before'-'evidence_hash'-'evidence_applied_at'-'base_connectivity_required'-'create_dispatched'-'retired'-'available_ip_count'-'used_ip_count'),'[]')::text FROM (SELECT * FROM "+table+" ORDER BY tenant_id) t").Scan(&body); e != nil {
 			t.Fatal(e)
 		}
 		if body != facts[table] {
 			t.Fatalf("upgrade changed existing facts/lease: %s", table)
 		}
+	}
+	var nonnullIPCounts int
+	if e := f.Owner.QueryRow(ctx, "SELECT count(*) FROM network_subnets WHERE available_ip_count IS NOT NULL OR used_ip_count IS NOT NULL").Scan(&nonnullIPCounts); e != nil || nonnullIPCounts != 0 {
+		t.Fatalf("upgrade invented subnet IP counts: %d %v", nonnullIPCounts, e)
 	}
 	for _, table := range []string{"network_operations", "network_reconciliations", "network_provider_bindings"} {
 		var lbReferences int
@@ -80,9 +90,29 @@ func TestNET05AMigrationUpgradesAllThreeHistoricalChecksums(t *testing.T) {
 			t.Fatalf("historical checksum changed %d %v", version, e)
 		}
 	}
+	var currentHistoricalSchema string
+	if e := f.Owner.QueryRow(ctx, "SELECT jsonb_agg(to_jsonb(v) ORDER BY version)::text FROM network_schema_version v WHERE version <= $1", len(before)).Scan(&currentHistoricalSchema); e != nil || currentHistoricalSchema != historicalSchema {
+		t.Fatalf("historical migration facts or timestamps changed: %v", e)
+	}
+	files, e := fs.Glob(migrations.Files, "*.sql")
+	if e != nil {
+		t.Fatal(e)
+	}
+	slices.Sort(files)
+	for index, name := range files {
+		body, e := migrations.Files.ReadFile(name)
+		if e != nil {
+			t.Fatal(e)
+		}
+		hash := sha256.Sum256(body)
+		var got string
+		if e = f.Owner.QueryRow(ctx, "SELECT checksum FROM network_schema_version WHERE version=$1", index+1).Scan(&got); e != nil || got != hex.EncodeToString(hash[:]) {
+			t.Fatalf("migration %s missing or changed: %v", name, e)
+		}
+	}
 	var count int
-	if e := f.Owner.QueryRow(ctx, `SELECT count(*) FROM network_schema_version`).Scan(&count); e != nil || count != 8 {
-		t.Fatalf("upgrade missing %d %v", count, e)
+	if e = f.Owner.QueryRow(ctx, `SELECT count(*) FROM network_schema_version`).Scan(&count); e != nil || count != len(files) {
+		t.Fatalf("upgrade migrations: got=%d want=%d %v", count, len(files), e)
 	}
 }
 

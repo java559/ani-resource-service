@@ -26,6 +26,10 @@ make race
 make tenant-mutations
 ```
 
+Image 的真实数据库、生命周期和租户隔离另用 `make image-integration`、
+`make image-tenant-mutations`；需设置本次检查独占的短路径 `TMPDIR`。
+完整入口和 CI 检查范围见 [运行验证](docs/runtime-verification.md)。
+
 本次改名的生成、编译、测试及 API 驱动仅在 SSH `fedora` 执行，见 [远程约定](docs/remote-execution.md)。
 正常启动需要专用 PostgreSQL 的 runtime 连接串、游标签名 secret 和 kc 集群凭据；
 迁移使用独立 owner，通过显式 `-migrate` 入口执行。

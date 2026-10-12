@@ -18,8 +18,9 @@ import (
 // ServiceTLS creates isolated credentials for the actual Resource composition.
 // Its CA is private to one test and is never accepted by a deployed service.
 type ServiceTLS struct {
-	CAFile, CertFile, KeyFile string
-	Client                    *tls.Config
+	CAFile, CertFile, KeyFile     string
+	ClientCertFile, ClientKeyFile string
+	Client                        *tls.Config
 }
 
 func NewServiceTLS(t testing.TB) ServiceTLS {
@@ -72,8 +73,8 @@ func NewServiceTLS(t testing.TB) ServiceTLS {
 		return cert, certFile, keyFile
 	}
 	_, certFile, keyFile := issue("ani-network-service", 2, x509.ExtKeyUsageServerAuth)
-	client, _, _ := issue("ani-governance", 3, x509.ExtKeyUsageClientAuth)
+	client, clientCertFile, clientKeyFile := issue("ani-governance", 3, x509.ExtKeyUsageClientAuth)
 	roots := x509.NewCertPool()
 	roots.AddCert(ca)
-	return ServiceTLS{CAFile: caFile, CertFile: certFile, KeyFile: keyFile, Client: &tls.Config{MinVersion: tls.VersionTLS13, RootCAs: roots, ServerName: "ani-network-service", Certificates: []tls.Certificate{client}}}
+	return ServiceTLS{CAFile: caFile, CertFile: certFile, KeyFile: keyFile, ClientCertFile: clientCertFile, ClientKeyFile: clientKeyFile, Client: &tls.Config{MinVersion: tls.VersionTLS13, RootCAs: roots, ServerName: "ani-network-service", Certificates: []tls.Certificate{client}}}
 }
