@@ -1,6 +1,18 @@
 # Network 执行状态
 
-更新日期：2026-10-11。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+更新日期：2026-10-12。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+
+## 2026-10-12：平台网络接入 Governance
+
+用户授权接入 Public/Intranet 地址池、VLAN 与配套平台接口，并参考已接入 VPC 检查分页和响应。固定输入为 Resource `4187c639ab46a55470292594ff2980584561dd3c`、Governance `4e3e5b4e750ac59cdeb227a0caf76e863873fde5`；两仓任务分支为 `codex/platform-network-gov-20261012`，受控验收快照未提交、推送或部署；用户随后授权发布两仓 `main`，最终提交与发布状态以 Git 历史和远端引用为准。原 Image 工作区及 Governance 原 main checkout 保持，部署未执行。
+
+新增 27 个平台用户 HTTP/BFF/客户端入口、权限目录步骤和 OpenAPI；Resource 同一 mTLS listener 注册平台服务，逐完整方法核验互斥平台/租户委托。平台不发送虚构 tenant，普通租户/API Key 无平台权。列表保留 limit/cursor/items/next_cursor/total，同筛选计数及快照由现有 Resource 路径提供；单资源/operation/capabilities 直接返回对象。调用合同见 [平台委托登记](../specs/governance-calls.md#平台网络用户委托)，Gov 的 DTO 和 HTTP 权限以对端源码为准。
+
+**pass**：Fedora Go 1.26.9、完整 Gov `make api`；受影响 Gov 包定向测试/vet、两仓生产入口构建、Resource server 测试；提交前 Resource 完整 `make verify` 通过（生成/格式/分层/故障构建/tidy、全包单元、vet、build、模块校验）；真实 HTTP/JWT/Casbin → mTLS → Resource/PostgreSQL/worker 的 27 平台方法（地址池命令、设备登记/VLAN、网关、能力和 operation），幂等、分页/total/末页/空结果、签名游标拒绝、无权/租户/AK/伪造身份拒绝和产品清理。租户 JWT、AK、VPC presets、三规格 LB 和多监听器的定向用例分别通过。KC/Envoy/NodeFacts/owner 外部边界受控；设备登记无删除 RPC，已完成登记保留到独占测试数据库退出，运行资源通过产品链退出。
+
+**fail**：共享夹具整批 `TestNetworkJointHTTP` 在 LB 多监听器更新等待中停留 desired_version=2/applied_version=1、PROVIDER_NOT_READY，并产生后续占用/清理失败；未放宽断言或称全绿。原始两仓基线同序列也有子网已知范围的初始断言和后段 AK DEPENDENCY_UNAVAILABLE 失败，但未复现完全相同的 LB 更新失败，不能据此宣布所有候选失败均为原有问题。子网夹具已显式建立未知范围起点并保持原断言。提交前初次格式检查失败已用固定工具链修正；后续本地 socket 测试因任务 TMPDIR 构成 153 字节 Unix socket 路径而失败，缩短任务独占 TMPDIR 后原断言及完整 `make verify` 通过。原始失败日志保留，不改测试或产品逻辑。
+
+**not_verified**：真实物理网卡/交换机/VLAN/公网转发、共享环境目录授权和部署。Ubuntu SSH 不可用，全部重任务在 Fedora 的 `/home/chabking/workspace/platform-network-gov-runs/20261012T-platform` 独占源码/缓存/PG/Redis 执行；实际日志与快照保存在仓库外任务工件目录 `/home/chabking/workspace/platform-network-gov-artifacts-20261012-01a124d1`，初始化缓存权限/生成预检失败保留，不冒充通过。
 
 ## 2026-10-11：Gov → Resource 调用规范收敛
 

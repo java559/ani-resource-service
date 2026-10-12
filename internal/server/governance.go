@@ -24,6 +24,38 @@ import (
 const GovernanceSAN = "ani-governance"
 const NetworkSAN = "ani-network-service"
 const OperatorHeader = "x-ani-operator"
+const GovernanceScopeHeader = "x-ani-scope"
+
+// Platform delegation is explicit and mutually exclusive with tenant delegation.
+var governancePlatformMethods = map[string]struct{}{
+	"/network.v1.PlatformNetworkService/ListNodeInterfaces":               {},
+	"/network.v1.PlatformNetworkService/AdoptNetworkDevice":               {},
+	"/network.v1.PlatformNetworkService/GetNetworkDevice":                 {},
+	"/network.v1.PlatformNetworkService/CreateVlanNetwork":                {},
+	"/network.v1.PlatformNetworkService/GetVlanNetwork":                   {},
+	"/network.v1.PlatformNetworkService/ListVlanNetworks":                 {},
+	"/network.v1.PlatformNetworkService/DeleteVlanNetwork":                {},
+	"/network.v1.PlatformNetworkService/CreateEgressGateway":              {},
+	"/network.v1.PlatformNetworkService/GetEgressGateway":                 {},
+	"/network.v1.PlatformNetworkService/ListEgressGateways":               {},
+	"/network.v1.PlatformNetworkService/DeleteEgressGateway":              {},
+	"/network.v1.PlatformNetworkService/CreatePublicAddressPool":          {},
+	"/network.v1.PlatformNetworkService/GetPublicAddressPool":             {},
+	"/network.v1.PlatformNetworkService/ListPublicAddressPools":           {},
+	"/network.v1.PlatformNetworkService/DeletePublicAddressPool":          {},
+	"/network.v1.PlatformNetworkService/RecordPublicPoolVerification":     {},
+	"/network.v1.PlatformNetworkService/SetPublicPoolAllocationEnabled":   {},
+	"/network.v1.PlatformNetworkService/SetDefaultPublicPool":             {},
+	"/network.v1.PlatformNetworkService/CreateIntranetAddressPool":        {},
+	"/network.v1.PlatformNetworkService/GetIntranetAddressPool":           {},
+	"/network.v1.PlatformNetworkService/ListIntranetAddressPools":         {},
+	"/network.v1.PlatformNetworkService/DeleteIntranetAddressPool":        {},
+	"/network.v1.PlatformNetworkService/RecordIntranetPoolVerification":   {},
+	"/network.v1.PlatformNetworkService/SetIntranetPoolAllocationEnabled": {},
+	"/network.v1.PlatformNetworkService/SetDefaultIntranetPool":           {},
+	"/network.v1.PlatformNetworkService/GetPlatformNetworkCapabilities":   {},
+	"/network.v1.PlatformNetworkService/GetPlatformOperation":             {},
+}
 
 // governanceReadMethods enforces the registered per-domain allowlist for the
 // internal business listener. Domain = one allowlist group; adding a domain
@@ -116,7 +148,10 @@ func exactClientDNS(cert *x509.Certificate, name string) bool {
 }
 
 // This identity is asserted by the authenticated Governance workload, not IAM.
-type governancePrincipal struct{ TenantID, Actor, RequestID, Operator, Workload string }
+type governancePrincipal struct {
+	TenantID, Actor, RequestID, Operator, Workload string
+	Platform                                       bool
+}
 type governancePrincipalKey struct{}
 
 type GovernanceResolver struct{}
@@ -144,7 +179,19 @@ func (GovernanceResolver) Resolve(ctx context.Context) (governancePrincipal, err
 	}
 	tenant, actor, request, operator := value("x-ani-tenant-id"), value("x-ani-actor"), value("x-ani-request-id"), value(OperatorHeader)
 	validUUID := func(v string) bool { id, err := uuid.Parse(v); return err == nil && id != uuid.Nil && id.String() == v }
-	if !validUUID(tenant) || !validUUID(request) || !validGovernanceActor(actor) {
+	scope := value(GovernanceScopeHeader)
+	platform := scope == "platform"
+	if len(md.Get(GovernanceScopeHeader)) > 1 || (len(md.Get(GovernanceScopeHeader)) == 1 && !platform) {
+		return governancePrincipal{}, denied
+	}
+	if platform {
+		if len(md.Get("x-ani-tenant-id")) != 0 || !strings.HasPrefix(actor, "governance:user:") {
+			return governancePrincipal{}, denied
+		}
+	} else if !validUUID(tenant) {
+		return governancePrincipal{}, denied
+	}
+	if !validUUID(request) || !validGovernanceActor(actor) {
 		return governancePrincipal{}, denied
 	}
 	// Legacy operator values name the same actor; they cannot replace the
@@ -156,7 +203,7 @@ func (GovernanceResolver) Resolve(ctx context.Context) (governancePrincipal, err
 	if len(md.Get(OperatorHeader)) > 1 || (len(md.Get(OperatorHeader)) == 1 && operator != expectedOperator) {
 		return governancePrincipal{}, denied
 	}
-	return governancePrincipal{TenantID: tenant, Actor: actor, RequestID: request, Operator: operator, Workload: GovernanceSAN}, nil
+	return governancePrincipal{TenantID: tenant, Actor: actor, RequestID: request, Operator: operator, Workload: GovernanceSAN, Platform: platform}, nil
 }
 
 // Actor namespaces keep human and API Key identities distinct. Both are
@@ -171,12 +218,9 @@ func validGovernanceActor(actor string) bool {
 	return false
 }
 
-// GovernanceUnary admits the allowlisted tenant methods before any business
-// handler or SQL runs. Read+write tenant surfaces of Network, Egress and LB are
-// admitted; PlatformNetworkService and every streaming RPC stay denied. For
-// Egress/LB methods it installs the trusted EgressCaller the biz layer requires
-// (same pattern as the controlled lb-api socket adapter), bound to the
-// authenticated principal — never to request fields.
+// GovernanceUnary authorizes exact methods and exclusive tenant/platform scopes
+// before business handlers or SQL. Platform authority is delegated only by the
+// verified Governance workload, never by public headers or protobuf fields.
 func GovernanceUnary() grpc.UnaryServerInterceptor {
 	return governanceUnary(false)
 }
@@ -187,11 +231,15 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 		if err != nil {
 			return nil, err
 		}
-		if readOnly && info.FullMethod != GetVPCMethod {
+		if readOnly && (info.FullMethod != GetVPCMethod || p.Platform) {
 			return nil, status.Error(codes.PermissionDenied, "read-only composition permits only GetVPC")
 		}
+		_, platformMethod := governancePlatformMethods[info.FullMethod]
+		if platformMethod != p.Platform {
+			return nil, status.Error(codes.PermissionDenied, "governance scope does not permit this method")
+		}
 		_, imageMethod := imageGovernanceMethods[info.FullMethod]
-		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod {
+		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)
@@ -199,6 +247,10 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "governance requests must be proto messages")
 		}
 		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
+		if platformMethod {
+			ctx = biz.WithEgressCaller(ctx, biz.EgressCaller{PlatformAdministrator: true, Attribution: biz.Attribution{Actor: p.Actor, DirectCaller: p.Workload, CorrelationID: p.RequestID}})
+			return next(ctx, req)
+		}
 		if imageMethod {
 			ctx, err = withImageGovernanceCaller(ctx, p, r)
 			if err != nil {

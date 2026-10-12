@@ -59,6 +59,7 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 		return controller.http(w, r, api)
 	})
 	addLBBackend(t, f, f.backendSubnet, "lb-second", "10.42.2.3")
+	networkJointPlatformFacts(t, f.api)
 	var boundNamespace string
 	if err := f.f.owner.QueryRow(f.f.ctx, `SELECT namespace FROM network_provider_bindings WHERE tenant_id=$1 AND subnet_id=$2 AND resource_kind='subnet'`, f.f.tenant, f.subnet.ID).Scan(&boundNamespace); err != nil {
 		t.Fatal(err)
@@ -125,6 +126,7 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	server := grpc.NewServer(grpc.Creds(credentials.NewTLS(tlsConfig)), grpc.UnaryInterceptor(runtime.GovernanceUnary()), grpc.StreamInterceptor(runtime.DenyGovernanceStreams))
 	networkv1.RegisterNetworkServiceServer(server, service.NewNetworkService(f.f.n))
 	networkv1.RegisterTenantEgressServiceServer(server, service.NewTenantEgressService(f.f.e))
+	networkv1.RegisterPlatformNetworkServiceServer(server, service.NewPlatformNetworkService(f.f.e))
 	networkv1.RegisterTenantLoadBalancerServiceServer(server, service.NewTenantLoadBalancerService(f.lbs))
 	serving := make(chan error, 1)
 	go func() { serving <- server.Serve(listener) }()
@@ -279,13 +281,17 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	// references to deleted pool history; it closes allocation and retires the
 	// pool slot. Do not erase those records outside the production contract.
 	var active int
-	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT (SELECT count(*) FROM network_vpcs WHERE state<>'deleted')+(SELECT count(*) FROM network_subnets WHERE state<>'deleted')+(SELECT count(*) FROM network_eips WHERE state<>'deleted')+(SELECT count(*) FROM network_snat_bindings WHERE state<>'deleted')+(SELECT count(*) FROM network_load_balancers WHERE state<>'deleted')+(SELECT count(*) FROM network_attachments WHERE state<>'released')+(SELECT count(*) FROM network_platform_resources WHERE state<>'deleted')`).Scan(&active); err != nil {
+	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT (SELECT count(*) FROM network_vpcs WHERE state<>'deleted')+(SELECT count(*) FROM network_subnets WHERE state<>'deleted')+(SELECT count(*) FROM network_eips WHERE state<>'deleted')+(SELECT count(*) FROM network_snat_bindings WHERE state<>'deleted')+(SELECT count(*) FROM network_load_balancers WHERE state<>'deleted')+(SELECT count(*) FROM network_attachments WHERE state<>'released')+(SELECT count(*) FROM network_platform_resources WHERE kind<>'device' AND state<>'deleted')`).Scan(&active); err != nil {
 		t.Fatal(err)
 	}
 	if active != 0 {
 		t.Fatalf("product cleanup left %d active tenant/platform resources", active)
 	}
-	t.Log("Resource product cleanup pass: no active VPC/Subnet/EIP/SNAT/LB/Attachment/platform resources")
+	var pendingDevice int
+	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_platform_resources r JOIN network_platform_operations o ON o.operation_id=r.last_operation_id WHERE r.kind='device' AND (r.state<>'available' OR o.state<>'succeeded')`).Scan(&pendingDevice); err != nil || pendingDevice != 0 {
+		t.Fatalf("permanent adoption must be fully applied before isolated fixture teardown: %d %v", pendingDevice, err)
+	}
+	t.Log("Resource product cleanup pass: no active runtime resources; permanent ready device adoption retained by contract until isolated database teardown (no device deletion API)")
 	cancel()
 }
 
@@ -405,4 +411,52 @@ func networkJointSubnetStatus(w http.ResponseWriter, r *http.Request, api *contr
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(api.Object("subnets", parts[4], parts[6]))
 	return true
+}
+
+// Only external NodeFacts/CNI observations are controlled here. Device adoption
+// still uses production authorization, admission, PostgreSQL, fencing and worker.
+func networkJointPlatformFacts(t *testing.T, api *controlled.Server) {
+	t.Helper()
+	var node, facts, config map[string]any
+	api.Backend.Mu.Lock()
+	for key, obj := range api.Backend.Objects {
+		meta, _ := obj["metadata"].(map[string]any)
+		if meta == nil {
+			continue
+		}
+		target := (*map[string]any)(nil)
+		switch {
+		case strings.HasPrefix(key, "nodes/") && meta["name"] == "node-1":
+			target = &node
+		case strings.HasPrefix(key, "configmaps/") && meta["name"] == "node-facts-node-1":
+			target = &facts
+		case strings.HasPrefix(key, "configmaps/") && meta["name"] == "kcn-config":
+			target = &config
+		}
+		if target != nil {
+			raw, _ := json.Marshal(obj)
+			_ = json.Unmarshal(raw, target)
+		}
+	}
+	api.Backend.Mu.Unlock()
+	if node == nil || facts == nil || config == nil {
+		t.Fatal("existing external NodeFacts and CNI configuration required")
+	}
+	uid := node["metadata"].(map[string]any)["uid"].(string)
+	node["metadata"].(map[string]any)["annotations"] = map[string]any{"networking.kubercloud.com/managed_netdevs": `{"phys0":true}`}
+	var doc data.NodeFactsDocument
+	if err := json.Unmarshal([]byte(facts["data"].(map[string]any)["facts.json"].(string)), &doc); err != nil {
+		t.Fatal(err)
+	}
+	doc.Interfaces = append(doc.Interfaces, biz.NodeInterface{NodeName: "node-1", NodeUID: uid, Name: "phys0", Kind: "device", MAC: "02:00:00:00:00:02", MTU: 1500, LinkUp: true, Carrier: true, Master: "ovs-system", OVSManaged: true, KCBridgeReady: true})
+	doc.CollectedAt = time.Now()
+	raw, err := json.Marshal(doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	facts["data"].(map[string]any)["facts.json"] = string(raw)
+	config["data"].(map[string]any)["managedDevices"] = "phys0"
+	api.Change("nodes", node, false)
+	api.Change("configmaps", facts, false)
+	api.Change("configmaps", config, false)
 }

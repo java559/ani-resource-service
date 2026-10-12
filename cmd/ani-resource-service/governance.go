@@ -19,8 +19,8 @@ import (
 )
 
 // Explicit governance composition: full worker so tenant writes are executed,
-// but only tenant-surface services are registered and the governance allowlist
-// gates every method. PlatformNetworkService is never registered here. It never
+// with tenant and platform services registered. Exact method and trusted scope
+// authorization gate every call before business code. It never
 // falls back to the legacy listener.
 func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err := bc.Validate(); err != nil {
@@ -96,6 +96,7 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	}
 	networkv1.RegisterNetworkServiceServer(gs, networkService.NewNetworkService(networkUC))
 	networkv1.RegisterTenantEgressServiceServer(gs, networkService.NewTenantEgressService(egress))
+	networkv1.RegisterPlatformNetworkServiceServer(gs, networkService.NewPlatformNetworkService(egress))
 	networkv1.RegisterTenantLoadBalancerServiceServer(gs, networkService.NewTenantLoadBalancerService(lbs))
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(gs, images.tenant)

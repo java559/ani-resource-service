@@ -1,5 +1,7 @@
 # Governance 全面读写对接（GOV-RESOURCE-20260922）
 
+> 历史租户接入批次。2026-10-12 用户新增授权的平台网络接入及互斥委托范围，以 [当前调用登记](../specs/governance-calls.md#平台网络用户委托) 为准；下列原批范围和历史验收不回写成新接口的证据。
+
 状态：completed（R/V1/G/V2 全部完成 2026-09-23；范围外数据面项已显式 not_verified）。批次：GOV-RESOURCE-20260922。日期：2026-09-23。
 governance 侧改动只允许发生在隔离 worktree `/home/ubuntu/Workspace/ani-governance-worktress`。
 
