@@ -464,6 +464,8 @@ Gov 公开 HTTP 已通过真实 JWT/token cache、套餐闸门、Casbin 和当�
 
 ### 执行证据与环境
 
+2026-10-13 main 发布时补齐独立模块依赖及 sums，并保留 Governance 新 main 的既有改动。Acc 首次发布 CI 在漏洞门禁失败；按报告升级 Go 1.26.9、`x/net` 0.60.0、OTel SDK 1.45.0，定向 owner/provider 和目标构建通过；Resource 固定其补丁提交，SG 同步网络库修复。原 CI 失败保留，新 CI 结果与真实 GPU 验收分别判断；未在 Fedora 执行全库测试或全套扫描。
+
 全部生成、编译、测试、PG、依赖准备和 Kubernetes API 驱动通过 `ssh fedora`。任务根 `/home/chabking/workspace/ani-resource-service-runs/instance-mvp-v15-20261013`，共享锁 `/home/chabking/workspace/ani-network-service-runs/net05a-heavy.lock`；Go 1.26.9、Buf 1.60.0、sqlc 1.31.1。编译串行，`GOMAXPROCS=2`、`-p=2`、CPUQuota=200%、MemoryMax=6G、MemorySwapMax=0，PG 单实例 768 MiB/1 CPU、随机 loopback 端口、任务标签与清理。模块/编译缓存及 TMPDIR 都为本任务独占。普通源码快照不含集群凭据、服务密钥或运行配置；私有配置仅保留在远端 `private/`。
 
 - r6 源码归档 SHA-256 `16a50b9558fd59f9555b93ab2a9c3a9919248376ad523059a66dbff995344a2d`：Resource 生成、两组真实 PG 行为、受影响 Governance mTLS 定向回归、`go build ./cmd/ani-resource-service` exit 0。
