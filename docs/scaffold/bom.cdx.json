@@ -22,11 +22,11 @@
       }
     ],
     "component": {
-      "bom-ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-373e45391c54?type=module",
+      "bom-ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-f02f96da1a93?type=module",
       "type": "application",
       "name": "github.com/zhangzhe-ctrl/ani-resource-service",
-      "version": "v0.0.0-20000101000000-373e45391c54",
-      "purl": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-373e45391c54?goarch=amd64&goos=linux&type=module",
+      "version": "v0.0.0-20000101000000-f02f96da1a93",
+      "purl": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-f02f96da1a93?goarch=amd64&goos=linux&type=module",
       "externalReferences": [
         {
           "url": "https://github.com/zhangzhe-ctrl/ani-resource-service",
@@ -878,6 +878,66 @@
       }
     },
     {
+      "bom-ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-accelerator-service@v0.0.0-20261013081408-03765d169b07?type=module",
+      "type": "library",
+      "name": "github.com/zhangzhe-ctrl/ani-accelerator-service",
+      "version": "v0.0.0-20261013081408-03765d169b07",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6f81c9a57db6a6792fb87fb9007de63ce493cef0f208f82b1a9a78827221dd82"
+        }
+      ],
+      "purl": "pkg:golang/github.com/zhangzhe-ctrl/ani-accelerator-service@v0.0.0-20261013081408-03765d169b07?goarch=amd64&goos=linux&type=module",
+      "externalReferences": [
+        {
+          "url": "https://github.com/zhangzhe-ctrl/ani-accelerator-service",
+          "type": "vcs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-governance/api/quota@v0.0.0-20261009133356-1ab461604c74?type=module",
+      "type": "library",
+      "name": "github.com/zhangzhe-ctrl/ani-governance/api/quota",
+      "version": "v0.0.0-20261009133356-1ab461604c74",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "71fc6996e51de8056df2f05be99e2f6f9150836ff77caebb0460d19b36d41480"
+        }
+      ],
+      "purl": "pkg:golang/github.com/zhangzhe-ctrl/ani-governance/api/quota@v0.0.0-20261009133356-1ab461604c74?goarch=amd64&goos=linux&type=module",
+      "externalReferences": [
+        {
+          "url": "https://github.com/zhangzhe-ctrl/ani-governance/api/quota",
+          "type": "vcs"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal@v0.0.0-20261013075021-0937f5aa9c6c?type=module",
+      "type": "library",
+      "name": "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal",
+      "version": "v0.0.0-20261013075021-0937f5aa9c6c",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f99fd1e005fd53446963eb269eb08ef5c5454f12ea8e3a74afb35b51675c84d1"
+        }
+      ],
+      "purl": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal@v0.0.0-20261013075021-0937f5aa9c6c?goarch=amd64&goos=linux&type=module",
+      "externalReferences": [
+        {
+          "url": "https://github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal",
+          "type": "vcs"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:golang/go.opentelemetry.io/auto/sdk@v1.2.1?type=module",
       "type": "library",
       "name": "go.opentelemetry.io/auto/sdk",
@@ -1315,18 +1375,18 @@
       }
     },
     {
-      "bom-ref": "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+      "bom-ref": "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
       "type": "library",
       "name": "google.golang.org/protobuf",
-      "version": "v1.36.12-0.20260120151049-f2248ac996af",
+      "version": "v1.36.12",
       "scope": "required",
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "fb9fd2c371ac0cd9449aeed37e495628f750d189236b95449aada2f35efe8db2"
+          "content": "a4938a0c33b279712b52ba028a11407792d0bb05c14a9567286ae3e68fdfc317"
         }
       ],
-      "purl": "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?goarch=amd64&goos=linux&type=module",
+      "purl": "pkg:golang/google.golang.org/protobuf@v1.36.12?goarch=amd64&goos=linux&type=module",
       "evidence": {
         "licenses": [
           {
@@ -1605,13 +1665,16 @@
   ],
   "dependencies": [
     {
-      "ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-373e45391c54?type=module",
+      "ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20000101000000-f02f96da1a93?type=module",
       "dependsOn": [
         "pkg:golang/github.com/go-kratos/kratos/contrib/otel/v3@v3.0.0-20260515082355-1ddb58e407c5?type=module",
         "pkg:golang/github.com/go-kratos/kratos/v3@v3.0.0?type=module",
         "pkg:golang/github.com/google/uuid@v1.6.0?type=module",
         "pkg:golang/github.com/jackc/pgx/v5@v5.10.0?type=module",
         "pkg:golang/github.com/prometheus/client_golang@v1.24.1?type=module",
+        "pkg:golang/github.com/zhangzhe-ctrl/ani-accelerator-service@v0.0.0-20261013081408-03765d169b07?type=module",
+        "pkg:golang/github.com/zhangzhe-ctrl/ani-governance/api/quota@v0.0.0-20261009133356-1ab461604c74?type=module",
+        "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal@v0.0.0-20261013075021-0937f5aa9c6c?type=module",
         "pkg:golang/go.opentelemetry.io/otel@v1.45.0?type=module",
         "pkg:golang/go.opentelemetry.io/otel/exporters/prometheus@v0.66.0?type=module",
         "pkg:golang/go.opentelemetry.io/otel/metric@v1.45.0?type=module",
@@ -1620,7 +1683,7 @@
         "pkg:golang/go.uber.org/automaxprocs@v1.6.0?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/k8s.io/apimachinery@v0.36.0?type=module",
         "pkg:golang/k8s.io/client-go@v0.36.0?type=module",
         "pkg:golang/sigs.k8s.io/yaml@v1.6.0?type=module"
@@ -1671,7 +1734,7 @@
         "pkg:golang/google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module"
       ]
     },
@@ -1690,7 +1753,7 @@
         "pkg:golang/google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module"
       ]
     },
@@ -1784,13 +1847,13 @@
         "pkg:golang/golang.org/x/oauth2@v0.36.0?type=module",
         "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
       ]
     },
     {
       "ref": "pkg:golang/github.com/prometheus/client_model@v0.6.2?type=module",
       "dependsOn": [
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
       ]
     },
     {
@@ -1810,7 +1873,7 @@
         "pkg:golang/golang.org/x/oauth2@v0.36.0?type=module",
         "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module"
       ]
     },
@@ -1829,6 +1892,76 @@
     },
     {
       "ref": "pkg:golang/github.com/x448/float16@v0.8.4?type=module"
+    },
+    {
+      "ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-accelerator-service@v0.0.0-20261013081408-03765d169b07?type=module",
+      "dependsOn": [
+        "pkg:golang/github.com/beorn7/perks@v1.0.1?type=module",
+        "pkg:golang/github.com/cespare/xxhash/v2@v2.3.0?type=module",
+        "pkg:golang/github.com/fsnotify/fsnotify@v1.10.1?type=module",
+        "pkg:golang/github.com/fxamacker/cbor/v2@v2.9.0?type=module",
+        "pkg:golang/github.com/go-kratos/kratos/contrib/otel/v3@v3.0.0-20260515082355-1ddb58e407c5?type=module",
+        "pkg:golang/github.com/go-kratos/kratos/v3@v3.0.0?type=module",
+        "pkg:golang/github.com/go-logr/logr@v1.4.4?type=module",
+        "pkg:golang/github.com/go-logr/stdr@v1.2.2?type=module",
+        "pkg:golang/github.com/go-playground/form/v4@v4.3.0?type=module",
+        "pkg:golang/github.com/google/uuid@v1.6.0?type=module",
+        "pkg:golang/github.com/gorilla/mux@v1.8.1?type=module",
+        "pkg:golang/github.com/gorilla/websocket@v1.5.4-0.20250319132907-e064f32e3674?type=module",
+        "pkg:golang/github.com/jackc/pgpassfile@v1.0.0?type=module",
+        "pkg:golang/github.com/jackc/pgservicefile@v0.0.0-20240606120523-5a60cdf6a761?type=module",
+        "pkg:golang/github.com/jackc/pgx/v5@v5.10.0?type=module",
+        "pkg:golang/github.com/jackc/puddle/v2@v2.2.2?type=module",
+        "pkg:golang/github.com/munnerz/goautoneg@v0.0.0-20191010083416-a7dc8b61c822?type=module",
+        "pkg:golang/github.com/prometheus/client_golang@v1.24.1?type=module",
+        "pkg:golang/github.com/prometheus/client_model@v0.6.2?type=module",
+        "pkg:golang/github.com/prometheus/common@v0.70.1?type=module",
+        "pkg:golang/github.com/prometheus/otlptranslator@v1.0.0?type=module",
+        "pkg:golang/github.com/prometheus/procfs@v0.21.1?type=module",
+        "pkg:golang/github.com/x448/float16@v0.8.4?type=module",
+        "pkg:golang/go.opentelemetry.io/auto/sdk@v1.2.1?type=module",
+        "pkg:golang/go.opentelemetry.io/otel@v1.45.0?type=module",
+        "pkg:golang/go.opentelemetry.io/otel/exporters/prometheus@v0.66.0?type=module",
+        "pkg:golang/go.opentelemetry.io/otel/metric@v1.45.0?type=module",
+        "pkg:golang/go.opentelemetry.io/otel/sdk@v1.45.0?type=module",
+        "pkg:golang/go.opentelemetry.io/otel/sdk/metric@v1.45.0?type=module",
+        "pkg:golang/go.opentelemetry.io/otel/trace@v1.45.0?type=module",
+        "pkg:golang/go.uber.org/automaxprocs@v1.6.0?type=module",
+        "pkg:golang/golang.org/x/net@v0.60.0?type=module",
+        "pkg:golang/golang.org/x/sync@v0.23.0?type=module",
+        "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
+        "pkg:golang/golang.org/x/text@v0.42.0?type=module",
+        "pkg:golang/google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
+        "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
+        "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
+        "pkg:golang/gopkg.in/inf.v0@v0.9.1?type=module",
+        "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module",
+        "pkg:golang/k8s.io/apimachinery@v0.36.0?type=module",
+        "pkg:golang/sigs.k8s.io/json@v0.0.0-20250730193827-2d320260d730?type=module"
+      ]
+    },
+    {
+      "ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-governance/api/quota@v0.0.0-20261009133356-1ab461604c74?type=module",
+      "dependsOn": [
+        "pkg:golang/golang.org/x/net@v0.60.0?type=module",
+        "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
+        "pkg:golang/golang.org/x/text@v0.42.0?type=module",
+        "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
+        "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
+      ]
+    },
+    {
+      "ref": "pkg:golang/github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal@v0.0.0-20261013075021-0937f5aa9c6c?type=module",
+      "dependsOn": [
+        "pkg:golang/golang.org/x/net@v0.60.0?type=module",
+        "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
+        "pkg:golang/golang.org/x/text@v0.42.0?type=module",
+        "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
+        "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
+      ]
     },
     {
       "ref": "pkg:golang/go.opentelemetry.io/auto/sdk@v1.2.1?type=module",
@@ -1878,7 +2011,7 @@
         "pkg:golang/go.opentelemetry.io/otel/trace@v1.45.0?type=module",
         "pkg:golang/go.yaml.in/yaml/v2@v2.4.4?type=module",
         "pkg:golang/golang.org/x/sys@v0.48.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module"
       ]
     },
@@ -1993,13 +2126,13 @@
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/grpc@v1.83.2?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
       ]
     },
     {
       "ref": "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
       "dependsOn": [
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
       ]
     },
     {
@@ -2022,11 +2155,11 @@
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/api@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
         "pkg:golang/google.golang.org/genproto/googleapis/rpc@v0.0.0-20260526163538-3dc84a4a5aaa?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
       ]
     },
     {
-      "ref": "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module"
+      "ref": "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module"
     },
     {
       "ref": "pkg:golang/gopkg.in/inf.v0@v0.9.1?type=module"
@@ -2051,7 +2184,7 @@
         "pkg:golang/golang.org/x/net@v0.60.0?type=module",
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
         "pkg:golang/golang.org/x/time@v0.14.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/inf.v0@v0.9.1?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module",
         "pkg:golang/k8s.io/klog/v2@v2.140.0?type=module",
@@ -2085,7 +2218,7 @@
         "pkg:golang/golang.org/x/term@v0.46.0?type=module",
         "pkg:golang/golang.org/x/text@v0.42.0?type=module",
         "pkg:golang/golang.org/x/time@v0.14.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/inf.v0@v0.9.1?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module",
         "pkg:golang/k8s.io/apimachinery@v0.36.0?type=module",
@@ -2118,7 +2251,7 @@
         "pkg:golang/github.com/spf13/pflag@v1.0.9?type=module",
         "pkg:golang/go.yaml.in/yaml/v2@v2.4.4?type=module",
         "pkg:golang/golang.org/x/sync@v0.23.0?type=module",
-        "pkg:golang/google.golang.org/protobuf@v1.36.12-0.20260120151049-f2248ac996af?type=module",
+        "pkg:golang/google.golang.org/protobuf@v1.36.12?type=module",
         "pkg:golang/gopkg.in/yaml.v3@v3.0.1?type=module",
         "pkg:golang/k8s.io/klog/v2@v2.140.0?type=module",
         "pkg:golang/k8s.io/utils@v0.0.0-20260210185600-b8788abfbbc2?type=module",

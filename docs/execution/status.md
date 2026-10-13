@@ -342,6 +342,10 @@ NET-05 验收完成，按用户后续授权发布 Network main，ANI 成果继�
 
 同日另经用户明确授权，已删除旧 UUID 的镜像测试遗留。经盘点/受限备份后删除旧空间 `f66a5727-128d-4d8c-ac86-8cc84c6198ee`、Harbor 空 Project 6 / `t-tenant-a`、Robot 5 及关联凭证/成功 command；Harbor GET=404，四表旧范围均0，保留对象对比一致。Network 管理的同 UUID Namespace 保留。线上 `image_space_one_per_tenant` 唯一索引有效，真实重复插入被23505拒绝并回滚；当前仅一个租户镜像空间和一个平台空间。命令与结果追加于上述操作记录。
 
+### 2026-09-30 节点缓存补充清理（历史记录补录）
+
+2026-09-30T03:47:20Z，按用户再次清理的要求完成[节点缓存补充清理](records/IMAGE-MVP/img-cleanup-20260930T0344Z/README.md)：三节点前次遗漏的 5 个测试仓库镜像引用及 3 个 runtime image-ID 引用已精确删除，CRI/containerd 复查为零，无使用者或测试 sandbox。Fedora 同时确认两个 Namespace、三个 Project、五个 Robot 不存在，无测试 Pod；临时凭证和代理已移除，未执行全局 GC。目录保留当时命令、回执和校验和；该历史记录此前未纳入 main 交付，现补录，不代表当前集群盘点或再次执行清理。
+
 ### 2026-10-08 main 合并授权
 
 用户授权完成[后端交接](records/IMAGE-MVP/HANDOFF-20261008.md)并合并 Resource/Governance review 分支到各自 main。Governance 与当前 ModelDev main 已完成普通 merge；Resource 历史公开哈希误报及新检出的 OpenTelemetry 漏洞已修复。Resource `3d15d09` 的 Fedora make verify/audit、Image PG/恢复/并发/race，Governance `2f8f919` 的跨仓真实 HTTP/JWT/AK/权限均 exit0；Governance 最终 CI 全部成功。命令、完整SHA、失败日志及清理记录见交接。最终 main 合并结果以 [Resource #5](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/5)、[Governance #7](https://github.com/zhangzhe-ctrl/ani-governance/pull/7) 为准；仅文档/SBOM追加通过运行源码一致性关联已验版本。产品 Harbor smoke、IMG-08、IMG-09 仍为 blocked，不新增部署或前端授权。

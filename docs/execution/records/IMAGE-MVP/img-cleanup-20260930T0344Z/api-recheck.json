@@ -1,0 +1,73 @@
+{
+  "cluster_uid": "87ecef8e-ac4e-442b-8e15-5e906263be6b",
+  "checks": [
+    {
+      "kind": "namespace",
+      "name": "imgp-0930-0200-a",
+      "status": 404
+    },
+    {
+      "kind": "namespace",
+      "name": "imgp-0930-0200-b",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "3",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "4",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "5",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "t-imgp-0930-0200-a",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "t-imgp-0930-0200-b",
+      "status": 404
+    },
+    {
+      "kind": "project",
+      "name_or_id": "imgp-0930-0200-platform",
+      "status": 404
+    },
+    {
+      "kind": "robot",
+      "name_or_id": "4",
+      "status": 404
+    },
+    {
+      "kind": "robot",
+      "name_or_id": "5",
+      "status": 404
+    },
+    {
+      "kind": "robot",
+      "name_or_id": "6",
+      "status": 404
+    },
+    {
+      "kind": "robot",
+      "name_or_id": "7",
+      "status": 404
+    },
+    {
+      "kind": "robot",
+      "name_or_id": "8",
+      "status": 404
+    }
+  ],
+  "matching_pods": [],
+  "private_header_removed": true,
+  "finished_utc": "2026-09-30T03:46:25Z"
+}

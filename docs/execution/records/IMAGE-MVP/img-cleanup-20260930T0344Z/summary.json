@@ -1,0 +1,15 @@
+{
+  "result": "pass",
+  "node_cleanup_hosts": [
+    "ani-01",
+    "ani-02",
+    "ani-03"
+  ],
+  "api_recheck_host": "fedora",
+  "removed_project_image_refs": 5,
+  "removed_runtime_image_id_refs": 3,
+  "proxy_forward_closed": true,
+  "transient_credentials_removed": true,
+  "global_gc": false,
+  "finished_utc": "2026-09-30T03:47:20Z"
+}
