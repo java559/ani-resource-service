@@ -1,0 +1,6 @@
+{
+  "notebook": "absent",
+  "statefulset": "absent",
+  "pvc": "absent",
+  "pv": "absent"
+}

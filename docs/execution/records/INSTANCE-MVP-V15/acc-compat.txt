@@ -1,0 +1,29 @@
+127.0.0.1:5432 - accepting connections
+internal/biz/validation.go: 成功
+internal/biz/plan_test.go: 成功
+internal/data/provider/parse.go: 成功
+internal/data/provider/parse_test.go: 成功
+internal/data/provider/kubernetes.go: 成功
+internal/data/provider/provider.go: 成功
+internal/data/provider/replay_test.go: 成功
+=== RUN   TestUNIT01ExactMiBAndPerContainerEncoding
+--- PASS: TestUNIT01ExactMiBAndPerContainerEncoding (0.00s)
+=== RUN   TestUNIT05UnknownFactorAndBaseline
+--- PASS: TestUNIT05UnknownFactorAndBaseline (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-accelerator-service/internal/biz	0.005s
+=== RUN   TestPinnedUpstreamFormats
+--- PASS: TestPinnedUpstreamFormats (0.00s)
+=== RUN   TestRuntimeLimitsAreMiBNotBlocks
+--- PASS: TestRuntimeLimitsAreMiBNotBlocks (0.00s)
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease/v1.12.0
+    replay_test.go:231: listen unix /home/chabking/workspace/ani-resource-service-runs/instance-mvp-v15-20261013/cache/tmp/sock-1788924686/pr.sock: bind: invalid argument
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease/v1.15.2
+    replay_test.go:231: listen unix /home/chabking/workspace/ani-resource-service-runs/instance-mvp-v15-20261013/cache/tmp/sock-2032978068/pr.sock: bind: invalid argument
+--- FAIL: TestProviderControlledSourcesPersistRecoverAndRelease (0.04s)
+    --- FAIL: TestProviderControlledSourcesPersistRecoverAndRelease/v1.12.0 (0.02s)
+    --- FAIL: TestProviderControlledSourcesPersistRecoverAndRelease/v1.15.2 (0.02s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-accelerator-service/internal/data/provider	0.049s
+FAIL

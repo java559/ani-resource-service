@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	instancebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -239,7 +240,8 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "governance scope does not permit this method")
 		}
 		_, imageMethod := imageGovernanceMethods[info.FullMethod]
-		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod {
+		_, instanceMethod := instanceGovernanceMethods[info.FullMethod]
+		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)
@@ -247,6 +249,13 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "governance requests must be proto messages")
 		}
 		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
+		if instanceMethod {
+			fd := r.ProtoReflect().Descriptor().Fields().ByName("tenant_id")
+			if fd == nil || r.ProtoReflect().Get(fd).String() != p.TenantID {
+				return nil, status.Error(codes.PermissionDenied, "instance tenant differs from authenticated scope")
+			}
+			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{TenantID: p.TenantID, Actor: p.Actor}), req)
+		}
 		if platformMethod {
 			ctx = biz.WithEgressCaller(ctx, biz.EgressCaller{PlatformAdministrator: true, Attribution: biz.Attribution{Actor: p.Actor, DirectCaller: p.Workload, CorrelationID: p.RequestID}})
 			return next(ctx, req)

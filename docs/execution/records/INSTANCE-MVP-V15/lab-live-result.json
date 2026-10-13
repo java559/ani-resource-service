@@ -1,0 +1,61 @@
+{
+  "recorded_at": "2026-10-13T02:18:54.301172+00:00",
+  "execution_host": "ssh fedora",
+  "api_server": "https://172.16.101.10:6443",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "gov_tenant_id": 1,
+  "resource_tenant_uuid": "e6b97f49-b696-4cf1-99e1-45fbd3363eae",
+  "business_namespace": "ani-tenant-e6b97f49-b696-4cf1-99e1-45fbd3363eae",
+  "namespace_uid": "f6468af7-627b-4bd3-8434-859f222a4331",
+  "infrastructure_probe_namespace": "ani-tenant-863025ec-a7e4-4a34-834f-d8a4e62b498d",
+  "infrastructure_probe_namespace_uid": "3033935f-4e55-43f1-9bb5-9fd2a1df59f3",
+  "acc_cluster_id": "b90dc57f-81ad-44ed-8088-6d731b63adea",
+  "acc_pool_id": "82485404-6e7f-491e-9d9e-524dbe9a3411",
+  "acc_counts": {
+    "clusters": 1,
+    "pools": 1,
+    "supply_groups": 0,
+    "profiles": 0
+  },
+  "gov_quota_operations": 0,
+  "resource_operations": 0,
+  "actual_tenant_query": {
+    "presets": {
+      "items": []
+    },
+    "instances": {
+      "items": [],
+      "nextAfterId": ""
+    },
+    "gpu_product_flow": "not_verified"
+  },
+  "closed_gpu_create": {
+    "http_status": 400,
+    "reason": "",
+    "quota_operations": 0,
+    "owner_operations": 0,
+    "gpu_product_flow": "not_verified"
+  },
+  "harbor_project": {
+    "ID": "bdc81779-238f-41a8-bbb2-b4c6f26edd47",
+    "ProjectName": "inst-lab-215c5205-9749-42e6-8be0-ca1dab9007ba",
+    "ProjectID": 9,
+    "State": "available"
+  },
+  "gpu_product_flow": "not_verified",
+  "gpu_image_contract": "not_verified",
+  "shared_services_updated": false,
+  "retained_databases": [
+    "lab_gov",
+    "lab_acc",
+    "lab_net",
+    "lab_image",
+    "lab_inst"
+  ],
+  "retained_containers": [
+    "instance-mvp-v15-lab-pg",
+    "instance-mvp-v15-lab-redis"
+  ],
+  "retained_volume": "instance-mvp-v15-lab-pg-data",
+  "sessions": "runtime stopped after acceptance; configuration retained"
+}

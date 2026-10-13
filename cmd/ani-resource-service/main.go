@@ -23,13 +23,14 @@ import (
 
 // Name and Version can be overridden with -ldflags at build time.
 var (
-	Name             = "ani-resource-service"
-	Version          = "dev"
-	flagconf         string
-	flagMigrate      bool
-	flagImageMigrate bool
-	flagNodeFacts    bool
-	id, _            = os.Hostname()
+	Name                = "ani-resource-service"
+	Version             = "dev"
+	flagconf            string
+	flagMigrate         bool
+	flagImageMigrate    bool
+	flagInstanceMigrate bool
+	flagNodeFacts       bool
+	id, _               = os.Hostname()
 )
 
 func init() {
@@ -37,13 +38,25 @@ func init() {
 	flag.BoolVar(&flagNodeFacts, "node-facts", false, "run the separately authorized read-only node facts collector")
 	flag.BoolVar(&flagMigrate, "migrate", false, "apply Network migrations using explicit owner environment")
 	flag.BoolVar(&flagImageMigrate, "image-migrate", false, "apply Image migrations using explicit owner secret file")
+	flag.BoolVar(&flagInstanceMigrate, "instance-migrate", false, "apply Instance migrations using explicit owner secret file")
 }
 
 func main() {
 	flag.Parse()
-	logger := newRuntimeLogger(os.Stdout)
+	logOutput := os.Stdout
+	if imageAdminAction != "" {
+		// Keep the operator's single JSON result readable on stdout.
+		logOutput = os.Stderr
+	}
+	logger := newRuntimeLogger(logOutput)
 	log.SetDefault(logger)
 	execute := func() error {
+		if flagInstanceMigrate {
+			if flagMigrate || flagImageMigrate || flagNodeFacts || imageAdminAction != "" || baseConnectivityAction != "" {
+				return fmt.Errorf("instance migration is exclusive with other command modes")
+			}
+			return runInstanceMigration()
+		}
 		if err := validateImageAdminModes(); err != nil {
 			return err
 		}
@@ -105,6 +118,9 @@ func run(logger *slog.Logger) error {
 	}
 	switch mode := os.Getenv("ANI_NETWORK_MODE"); mode {
 	case "", "full":
+		if os.Getenv("ANI_INSTANCE_CONFIG_FILE") != "" {
+			return fmt.Errorf("enabled instances require the trusted governance composition")
+		}
 	case "vpc-read":
 		return runVPCRead(&bc, logger)
 	case "governance":

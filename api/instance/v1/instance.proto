@@ -1,0 +1,101 @@
+syntax = "proto3";
+package instance.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1;instancev1";
+
+import "accelerator/v1/accelerator.proto";
+import "accelerator/integration/v1/owner_gpu_attachment.proto";
+import "instance/terminal/v1/terminal.proto";
+
+// Trusted Governance listener only. Public HTTP DTOs exclude the frozen fields,
+// namespace, tenant, plan and original charges.
+service InstanceService {
+  rpc ListPresets(ListPresetsRequest) returns (ListPresetsResponse);
+  rpc ResolveCreateSpec(ResolveCreateSpecRequest) returns (CreateBusiness);
+  rpc AcceptCreate(AcceptCreateRequest) returns (OperationResponse);
+  rpc AcceptDelete(AcceptDeleteRequest) returns (OperationResponse);
+  rpc Start(ChangeInstanceRequest) returns (OperationResponse);
+  rpc Stop(ChangeInstanceRequest) returns (OperationResponse);
+  rpc GetInstance(GetInstanceRequest) returns (Instance);
+  rpc ListInstances(ListInstancesRequest) returns (ListInstancesResponse);
+  rpc GetOperation(GetOperationRequest) returns (Operation);
+  rpc ResolveTerminalTarget(ResolveTerminalTargetRequest) returns (instance.terminal.v1.TerminalTarget);
+}
+
+message CreateInstanceData {
+  string name = 1;
+  string image_id = 2;
+  string image_scope = 3;
+  string preset_id = 4;
+  int64 preset_version = 5;
+}
+message Preset {
+  string id = 1;
+  int64 version = 2;
+  string name = 3;
+  string cpu = 4;
+  string memory = 5;
+  accelerator.v1.GpuRequest gpu = 6;
+}
+message ListPresetsRequest { string tenant_id = 1; }
+message ListPresetsResponse { repeated Preset items = 1; }
+message ResolveCreateSpecRequest {
+  string tenant_id = 1;
+  CreateInstanceData data = 2;
+  // Optional trusted environment context, never a public field.
+  string namespace = 3;
+}
+message FrozenSpec {
+  string image_reference = 1;
+  string image_digest = 2;
+  string cpu = 3;
+  string memory = 4;
+  string cluster_id = 5;
+  string namespace = 6;
+  string service_account = 7;
+  string storage_class = 8;
+  string workspace_size = 9;
+  string shell = 10;
+  int64 uid = 11;
+  int64 gid = 12;
+}
+message CreateBusiness {
+  CreateInstanceData data = 1;
+  FrozenSpec spec = 2;
+  accelerator.v1.GpuRequest gpu = 3;
+}
+message OriginalQuotaCharge { string charge_id = 1; string quota_code = 2; int64 original_units = 3; }
+message AcceptCreateRequest {
+  string tenant_id = 1;
+  string operation_id = 2;
+  CreateBusiness business = 3;
+  accelerator.integration.v1.GpuOwnerCreateAttachment gpu_owner_attachment = 4;
+  repeated OriginalQuotaCharge original_charges = 5;
+}
+message AcceptDeleteRequest {
+  string tenant_id = 1;
+  string operation_id = 2;
+  accelerator.integration.v1.GpuOwnerDeleteAttachment gpu_owner_attachment = 3;
+  repeated OriginalQuotaCharge original_charges = 4;
+  int64 expected_version = 5;
+}
+message ChangeInstanceRequest {
+  string tenant_id = 1;
+  string instance_id = 2;
+  string idempotency_key = 3;
+  int64 expected_version = 4;
+}
+message OperationResponse { accelerator.integration.v1.DurableOwnerAck durable_owner_ack = 1; }
+message GetInstanceRequest { string tenant_id = 1; string instance_id = 2; }
+message ListInstancesRequest { string tenant_id = 1; int32 page_size = 2; string after_id = 3; }
+message ListInstancesResponse { repeated Instance items = 1; string next_after_id = 2; }
+// Safe query view; full plans, charges and runtime credentials stay internal.
+message Instance {
+  string id = 1; string name = 2; int64 version = 3;
+  string desired_state = 4; string observed_state = 5; string reason = 6;
+  string image_id = 7; string image_digest = 8; string preset_id = 9; int64 preset_version = 10;
+  string create_operation_id = 11; string last_operation_id = 12;
+  bool compute_cleaned = 13; bool workspace_cleaned = 14; bool quota_returned = 15;
+}
+message GetOperationRequest { string tenant_id = 1; string operation_id = 2; }
+message Operation { string id = 1; string instance_id = 2; string action = 3; int64 intent_version = 4; string state = 5; string reason = 6; }
+message ResolveTerminalTargetRequest { string tenant_id = 1; string instance_id = 2; int64 expected_version = 3; }

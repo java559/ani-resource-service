@@ -1,0 +1,2 @@
+internal/service/instance/service.go: 成功
+Resource empty-catalog composition and actual Governance server compiled.

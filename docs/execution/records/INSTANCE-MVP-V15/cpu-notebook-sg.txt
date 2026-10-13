@@ -1,0 +1,9 @@
+cmd/session-gateway/main.go: 成功
+cmd/session-gateway/instance_tls.go: 成功
+internal/runtime/kubernetes/cpu_live_test.go: 成功
+=== RUN   TestNotebookCPUInfrastructureLive
+I1013 09:12:26.767854   72769 warnings.go:110] "Warning: unknown field \"spec.template.metadata\""
+    cpu_live_test.go:289: actual CPU Notebook/CSI/SG exec: two native Stop/Start cycles preserved original PVC and file; final Notebook/PVC/PV absent; GPU product flow not_verified
+--- PASS: TestNotebookCPUInfrastructureLive (125.21s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/runtime/kubernetes	125.227s

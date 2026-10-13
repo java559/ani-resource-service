@@ -1,0 +1,8 @@
+Registered candidate image ID img_56d9b16341034d95b3015d51ec72c448 ; no GPU capability declared.
+internal/data/instance/image_live_test.go: 成功
+=== RUN   TestRuntimeImagePrivateHarborPullLive
+    image_live_test.go:197: actual private image start timeout
+--- FAIL: TestRuntimeImagePrivateHarborPullLive (120.87s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance	120.887s
+FAIL

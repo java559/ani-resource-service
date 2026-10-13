@@ -1,0 +1,19 @@
+internal/data/instance/governance_fixture_test.go: 成功
+127.0.0.1:5432 - accepting connections
+=== RUN   TestInstancePublicHTTPPersistentIntakeAndCommands
+    instance_joint_test.go:222: HTTP POST /api/v1/instances -> 401
+    instance_joint_test.go:224: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:233: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:238: HTTP GET /api/v1/instances/ed923943-98a6-4a34-856d-b9f451fd4370 -> 200
+    instance_joint_test.go:248: HTTP GET /api/v1/instances -> 200
+    instance_joint_test.go:251: HTTP GET /api/v1/instance-operations/d9adfda0-dec1-4388-9455-f1b8a11c1daf -> 200
+    instance_joint_test.go:254: HTTP GET /api/v1/instance-presets -> 200
+    instance_joint_test.go:259: HTTP POST /api/v1/instances/ed923943-98a6-4a34-856d-b9f451fd4370:stop -> 202
+    instance_joint_test.go:259: HTTP POST /api/v1/instances/ed923943-98a6-4a34-856d-b9f451fd4370:start -> 202
+    instance_joint_test.go:276: HTTP GET /api/v1/instances/ed923943-98a6-4a34-856d-b9f451fd4370 -> 200
+    instance_joint_test.go:280: HTTP DELETE /api/v1/instances/ed923943-98a6-4a34-856d-b9f451fd4370 -> 202
+    instance_joint_test.go:310: HTTP POST /api/v1/instances -> 403
+    instance_resource.go:42: Resource durable intake subprocess exit=0; isolated PG cleaned
+--- PASS: TestInstancePublicHTTPPersistentIntakeAndCommands (44.98s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/server	45.525s

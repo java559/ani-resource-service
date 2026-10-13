@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+cd "$(dirname "$0")/.."
+readonly image='docker.io/library/postgres@sha256:4ef4dbc939d61acea57712655ddb4b4ab27419c913f94cca0cd57cb3ea3c2280'
+private=$(mktemp -d "${TMPDIR:?task-owned TMPDIR}/instance-pg.XXXXXX")
+container=''
+cleanup() {
+ local rc=$?
+ trap - EXIT
+ if [[ -n $container ]]; then
+  [[ $(docker inspect --format '{{index .Config.Labels "ani.instance.fixture"}}' "$container") == "$private" ]] || exit 1
+  docker rm -f -v "$container" >/dev/null || exit 1
+ fi
+ rm -rf -- "$private"
+ exit "$rc"
+}
+trap cleanup EXIT
+umask 077
+python3 - "$private" <<'PY'
+from pathlib import Path
+import secrets,sys
+Path(sys.argv[1],'postgres.env').write_text('POSTGRES_PASSWORD='+secrets.token_hex(32)+'\n')
+PY
+docker image inspect "$image" >/dev/null 2>&1 || docker pull "$image"
+container=$(docker run -d --label "ani.instance.fixture=$private" --memory=768m --memory-swap=768m --cpus=1 \
+ --mount type=tmpfs,destination=/var/lib/postgresql --env-file "$private/postgres.env" -p 127.0.0.1::5432 "$image")
+for attempt in $(seq 1 45); do
+ if docker exec "$container" pg_isready -h 127.0.0.1 -U postgres >/dev/null 2>&1; then break; fi
+ sleep 1
+done
+docker exec "$container" pg_isready -h 127.0.0.1 -U postgres
+port=$(docker port "$container" 5432/tcp | awk -F: '$1 == "127.0.0.1" {print $2}')
+[[ $port =~ ^[0-9]+$ ]]
+python3 - "$private" "$port" <<'PY'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1]);password=(p/'postgres.env').read_text().strip().split('=',1)[1]
+(p/'admin.dsn').write_text('postgres://postgres:'+password+'@127.0.0.1:'+sys.argv[2]+'/postgres?sslmode=disable')
+PY
+export INSTANCE_TEST_ADMIN_DSN_FILE="$private/admin.dsn"
+go test -tags=instanceintegration -count=1 -timeout=5m ./internal/data/instance -run "${INSTANCE_TEST_RUN:-^TestInstance(PersistentLifecycle|DeleteFirstAndTenant|ReleaseRetryAndTerminalRevocation|SupersededMutationAndLeaseFencing)$}"

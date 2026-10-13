@@ -8,8 +8,10 @@ import (
 	"time"
 
 	kratos "github.com/go-kratos/kratos/v3"
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/uuid"
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
+	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
@@ -35,6 +37,11 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 		return err
 	}
 	defer images.Close()
+	instances, err := openInstance(context.Background(), bc.Network, images, logger)
+	if err != nil {
+		return err
+	}
+	defer instances.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	repository, err := data.OpenPostgres(ctx, bc.Network.DatabaseDsn, data.Placement{ClusterID: bc.Network.ClusterId, NamespacePrefix: bc.Network.NamespacePrefix})
 	cancel()
@@ -101,10 +108,17 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(gs, images.tenant)
 	}
+	if instances != nil {
+		instancev1.RegisterInstanceServiceServer(gs, instances.service)
+	}
 	configured = true
 	admin := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
+	servers := []transport.Server{gs, admin, execution}
+	if instances != nil {
+		servers = append(servers, instances.execution, instances.terminal)
+	}
 	return kratos.New(kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Logger(logger),
-		kratos.Server(gs, admin, execution),
+		kratos.Server(servers...),
 		kratos.AfterStart(func(context.Context) error { readiness.Set(true); return nil }),
 		kratos.BeforeStop(func(context.Context) error { readiness.Set(false); return nil }),
 		kratos.AfterStop(func(ctx context.Context) error {

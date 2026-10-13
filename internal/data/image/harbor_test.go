@@ -250,6 +250,18 @@ func TestHarborArtifactDigestAndPlatforms(t *testing.T) {
 	}{
 		{"manifest", func(m map[string]harborArtifact) { m[root] = m[child]; a := m[root]; a.Digest = root; m[root] = a }, true},
 		{"index", func(map[string]harborArtifact) {}, true},
+		{"legacy empty config type", func(m map[string]harborArtifact) { a := m[child]; a.ArtifactType = ""; m[child] = a }, true},
+		{"docker image config type", func(m map[string]harborArtifact) {
+			a := m[child]
+			a.ManifestMediaType = dockerManifest
+			a.ArtifactType = "application/vnd.docker.container.image.v1+json"
+			m[child] = a
+		}, true},
+		{"config type mismatch", func(m map[string]harborArtifact) {
+			a := m[child]
+			a.ArtifactType = "application/vnd.docker.container.image.v1+json"
+			m[child] = a
+		}, false},
 		{"attestation ignored", func(m map[string]harborArtifact) {
 			a := m[root]
 			a.References = append(a.References, harborReference{Digest: digest("c"), Annotations: map[string]string{"vnd.docker.reference.type": "attestation-manifest"}})
@@ -284,7 +296,7 @@ func TestHarborArtifactDigestAndPlatforms(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			leaf := harborArtifact{Digest: child, Type: "IMAGE", ManifestMediaType: ociManifest, RepositoryName: "t-alpha/repo", Extra: harborPlatform{OS: "linux", Architecture: "amd64"}}
+			leaf := harborArtifact{Digest: child, Type: "IMAGE", ManifestMediaType: ociManifest, ArtifactType: "application/vnd.oci.image.config.v1+json", RepositoryName: "t-alpha/repo", Extra: harborPlatform{OS: "linux", Architecture: "amd64"}}
 			index := harborArtifact{Digest: root, Type: "IMAGE", ManifestMediaType: ociIndex, RepositoryName: "t-alpha/repo", References: []harborReference{{Digest: child, Platform: leaf.Extra}}}
 			objects := map[string]harborArtifact{root: index, child: leaf}
 			tc.mutate(objects)

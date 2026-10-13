@@ -1,0 +1,13 @@
+{
+  "type": "IMAGE",
+  "manifest_media_type": "application/vnd.oci.image.manifest.v1+json",
+  "artifact_type": "application/vnd.oci.image.config.v1+json",
+  "repository_name": "inst-lab-215c5205-9749-42e6-8be0-ca1dab9007ba/workspace-candidate",
+  "references": null,
+  "extra_platform": {
+    "os": "linux",
+    "architecture": "amd64",
+    "variant": null
+  },
+  "harbor_version": "v2.15.2-a97e7b83"
+}

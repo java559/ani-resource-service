@@ -1,0 +1,14 @@
+{
+  "namespace": "ani-tenant-e6b97f49-b696-4cf1-99e1-45fbd3363eae",
+  "namespace_uid": "f6468af7-627b-4bd3-8434-859f222a4331",
+  "tenant_id": "e6b97f49-b696-4cf1-99e1-45fbd3363eae",
+  "service_accounts": [
+    "workload",
+    "session-runtime"
+  ],
+  "role": "session-runtime",
+  "role_binding": "session-runtime",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "image": "172.16.101.10:5000/library/busybox@sha256:7a3ebe5bfd1a4a19797d20b0c0bb39d44393e9a03fd852c0865b0f540d868df0",
+  "runtime_token_expiration": "2026-10-13T04:08:09Z"
+}

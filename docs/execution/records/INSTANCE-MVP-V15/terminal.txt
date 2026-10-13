@@ -1,0 +1,23 @@
+app/admin/service/internal/server/instance_joint_test.go: 成功
+127.0.0.1:5432 - accepting connections
+=== RUN   TestInstancePublicHTTPPersistentIntakeAndCommands
+    instance_joint_test.go:232: HTTP POST /api/v1/instances -> 401
+    instance_joint_test.go:234: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:243: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:248: HTTP GET /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714 -> 200
+    instance_joint_test.go:258: HTTP GET /api/v1/instances -> 200
+    instance_joint_test.go:261: HTTP GET /api/v1/instance-operations/9efec10e-8ebf-404d-8f36-2f9b5525324a -> 200
+    instance_joint_test.go:264: HTTP GET /api/v1/instance-presets -> 200
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714/exec -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714/exec -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714/exec -> 202
+    instance_joint_test.go:269: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714:stop -> 202
+    instance_joint_test.go:269: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714:start -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714/exec -> 202
+    instance_joint_test.go:357: HTTP GET /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714 -> 200
+    instance_joint_test.go:361: HTTP DELETE /api/v1/instances/b86d7b08-21b4-468f-ac96-1f996752a714 -> 202
+    instance_joint_test.go:391: HTTP POST /api/v1/instances -> 403
+    instance_resource.go:44: Resource durable intake subprocess exit=0; isolated PG cleaned
+--- PASS: TestInstancePublicHTTPPersistentIntakeAndCommands (45.00s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/server	45.542s

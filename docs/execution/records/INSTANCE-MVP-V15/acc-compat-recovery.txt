@@ -1,0 +1,18 @@
+127.0.0.1:5432 - accepting connections
+internal/biz/validation.go: 成功
+internal/biz/plan_test.go: 成功
+internal/data/provider/parse.go: 成功
+internal/data/provider/parse_test.go: 成功
+internal/data/provider/kubernetes.go: 成功
+internal/data/provider/provider.go: 成功
+internal/data/provider/replay_test.go: 成功
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease/v1.12.0
+    replay_test.go:390: OBS-01..06 CAP-01..04 REL-01..04: production HTTP/TLS + Unix gRPC readers, controlled source replay + real PG; no actual GPU sample
+=== RUN   TestProviderControlledSourcesPersistRecoverAndRelease/v1.15.2
+    replay_test.go:390: OBS-01..06 CAP-01..04 REL-01..04: production HTTP/TLS + Unix gRPC readers, controlled source replay + real PG; no actual GPU sample
+--- PASS: TestProviderControlledSourcesPersistRecoverAndRelease (0.45s)
+    --- PASS: TestProviderControlledSourcesPersistRecoverAndRelease/v1.12.0 (0.20s)
+    --- PASS: TestProviderControlledSourcesPersistRecoverAndRelease/v1.15.2 (0.25s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-accelerator-service/internal/data/provider	0.461s

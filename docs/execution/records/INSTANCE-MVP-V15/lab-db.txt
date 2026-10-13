@@ -1,0 +1,4 @@
+/var/run/postgresql:5432 - accepting connections
+PASS: initial seed and administrator committed
+PASS: platform administrator and required API grants are present
+Owned Gov/Acc/Network/Image/Instance databases migrated; official Gov bootstrap/check completed. No product operations or GPU supply injected.

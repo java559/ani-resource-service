@@ -1,0 +1,35 @@
+=== RUN   TestHarborArtifactDigestAndPlatforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/manifest
+    harbor_test.go:319: {  []} UNSUPPORTED_ARTIFACT: artifact has no confirmed runnable image platforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/index
+    harbor_test.go:319: {  []} UNSUPPORTED_ARTIFACT: artifact has no confirmed runnable image platforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/legacy_empty_config_type
+=== RUN   TestHarborArtifactDigestAndPlatforms/docker_image_config_type
+    harbor_test.go:319: {  []} UNSUPPORTED_ARTIFACT: artifact has no confirmed runnable image platforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/config_type_mismatch
+=== RUN   TestHarborArtifactDigestAndPlatforms/attestation_ignored
+    harbor_test.go:319: {  []} UNSUPPORTED_ARTIFACT: artifact has no confirmed runnable image platforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/chart
+=== RUN   TestHarborArtifactDigestAndPlatforms/artifact
+=== RUN   TestHarborArtifactDigestAndPlatforms/unknown
+=== RUN   TestHarborArtifactDigestAndPlatforms/platform_mismatch
+=== RUN   TestHarborArtifactDigestAndPlatforms/descriptor_limit
+=== RUN   TestHarborArtifactDigestAndPlatforms/cycle
+=== RUN   TestHarborArtifactDigestAndPlatforms/depth
+--- FAIL: TestHarborArtifactDigestAndPlatforms (0.10s)
+    --- FAIL: TestHarborArtifactDigestAndPlatforms/manifest (0.04s)
+    --- FAIL: TestHarborArtifactDigestAndPlatforms/index (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/legacy_empty_config_type (0.01s)
+    --- FAIL: TestHarborArtifactDigestAndPlatforms/docker_image_config_type (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/config_type_mismatch (0.01s)
+    --- FAIL: TestHarborArtifactDigestAndPlatforms/attestation_ignored (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/chart (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/artifact (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/unknown (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/platform_mismatch (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/descriptor_limit (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/cycle (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/depth (0.01s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image	0.106s
+FAIL

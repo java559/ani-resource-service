@@ -1,0 +1,14 @@
+{
+  "resource": {
+    "cmd/ani-resource-service/main.go": "50b5c1cac3b7a6c3661e7ee7d983d6871ea6646ae4cca610979eaab6c9ba833c",
+    "internal/service/instance/service.go": "9d37f444d83a17aa779f539cb6a3ed0663f4b8fbaf8c9ddefa5a317b9a5e0fc5",
+    "internal/data/image/harbor_artifact.go": "b9e43d9296dd960c33d04b2517e08a19dbc622322527e9281ff30f16b8e044e2",
+    "internal/data/image/harbor_test.go": "92107e5820d7f04cbc257b5b89d64457860361265024d71130a889ff1e5bfc89",
+    "internal/data/instance/image_live_test.go": "85a91b7f85d5543c77505a80e547bad32bd0e6543ddd58af09bbd06cd9a53ffb",
+    "go.sum": "0eca4c612f158d032bc10516f46b317f6eaad4c408c112bd9dd1ece9641ecf57"
+  },
+  "governance": {
+    "app/admin/service/internal/service/instance_pg_test.go": "51f1f20cff71242ee1925c9d297263562f24f68a8fbca0fe9f92d16d16e3a8bb",
+    "app/admin/service/internal/server/instance_joint_test.go": "94932374d4d89affd43edabab8f47a5352590d043d8ded957c103ade8877ff98"
+  }
+}
