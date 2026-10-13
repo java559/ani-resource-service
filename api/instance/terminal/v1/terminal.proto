@@ -1,0 +1,15 @@
+syntax = "proto3";
+package instance.terminal.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal/v1;terminalv1";
+
+// SG receives only this protobuf/gRPC contract, without Kubernetes drivers.
+service InstanceTerminalService {
+  rpc ValidateTerminalTarget(TerminalTarget) returns (TerminalValidation);
+}
+message TerminalTarget {
+ string tenant_id = 1; string instance_id = 2; int64 version = 3;
+ string cluster_id = 4; string namespace = 5;
+ string notebook_name = 6; string notebook_uid = 7;
+ string pod_name = 8; string pod_uid = 9; string container_name = 10; string shell = 11;
+}
+message TerminalValidation { bool valid = 1; }
