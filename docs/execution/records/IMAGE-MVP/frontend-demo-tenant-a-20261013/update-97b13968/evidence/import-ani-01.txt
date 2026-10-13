@@ -1,0 +1,8 @@
+localhost/ani resource@sha256:3467b51cbb	saved
+application/vnd.oci.image.index.v1+json sha256:3467b51cbb474f89e9f178796cd3f11a9078375dbea32390593b567433058a16
+Importing	elapsed: 0.3 s	total:   0.0 B	(0.0 B/s)
+localhost/ani resource@sha256:3467b51cbb	saved
+localhost/ani resource:97b13968d156 2026	saved
+application/vnd.oci.image.index.v1+json sha256:3467b51cbb474f89e9f178796cd3f11a9078375dbea32390593b567433058a16
+application/vnd.oci.image.manifest.v1+json sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1
+Importing	elapsed: 0.3 s	total:   0.0 B	(0.0 B/s)

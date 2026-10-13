@@ -1,0 +1,226 @@
+{
+  "spaces": [
+    {
+      "state": "available",
+      "reason": "",
+      "version": 3,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "tenant_id": null,
+      "created_at": "2026-10-09T03:34:55.759138+00:00",
+      "updated_at": "2026-10-09T03:36:58.130037+00:00",
+      "owner_scope": "platform",
+      "project_name": "ani-platform-images",
+      "installation_id": "497fdb5a-1395-416d-8e26-35c21e8d5893",
+      "harbor_project_id": 5,
+      "registry_authority": "172.16.101.10:30003"
+    },
+    {
+      "state": "available",
+      "reason": "",
+      "version": 3,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "created_at": "2026-10-13T07:41:45.02385+00:00",
+      "updated_at": "2026-10-13T07:41:49.58779+00:00",
+      "owner_scope": "tenant",
+      "project_name": "t-tenant-a-demo",
+      "installation_id": "497fdb5a-1395-416d-8e26-35c21e8d5893",
+      "harbor_project_id": 11,
+      "registry_authority": "172.16.101.10:30003"
+    }
+  ],
+  "credentials": [
+    {
+      "state": "active",
+      "purpose": "publisher",
+      "version": 2,
+      "robot_id": 7,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "username": "robot$i-e46fade37604c18634daf4829c5da4db70209f85",
+      "tenant_id": null,
+      "expires_at": "2026-11-12T07:36:38+00:00",
+      "generation": 1,
+      "robot_name": "robot$i-e46fade37604c18634daf4829c5da4db70209f85",
+      "owner_scope": "platform"
+    },
+    {
+      "state": "active",
+      "purpose": "pull",
+      "version": 2,
+      "robot_id": 8,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "username": "robot$i-92ef51ce08992b84cbeb789429bf7dc3606dc673",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "expires_at": "2027-10-13T07:41:47+00:00",
+      "generation": 1,
+      "robot_name": "robot$i-92ef51ce08992b84cbeb789429bf7dc3606dc673",
+      "owner_scope": "tenant"
+    },
+    {
+      "state": "active",
+      "purpose": "publisher",
+      "version": 3,
+      "robot_id": 10,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "username": "robot$i-1c0b266a5ea4c638cee74d546e3486ccf758ebbc",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "expires_at": "2026-11-12T08:02:20+00:00",
+      "generation": 2,
+      "robot_name": "robot$i-1c0b266a5ea4c638cee74d546e3486ccf758ebbc",
+      "owner_scope": "tenant"
+    }
+  ],
+  "registrations": [
+    {
+      "digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+      "version": 1,
+      "image_id": "img_b677b416424740a7aef2988bbfe757a5",
+      "purposes": [
+        "container"
+      ],
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "platforms": [
+        {
+          "OS": "linux",
+          "Variant": "",
+          "Architecture": "amd64"
+        }
+      ],
+      "tenant_id": null,
+      "created_at": "2026-10-13T07:50:41.28754+00:00",
+      "created_by": "operator-image-demo-20261013",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "repository": "demo-busybox",
+      "updated_at": "2026-10-13T07:50:41.28754+00:00",
+      "updated_by": "operator-image-demo-20261013",
+      "accelerator": "none",
+      "description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+      "owner_scope": "platform",
+      "display_name": "BusyBox 1.37.0 · 平台演示",
+      "unregistered_at": null,
+      "source_reference": "172.16.101.10:30003/ani-platform-images/demo-busybox:v20261013"
+    },
+    {
+      "digest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+      "version": 1,
+      "image_id": "img_12a31f01cacc4ba59fa3cfb2c7f16223",
+      "purposes": [
+        "container"
+      ],
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "platforms": [
+        {
+          "OS": "linux",
+          "Variant": "",
+          "Architecture": "amd64"
+        }
+      ],
+      "tenant_id": null,
+      "created_at": "2026-10-13T07:50:42.274388+00:00",
+      "created_by": "operator-image-demo-20261013",
+      "media_type": "application/vnd.oci.image.manifest.v1+json",
+      "repository": "demo-nginx",
+      "updated_at": "2026-10-13T07:50:42.274388+00:00",
+      "updated_by": "operator-image-demo-20261013",
+      "accelerator": "none",
+      "description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+      "owner_scope": "platform",
+      "display_name": "Nginx 1.28 Alpine · 平台演示",
+      "unregistered_at": null,
+      "source_reference": "172.16.101.10:30003/ani-platform-images/demo-nginx:v20261013"
+    }
+  ],
+  "commands": [
+    {
+      "kind": "enable_space",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 4,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "tenant_id": null,
+      "command_id": "7b10b285-1bff-468c-9a89-cab6551a66da"
+    },
+    {
+      "kind": "issue_publisher",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 6,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "tenant_id": null,
+      "command_id": "19d94111-3d90-4b23-bd52-345b7eb94299"
+    },
+    {
+      "kind": "enable_space",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 8,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "command_id": "578043da-71b3-444c-924b-e56b490c993c"
+    },
+    {
+      "kind": "issue_publisher",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 6,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "command_id": "54f7adeb-46ee-4114-bee8-9514607b9f02"
+    },
+    {
+      "kind": "register_image",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 2,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "tenant_id": null,
+      "command_id": "f0e9d016-55fc-4872-8292-01439ec25ca4"
+    },
+    {
+      "kind": "register_image",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 2,
+      "space_id": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+      "tenant_id": null,
+      "command_id": "093c6773-e764-4ce0-94ec-f9073097a4dd"
+    },
+    {
+      "kind": "reset_publisher",
+      "phase": "completed",
+      "state": "succeeded",
+      "version": 6,
+      "space_id": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+      "tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+      "command_id": "a5e24e67-aaf5-4ecc-b0f5-c681f5396a3c"
+    }
+  ],
+  "tenants": [
+    {
+      "id": 1,
+      "code": "tenant-a",
+      "status": "ON",
+      "resource_tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70"
+    },
+    {
+      "id": 2,
+      "code": "tenant-b",
+      "status": "ON",
+      "resource_tenant_id": "3d073e17-11b1-4a43-b9f7-a5f26d14b73b"
+    }
+  ],
+  "old_network_namespace": {
+    "creationTimestamp": "2026-10-09T04:51:26Z",
+    "labels": {
+      "kubernetes.io/metadata.name": "tenant-08b021f2-f921-4521-b39b-5265ec81f00f",
+      "network.ani.io/managed-by": "ani-network-service",
+      "network.ani.io/tenant-id": "08b021f2-f921-4521-b39b-5265ec81f00f"
+    },
+    "name": "tenant-08b021f2-f921-4521-b39b-5265ec81f00f",
+    "resourceVersion": "3123231",
+    "uid": "9977a080-0abf-4af7-93dd-6e9ff97033db"
+  },
+  "resource_deployment_images": [
+    "localhost/ani-resource:a57b6760bf2d-20261012@sha256:d69852dfa4ed0cb895ff8750ac8ff63dd7fbf067e8e58cae4179134b96f1c1b3"
+  ]
+}

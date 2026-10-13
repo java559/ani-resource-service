@@ -1,0 +1,26 @@
+{
+  "image_id": "img_5eb2226977134c09a330ad329fb32d9f",
+  "scope": "tenant",
+  "spaceId": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+  "displayName": "BusyBox 1.37.0 · 租户演示",
+  "description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+  "repository": "demo-busybox",
+  "sourceReference": "172.16.101.10:30003/t-tenant-a-demo/demo-busybox:v20261013",
+  "digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "resolvedReference": "172.16.101.10:30003/t-tenant-a-demo/demo-busybox@sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "platforms": [
+    {
+      "os": "linux",
+      "architecture": "amd64",
+      "variant": ""
+    }
+  ],
+  "purposes": [
+    "container"
+  ],
+  "accelerator": "none",
+  "version": "1",
+  "createdAt": "2026-10-13T09:50:38.709665Z",
+  "updatedAt": "2026-10-13T09:50:38.709665Z",
+  "unregisteredAt": null
+}

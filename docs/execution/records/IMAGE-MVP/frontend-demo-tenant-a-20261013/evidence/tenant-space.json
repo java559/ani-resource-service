@@ -1,0 +1,11 @@
+{
+  "spaceId": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+  "projectName": "t-tenant-a-demo",
+  "registryAuthority": "172.16.101.10:30003",
+  "state": "available",
+  "reason": "",
+  "version": "3",
+  "pullCredentialGeneration": "1",
+  "createdAt": "2026-10-13T07:41:45.023850Z",
+  "updatedAt": "2026-10-13T07:41:49.587790Z"
+}

@@ -1,0 +1,22 @@
+{
+  "source": "docker.io/library/busybox:1.37.0",
+  "source_index_digest": "sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e",
+  "selected_digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "platform": {
+    "os": "linux",
+    "architecture": "amd64"
+  },
+  "fixed_source": "docker.io/library/busybox@sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "local_directory": "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-busybox",
+  "copied_at": "2026-10-13T07:38:19.268370+00:00",
+  "started_at": "2026-10-13T07:38:07.476276+00:00",
+  "command": [
+    "skopeo",
+    "copy",
+    "--preserve-digests",
+    "docker://docker.io/library/busybox@sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+    "dir:/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-busybox"
+  ],
+  "exit": 0,
+  "tag": "v20261013"
+}

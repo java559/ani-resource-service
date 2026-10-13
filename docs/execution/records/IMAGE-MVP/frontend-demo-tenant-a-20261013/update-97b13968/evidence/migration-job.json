@@ -1,0 +1,73 @@
+{
+  "apiVersion": "batch/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "resource-migrate-image-20261013-97b13968",
+    "namespace": "ani-system",
+    "labels": {
+      "ani.io/deployment-run": "image-update-20261013"
+    }
+  },
+  "spec": {
+    "backoffLimit": 0,
+    "activeDeadlineSeconds": 120,
+    "template": {
+      "spec": {
+        "restartPolicy": "Never",
+        "automountServiceAccountToken": false,
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 65532,
+          "runAsGroup": 65532,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "migrate",
+            "image": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+            "imagePullPolicy": "IfNotPresent",
+            "args": [
+              "-migrate"
+            ],
+            "env": [
+              {
+                "name": "ANI_NETWORK_MIGRATION_DSN",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "resource-network-owner",
+                    "key": "dsn"
+                  }
+                }
+              },
+              {
+                "name": "ANI_NETWORK_RUNTIME_ROLE",
+                "value": "ani_resource_network_runtime"
+              }
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              },
+              "limits": {
+                "cpu": "500m",
+                "memory": "256Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              },
+              "readOnlyRootFilesystem": true
+            }
+          }
+        ]
+      }
+    }
+  }
+}

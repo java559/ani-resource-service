@@ -1,0 +1,105 @@
+{
+  "scope": "tenant",
+  "reference": "172.16.101.10:30003/t-tenant-a-demo/demo-nginx:v20261013",
+  "digest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+  "started_at": "2026-10-13T07:44:17.954313+00:00",
+  "finished_at": "2026-10-13T07:44:22.286697+00:00",
+  "command": [
+    "skopeo",
+    "copy",
+    "--preserve-digests",
+    "--dest-authfile",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/tenant-auth.json",
+    "--dest-cert-dir",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/registry-cert",
+    "dir:/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-nginx",
+    "docker://172.16.101.10:30003/t-tenant-a-demo/demo-nginx:v20261013"
+  ],
+  "exit": 0,
+  "harbor_artifact": {
+    "accessories": null,
+    "addition_links": {
+      "build_history": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/t-tenant-a-demo/repositories/demo-nginx/artifacts/sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3/additions/build_history"
+      },
+      "sboms": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/t-tenant-a-demo/repositories/demo-nginx/artifacts//additions/sbom"
+      },
+      "vulnerabilities": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/t-tenant-a-demo/repositories/demo-nginx/artifacts/sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3/additions/vulnerabilities"
+      }
+    },
+    "annotations": {
+      "com.docker.official-images.bashbrew.arch": "amd64",
+      "org.opencontainers.image.base.digest": "sha256:6ee8a60426eecd547e15e956742947935ccc66f39811c6ab161d98c6ba6ac148",
+      "org.opencontainers.image.base.name": "nginx:1.28.3-alpine-slim",
+      "org.opencontainers.image.created": "2026-03-24T23:11:09Z",
+      "org.opencontainers.image.revision": "30c9ebf5aba124ca7bd79f97dd7c825c113ed864",
+      "org.opencontainers.image.source": "https://github.com/nginx/docker-nginx.git#30c9ebf5aba124ca7bd79f97dd7c825c113ed864:stable/alpine",
+      "org.opencontainers.image.url": "https://hub.docker.com/_/nginx",
+      "org.opencontainers.image.version": "1.28.3-alpine"
+    },
+    "artifact_type": "application/vnd.oci.image.config.v1+json",
+    "digest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+    "extra_attrs": {
+      "architecture": "amd64",
+      "author": "NGINX Docker Maintainers <docker-maint@nginx.com>",
+      "config": {
+        "Cmd": [
+          "nginx",
+          "-g",
+          "daemon off;"
+        ],
+        "Entrypoint": [
+          "/docker-entrypoint.sh"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NGINX_VERSION=1.28.3",
+          "PKG_RELEASE=1",
+          "DYNPKG_RELEASE=1",
+          "NJS_VERSION=0.9.6",
+          "NJS_RELEASE=1",
+          "ACME_VERSION=0.3.1"
+        ],
+        "ExposedPorts": {
+          "80/tcp": {}
+        },
+        "Labels": {
+          "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+        },
+        "StopSignal": "SIGQUIT",
+        "WorkingDir": "/"
+      },
+      "created": "2026-03-24T23:11:15.718500787Z",
+      "os": "linux"
+    },
+    "icon": "sha256:0048162a053eef4d4ce3fe7518615bef084403614f8bca43b40ae2e762e11e06",
+    "id": 29,
+    "labels": null,
+    "manifest_media_type": "application/vnd.oci.image.manifest.v1+json",
+    "media_type": "application/vnd.oci.image.config.v1+json",
+    "project_id": 11,
+    "pull_time": "0001-01-01T00:00:00.000Z",
+    "push_time": "2026-10-13T07:44:14.331Z",
+    "references": null,
+    "repository_id": 27,
+    "repository_name": "t-tenant-a-demo/demo-nginx",
+    "size": 25965725,
+    "tags": [
+      {
+        "artifact_id": 29,
+        "id": 30,
+        "immutable": false,
+        "name": "v20261013",
+        "pull_time": "0001-01-01T00:00:00.000Z",
+        "push_time": "2026-10-13T07:44:14.506Z",
+        "repository_id": 27
+      }
+    ],
+    "type": "IMAGE"
+  }
+}

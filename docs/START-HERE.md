@@ -83,6 +83,7 @@ NET-05A 的观察、时效、调度与增量验收统一见[持续观察规格](
 
 ## Image MVP
 
+- [2026-10-13 tenant-a 前端演示手动操作](execution/records/IMAGE-MVP/frontend-demo-tenant-a-20261013/README.md)：真实租户空间、两类镜像推送/登记和恢复记录。
 - [2026-10-08 后端交接](execution/records/IMAGE-MVP/HANDOFF-20261008.md)：业务主链断点、代码入口、验证范围与后续接入条件。
 - [规格](specs/image-mvp.md)、[API](specs/image-api.md)、[数据](specs/image-data.md)、[方法](specs/image-methods.md)、[验收](specs/image-acceptance.md)
 - [逐批计划](plans/image-mvp.md)、[执行授权](plans/image-mvp-goal.md)、[来源](plans/image-mvp-sources.md)、[设计包](plans/image-mvp-package.md)

@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-10-13T10:22:43.175161+00:00",
+  "execution_host": "fedora",
+  "source_base": "97b13968d156d65fe492cb583ec9920d21d0e57a",
+  "validated_tree": "faed20301e4153016fcd81815d183d0749addd42",
+  "run_directory": "/home/chabking/ani-image-mvp-runs/publish-20261013",
+  "commands_script": "verify-v3.sh",
+  "go_version": "1.26.9",
+  "buf_version": "1.60.0",
+  "sqlc_version": "1.31.1",
+  "go_flags": "-p=2",
+  "temporary_directory": "task-owned short /tmp/ip.*",
+  "make_verify": "pass",
+  "gitleaks_directory_scan": "pass, no leaks found",
+  "archive_syntax_and_links": "pass",
+  "additional_code_change": {
+    "file": "buf.yaml",
+    "before": "instance",
+    "after": "api/instance",
+    "reason": "Buf v2 excludes must be relative to the workspace"
+  },
+  "prior_attempts": [
+    {
+      "result": "fail",
+      "reason": "existing invalid Buf exclude"
+    },
+    {
+      "result": "fail",
+      "reason": "check started before remote source preparation completed"
+    },
+    {
+      "result": "fail",
+      "reason": "verification used trimpath and long TMPDIR, incompatible with path/socket tests"
+    }
+  ],
+  "publication_evidence_added_after_validation": true,
+  "runtime_code_changed_after_validation": false
+}

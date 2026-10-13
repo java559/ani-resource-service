@@ -1,0 +1,32 @@
+{
+  "ID": "img_b677b416424740a7aef2988bbfe757a5",
+  "TenantID": "",
+  "SpaceID": "29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac",
+  "Repository": "demo-busybox",
+  "SourceReference": "172.16.101.10:30003/ani-platform-images/demo-busybox:v20261013",
+  "Digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "ResolvedReference": "172.16.101.10:30003/ani-platform-images/demo-busybox@sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "MediaType": "application/vnd.oci.image.manifest.v1+json",
+  "Scope": "platform",
+  "Metadata": {
+    "DisplayName": "BusyBox 1.37.0 · 平台演示",
+    "Description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+    "Purposes": [
+      "container"
+    ],
+    "Accelerator": "none"
+  },
+  "Platforms": [
+    {
+      "OS": "linux",
+      "Architecture": "amd64",
+      "Variant": ""
+    }
+  ],
+  "Version": 1,
+  "CreatedBy": "operator-image-demo-20261013",
+  "UpdatedBy": "operator-image-demo-20261013",
+  "CreatedAt": "2026-10-13T15:50:41.28754+08:00",
+  "UpdatedAt": "2026-10-13T15:50:41.28754+08:00",
+  "UnregisteredAt": null
+}

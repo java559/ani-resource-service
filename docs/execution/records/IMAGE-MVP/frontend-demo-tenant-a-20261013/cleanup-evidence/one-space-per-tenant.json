@@ -1,0 +1,11 @@
+{
+  "time": "2026-10-13T09:26:34.114000+00:00",
+  "index": "image.image_space_one_per_tenant",
+  "unique_valid_ready": true,
+  "second_space_rejected_by_live_database": true,
+  "sqlstate": "23505",
+  "current_tenant_space_count": 1,
+  "probe_rows_remaining": 0,
+  "probe_sql": "DO $probe$\nDECLARE violated text;\nBEGIN\n  BEGIN\n    INSERT INTO image.spaces(space_id,owner_scope,tenant_id,installation_id,registry_authority,project_name)\n    SELECT gen_random_uuid(),owner_scope,tenant_id,installation_id,registry_authority,'t-limit-probe-20261013'\n    FROM image.spaces WHERE owner_scope='tenant' AND tenant_id='46936e6b-3a3b-4868-8d88-6833665abb70';\n    RAISE EXCEPTION 'second tenant space unexpectedly accepted';\n  EXCEPTION WHEN unique_violation THEN\n    GET STACKED DIAGNOSTICS violated = CONSTRAINT_NAME;\n    IF violated <> 'image_space_one_per_tenant' THEN\n      RAISE EXCEPTION 'unexpected unique constraint %',violated;\n    END IF;\n  END;\nEND $probe$;\nSELECT count(*) FROM image.spaces WHERE owner_scope='tenant' AND tenant_id='46936e6b-3a3b-4868-8d88-6833665abb70';\nSELECT count(*) FROM image.spaces WHERE project_name='t-limit-probe-20261013';\n",
+  "output": "DO\n1\n0"
+}

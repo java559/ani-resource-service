@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-13T07:36:43.108271+00:00",
+  "finished_at": "2026-10-13T07:36:47.026784+00:00",
+  "command": [
+    "/home/chabking/ani-four-service-deploy-20261012/bin/resource",
+    "-conf",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/resource.yaml",
+    "-image-operator-config",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/operator.json",
+    "-image-admin=issue-platform-publisher",
+    "-image-admin-input",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/admin-request.json",
+    "-image-secret-output",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/platform-publisher-delivery.json"
+  ],
+  "request": {
+    "idempotency_key": "image-demo-20261013:platform-publisher",
+    "expected_version": 0,
+    "rotate": false
+  },
+  "exit": 0
+}

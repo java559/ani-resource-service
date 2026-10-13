@@ -1,0 +1,26 @@
+{
+  "image_id": "img_8a283065022c4120a1c10fdc357ec8f5",
+  "scope": "tenant",
+  "spaceId": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b",
+  "displayName": "Nginx 1.28 Alpine · 租户演示",
+  "description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+  "repository": "demo-nginx",
+  "sourceReference": "172.16.101.10:30003/t-tenant-a-demo/demo-nginx:v20261013",
+  "digest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+  "resolvedReference": "172.16.101.10:30003/t-tenant-a-demo/demo-nginx@sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+  "platforms": [
+    {
+      "os": "linux",
+      "architecture": "amd64",
+      "variant": ""
+    }
+  ],
+  "purposes": [
+    "container"
+  ],
+  "accelerator": "none",
+  "version": "1",
+  "createdAt": "2026-10-13T09:50:39.723510Z",
+  "updatedAt": "2026-10-13T09:50:39.723510Z",
+  "unregisteredAt": null
+}

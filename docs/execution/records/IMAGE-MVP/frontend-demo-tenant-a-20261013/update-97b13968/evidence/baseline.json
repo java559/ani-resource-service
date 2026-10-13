@@ -1,0 +1,33 @@
+{
+  "image": "localhost/ani-resource:a57b6760bf2d-20261012@sha256:d69852dfa4ed0cb895ff8750ac8ff63dd7fbf067e8e58cae4179134b96f1c1b3",
+  "replicas": 1,
+  "resourceVersion": "16459132",
+  "generation": 8,
+  "schema": "13|13",
+  "instance_enabled": false,
+  "other_deployments": {
+    "ani-boss-console": [
+      "172.16.101.10:5000/ani/ani-boss-console:202610081405"
+    ],
+    "ani-console": [
+      "172.16.101.10:5000/ani/ani-console:202610081030"
+    ],
+    "ani-governance": [
+      "172.16.101.10:5000/ani/ani-governance:20261013-apikey-role-info"
+    ],
+    "ani-inference-service": [
+      "localhost/ani-inference:c88199d19e5c-20261012@sha256:831c1e4c06306b6c576a77469bacfc44fb542fecb7ae02c8ec4e7dbd281e716a"
+    ],
+    "ani-model-service": [
+      "localhost/ani-model:71c10de63f07-20261012@sha256:a705037b2ae98db1940da012de10e73de5edda38280f9dc89e4a6884dbffd2c6"
+    ],
+    "ani-modeldev": [
+      "172.16.101.10:5000/ani/ani-modeldev-service:20261012-s2s-modeldev"
+    ],
+    "ani-modeldev-exit-retention": [
+      "localhost/ani-cpu03@sha256:53f1200cc679ad827aaad9306310d5577e89c26e6876de6d61800655c07b5040"
+    ]
+  },
+  "network_operations": "succeeded|22",
+  "image_spaces": "0d4cd79b-0cb8-4585-8d46-0e8b2eaf041b|tenant|46936e6b-3a3b-4868-8d88-6833665abb70|t-tenant-a-demo|available\n29fe8cdf-1b6c-4efd-aaa2-23de9a4436ac|platform||ani-platform-images|available\n"
+}

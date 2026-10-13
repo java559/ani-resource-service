@@ -1,0 +1,26 @@
+{
+  "removed_at": "2026-10-13T07:56:41.174582+00:00",
+  "removed_task_owned_filenames": [
+    "tenant-password",
+    "governance-admin-password",
+    "tenant-authorization",
+    "harbor-authorization",
+    "harbor-password",
+    "encryption-keys.json",
+    "image-dsn",
+    "image-cursor-key",
+    "request.json",
+    "http-headers",
+    "http-body",
+    "harbor-response",
+    "resource-deployment-before.json"
+  ],
+  "retained_publisher_files": [
+    "platform-publisher-delivery.json",
+    "platform-auth.json",
+    "tenant-publisher-delivery.json",
+    "tenant-auth.json"
+  ],
+  "retained_demo_resources": true,
+  "no_password_rotation": true
+}

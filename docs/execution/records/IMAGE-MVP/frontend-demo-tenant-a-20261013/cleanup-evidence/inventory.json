@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-10-13T09:26:01.665543+00:00",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "old_space": {
+    "space_id": "f66a5727-128d-4d8c-ac86-8cc84c6198ee",
+    "tenant_id": "08b021f2-f921-4521-b39b-5265ec81f00f",
+    "project_name": "t-tenant-a",
+    "harbor_project_id": 6,
+    "installation_id": "497fdb5a-1395-416d-8e26-35c21e8d5893",
+    "state": "available",
+    "version": 3
+  },
+  "old_robot": {
+    "robot_id": 5,
+    "robot_name": "robot$i-11f3de43d90707d34d4369ec2b113486663a5867",
+    "purpose": "pull",
+    "generation": 1,
+    "version": 2
+  },
+  "old_command": {
+    "command_id": "23c23af4-ccd8-4568-bae6-76e17cdf6053",
+    "kind": "enable_space",
+    "state": "succeeded",
+    "phase": "completed"
+  },
+  "row_counts": {
+    "spaces": 1,
+    "credentials": 1,
+    "commands": 1,
+    "registrations": 0
+  },
+  "private_backup_sha256": "b9ad82e6370fd59333a4349a522a51b9ce20dee15e3852073d9be149776b3824",
+  "preserve": [
+    "current tenant-a t-tenant-a-demo",
+    "ani-platform-images and its two registrations",
+    "all other Image rows",
+    "Governance tenants and permissions",
+    "Network namespace tenant-08b021f2-f921-4521-b39b-5265ec81f00f",
+    "Resource deployment"
+  ],
+  "user_authorized_deletion": true
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "node": "ani-01",
+    "pod": "image-update-97b13968-ani-01",
+    "reference": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "canonical_reference": "localhost/ani-resource@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "archive_sha256": "61aea295dcee9088f87f087b40a5971d0ff2e7ee5c56202cdc1eb7c24ebdb5b4",
+    "cri_startup_check": {
+      "allocatedResources": {
+        "cpu": "50m",
+        "memory": "64Mi"
+      },
+      "containerID": "containerd://a5b42d9ef400c2ad8677cc20d342079a0964d42f82c06c6447029bbba15082d6",
+      "image": "localhost/ani-resource:97b13968d156-20261013",
+      "imageID": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+      "lastState": {},
+      "name": "check",
+      "ready": false,
+      "resources": {
+        "limits": {
+          "cpu": "500m",
+          "memory": "128Mi"
+        },
+        "requests": {
+          "cpu": "50m",
+          "memory": "64Mi"
+        }
+      },
+      "restartCount": 0,
+      "started": false,
+      "state": {
+        "terminated": {
+          "containerID": "containerd://a5b42d9ef400c2ad8677cc20d342079a0964d42f82c06c6447029bbba15082d6",
+          "exitCode": 0,
+          "finishedAt": "2026-10-13T09:48:59Z",
+          "reason": "Completed",
+          "startedAt": "2026-10-13T09:48:59Z"
+        }
+      },
+      "user": {
+        "linux": {
+          "gid": 65532,
+          "supplementalGroups": [
+            65532
+          ],
+          "uid": 65532
+        }
+      }
+    },
+    "result": "pass"
+  },
+  {
+    "node": "ani-02",
+    "pod": "image-update-97b13968-ani-02",
+    "reference": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "canonical_reference": "localhost/ani-resource@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "archive_sha256": "61aea295dcee9088f87f087b40a5971d0ff2e7ee5c56202cdc1eb7c24ebdb5b4",
+    "cri_startup_check": {
+      "allocatedResources": {
+        "cpu": "50m",
+        "memory": "64Mi"
+      },
+      "containerID": "containerd://f9b16cc6093e600a09d94e036e0c6905d2bd6904d738ae365ed402259b011392",
+      "image": "localhost/ani-resource:97b13968d156-20261013",
+      "imageID": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+      "lastState": {},
+      "name": "check",
+      "ready": false,
+      "resources": {
+        "limits": {
+          "cpu": "500m",
+          "memory": "128Mi"
+        },
+        "requests": {
+          "cpu": "50m",
+          "memory": "64Mi"
+        }
+      },
+      "restartCount": 0,
+      "started": false,
+      "state": {
+        "terminated": {
+          "containerID": "containerd://f9b16cc6093e600a09d94e036e0c6905d2bd6904d738ae365ed402259b011392",
+          "exitCode": 0,
+          "finishedAt": "2026-10-13T09:49:10Z",
+          "reason": "Completed",
+          "startedAt": "2026-10-13T09:49:10Z"
+        }
+      },
+      "user": {
+        "linux": {
+          "gid": 65532,
+          "supplementalGroups": [
+            65532
+          ],
+          "uid": 65532
+        }
+      }
+    },
+    "result": "pass"
+  },
+  {
+    "node": "ani-03",
+    "pod": "image-update-97b13968-ani-03",
+    "reference": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "canonical_reference": "localhost/ani-resource@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+    "archive_sha256": "61aea295dcee9088f87f087b40a5971d0ff2e7ee5c56202cdc1eb7c24ebdb5b4",
+    "cri_startup_check": {
+      "allocatedResources": {
+        "cpu": "50m",
+        "memory": "64Mi"
+      },
+      "containerID": "containerd://1c91a9bb1047c1aaabeba28b57bfc7b7c647cc54145badbbfeb1b5a6d6818ae5",
+      "image": "localhost/ani-resource:97b13968d156-20261013",
+      "imageID": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+      "lastState": {},
+      "name": "check",
+      "ready": false,
+      "resources": {
+        "limits": {
+          "cpu": "500m",
+          "memory": "128Mi"
+        },
+        "requests": {
+          "cpu": "50m",
+          "memory": "64Mi"
+        }
+      },
+      "restartCount": 0,
+      "started": false,
+      "state": {
+        "terminated": {
+          "containerID": "containerd://1c91a9bb1047c1aaabeba28b57bfc7b7c647cc54145badbbfeb1b5a6d6818ae5",
+          "exitCode": 0,
+          "finishedAt": "2026-10-13T09:49:21Z",
+          "reason": "Completed",
+          "startedAt": "2026-10-13T09:49:21Z"
+        }
+      },
+      "user": {
+        "linux": {
+          "gid": 65532,
+          "supplementalGroups": [
+            65532
+          ],
+          "uid": 65532
+        }
+      }
+    },
+    "result": "pass"
+  }
+]

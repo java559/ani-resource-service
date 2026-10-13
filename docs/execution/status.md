@@ -336,6 +336,12 @@ NET-05 验收完成，按用户后续授权发布 Network main，ANI 成果继�
 
 ## Image MVP
 
+### 2026-10-13 tenant-a 前端演示数据准备
+
+用户授权手动开通 10～12 集群当前 `tenant-a`（Resource UUID `46936e6b-3a3b-4868-8d88-6833665abb70`）并向平台/租户仓库各 Push 两个镜像，随后明确授权修复 OCI 误判并部署最新代码。2026-10-13 17:50，最新 main `97b13968d156d65fe492cb583ec9920d21d0e57a`（已含 OCI 修复）完成 Fedora 必要测试/构建及三节点镜像启动验证，正式迁移 Network schema13→14，更新 Resource 服务；rollout、healthz/readyz pass，Instance 仍关闭。原空间 `t-tenant-a-demo` available；四次 BusyBox/Nginx Push 的 Digest 保留，租户两条登记现已通过真实公开接口完成，平台/租户目录分别 total=2，四条详情 Digest 一致，同键重放不新增登记。未改普通用户权限或其他服务镜像，本轮临时密码/JWT、Pod/Job和访问通道已清理。实际步骤、失败恢复、备份摘要、固定镜像引用与证据见[手动操作记录](records/IMAGE-MVP/frontend-demo-tenant-a-20261013/README.md#追加oci-修复与最新-main-部署)。这证明真实 Harbor 登记与查询链，不代替浏览器页面、容器创建/拉取或 Notebook 产品验收；未验证部分继续 not_verified。
+
+同日另经用户明确授权，已删除旧 UUID 的镜像测试遗留。经盘点/受限备份后删除旧空间 `f66a5727-128d-4d8c-ac86-8cc84c6198ee`、Harbor 空 Project 6 / `t-tenant-a`、Robot 5 及关联凭证/成功 command；Harbor GET=404，四表旧范围均0，保留对象对比一致。Network 管理的同 UUID Namespace 保留。线上 `image_space_one_per_tenant` 唯一索引有效，真实重复插入被23505拒绝并回滚；当前仅一个租户镜像空间和一个平台空间。命令与结果追加于上述操作记录。
+
 ### 2026-10-08 main 合并授权
 
 用户授权完成[后端交接](records/IMAGE-MVP/HANDOFF-20261008.md)并合并 Resource/Governance review 分支到各自 main。Governance 与当前 ModelDev main 已完成普通 merge；Resource 历史公开哈希误报及新检出的 OpenTelemetry 漏洞已修复。Resource `3d15d09` 的 Fedora make verify/audit、Image PG/恢复/并发/race，Governance `2f8f919` 的跨仓真实 HTTP/JWT/AK/权限均 exit0；Governance 最终 CI 全部成功。命令、完整SHA、失败日志及清理记录见交接。最终 main 合并结果以 [Resource #5](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/5)、[Governance #7](https://github.com/zhangzhe-ctrl/ani-governance/pull/7) 为准；仅文档/SBOM追加通过运行源码一致性关联已验版本。产品 Harbor smoke、IMG-08、IMG-09 仍为 blocked，不新增部署或前端授权。

@@ -1,0 +1,8 @@
+{
+  "result": "pass",
+  "migration": "0014_lb_deferred_activation.sql",
+  "source_sha": "97b13968d156d65fe492cb583ec9920d21d0e57a",
+  "existing_checksums": "pass",
+  "deferred_constraints": "pass",
+  "rolled_back": true
+}

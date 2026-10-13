@@ -1,0 +1,63 @@
+=== RUN   TestHarborTransportBoundary
+=== RUN   TestHarborTransportBoundary/400
+=== RUN   TestHarborTransportBoundary/401
+=== RUN   TestHarborTransportBoundary/403
+=== RUN   TestHarborTransportBoundary/404
+=== RUN   TestHarborTransportBoundary/409
+=== RUN   TestHarborTransportBoundary/429
+=== RUN   TestHarborTransportBoundary/500
+=== RUN   TestHarborTransportBoundary/502
+=== RUN   TestHarborTransportBoundary/503
+=== RUN   TestHarborTransportBoundary/504
+=== RUN   TestHarborTransportBoundary/redirect
+=== RUN   TestHarborTransportBoundary/untrusted_TLS
+2026/10/13 15:47:57 http: TLS handshake error from 127.0.0.1:40326: remote error: tls: bad certificate
+=== RUN   TestHarborTransportBoundary/timeout
+=== RUN   TestHarborTransportBoundary/body_limit
+--- PASS: TestHarborTransportBoundary (0.35s)
+    --- PASS: TestHarborTransportBoundary/400 (0.04s)
+    --- PASS: TestHarborTransportBoundary/401 (0.01s)
+    --- PASS: TestHarborTransportBoundary/403 (0.00s)
+    --- PASS: TestHarborTransportBoundary/404 (0.00s)
+    --- PASS: TestHarborTransportBoundary/409 (0.00s)
+    --- PASS: TestHarborTransportBoundary/429 (0.06s)
+    --- PASS: TestHarborTransportBoundary/500 (0.00s)
+    --- PASS: TestHarborTransportBoundary/502 (0.06s)
+    --- PASS: TestHarborTransportBoundary/503 (0.06s)
+    --- PASS: TestHarborTransportBoundary/504 (0.06s)
+    --- PASS: TestHarborTransportBoundary/redirect (0.01s)
+    --- PASS: TestHarborTransportBoundary/untrusted_TLS (0.00s)
+    --- PASS: TestHarborTransportBoundary/timeout (0.03s)
+    --- PASS: TestHarborTransportBoundary/body_limit (0.02s)
+=== RUN   TestHarborPrivateProjectAndLocation
+--- PASS: TestHarborPrivateProjectAndLocation (0.02s)
+=== RUN   TestHarborRobotOwnershipAndWireContract
+--- PASS: TestHarborRobotOwnershipAndWireContract (0.01s)
+=== RUN   TestHarborArtifactDigestAndPlatforms
+=== RUN   TestHarborArtifactDigestAndPlatforms/manifest
+=== RUN   TestHarborArtifactDigestAndPlatforms/index
+=== RUN   TestHarborArtifactDigestAndPlatforms/oci_image_artifact_type
+=== RUN   TestHarborArtifactDigestAndPlatforms/docker_image_artifact_type
+=== RUN   TestHarborArtifactDigestAndPlatforms/attestation_ignored
+=== RUN   TestHarborArtifactDigestAndPlatforms/chart
+=== RUN   TestHarborArtifactDigestAndPlatforms/artifact
+=== RUN   TestHarborArtifactDigestAndPlatforms/unknown
+=== RUN   TestHarborArtifactDigestAndPlatforms/platform_mismatch
+=== RUN   TestHarborArtifactDigestAndPlatforms/descriptor_limit
+=== RUN   TestHarborArtifactDigestAndPlatforms/cycle
+=== RUN   TestHarborArtifactDigestAndPlatforms/depth
+--- PASS: TestHarborArtifactDigestAndPlatforms (0.06s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/manifest (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/index (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/oci_image_artifact_type (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/docker_image_artifact_type (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/attestation_ignored (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/chart (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/artifact (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/unknown (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/platform_mismatch (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/descriptor_limit (0.00s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/cycle (0.01s)
+    --- PASS: TestHarborArtifactDigestAndPlatforms/depth (0.01s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image	0.447s

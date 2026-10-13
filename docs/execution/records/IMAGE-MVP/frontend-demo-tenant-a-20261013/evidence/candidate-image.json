@@ -1,0 +1,10 @@
+{
+  "tag": "localhost/ani-resource:image-artifact-fix-20261013-ab03dfc62dd5",
+  "digest": "sha256:bd1fb354c28670296812bab69b6a8bbd7f09c3ff9155ae6709a7d836efbb4e63",
+  "reference": "localhost/ani-resource:image-artifact-fix-20261013-ab03dfc62dd5@sha256:bd1fb354c28670296812bab69b6a8bbd7f09c3ff9155ae6709a7d836efbb4e63",
+  "archive": "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/resource-artifact-fix.oci.tar",
+  "binary_sha256": "6096790aae445508450494fc1406f25e4b0489ac6e0811cef35d700b5976ec66",
+  "source_parent": "a57b6760bf2dd7dd7e682d340db226037f529d5c",
+  "patch_sha256": "ab03dfc62dd53f59c4f76c875d32ac1b49bfb23b5adec1fc20c82bc81fc0b2cf",
+  "built_at": "2026-10-13T07:49:57.750849+00:00"
+}

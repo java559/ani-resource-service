@@ -1,0 +1,72 @@
+[
+  {
+    "name": "ani-resource-service-84b8bf64c6-lt64d",
+    "node": "ani-03",
+    "containers": [
+      {
+        "allocatedResources": {
+          "cpu": "100m",
+          "memory": "128Mi"
+        },
+        "containerID": "containerd://0df4e582423cffd6611f07f4ccb26aacb18af20c8f0e02a792d7f0157c65214c",
+        "image": "localhost/ani-resource:97b13968d156-20261013",
+        "imageID": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+        "lastState": {},
+        "name": "server",
+        "ready": true,
+        "resources": {
+          "limits": {
+            "cpu": "500m",
+            "memory": "512Mi"
+          },
+          "requests": {
+            "cpu": "100m",
+            "memory": "128Mi"
+          }
+        },
+        "restartCount": 0,
+        "started": true,
+        "state": {
+          "running": {
+            "startedAt": "2026-10-13T09:50:02Z"
+          }
+        },
+        "user": {
+          "linux": {
+            "gid": 65532,
+            "supplementalGroups": [
+              65532
+            ],
+            "uid": 65532
+          }
+        },
+        "volumeMounts": [
+          {
+            "mountPath": "/run/configs",
+            "name": "configs",
+            "readOnly": true,
+            "recursiveReadOnly": "Disabled"
+          },
+          {
+            "mountPath": "/run/resource-mtls",
+            "name": "tls",
+            "readOnly": true,
+            "recursiveReadOnly": "Disabled"
+          },
+          {
+            "mountPath": "/run/resource-private",
+            "name": "private",
+            "readOnly": true,
+            "recursiveReadOnly": "Disabled"
+          },
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "kube-api-access-cls69",
+            "readOnly": true,
+            "recursiveReadOnly": "Disabled"
+          }
+        ]
+      }
+    ]
+  }
+]

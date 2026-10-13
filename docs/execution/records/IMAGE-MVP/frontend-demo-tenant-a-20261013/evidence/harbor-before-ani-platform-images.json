@@ -1,0 +1,23 @@
+{
+  "creation_time": "2026-10-09T03:36:57.591Z",
+  "current_user_role_id": 1,
+  "current_user_role_ids": [
+    1
+  ],
+  "cve_allowlist": {
+    "creation_time": "0001-01-01T00:00:00.000Z",
+    "id": 5,
+    "items": [],
+    "project_id": 5,
+    "update_time": "0001-01-01T00:00:00.000Z"
+  },
+  "metadata": {
+    "public": "false"
+  },
+  "name": "ani-platform-images",
+  "owner_id": 1,
+  "owner_name": "admin",
+  "project_id": 5,
+  "repo_count": 0,
+  "update_time": "2026-10-09T03:36:57.591Z"
+}

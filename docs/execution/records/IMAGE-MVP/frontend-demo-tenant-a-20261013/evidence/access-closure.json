@@ -1,0 +1,8 @@
+{
+  "initial_ssh_interrupt_left_remote_listeners": true,
+  "terminated_exact_task_argv": [],
+  "ports_closed": {
+    "25432": true,
+    "27788": true
+  }
+}

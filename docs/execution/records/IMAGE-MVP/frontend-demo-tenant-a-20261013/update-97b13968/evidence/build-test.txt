@@ -1,0 +1,11 @@
+go version go1.26.9 linux/amd64
+go: downloading github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal v0.0.0-20261013075021-0937f5aa9c6c
+go: downloading github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261013081408-03765d169b07
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image	0.468s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image	0.005s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image	0.006s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/server	2.260s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service	0.019s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network	0.005s
+all modules verified
+15c6e96776f2b523beb437824f6b1d72ba57e4ec747fe59d782718295cc4d7ae  /home/chabking/ani-image-mvp-runs/update-97b13968-20261013/bin/resource

@@ -1,0 +1,15 @@
+STEP 1/6: FROM scratch
+STEP 2/6: USER 65532:65532
+--> Using cache c69317307cc1f561d99f06c3d92d7e7770f5b2afb3b629abccb295f342e9f370
+--> c69317307cc1
+STEP 3/6: COPY server /app/resource-service
+--> d5432e648ffa
+STEP 4/6: COPY ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+--> 26d25b4954e2
+STEP 5/6: ENTRYPOINT ["/app/resource-service"]
+--> 201867cf41a3
+STEP 6/6: LABEL org.opencontainers.image.source="https://github.com/zhangzhe-ctrl/ani-resource-service" org.opencontainers.image.revision="a57b6760bf2dd7dd7e682d340db226037f529d5c" io.ani.source.patch.sha256="ab03dfc62dd53f59c4f76c875d32ac1b49bfb23b5adec1fc20c82bc81fc0b2cf"
+COMMIT localhost/ani-resource:image-artifact-fix-20261013-ab03dfc62dd5
+--> 541e942f8826
+Successfully tagged localhost/ani-resource:image-artifact-fix-20261013-ab03dfc62dd5
+541e942f882673544ba566ad1717e0d1bc643c934d2938c9758dd81e0095155c

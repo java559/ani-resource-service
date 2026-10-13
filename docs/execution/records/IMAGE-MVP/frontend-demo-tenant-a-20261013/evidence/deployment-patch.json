@@ -1,0 +1,14 @@
+{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "server",
+            "image": "localhost/ani-resource:image-artifact-fix-20261013-ab03dfc62dd5@sha256:bd1fb354c28670296812bab69b6a8bbd7f09c3ff9155ae6709a7d836efbb4e63"
+          }
+        ]
+      }
+    }
+  }
+}

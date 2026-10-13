@@ -1,0 +1,9 @@
+{
+  "stage": "first migration attempt",
+  "result": "fail",
+  "reason": "CRI requested canonical repository@digest reference absent from initial image name imports",
+  "database_after": "13|13",
+  "migration_executed": false,
+  "recovery": "deleted task migration Job and restored old Resource at one replica",
+  "next": "add canonical reference and validate new image startup on every node before retry"
+}

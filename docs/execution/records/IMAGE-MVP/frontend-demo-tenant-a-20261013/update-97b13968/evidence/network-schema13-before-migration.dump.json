@@ -1,0 +1,7 @@
+{
+  "private_path": "/home/chabking/ani-image-mvp-runs/update-97b13968-20261013/private/network-schema13-before-migration.dump",
+  "sha256": "2b190f753f6d55e6b1dc96a9e0d460de7c438d3051801707854be9a21ff28d32",
+  "bytes": 242915,
+  "timestamp": "2026-10-13T09:49:58.830855+00:00",
+  "format": "pg_dump custom"
+}

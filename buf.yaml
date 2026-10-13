@@ -3,4 +3,4 @@ modules:
   - path: internal
   - path: api
     excludes:
-      - instance
+      - api/instance

@@ -1,0 +1,13 @@
+{
+  "result": "pass",
+  "source_sha": "97b13968d156d65fe492cb583ec9920d21d0e57a",
+  "reference": "localhost/ani-resource:97b13968d156-20261013@sha256:ca315d144391cd2a186ad23637eb1427ff95c9732a343c06a1f57f60c3c805c1",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "schema_before": 13,
+  "schema_after": 14,
+  "instance_enabled": false,
+  "deployment_spec_only_image_changed": true,
+  "other_deployment_images_unchanged": true,
+  "available_replicas": 1,
+  "timestamp": "2026-10-13T09:50:12.260380+00:00"
+}

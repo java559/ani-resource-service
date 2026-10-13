@@ -1,0 +1,29 @@
+{
+  "removed_transient_files": [
+    "tenant-password",
+    "tenant-authorization",
+    "http-headers",
+    "http-body",
+    "request.json"
+  ],
+  "port_forward_pids_terminated": [
+    317759,
+    320922
+  ],
+  "ports_closed": [
+    27788,
+    29091
+  ],
+  "temporary_cluster_objects_remaining": {
+    "ani-system": [],
+    "kube-system": []
+  },
+  "public_evidence_has_no_password_or_jwt": true,
+  "preserved_private_files": [
+    "resource-deployment-before.json",
+    "network-schema13-preflight.dump",
+    "network-schema13-before-migration.dump",
+    "resource-deployment-after.json"
+  ],
+  "result": "pass"
+}

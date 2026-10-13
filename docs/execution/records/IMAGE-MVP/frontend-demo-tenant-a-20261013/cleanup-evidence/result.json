@@ -1,0 +1,19 @@
+{
+  "finished_at": "2026-10-13T09:26:48.228136+00:00",
+  "old_database_counts": {
+    "spaces": 0,
+    "credentials": 0,
+    "commands": 0,
+    "registrations": 0
+  },
+  "deleted_project_id": 6,
+  "deleted_project_name": "t-tenant-a",
+  "deleted_robot_id": 5,
+  "Harbor_GET_after_delete": "404 for project and robot",
+  "protected_records_unchanged": true,
+  "remaining_tenant_space_count": 1,
+  "remaining_platform_space_count": 1,
+  "preserved_network_namespace": "tenant-08b021f2-f921-4521-b39b-5265ec81f00f",
+  "private_backup_retained": "/home/chabking/ani-image-mvp-runs/cleanup-old-space-20261013/private/old-image-rows.json",
+  "deployment_changed": false
+}

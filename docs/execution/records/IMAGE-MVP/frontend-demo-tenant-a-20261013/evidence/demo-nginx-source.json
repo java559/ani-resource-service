@@ -1,0 +1,22 @@
+{
+  "source": "docker.io/library/nginx:1.28-alpine",
+  "source_index_digest": "sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+  "selected_digest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+  "platform": {
+    "os": "linux",
+    "architecture": "amd64"
+  },
+  "fixed_source": "docker.io/library/nginx@sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+  "local_directory": "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-nginx",
+  "copied_at": "2026-10-13T07:38:49.211405+00:00",
+  "started_at": "2026-10-13T07:38:26.648403+00:00",
+  "command": [
+    "skopeo",
+    "copy",
+    "--preserve-digests",
+    "docker://docker.io/library/nginx@sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3",
+    "dir:/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-nginx"
+  ],
+  "exit": 0,
+  "tag": "v20261013"
+}

@@ -1,0 +1,80 @@
+{
+  "scope": "platform",
+  "reference": "172.16.101.10:30003/ani-platform-images/demo-busybox:v20261013",
+  "digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+  "started_at": "2026-10-13T07:39:16.593534+00:00",
+  "finished_at": "2026-10-13T07:39:19.001576+00:00",
+  "command": [
+    "skopeo",
+    "copy",
+    "--preserve-digests",
+    "--dest-authfile",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/platform-auth.json",
+    "--dest-cert-dir",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/registry-cert",
+    "dir:/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/images/demo-busybox",
+    "docker://172.16.101.10:30003/ani-platform-images/demo-busybox:v20261013"
+  ],
+  "exit": 0,
+  "harbor_artifact": {
+    "accessories": null,
+    "addition_links": {
+      "build_history": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/ani-platform-images/repositories/demo-busybox/artifacts/sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4/additions/build_history"
+      },
+      "sboms": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/ani-platform-images/repositories/demo-busybox/artifacts//additions/sbom"
+      },
+      "vulnerabilities": {
+        "absolute": false,
+        "href": "/api/v2.0/projects/ani-platform-images/repositories/demo-busybox/artifacts/sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4/additions/vulnerabilities"
+      }
+    },
+    "annotations": {
+      "org.opencontainers.image.url": "https://github.com/docker-library/busybox",
+      "org.opencontainers.image.version": "1.37.0-glibc"
+    },
+    "artifact_type": "application/vnd.oci.image.config.v1+json",
+    "digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+    "extra_attrs": {
+      "architecture": "amd64",
+      "author": "",
+      "config": {
+        "Cmd": [
+          "sh"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+        ]
+      },
+      "created": "2024-09-26T21:31:42Z",
+      "os": "linux"
+    },
+    "icon": "sha256:0048162a053eef4d4ce3fe7518615bef084403614f8bca43b40ae2e762e11e06",
+    "id": 26,
+    "labels": null,
+    "manifest_media_type": "application/vnd.oci.image.manifest.v1+json",
+    "media_type": "application/vnd.oci.image.config.v1+json",
+    "project_id": 5,
+    "pull_time": "0001-01-01T00:00:00.000Z",
+    "push_time": "2026-10-13T07:39:10.966Z",
+    "references": null,
+    "repository_id": 24,
+    "repository_name": "ani-platform-images/demo-busybox",
+    "size": 2212583,
+    "tags": [
+      {
+        "artifact_id": 26,
+        "id": 27,
+        "immutable": false,
+        "name": "v20261013",
+        "pull_time": "0001-01-01T00:00:00.000Z",
+        "push_time": "2026-10-13T07:39:11.142Z",
+        "repository_id": 24
+      }
+    ],
+    "type": "IMAGE"
+  }
+}

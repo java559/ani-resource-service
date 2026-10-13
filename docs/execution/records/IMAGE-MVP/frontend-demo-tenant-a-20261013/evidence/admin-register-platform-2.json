@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-10-13T07:50:47.233430+00:00",
+  "finished_at": "2026-10-13T07:50:48.493029+00:00",
+  "command": [
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/bin/resource",
+    "-conf",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/resource.yaml",
+    "-image-operator-config",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/operator.json",
+    "-image-admin=register-platform",
+    "-image-admin-input",
+    "/home/chabking/ani-image-mvp-runs/demo-tenant-a-20261013/private/admin-request.json"
+  ],
+  "request": {
+    "idempotency_key": "image-demo-20261013:platform:demo-busybox",
+    "image_reference": "172.16.101.10:30003/ani-platform-images/demo-busybox:v20261013",
+    "display_name": "BusyBox 1.37.0 · 平台演示",
+    "description": "2026-10-13 前端镜像目录演示；官方源镜像，固定 linux/amd64 Digest。",
+    "purposes": [
+      "container"
+    ],
+    "accelerator": "none"
+  },
+  "exit": 0
+}

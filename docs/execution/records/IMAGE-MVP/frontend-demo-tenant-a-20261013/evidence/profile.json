@@ -1,0 +1,116 @@
+{
+  "recorded_at": "2026-10-13T07:31:01.333161+00:00",
+  "execution_host": "fedora",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "context": "kubernetes-admin@ani-lab",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "addresses": [
+        {
+          "address": "172.16.101.10",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-01",
+          "type": "Hostname"
+        }
+      ]
+    },
+    {
+      "name": "ani-02",
+      "addresses": [
+        {
+          "address": "172.16.101.11",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-02",
+          "type": "Hostname"
+        }
+      ]
+    },
+    {
+      "name": "ani-03",
+      "addresses": [
+        {
+          "address": "172.16.101.12",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-03",
+          "type": "Hostname"
+        }
+      ]
+    }
+  ],
+  "harbor_url": "https://172.16.101.10:30003",
+  "harbor_ca_sha256": "7371905a16dd41d8059629967a6c65f1d49b3a73dca44ee5e2dddef159168ac1",
+  "installation_id": "497fdb5a-1395-416d-8e26-35c21e8d5893",
+  "platform_project": "ani-platform-images",
+  "tenant_code": "tenant-a",
+  "governance_tenant_id": "1",
+  "resource_tenant_id": "46936e6b-3a3b-4868-8d88-6833665abb70",
+  "tenant_admin_user_id": "3",
+  "tenant_slug": "tenant-a-demo",
+  "tenant_project": "t-tenant-a-demo",
+  "allowed_repositories": [
+    "demo-busybox",
+    "demo-nginx"
+  ],
+  "allowed_mutations": [
+    "ensure current tenant-a image space",
+    "first publisher issuance",
+    "push two images into platform and tenant project",
+    "register four images"
+  ],
+  "preserve": [
+    "all existing projects and robots",
+    "old t-tenant-a ownership",
+    "ordinary user permissions",
+    "existing tags"
+  ],
+  "no_cleanup_of_demo_images": true,
+  "resource_binary": "/home/chabking/ani-four-service-deploy-20261012/bin/resource",
+  "resource_binary_sha256": "87c0b16b8729b6613c1d2aa28014c23f2df17151d35a5605fb435fb9f92692b4",
+  "source_lock": {
+    "model": {
+      "repo": "liangzai006/ani-model-service",
+      "ref": "upstream/master",
+      "sha": "aea96e7bf28824d2875943209889c7d4db67b243"
+    },
+    "inference": {
+      "repo": "liangzai006/ani-inference-service",
+      "ref": "upstream/main",
+      "sha": "49ed5e514c865144575b3436c56ddfff3db77200"
+    },
+    "governance": {
+      "repo": "zhangzhe-ctrl/ani-governance",
+      "ref": "origin/main",
+      "sha": "4e3e5b4e750ac59cdeb227a0caf76e863873fde5"
+    },
+    "resource": {
+      "repo": "zhangzhe-ctrl/ani-resource-service",
+      "ref": "origin/main",
+      "sha": "a57b6760bf2dd7dd7e682d340db226037f529d5c"
+    }
+  },
+  "cluster_api": "https://172.16.101.10:6443",
+  "cluster_ca_sha256": "437fec7e116415a0628a4c4d5dc58996b8df8e6995bfc325643bcc073d171011",
+  "deployment_refs": {
+    "ani-resource-service": [
+      {
+        "name": "server",
+        "image": "localhost/ani-resource:a57b6760bf2d-20261012@sha256:d69852dfa4ed0cb895ff8750ac8ff63dd7fbf067e8e58cae4179134b96f1c1b3",
+        "imagePullPolicy": "IfNotPresent"
+      }
+    ],
+    "ani-governance": [
+      {
+        "name": "server",
+        "image": "172.16.101.10:5000/ani/ani-governance:20261013-apikey-role-info",
+        "imagePullPolicy": "IfNotPresent"
+      }
+    ]
+  }
+}
