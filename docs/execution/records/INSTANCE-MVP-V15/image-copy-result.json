@@ -1,0 +1,8 @@
+{
+  "harbor_version": "v2.15.2-a97e7b83",
+  "source": "172.16.101.10:30003/ani-kf-manual-20261009/ani/kubeflow-jupyter@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "target": "172.16.101.10:30003/inst-lab-215c5205-9749-42e6-8be0-ca1dab9007ba/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "project_id": 9,
+  "gpu_runtime": "not_verified"
+}

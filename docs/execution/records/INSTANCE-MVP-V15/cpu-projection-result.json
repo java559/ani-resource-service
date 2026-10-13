@@ -1,0 +1,16 @@
+{
+  "annotation_projection": true,
+  "compute_and_volume_reclaimed": true,
+  "gpu_product_flow": "not_verified",
+  "kind": "cpu_infrastructure_only",
+  "namespace": "ani-tenant-863025ec-a7e4-4a34-834f-d8a4e62b498d",
+  "namespace_uid": "3033935f-4e55-43f1-9bb5-9fd2a1df59f3",
+  "notebook_uid": "6866c24b-831c-42ad-a134-797996e3f196",
+  "pv_name": "pvc-18a6a39a-f39a-420b-b7f8-bda8d7adf06b",
+  "pv_uid": "d1ba6b22-aeae-4dd7-b9b8-7c7740b7fecf",
+  "pvc_uid": "18a6a39a-f39a-420b-b7f8-bda8d7adf06b",
+  "sg_actual_exec": false,
+  "statefulset_owner_uid": "0a6ef4fa-a7c9-418c-b064-e3432cf6b227",
+  "stop_start_cycles": 0,
+  "workspace_retained": false
+}

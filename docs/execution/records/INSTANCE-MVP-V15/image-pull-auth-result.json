@@ -1,0 +1,12 @@
+{
+  "reference": "172.16.101.10:30003/inst-lab-215c5205-9749-42e6-8be0-ca1dab9007ba/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "secret_uid": "a7b8a781-2f1d-4622-9c66-7e1762f830c6",
+  "namespace": "ani-tenant-e6b97f49-b696-4cf1-99e1-45fbd3363eae",
+  "anonymous_denied": true,
+  "actual_stored_tenant_robot_pull": true,
+  "foreign_private_project": "ani-b07-test",
+  "foreign_project_denied": true,
+  "credentials_exported": false,
+  "gpu_runtime": "not_verified"
+}

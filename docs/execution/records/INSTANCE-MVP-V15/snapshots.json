@@ -1,0 +1,26 @@
+{
+  "source": {
+    "baseline": "e7b5a8a3435996181bff62e025a21224c97d2464",
+    "branch": "codex/resource-instance-mvp-v15",
+    "archive_sha256": "78bf357393ffb09969300a9a150553868da4db0c18b1075b84ce93d5895c284c",
+    "source_files": 5841
+  },
+  "gov": {
+    "baseline": "edcd4ed864c4a218faa8b957b7e7c0f817dec6ad",
+    "branch": "codex/resource-instance-mvp-v15",
+    "archive_sha256": "cbfd60bfabfffa7625bb7d2f0233dbadcc109894eea5ee8ed41606c4514efc10",
+    "source_files": 2244
+  },
+  "acc": {
+    "baseline": "76e1b796a90867185cb7e93d4ae390e2d72aacdb",
+    "branch": "codex/resource-instance-mvp-v15",
+    "archive_sha256": "59bbd7656cf9961ec3689f713f1d2c582baacbfe56f5ed41aa0b5fa6aed91550",
+    "source_files": 309
+  },
+  "sg": {
+    "baseline": "d8cebd50fb38c3e0d7b875e2c4a88377eb43cce1",
+    "branch": "codex/resource-instance-mvp-v15",
+    "archive_sha256": "b7cf2f16bfa3ae64e84a4ae51b429c4c0a8cea168a2835283f0d58f5c9ca44d2",
+    "source_files": 89
+  }
+}

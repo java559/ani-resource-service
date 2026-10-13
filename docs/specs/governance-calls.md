@@ -1,6 +1,6 @@
 # Governance → Resource 调用登记
 
-本登记覆盖现有 Network/Image 用户业务委托，统一规则见 [ANI 服务间调用规范](https://github.com/zhangzhe-ctrl/ani-governance/blob/8724a32ab7dda903e1c67def28ad206a06d09c44/docs/contracts/service-to-service-calls.md)。2026-10-12 增加平台网络用户委托；调用者和 TLS 身份保持，Resource 当前没有向 Governance 发起的业务 RPC。
+本登记覆盖 Network/Image/Instance 用户业务委托，统一规则见 [ANI 服务间调用规范](https://github.com/zhangzhe-ctrl/ani-governance/blob/8724a32ab7dda903e1c67def28ad206a06d09c44/docs/contracts/service-to-service-calls.md)。平台网络及实例使用原业务委托身份；实例 owner 退额另走既有 QuotaReleaseService 的受管 owner 身份。
 
 ## 身份、范围和入口
 
@@ -56,8 +56,20 @@
 | `/image.v1.TenantImageService/ListImages` | 查询，租户镜像或既有平台只读目录 |
 | `/image.v1.TenantImageService/UpdateImage` | 原键 |
 | `/image.v1.TenantImageService/UnregisterImage` | 原键 |
+| `/instance.v1.InstanceService/ListPresets` | 查询 |
+| `/instance.v1.InstanceService/ResolveCreateSpec` | 仅新公开请求解析，首次冻结 |
+| `/instance.v1.InstanceService/AcceptCreate` | 原 operation/ref/plan/charges 与持久 ACK |
+| `/instance.v1.InstanceService/AcceptDelete` | 原 CREATE + delete operation，expected_version |
+| `/instance.v1.InstanceService/Start` | 原键 + expected_version |
+| `/instance.v1.InstanceService/Stop` | 原键 + expected_version |
+| `/instance.v1.InstanceService/GetInstance` | 查询 |
+| `/instance.v1.InstanceService/ListInstances` | 域协议 page_size/after_id，默认 50，最大 100，无 total |
+| `/instance.v1.InstanceService/GetOperation` | 查询 |
+| `/instance.v1.InstanceService/ResolveTerminalTarget` | 保存位置 + 当前业务版本与真实 UID |
 
-接收方允许清单实现为 [governance.go](../../internal/server/governance.go) 与 [image_identity.go](../../internal/server/image_identity.go)。修改调用时同时修改登记、允许清单和真实链路测试，不使用 RPC 前缀或通配符授权。
+接收方允许清单实现为 [governance.go](../../internal/server/governance.go)、[image_identity.go](../../internal/server/image_identity.go) 与 [instance_identity.go](../../internal/server/instance_identity.go)。Instance 调用上限 30s，后台投递继承其更短 deadline。修改调用时同时修改登记、允许清单和真实链路测试，不使用 RPC 前缀或通配符授权。
+
+`/instance.terminal.v1.InstanceTerminalService/ValidateTerminalTarget` 不在 Gov 委托清单中。它由 Resource 同进程独立 mTLS listener 仅授权唯一 SG URI `spiffe://ani.internal/service/ani-session-gateway`，核对持久意图/版本、保存位置、Notebook/Pod UID、容器及当前 provider 观察。详见 [运行与恢复](../runbooks/instance-mvp-fedora.md)。
 
 ## 结果和重试
 

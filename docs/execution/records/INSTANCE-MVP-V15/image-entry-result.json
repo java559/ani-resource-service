@@ -1,0 +1,8 @@
+{
+  "image_digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+  "layer_digest": "sha256:5ca067409b0c8669d39cbe51dae34bcf4c30a085b7f33e324152d933b0392512",
+  "source_sha256": "2d710af24204c8d227033caea46f2439aafd2f65335eacd9c00bb3107f6b717e",
+  "requires_jupyter_token": true,
+  "compatible_with_current_instance_entry": false,
+  "gpu_runtime": "not_verified"
+}

@@ -1,0 +1,200 @@
+[
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:01:52.592+08:00",
+    "operation": "/admin.service.v1.AuthenticationService/GenerateCaptcha",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:02:22.360+08:00",
+    "operation": "/admin.service.v1.AuthenticationService/PlatformPasswordLogin",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:02:28.134+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 403
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:04:23.541+08:00",
+    "operation": "/admin.service.v1.RoleService/Update",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:04:28.152+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 400
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:05:00.814+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:05:00.840+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/CreatePool",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:07:35.134+08:00",
+    "operation": "/admin.service.v1.PlanService/Create",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:07:35.211+08:00",
+    "operation": "/admin.service.v1.PlanModuleService/Create",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:07:35.387+08:00",
+    "operation": "/admin.service.v1.TenantService/CreateTenantWithAdminUser",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:07:35.757+08:00",
+    "operation": "/admin.service.v1.RoleService/Update",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:08:16.244+08:00",
+    "operation": "/admin.service.v1.AuthenticationService/GenerateCaptcha",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:08:41.443+08:00",
+    "operation": "/admin.service.v1.AuthenticationService/PasswordLogin",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:08:41.601+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstancePresets",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:08:41.649+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstances",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:09:19.034+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:09:19.056+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/CreatePool",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:09:54.622+08:00",
+    "operation": "/admin.service.v1.InstanceService/CreateInstance",
+    "code": 400
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:10:57.212+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstancePresets",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:10:57.274+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstances",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:10:57.407+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:10:57.427+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/CreatePool",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:18:47.882+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstancePresets",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:18:47.947+08:00",
+    "operation": "/admin.service.v1.InstanceService/ListInstances",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:18:48.090+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/RegisterCluster",
+    "code": 200
+  },
+  {
+    "service": "gov",
+    "time": "time=2026-10-13T10:18:48.111+08:00",
+    "operation": "/admin.service.v1.AcceleratorAdminService/CreatePool",
+    "code": 200
+  },
+  {
+    "time": "2026-10-13T10:08:41.572747553+08:00",
+    "operation": "/instance.v1.InstanceService/ListPresets",
+    "code": 200,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:08:41.620105416+08:00",
+    "operation": "/instance.v1.InstanceService/ListInstances",
+    "code": 200,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:09:54.590965429+08:00",
+    "operation": "/instance.v1.InstanceService/ResolveCreateSpec",
+    "code": 400,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:10:57.177599741+08:00",
+    "operation": "/instance.v1.InstanceService/ListPresets",
+    "code": 200,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:10:57.243608587+08:00",
+    "operation": "/instance.v1.InstanceService/ListInstances",
+    "code": 200,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:18:47.837797164+08:00",
+    "operation": "/instance.v1.InstanceService/ListPresets",
+    "code": 200,
+    "reason": ""
+  },
+  {
+    "time": "2026-10-13T10:18:47.913543046+08:00",
+    "operation": "/instance.v1.InstanceService/ListInstances",
+    "code": 200,
+    "reason": ""
+  }
+]

@@ -1,0 +1,6 @@
+internal/runtime/kubernetes/cpu_live_test.go: 成功
+=== RUN   TestNotebookCPUInfrastructureLive
+    cpu_live_test.go:327: actual Notebook top-level annotation projection and UID owner chain verified; owned Notebook/PVC/PV reclaimed
+--- PASS: TestNotebookCPUInfrastructureLive (52.91s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/runtime/kubernetes	52.927s

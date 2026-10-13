@@ -73,6 +73,7 @@ config: check-buf
 	$(BUF) lint
 	$(BUF) build
 	$(BUF) generate --template buf.gen.yaml
+	BUF=$(BUF) TMPDIR=$${TMPDIR:-$(CURDIR)/.work} ./scripts/generate-instance-api
 
 sql: check-sqlc
 	$(SQLC) generate

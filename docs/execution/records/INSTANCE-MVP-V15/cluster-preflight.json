@@ -1,0 +1,144 @@
+{
+  "observed_utc": "2026-10-12T20:05:25.305372+00:00",
+  "execution_host": "ssh fedora",
+  "api": "https://172.16.101.10:6443",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "addresses": [
+        "172.16.101.10"
+      ],
+      "kubernetes": "v1.35.8",
+      "gpu_allocatable": {}
+    },
+    {
+      "name": "ani-02",
+      "addresses": [
+        "172.16.101.11"
+      ],
+      "kubernetes": "v1.35.8",
+      "gpu_allocatable": {}
+    },
+    {
+      "name": "ani-03",
+      "addresses": [
+        "172.16.101.12"
+      ],
+      "kubernetes": "v1.35.8",
+      "gpu_allocatable": {}
+    }
+  ],
+  "relevant_deployments": [
+    {
+      "namespace": "notebook-controller-system",
+      "name": "notebook-controller-deployment",
+      "images": [
+        "172.16.101.10:30003/ani-kf-manual-20261009/kubeflow/kubeflow/notebook-controller:v1.10.0@sha256:a0dda5d62845057c73f2984d599770ea05f5067d50583fbd388687069e843bd9"
+      ]
+    },
+    {
+      "namespace": "volcano-system",
+      "name": "ani-volcano-admission",
+      "images": [
+        "172.16.101.10:5000/volcanosh/vc-webhook-manager:v1.15.2"
+      ]
+    },
+    {
+      "namespace": "volcano-system",
+      "name": "ani-volcano-controllers",
+      "images": [
+        "172.16.101.10:5000/volcanosh/vc-controller-manager:v1.15.2"
+      ]
+    },
+    {
+      "namespace": "volcano-system",
+      "name": "ani-volcano-scheduler",
+      "images": [
+        "172.16.101.10:5000/volcanosh/vc-scheduler:v1.15.2"
+      ]
+    }
+  ],
+  "daemonsets": [
+    {
+      "namespace": "ani-observability",
+      "name": "ani-fluent-bit",
+      "images": [
+        "172.16.101.10:5000/fluent/fluent-bit:5.1.2"
+      ]
+    },
+    {
+      "namespace": "ani-observability",
+      "name": "ani-metrics-prometheus-node-exporter",
+      "images": [
+        "172.16.101.10:5000/prometheus/node-exporter:v1.11.1-distroless"
+      ]
+    },
+    {
+      "namespace": "kcn-system",
+      "name": "kcn-cni-ds",
+      "images": [
+        "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+      ]
+    },
+    {
+      "namespace": "kcn-system",
+      "name": "kcn-ovs-ds",
+      "images": [
+        "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+      ]
+    },
+    {
+      "namespace": "kube-system",
+      "name": "ani-multus",
+      "images": [
+        "172.16.101.10:5000/k8snetworkplumbingwg/multus-cni:v4.3.1-thick"
+      ]
+    },
+    {
+      "namespace": "kube-system",
+      "name": "kube-proxy",
+      "images": [
+        "172.16.101.10:5000/kubernetes/kube-proxy:v1.35.8"
+      ]
+    },
+    {
+      "namespace": "kubevirt",
+      "name": "virt-handler",
+      "images": [
+        "172.16.101.10:5000/kubevirt/virt-handler:v1.9.0"
+      ]
+    },
+    {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph.cephfs.csi.ceph.com-nodeplugin",
+      "images": [
+        "172.16.101.10:5000/cephcsi/cephcsi:v3.17.1",
+        "172.16.101.10:5000/sig-storage/csi-node-driver-registrar:v2.17.0"
+      ]
+    },
+    {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph.rbd.csi.ceph.com-nodeplugin",
+      "images": [
+        "172.16.101.10:5000/cephcsi/cephcsi:v3.17.1",
+        "172.16.101.10:5000/sig-storage/csi-node-driver-registrar:v2.17.0"
+      ]
+    }
+  ],
+  "storage_classes": [
+    {
+      "name": "ani-block",
+      "provisioner": "rook-ceph.rbd.csi.ceph.com",
+      "reclaim_policy": "Delete",
+      "binding_mode": "Immediate"
+    },
+    {
+      "name": "ani-cephfs",
+      "provisioner": "rook-ceph.cephfs.csi.ceph.com",
+      "reclaim_policy": "Delete",
+      "binding_mode": "Immediate"
+    }
+  ],
+  "writes": []
+}

@@ -1,0 +1,1 @@
+cmd/ani-resource-service/main.go: 成功

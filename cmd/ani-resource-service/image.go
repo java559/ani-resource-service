@@ -24,6 +24,7 @@ type imageComponents struct {
 	catalog    *imagebiz.Catalog
 	repository *imagedata.Postgres
 	harbor     *imagedata.Harbor
+	runtime    *imagebiz.Runtime
 }
 
 func (c *imageComponents) Close() {
@@ -154,6 +155,10 @@ func openImage(ctx context.Context, c *conf.Image) (*imageComponents, error) {
 	if err != nil {
 		return nil, err
 	}
+	runtime, err := imagebiz.NewRuntime(repo, repo, repo, harbor, cipher, time.Now)
+	if err != nil {
+		return nil, err
+	}
 	ready = true
-	return &imageComponents{tenant: imageservice.NewTenantService(lifecycle, catalog), lifecycle: lifecycle, catalog: catalog, repository: repo, harbor: harbor}, nil
+	return &imageComponents{tenant: imageservice.NewTenantService(lifecycle, catalog), lifecycle: lifecycle, catalog: catalog, repository: repo, harbor: harbor, runtime: runtime}, nil
 }

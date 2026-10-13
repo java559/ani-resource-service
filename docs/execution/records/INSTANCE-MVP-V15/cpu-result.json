@@ -1,0 +1,14 @@
+{
+  "compute_and_volume_reclaimed": true,
+  "gpu_product_flow": "not_verified",
+  "kind": "cpu_infrastructure_only",
+  "namespace": "ani-tenant-863025ec-a7e4-4a34-834f-d8a4e62b498d",
+  "namespace_uid": "3033935f-4e55-43f1-9bb5-9fd2a1df59f3",
+  "notebook_uid": "8f710240-4ead-467b-b349-5bf0d06b707a",
+  "pv_name": "pvc-f0d1386c-1501-4476-8433-709df87ac9ba",
+  "pv_uid": "4c7d815e-43b1-456f-8418-41196a79c8f0",
+  "pvc_uid": "f0d1386c-1501-4476-8433-709df87ac9ba",
+  "sg_actual_exec": true,
+  "stop_start_cycles": 2,
+  "workspace_retained": true
+}

@@ -46,6 +46,23 @@ func supportedPlatform(p harborPlatform) bool {
 func unsupportedArtifact() error {
 	return biz.Fail(biz.UnsupportedArtifact, "artifact has no confirmed runnable image platforms")
 }
+
+// Harbor may report an image's config media type as artifact_type. It is a
+// runnable image only for the matching manifest family; arbitrary artifact
+// types and typed indexes remain outside this adapter's confirmed contract.
+func supportedImageArtifactType(a harborArtifact) bool {
+	if a.ArtifactType == "" {
+		return true
+	}
+	switch a.ManifestMediaType {
+	case ociManifest:
+		return a.ArtifactType == "application/vnd.oci.image.config.v1+json"
+	case dockerManifest:
+		return a.ArtifactType == "application/vnd.docker.container.image.v1+json"
+	default:
+		return false
+	}
+}
 func (h *Harbor) readArtifact(ctx context.Context, project, repository, ref string) (harborArtifact, error) {
 	var a harborArtifact
 	if !harborName.MatchString(project) {
@@ -100,7 +117,7 @@ func (h *Harbor) readRunnablePlatforms(ctx context.Context, project, repository 
 	descriptors := 0
 	var visit func(harborArtifact, int, harborPlatform) error
 	visit = func(a harborArtifact, depth int, expected harborPlatform) error {
-		if depth > 2 || seen[a.Digest] || !strings.EqualFold(a.Type, "IMAGE") || a.ArtifactType != "" || a.Annotations["vnd.docker.reference.type"] == "attestation-manifest" {
+		if depth > 2 || seen[a.Digest] || !strings.EqualFold(a.Type, "IMAGE") || !supportedImageArtifactType(a) || a.Annotations["vnd.docker.reference.type"] == "attestation-manifest" {
 			return unsupportedArtifact()
 		}
 		if (expected.OS != "" || expected.Architecture != "" || expected.Variant != "") && !supportedPlatform(expected) {

@@ -1,0 +1,28 @@
+internal/service/instance/service.go: 成功
+127.0.0.1:5432 - accepting connections
+=== RUN   TestInstanceCurrentAuthorizationOriginalReplayAndOwnerRelease
+    instance_resource.go:44: Resource durable intake subprocess exit=0; isolated PG cleaned
+--- PASS: TestInstanceCurrentAuthorizationOriginalReplayAndOwnerRelease (0.29s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/service	0.327s
+=== RUN   TestInstancePublicHTTPPersistentIntakeAndCommands
+    instance_joint_test.go:232: HTTP POST /api/v1/instances -> 401
+    instance_joint_test.go:234: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:243: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:248: HTTP GET /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc -> 200
+    instance_joint_test.go:258: HTTP GET /api/v1/instances -> 200
+    instance_joint_test.go:261: HTTP GET /api/v1/instance-operations/2f805565-dd3c-4e09-a07d-472cff2586c3 -> 200
+    instance_joint_test.go:264: HTTP GET /api/v1/instance-presets -> 200
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc/exec -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc/exec -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc/exec -> 202
+    instance_joint_test.go:269: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc:stop -> 202
+    instance_joint_test.go:269: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc:start -> 202
+    instance_joint_test.go:274: HTTP POST /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc/exec -> 202
+    instance_joint_test.go:357: HTTP GET /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc -> 200
+    instance_joint_test.go:361: HTTP DELETE /api/v1/instances/43bd85c5-55ee-468d-a646-7f5e0d01a1dc -> 202
+    instance_joint_test.go:391: HTTP POST /api/v1/instances -> 403
+    instance_resource.go:44: Resource durable intake subprocess exit=0; isolated PG cleaned
+--- PASS: TestInstancePublicHTTPPersistentIntakeAndCommands (45.14s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/server	45.687s

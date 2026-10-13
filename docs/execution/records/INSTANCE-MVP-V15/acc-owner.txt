@@ -1,0 +1,15 @@
+127.0.0.1:5432 - accepting connections
+internal/data/postgres_test.go: 成功
+=== RUN   TestPostgresProjectionOrderConflictAndRestart
+    postgres_test.go:239: SYNC-RX-01/02/03: parallel terminal-first delivery, stale revision and create-operation resurrection; DB persistence across connections
+--- PASS: TestPostgresProjectionOrderConflictAndRestart (0.14s)
+=== RUN   TestPostgresBindingsBeforeProjectionAndScopedRelease
+=== RUN   TestPostgresBindingsBeforeProjectionAndScopedRelease/ani-inference
+    postgres_test.go:327: CAP-01/03/04, REL-01/02: three sources count once; ENDED and missing poll preserve allocation; positive exact-scope proof retires older evidence
+=== RUN   TestPostgresBindingsBeforeProjectionAndScopedRelease/ani-resource-service
+    postgres_test.go:327: CAP-01/03/04, REL-01/02: three sources count once; ENDED and missing poll preserve allocation; positive exact-scope proof retires older evidence
+--- PASS: TestPostgresBindingsBeforeProjectionAndScopedRelease (0.18s)
+    --- PASS: TestPostgresBindingsBeforeProjectionAndScopedRelease/ani-inference (0.09s)
+    --- PASS: TestPostgresBindingsBeforeProjectionAndScopedRelease/ani-resource-service (0.08s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-accelerator-service/internal/data	0.321s

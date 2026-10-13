@@ -1,0 +1,51 @@
+{
+  "repository": "https://github.com/kubeflow/kubeflow.git",
+  "tag": "v1.10.0",
+  "tag_object": "61234013ebadfe687417ebe2bd8456b9d50acace",
+  "commit": "90e987bf87d3e7c900926310b00bfa16b59e41eb",
+  "execution_host": "fedora",
+  "scope": "read-only source and CRD comparison; no cluster writes or builds",
+  "files": [
+    {
+      "path": "components/notebook-controller/config/crd/bases/kubeflow.org_notebooks.yaml",
+      "sha256": "907fa06f47a2f37767059afb7bdfbdc3d9ddb6a1a829e3bd3c251dd5940bb3a4",
+      "lines": 9410
+    },
+    {
+      "path": "components/notebook-controller/api/v1/notebook_types.go",
+      "sha256": "7cf5156afb912e4b1e976d6b2f280dbc855b0c6be30f31b8377acf58889168a9",
+      "lines": 88
+    },
+    {
+      "path": "components/notebook-controller/api/v1beta1/notebook_types.go",
+      "sha256": "b5cb0f4722d672b5effa2fbf7c6edbfa0da0bd891947fe5987cd0be544603666",
+      "lines": 88
+    },
+    {
+      "path": "components/notebook-controller/controllers/notebook_controller.go",
+      "sha256": "a46b600c26e50c65c1ba4de590331eb2144a00518ecb6fdfe430abab2da2cee4",
+      "lines": 739
+    },
+    {
+      "path": "components/common/reconcilehelper/util.go",
+      "sha256": "5fbaa94736f53916dd51fd5340e92805e2e64c4cee07828c981df80a729f9b83",
+      "lines": 219
+    }
+  ],
+  "kubernetes_pod_ownerref_source": {
+    "tag": "v1.35.8",
+    "commit": "1c2e10a409eb1b03f2f28f401ce935312e20d9fb",
+    "files": [
+      {
+        "path": "pkg/controller/statefulset/stateful_set_utils.go",
+        "sha256": "9299c1041856f0bb46e10172e8471dc38262e307acaaa62d1dc32ee1c2e12756",
+        "lines": 699
+      },
+      {
+        "path": "pkg/controller/controller_utils.go",
+        "sha256": "33ef30669ed225ae6722b3c0ac3eede83844d9251aa13c0595fc10b55b9695b0",
+        "lines": 1452
+      }
+    ]
+  }
+}

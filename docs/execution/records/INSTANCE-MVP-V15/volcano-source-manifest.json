@@ -1,0 +1,129 @@
+{
+  "execution_host": "fedora",
+  "date": "2026-10-13",
+  "scope": "read-only upstream source comparison; no upstream build, dependency download, platform installation or hardware verification",
+  "repositories": [
+    {
+      "name": "volcano",
+      "remote": "https://github.com/volcano-sh/volcano.git",
+      "versions": [
+        {
+          "tag": "v1.12.0",
+          "tag_object": "d24c04ca1a2813c506a1d9d3cd38dca9bf7ce400",
+          "commit": "d24c04ca1a2813c506a1d9d3cd38dca9bf7ce400",
+          "files": [
+            {
+              "path": "pkg/scheduler/api/devices/config/vgpu.go",
+              "sha256": "cce5064f5d69053e11ee05c2e3c5d6dc343b47a6676e902d7643524064be111a",
+              "lines": 115
+            },
+            {
+              "path": "pkg/scheduler/api/devices/nvidia/vgpu/device_info.go",
+              "sha256": "eb192ab36f527be1439a28334ad65ff697d9298913be04fd10aa7b8efc6716a7",
+              "lines": 266
+            },
+            {
+              "path": "pkg/scheduler/api/devices/nvidia/vgpu/utils.go",
+              "sha256": "fd0be2479052fcb8d28c941604eaec7cccffb6add4b6707013c59409c83c5f40",
+              "lines": 502
+            }
+          ]
+        },
+        {
+          "tag": "v1.15.2",
+          "tag_object": "f0917e48403c4ffa2d8a022f05f1f5097fbe9c10",
+          "commit": "1462fb7b4835970708717456e3aed85e697ec2eb",
+          "files": [
+            {
+              "path": "pkg/scheduler/api/devices/config/vgpu.go",
+              "sha256": "6d7bba03240c62615a7dd0c0c106156090576106c1e48ed651c23d7add3e52b2",
+              "lines": 113
+            },
+            {
+              "path": "pkg/scheduler/api/devices/nvidia/vgpu/type.go",
+              "sha256": "e6952b7388739471e0333dfe131fd4a80e4ad7b097a91cc97aa226a2e286c728",
+              "lines": 74
+            },
+            {
+              "path": "pkg/scheduler/api/devices/nvidia/vgpu/device_info.go",
+              "sha256": "e0cb1ad20ff9dff946263a361bbbe17ded19025c4f26370c8f3dc294396fa57e",
+              "lines": 431
+            },
+            {
+              "path": "pkg/scheduler/api/devices/nvidia/vgpu/utils.go",
+              "sha256": "b35c0b125a385c833ee9d2beb228454326ef01399e03f20c0ca7181a9d8a6b57",
+              "lines": 550
+            },
+            {
+              "path": "pkg/scheduler/api/devices/util.go",
+              "sha256": "3401cd26795abad2e8b5671f1f816ec464da3bbfad8b50322c0111e470d8614c",
+              "lines": 276
+            },
+            {
+              "path": "pkg/controllers/podgroup/pg_controller_handler.go",
+              "sha256": "834e8a2857d78fea03e4b8bfa120828f53d1aa70b43698125741d1a72f091b88",
+              "lines": 520
+            },
+            {
+              "path": "staging/src/volcano.sh/apis/pkg/apis/scheduling/v1beta1/labels.go",
+              "sha256": "366d9caa07f28b859afe027243859ddae022cb8190d31b630f84bee02f44b947",
+              "lines": 77
+            },
+            {
+              "path": "docs/user-guide/how_to_use_volcano_vgpu.md",
+              "sha256": "24270a58c7f8249a7c88b904e9caf4f3f88f6c629b5a52758def2d088d839888",
+              "lines": 245
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "device-plugin",
+      "remote": "https://github.com/Project-HAMi/volcano-vgpu-device-plugin.git",
+      "versions": [
+        {
+          "tag": "v1.12.0",
+          "tag_object": "afefcc2ff7944e9e68275e83217cf5eb7fb4a585",
+          "commit": "afefcc2ff7944e9e68275e83217cf5eb7fb4a585",
+          "files": [
+            {
+              "path": "pkg/plugin/register.go",
+              "sha256": "ea932f79c01ba6bb7e98a0df0bba42e0b8f2b550740694860c08654ac4290653",
+              "lines": 92
+            },
+            {
+              "path": "pkg/plugin/server.go",
+              "sha256": "1a8e8c12bb5d4350cc0f2f8c11a4b8d25b64bd78d5a64b95c8f99016b05c16b6",
+              "lines": 997
+            },
+            {
+              "path": "pkg/util/types.go",
+              "sha256": "82bec39dbca0d092557bccbc6548e2fd0c0b111c4ea2019635570e90ccaee35b",
+              "lines": 110
+            },
+            {
+              "path": "pkg/util/util.go",
+              "sha256": "6594d67ef01050e2593f9ac50e8bc00485654b2a6e5ee68af7da4d7eda25b106",
+              "lines": 719
+            },
+            {
+              "path": "cmd/vgpu/main.go",
+              "sha256": "0dc188ee6dfd9b5ba70be24c530894d4971e9a98dd84e8145d2deea9668cb4a7",
+              "lines": 443
+            },
+            {
+              "path": "volcano-vgpu-device-plugin.yml",
+              "sha256": "02f1fc0ce842fd587b7834c6c5f5949399badd0717c3f61170134700bc9d6153",
+              "lines": 303
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plugin_v1.15.2_tag_query": {
+    "output": "",
+    "claim": "no matching tag advertised by origin in this query; not a claim about future releases"
+  }
+}

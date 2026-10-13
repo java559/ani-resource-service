@@ -1,0 +1,29 @@
+app/admin/service/internal/service/instance_pg_test.go: 成功
+app/admin/service/internal/service/instance_fixture_test.go: 成功
+app/admin/service/tests/testutil/instance_resource.go: 成功
+app/admin/service/internal/server/instance_joint_test.go: 成功
+app/admin/service/internal/server/instance_http.go: 成功
+app/admin/service/internal/server/quota_internal_server.go: 成功
+app/admin/service/internal/data/tenant_access_checker.go: 成功
+app/admin/service/internal/data/quota_ledger_repo.go: 成功
+pkg/constants/module_mapping.go: 成功
+pkg/constants/module_mapping_test.go: 成功
+internal/data/instance/governance_fixture_test.go: 成功
+127.0.0.1:5432 - accepting connections
+=== RUN   TestInstancePublicHTTPPersistentIntakeAndCommands
+    instance_joint_test.go:186: HTTP POST /api/v1/instances -> 401
+    instance_joint_test.go:188: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:197: HTTP POST /api/v1/instances -> 202
+    instance_joint_test.go:202: HTTP GET /api/v1/instances/c867235b-be7d-49f2-8e3e-abe7613b53cd -> 200
+    instance_joint_test.go:206: HTTP GET /api/v1/instances -> 200
+    instance_joint_test.go:209: HTTP GET /api/v1/instance-operations/176c1523-1dc2-434a-9587-9e8fe6a45ccd -> 200
+    instance_joint_test.go:212: HTTP GET /api/v1/instance-presets -> 200
+    instance_joint_test.go:217: HTTP POST /api/v1/instances/c867235b-be7d-49f2-8e3e-abe7613b53cd:stop -> 202
+    instance_joint_test.go:217: HTTP POST /api/v1/instances/c867235b-be7d-49f2-8e3e-abe7613b53cd:start -> 202
+    instance_joint_test.go:222: HTTP GET /api/v1/instances/c867235b-be7d-49f2-8e3e-abe7613b53cd -> 200
+    instance_joint_test.go:226: HTTP DELETE /api/v1/instances/c867235b-be7d-49f2-8e3e-abe7613b53cd -> 202
+    instance_joint_test.go:240: HTTP POST /api/v1/instances -> 403
+    instance_resource.go:42: Resource durable intake subprocess exit=0; isolated PG cleaned
+--- PASS: TestInstancePublicHTTPPersistentIntakeAndCommands (0.64s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/server	1.193s

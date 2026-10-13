@@ -418,3 +418,63 @@ Harbor 实际版本 `v2.15.2-a97e7b83`；CA 缺 Key Usage 导致 Python 默认 S
 ## 详情响应格式（2026-10-09）
 
 基于 Resource main `73c4170`、Governance main `134686f` 自查对外 JSON 详情：Governance 的 9 个单对象详情统一展开，Resource 同步 [VPC/网络查询规格](../specs/governance-vpc-read.md#governance-对外详情格式) 和 [Image API 规格](../specs/image-api.md)。Resource 仅提供内部 gRPC，消息/字段编号、租户谓词及权限保持既有合同；业务代码没有变化。实际 HTTP、生成和编译结果在 Governance 的接口集成登记 `DETAIL-FORMAT-01` 维护。部署及目标环境验收仍为 not_verified。
+## GPU container instance MVP v1.5
+
+2026-10-13 用户启动持续 Goal；后续明确本轮只负责后端，前端由专人接手。用户随后授权等待 GPU 期间适配实际调度器、准备真实隔离后端环境并完成 CPU 基础设施验证；这些独立工作及实际 Image 接线已推进。Goal **blocked / 未完成**：恢复后的原用户轮及后续两轮中，同一实际 GPU 前提持续缺失；本轮 Fedora 只读复核确认三节点 GPU allocatable 空、设备插件无、scheduler 没有 deviceshare/VGPUEnable，四个任务服务 inactive/dead、ExecMainStatus=0，没有可等待的运行验收任务。当前必须依赖平台条件变化才能继续真实 GPU 产品主链；不安装缺失组件，不用 CPU/替身结果替代共享/整卡验收。原 MVP-01～04 后端目标保持。
+
+主链：Gov 当前授权 → 原公开请求幂等 → Image/preset/Namespace 冻结 → Acc plan → Gov 原子占额/持久投递 → Res 持久 ACK → Notebook GPU → SG 终端/工作目录 → 原账启停 → 删除计算及专属盘 → Gov 原账归还 → Acc ENDED。
+
+### 基线与工作区
+
+- Resource 最新远端 main 经 SSH 重新获取：`e7b5a8a3435996181bff62e025a21224c97d2464`；分支 `codex/resource-instance-mvp-v15`，任务 worktree `/home/chabking/.codex/worktrees/resource-instance-mvp-v15/ani-resource-service`。
+- Governance main：`edcd4ed864c4a218faa8b957b7e7c0f817dec6ad`，独立 worktree `/home/chabking/workspace/ani-governance-instance-mvp-v15`。
+- Accelerator main：`76e1b796a90867185cb7e93d4ae390e2d72aacdb`，独立 worktree `/home/chabking/workspace/ani-accelerator-instance-mvp-v15`。
+- SG main：`d8cebd50fb38c3e0d7b875e2c4a88377eb43cce1`，独立 worktree `/home/chabking/workspace/ani-session-gateway-instance-mvp-v15`。后三仓任务分支均为 `codex/resource-instance-mvp-v15`。
+- 原 Resource Image 分支及其未提交文件保留；原 Acc 的两个未跟踪计划保留。2026-10-13 用户明确授权将已完成后端推送四仓 main；源码发布不改变下述真实 GPU 验收结论，不更新共享部署。
+
+### 当前业务位置
+
+Resource 已实现独立实例持久仓储、ACK、worker、Notebook/PVC 适配、Image 窄运行用例、原 charge 退额 outbox 和 SG 目标复核。真实 PG + 外部 Kubernetes/Gov 替身覆盖多次启停、原冻结配置不变、PVC 清理失败后 GPU 已归还但删除未完成、未知 CREATE 保持 blocked、DELETE 先到和租户拒绝。**这还不是 Gov 产品 API → GPU → 终端的闭环证据。**
+
+Gov 公开 HTTP 已通过真实 JWT/token cache、套餐闸门、Casbin 和当前角色快照验证；创建/重放、列表/详情/操作/规格查询、Stop/Start 及最终 Delete 经真实 mTLS 接到 Resource 子进程与独立受限 PG，CREATE/DELETE 均取得持久 ACK。此切片中的 Acc RPC 和 Image/环境可用事实受控，没有运行 Notebook，也没有制造计算清理或退额：最终删除接单后原账仍占 6144 MiB。源与记录见 [本次后端证据](records/INSTANCE-MVP-V15/README.md)。
+
+四个服务的目标构建、必要 Proto/Ent/sqlc 生成已通过 Fedora 工作区验证。Acc 固定 Resource ref/投影、独立 owner 公钥拒绝旧 Inference 密钥；SG UID guard、Redis 绑定重启恢复与受影响旧 gRPC 路径已通过定向检查。Resource 生产退额 outbox 已通过回执丢失和重启后原事件重发。
+
+后续同一 HTTP 切片启用真实 Resource worker/退额 outbox、Gov 退额 mTLS listener 及 Acc 服务/PG：Acc 目录通过管理 RPC 准备，公开创建通过真实 Acc RPC 冻结 plan；运行观察、Stop/Start、计算/盘清理决策、原事件退额、Gov 原账归零和 Acc ENDED 查询均通过（45 秒，exit 0）。此阶段仅 Kubernetes provider 与 Image/环境事实受控；没有真实 GPU/Notebook/物理盘，也没有 SG 终端或文件验收。没有手改原账或注入完成通知。
+
+进一步在同一切片接入真实 SG 服务：Gov 唯一 URI mTLS 签发、SG 唯一 URI mTLS 查询 Resource 的窄终端 validator、独占真实 Redis、原 WebSocket/Connected Session/ExecAdapter 均使用生产代码。45 秒组合用例通过（exit 0）：shell 写入/读回任务文件、Stop/Start 后相同目录读回；停止后旧票据和旧版本票据在重启后均无法打开 exec；随后删除/退额/Acc ENDED 仍通过。Kubernetes 列表/remotecommand 使用显式边界替身，文件为 task-local 外部 exec 工作目录，**不是实际 PVC 文件或 GPU 容器验收**。当前共享环境仍未创建实例。
+
+接线发现 Acc schema 2 的 usages/claims/release_proofs 只允许 Inference。新增独立 `0003_resource_instance_owner.sql`，runtime 明确要求 schema 3，不改历史迁移、不自动迁移。新迁移在独占 PG 实际执行，并通过原 Inference/Resource 的 Binding 先到、投影关联、ENDED 不等于分配消失和确定释放用例；旧投影并发/恢复定向回归通过。正式启动与回退必须使用匹配数据库版本/恢复点；尚未更新共享 Acc 服务。
+
+最终删除另增加实际 PV 回收核验：持久保存工作盘绑定名称/UID，校验原 claimRef 和 Delete 策略；PVC 消失而原 PV 仍存在时保持未完成。磁盘观察或删除失败不阻止计算清理后的原 GPU 退额。Notebook adapter 的归属/回收定向用例和原四组 PG 行为通过；追加磁盘观察失败仅重跑现有生命周期用例，通过。重新编译改动后的 Resource fixture，再跑同一 HTTP/SG 组合用例，45.14 秒、exit 0；未变的其他服务 artifact 复用。没有直接删除 PV 或存储 finalizer。真实 CSI 回收仍未验收。
+
+等待 GPU 期间新增真实 CPU 基础设施证据：Notebook Controller 1.10、`ani-block`、生产 SG 进程/Redis/mTLS/WebSocket/Kubernetes exec 完成写入读回、两次原生条件 Stop/Start、相同 PVC 重挂与文件保留，以及 Notebook/Pod/StatefulSet/PVC/PV 最终回收（125.21 秒，exit 0）。此 CPU 探针使用 SG 的既有 container 路径，不是 GPU 产品 InstanceBinding 或 Gov GPU 创建验收。源码核对发现 `spec.template.metadata` 被 CRD 丢弃、STS 顶层无 ANI 标签；Resource 已改为 Notebook 顶层投影，并按保存 UID 的 Notebook→STS→Pod 所有权链观测清理，持久保存 STS UID。修复后新建真实 CPU 对象的注解投影/所有权链/CSI 回收通过（52.91 秒）；改动对应 adapter、原四组 PG 行为与 Resource 构建通过。来源与日志见[真实实验记录](records/INSTANCE-MVP-V15/live-lab.md)。
+
+四个正式生产入口已在 Fedora 隔离运行：五域 owner/runtime 数据库、官方 Gov 初始化、专属 Redis、任务 mTLS 与真实 Kubernetes/Harbor。实验套餐、租户、用户、九项 INSTANCE 权限由正式 API 准备；真实租户登录→当前角色/套餐→Gov→Resource mTLS/PG 的规格及实例空列表通过。Gov→Acc 管理 RPC 实际登记集群/池；四服务重启后查询和原幂等键重放保持各一个登记对象。Resource 允许空 Presets 启动查询/恢复，新 GPU 创建仍拒绝，Gov/Resource 操作记录均为零。Image 生产生命周期已建立专属 Harbor 项目，GPU 工作镜像及凭证消费尚未冻结。实验服务验证后已停止，数据库、配置和任务基础资源保留供恢复；没有更新共享服务。
+
+后续 Image 真接线已推进：实验套餐/角色增加四项所需 IMAGE 动作，正式租户 API→Gov→Resource→Image PG/Harbor 建立空间与加密 pull robot；真实平台 artifact 登记及列表/详情通过，生产 Runtime/Notebook adapter 写入 shared pull Secret，实际 robot 私有拉取、匿名及其他私有项目拒绝通过。真实报文暴露并修复正常 OCI config artifact_type 被拒绝、实例误把 `img_…` ID 当 UUID 两个主链问题；原授权/原账/SG 组合定向回归通过，Image operator JSON stdout 混日志也已修正。现有 Jupyter 镜像实际私有拉取成功，但缺强制 Jupyter token 后容器反复退出，入口验证 fail；未绕过入口、未标为兼容，shell/工作目录及 GPU 软件仍 not_verified。探针计算/PVC/原 PV 已回收，Image/共享 pull Secret 保留。来源、失败、命令和源码哈希见 [Image 实验](records/INSTANCE-MVP-V15/image-lab.md)。
+
+| 工作包 | 当前结论 | 断点 |
+| --- | --- | --- |
+| MVP-01 | partial / GPU blocked | 真实 CPU Notebook/注解投影/CSI 回收及实验租户已验证；实际 scheduler 1.15.2 的源码合同已适配，GPU、设备插件、有效调度配置和工作镜像约定仍待冻结 |
+| MVP-02 | partial | 当前授权/原请求重放、真实原账、Resource mTLS ACK/退额及 Acc 持久同步有软件证据；隔离生产查询及管理登记已通过，真实 GPU owner 事实待完成 |
+| MVP-03 | partial / GPU not_verified | 软件主链有真实 PG/Redis/mTLS 及边界替身证据；真实生产查询已接通，GPU 产品创建→终端→原账归还仍未验收 |
+| MVP-04 backend | partial | 真实 CPU 终端文件、多次原生启停、同 PVC 保留及最终计算/盘回收通过；未知/迟到保护有定向持久化证据，真实 GPU 产品验收仍待完成 |
+| 前端/浏览器页面 | handed_off | 按用户调整由前端专人承担，本轮没有修改前端 |
+
+### 执行证据与环境
+
+全部生成、编译、测试、PG、依赖准备和 Kubernetes API 驱动通过 `ssh fedora`。任务根 `/home/chabking/workspace/ani-resource-service-runs/instance-mvp-v15-20261013`，共享锁 `/home/chabking/workspace/ani-network-service-runs/net05a-heavy.lock`；Go 1.26.9、Buf 1.60.0、sqlc 1.31.1。编译串行，`GOMAXPROCS=2`、`-p=2`、CPUQuota=200%、MemoryMax=6G、MemorySwapMax=0，PG 单实例 768 MiB/1 CPU、随机 loopback 端口、任务标签与清理。模块/编译缓存及 TMPDIR 都为本任务独占。普通源码快照不含集群凭据、服务密钥或运行配置；私有配置仅保留在远端 `private/`。
+
+- r6 源码归档 SHA-256 `16a50b9558fd59f9555b93ab2a9c3a9919248376ad523059a66dbff995344a2d`：Resource 生成、两组真实 PG 行为、受影响 Governance mTLS 定向回归、`go build ./cmd/ani-resource-service` exit 0。
+- r9 源码归档 SHA-256 `1dbd55accdfd95039b14eec8bad1d1ca9a96d18295df4854a0f490021bfa466b`：新增原生启停/映射测试、两组真实 PG 行为、Resource 服务构建 exit 0。执行入口为 `scripts/generate-instance-api`、sqlc generate、`go test -count=1 ./internal/data/instance -run TestNotebookMappingAndConditionalStop`、`scripts/instance-integration`、`go build ./cmd/ani-resource-service`；输入完整文件哈希在远端 `input-r9.sha256`。
+- 保留失败：初次生成暂存 upstream 只读权限导致清理 exit 1，已限定修复暂存目录；共享 Go cache permission denied 导致 transport setup fail，改用独占缓存；r5 Notebook 构造字段漏填导致编译失败，已修复；r8 验证命令误将 `-mod=mod` 与临时 go.work 同用，exit 1，已分开 standalone Resource 与跨仓 workspace 验证。没有运行全量测试、race、mutation 或扫描。
+- `make verify` 会触发全量测试，本 Goal 不执行该总入口；按授权拆取改动对应的生成、编译、契约与具名行为检查。早期跨仓验证使用任务私有 go.work 和各冻结源码；2026-10-13 用户授权发布时，窄终端协议与 Acc provider 已推送 main，下载来源 SHA/sums 已核对，Resource/SG 的 `GOWORK=off` 独立构建和受影响具名行为通过，不提交本地 replace。
+- 终端协议拆为只依赖 protobuf/gRPC 的 `api/instance/terminal` 子模块，隔离 SG v0.34.3 Kubernetes SDK 与 Resource/Acc 根模块的 v0.36.x。早期任务私有 `resource-workspace/go.work`、`sg-workspace/go.work` 和 Gov/Acc workspace 使用版本限定的 `v0.0.0` 替换。发布消费改为 `go.mod` 中的正式版本；窄协议自身及 Resource/SG 根模块的 `GOWORK=off` 构建通过，源文件冻结记录保留在 Fedora 任务 `publication/`。
+- 后续定向修复已验证：INSTANCE 套餐转换及 OpenAPI tag 登记；路径字段 json_name 与真实路由一致；Gov 删除快照保留原冻结内容并持久 expected_version；Res 同值启停写入失败不能借旧观察提前完成；Pod Ready、downward UID 和专属 PVC 投影检查。具名命令、失败修复与日志见本次证据；无全量/无关测试。
+- 实际 API `https://172.16.101.10:6443`；cluster UID `5277649d-e28d-4a0a-ae76-8354365c63bc`；ani-01/02/03 为 `.10/.11/.12`，Kubernetes v1.35.8。它不同于旧 Image 记录中的 cluster UID，未按旧 kubecontext/UID 写入。
+- Notebook Controller v1.10.0 已部署；`ani-block`、`ani-cephfs` 均为 Delete reclaim policy。三个节点 GPU allocatable 均空，没有 GPU 设备插件；实际 scheduler 1.15.2 的配置没有 `deviceshare.VGPUEnable`。旧 Acc 的 1.12.0 限制来自源码支持范围，不是用户指定的部署版本要求，也不代表硬件已验证。现已按固定上游源码增加 `(scheduler 1.15.2, independent device plugin 1.12.0)` 的明确支持组合，修正 Unix 秒及 Allocatable 门禁，定向 unit/真实 PG provider replay 与构建通过；插件最终安装版本仍须单独核对。**真实共享/整卡 GPU 验收 blocked**：需可用设备、插件、有效调度配置及实际硬件消费证明，不以软件兼容性或 CPU 结果代替。
+- 2026-10-13 04:05 CST 从 Fedora 用私有 kubeconfig 和校验 CA 的 Kubernetes HTTPS API 只读复查：相同 API/UID/节点；GPU allocatable 仍为空、没有设备插件 DS、Volcano 仍为 v1.15.2，两个 StorageClass 为 Delete/Immediate。只读结果见 [cluster-preflight.json](records/INSTANCE-MVP-V15/cluster-preflight.json)，无集群写入。
+- 后续授权实验已创建两个任务 Namespace 及普通 SA/SG namespaced exec Role；CPU Notebook/STS/Pod/PVC/PV 已全部回收。业务 Namespace 使用正式 Gov 创建的持久资源租户 UUID。五个隔离数据库、PG/Redis、任务 Harbor 项目和私有配置保留，资源 ID/清理边界见[真实实验记录](records/INSTANCE-MVP-V15/live-lab.md)。旧 fixture 容器/卷已清理；没有更新共享服务、平台 GPU/CNI/全局准入。运行/恢复入口为 [Fedora 手册](../runbooks/instance-mvp-fedora.md)。
+
+继续条件：10～12 实验集群提供实际可用 GPU、独立设备插件及有效 VGPU 调度配置，核对实际组合并完成 Acc 硬件消费证明/supply/profile；提供符合实例长驻/shell/目录约定的工作镜像并验证 GPU 软件。现有 Jupyter candidate 不能直接作为兼容镜像；真实拉取材料路径已验证。冻结合格镜像 digest/shell/UID/GID 后，使用已准备租户沿产品链执行共享/整卡、可信实例终端、原账启停和最终回收。本任务不安装缺失平台组件，不扩大兼容矩阵。MVP-05 完整矩阵不额外前置；MVP-01～04 的真实 GPU 后端验收仍未完成，前端已按用户要求移交。

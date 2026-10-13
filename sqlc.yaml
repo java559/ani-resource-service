@@ -1,6 +1,23 @@
 version: "2"
 sql:
   - engine: postgresql
+    schema: migrations/instance
+    queries: internal/data/instance/queries
+    gen:
+      go:
+        package: sqlcgen
+        out: internal/data/instance/sqlcgen
+        sql_package: pgx/v5
+        emit_empty_slices: true
+        query_parameter_limit: 0
+        overrides:
+          - db_type: uuid
+            go_type: string
+          - db_type: timestamptz
+            go_type:
+              import: time
+              type: Time
+  - engine: postgresql
     schema:
       - migrations/0001_vpc.sql
       - migrations/0002_subnet.sql

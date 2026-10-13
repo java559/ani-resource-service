@@ -1,0 +1,11 @@
+internal/data/instance/postgres.go: 成功
+internal/data/instance/postgres_integration_test.go: 成功
+internal/data/instance/notebook.go: 成功
+internal/data/instance/notebook_test.go: 成功
+scripts/instance-integration: 成功
+=== RUN   TestNotebookMappingAndConditionalStop
+--- PASS: TestNotebookMappingAndConditionalStop (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance	0.010s
+127.0.0.1:5432 - accepting connections
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance	0.783s
