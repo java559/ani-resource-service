@@ -60,6 +60,15 @@ func (p *Postgres) Claim(ctx context.Context, owner string, duration time.Durati
 		if err = hydrateLBWork(ctx, q, &resource, binding); err != nil {
 			return biz.Work{}, false, databaseFailure(err)
 		}
+		if !active {
+			parked, err := parkLBWaitingWork(ctx, q, resource)
+			if err != nil {
+				return biz.Work{}, false, databaseFailure(err)
+			}
+			if parked {
+				return biz.Work{}, false, databaseFailure(tx.Commit(ctx))
+			}
+		}
 	}
 	now, err := q.DatabaseTime(ctx)
 	if err != nil {
@@ -70,6 +79,14 @@ func (p *Postgres) Claim(ctx context.Context, owner string, duration time.Durati
 		return biz.Work{}, false, err
 	}
 	cancelUnsent := (resource.State == biz.Deleting || resource.State == biz.Deleted) && resource.SystemManaged && !binding.CreateDispatched && binding.ProviderUid == "" && binding.PendingAction == ""
+	if resource.Kind == "load_balancer" && (resource.State == biz.Deleting || resource.State == biz.Deleted) {
+		safe, checkErr := q.CanDeleteLBWithoutProvider(ctx, sqlcgen.CanDeleteLBWithoutProviderParams{TenantID: resource.TenantID, LbID: resource.ID})
+		err = checkErr
+		cancelUnsent = safe.Valid && safe.Bool
+		if err != nil {
+			return biz.Work{}, false, databaseFailure(err)
+		}
+	}
 	if err := tx.Commit(ctx); err != nil {
 		return biz.Work{}, false, databaseFailure(err)
 	}
@@ -182,6 +199,21 @@ func (p *Postgres) Finish(ctx context.Context, work biz.Work, progress biz.Progr
 	})); err != nil {
 		return err
 	}
+	lbWaiting := work.Resource.Kind == "load_balancer" && progress.Observed && progress.LoadBalancer != nil && progress.LoadBalancer.ConfigurationState == "waiting_for_backends"
+	if lbWaiting && work.KnownIdentity != "" {
+		// This immutable exit fact is committed together with completed cleanup,
+		// cleared pending mutation and the lease/version-fenced observation.
+		retired, err := q.GetLBRetiredBinding(ctx, sqlcgen.GetLBRetiredBindingParams{TenantID: row.TenantID, LbID: row.ID, BindingID: work.BindingID})
+		if errors.Is(err, pgx.ErrNoRows) {
+			if err = affected(q.InsertLBRetiredBinding(ctx, sqlcgen.InsertLBRetiredBindingParams{TenantID: row.TenantID, LbID: row.ID, Version: row.Version, BindingID: work.BindingID, ProviderUid: work.KnownIdentity, OperationID: work.Operation.ID})); err != nil {
+				return err
+			}
+		} else if err != nil {
+			return databaseFailure(err)
+		} else if retired.ProviderUid != work.KnownIdentity || retired.CleanupTargetVersion != progress.LoadBalancer.AppliedVersion {
+			return biz.ErrLeaseLost
+		}
+	}
 	// Continuous observations only append history for a material state/reason
 	// change. They never reopen or rewrite the historical operation.
 	if work.ActiveOperation || work.Resource.State != progress.State || work.Resource.Reason != progress.Reason {
@@ -217,6 +249,11 @@ func (p *Postgres) Finish(ctx context.Context, work biz.Work, progress biz.Progr
 		CoveredGeneration: coveredGeneration(progress.Observed, progress.Proof, work.Requirement), Observed: progress.Observed, EvidenceHash: progress.Proof.Hash, Backoff: progress.Backoff,
 	})); err != nil {
 		return err
+	}
+	if lbWaiting {
+		if err := affected(q.ParkLBReconciliation(ctx, sqlcgen.ParkLBReconciliationParams{TenantID: row.TenantID, LbID: row.ID})); err != nil {
+			return err
+		}
 	}
 	return databaseFailure(tx.Commit(ctx))
 }

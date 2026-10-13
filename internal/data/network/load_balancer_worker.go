@@ -8,6 +8,23 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen"
 )
 
+// A parent observation can wake a saved waiting product. Only authoritative
+// unsent or completed retirement facts permit parking it without Provider IO.
+func parkLBWaitingWork(ctx context.Context, q *sqlcgen.Queries, resource biz.ResourceWork) (bool, error) {
+	lb := resource.LoadBalancer.LoadBalancer
+	if lb.ConfigurationState != "waiting_for_backends" || resource.State == biz.Deleting || resource.State == biz.Deleted {
+		return false, nil
+	}
+	safe, err := q.CanParkLBWaitingWithoutProvider(ctx, sqlcgen.CanParkLBWaitingWithoutProviderParams{TenantID: resource.TenantID, LbID: resource.ID})
+	if err != nil {
+		return false, err
+	}
+	if !safe {
+		return false, nil
+	}
+	return true, affected(q.ParkLBReconciliation(ctx, sqlcgen.ParkLBReconciliationParams{TenantID: resource.TenantID, LbID: resource.ID}))
+}
+
 func lbWork(row sqlcgen.NetworkLoadBalancer) biz.ResourceWork {
 	op := ""
 	if row.LastOperationID != nil {
@@ -50,12 +67,12 @@ func hydrateLBWork(ctx context.Context, q *sqlcgen.Queries, work *biz.ResourceWo
 	if err != nil {
 		return err
 	}
-	v, err := loadLB(ctx, q, r)
+	v, err := loadLBProviderTarget(ctx, q, r)
 	if err != nil {
 		return err
 	}
 	s := &biz.LoadBalancerWork{LoadBalancer: v, VIPOccupiedRevision: r.VipOccupiedRevision, VIPAbsenceRevision: r.VipAbsenceRevision}
-	s.Components = append(s.Components, biz.LoadBalancerComponent{ID: b.BindingID, Kind: "gateway", Name: b.ProviderName, Identity: b.ProviderUid, PendingAction: b.PendingAction, CreateDispatched: b.CreateDispatched, TargetVersion: v.DesiredVersion})
+	s.Components = append(s.Components, biz.LoadBalancerComponent{ID: b.BindingID, Kind: "gateway", Name: b.ProviderName, Identity: b.ProviderUid, PendingAction: b.PendingAction, CreateDispatched: b.CreateDispatched, TargetVersion: v.ProviderTargetVersion})
 	cs, err := q.ListLBComponents(ctx, sqlcgen.ListLBComponentsParams{TenantID: r.TenantID, LbID: r.LbID})
 	if err != nil {
 		return err
@@ -101,7 +118,7 @@ func (p *Postgres) BeginLoadBalancerMutation(ctx context.Context, w biz.Work, c 
 	if (w.Resource.State == biz.Deleting || w.Resource.State == biz.Deleted) && action != "delete" {
 		return biz.ErrLeaseLost
 	}
-	if err = affected(q.BeginLBComponentMutation(ctx, sqlcgen.BeginLBComponentMutationParams{TenantID: w.Resource.TenantID, LbID: w.Resource.ID, ComponentID: c.ID, Action: action, Identity: identity, TargetVersion: w.Resource.LoadBalancer.LoadBalancer.DesiredVersion})); err != nil {
+	if err = affected(q.BeginLBComponentMutation(ctx, sqlcgen.BeginLBComponentMutationParams{TenantID: w.Resource.TenantID, LbID: w.Resource.ID, ComponentID: c.ID, Action: action, Identity: identity, TargetVersion: w.Resource.LoadBalancer.LoadBalancer.ProviderTargetVersion})); err != nil {
 		return err
 	}
 	return databaseFailure(tx.Commit(ctx))
@@ -140,6 +157,14 @@ func (p *Postgres) finishLB(ctx context.Context, q *sqlcgen.Queries, w biz.Work,
 	}
 	if o.GeneratedReady {
 		if err := q.BoundLBClaim(ctx, sqlcgen.BoundLBClaimParams{TenantID: w.Resource.TenantID, LbID: &w.Resource.ID}); err != nil {
+			return err
+		}
+	}
+	if o.ConfigurationState == "waiting_for_backends" {
+		if !o.GeneratedReleased || !o.AddressReleased {
+			return biz.ErrLeaseLost
+		}
+		if err := q.ReserveLBClaim(ctx, sqlcgen.ReserveLBClaimParams{TenantID: w.Resource.TenantID, LbID: &w.Resource.ID}); err != nil {
 			return err
 		}
 	}

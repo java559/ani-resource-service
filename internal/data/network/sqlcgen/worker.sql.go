@@ -347,6 +347,39 @@ func (q *Queries) LockVPC(ctx context.Context, arg LockVPCParams) (NetworkVpc, e
 	return i, err
 }
 
+const reincarnateLBBinding = `-- name: ReincarnateLBBinding :execrows
+UPDATE network_provider_bindings b SET binding_id=$1,provider_name=$2,provider_uid='',
+ create_dispatched=false,pending_action='',pending_since=NULL
+WHERE b.tenant_id=$3 AND b.lb_id=$4::text AND b.binding_id=$5 AND b.provider_uid=$6 AND b.pending_action=''
+AND EXISTS(SELECT 1 FROM network_lb_retired_bindings r JOIN network_load_balancers l USING(tenant_id,cluster_id,namespace,lb_id)
+ WHERE r.tenant_id=b.tenant_id AND r.lb_id=b.lb_id AND r.binding_id=b.binding_id AND r.provider_uid=b.provider_uid
+ AND r.provider_name=b.provider_name AND r.cleanup_target_version=l.applied_version AND l.configuration_state='waiting_for_backends')
+`
+
+type ReincarnateLBBindingParams struct {
+	NewBindingID    string
+	NewProviderName string
+	TenantID        string
+	LbID            string
+	OldBindingID    string
+	OldProviderUid  string
+}
+
+func (q *Queries) ReincarnateLBBinding(ctx context.Context, arg ReincarnateLBBindingParams) (int64, error) {
+	result, err := q.db.Exec(ctx, reincarnateLBBinding,
+		arg.NewBindingID,
+		arg.NewProviderName,
+		arg.TenantID,
+		arg.LbID,
+		arg.OldBindingID,
+		arg.OldProviderUid,
+	)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
 const releaseLease = `-- name: ReleaseLease :execrows
 UPDATE network_reconciliations
 SET lease_owner=NULL, lease_until=NULL,

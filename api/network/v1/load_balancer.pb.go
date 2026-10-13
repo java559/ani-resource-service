@@ -239,12 +239,13 @@ func (LoadBalancerHealthCheckProtocol) EnumDescriptor() ([]byte, []int) {
 type LoadBalancerConfigurationState int32
 
 const (
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED LoadBalancerConfigurationState = 0
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_PENDING     LoadBalancerConfigurationState = 1
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_APPLYING    LoadBalancerConfigurationState = 2
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED  LoadBalancerConfigurationState = 3
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED    LoadBalancerConfigurationState = 4
-	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN     LoadBalancerConfigurationState = 5
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED          LoadBalancerConfigurationState = 0
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_PENDING              LoadBalancerConfigurationState = 1
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_APPLYING             LoadBalancerConfigurationState = 2
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED           LoadBalancerConfigurationState = 3
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED             LoadBalancerConfigurationState = 4
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN              LoadBalancerConfigurationState = 5
+	LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS LoadBalancerConfigurationState = 6
 )
 
 // Enum value maps for LoadBalancerConfigurationState.
@@ -256,14 +257,16 @@ var (
 		3: "LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED",
 		4: "LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED",
 		5: "LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN",
+		6: "LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS",
 	}
 	LoadBalancerConfigurationState_value = map[string]int32{
-		"LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED": 0,
-		"LOAD_BALANCER_CONFIGURATION_STATE_PENDING":     1,
-		"LOAD_BALANCER_CONFIGURATION_STATE_APPLYING":    2,
-		"LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED":  3,
-		"LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED":    4,
-		"LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN":     5,
+		"LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED":          0,
+		"LOAD_BALANCER_CONFIGURATION_STATE_PENDING":              1,
+		"LOAD_BALANCER_CONFIGURATION_STATE_APPLYING":             2,
+		"LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED":           3,
+		"LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED":             4,
+		"LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN":              5,
+		"LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS": 6,
 	}
 )
 
@@ -651,8 +654,12 @@ type LoadBalancerListener struct {
 	MaxConnections          *uint32                         `protobuf:"varint,10,opt,name=max_connections,json=maxConnections,proto3,oneof" json:"max_connections,omitempty"`
 	GzipEnabled             bool                            `protobuf:"varint,11,opt,name=gzip_enabled,json=gzipEnabled,proto3" json:"gzip_enabled,omitempty"`
 	HttpsRedirectStatusCode uint32                          `protobuf:"varint,12,opt,name=https_redirect_status_code,json=httpsRedirectStatusCode,proto3" json:"https_redirect_status_code,omitempty"`
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// Read-only: waiting_for_backends, applying, configured, removing, degraded
+	// or unknown. Waiting redirect listeners report WAITING_FOR_REDIRECT_TARGET.
+	DeploymentState string `protobuf:"bytes,13,opt,name=deployment_state,json=deploymentState,proto3" json:"deployment_state,omitempty"`
+	Reason          string `protobuf:"bytes,14,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *LoadBalancerListener) Reset() {
@@ -767,6 +774,20 @@ func (x *LoadBalancerListener) GetHttpsRedirectStatusCode() uint32 {
 		return x.HttpsRedirectStatusCode
 	}
 	return 0
+}
+
+func (x *LoadBalancerListener) GetDeploymentState() string {
+	if x != nil {
+		return x.DeploymentState
+	}
+	return ""
+}
+
+func (x *LoadBalancerListener) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
 }
 
 // The backend must resolve to a current, allocated business address in this VPC
@@ -1095,7 +1116,7 @@ type LoadBalancer struct {
 	Version        int64                        `protobuf:"varint,18,opt,name=version,proto3" json:"version,omitempty"`
 	DesiredVersion int64                        `protobuf:"varint,19,opt,name=desired_version,json=desiredVersion,proto3" json:"desired_version,omitempty"`
 	// Preserved during partially applied or failed updates; never copied from
-	// desired_version until the corresponding configuration is verified.
+	// provider_target_version until that projection or its cleanup is verified.
 	AppliedVersion     int64                          `protobuf:"varint,20,opt,name=applied_version,json=appliedVersion,proto3" json:"applied_version,omitempty"`
 	ConfigurationState LoadBalancerConfigurationState `protobuf:"varint,21,opt,name=configuration_state,json=configurationState,proto3,enum=network.v1.LoadBalancerConfigurationState" json:"configuration_state,omitempty"`
 	// unknown without a suitable fresh health source. Gateway/Route/Policy
@@ -1111,8 +1132,11 @@ type LoadBalancer struct {
 	// resources. Absent when unknown; stale evidence forces data_plane_state=unknown.
 	DataPlaneObservedAt *timestamppb.Timestamp  `protobuf:"bytes,29,opt,name=data_plane_observed_at,json=dataPlaneObservedAt,proto3" json:"data_plane_observed_at,omitempty"`
 	Listeners           []*LoadBalancerListener `protobuf:"bytes,30,rep,name=listeners,proto3" json:"listeners,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Read-only version of the latest configuration that changed the Provider
+	// projection. Zero means no projection has ever been targeted.
+	ProviderTargetVersion int64 `protobuf:"varint,31,opt,name=provider_target_version,json=providerTargetVersion,proto3" json:"provider_target_version,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *LoadBalancer) Reset() {
@@ -1355,10 +1379,18 @@ func (x *LoadBalancer) GetListeners() []*LoadBalancerListener {
 	return nil
 }
 
+func (x *LoadBalancer) GetProviderTargetVersion() int64 {
+	if x != nil {
+		return x.ProviderTargetVersion
+	}
+	return 0
+}
+
 // Creation validates each HTTP listener and its backend/health configuration.
 // Flavor is small (the default), medium or large. Private/public_private require a usable private_ip in subnet_id;
 // public forbids private_ip. Public/public_private require an allocated, unclaimed
-// Public EIP; private forbids public_eip_id. All three require fresh base readiness.
+// Public EIP; private forbids public_eip_id. Empty listeners save intent only;
+// runtime readiness is checked when their backend configuration activates them.
 // Accepted intent atomically reserves parents, VIP/EIP and stable child identities.
 // Replaying the same key and normalized intent returns the accepted snapshot;
 // a changed intent under the same key is IDEMPOTENCY_CONFLICT.
@@ -2342,7 +2374,7 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\fgzip_enabled\x18\v \x01(\bR\vgzipEnabled\x12;\n" +
 	"\x1ahttps_redirect_status_code\x18\f \x01(\rR\x17httpsRedirectStatusCodeB\a\n" +
 	"\x05_portB\x12\n" +
-	"\x10_max_connections\"\xb0\x05\n" +
+	"\x10_max_connections\"\xf3\x05\n" +
 	"\x14LoadBalancerListener\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12D\n" +
 	"\bprotocol\x18\x02 \x01(\x0e2(.network.v1.LoadBalancerListenerProtocolR\bprotocol\x12\x12\n" +
@@ -2356,7 +2388,9 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\x0fmax_connections\x18\n" +
 	" \x01(\rH\x00R\x0emaxConnections\x88\x01\x01\x12!\n" +
 	"\fgzip_enabled\x18\v \x01(\bR\vgzipEnabled\x12;\n" +
-	"\x1ahttps_redirect_status_code\x18\f \x01(\rR\x17httpsRedirectStatusCodeB\x12\n" +
+	"\x1ahttps_redirect_status_code\x18\f \x01(\rR\x17httpsRedirectStatusCode\x12)\n" +
+	"\x10deployment_state\x18\r \x01(\tR\x0fdeploymentState\x12\x16\n" +
+	"\x06reason\x18\x0e \x01(\tR\x06reasonB\x12\n" +
 	"\x10_max_connections\"\x9d\x01\n" +
 	"\x18LoadBalancerBackendInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
@@ -2391,7 +2425,7 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\x10_timeout_secondsB\x16\n" +
 	"\x14_unhealthy_thresholdB\x14\n" +
 	"\x12_healthy_thresholdB\a\n" +
-	"\x05_port\"\x97\v\n" +
+	"\x05_port\"\xcf\v\n" +
 	"\fLoadBalancer\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\ttenant_id\x18\x02 \x01(\tR\btenantId\x12\x15\n" +
@@ -2427,7 +2461,8 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\x11last_operation_id\x18\x1b \x01(\tR\x0flastOperationId\x12%\n" +
 	"\x0epublic_address\x18\x1c \x01(\tR\rpublicAddress\x12O\n" +
 	"\x16data_plane_observed_at\x18\x1d \x01(\v2\x1a.google.protobuf.TimestampR\x13dataPlaneObservedAt\x12>\n" +
-	"\tlisteners\x18\x1e \x03(\v2 .network.v1.LoadBalancerListenerR\tlisteners\"\x81\x05\n" +
+	"\tlisteners\x18\x1e \x03(\v2 .network.v1.LoadBalancerListenerR\tlisteners\x126\n" +
+	"\x17provider_target_version\x18\x1f \x01(\x03R\x15providerTargetVersion\"\x81\x05\n" +
 	"\x19CreateLoadBalancerRequest\x12(\n" +
 	"\x10target_tenant_id\x18\x01 \x01(\tR\x0etargetTenantId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -2521,14 +2556,15 @@ const file_network_v1_load_balancer_proto_rawDesc = "" +
 	"\x1fLoadBalancerHealthCheckProtocol\x123\n" +
 	"/LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_UNSPECIFIED\x10\x00\x12+\n" +
 	"'LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP\x10\x01\x12,\n" +
-	"(LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP\x10\x02*\xc3\x02\n" +
+	"(LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_HTTP\x10\x02*\xff\x02\n" +
 	"\x1eLoadBalancerConfigurationState\x121\n" +
 	"-LOAD_BALANCER_CONFIGURATION_STATE_UNSPECIFIED\x10\x00\x12-\n" +
 	")LOAD_BALANCER_CONFIGURATION_STATE_PENDING\x10\x01\x12.\n" +
 	"*LOAD_BALANCER_CONFIGURATION_STATE_APPLYING\x10\x02\x120\n" +
 	",LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED\x10\x03\x12.\n" +
 	"*LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED\x10\x04\x12-\n" +
-	")LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN\x10\x05*\xd2\x01\n" +
+	")LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN\x10\x05\x12:\n" +
+	"6LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS\x10\x06*\xd2\x01\n" +
 	"\x1aLoadBalancerDataPlaneState\x12.\n" +
 	"*LOAD_BALANCER_DATA_PLANE_STATE_UNSPECIFIED\x10\x00\x12*\n" +
 	"&LOAD_BALANCER_DATA_PLANE_STATE_UNKNOWN\x10\x01\x12*\n" +

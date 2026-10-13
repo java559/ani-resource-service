@@ -312,6 +312,22 @@ type NetworkLbMember struct {
 	ObservedAt   *time.Time
 }
 
+type NetworkLbRetiredBinding struct {
+	TenantID             string
+	ClusterID            string
+	Namespace            string
+	LbID                 string
+	BindingID            string
+	ProviderName         string
+	ProviderUid          string
+	CleanupTargetVersion int64
+	OperationID          string
+	OperationState       string
+	VipOccupiedRevision  string
+	VipAbsenceRevision   string
+	CleanupCompletedAt   time.Time
+}
+
 type NetworkLbSubnetRef struct {
 	TenantID   string
 	ClusterID  string
@@ -363,6 +379,7 @@ type NetworkLoadBalancer struct {
 	DataPlaneObservedAt   *time.Time
 	AcceptedConfigVersion pgtype.Int8
 	AppliedConfigVersion  pgtype.Int8
+	ProviderTargetVersion pgtype.Int8
 }
 
 type NetworkOperation struct {

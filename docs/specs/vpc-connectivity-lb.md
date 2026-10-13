@@ -10,6 +10,8 @@ Network 实施基础为 `d8835a22d905e358b7f60756d3113baa97d7c762`（既有 EIP/
 
 本批 LB 交付范围为 IPv4、单集群、三种入口类型、1～64 个独立 HTTP/HTTPS/TCP/UDP/SSL 监听器、固定 small/medium/large、同 VPC 的 IP 后端、权重与监听参数。旧单监听器默认 HTTP/8080 输入继续兼容。复杂路由、证书管理、在线切换 LB 类型/规格、HA/容量和 Underlay 物理验收仍属后续单独任务。
 
+空监听器保存、独立 Provider 目标版本、下发集合与清空/再激活的增量合同由 [LB 延迟下发规格](lb-deferred-activation.md) §§2～6 定义；实际验证范围只见 [LB-DEFERRED-01](../execution/status.md#lb-deferred-01)。
+
 已有 VPC/Subnet/Attachment 的未冲突规则、Public EIP 的独立申请/保留/释放语义、平台 Public 网络模式和证据要求继续适用。本文替代旧方案中“每 VPC 总共一个 SNAT”“VPC Ready 即整个创建完成”“任何 SNAT 都直接阻塞 VPC 删除”“EIP 只能用于 SNAT”的相关限制。
 
 ### 1.1 已有证据与边界
@@ -126,7 +128,7 @@ LB 归属于一个租户/VPC/Subnet，包含 1～64 个 HTTP/HTTPS/TCP/UDP/SSL L
 | private_ip | private/public_private 必填，属于所选 Subnet 且非网关/保留地址；public 禁止 |
 | listeners | `{items:[...]}`；1～64 个监听器，protocol 为 HTTP/HTTPS/TCP/UDP/SSL；name 遵守安装 CRD 的 253 字符 DNS 名称限制，name/port 不重复，端口范围 1–65535 |
 | listener | 旧单监听器输入仍兼容，规范化为 `http`；不得与 listeners 同时提供 |
-| backends | 转发监听器非空，HTTP 重定向监听器必须为空；成员含 subnet_id、IPv4、port、weight，须验证归属本 VPC 的已分配业务地址，禁止直接指定平台/节点/跨租户地址；顶层字段仅用于旧输入 |
+| backends | 普通监听器允许空集合，等待添加后端时仅保存数据库；HTTP 重定向监听器必须为空，其激活依赖固定 HTTPS 目标。下发规则见 [延迟下发 §2](lb-deferred-activation.md#2-用户配置与下发集合)。非空成员含 subnet_id、IPv4、port、weight，须验证归属本 VPC 的已分配业务地址，禁止直接指定平台/节点/跨租户地址；顶层字段仅用于旧输入 |
 | health_check | TCP/HTTP；UDP 仅 TCP。port 缺失或 0 使用后端业务端口，非零 1–65535 可以独立于业务端口；HTTP 要求 path，可选 DNS hostname。默认 interval=5s、timeout=3s、unhealthy=3、healthy=1，时间与阈值分别为正数；panicThreshold=0 |
 | algorithm | 每监听器 RoundRobin（旧请求默认）、LeastRequest、SourceIP ConsistentHash，详情返回保存的实际算法 |
 | certificate_ref | HTTPS/SSL 必填 TLS Secret name，可选 namespace 必须等于资源绑定 namespace；Secret 需具有相同租户标签。只引用，不签发或上传 |

@@ -62,6 +62,9 @@ func LoadBalancerIsRoute(kind string) bool {
 }
 
 func LoadBalancerListenerComponentKinds(l LoadBalancerListener) []string {
+	if len(l.Backends) == 0 && l.Parameters.HTTPSRedirectStatusCode == 0 {
+		return nil
+	}
 	kinds := []string{LoadBalancerRouteKind(l.Protocol), "policy"}
 	if l.Parameters.MaxConnections > 0 {
 		kinds = append(kinds, "client_policy")

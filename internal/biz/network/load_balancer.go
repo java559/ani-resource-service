@@ -13,9 +13,11 @@ import (
 )
 
 const (
-	LoadBalancerNotReady    Reason = "LOAD_BALANCER_NOT_READY"
-	BackendIdentityMismatch Reason = "BACKEND_IDENTITY_MISMATCH"
-	VIPInUse                Reason = "VIP_IN_USE"
+	LoadBalancerNotReady     Reason = "LOAD_BALANCER_NOT_READY"
+	BackendIdentityMismatch  Reason = "BACKEND_IDENTITY_MISMATCH"
+	VIPInUse                 Reason = "VIP_IN_USE"
+	WaitingForBackends       Reason = "WAITING_FOR_BACKENDS"
+	WaitingForRedirectTarget Reason = "WAITING_FOR_REDIRECT_TARGET"
 )
 
 type LoadBalancerHealth struct {
@@ -31,13 +33,15 @@ type LoadBalancerHealthInput struct {
 	Port                                                                  *uint32
 }
 type LoadBalancerListener struct {
-	Parameters LoadBalancerListenerParameters `json:"Parameters,omitzero"`
-	ID         string
-	Port       uint32
-	Name       string                `json:"Name,omitempty"`
-	Protocol   string                `json:"Protocol,omitempty"`
-	Backends   []LoadBalancerBackend `json:"Backends,omitempty"`
-	Health     LoadBalancerHealth    `json:"Health,omitzero"`
+	Parameters       LoadBalancerListenerParameters `json:"Parameters,omitzero"`
+	ID               string
+	Port             uint32
+	Name             string                `json:"Name,omitempty"`
+	Protocol         string                `json:"Protocol,omitempty"`
+	Backends         []LoadBalancerBackend `json:"Backends,omitempty"`
+	Health           LoadBalancerHealth    `json:"Health,omitzero"`
+	DeploymentState  string                `json:",omitempty"`
+	DeploymentReason Reason                `json:",omitempty"`
 }
 type LoadBalancerBackendInput struct {
 	ID, SubnetID, Address string
@@ -60,6 +64,7 @@ type LoadBalancer struct {
 	Backends                                                                           []LoadBalancerBackend
 	Health                                                                             LoadBalancerHealth
 	DesiredVersion, AppliedVersion                                                     int64
+	ProviderTargetVersion                                                              int64 `json:",omitempty"`
 	ConfigurationState, DataPlaneState                                                 string
 	DataPlaneObservedAt                                                                *time.Time
 }
@@ -164,9 +169,6 @@ func normalizeLBMutable(i *LoadBalancerIntent, r LoadBalancerMutableInput, creat
 	}
 	if i.Health.TimeoutSeconds == 0 || i.Health.IntervalSeconds == 0 || i.Health.UnhealthyThreshold == 0 || i.Health.HealthyThreshold == 0 {
 		return Fail(InvalidArgument, "positive health parameters are required")
-	}
-	if len(r.Backends) == 0 && !redirecting {
-		return Fail(InvalidArgument, "a nonempty backend set is required")
 	}
 	ids, endpoints := map[string]bool{}, map[string]bool{}
 	for _, b := range r.Backends {

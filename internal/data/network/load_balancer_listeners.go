@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-func loadLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer, v *biz.LoadBalancer) error {
-	rows, err := q.ListLBConfigurationListeners(ctx, sqlcgen.ListLBConfigurationListenersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: row.DesiredVersion})
+func loadLBListenersVersion(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer, configVersion int64, v *biz.LoadBalancer) error {
+	rows, err := q.ListLBConfigurationListeners(ctx, sqlcgen.ListLBConfigurationListenersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: configVersion})
 	if err != nil {
 		return databaseFailure(err)
 	}
@@ -26,7 +26,7 @@ func loadLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 			return databaseFailure(fmt.Errorf("decode listener parameters: %w", err))
 		}
 		listener.Health.Protocol, listener.Health.Path, listener.Health.Hostname = c.HealthProtocol, c.HealthPath, c.HealthHostname
-		members, err := q.ListLBListenerMembers(ctx, sqlcgen.ListLBListenerMembersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: row.DesiredVersion, ListenerID: l.ListenerID})
+		members, err := q.ListLBListenerMembers(ctx, sqlcgen.ListLBListenerMembersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: configVersion, ListenerID: l.ListenerID})
 		if err != nil {
 			return databaseFailure(err)
 		}
@@ -88,6 +88,11 @@ func prepareLBListeners(ctx context.Context, q *sqlcgen.Queries, i *biz.LoadBala
 	union := map[string]biz.LoadBalancerBackend{}
 	for j := range i.Listeners {
 		l := &i.Listeners[j]
+		if prior != nil && l.Parameters.Certificate != nil && l.Parameters.Certificate.Namespace == "" {
+			certificate := *l.Parameters.Certificate
+			certificate.Namespace = prior.Namespace
+			l.Parameters.Certificate = &certificate
+		}
 		known, exists := registry[l.Name]
 		if l.ID != "" && (!exists || known.ListenerID != l.ID || !slices.ContainsFunc(current.Listeners, func(c biz.LoadBalancerListener) bool { return c.ID == l.ID })) {
 			return biz.Fail(biz.InvalidArgument, "retained listener identity and name must match the current LB")
@@ -138,6 +143,7 @@ func saveLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 	if err != nil {
 		return databaseFailure(err)
 	}
+	projection := biz.ProjectLoadBalancerListeners(listeners)
 	for _, l := range listeners {
 		known := slices.ContainsFunc(registry, func(r sqlcgen.NetworkLbListener) bool { return r.Name == l.Name })
 		if !known {
@@ -166,7 +172,11 @@ func saveLBListeners(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Networ
 		if err = q.InsertLBConfigurationListener(ctx, sqlcgen.InsertLBConfigurationListenerParams{TenantID: row.TenantID, ClusterID: row.ClusterID, Namespace: row.Namespace, LbID: row.LbID, ConfigVersion: row.DesiredVersion, ListenerID: l.ID, Protocol: l.Protocol, Port: int32(l.Port), IntervalSeconds: int64(h.IntervalSeconds), TimeoutSeconds: int64(h.TimeoutSeconds), UnhealthyThreshold: int64(h.UnhealthyThreshold), HealthyThreshold: int64(h.HealthyThreshold), HealthCheckPort: int32(h.Port), Parameters: parameters, HealthProtocol: healthProtocol, HealthPath: h.Path, HealthHostname: h.Hostname}); err != nil {
 			return databaseFailure(err)
 		}
-		for _, kind := range biz.LoadBalancerListenerComponentKinds(l) {
+		kinds := []string(nil)
+		if slices.ContainsFunc(projection, func(active biz.LoadBalancerListener) bool { return active.Name == l.Name }) {
+			kinds = biz.LoadBalancerListenerComponentKinds(l)
+		}
+		for _, kind := range kinds {
 			if !slices.ContainsFunc(components, func(c sqlcgen.NetworkLbComponent) bool {
 				return c.Kind == kind && textValue(c.ListenerID) == l.ID && c.DeletedAt == nil
 			}) {

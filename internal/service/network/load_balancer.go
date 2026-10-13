@@ -59,11 +59,12 @@ func lbMutable(name, description string, backends []*networkv1.LoadBalancerBacke
 }
 func wireLoadBalancer(v biz.LoadBalancer) *networkv1.LoadBalancer {
 	cfg := map[string]networkv1.LoadBalancerConfigurationState{
-		"pending":    networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_PENDING,
-		"applying":   networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_APPLYING,
-		"configured": networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED,
-		"degraded":   networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED,
-		"unknown":    networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN,
+		"waiting_for_backends": networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS,
+		"pending":              networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_PENDING,
+		"applying":             networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_APPLYING,
+		"configured":           networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED,
+		"degraded":             networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED,
+		"unknown":              networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN,
 	}
 	data := networkv1.LoadBalancerDataPlaneState_LOAD_BALANCER_DATA_PLANE_STATE_UNKNOWN
 	if v.DataPlaneObservedAt != nil {
@@ -81,7 +82,7 @@ func wireLoadBalancer(v biz.LoadBalancer) *networkv1.LoadBalancer {
 	r := &networkv1.LoadBalancer{Id: v.ID, TenantId: v.TenantID, VpcId: v.VPCID, SubnetId: v.SubnetID, Name: v.Name, Description: v.Description, Exposure: lbExposureToWire[v.Exposure], Flavor: v.Flavor, PublicEipId: v.PublicEIPID, PrivateIp: v.PrivateIP,
 		Listener:    &networkv1.LoadBalancerListener{Id: v.Listener.ID, Protocol: networkv1.LoadBalancerListenerProtocol_LOAD_BALANCER_LISTENER_PROTOCOL_HTTP, Port: v.Listener.Port},
 		HealthCheck: &networkv1.LoadBalancerHealthCheck{Protocol: networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP, IntervalSeconds: &v.Health.IntervalSeconds, TimeoutSeconds: &v.Health.TimeoutSeconds, UnhealthyThreshold: &v.Health.UnhealthyThreshold, HealthyThreshold: &v.Health.HealthyThreshold},
-		Algorithm:   networkv1.LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_ROUND_ROBIN, State: statesToWire[v.State], Reason: string(v.Reason), ReasonMessage: v.Reason.Message(), Version: v.Version, DesiredVersion: v.DesiredVersion, AppliedVersion: v.AppliedVersion, ConfigurationState: state, DataPlaneState: data, ObservedAt: optionalTime(v.ObservedAt), ObservationStale: v.ObservationStale, CreatedAt: timestamppb.New(v.CreatedAt), UpdatedAt: timestamppb.New(v.UpdatedAt), LastOperationId: v.LastOperationID, PublicAddress: v.PublicAddress, DataPlaneObservedAt: optionalTime(v.DataPlaneObservedAt)}
+		Algorithm:   networkv1.LoadBalancerAlgorithm_LOAD_BALANCER_ALGORITHM_ROUND_ROBIN, State: statesToWire[v.State], Reason: string(v.Reason), ReasonMessage: v.Reason.Message(), Version: v.Version, DesiredVersion: v.DesiredVersion, ProviderTargetVersion: v.ProviderTargetVersion, AppliedVersion: v.AppliedVersion, ConfigurationState: state, DataPlaneState: data, ObservedAt: optionalTime(v.ObservedAt), ObservationStale: v.ObservationStale, CreatedAt: timestamppb.New(v.CreatedAt), UpdatedAt: timestamppb.New(v.UpdatedAt), LastOperationId: v.LastOperationID, PublicAddress: v.PublicAddress, DataPlaneObservedAt: optionalTime(v.DataPlaneObservedAt)}
 	if v.Health.Port != 0 {
 		r.HealthCheck.Port = &v.Health.Port
 	}
@@ -125,7 +126,7 @@ func lbListenersInput(set *networkv1.LoadBalancerListenerSet) ([]biz.LoadBalance
 }
 func wireLBListener(l biz.LoadBalancerListener) *networkv1.LoadBalancerListener {
 	h := l.Health
-	v := &networkv1.LoadBalancerListener{Id: l.ID, Name: l.Name, Protocol: lbProtocolToWire(l.Protocol), Port: l.Port, HealthCheck: &networkv1.LoadBalancerHealthCheck{Protocol: networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP, IntervalSeconds: &h.IntervalSeconds, TimeoutSeconds: &h.TimeoutSeconds, UnhealthyThreshold: &h.UnhealthyThreshold, HealthyThreshold: &h.HealthyThreshold}}
+	v := &networkv1.LoadBalancerListener{Id: l.ID, Name: l.Name, Protocol: lbProtocolToWire(l.Protocol), Port: l.Port, DeploymentState: l.DeploymentState, Reason: string(l.DeploymentReason), HealthCheck: &networkv1.LoadBalancerHealthCheck{Protocol: networkv1.LoadBalancerHealthCheckProtocol_LOAD_BALANCER_HEALTH_CHECK_PROTOCOL_TCP, IntervalSeconds: &h.IntervalSeconds, TimeoutSeconds: &h.TimeoutSeconds, UnhealthyThreshold: &h.UnhealthyThreshold, HealthyThreshold: &h.HealthyThreshold}}
 	v.Algorithm = lbAlgorithmToWire(l.Parameters.Algorithm)
 	v.GzipEnabled = l.Parameters.GzipEnabled
 	v.HttpsRedirectStatusCode = l.Parameters.HTTPSRedirectStatusCode

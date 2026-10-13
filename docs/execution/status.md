@@ -2,6 +2,29 @@
 
 更新日期：2026-10-12。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
 
+## LB-DEFERRED-01
+
+2026-10-13：`controlled_complete`（按用户调整后的范围完成）。用户授权四文件补充接线，并在共享平台预置授权问题中明确答复“这个测试跳过”；P0–P4 主链及最终再激活名称修正均已受控验证，P5 的 10～12 真实 LB 验收记为 `skipped_by_user`。完成范围以本次用户调整为准；真实 VIP 流量未证明。主链为仅 DB 空保存 → 添加后端下发 → 混合监听器 → 部分/全部清空并确认解绑 → 新运行身份再激活 → 产品删除/恢复。固定源码、原始失败及命令只在 [证据索引](records/LB-DEFERRED-01/README.md)。
+
+两仓独占工作树为 `codex/lb-deferred-01-20261013`；冻结 Resource HEAD/tree `e7b5a8a3435996181bff62e025a21224c97d2464` / `b574f9e4ed8419d80261551c153bfd5600ad67f1`，Governance `44baecb7bc6d874b859ed556610dd5fa70bbe709` / `31b43c4d95d352399abacbffbf358c37e82fae6e`。原 Image dirty 工作区和无关工作树保持。最终业务代码与 Fedora 有效 Resource s14、Governance s15 逐文件一致；随后只更新本工作包文档。未提交、推送、发布 SDK、创建 PR 或共享部署。
+
+`implemented`：零后端准入、完整配置/运行投影分离与 Provider 目标、DB operation/幂等原子受理、组件清空与实际地址释放门禁、不可变退出事实/新 binding 与旧 lease fence、退休后数据库逻辑删除、Proto/Resource/Governance 只读映射。追加 `0014`，旧 migration 不变；授权的 sqlc 正式输入、Migrate 新表 SELECT/INSERT 权限与 service mapper 已接线。再激活 Provider 名称使用完整 UUID 且符合生成 Service 的 63 字符限制。
+
+`controlled_verified`：Fedora 正式 Resource 生成无漂移、`make verify` 完整通过，Governance 11 模板/OpenAPI `make api` 无 diff。真实 admission/授权、PG/worker/KCN adapter 通过完整空保存→激活→混合/共享成员→部分及全部清空→清理中重启→新 UID 再激活→产品删除，EIP reserved/bound、子网/VIP 预留、退休事实与旧 lease 拒绝均核对；退休后 VIP 被外部再分配也不阻塞产品逻辑删除；同一完整生命周期检查实际 Kubernetes Service 名称约束。真实 Governance HTTP/JWT/AK→mTLS→Resource/PG/worker 完整 deferred 联合链通过，含重放/异意图、版本、只读输入、租户隔离。Kubernetes/controller/owner 仅在外部协议边界受控，不能据此宣称真实业务流量。
+
+| AC | 已证明的受控范围 | 现场或发布边界 |
+| --- | --- | --- |
+| AC01 | 空配置原子保存、成功 operation、target/applied=0、零 Provider mutation、HTTP/auth/mTLS：pass | 真实集群部分由用户跳过 |
+| AC02 | 首后端真实业务执行与 Gateway/Service/UID/configured、联合 HTTP：pass | 直接 VIP 流量 skipped_by_user |
+| AC03 | mixed target/applied/spec/UID 保持、全部既有协议、共享成员及部分清空：pass | 真实集群部分由用户跳过 |
+| AC04 | 全空撤组件/解绑、reserved/保留产品占用、退出事实/new binding、新 Gateway UID：pass | 真实集群部分由用户跳过 |
+| AC05 | 持久重放/异意图、版本/原子回滚、HTTP 跨租户拒绝、共享 Backend 最后引用：pass | 正式 SDK 发布/消费未授权、not_verified |
+| AC06 | 首次 Gateway 未知 CREATE、Backend/Policy POST 与 Route UPDATE 响应丢失、清理重启、旧 lease：pass | 实际 KCN 故障恢复未做，P5 用户跳过 |
+| AC07 | 旧迁移/回执、参数/零权重、443/8443 redirect/证书延后、正式生成一致：pass | 真实协议/公网与生产 not_verified |
+| AC08 | 未下发及已下发/退回空配置的逻辑删除、占用释放、后端/EIP/VPC 保护：pass | 没有创建本任务真实集群产品，无现场产品残留 |
+
+`live_verified` 仅为当前集群只读身份/能力核验。P5 `skipped_by_user`；五组缺失 Class/Proxy 已有具体提案但未应用，共享配置及集群产品写入为零。所有本任务控制验证 PG/Redis、测试服务与未知请求已清理/终止；源码、缓存和日志保留以便审查。正式 Resource SDK 发布 → 下载模块 Origin.Hash/checksum 核验 → Governance 锁定正式版本 → 正式消费验证及部署仍 `not_verified`，具体发布顺序在证据索引，需独立发布授权。
+
 ## 2026-10-12：平台网络接入 Governance
 
 用户授权接入 Public/Intranet 地址池、VLAN 与配套平台接口，并参考已接入 VPC 检查分页和响应。固定输入为 Resource `4187c639ab46a55470292594ff2980584561dd3c`、Governance `4e3e5b4e750ac59cdeb227a0caf76e863873fde5`；两仓任务分支为 `codex/platform-network-gov-20261012`，受控验收快照未提交、推送或部署；用户随后授权发布两仓 `main`，最终提交与发布状态以 Git 历史和远端引用为准。原 Image 工作区及 Governance 原 main checkout 保持，部署未执行。

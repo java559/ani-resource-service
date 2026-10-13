@@ -95,3 +95,11 @@ RETURNING *;
 UPDATE network_reconciliations SET next_run_at=clock_timestamp(),
     lease_owner=NULL, lease_until=NULL, lease_epoch=lease_epoch+1
 WHERE tenant_id=sqlc.arg(tenant_id) AND coalesce(vpc_id,subnet_id,eip_id,snat_id,lb_id)=sqlc.arg(resource_id)::text;
+
+-- name: ReincarnateLBBinding :execrows
+UPDATE network_provider_bindings b SET binding_id=sqlc.arg(new_binding_id),provider_name=sqlc.arg(new_provider_name),provider_uid='',
+ create_dispatched=false,pending_action='',pending_since=NULL
+WHERE b.tenant_id=sqlc.arg(tenant_id) AND b.lb_id=sqlc.arg(lb_id)::text AND b.binding_id=sqlc.arg(old_binding_id) AND b.provider_uid=sqlc.arg(old_provider_uid) AND b.pending_action=''
+AND EXISTS(SELECT 1 FROM network_lb_retired_bindings r JOIN network_load_balancers l USING(tenant_id,cluster_id,namespace,lb_id)
+ WHERE r.tenant_id=b.tenant_id AND r.lb_id=b.lb_id AND r.binding_id=b.binding_id AND r.provider_uid=b.provider_uid
+ AND r.provider_name=b.provider_name AND r.cleanup_target_version=l.applied_version AND l.configuration_state='waiting_for_backends');

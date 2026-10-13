@@ -96,3 +96,11 @@ func TestLBWireRejectsUnknownEnumsAndMapsStableErrors(t *testing.T) {
 		}
 	}
 }
+
+func TestLBWireDeferredConfigurationAndListenerFacts(t *testing.T) {
+	v := biz.LoadBalancer{ConfigurationState: "waiting_for_backends", DesiredVersion: 4, ProviderTargetVersion: 4, AppliedVersion: 4, Listeners: []biz.LoadBalancerListener{{ID: "saved-listener", Name: "http", Protocol: "HTTP", Port: 80, DeploymentState: "waiting_for_backends", DeploymentReason: biz.WaitingForBackends}}}
+	r := wireLoadBalancer(v)
+	if r.ConfigurationState != networkv1.LoadBalancerConfigurationState_LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS || r.ProviderTargetVersion != 4 || r.AppliedVersion != 4 || r.DesiredVersion != 4 || r.DataPlaneState != networkv1.LoadBalancerDataPlaneState_LOAD_BALANCER_DATA_PLANE_STATE_UNKNOWN || len(r.Listeners) != 1 || r.Listeners[0].DeploymentState != "waiting_for_backends" || r.Listeners[0].Reason != string(biz.WaitingForBackends) || r.Listener.DeploymentState != "waiting_for_backends" {
+		t.Fatal("deferred response lost durable facts", r)
+	}
+}

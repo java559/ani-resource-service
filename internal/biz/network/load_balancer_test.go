@@ -80,7 +80,6 @@ func TestLBNormalizationRejectsAmbiguousOrUnsupportedInputs(t *testing.T) {
 		"private_with_eip":         func(r *CreateLoadBalancer) { r.PublicEIPID = "eip_" + strings.Repeat("3", 32) },
 		"public_with_vip":          func(r *CreateLoadBalancer) { r.Exposure = "public" },
 		"dual_without_eip":         func(r *CreateLoadBalancer) { r.Exposure = "public_private" },
-		"empty_set":                func(r *CreateLoadBalancer) { r.Backends = nil },
 		"duplicate":                func(r *CreateLoadBalancer) { r.Backends = append(r.Backends, r.Backends[0]) },
 		"unsupported_flavor":       func(r *CreateLoadBalancer) { r.Flavor = "dynamic" },
 		"unsupported_listener":     func(r *CreateLoadBalancer) { r.ListenerProtocol = "TCP" },

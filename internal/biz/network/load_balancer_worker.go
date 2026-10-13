@@ -68,6 +68,17 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 		return errors.New("LB lifecycle dependencies unavailable")
 	}
 	p := Progress{State: work.Resource.State, Identity: work.KnownIdentity, NextDelay: w.policy.ObserveEvery, OperationState: Retrying}
+	// The repository establishes this proof under the resource/lease fence.
+	// Target zero alone never authorizes bypassing unknown CREATE recovery.
+	if work.CancelUnsent {
+		p.State, p.OperationState, p.ClearPending = Deleted, Succeeded, true
+		return lbLeaseResult(w.finish(ctx, work, p))
+	}
+	if work.GateReason != "" {
+		p.Reason, p.OperationState, p.Backoff = work.GateReason, Blocked, true
+		p.NextDelay = w.retryDelay(work.Attempt)
+		return lbLeaseResult(w.finish(ctx, work, p))
+	}
 	callCtx, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
 	o, err := provider.ObserveLoadBalancer(callCtx, work)
 	cancel()
@@ -81,24 +92,24 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 		p.Observed, p.Proof, p.LoadBalancer = true, o.Proof, &o
 		o.ConfigurationState = "applying"
 		deleting := p.State == Deleting || p.State == Deleted
-		allEligible := len(o.Members) > 0
-		for _, m := range o.Members {
-			allEligible = allEligible && m.Eligible
-		}
+		runtime := ProjectLoadBalancerListeners(EffectiveLoadBalancerListeners(work.Resource.LoadBalancer.LoadBalancer))
+		draining := !deleting && len(runtime) == 0
+		removing := deleting || draining
+		allEligible := lbRuntimeMembersEligible(runtime, o)
 		// A changed/missing backend must first be removed from the Route.
 		// This safety update also runs during ordinary continuous observation.
 		order := []string{"retired_route", "retired_policy", "backend", "gateway", "policy", "route"}
 		if !allEligible {
 			order = []string{"retired_route", "retired_policy", "route", "backend", "gateway", "policy"}
 		}
-		if deleting {
+		if removing {
 			order = []string{"route", "policy", "gateway", "backend"}
 		}
 		if o.GeneratedConflict {
 			// A foreign generated occupant blocks Gateway/address cleanup, but
 			// must not prevent withdrawing an invalid IP from our owned Route.
 			order = nil
-			if deleting {
+			if removing {
 				order = []string{"route", "policy"}
 			} else if !allEligible {
 				order = []string{"route"}
@@ -106,7 +117,7 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 		}
 		allReady, acted := !o.GeneratedConflict, false
 		for _, kind := range order {
-			if kind == "backend" && deleting && (!o.GeneratedReleased || !o.AddressReleased) {
+			if kind == "backend" && removing && (!o.GeneratedReleased || !o.AddressReleased) {
 				allReady, p.Reason = false, CleanupPending
 				break
 			}
@@ -118,7 +129,7 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 				} else if c.Kind == "client_policy" || c.Kind == "patch_policy" {
 					selectedKind = "policy"
 				}
-				if retiredListener && !deleting {
+				if retiredListener && !removing {
 					selectedKind = "retired_" + selectedKind
 				}
 				if selectedKind != kind {
@@ -134,8 +145,8 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 					break
 				}
 				retired := c.Deleted || retiredListener || (c.Kind == "backend" && !lbDesiredMember(work, c.MemberID))
-				remove := deleting || retired
-				if retired && c.Kind == "backend" && !deleting && (!lbRouteCurrent(work, o) || !o.GeneratedReady) {
+				remove := removing || retired
+				if retired && c.Kind == "backend" && !removing && (!lbRouteCurrent(work, o) || !o.GeneratedReady) {
 					allReady = false
 					continue
 				}
@@ -184,7 +195,7 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 				} else {
 					v.ClearPending = c.PendingAction != "delete"
 					if v.Ready {
-						v.AppliedVersion = work.Resource.LoadBalancer.LoadBalancer.DesiredVersion
+						v.AppliedVersion = work.Resource.LoadBalancer.LoadBalancer.ProviderTargetVersion
 					}
 					lbReplaceObservation(&o, v)
 					if !v.Ready {
@@ -217,7 +228,7 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 					break
 				}
 			}
-			if acted || p.Reason == ProviderUnknown || p.Reason == ProviderOwnership || (deleting && !allReady) {
+			if acted || p.Reason == ProviderUnknown || p.Reason == ProviderOwnership || (removing && !allReady) {
 				break
 			}
 		}
@@ -228,16 +239,23 @@ func (w *Worker) stepLoadBalancer(ctx context.Context, work Work) error {
 			if allReady && o.GeneratedReleased && o.AddressReleased {
 				p.State, p.OperationState, p.Reason = Deleted, Succeeded, ""
 			}
-		} else if allReady && allEligible && o.DependenciesReady && o.GeneratedReady {
+		} else if draining {
+			if allReady && o.GeneratedReleased && o.AddressReleased {
+				p.State, p.OperationState, p.Reason = Provisioning, Succeeded, ""
+				o.ConfigurationState, o.AppliedVersion = "waiting_for_backends", work.Resource.LoadBalancer.LoadBalancer.ProviderTargetVersion
+			} else if p.Reason == "" {
+				p.Reason = CleanupPending
+			}
+		} else if allReady && allEligible && lbRuntimeComponentsCovered(work, runtime) && o.DependenciesReady && o.GeneratedReady {
 			p.State, p.OperationState, p.Reason = Available, Succeeded, ""
-			o.ConfigurationState, o.AppliedVersion = "configured", work.Resource.LoadBalancer.LoadBalancer.DesiredVersion
+			o.ConfigurationState, o.AppliedVersion = "configured", work.Resource.LoadBalancer.LoadBalancer.ProviderTargetVersion
 		} else if work.Resource.LoadBalancer.LoadBalancer.AppliedVersion > 0 {
 			p.State, o.ConfigurationState = Degraded, "degraded"
 		}
-		if !deleting && p.State != Available && p.Reason == "" {
+		if !removing && p.State != Available && p.Reason == "" {
 			p.Reason = ProviderNotReady
 		}
-		if !allEligible && !deleting {
+		if !allEligible && !removing && p.Reason != ProviderUnknown && p.Reason != ProviderOwnership {
 			p.Reason = BackendIdentityMismatch
 		}
 		for _, v := range o.Components {
@@ -288,9 +306,11 @@ func lbReplaceObservation(o *LoadBalancerObservation, v LoadBalancerComponentObs
 	}
 }
 func lbDesiredMember(w Work, id string) bool {
-	for _, m := range w.Resource.LoadBalancer.LoadBalancer.Backends {
-		if m.ID == id {
-			return true
+	for _, l := range ProjectLoadBalancerListeners(EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer)) {
+		for _, m := range l.Backends {
+			if m.ID == id {
+				return true
+			}
 		}
 	}
 	return false
@@ -310,7 +330,7 @@ func lbRouteCurrent(w Work, o LoadBalancerObservation) bool {
 }
 
 func lbDesiredListener(w Work, id string) bool {
-	for _, l := range EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer) {
+	for _, l := range ProjectLoadBalancerListeners(EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer)) {
 		if l.ID == id || (id == "" && len(w.Resource.LoadBalancer.LoadBalancer.Listeners) == 0) {
 			return true
 		}
@@ -322,7 +342,7 @@ func lbDesiredListener(w Work, id string) bool {
 // application health source. The repository always leaves data_plane unknown.
 
 func lbDesiredListenerComponent(w Work, c LoadBalancerComponent) bool {
-	for _, l := range EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer) {
+	for _, l := range ProjectLoadBalancerListeners(EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer)) {
 		if l.ID == c.ListenerID {
 			for _, kind := range LoadBalancerListenerComponentKinds(l) {
 				if c.Kind == kind {
@@ -332,4 +352,52 @@ func lbDesiredListenerComponent(w Work, c LoadBalancerComponent) bool {
 		}
 	}
 	return false
+}
+
+func lbRuntimeMembersEligible(listeners []LoadBalancerListener, observed LoadBalancerObservation) bool {
+	for _, l := range listeners {
+		for _, desired := range l.Backends {
+			found := false
+			for _, m := range observed.Members {
+				if m.ID == desired.ID {
+					if !m.Eligible {
+						return false
+					}
+					found = true
+				}
+			}
+			if !found {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func lbRuntimeComponentsCovered(work Work, listeners []LoadBalancerListener) bool {
+	components := work.Resource.LoadBalancer.Components
+	covered := func(kind, listener, member string) bool {
+		for _, c := range components {
+			if c.Kind == kind && !c.Deleted && c.ListenerID == listener && c.MemberID == member {
+				return true
+			}
+		}
+		return false
+	}
+	if !covered("gateway", "", "") {
+		return false
+	}
+	for _, l := range listeners {
+		for _, kind := range LoadBalancerListenerComponentKinds(l) {
+			if !covered(kind, l.ID, "") {
+				return false
+			}
+		}
+		for _, m := range l.Backends {
+			if !covered("backend", "", m.ID) {
+				return false
+			}
+		}
+	}
+	return true
 }

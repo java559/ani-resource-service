@@ -150,6 +150,10 @@ func (r Reason) Message() string {
 		return "The load balancer capability is not ready."
 	case BackendIdentityMismatch:
 		return "The backend no longer matches its accepted network identity."
+	case WaitingForBackends:
+		return "The listener configuration is saved and awaits backends."
+	case WaitingForRedirectTarget:
+		return "The redirect configuration awaits backends on its HTTPS target."
 	case VIPInUse:
 		return "The private address is reserved by another network resource."
 	case Reason("CREATE_TERMINATED"):

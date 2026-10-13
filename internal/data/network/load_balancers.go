@@ -18,6 +18,20 @@ import (
 var _ biz.LoadBalancerRepository = (*Postgres)(nil)
 
 func loadLB(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer) (biz.LoadBalancer, error) {
+	return loadLBVersion(ctx, q, row, row.DesiredVersion)
+}
+
+// Workers hydrate the persisted Provider target while GET reads the latest
+// complete user configuration. Metadata retains all three version counters.
+func loadLBProviderTarget(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer) (biz.LoadBalancer, error) {
+	target := row.DesiredVersion
+	if row.ProviderTargetVersion.Valid {
+		target = row.ProviderTargetVersion.Int64
+	}
+	return loadLBVersion(ctx, q, row, target)
+}
+
+func loadLBVersion(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer, configVersion int64) (biz.LoadBalancer, error) {
 	if row.LastOperationID == nil {
 		return biz.LoadBalancer{}, biz.Fail(biz.ResourceNotFound, "load balancer not found")
 	}
@@ -25,20 +39,20 @@ func loadLB(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBala
 	if err != nil {
 		return biz.LoadBalancer{}, databaseFailure(err)
 	}
-	c, err := q.GetLBConfiguration(ctx, sqlcgen.GetLBConfigurationParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: row.DesiredVersion})
+	c, err := q.GetLBConfiguration(ctx, sqlcgen.GetLBConfigurationParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: configVersion})
 	if err != nil {
 		return biz.LoadBalancer{}, databaseFailure(err)
 	}
-	members, err := q.ListLBMembers(ctx, sqlcgen.ListLBMembersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: row.DesiredVersion})
+	members, err := q.ListLBMembers(ctx, sqlcgen.ListLBMembersParams{TenantID: row.TenantID, LbID: row.LbID, ConfigVersion: configVersion})
 	if err != nil {
 		return biz.LoadBalancer{}, databaseFailure(err)
 	}
-	v := biz.LoadBalancer{EgressMetadata: biz.EgressMetadata{ID: row.LbID, Name: row.Name, Description: row.Description, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: *row.LastOperationID}, TenantID: row.TenantID, VPCID: row.VpcID, SubnetID: row.SubnetID, Exposure: row.Exposure, Flavor: row.Flavor, PublicEIPID: textValue(row.PublicEipID), PrivateIP: textValue(row.PrivateIp), Listener: biz.LoadBalancerListener{ID: l.ListenerID, Port: uint32(l.Port)}, Health: biz.LoadBalancerHealth{Port: uint32(c.HealthCheckPort), IntervalSeconds: uint32(c.IntervalSeconds), TimeoutSeconds: uint32(c.TimeoutSeconds), UnhealthyThreshold: uint32(c.UnhealthyThreshold), HealthyThreshold: uint32(c.HealthyThreshold)}, DesiredVersion: row.DesiredVersion, AppliedVersion: row.AppliedVersion, ConfigurationState: row.ConfigurationState, DataPlaneState: row.DataPlaneState, DataPlaneObservedAt: row.DataPlaneObservedAt, Backends: make([]biz.LoadBalancerBackend, 0, len(members))}
+	v := biz.LoadBalancer{EgressMetadata: biz.EgressMetadata{ID: row.LbID, Name: row.Name, Description: row.Description, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: *row.LastOperationID}, TenantID: row.TenantID, VPCID: row.VpcID, SubnetID: row.SubnetID, Exposure: row.Exposure, Flavor: row.Flavor, PublicEIPID: textValue(row.PublicEipID), PrivateIP: textValue(row.PrivateIp), Listener: biz.LoadBalancerListener{ID: l.ListenerID, Port: uint32(l.Port)}, Health: biz.LoadBalancerHealth{Port: uint32(c.HealthCheckPort), IntervalSeconds: uint32(c.IntervalSeconds), TimeoutSeconds: uint32(c.TimeoutSeconds), UnhealthyThreshold: uint32(c.UnhealthyThreshold), HealthyThreshold: uint32(c.HealthyThreshold)}, DesiredVersion: row.DesiredVersion, ProviderTargetVersion: lbProviderTargetVersion(row), AppliedVersion: row.AppliedVersion, ConfigurationState: row.ConfigurationState, DataPlaneState: row.DataPlaneState, DataPlaneObservedAt: row.DataPlaneObservedAt, Backends: make([]biz.LoadBalancerBackend, 0, len(members))}
 	for _, item := range members {
 		m := item.NetworkLbMember
 		v.Backends = append(v.Backends, biz.LoadBalancerBackend{ID: m.MemberID, SubnetID: m.SubnetID, Address: m.Address, Port: uint32(m.Port), Weight: uint32(item.Weight), AttachmentID: m.AttachmentID, State: m.State, Reason: biz.Reason(m.Reason), ObservedAt: m.ObservedAt})
 	}
-	if err = loadLBListeners(ctx, q, row, &v); err != nil {
+	if err = loadLBListenersVersion(ctx, q, row, configVersion, &v); err != nil {
 		return v, err
 	}
 	if row.PublicEipID != nil {
@@ -48,7 +62,27 @@ func loadLB(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBala
 		}
 		v.PublicAddress = e.Address
 	}
+	components, err := q.ListLBComponents(ctx, sqlcgen.ListLBComponentsParams{TenantID: row.TenantID, LbID: row.LbID})
+	if err != nil {
+		return v, databaseFailure(err)
+	}
+	facts := make([]biz.LoadBalancerComponent, 0, len(components))
+	for _, c := range components {
+		facts = append(facts, biz.LoadBalancerComponent{ID: c.ComponentID, Kind: c.Kind, MemberID: textValue(c.MemberID), ListenerID: textValue(c.ListenerID), Name: c.ProviderName, Identity: c.ProviderUid, PendingAction: c.PendingAction, CreateDispatched: c.CreateDispatched, Deleted: c.DeletedAt != nil, TargetVersion: c.TargetVersion, AppliedVersion: c.AppliedVersion})
+	}
+	binding, err := q.GetBinding(ctx, sqlcgen.GetBindingParams{TenantID: row.TenantID, ResourceID: row.LbID})
+	if err != nil {
+		return v, databaseFailure(err)
+	}
+	facts = append(facts, biz.LoadBalancerComponent{Kind: "gateway", Name: binding.ProviderName, Identity: binding.ProviderUid, PendingAction: binding.PendingAction, CreateDispatched: binding.CreateDispatched})
+	biz.SetLoadBalancerListenerDeploymentStates(&v, facts)
 	return v, nil
+}
+func lbProviderTargetVersion(row sqlcgen.NetworkLoadBalancer) int64 {
+	if !row.ProviderTargetVersion.Valid {
+		return 0
+	}
+	return row.ProviderTargetVersion.Int64
 }
 func lbResult(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer) (biz.LoadBalancerResult, error) {
 	v, err := loadLB(ctx, q, row)
@@ -223,6 +257,16 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 	if err = prepareLBListeners(ctx, q, &i, priorListeners); err != nil {
 		return biz.LoadBalancerResult{}, err
 	}
+	projection := biz.ProjectLoadBalancerListeners(i.Listeners)
+	projectionChanged := len(projection) > 0
+	if !creating {
+		current, e := loadLB(ctx, q, prior)
+		if e != nil {
+			return biz.LoadBalancerResult{}, e
+		}
+		projectionChanged = !biz.LoadBalancerProjectionEqual(current.Listeners, i.Listeners)
+	}
+	requireRuntimeReady := projectionChanged && len(projection) > 0
 	ids := []string{subnetID}
 	for _, b := range i.Backends {
 		ids = append(ids, b.SubnetID)
@@ -269,25 +313,32 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 	if err != nil {
 		return biz.LoadBalancerResult{}, databaseFailure(err)
 	}
-	if err = p.requireBaseConnectivity(ctx, q, i.TenantID, vpcID, now, freshness); err != nil {
-		return biz.LoadBalancerResult{}, err
+	if parent.State == "deleting" || parent.State == "deleted" {
+		return biz.LoadBalancerResult{}, biz.Fail(biz.ParentNotReady, "VPC has closed admission")
 	}
-	if !freshResource(parent.State, parent.ObservedAt, now, freshness) {
-		return biz.LoadBalancerResult{}, biz.Fail(biz.ParentNotReady, "VPC is not fresh and ready")
+	if requireRuntimeReady {
+		if err = p.requireBaseConnectivity(ctx, q, i.TenantID, vpcID, now, freshness); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+		if !freshResource(parent.State, parent.ObservedAt, now, freshness) {
+			return biz.LoadBalancerResult{}, biz.Fail(biz.ParentNotReady, "VPC is not fresh and ready")
+		}
 	}
 	pb, err := q.GetBinding(ctx, sqlcgen.GetBindingParams{TenantID: i.TenantID, ResourceID: vpcID})
 	if err != nil {
 		return biz.LoadBalancerResult{}, databaseFailure(err)
 	}
-	if pb.ClusterID != p.placement.ClusterID || pb.ProviderUid == "" || pb.PendingAction != "" {
+	if pb.ClusterID != p.placement.ClusterID || (requireRuntimeReady && (pb.ProviderUid == "" || pb.PendingAction != "")) {
 		return biz.LoadBalancerResult{}, biz.Fail(biz.ProviderOwnership, "parent placement or identity is not ready")
 	}
-	capability, err := q.GetLBCapability(ctx, sqlcgen.GetLBCapabilityParams{ClusterID: pb.ClusterID})
-	if err != nil && !errors.Is(err, pgx.ErrNoRows) {
-		return biz.LoadBalancerResult{}, databaseFailure(err)
-	}
-	if err != nil || !capability.Ready || !freshTime(&capability.ObservedAt, now, freshness) {
-		return biz.LoadBalancerResult{}, biz.Fail(biz.LoadBalancerNotReady, "load balancer capability is not fresh and ready")
+	if requireRuntimeReady {
+		capability, err := q.GetLBCapability(ctx, sqlcgen.GetLBCapabilityParams{ClusterID: pb.ClusterID})
+		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err != nil || !capability.Ready || !freshTime(&capability.ObservedAt, now, freshness) {
+			return biz.LoadBalancerResult{}, biz.Fail(biz.LoadBalancerNotReady, "load balancer capability is not fresh and ready")
+		}
 	}
 	// Only entry and new desired backend subnets must be available. Retired
 	// configuration references remain locked/occupied until Provider cleanup.
@@ -301,10 +352,13 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		if err != nil {
 			return biz.LoadBalancerResult{}, databaseFailure(err)
 		}
-		if !freshResource(s.State, s.ObservedAt, now, freshness) {
+		if s.State == "deleting" || s.State == "deleted" {
+			return biz.LoadBalancerResult{}, biz.Fail(biz.ParentNotReady, "subnet has closed admission")
+		}
+		if requireRuntimeReady && !freshResource(s.State, s.ObservedAt, now, freshness) {
 			return biz.LoadBalancerResult{}, biz.Fail(biz.ParentNotReady, "subnet is not fresh and ready")
 		}
-		if sb.ClusterID != pb.ClusterID || sb.Namespace != pb.Namespace || sb.ProviderUid == "" || sb.PendingAction != "" {
+		if sb.ClusterID != pb.ClusterID || sb.Namespace != pb.Namespace || (requireRuntimeReady && (sb.ProviderUid == "" || sb.PendingAction != "")) {
 			return biz.LoadBalancerResult{}, biz.Fail(biz.ProviderOwnership, "subnet placement or identity differs")
 		}
 	}
@@ -316,7 +370,7 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		if err != nil {
 			return biz.LoadBalancerResult{}, databaseFailure(err)
 		}
-		if eb.ProviderUid == "" || eb.PendingAction != "" || eb.ClusterID != pb.ClusterID || eb.Namespace != pb.Namespace || eip.Address == "" || !freshResource(eip.State, eip.ObservedAt, now, freshness) {
+		if eb.ClusterID != pb.ClusterID || eb.Namespace != pb.Namespace || eip.Address == "" || eip.State == "deleting" || eip.State == "deleted" || (requireRuntimeReady && (eb.ProviderUid == "" || eb.PendingAction != "" || !freshResource(eip.State, eip.ObservedAt, now, freshness))) {
 			return biz.LoadBalancerResult{}, biz.Fail(biz.PublicEgressNotReady, "Public EIP is not fresh and allocated")
 		}
 		pool, err := q.GetPublicPool(ctx, sqlcgen.GetPublicPoolParams{ClusterID: eip.ClusterID, ResourceID: eip.PoolID})
@@ -329,8 +383,10 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		if err = completedOperation(ctx, q, i.TenantID, eip.LastOperationID); err != nil {
 			return biz.LoadBalancerResult{}, err
 		}
-		if err = p.poolReady(ctx, q, pool, now, freshness, false); err != nil {
-			return biz.LoadBalancerResult{}, err
+		if requireRuntimeReady {
+			if err = p.poolReady(ctx, q, pool, now, freshness, false); err != nil {
+				return biz.LoadBalancerResult{}, err
+			}
 		}
 		if creating {
 			count, err := q.BlockingSnatForEIP(ctx, sqlcgen.BlockingSnatForEIPParams{TenantID: i.TenantID, EipID: eipID})
@@ -369,6 +425,12 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		if ce != nil || ie != nil || !cidr.Contains(ip) {
 			return biz.LoadBalancerResult{}, biz.Fail(biz.BackendIdentityMismatch, "backend address does not match its subnet identity")
 		}
+		if !projectionChanged {
+			if b.ID == "" || !current[b.ID] {
+				return biz.LoadBalancerResult{}, biz.Fail(biz.BackendIdentityMismatch, "unchanged runtime projection requires retained member identities")
+			}
+			continue
+		}
 		c, err := lbBackendIdentity(ctx, q, i.TenantID, pb.ClusterID, pb.Namespace, vpcID, b, now, freshness)
 		if err != nil {
 			return biz.LoadBalancerResult{}, err
@@ -387,15 +449,31 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		}
 		identities[j] = c
 	}
+	if !creating && projectionChanged && len(biz.ProjectLoadBalancerListeners(i.Listeners)) > 0 && prior.ConfigurationState == "waiting_for_backends" && lbProviderTargetVersion(prior) > 0 {
+		if err = reincarnateLB(ctx, q, prior); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+	}
 	opID := uuid.NewString()
 	var row sqlcgen.NetworkLoadBalancer
 	if creating {
 		row, err = q.InsertLB(ctx, sqlcgen.InsertLBParams{TenantID: i.TenantID, LbID: newEgressID("lb"), ClusterID: pb.ClusterID, Namespace: pb.Namespace, VpcID: vpcID, SubnetID: subnetID, Exposure: i.Exposure, Flavor: i.Flavor, PublicEipID: eipID, PrivateIp: i.PrivateIP, Name: i.Name, Description: i.Description, CreatedAt: now, OperationID: &opID})
 	} else {
-		row, err = q.UpdateLBIntent(ctx, sqlcgen.UpdateLBIntentParams{TenantID: i.TenantID, LbID: i.ID, Version: i.ExpectedVersion, Name: i.Name, Description: i.Description, OperationID: &opID})
+		row, err = q.UpdateLBIntent(ctx, sqlcgen.UpdateLBIntentParams{TenantID: i.TenantID, LbID: i.ID, Version: i.ExpectedVersion, Name: i.Name, Description: i.Description, ProjectionChanged: projectionChanged, OperationID: &opID})
 	}
 	if err != nil {
 		return biz.LoadBalancerResult{}, databaseFailure(err)
+	}
+	if projectionChanged {
+		row, err = q.AdvanceLBProviderTarget(ctx, sqlcgen.AdvanceLBProviderTargetParams{TenantID: row.TenantID, LbID: row.LbID, Version: row.Version})
+		if err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+	} else if creating {
+		row, err = q.MarkLBWaitingForBackends(ctx, sqlcgen.MarkLBWaitingForBackendsParams{TenantID: row.TenantID, LbID: row.LbID, Version: row.Version})
+		if err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
 	}
 	if creating {
 		if eipID != "" {
@@ -458,14 +536,26 @@ func (p *Postgres) AcceptLoadBalancer(ctx context.Context, i biz.LoadBalancerInt
 		if err = q.InsertReconciliation(ctx, sqlcgen.InsertReconciliationParams{TenantID: i.TenantID, LbID: row.LbID, NextRunAt: now}); err != nil {
 			return biz.LoadBalancerResult{}, databaseFailure(err)
 		}
-	} else if err = affected(q.ScheduleDeletion(ctx, sqlcgen.ScheduleDeletionParams{TenantID: i.TenantID, ResourceID: row.LbID})); err != nil {
-		return biz.LoadBalancerResult{}, err
+	} else if projectionChanged {
+		if err = affected(q.ScheduleDeletion(ctx, sqlcgen.ScheduleDeletionParams{TenantID: i.TenantID, ResourceID: row.LbID})); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+	}
+	if !projectionChanged {
+		if err = affected(q.CompleteLBDatabaseOperation(ctx, sqlcgen.CompleteLBDatabaseOperationParams{TenantID: row.TenantID, LbID: row.LbID, OperationID: opID})); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+		if creating {
+			if err = affected(q.ParkLBReconciliation(ctx, sqlcgen.ParkLBReconciliationParams{TenantID: row.TenantID, LbID: row.LbID})); err != nil {
+				return biz.LoadBalancerResult{}, err
+			}
+		}
 	}
 	result, err := lbResult(ctx, q, row)
 	if err != nil {
 		return result, err
 	}
-	result.LoadBalancer.ObservationStale = true
+	result.LoadBalancer.ObservationStale = !freshTime(result.LoadBalancer.ObservedAt, now, freshness)
 	for j := range result.LoadBalancer.Backends {
 		result.LoadBalancer.Backends[j].ObservationStale = !freshTime(result.LoadBalancer.Backends[j].ObservedAt, now, freshness)
 	}
@@ -494,7 +584,11 @@ func insertLBComponent(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.Netw
 	return insertLBListenerComponent(ctx, q, row, kind, member, nil)
 }
 func lbHistory(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer, a biz.Attribution, event string, now time.Time) error {
-	return databaseFailure(q.InsertHistory(ctx, sqlcgen.InsertHistoryParams{TenantID: row.TenantID, LbID: row.LbID, HistoryID: uuid.NewString(), OperationID: row.LastOperationID, Event: event, ResourceState: row.State, OperationState: string(biz.Queued), ActorRef: a.Actor, CallerRef: a.DirectCaller, CorrelationID: a.CorrelationID, CreatedAt: now}))
+	op, err := q.GetOperation(ctx, sqlcgen.GetOperationParams{TenantID: row.TenantID, OperationID: textValue(row.LastOperationID)})
+	if err != nil {
+		return databaseFailure(err)
+	}
+	return databaseFailure(q.InsertHistory(ctx, sqlcgen.InsertHistoryParams{TenantID: row.TenantID, LbID: row.LbID, HistoryID: uuid.NewString(), OperationID: row.LastOperationID, Event: event, ResourceState: row.State, OperationState: op.State, ActorRef: a.Actor, CallerRef: a.DirectCaller, CorrelationID: a.CorrelationID, CreatedAt: now}))
 }
 func (p *Postgres) DeleteLoadBalancer(ctx context.Context, tenant, id string, a biz.Attribution) (biz.LoadBalancerResult, error) {
 	tx, err := p.pool.Begin(ctx)
@@ -536,6 +630,22 @@ func (p *Postgres) DeleteLoadBalancer(ctx context.Context, tenant, id string, a 
 	if row.State == "deleting" || row.State == "deleted" {
 		return lbResult(ctx, q, row)
 	}
+	// Capture completed retirement while last_operation_id still identifies
+	// the saved waiting operation. A queued delete is not that proof. Never-
+	// dispatched products keep the independent guard and query below.
+	retiredDeletion := false
+	if row.ConfigurationState == "waiting_for_backends" && lbProviderTargetVersion(row) > 0 && row.AppliedVersion == lbProviderTargetVersion(row) {
+		binding, bindingErr := q.GetBinding(ctx, sqlcgen.GetBindingParams{TenantID: tenant, ResourceID: id})
+		if bindingErr != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(bindingErr)
+		}
+		if binding.ProviderUid != "" && binding.PendingAction == "" {
+			retiredDeletion, err = q.CanParkLBWaitingWithoutProvider(ctx, sqlcgen.CanParkLBWaitingWithoutProviderParams{TenantID: tenant, LbID: id})
+			if err != nil {
+				return biz.LoadBalancerResult{}, databaseFailure(err)
+			}
+		}
+	}
 	if err = q.RetireLBMutation(ctx, sqlcgen.RetireLBMutationParams{TenantID: tenant, LbID: id, OperationID: *row.LastOperationID}); err != nil {
 		return biz.LoadBalancerResult{}, databaseFailure(err)
 	}
@@ -551,7 +661,38 @@ func (p *Postgres) DeleteLoadBalancer(ctx context.Context, tenant, id string, a 
 	if err != nil {
 		return biz.LoadBalancerResult{}, databaseFailure(err)
 	}
-	if err = affected(q.ScheduleDeletion(ctx, sqlcgen.ScheduleDeletionParams{TenantID: tenant, ResourceID: id})); err != nil {
+	deletionProof, err := q.CanDeleteLBWithoutProvider(ctx, sqlcgen.CanDeleteLBWithoutProviderParams{TenantID: tenant, LbID: id})
+	if err != nil {
+		return biz.LoadBalancerResult{}, databaseFailure(err)
+	}
+	if retiredDeletion || (deletionProof.Valid && deletionProof.Bool) {
+		if retiredDeletion {
+			row, err = q.CompleteLBRetiredDatabaseDeletion(ctx, sqlcgen.CompleteLBRetiredDatabaseDeletionParams{TenantID: tenant, LbID: id, Version: row.Version})
+		} else {
+			row, err = q.CompleteLBDatabaseDeletion(ctx, sqlcgen.CompleteLBDatabaseDeletionParams{TenantID: tenant, LbID: id, Version: row.Version})
+		}
+		if err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err = affected(q.CompleteLBDatabaseOperation(ctx, sqlcgen.CompleteLBDatabaseOperationParams{TenantID: tenant, LbID: id, OperationID: opID})); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+		if err = q.RetireLBUndispatchedComponents(ctx, sqlcgen.RetireLBUndispatchedComponentsParams{TenantID: tenant, LbID: id}); err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err = q.ReleaseLBClaim(ctx, sqlcgen.ReleaseLBClaimParams{TenantID: tenant, LbID: &id}); err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err = q.ReleaseLBVIP(ctx, sqlcgen.ReleaseLBVIPParams{TenantID: tenant, LbID: id}); err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err = q.ReleaseLBSubnetRefs(ctx, sqlcgen.ReleaseLBSubnetRefsParams{TenantID: tenant, LbID: id, Deleted: true, EntrySubnet: row.SubnetID, DesiredVersion: row.DesiredVersion}); err != nil {
+			return biz.LoadBalancerResult{}, databaseFailure(err)
+		}
+		if err = affected(q.ParkLBReconciliation(ctx, sqlcgen.ParkLBReconciliationParams{TenantID: tenant, LbID: id})); err != nil {
+			return biz.LoadBalancerResult{}, err
+		}
+	} else if err = affected(q.ScheduleDeletion(ctx, sqlcgen.ScheduleDeletionParams{TenantID: tenant, ResourceID: id})); err != nil {
 		return biz.LoadBalancerResult{}, err
 	}
 	if err = lbHistory(ctx, q, row, a, "delete_load_balancer_accepted", now); err != nil {
@@ -565,4 +706,28 @@ func (p *Postgres) DeleteLoadBalancer(ctx context.Context, tenant, id string, a 
 		return biz.LoadBalancerResult{}, databaseFailure(err)
 	}
 	return result, nil
+}
+
+// The parent/LB locks and the subsequent admission version update fence old
+// work. Only a confirmed, immutable retirement permits identity replacement.
+func reincarnateLB(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkLoadBalancer) error {
+	binding, err := q.GetBinding(ctx, sqlcgen.GetBindingParams{TenantID: row.TenantID, ResourceID: row.LbID})
+	if err != nil {
+		return databaseFailure(err)
+	}
+	retired, err := q.GetLBRetiredBinding(ctx, sqlcgen.GetLBRetiredBindingParams{TenantID: row.TenantID, LbID: row.LbID, BindingID: binding.BindingID})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return biz.Fail(biz.ResourceBusy, "previous Gateway cleanup has no completed retirement proof")
+	}
+	if err != nil {
+		return databaseFailure(err)
+	}
+	if retired.ProviderUid != binding.ProviderUid || retired.ProviderName != binding.ProviderName || retired.CleanupTargetVersion != row.AppliedVersion || retired.CleanupTargetVersion != lbProviderTargetVersion(row) || binding.PendingAction != "" || retired.VipOccupiedRevision != row.VipOccupiedRevision || retired.VipAbsenceRevision != row.VipAbsenceRevision {
+		return biz.Fail(biz.ProviderOwnership, "previous Gateway retirement proof does not match current binding")
+	}
+	if err = affected(q.ResetLBRetiredVIPProof(ctx, sqlcgen.ResetLBRetiredVIPProofParams{TenantID: row.TenantID, LbID: row.LbID, Version: row.Version, BindingID: binding.BindingID, ProviderUid: binding.ProviderUid})); err != nil {
+		return err
+	}
+	newBinding := uuid.NewString()
+	return affected(q.ReincarnateLBBinding(ctx, sqlcgen.ReincarnateLBBindingParams{TenantID: row.TenantID, LbID: row.LbID, OldBindingID: binding.BindingID, OldProviderUid: binding.ProviderUid, NewBindingID: newBinding, NewProviderName: "lb-" + strings.ReplaceAll(newBinding, "-", "")}))
 }

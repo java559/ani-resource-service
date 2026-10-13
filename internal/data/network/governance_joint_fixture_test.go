@@ -45,6 +45,16 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	}
 	controller := &lbControllerFixture{}
 	f := newLBAdmissionFixture(t, func(w http.ResponseWriter, r *http.Request, api *controlled.Server) bool {
+		if r.Method == http.MethodGet && r.URL.Path == "/network-joint/lb-requests" {
+			// Read-only observation of the external protocol boundary. Admission,
+			// persistence and lifecycle execution still use production code.
+			controller.mu.Lock()
+			requests := append([]string{}, controller.requests...)
+			controller.mu.Unlock()
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode(requests)
+			return true
+		}
 		if r.Method == "POST" && strings.HasSuffix(r.URL.Path, "/subjectaccessreviews") {
 			w.Header().Set("Content-Type", "application/json")
 			_, _ = w.Write([]byte(`{"apiVersion":"authorization.k8s.io/v1","kind":"SubjectAccessReview","status":{"allowed":true}}`))

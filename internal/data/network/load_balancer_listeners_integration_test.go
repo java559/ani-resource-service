@@ -119,8 +119,11 @@ func TestLBMultipleListenersMainFlow(t *testing.T) {
 	}
 	f.f.drive(t, func() bool {
 		lb, err = f.lbs.Get(f.f.ctx, "", lb.ID)
-		return err == nil && lb.AppliedVersion == metadata.LoadBalancer.DesiredVersion && lb.ConfigurationState == "configured"
+		return err == nil && lb.AppliedVersion == metadata.LoadBalancer.ProviderTargetVersion && lb.ConfigurationState == "configured"
 	})
+	if metadata.LoadBalancer.ProviderTargetVersion != 1 || lb.DesiredVersion != 2 {
+		t.Fatal("metadata edit changed the Provider target or lost the complete configuration version", lb)
+	}
 	if len(lb.Listeners) != 2 || lb.Listeners[0].ID != firstID || lb.Listeners[1].ID != secondID || lb.Listeners[0].Port != 80 || lb.Listeners[1].Port != 8081 {
 		t.Fatal("omitted listener set changed", lb.Listeners)
 	}

@@ -67,6 +67,9 @@ func (p *KCProvider) readEIPLoadBalancer(ctx context.Context, e egressResolved, 
 		return readFailure(err)
 	}
 	for _, g := range prior {
+		if g.GatewayUid != v.Identity && g.ReleasedAt != nil {
+			continue
+		}
 		if g.Kind == "Service" && (g.ProviderName != svc.GetName() || g.ProviderUid != string(svc.GetUID()) || g.Namespace != svc.GetNamespace() || g.GatewayUid != v.Identity) {
 			return &biz.ProviderError{Kind: biz.ProviderConflict}
 		}

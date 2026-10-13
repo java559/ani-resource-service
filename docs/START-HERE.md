@@ -17,6 +17,8 @@
 
 2026-09-14 新统一设计：[VPC 基础内网、公网出站与 LB 方案](specs/vpc-connectivity-lb.md)定义新规则及对旧流程的调整；[13 个可执行任务](plans/vpc-connectivity-lb.md)给出依赖、修改范围与验收条件；[方案交付与来源核对](execution/records/2026-09-14-vpc-lb-plan.md)记录固定代码和手工实测的证据边界。本文档交付不代表新流程已实现。
 
+[LB 监听器延迟下发](specs/lb-deferred-activation.md)定义空监听器保存、运行投影、清空与再激活合同；实际进度只见 [LB-DEFERRED-01](execution/status.md#lb-deferred-01)，证据入口为 [工作包索引](execution/records/LB-DEFERRED-01/README.md)。
+
 [历史未知创建恢复提案](plans/provider-unknown-create-recovery.md)区分退出结果落库修正与旧回执缺失的恢复前提；本次实验例外已按用户授权恢复并复测；通用管理接口未实施，实际结果见执行状态。
 
 ## 架构决定

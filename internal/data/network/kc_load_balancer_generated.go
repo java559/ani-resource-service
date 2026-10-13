@@ -26,6 +26,17 @@ func (p *KCProvider) lbGenerated(ctx context.Context, r lbResolved, o *biz.LoadB
 	if err != nil {
 		return readFailure(err)
 	}
+	// Released descendants belong to a retired Gateway incarnation. Keep their
+	// durable tombstones, but only the current Gateway can prove readiness or
+	// release for the current binding.
+	current := prior[:0]
+	for _, g := range prior {
+		if g.GatewayUid != uid && g.ReleasedAt != nil {
+			continue
+		}
+		current = append(current, g)
+	}
+	prior = current
 	// All owner edges are scoped to this namespace and typed kind/name/UID.
 	// Previously observed intermediate UIDs keep orphaned descendants visible.
 	type identity struct{ kind, name, uid string }
@@ -309,7 +320,7 @@ func lbServiceTargets(s *unstructured.Unstructured, l biz.LoadBalancer, pods map
 	}
 	ports, _, _ := unstructured.NestedSlice(s.Object, "spec", "ports")
 	wanted := map[int64]string{}
-	for _, listener := range biz.EffectiveLoadBalancerListeners(l) {
+	for _, listener := range biz.ProjectLoadBalancerListeners(biz.EffectiveLoadBalancerListeners(l)) {
 		protocol := "TCP"
 		if listener.Protocol == "UDP" {
 			protocol = "UDP"

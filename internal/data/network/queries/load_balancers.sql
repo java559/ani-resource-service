@@ -55,7 +55,9 @@ INSERT INTO network_idempotency(tenant_id,operation_kind,idempotency_key,fingerp
 VALUES($1,$2,$3,$4,1,$5,$6,$7,$8);
 -- name: UpdateLBIntent :one
 UPDATE network_load_balancers SET name=sqlc.arg(name),description=sqlc.arg(description),desired_version=desired_version+1,
-configuration_state='pending',data_plane_state='unknown',data_plane_observed_at=NULL,
+configuration_state=CASE WHEN sqlc.arg(projection_changed)::boolean THEN 'pending' ELSE configuration_state END,
+data_plane_state=CASE WHEN sqlc.arg(projection_changed)::boolean THEN 'unknown' ELSE data_plane_state END,
+data_plane_observed_at=CASE WHEN sqlc.arg(projection_changed)::boolean THEN NULL ELSE data_plane_observed_at END,
 version=version+1,updated_at=clock_timestamp(),last_operation_id=sqlc.arg(operation_id)
 WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND version=sqlc.arg(version) AND state NOT IN ('deleting','deleted') RETURNING *;
 -- name: AdmitLBDeletion :one
@@ -137,3 +139,102 @@ AND (sqlc.arg(vpc_filter)::text='' OR vpc_id=sqlc.arg(vpc_filter))
 AND (sqlc.arg(subnet_filter)::text='' OR subnet_id=sqlc.arg(subnet_filter))
 AND (sqlc.arg(exposure_filter)::text='' OR exposure=sqlc.arg(exposure_filter))
 AND ((sqlc.arg(state_filter)::text='' AND state<>'deleted') OR state=sqlc.arg(state_filter));
+
+-- name: AdvanceLBProviderTarget :one
+UPDATE network_load_balancers SET provider_target_version=desired_version,configuration_state='pending'
+WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND version=sqlc.arg(version) RETURNING *;
+-- name: CompleteLBDatabaseOperation :execrows
+UPDATE network_operations SET state='succeeded',reason='',updated_at=clock_timestamp(),completed_at=clock_timestamp(),next_attempt_at=NULL
+WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id)::text AND operation_id=sqlc.arg(operation_id) AND completed_at IS NULL;
+-- name: MarkLBWaitingForBackends :one
+UPDATE network_load_balancers SET configuration_state='waiting_for_backends'
+WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND version=sqlc.arg(version) AND provider_target_version IS NULL RETURNING *;
+-- name: CanDeleteLBWithoutProvider :one
+SELECT NOT EXISTS(SELECT 1 FROM network_provider_bindings b WHERE b.tenant_id=sqlc.arg(tenant_id) AND b.lb_id=sqlc.arg(lb_id)::text
+ AND (b.create_dispatched OR b.pending_action<>'' OR b.provider_uid<>''))
+AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=sqlc.arg(tenant_id) AND c.lb_id=sqlc.arg(lb_id)
+ AND (c.create_dispatched OR c.pending_action<>'' OR c.provider_uid<>''))
+AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=sqlc.arg(tenant_id) AND g.lb_id=sqlc.arg(lb_id)) AS safe;
+-- name: CompleteLBDatabaseDeletion :one
+UPDATE network_load_balancers l SET state='deleted',reason='',version=version+1,updated_at=clock_timestamp(),data_plane_state='unknown',data_plane_observed_at=NULL
+WHERE l.tenant_id=sqlc.arg(tenant_id) AND l.lb_id=sqlc.arg(lb_id) AND l.version=sqlc.arg(version) AND l.state='deleting'
+AND NOT EXISTS(SELECT 1 FROM network_provider_bindings b WHERE b.tenant_id=l.tenant_id AND b.lb_id=l.lb_id
+ AND (b.create_dispatched OR b.pending_action<>'' OR b.provider_uid<>''))
+AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=l.tenant_id AND c.lb_id=l.lb_id
+ AND (c.create_dispatched OR c.pending_action<>'' OR c.provider_uid<>''))
+AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=l.tenant_id AND g.lb_id=l.lb_id)
+RETURNING *;
+-- name: RetireLBUndispatchedComponents :exec
+UPDATE network_lb_components SET deleted_at=coalesce(deleted_at,clock_timestamp())
+WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND NOT create_dispatched AND pending_action='' AND provider_uid='';
+-- name: GetLBRetiredBinding :one
+SELECT * FROM network_lb_retired_bindings WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND binding_id=sqlc.arg(binding_id);
+-- name: InsertLBRetiredBinding :execrows
+INSERT INTO network_lb_retired_bindings(tenant_id,cluster_id,namespace,lb_id,binding_id,provider_name,provider_uid,cleanup_target_version,operation_id,vip_occupied_revision,vip_absence_revision,cleanup_completed_at)
+SELECT l.tenant_id,l.cluster_id,l.namespace,l.lb_id,b.binding_id,b.provider_name,b.provider_uid,l.provider_target_version,sqlc.arg(operation_id),l.vip_occupied_revision,l.vip_absence_revision,clock_timestamp()
+FROM network_load_balancers l JOIN network_provider_bindings b USING(tenant_id,cluster_id,namespace,lb_id)
+WHERE l.tenant_id=sqlc.arg(tenant_id) AND l.lb_id=sqlc.arg(lb_id) AND l.version=sqlc.arg(version)
+AND l.configuration_state='waiting_for_backends' AND l.applied_version=l.provider_target_version
+AND b.binding_id=sqlc.arg(binding_id) AND b.provider_uid=sqlc.arg(provider_uid) AND b.provider_uid<>'' AND b.pending_action=''
+AND (l.private_ip IS NULL OR l.vip_absence_revision<>'')
+AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=l.tenant_id AND c.lb_id=l.lb_id AND c.deleted_at IS NULL)
+AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=l.tenant_id AND g.lb_id=l.lb_id AND g.gateway_uid=b.provider_uid AND g.released_at IS NULL)
+ON CONFLICT (tenant_id,lb_id,binding_id) DO NOTHING;
+-- name: ResetLBRetiredVIPProof :execrows
+UPDATE network_load_balancers l SET vip_occupied_revision='',vip_absence_revision=''
+WHERE l.tenant_id=sqlc.arg(tenant_id) AND l.lb_id=sqlc.arg(lb_id) AND l.version=sqlc.arg(version)
+AND EXISTS(SELECT 1 FROM network_lb_retired_bindings r WHERE r.tenant_id=l.tenant_id AND r.lb_id=l.lb_id
+ AND r.binding_id=sqlc.arg(binding_id) AND r.provider_uid=sqlc.arg(provider_uid) AND r.cleanup_target_version=l.applied_version
+ AND r.vip_occupied_revision=l.vip_occupied_revision AND r.vip_absence_revision=l.vip_absence_revision);
+-- name: ReserveLBClaim :exec
+UPDATE network_eip_claims SET state='reserved' WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id) AND released_at IS NULL;
+-- name: ParkLBReconciliation :execrows
+UPDATE network_reconciliations SET next_run_at='infinity'::timestamptz,lease_owner=NULL,lease_until=NULL,lease_epoch=lease_epoch+1
+WHERE tenant_id=sqlc.arg(tenant_id) AND lb_id=sqlc.arg(lb_id)::text;
+
+-- name: CanParkLBWaitingWithoutProvider :one
+SELECT EXISTS (
+ SELECT 1 FROM network_load_balancers l
+ JOIN network_provider_bindings b USING(tenant_id,cluster_id,namespace,lb_id)
+ JOIN network_operations o ON o.tenant_id=l.tenant_id AND o.lb_id=l.lb_id AND o.operation_id=l.last_operation_id
+ WHERE l.tenant_id=sqlc.arg(tenant_id) AND l.lb_id=sqlc.arg(lb_id)
+ AND l.state='provisioning' AND l.configuration_state='waiting_for_backends' AND o.completed_at IS NOT NULL AND o.state='succeeded'
+ AND b.pending_action=''
+ AND (
+  (NOT b.create_dispatched AND b.provider_uid=''
+   AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=l.tenant_id AND c.lb_id=l.lb_id
+    AND (c.create_dispatched OR c.pending_action<>'' OR c.provider_uid<>''))
+   AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=l.tenant_id AND g.lb_id=l.lb_id))
+  OR
+  (l.applied_version=l.provider_target_version
+   AND EXISTS(SELECT 1 FROM network_lb_retired_bindings r WHERE r.tenant_id=l.tenant_id AND r.cluster_id=l.cluster_id AND r.namespace=l.namespace AND r.lb_id=l.lb_id
+    AND r.binding_id=b.binding_id AND r.provider_name=b.provider_name AND r.provider_uid=b.provider_uid
+    AND r.cleanup_target_version=l.provider_target_version
+    AND r.vip_occupied_revision=l.vip_occupied_revision AND r.vip_absence_revision=l.vip_absence_revision)
+   AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=l.tenant_id AND c.lb_id=l.lb_id AND c.deleted_at IS NULL)
+   AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=l.tenant_id AND g.lb_id=l.lb_id AND g.gateway_uid=b.provider_uid AND g.released_at IS NULL))
+ )
+) AS safe;
+
+-- A confirmed retired incarnation can release product reservations without
+-- rechecking whether an unrelated consumer has since allocated its freed VIP.
+-- Keep this separate from never-dispatched deletion: the latter has no need to
+-- read the retired fact table and must retain its existing privilege contract.
+-- name: CompleteLBRetiredDatabaseDeletion :one
+UPDATE network_load_balancers l SET state='deleted',reason='',version=version+1,updated_at=clock_timestamp(),data_plane_state='unknown',data_plane_observed_at=NULL
+WHERE l.tenant_id=sqlc.arg(tenant_id) AND l.lb_id=sqlc.arg(lb_id) AND l.version=sqlc.arg(version) AND l.state='deleting'
+AND l.configuration_state='waiting_for_backends' AND l.provider_target_version>0 AND l.applied_version=l.provider_target_version
+AND EXISTS (
+ SELECT 1 FROM network_provider_bindings b
+ JOIN network_lb_retired_bindings r ON (r.tenant_id,r.cluster_id,r.namespace,r.lb_id,r.binding_id)=(b.tenant_id,b.cluster_id,b.namespace,b.lb_id,b.binding_id)
+ JOIN network_operations o ON o.tenant_id=r.tenant_id AND o.lb_id=r.lb_id AND o.operation_id=r.operation_id
+ WHERE (b.tenant_id,b.cluster_id,b.namespace,b.lb_id)=(l.tenant_id,l.cluster_id,l.namespace,l.lb_id)
+ AND b.provider_uid<>'' AND b.pending_action='' AND b.pending_since IS NULL
+ AND r.provider_uid=b.provider_uid AND r.provider_name=b.provider_name AND r.cleanup_target_version=l.provider_target_version
+ AND r.vip_occupied_revision=l.vip_occupied_revision AND r.vip_absence_revision=l.vip_absence_revision
+ AND (l.private_ip IS NULL OR r.vip_absence_revision<>'')
+ AND o.state='succeeded' AND o.completed_at IS NOT NULL
+)
+AND NOT EXISTS(SELECT 1 FROM network_lb_components c WHERE c.tenant_id=l.tenant_id AND c.lb_id=l.lb_id AND (c.deleted_at IS NULL OR c.pending_action<>'' OR c.pending_since IS NOT NULL))
+AND NOT EXISTS(SELECT 1 FROM network_lb_generated_resources g WHERE g.tenant_id=l.tenant_id AND g.lb_id=l.lb_id AND g.released_at IS NULL)
+RETURNING *;

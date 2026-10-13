@@ -160,6 +160,9 @@ func TestLBAdmissionAtomicIdentityReplayAndParentOccupancy(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if d.LoadBalancer.State != biz.Deleted || d.Operation.State != biz.Succeeded {
+		t.Fatal("never-dispatched product deletion did not complete atomically", d)
+	}
 	again, err := f.lbs.Delete(f.f.ctx, "", r.LoadBalancer.ID)
 	if err != nil || d.Operation.ID != again.Operation.ID {
 		t.Fatal("delete lost identity", err)
@@ -167,8 +170,8 @@ func TestLBAdmissionAtomicIdentityReplayAndParentOccupancy(t *testing.T) {
 	if _, err = f.lbs.Update(f.f.ctx, biz.UpdateLoadBalancer{ID: r.LoadBalancer.ID, ExpectedVersion: d.LoadBalancer.Version, IdempotencyKey: "closed", LoadBalancerMutableInput: f.request.LoadBalancerMutableInput}); biz.ReasonOf(err) != biz.ResourceBusy {
 		t.Fatal("deletion did not close update", err)
 	}
-	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_lb_vip_intents WHERE tenant_id=$1 AND lb_id=$2 AND released_at IS NULL`, f.f.tenant, r.LoadBalancer.ID).Scan(&vips); err != nil || vips != 1 {
-		t.Fatal("accepting delete prematurely released VIP", vips, err)
+	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_lb_vip_intents WHERE tenant_id=$1 AND lb_id=$2 AND released_at IS NULL`, f.f.tenant, r.LoadBalancer.ID).Scan(&vips); err != nil || vips != 0 {
+		t.Fatal("completed never-dispatched deletion retained VIP reservation", vips, err)
 	}
 }
 func TestLBAdmissionRejectsCIDROnlyBackendAndDuplicateVIP(t *testing.T) {

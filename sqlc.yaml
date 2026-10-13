@@ -15,6 +15,7 @@ sql:
       - migrations/0011_subnet_ip_counts.sql
       - migrations/0012_lb_listener_parameters.sql
       - migrations/0013_subnet_ip_ranges.sql
+      - migrations/0014_lb_deferred_activation.sql
     queries: internal/data/network/queries
     gen:
       go:

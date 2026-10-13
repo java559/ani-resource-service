@@ -147,7 +147,7 @@ func lbMemberEligible(o biz.LoadBalancerObservation, id string) bool {
 func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalancerObservation) *unstructured.Unstructured {
 	l := r.work.Resource.LoadBalancer.LoadBalancer
 	spec := map[string]any{}
-	version := l.DesiredVersion
+	version := l.ProviderTargetVersion
 	switch c.Kind {
 	case "gateway":
 		flavor, ok := biz.FindLoadBalancerFlavor(l.Flavor)
@@ -164,7 +164,7 @@ func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalanc
 			a["networking.kubercloud.com/lb_eips"] = r.eip.ProviderName
 		}
 		listeners := []any{}
-		for _, listener := range biz.EffectiveLoadBalancerListeners(l) {
+		for _, listener := range biz.ProjectLoadBalancerListeners(biz.EffectiveLoadBalancerListeners(l)) {
 			listeners = append(listeners, lbGatewayListener(listener))
 		}
 		spec = map[string]any{"gatewayClassName": class, "infrastructure": map[string]any{"annotations": a}, "listeners": listeners}
@@ -189,16 +189,8 @@ func lbDesiredObject(r lbResolved, c biz.LoadBalancerComponent, o biz.LoadBalanc
 		}
 		rule := lbRouteRule(listener, refs)
 		if listener.Parameters.HTTPSRedirectStatusCode != 0 {
-			var port uint32
-			for _, target := range biz.EffectiveLoadBalancerListeners(l) {
-				if target.Protocol == "HTTPS" {
-					port = target.Port
-					if port == 443 {
-						break
-					}
-				}
-			}
-			rule["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["port"] = int64(port)
+			target, _ := biz.ResolveLoadBalancerRedirectTarget(biz.EffectiveLoadBalancerListeners(l))
+			rule["filters"].([]any)[0].(map[string]any)["requestRedirect"].(map[string]any)["port"] = int64(target.Port)
 		}
 
 		spec = map[string]any{"parentRefs": []any{map[string]any{"group": lbGateways.Group, "kind": "Gateway", "name": r.binding.ProviderName, "sectionName": listener.Name}}, "rules": []any{rule}}
@@ -372,7 +364,7 @@ func (p *KCProvider) observeLoadBalancerOnce(ctx context.Context, w biz.Work, re
 			resources = append(resources, gvr)
 		}
 	}
-	for _, listener := range biz.EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer) {
+	for _, listener := range biz.ProjectLoadBalancerListeners(biz.EffectiveLoadBalancerListeners(w.Resource.LoadBalancer.LoadBalancer)) {
 		if w.Resource.State != biz.Deleting && w.Resource.State != biz.Deleted && listener.Parameters.Certificate != nil {
 			if err := p.validateLBCertificate(ctx, r, listener); err != nil {
 				return o, err

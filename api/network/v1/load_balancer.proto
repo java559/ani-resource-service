@@ -55,6 +55,7 @@ enum LoadBalancerConfigurationState {
   LOAD_BALANCER_CONFIGURATION_STATE_CONFIGURED = 3;
   LOAD_BALANCER_CONFIGURATION_STATE_DEGRADED = 4;
   LOAD_BALANCER_CONFIGURATION_STATE_UNKNOWN = 5;
+  LOAD_BALANCER_CONFIGURATION_STATE_WAITING_FOR_BACKENDS = 6;
 }
 enum LoadBalancerDataPlaneState {
   LOAD_BALANCER_DATA_PLANE_STATE_UNSPECIFIED = 0;
@@ -107,6 +108,10 @@ message LoadBalancerListener {
   optional uint32 max_connections = 10;
   bool gzip_enabled = 11;
   uint32 https_redirect_status_code = 12;
+  // Read-only: waiting_for_backends, applying, configured, removing, degraded
+  // or unknown. Waiting redirect listeners report WAITING_FOR_REDIRECT_TARGET.
+  string deployment_state = 13;
+  string reason = 14;
 }
 // The backend must resolve to a current, allocated business address in this VPC
 // using Attachment plus Provider identity facts. CIDR membership alone is not
@@ -171,7 +176,7 @@ message LoadBalancer {
   int64 version = 18;
   int64 desired_version = 19;
   // Preserved during partially applied or failed updates; never copied from
-  // desired_version until the corresponding configuration is verified.
+  // provider_target_version until that projection or its cleanup is verified.
   int64 applied_version = 20;
   LoadBalancerConfigurationState configuration_state = 21;
   // unknown without a suitable fresh health source. Gateway/Route/Policy
@@ -187,12 +192,16 @@ message LoadBalancer {
   // resources. Absent when unknown; stale evidence forces data_plane_state=unknown.
   google.protobuf.Timestamp data_plane_observed_at = 29;
   repeated LoadBalancerListener listeners = 30;
+  // Read-only version of the latest configuration that changed the Provider
+  // projection. Zero means no projection has ever been targeted.
+  int64 provider_target_version = 31;
 }
 
 // Creation validates each HTTP listener and its backend/health configuration.
 // Flavor is small (the default), medium or large. Private/public_private require a usable private_ip in subnet_id;
 // public forbids private_ip. Public/public_private require an allocated, unclaimed
-// Public EIP; private forbids public_eip_id. All three require fresh base readiness.
+// Public EIP; private forbids public_eip_id. Empty listeners save intent only;
+// runtime readiness is checked when their backend configuration activates them.
 // Accepted intent atomically reserves parents, VIP/EIP and stable child identities.
 // Replaying the same key and normalized intent returns the accepted snapshot;
 // a changed intent under the same key is IDEMPOTENCY_CONFLICT.
