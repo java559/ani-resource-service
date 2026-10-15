@@ -282,7 +282,7 @@ func (p *Postgres) ListVPCs(ctx context.Context, tenant string, filter biz.VPCFi
 	}
 	rows, err := q.ListVPCs(ctx, sqlcgen.ListVPCsParams{
 		TenantID: tenant, NameFilter: filter.Name, StateFilter: filter.State,
-		AfterID: filter.AfterID, AfterCreatedAt: filter.AfterCreatedAt, MaxResults: filter.Limit,
+		AfterID: filter.AfterID, AfterCreatedAt: filter.AfterCreatedAt, MaxResults: filter.Limit, PageOffset: filter.Offset,
 	})
 	if err != nil {
 		return nil, 0, databaseFailure(err)

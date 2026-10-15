@@ -151,8 +151,11 @@ message ListVPCsRequest {
   string tenant_id = 1;
   string name = 2;
   ResourceState state = 3;
-  int32 limit = 4;
-  string cursor = 5;
+  // Legacy RPC window only; Gov public VPC requests use page/page_size.
+  int32 limit = 4 [deprecated = true];
+  string cursor = 5 [deprecated = true];
+  optional uint32 page = 6;
+  optional uint32 page_size = 7 [json_name = "pageSize"];
 }
 message ListVPCsResponse { repeated VPC items = 1; string next_cursor = 2; int64 total = 3; }
 message DeleteVPCRequest { string tenant_id = 1; string vpc_id = 2; }

@@ -15,6 +15,7 @@ import (
 type ListVPCs struct {
 	TenantID, Name, State, Cursor string
 	Limit                         int
+	Page, PageSize                *uint32
 }
 
 type VPCPage struct {
@@ -27,6 +28,7 @@ type VPCFilter struct {
 	Name, State, AfterID string
 	AfterCreatedAt       time.Time
 	Limit                int32
+	Offset               int64
 }
 
 type vpcCursor struct {
@@ -43,6 +45,29 @@ func (n *Network) ListVPCs(ctx context.Context, request ListVPCs) (VPCPage, erro
 	tenant, err := ParseTenant(request.TenantID)
 	if err != nil {
 		return VPCPage{}, err
+	}
+	if request.Page != nil || request.PageSize != nil {
+		if request.Limit != 0 || request.Cursor != "" {
+			return VPCPage{}, Fail(InvalidArgument, "page/pageSize cannot be mixed with limit/cursor")
+		}
+		window, err := ResolvePage(request.Page, request.PageSize)
+		if err != nil {
+			return VPCPage{}, err
+		}
+		filter, err := normalizeList(request.Name, request.State, int(window.Limit))
+		if err != nil {
+			return VPCPage{}, err
+		}
+		filter.Limit, filter.Offset = window.Limit, window.Offset
+		rows, total, err := n.repository.ListVPCs(ctx, tenant, filter)
+		if err != nil {
+			return VPCPage{}, err
+		}
+		page := VPCPage{Total: total, Items: make([]VPC, 0, len(rows))}
+		for _, value := range rows {
+			page.Items = append(page.Items, n.observation(value))
+		}
+		return page, nil
 	}
 	filter, err := normalizeList(request.Name, request.State, request.Limit)
 	if err != nil {

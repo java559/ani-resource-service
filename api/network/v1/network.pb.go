@@ -1116,12 +1116,18 @@ func (x *GetVPCResponse) GetVpc() *VPC {
 }
 
 type ListVPCsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	State         ResourceState          `protobuf:"varint,3,opt,name=state,proto3,enum=network.v1.ResourceState" json:"state,omitempty"`
-	Limit         int32                  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
-	Cursor        string                 `protobuf:"bytes,5,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	TenantId string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	Name     string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	State    ResourceState          `protobuf:"varint,3,opt,name=state,proto3,enum=network.v1.ResourceState" json:"state,omitempty"`
+	// Legacy RPC window only; Gov public VPC requests use page/page_size.
+	//
+	// Deprecated: Marked as deprecated in network/v1/network.proto.
+	Limit int32 `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
+	// Deprecated: Marked as deprecated in network/v1/network.proto.
+	Cursor        string  `protobuf:"bytes,5,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	Page          *uint32 `protobuf:"varint,6,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	PageSize      *uint32 `protobuf:"varint,7,opt,name=page_size,json=pageSize,proto3,oneof" json:"page_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1177,6 +1183,7 @@ func (x *ListVPCsRequest) GetState() ResourceState {
 	return ResourceState_RESOURCE_STATE_UNSPECIFIED
 }
 
+// Deprecated: Marked as deprecated in network/v1/network.proto.
 func (x *ListVPCsRequest) GetLimit() int32 {
 	if x != nil {
 		return x.Limit
@@ -1184,11 +1191,26 @@ func (x *ListVPCsRequest) GetLimit() int32 {
 	return 0
 }
 
+// Deprecated: Marked as deprecated in network/v1/network.proto.
 func (x *ListVPCsRequest) GetCursor() string {
 	if x != nil {
 		return x.Cursor
 	}
 	return ""
+}
+
+func (x *ListVPCsRequest) GetPage() uint32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
+	}
+	return 0
+}
+
+func (x *ListVPCsRequest) GetPageSize() uint32 {
+	if x != nil && x.PageSize != nil {
+		return *x.PageSize
+	}
+	return 0
 }
 
 type ListVPCsResponse struct {
@@ -3353,13 +3375,18 @@ const file_network_v1_network_proto_rawDesc = "" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x15\n" +
 	"\x06vpc_id\x18\x02 \x01(\tR\x05vpcId\"3\n" +
 	"\x0eGetVPCResponse\x12!\n" +
-	"\x03vpc\x18\x01 \x01(\v2\x0f.network.v1.VPCR\x03vpc\"\xa1\x01\n" +
+	"\x03vpc\x18\x01 \x01(\v2\x0f.network.v1.VPCR\x03vpc\"\xfb\x01\n" +
 	"\x0fListVPCsRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12/\n" +
-	"\x05state\x18\x03 \x01(\x0e2\x19.network.v1.ResourceStateR\x05state\x12\x14\n" +
-	"\x05limit\x18\x04 \x01(\x05R\x05limit\x12\x16\n" +
-	"\x06cursor\x18\x05 \x01(\tR\x06cursor\"p\n" +
+	"\x05state\x18\x03 \x01(\x0e2\x19.network.v1.ResourceStateR\x05state\x12\x18\n" +
+	"\x05limit\x18\x04 \x01(\x05B\x02\x18\x01R\x05limit\x12\x1a\n" +
+	"\x06cursor\x18\x05 \x01(\tB\x02\x18\x01R\x06cursor\x12\x17\n" +
+	"\x04page\x18\x06 \x01(\rH\x00R\x04page\x88\x01\x01\x12 \n" +
+	"\tpage_size\x18\a \x01(\rH\x01R\bpageSize\x88\x01\x01B\a\n" +
+	"\x05_pageB\f\n" +
+	"\n" +
+	"_page_size\"p\n" +
 	"\x10ListVPCsResponse\x12%\n" +
 	"\x05items\x18\x01 \x03(\v2\x0f.network.v1.VPCR\x05items\x12\x1f\n" +
 	"\vnext_cursor\x18\x02 \x01(\tR\n" +
@@ -3803,6 +3830,7 @@ func file_network_v1_network_proto_init() {
 	if File_network_v1_network_proto != nil {
 		return
 	}
+	file_network_v1_network_proto_msgTypes[8].OneofWrappers = []any{}
 	file_network_v1_network_proto_msgTypes[14].OneofWrappers = []any{}
 	file_network_v1_network_proto_msgTypes[15].OneofWrappers = []any{}
 	type x struct{}

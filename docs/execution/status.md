@@ -2,6 +2,14 @@
 
 更新日期：2026-10-12。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
 
+## VPC R01 页码参考实现
+
+2026-10-15：`query_verified`。基线为远端默认分支 main `c826b2b4d3ce7746b3caa49548e104e07d6e3b8e`，隔离分支 `codex/vpc-page-r01-20261015`。范围仅 VPC：有 presence 的 page/page_size → LIMIT/OFFSET → 同快照 Count/List；保留旧 Resource RPC 游标适配。原 Image 工作树修改保留。Gov 接入及跨仓 HTTP 验证结果以 Gov `docs/interface-integration-register.md` 的 VPC R01 登记为准，未部署或修改其他资源协议。
+
+Fedora Go 1.26.9、Buf 1.60.0、sqlc 1.31.1；`make config sql`、`scripts/verify-source`、`scripts/verify-boundaries` 均 exit 0。本次按用户限定仅做定向测试，未执行包含全仓测试的 `make verify`：`go test -count=1 -v -run '^TestResolvePage$' ./internal/biz/network`，以及 `scripts/integration -timeout 3m -v -run '^(TestVPCPageRandomAccessAndScope|TestVPCPageCountAndListShareSnapshot|TestVPCListTotalAcrossPagesAndFilters)$' ./internal/data/network` 均 pass/0。后者真实 PostgreSQL 运行于任务独占临时容器，三项分别 0.55s/0.45s/0.51s，结束已清理；并发测试用锁暂停 List，在 Count 后提交名称变更，证明同次仍返回旧快照、下次看到新状态。Provider 平台事实仅在外部边界使用既有 fixture。
+
+可复现输入归档为 Fedora `/home/chabking/workspace/ani-resource-service-runs/vpc-page-r01-01a13e73/input/resource-s02.tar.gz`，SHA256 `53614b8a7ad143fada142fc98df198311efc2724050d18bde8725b2ae6507c2d`，具名日志 `resource-s02.log` / exit 0；同目录 manifest 逐文件记录源码，远端 gofmt 回传后逐项核对本地未漂移。Resource 联调二进制 SHA256 `9194e6e454606152756623cb43ad8466689d0d208ab8ccbb8b8661ad30916200`。真实 Provider/集群、生产鉴权配置和部署验收 `not_verified`。
+
 ## LB-DEFERRED-01
 
 2026-10-13：`controlled_complete`（按用户调整后的范围完成）。用户授权四文件补充接线，并在共享平台预置授权问题中明确答复“这个测试跳过”；P0–P4 主链及最终再激活名称修正均已受控验证，P5 的 10～12 真实 LB 验收记为 `skipped_by_user`。完成范围以本次用户调整为准；真实 VIP 流量未证明。主链为仅 DB 空保存 → 添加后端下发 → 混合监听器 → 部分/全部清空并确认解绑 → 新运行身份再激活 → 产品删除/恢复。固定源码、原始失败及命令只在 [证据索引](records/LB-DEFERRED-01/README.md)。

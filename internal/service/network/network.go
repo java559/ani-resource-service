@@ -46,11 +46,14 @@ func (s *NetworkService) GetVPC(ctx context.Context, r *networkv1.GetVPCRequest)
 	return &networkv1.GetVPCResponse{Vpc: wireVPC(value)}, nil
 }
 func (s *NetworkService) ListVPCs(ctx context.Context, r *networkv1.ListVPCsRequest) (*networkv1.ListVPCsResponse, error) {
+	if r == nil {
+		return nil, rpcError(biz.Fail(biz.InvalidArgument, "request required"))
+	}
 	state, exists := statesFromWire[r.GetState()]
 	if !exists {
 		return nil, rpcError(biz.Fail(biz.InvalidArgument, "invalid VPC state filter"))
 	}
-	value, err := s.network.ListVPCs(ctx, biz.ListVPCs{TenantID: r.GetTenantId(), Name: r.GetName(), State: string(state), Limit: int(r.GetLimit()), Cursor: r.GetCursor()})
+	value, err := s.network.ListVPCs(ctx, biz.ListVPCs{TenantID: r.GetTenantId(), Name: r.GetName(), State: string(state), Limit: int(r.GetLimit()), Cursor: r.GetCursor(), Page: r.Page, PageSize: r.PageSize})
 	if err != nil {
 		return nil, rpcError(err)
 	}

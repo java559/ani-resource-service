@@ -400,7 +400,7 @@ WHERE v.tenant_id = $1
   AND (($3::text = '' AND v.state <> 'deleted') OR v.state = $3)
   AND ($4::text = '' OR (v.created_at, v.vpc_id) < ($5::timestamptz, $4::text))
 ORDER BY v.created_at DESC, v.vpc_id DESC
-LIMIT $6::integer
+LIMIT $7::integer OFFSET $6::bigint
 `
 
 type ListVPCsParams struct {
@@ -409,6 +409,7 @@ type ListVPCsParams struct {
 	StateFilter    string
 	AfterID        string
 	AfterCreatedAt time.Time
+	PageOffset     int64
 	MaxResults     int32
 }
 
@@ -427,6 +428,7 @@ func (q *Queries) ListVPCs(ctx context.Context, arg ListVPCsParams) ([]ListVPCsR
 		arg.StateFilter,
 		arg.AfterID,
 		arg.AfterCreatedAt,
+		arg.PageOffset,
 		arg.MaxResults,
 	)
 	if err != nil {

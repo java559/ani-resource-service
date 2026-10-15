@@ -47,7 +47,7 @@ WHERE v.tenant_id = sqlc.arg(tenant_id)
   AND ((sqlc.arg(state_filter)::text = '' AND v.state <> 'deleted') OR v.state = sqlc.arg(state_filter))
   AND (sqlc.arg(after_id)::text = '' OR (v.created_at, v.vpc_id) < (sqlc.arg(after_created_at)::timestamptz, sqlc.arg(after_id)::text))
 ORDER BY v.created_at DESC, v.vpc_id DESC
-LIMIT sqlc.arg(max_results)::integer;
+LIMIT sqlc.arg(max_results)::integer OFFSET sqlc.arg(page_offset)::bigint;
 
 -- name: EnsureTenantNamespace :exec
 INSERT INTO network_tenant_namespaces(tenant_id,cluster_id,namespace) VALUES ($1,$2,$3)

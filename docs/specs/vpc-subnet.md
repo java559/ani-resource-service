@@ -100,7 +100,7 @@ REST 前缀继续为 `/api/v1`。下面路径保留现有产品形式；新增/�
 |---|---|---|
 | `POST /networks/vpcs` | `CreateVPC` | `name,cidr,idempotency_key,description?`；201 + VPC |
 | `GET /networks/vpcs/{vpc_id}` | `GetVPC` | 200 + VPC；始终按租户查询 |
-| `GET /networks/vpcs` | `ListVPCs` | 200 + 分页；`name?,state?,limit?,cursor?` |
+| `GET /networks/vpcs` | `ListVPCs` | 200 + 分页；`name?,state?,page?,pageSize?`（Gov），旧 RPC 见下文 |
 | `DELETE /networks/vpcs/{vpc_id}` | `DeleteVPC` | 接受异步删除时 202 + VPC；已 deleted 时 200 + VPC |
 | `POST /networks/subnets` | `CreateSubnet` | `name,vpc_id,cidr,idempotency_key,description?,gateway?`；201 + Subnet |
 | `GET /networks/subnets/{subnet_id}` | `GetSubnet` | 200 + Subnet |
@@ -126,8 +126,9 @@ Fedora 上 `scripts/integration -timeout 5m -v -run '^(TestSubnetKCIPRangesDetai
 Operation 字段：`id,tenant_id,kind,resource_type,resource_id,state,reason,created_at,updated_at,completed_at,next_attempt_at`。
 kind 首片为 `create_vpc,delete_vpc,create_subnet,delete_subnet`；内部接入事务有独立 Attachment 状态，不伪装成中央 AsyncTask。
 
-列表默认 `limit=20`，范围 1–100；`name` 是规范化后区分大小写的精确匹配，`state` 为单值，非法值 400。
-按 `(created_at DESC,id DESC)` 做 keyset 分页；返回 `items,next_cursor,total`。`total` 是当前租户和筛选条件下的匹配总条数，不应用 cursor 或 limit；总数和本页数据来自同一只读数据库快照。
+Gov VPC 列表采用 `page/pageSize`，独立默认 1/20，page 为 uint32 正整数，pageSize 范围 1–100。显式非法、重复、溢出及旧窗口参数返回 400。返回 `items/total`；空页 items 为数组，HTTP total 为十进制字符串。Resource 新增有 presence 的 RPC 字段（6/7），任一存在时按 `(page-1)*pageSize` 直接执行 LIMIT/OFFSET，无需预读前页。超界页仍返回完整 total。
+VPC 稳定排序为非 NULL 的 `(created_at DESC,vpc_id DESC)`；`name` 是规范化后区分大小写精确匹配，`state` 为单值，不传时排除 deleted。Count/List 使用相同 tenant/name/state 范围及同一个只读 Repeatable Read 快照。
+Resource 旧 RPC limit/cursor 字段标记 deprecated，未传页码时保留原 keyset 协议；页码与非零 limit/非空 cursor 混用拒绝。Gov VPC 已明确退出旧协议，不返回 next_cursor。Subnet 及其他资源仍保留既有 limit/cursor 行为及共享 codec，不随本片迁移。
 默认排除 deleted；显式 `state=deleted` 可查墓碑。GET 保留 deleted 资源，直到另行设计保留/清理策略。
 cursor 是服务生成的带完整性校验的 opaque 值，绑定租户、资源种类、筛选条件和上页边界；跨租户/改筛选/损坏均 400，不改变租户授权。
 分页不是跨多个请求的数据库快照；并发插入的新资源从新一轮列表读取。
