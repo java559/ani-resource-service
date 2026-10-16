@@ -12,6 +12,7 @@ import (
 	imagebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -106,7 +107,7 @@ func stringMap(in map[string]string) map[string]any {
 	return out
 }
 
-// RenderNotebook consumes frozen GPU fields only. User images cannot change the
+// RenderNotebook consumes the frozen instance specification. User images cannot change the
 // managed container count, replicas, selectors, queue, or resource limits.
 func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 	if e := biz.ValidateCreate(biz.Create{TenantID: i.TenantID, ID: i.ID, OperationID: i.CreateOperationID, RequestHash: i.CreateRequestHash, BusinessDigest: i.BusinessDigest, Spec: i.Spec, Charges: i.Charges}); e != nil {
@@ -124,9 +125,13 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 	for k, v := range s.GPU.Annotations {
 		ann[k] = v
 	}
-	ann["scheduling.volcano.sh/queue-name"] = s.GPU.Queue
-	ann["accelerator.ani.io/plan-digest"] = s.GPU.Digest
-	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "schedulerName": s.GPU.Scheduler, "nodeSelector": stringMap(s.GPU.NodeLabels), "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": "/workspace", "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": []any{map[string]any{"name": "workspace", "mountPath": "/workspace"}}}}, "volumes": []any{map[string]any{"name": "workspace", "persistentVolumeClaim": map[string]any{"claimName": s.PVCName}}}}
+	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": "/workspace", "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": []any{map[string]any{"name": "workspace", "mountPath": "/workspace"}}}}, "volumes": []any{map[string]any{"name": "workspace", "persistentVolumeClaim": map[string]any{"claimName": s.PVCName}}}}
+	if s.Type() == biz.TypeGPU {
+		ann["scheduling.volcano.sh/queue-name"] = s.GPU.Queue
+		ann["accelerator.ani.io/plan-digest"] = s.GPU.Digest
+		pod["schedulerName"] = s.GPU.Scheduler
+		pod["nodeSelector"] = stringMap(s.GPU.NodeLabels)
+	}
 	if s.GPU.RuntimeClass != "" {
 		pod["runtimeClassName"] = s.GPU.RuntimeClass
 	}
@@ -220,7 +225,7 @@ func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation
 					out.PodReady = true
 				}
 			}
-			if len(n.signingKey) == ed25519.PrivateKeySize {
+			if i.Spec.Type() == biz.TypeGPU && len(n.signingKey) == ed25519.PrivateKeySize {
 				if e := n.signPod(ctx, p, i); e != nil {
 					return out, e
 				}
@@ -337,10 +342,12 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 		containers, _, _ := unstructured.NestedSlice(p.Object, "spec", field)
 		for _, v := range containers {
 			container, _ := v.(map[string]any)
-			limits, _, _ := unstructured.NestedStringMap(container, "resources", "limits")
-			for k := range limits {
-				if strings.Contains(k, "gpu") {
-					return biz.ErrOwnership
+			for _, resourceField := range []string{"requests", "limits"} {
+				resources, _, _ := unstructured.NestedStringMap(container, "resources", resourceField)
+				for k := range resources {
+					if strings.Contains(k, "gpu") || (i.Spec.Type() == biz.TypeCPU && strings.Contains(k, "/")) {
+						return biz.ErrOwnership
+					}
 				}
 			}
 		}
@@ -352,6 +359,39 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 	c, _ := cs[0].(map[string]any)
 	if c["name"] != biz.Container || c["image"] != i.Spec.ImageReference {
 		return biz.ErrOwnership
+	}
+	if c["workingDir"] != "/workspace" {
+		return biz.ErrOwnership
+	}
+	serviceAccount, _, _ := unstructured.NestedString(p.Object, "spec", "serviceAccountName")
+	automount, present, err := unstructured.NestedBool(p.Object, "spec", "automountServiceAccountToken")
+	if serviceAccount != i.Spec.ServiceAccount || err != nil || !present || automount {
+		return biz.ErrOwnership
+	}
+	for field, expected := range map[string]int64{"runAsUser": i.Spec.UID, "runAsGroup": i.Spec.GID, "fsGroup": i.Spec.GID} {
+		actual, exists, err := unstructured.NestedInt64(p.Object, "spec", "securityContext", field)
+		if err != nil || !exists || actual != expected {
+			return biz.ErrOwnership
+		}
+	}
+	for field, expected := range map[string]int64{"runAsUser": i.Spec.UID, "runAsGroup": i.Spec.GID} {
+		actual, exists, err := unstructured.NestedInt64(c, "securityContext", field)
+		if err != nil || (exists && actual != expected) {
+			return biz.ErrOwnership
+		}
+	}
+	for _, field := range []string{"requests", "limits"} {
+		resources, _, _ := unstructured.NestedStringMap(c, "resources", field)
+		for name, expected := range map[string]string{"cpu": i.Spec.CPU, "memory": i.Spec.Memory} {
+			actualQuantity, actualErr := resource.ParseQuantity(resources[name])
+			expectedQuantity, expectedErr := resource.ParseQuantity(expected)
+			if actualErr != nil || expectedErr != nil || actualQuantity.Cmp(expectedQuantity) != 0 {
+				return biz.ErrOwnership
+			}
+		}
+		if i.Spec.Type() == biz.TypeCPU && len(resources) != 2 {
+			return biz.ErrOwnership
+		}
 	}
 	// The exec UID guard and workspace target must survive the controller's
 	// projection. Otherwise this Pod is not the frozen instance target.
@@ -405,6 +445,22 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 		}
 	}
 	scheduler, _, _ := unstructured.NestedString(p.Object, "spec", "schedulerName")
+	if i.Spec.Type() == biz.TypeCPU {
+		if scheduler != "" && scheduler != "default-scheduler" {
+			return biz.ErrOwnership
+		}
+		nodes, _, _ := unstructured.NestedStringMap(p.Object, "spec", "nodeSelector")
+		runtimeClass, _, _ := unstructured.NestedString(p.Object, "spec", "runtimeClassName")
+		if len(nodes) != 0 || runtimeClass != "" {
+			return biz.ErrOwnership
+		}
+		for key := range p.GetAnnotations() {
+			if strings.HasPrefix(key, "accelerator.ani.io/") || strings.HasPrefix(key, "volcano.sh/") || strings.HasPrefix(key, "scheduling.volcano.sh/") {
+				return biz.ErrOwnership
+			}
+		}
+		return nil
+	}
 	if scheduler != i.Spec.GPU.Scheduler {
 		return biz.ErrOwnership
 	}
@@ -431,6 +487,9 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 	return nil
 }
 func (n *Notebook) signPod(ctx context.Context, p *unstructured.Unstructured, i biz.Instance) error {
+	if i.Spec.Type() != biz.TypeGPU {
+		return biz.ErrInvalid
+	}
 	payload, e := json.Marshal(map[string]any{"pod": map[string]string{"cluster_id": i.Spec.ClusterID, "namespace": p.GetNamespace(), "name": p.GetName(), "uid": string(p.GetUID()), "container_name": biz.Container}, "ref": map[string]string{"tenant_id": i.TenantID, "owner_service": biz.Owner, "resource_id": i.ID, "create_operation_id": i.CreateOperationID}, "plan_digest": i.Spec.GPU.Digest})
 	if e != nil {
 		return e

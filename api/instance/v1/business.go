@@ -32,6 +32,14 @@ func CanonicalBusinessPayload(m proto.Message) ([]byte, error) {
 	if e = dec.Decode(&value); e != nil {
 		return nil, e
 	}
+	// Preserve canonical bytes for accepted GPU snapshots from before this field.
+	if b, ok := m.(*CreateBusiness); ok && b.Spec != nil && b.Spec.InstanceType == "" {
+		if object, ok := value.(map[string]any); ok {
+			if spec, ok := object["spec"].(map[string]any); ok {
+				delete(spec, "instance_type")
+			}
+		}
+	}
 	var out bytes.Buffer
 	enc := json.NewEncoder(&out)
 	enc.SetEscapeHTML(false)

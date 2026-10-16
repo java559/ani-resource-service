@@ -32,6 +32,13 @@ func (q *Quota) Report(ctx context.Context, i biz.Instance) error {
 	if i.Desired != biz.Deleted || !i.ComputeCleaned || i.Pending != nil {
 		return biz.ErrInvalid
 	}
+	// CPU instances never own a GPU charge or a GPU release outbox record.
+	if i.Spec.Type() == biz.TypeCPU {
+		if !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
+			return biz.ErrInvalid
+		}
+		return nil
+	}
 	charges := []biz.Charge{}
 	for _, c := range i.Charges {
 		if strings.HasPrefix(c.Code, "gpu.") {

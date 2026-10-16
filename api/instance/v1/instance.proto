@@ -35,6 +35,7 @@ message Preset {
   string cpu = 4;
   string memory = 5;
   accelerator.v1.GpuRequest gpu = 6;
+  string instance_type = 7;
 }
 message ListPresetsRequest { string tenant_id = 1; }
 message ListPresetsResponse { repeated Preset items = 1; }
@@ -57,6 +58,7 @@ message FrozenSpec {
   string shell = 10;
   int64 uid = 11;
   int64 gid = 12;
+  string instance_type = 13;
 }
 message CreateBusiness {
   CreateInstanceData data = 1;
@@ -70,6 +72,13 @@ message AcceptCreateRequest {
   CreateBusiness business = 3;
   accelerator.integration.v1.GpuOwnerCreateAttachment gpu_owner_attachment = 4;
   repeated OriginalQuotaCharge original_charges = 5;
+  CpuOwnerCreateAttachment cpu_owner_attachment = 6;
+}
+message CpuOwnerCreateAttachment {
+  string resource_id = 1;
+  string request_hash = 2;
+  string business_payload_digest = 3;
+  string actor = 4;
 }
 message AcceptDeleteRequest {
   string tenant_id = 1;
@@ -77,6 +86,13 @@ message AcceptDeleteRequest {
   accelerator.integration.v1.GpuOwnerDeleteAttachment gpu_owner_attachment = 3;
   repeated OriginalQuotaCharge original_charges = 4;
   int64 expected_version = 5;
+  CpuOwnerDeleteAttachment cpu_owner_attachment = 6;
+}
+message CpuOwnerDeleteAttachment {
+  string resource_id = 1;
+  string create_operation_id = 2;
+  string request_hash = 3;
+  string actor = 4;
 }
 message ChangeInstanceRequest {
   string tenant_id = 1;
@@ -95,6 +111,7 @@ message Instance {
   string image_id = 7; string image_digest = 8; string preset_id = 9; int64 preset_version = 10;
   string create_operation_id = 11; string last_operation_id = 12;
   bool compute_cleaned = 13; bool workspace_cleaned = 14; bool quota_returned = 15;
+  string instance_type = 16;
 }
 message GetOperationRequest { string tenant_id = 1; string operation_id = 2; }
 message Operation { string id = 1; string instance_id = 2; string action = 3; int64 intent_version = 4; string state = 5; string reason = 6; }

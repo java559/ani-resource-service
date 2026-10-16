@@ -2,6 +2,7 @@ package instance
 
 import (
 	"context"
+	"crypto/ed25519"
 	"encoding/json"
 	"errors"
 	"strings"
@@ -15,6 +16,102 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/dynamic/fake"
 )
+
+func TestCPUNotebookProjectionAndPodBinding(t *testing.T) {
+	const id = "11111111-1111-4111-8111-111111111111"
+	i := biz.Instance{TenantID: id, ID: id, CreateOperationID: id, CreateRequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Version: 1, Desired: biz.Running, Spec: biz.Spec{InstanceType: biz.TypeCPU, ImageReference: "registry.invalid/work@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: id, Namespace: "tenant-" + id, NotebookName: "instance-" + id, PVCName: "workspace-" + id}}
+	notebook, err := RenderNotebook(i)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, field := range []string{"schedulerName", "runtimeClassName", "nodeSelector"} {
+		if _, exists, _ := unstructured.NestedFieldNoCopy(notebook.Object, "spec", "template", "spec", field); exists {
+			t.Fatal("CPU instance received GPU scheduling configuration", field)
+		}
+	}
+	for key := range notebook.GetAnnotations() {
+		if key != versionAnnotation {
+			t.Fatal("CPU instance received GPU annotations", key)
+		}
+	}
+	notebook.SetUID("notebook-original")
+	i.NotebookUID = string(notebook.GetUID())
+	template, _, _ := unstructured.NestedMap(notebook.Object, "spec", "template")
+	pod := &unstructured.Unstructured{Object: template}
+	pod.SetAPIVersion("v1")
+	pod.SetKind("Pod")
+	pod.SetName(i.Spec.NotebookName + "-0")
+	pod.SetNamespace(i.Spec.Namespace)
+	pod.SetUID("pod-original")
+	pod.SetLabels(notebook.GetLabels())
+	pod.SetAnnotations(notebook.GetAnnotations())
+	// The Kubernetes API defaults this field even though the Notebook omits it.
+	_ = unstructured.SetNestedField(pod.Object, "default-scheduler", "spec", "schedulerName")
+	if err := verifyPod(pod, i); err != nil {
+		t.Fatal("defaulted CPU Pod rejected", err)
+	}
+	mutations := map[string]func(*unstructured.Unstructured){
+		"GPU annotation": func(p *unstructured.Unstructured) {
+			a := p.GetAnnotations()
+			a["accelerator.ani.io/plan-digest"] = "foreign"
+			p.SetAnnotations(a)
+		},
+		"GPU scheduler": func(p *unstructured.Unstructured) {
+			_ = unstructured.SetNestedField(p.Object, "volcano", "spec", "schedulerName")
+		},
+		"GPU selector": func(p *unstructured.Unstructured) {
+			_ = unstructured.SetNestedStringMap(p.Object, map[string]string{"gpu": "true"}, "spec", "nodeSelector")
+		},
+		"runtime class": func(p *unstructured.Unstructured) {
+			_ = unstructured.SetNestedField(p.Object, "nvidia", "spec", "runtimeClassName")
+		},
+		"different user": func(p *unstructured.Unstructured) {
+			_ = unstructured.SetNestedField(p.Object, int64(0), "spec", "securityContext", "runAsUser")
+		},
+		"different working directory": func(p *unstructured.Unstructured) {
+			cs, _, _ := unstructured.NestedSlice(p.Object, "spec", "containers")
+			cs[0].(map[string]any)["workingDir"] = "/"
+			_ = unstructured.SetNestedSlice(p.Object, cs, "spec", "containers")
+		},
+		"different CPU limit": func(p *unstructured.Unstructured) {
+			cs, _, _ := unstructured.NestedSlice(p.Object, "spec", "containers")
+			_ = unstructured.SetNestedField(cs[0].(map[string]any), "2", "resources", "limits", "cpu")
+			_ = unstructured.SetNestedSlice(p.Object, cs, "spec", "containers")
+		},
+		"additional GPU limit": func(p *unstructured.Unstructured) {
+			cs, _, _ := unstructured.NestedSlice(p.Object, "spec", "containers")
+			_ = unstructured.SetNestedField(cs[0].(map[string]any), "1", "resources", "limits", "nvidia.com/gpu")
+			_ = unstructured.SetNestedSlice(p.Object, cs, "spec", "containers")
+		},
+	}
+	for name, mutate := range mutations {
+		t.Run(name, func(t *testing.T) {
+			changed := pod.DeepCopy()
+			mutate(changed)
+			if err := verifyPod(changed, i); !errors.Is(err, biz.ErrOwnership) {
+				t.Fatal("changed CPU target accepted", err)
+			}
+		})
+	}
+	controller := true
+	set := &unstructured.Unstructured{Object: map[string]any{"apiVersion": "apps/v1", "kind": "StatefulSet", "metadata": map[string]any{"name": i.Spec.NotebookName, "namespace": i.Spec.Namespace, "uid": "set-original"}}}
+	set.SetOwnerReferences([]metav1.OwnerReference{{APIVersion: "kubeflow.org/v1", Kind: "Notebook", Name: i.Spec.NotebookName, UID: notebook.GetUID(), Controller: &controller}})
+	pod.SetOwnerReferences([]metav1.OwnerReference{{APIVersion: "apps/v1", Kind: "StatefulSet", Name: i.Spec.NotebookName, UID: set.GetUID(), Controller: &controller}})
+	pod.Object["status"] = map[string]any{"phase": "Running", "containerStatuses": []any{map[string]any{"name": biz.Container, "ready": true}}, "conditions": []any{map[string]any{"type": "Ready", "status": "True"}}}
+	client := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), map[schema.GroupVersionResource]string{podGVR: "PodList"}, notebook, set, pod)
+	provider, _ := NewNotebook(client)
+	if err = provider.ConfigureSigningKey(ed25519.NewKeyFromSeed(make([]byte, ed25519.SeedSize))); err != nil {
+		t.Fatal(err)
+	}
+	obs, err := provider.Observe(context.Background(), i)
+	if err != nil || !obs.PodReady || obs.PodUID != "pod-original" || obs.StatefulSetUID != "set-original" {
+		t.Fatal("managed CPU target not observed", obs, err)
+	}
+	current, err := client.Resource(podGVR).Namespace(i.Spec.Namespace).Get(context.Background(), pod.GetName(), metav1.GetOptions{})
+	if err != nil || current.GetAnnotations()["accelerator.ani.io/owner-signature"] != "" {
+		t.Fatal("CPU Pod received an Acc signature", err)
+	}
+}
 
 func TestNotebookMappingAndConditionalStop(t *testing.T) {
 	const id = "11111111-1111-4111-8111-111111111111"

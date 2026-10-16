@@ -69,6 +69,49 @@ Fedora 隔离 SG 可以设置绝对路径 `KUBECONFIG`，使用既有 CA 校验�
 
 Notebook 1.10 的标签/注解放在 Notebook 顶层 metadata，`spec.template` 只有 spec。Resource 按保存 Notebook UID 核对同名 StatefulSet 的 controller ownerRef，再核对 Pod 的 STS UID；没有 STS 标签不能证明计算已清理。实际来源限制见 [Notebook 投影核验](../execution/records/INSTANCE-MVP-V15/notebook-v1.10-projection.md)。普通 Stop/Start 使用原生停止注解，不修改控制器生成的子对象。
 
+## CPU 实例与前端联调
+
+2026-10-15 用户追加分别创建 CPU/GPU、类型和规格固定。CPU 使用同一套实例 API，配置显式 CPU preset，例如：
+
+```json
+{"id":"cpu","version":1,"name":"CPU 1核 / 2Gi","cpu":"1","memory":"2Gi","instance_type":"cpu"}
+```
+
+该 preset 不得带 `gpu`。`Service.ClusterID` 仍指向实际受管集群；Notebook 使用默认调度器，无 GPU 设备、Acc plan/签名或 GPU quota。现有程序的受管私有配置与 TLS 配置仍按上述启动合同提供，CPU 请求不会调用 GPU 解析或退额。GPU preset 继续包含真实 GPU request；旧未显式填类型的 GPU 配置兼容。
+
+本次可用镜像 ID 为 `img_add4a49b0c694553a9e85768132584ec`，scope `platform`；选 `cpu` / version `1`。固定 digest 和实际验收只在当前状态维护。
+
+最小创建请求（沿用正常 Bearer 身份）：
+
+```json
+{"data":{"idempotencyKey":"<新 UUID>","name":"cpu-dev","imageId":"img_add4a49b0c694553a9e85768132584ec","imageScope":"platform","presetId":"cpu","presetVersion":"1"}}
+```
+
+HTTP JSON 的类型字段为 `instanceType`；版本等 int64 返回字符串，后续 `expectedVersion` 回传详情中的最新 `version`。其他字段及响应以 Gov OpenAPI 为准。
+
+创建、查询、操作、启停、删除和终端沿用 [规格中的公开接口](../specs/instance-mvp.md#11-api数据与代码落点)，以 Gov 的 `api/protos/instance/service/v1/instance.proto` 和 OpenAPI 为正式 DTO。创建只选 preset ID/版本，不提交 `instance_type`、namespace、plan 或 charges。写请求使用 `{data:{...}}`；Start/Stop/Delete 带新的幂等键和最新 `expected_version`。创建受理后轮询 operation 与实例，只有 `running` 且当前版本可解析终端时才请求 exec。Gov 尚在投递时，CPU operation 返回真实 `QUEUED` / `DISPATCHING` / `UNKNOWN`；`CANCELED_UNSENT` 为未发送即取消的终态。Res 接单后使用原 Res operation 状态。
+
+Exec 返回一次性 `ws_url`，通过 SG 的 `ani.terminal.v1` WebSocket 子协议传输终端帧；不要保存票据到普通日志或在停止/重启后复用旧票据。停止后保留 `/workspace`，最终删除会清除专属工作目录。CPU 不展示“仍占 GPU 配额”。
+
+本次 CPU 隔离运行根：`/home/chabking/workspace/ani-resource-service-runs/instance-cpu-mvp-20261015`。`private/cpu-runtime.sh start|stop|status [resource|gov|sg]` 管理任务专用 Docker 服务，SSH 退出后继续运行；不启动 Acc、不改共享部署。原持久 PG/Redis 与私有身份材料保留，任务容器按 label 核对归属。配置、二进制、Image receipt 只在该任务目录，登录密码/token 不进入仓库。
+
+前端开发机可建立专用隧道：
+
+```bash
+ssh -N -o ExitOnForwardFailure=yes \
+  -L 18080:127.0.0.1:52673 -L 18081:127.0.0.1:47157 fedora
+```
+
+Gov 地址为 `http://127.0.0.1:18080`，SG 票据的公开地址为 `ws://127.0.0.1:18081/api/v1/realtime`。前端开发服务器代理 `/api` 到 Gov；SG 已允许 `http://localhost:5173`、`http://127.0.0.1:5173` 与实验 driver Origin `http://instance-lab`。其他 Origin 需在该任务私有配置中明确登记并重启 SG，不放开通配。
+
+手动刷新 SG token 并只重启该任务 SG：
+
+```bash
+ssh fedora 'python3 /home/chabking/workspace/ani-resource-service-runs/instance-cpu-mvp-20261015/private/refresh-session-token.py'
+```
+
+脚本核对 cluster/Namespace/SA UID，只申请原 namespaced 权限的 token，以 API 返回的到期时间为准；不安装定时任务。TLS 证书到期前使用保存 CA/CSR 续签。普通用户按当前 Gov 正式合同完成租户密码登录，沿用 INSTANCE/IMAGE 当前角色和套餐授权。实验租户名 `instance-lab-v15`、账号 `instance-lab-user`；`POST /api/v1/auth/password/login` 接受 `tenant_name`、`username`、`password`。密码位于 Fedora 原任务根 `private/instance-lab/tenant.password`，只通过受管私有渠道读取；无需管理员账号。实际镜像 ID、运行结果、有效期和精确快照统一见 [CPU 当前状态](../execution/status.md#cpu-instance-backend-20261015)。
+
 ## 本任务隔离实验的恢复
 
 固定远端根为 `/home/chabking/workspace/ani-resource-service-runs/instance-mvp-v15-20261013`。私有配置与运行入口在 `private/instance-lab/` 和 `private/lab-*.{py,sh}`；ID、源码哈希与实际结果见 [真实实验记录](../execution/records/INSTANCE-MVP-V15/live-lab.md)。PG/Redis 和 Harbor 项目保留，四个服务已停止。不要在恢复时删除数据库卷、角色密钥、原账或恢复标记。

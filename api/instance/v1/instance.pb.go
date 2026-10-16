@@ -108,6 +108,7 @@ type Preset struct {
 	Cpu           string                 `protobuf:"bytes,4,opt,name=cpu,proto3" json:"cpu,omitempty"`
 	Memory        string                 `protobuf:"bytes,5,opt,name=memory,proto3" json:"memory,omitempty"`
 	Gpu           *v1.GpuRequest         `protobuf:"bytes,6,opt,name=gpu,proto3" json:"gpu,omitempty"`
+	InstanceType  string                 `protobuf:"bytes,7,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -182,6 +183,13 @@ func (x *Preset) GetGpu() *v1.GpuRequest {
 		return x.Gpu
 	}
 	return nil
+}
+
+func (x *Preset) GetInstanceType() string {
+	if x != nil {
+		return x.InstanceType
+	}
+	return ""
 }
 
 type ListPresetsRequest struct {
@@ -347,6 +355,7 @@ type FrozenSpec struct {
 	Shell          string                 `protobuf:"bytes,10,opt,name=shell,proto3" json:"shell,omitempty"`
 	Uid            int64                  `protobuf:"varint,11,opt,name=uid,proto3" json:"uid,omitempty"`
 	Gid            int64                  `protobuf:"varint,12,opt,name=gid,proto3" json:"gid,omitempty"`
+	InstanceType   string                 `protobuf:"bytes,13,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -463,6 +472,13 @@ func (x *FrozenSpec) GetGid() int64 {
 		return x.Gid
 	}
 	return 0
+}
+
+func (x *FrozenSpec) GetInstanceType() string {
+	if x != nil {
+		return x.InstanceType
+	}
+	return ""
 }
 
 type CreateBusiness struct {
@@ -592,6 +608,7 @@ type AcceptCreateRequest struct {
 	Business           *CreateBusiness               `protobuf:"bytes,3,opt,name=business,proto3" json:"business,omitempty"`
 	GpuOwnerAttachment *v11.GpuOwnerCreateAttachment `protobuf:"bytes,4,opt,name=gpu_owner_attachment,json=gpuOwnerAttachment,proto3" json:"gpu_owner_attachment,omitempty"`
 	OriginalCharges    []*OriginalQuotaCharge        `protobuf:"bytes,5,rep,name=original_charges,json=originalCharges,proto3" json:"original_charges,omitempty"`
+	CpuOwnerAttachment *CpuOwnerCreateAttachment     `protobuf:"bytes,6,opt,name=cpu_owner_attachment,json=cpuOwnerAttachment,proto3" json:"cpu_owner_attachment,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -661,6 +678,81 @@ func (x *AcceptCreateRequest) GetOriginalCharges() []*OriginalQuotaCharge {
 	return nil
 }
 
+func (x *AcceptCreateRequest) GetCpuOwnerAttachment() *CpuOwnerCreateAttachment {
+	if x != nil {
+		return x.CpuOwnerAttachment
+	}
+	return nil
+}
+
+type CpuOwnerCreateAttachment struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	ResourceId            string                 `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	RequestHash           string                 `protobuf:"bytes,2,opt,name=request_hash,json=requestHash,proto3" json:"request_hash,omitempty"`
+	BusinessPayloadDigest string                 `protobuf:"bytes,3,opt,name=business_payload_digest,json=businessPayloadDigest,proto3" json:"business_payload_digest,omitempty"`
+	Actor                 string                 `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *CpuOwnerCreateAttachment) Reset() {
+	*x = CpuOwnerCreateAttachment{}
+	mi := &file_instance_v1_instance_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CpuOwnerCreateAttachment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CpuOwnerCreateAttachment) ProtoMessage() {}
+
+func (x *CpuOwnerCreateAttachment) ProtoReflect() protoreflect.Message {
+	mi := &file_instance_v1_instance_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CpuOwnerCreateAttachment.ProtoReflect.Descriptor instead.
+func (*CpuOwnerCreateAttachment) Descriptor() ([]byte, []int) {
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CpuOwnerCreateAttachment) GetResourceId() string {
+	if x != nil {
+		return x.ResourceId
+	}
+	return ""
+}
+
+func (x *CpuOwnerCreateAttachment) GetRequestHash() string {
+	if x != nil {
+		return x.RequestHash
+	}
+	return ""
+}
+
+func (x *CpuOwnerCreateAttachment) GetBusinessPayloadDigest() string {
+	if x != nil {
+		return x.BusinessPayloadDigest
+	}
+	return ""
+}
+
+func (x *CpuOwnerCreateAttachment) GetActor() string {
+	if x != nil {
+		return x.Actor
+	}
+	return ""
+}
+
 type AcceptDeleteRequest struct {
 	state              protoimpl.MessageState        `protogen:"open.v1"`
 	TenantId           string                        `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
@@ -668,13 +760,14 @@ type AcceptDeleteRequest struct {
 	GpuOwnerAttachment *v11.GpuOwnerDeleteAttachment `protobuf:"bytes,3,opt,name=gpu_owner_attachment,json=gpuOwnerAttachment,proto3" json:"gpu_owner_attachment,omitempty"`
 	OriginalCharges    []*OriginalQuotaCharge        `protobuf:"bytes,4,rep,name=original_charges,json=originalCharges,proto3" json:"original_charges,omitempty"`
 	ExpectedVersion    int64                         `protobuf:"varint,5,opt,name=expected_version,json=expectedVersion,proto3" json:"expected_version,omitempty"`
+	CpuOwnerAttachment *CpuOwnerDeleteAttachment     `protobuf:"bytes,6,opt,name=cpu_owner_attachment,json=cpuOwnerAttachment,proto3" json:"cpu_owner_attachment,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
 
 func (x *AcceptDeleteRequest) Reset() {
 	*x = AcceptDeleteRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[9]
+	mi := &file_instance_v1_instance_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -686,7 +779,7 @@ func (x *AcceptDeleteRequest) String() string {
 func (*AcceptDeleteRequest) ProtoMessage() {}
 
 func (x *AcceptDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[9]
+	mi := &file_instance_v1_instance_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -699,7 +792,7 @@ func (x *AcceptDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptDeleteRequest.ProtoReflect.Descriptor instead.
 func (*AcceptDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{9}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AcceptDeleteRequest) GetTenantId() string {
@@ -737,6 +830,81 @@ func (x *AcceptDeleteRequest) GetExpectedVersion() int64 {
 	return 0
 }
 
+func (x *AcceptDeleteRequest) GetCpuOwnerAttachment() *CpuOwnerDeleteAttachment {
+	if x != nil {
+		return x.CpuOwnerAttachment
+	}
+	return nil
+}
+
+type CpuOwnerDeleteAttachment struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	ResourceId        string                 `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	CreateOperationId string                 `protobuf:"bytes,2,opt,name=create_operation_id,json=createOperationId,proto3" json:"create_operation_id,omitempty"`
+	RequestHash       string                 `protobuf:"bytes,3,opt,name=request_hash,json=requestHash,proto3" json:"request_hash,omitempty"`
+	Actor             string                 `protobuf:"bytes,4,opt,name=actor,proto3" json:"actor,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *CpuOwnerDeleteAttachment) Reset() {
+	*x = CpuOwnerDeleteAttachment{}
+	mi := &file_instance_v1_instance_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CpuOwnerDeleteAttachment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CpuOwnerDeleteAttachment) ProtoMessage() {}
+
+func (x *CpuOwnerDeleteAttachment) ProtoReflect() protoreflect.Message {
+	mi := &file_instance_v1_instance_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CpuOwnerDeleteAttachment.ProtoReflect.Descriptor instead.
+func (*CpuOwnerDeleteAttachment) Descriptor() ([]byte, []int) {
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CpuOwnerDeleteAttachment) GetResourceId() string {
+	if x != nil {
+		return x.ResourceId
+	}
+	return ""
+}
+
+func (x *CpuOwnerDeleteAttachment) GetCreateOperationId() string {
+	if x != nil {
+		return x.CreateOperationId
+	}
+	return ""
+}
+
+func (x *CpuOwnerDeleteAttachment) GetRequestHash() string {
+	if x != nil {
+		return x.RequestHash
+	}
+	return ""
+}
+
+func (x *CpuOwnerDeleteAttachment) GetActor() string {
+	if x != nil {
+		return x.Actor
+	}
+	return ""
+}
+
 type ChangeInstanceRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	TenantId        string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
@@ -749,7 +917,7 @@ type ChangeInstanceRequest struct {
 
 func (x *ChangeInstanceRequest) Reset() {
 	*x = ChangeInstanceRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[10]
+	mi := &file_instance_v1_instance_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -761,7 +929,7 @@ func (x *ChangeInstanceRequest) String() string {
 func (*ChangeInstanceRequest) ProtoMessage() {}
 
 func (x *ChangeInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[10]
+	mi := &file_instance_v1_instance_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -774,7 +942,7 @@ func (x *ChangeInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeInstanceRequest.ProtoReflect.Descriptor instead.
 func (*ChangeInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{10}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ChangeInstanceRequest) GetTenantId() string {
@@ -814,7 +982,7 @@ type OperationResponse struct {
 
 func (x *OperationResponse) Reset() {
 	*x = OperationResponse{}
-	mi := &file_instance_v1_instance_proto_msgTypes[11]
+	mi := &file_instance_v1_instance_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -826,7 +994,7 @@ func (x *OperationResponse) String() string {
 func (*OperationResponse) ProtoMessage() {}
 
 func (x *OperationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[11]
+	mi := &file_instance_v1_instance_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -839,7 +1007,7 @@ func (x *OperationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperationResponse.ProtoReflect.Descriptor instead.
 func (*OperationResponse) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{11}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *OperationResponse) GetDurableOwnerAck() *v11.DurableOwnerAck {
@@ -859,7 +1027,7 @@ type GetInstanceRequest struct {
 
 func (x *GetInstanceRequest) Reset() {
 	*x = GetInstanceRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[12]
+	mi := &file_instance_v1_instance_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -871,7 +1039,7 @@ func (x *GetInstanceRequest) String() string {
 func (*GetInstanceRequest) ProtoMessage() {}
 
 func (x *GetInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[12]
+	mi := &file_instance_v1_instance_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -884,7 +1052,7 @@ func (x *GetInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetInstanceRequest.ProtoReflect.Descriptor instead.
 func (*GetInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{12}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetInstanceRequest) GetTenantId() string {
@@ -912,7 +1080,7 @@ type ListInstancesRequest struct {
 
 func (x *ListInstancesRequest) Reset() {
 	*x = ListInstancesRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[13]
+	mi := &file_instance_v1_instance_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -924,7 +1092,7 @@ func (x *ListInstancesRequest) String() string {
 func (*ListInstancesRequest) ProtoMessage() {}
 
 func (x *ListInstancesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[13]
+	mi := &file_instance_v1_instance_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -937,7 +1105,7 @@ func (x *ListInstancesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInstancesRequest.ProtoReflect.Descriptor instead.
 func (*ListInstancesRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{13}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListInstancesRequest) GetTenantId() string {
@@ -971,7 +1139,7 @@ type ListInstancesResponse struct {
 
 func (x *ListInstancesResponse) Reset() {
 	*x = ListInstancesResponse{}
-	mi := &file_instance_v1_instance_proto_msgTypes[14]
+	mi := &file_instance_v1_instance_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -983,7 +1151,7 @@ func (x *ListInstancesResponse) String() string {
 func (*ListInstancesResponse) ProtoMessage() {}
 
 func (x *ListInstancesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[14]
+	mi := &file_instance_v1_instance_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -996,7 +1164,7 @@ func (x *ListInstancesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInstancesResponse.ProtoReflect.Descriptor instead.
 func (*ListInstancesResponse) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{14}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ListInstancesResponse) GetItems() []*Instance {
@@ -1031,13 +1199,14 @@ type Instance struct {
 	ComputeCleaned    bool                   `protobuf:"varint,13,opt,name=compute_cleaned,json=computeCleaned,proto3" json:"compute_cleaned,omitempty"`
 	WorkspaceCleaned  bool                   `protobuf:"varint,14,opt,name=workspace_cleaned,json=workspaceCleaned,proto3" json:"workspace_cleaned,omitempty"`
 	QuotaReturned     bool                   `protobuf:"varint,15,opt,name=quota_returned,json=quotaReturned,proto3" json:"quota_returned,omitempty"`
+	InstanceType      string                 `protobuf:"bytes,16,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Instance) Reset() {
 	*x = Instance{}
-	mi := &file_instance_v1_instance_proto_msgTypes[15]
+	mi := &file_instance_v1_instance_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1049,7 +1218,7 @@ func (x *Instance) String() string {
 func (*Instance) ProtoMessage() {}
 
 func (x *Instance) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[15]
+	mi := &file_instance_v1_instance_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1062,7 +1231,7 @@ func (x *Instance) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Instance.ProtoReflect.Descriptor instead.
 func (*Instance) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{15}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Instance) GetId() string {
@@ -1170,6 +1339,13 @@ func (x *Instance) GetQuotaReturned() bool {
 	return false
 }
 
+func (x *Instance) GetInstanceType() string {
+	if x != nil {
+		return x.InstanceType
+	}
+	return ""
+}
+
 type GetOperationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
@@ -1180,7 +1356,7 @@ type GetOperationRequest struct {
 
 func (x *GetOperationRequest) Reset() {
 	*x = GetOperationRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[16]
+	mi := &file_instance_v1_instance_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1192,7 +1368,7 @@ func (x *GetOperationRequest) String() string {
 func (*GetOperationRequest) ProtoMessage() {}
 
 func (x *GetOperationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[16]
+	mi := &file_instance_v1_instance_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1205,7 +1381,7 @@ func (x *GetOperationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOperationRequest.ProtoReflect.Descriptor instead.
 func (*GetOperationRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{16}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetOperationRequest) GetTenantId() string {
@@ -1236,7 +1412,7 @@ type Operation struct {
 
 func (x *Operation) Reset() {
 	*x = Operation{}
-	mi := &file_instance_v1_instance_proto_msgTypes[17]
+	mi := &file_instance_v1_instance_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1248,7 +1424,7 @@ func (x *Operation) String() string {
 func (*Operation) ProtoMessage() {}
 
 func (x *Operation) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[17]
+	mi := &file_instance_v1_instance_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1261,7 +1437,7 @@ func (x *Operation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Operation.ProtoReflect.Descriptor instead.
 func (*Operation) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{17}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *Operation) GetId() string {
@@ -1317,7 +1493,7 @@ type ResolveTerminalTargetRequest struct {
 
 func (x *ResolveTerminalTargetRequest) Reset() {
 	*x = ResolveTerminalTargetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[18]
+	mi := &file_instance_v1_instance_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1329,7 +1505,7 @@ func (x *ResolveTerminalTargetRequest) String() string {
 func (*ResolveTerminalTargetRequest) ProtoMessage() {}
 
 func (x *ResolveTerminalTargetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[18]
+	mi := &file_instance_v1_instance_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1342,7 +1518,7 @@ func (x *ResolveTerminalTargetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResolveTerminalTargetRequest.ProtoReflect.Descriptor instead.
 func (*ResolveTerminalTargetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{18}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ResolveTerminalTargetRequest) GetTenantId() string {
@@ -1377,14 +1553,15 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\vimage_scope\x18\x03 \x01(\tR\n" +
 	"imageScope\x12\x1b\n" +
 	"\tpreset_id\x18\x04 \x01(\tR\bpresetId\x12%\n" +
-	"\x0epreset_version\x18\x05 \x01(\x03R\rpresetVersion\"\x9e\x01\n" +
+	"\x0epreset_version\x18\x05 \x01(\x03R\rpresetVersion\"\xc3\x01\n" +
 	"\x06Preset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\x03R\aversion\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n" +
 	"\x03cpu\x18\x04 \x01(\tR\x03cpu\x12\x16\n" +
 	"\x06memory\x18\x05 \x01(\tR\x06memory\x12,\n" +
-	"\x03gpu\x18\x06 \x01(\v2\x1a.accelerator.v1.GpuRequestR\x03gpu\"1\n" +
+	"\x03gpu\x18\x06 \x01(\v2\x1a.accelerator.v1.GpuRequestR\x03gpu\x12#\n" +
+	"\rinstance_type\x18\a \x01(\tR\finstanceType\"1\n" +
 	"\x12ListPresetsRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\"@\n" +
 	"\x13ListPresetsResponse\x12)\n" +
@@ -1392,7 +1569,7 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\x18ResolveCreateSpecRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x123\n" +
 	"\x04data\x18\x02 \x01(\v2\x1f.instance.v1.CreateInstanceDataR\x04data\x12\x1c\n" +
-	"\tnamespace\x18\x03 \x01(\tR\tnamespace\"\xee\x02\n" +
+	"\tnamespace\x18\x03 \x01(\tR\tnamespace\"\x93\x03\n" +
 	"\n" +
 	"FrozenSpec\x12'\n" +
 	"\x0fimage_reference\x18\x01 \x01(\tR\x0eimageReference\x12!\n" +
@@ -1408,7 +1585,8 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\x05shell\x18\n" +
 	" \x01(\tR\x05shell\x12\x10\n" +
 	"\x03uid\x18\v \x01(\x03R\x03uid\x12\x10\n" +
-	"\x03gid\x18\f \x01(\x03R\x03gid\"\xa0\x01\n" +
+	"\x03gid\x18\f \x01(\x03R\x03gid\x12#\n" +
+	"\rinstance_type\x18\r \x01(\tR\finstanceType\"\xa0\x01\n" +
 	"\x0eCreateBusiness\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.instance.v1.CreateInstanceDataR\x04data\x12+\n" +
 	"\x04spec\x18\x02 \x01(\v2\x17.instance.v1.FrozenSpecR\x04spec\x12,\n" +
@@ -1417,19 +1595,33 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\tcharge_id\x18\x01 \x01(\tR\bchargeId\x12\x1d\n" +
 	"\n" +
 	"quota_code\x18\x02 \x01(\tR\tquotaCode\x12%\n" +
-	"\x0eoriginal_units\x18\x03 \x01(\x03R\roriginalUnits\"\xc3\x02\n" +
+	"\x0eoriginal_units\x18\x03 \x01(\x03R\roriginalUnits\"\x9c\x03\n" +
 	"\x13AcceptCreateRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12!\n" +
 	"\foperation_id\x18\x02 \x01(\tR\voperationId\x127\n" +
 	"\bbusiness\x18\x03 \x01(\v2\x1b.instance.v1.CreateBusinessR\bbusiness\x12f\n" +
 	"\x14gpu_owner_attachment\x18\x04 \x01(\v24.accelerator.integration.v1.GpuOwnerCreateAttachmentR\x12gpuOwnerAttachment\x12K\n" +
-	"\x10original_charges\x18\x05 \x03(\v2 .instance.v1.OriginalQuotaChargeR\x0foriginalCharges\"\xb5\x02\n" +
+	"\x10original_charges\x18\x05 \x03(\v2 .instance.v1.OriginalQuotaChargeR\x0foriginalCharges\x12W\n" +
+	"\x14cpu_owner_attachment\x18\x06 \x01(\v2%.instance.v1.CpuOwnerCreateAttachmentR\x12cpuOwnerAttachment\"\xac\x01\n" +
+	"\x18CpuOwnerCreateAttachment\x12\x1f\n" +
+	"\vresource_id\x18\x01 \x01(\tR\n" +
+	"resourceId\x12!\n" +
+	"\frequest_hash\x18\x02 \x01(\tR\vrequestHash\x126\n" +
+	"\x17business_payload_digest\x18\x03 \x01(\tR\x15businessPayloadDigest\x12\x14\n" +
+	"\x05actor\x18\x04 \x01(\tR\x05actor\"\x8e\x03\n" +
 	"\x13AcceptDeleteRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12!\n" +
 	"\foperation_id\x18\x02 \x01(\tR\voperationId\x12f\n" +
 	"\x14gpu_owner_attachment\x18\x03 \x01(\v24.accelerator.integration.v1.GpuOwnerDeleteAttachmentR\x12gpuOwnerAttachment\x12K\n" +
 	"\x10original_charges\x18\x04 \x03(\v2 .instance.v1.OriginalQuotaChargeR\x0foriginalCharges\x12)\n" +
-	"\x10expected_version\x18\x05 \x01(\x03R\x0fexpectedVersion\"\xa9\x01\n" +
+	"\x10expected_version\x18\x05 \x01(\x03R\x0fexpectedVersion\x12W\n" +
+	"\x14cpu_owner_attachment\x18\x06 \x01(\v2%.instance.v1.CpuOwnerDeleteAttachmentR\x12cpuOwnerAttachment\"\xa4\x01\n" +
+	"\x18CpuOwnerDeleteAttachment\x12\x1f\n" +
+	"\vresource_id\x18\x01 \x01(\tR\n" +
+	"resourceId\x12.\n" +
+	"\x13create_operation_id\x18\x02 \x01(\tR\x11createOperationId\x12!\n" +
+	"\frequest_hash\x18\x03 \x01(\tR\vrequestHash\x12\x14\n" +
+	"\x05actor\x18\x04 \x01(\tR\x05actor\"\xa9\x01\n" +
 	"\x15ChangeInstanceRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\tR\n" +
@@ -1448,7 +1640,7 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\bafter_id\x18\x03 \x01(\tR\aafterId\"h\n" +
 	"\x15ListInstancesResponse\x12+\n" +
 	"\x05items\x18\x01 \x03(\v2\x15.instance.v1.InstanceR\x05items\x12\"\n" +
-	"\rnext_after_id\x18\x02 \x01(\tR\vnextAfterId\"\x87\x04\n" +
+	"\rnext_after_id\x18\x02 \x01(\tR\vnextAfterId\"\xac\x04\n" +
 	"\bInstance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
@@ -1465,7 +1657,8 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\x11last_operation_id\x18\f \x01(\tR\x0flastOperationId\x12'\n" +
 	"\x0fcompute_cleaned\x18\r \x01(\bR\x0ecomputeCleaned\x12+\n" +
 	"\x11workspace_cleaned\x18\x0e \x01(\bR\x10workspaceCleaned\x12%\n" +
-	"\x0equota_returned\x18\x0f \x01(\bR\rquotaReturned\"U\n" +
+	"\x0equota_returned\x18\x0f \x01(\bR\rquotaReturned\x12#\n" +
+	"\rinstance_type\x18\x10 \x01(\tR\finstanceType\"U\n" +
 	"\x13GetOperationRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12!\n" +
 	"\foperation_id\x18\x02 \x01(\tR\voperationId\"\xa9\x01\n" +
@@ -1506,7 +1699,7 @@ func file_instance_v1_instance_proto_rawDescGZIP() []byte {
 	return file_instance_v1_instance_proto_rawDescData
 }
 
-var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_instance_v1_instance_proto_goTypes = []any{
 	(*CreateInstanceData)(nil),           // 0: instance.v1.CreateInstanceData
 	(*Preset)(nil),                       // 1: instance.v1.Preset
@@ -1517,61 +1710,65 @@ var file_instance_v1_instance_proto_goTypes = []any{
 	(*CreateBusiness)(nil),               // 6: instance.v1.CreateBusiness
 	(*OriginalQuotaCharge)(nil),          // 7: instance.v1.OriginalQuotaCharge
 	(*AcceptCreateRequest)(nil),          // 8: instance.v1.AcceptCreateRequest
-	(*AcceptDeleteRequest)(nil),          // 9: instance.v1.AcceptDeleteRequest
-	(*ChangeInstanceRequest)(nil),        // 10: instance.v1.ChangeInstanceRequest
-	(*OperationResponse)(nil),            // 11: instance.v1.OperationResponse
-	(*GetInstanceRequest)(nil),           // 12: instance.v1.GetInstanceRequest
-	(*ListInstancesRequest)(nil),         // 13: instance.v1.ListInstancesRequest
-	(*ListInstancesResponse)(nil),        // 14: instance.v1.ListInstancesResponse
-	(*Instance)(nil),                     // 15: instance.v1.Instance
-	(*GetOperationRequest)(nil),          // 16: instance.v1.GetOperationRequest
-	(*Operation)(nil),                    // 17: instance.v1.Operation
-	(*ResolveTerminalTargetRequest)(nil), // 18: instance.v1.ResolveTerminalTargetRequest
-	(*v1.GpuRequest)(nil),                // 19: accelerator.v1.GpuRequest
-	(*v11.GpuOwnerCreateAttachment)(nil), // 20: accelerator.integration.v1.GpuOwnerCreateAttachment
-	(*v11.GpuOwnerDeleteAttachment)(nil), // 21: accelerator.integration.v1.GpuOwnerDeleteAttachment
-	(*v11.DurableOwnerAck)(nil),          // 22: accelerator.integration.v1.DurableOwnerAck
-	(*v12.TerminalTarget)(nil),           // 23: instance.terminal.v1.TerminalTarget
+	(*CpuOwnerCreateAttachment)(nil),     // 9: instance.v1.CpuOwnerCreateAttachment
+	(*AcceptDeleteRequest)(nil),          // 10: instance.v1.AcceptDeleteRequest
+	(*CpuOwnerDeleteAttachment)(nil),     // 11: instance.v1.CpuOwnerDeleteAttachment
+	(*ChangeInstanceRequest)(nil),        // 12: instance.v1.ChangeInstanceRequest
+	(*OperationResponse)(nil),            // 13: instance.v1.OperationResponse
+	(*GetInstanceRequest)(nil),           // 14: instance.v1.GetInstanceRequest
+	(*ListInstancesRequest)(nil),         // 15: instance.v1.ListInstancesRequest
+	(*ListInstancesResponse)(nil),        // 16: instance.v1.ListInstancesResponse
+	(*Instance)(nil),                     // 17: instance.v1.Instance
+	(*GetOperationRequest)(nil),          // 18: instance.v1.GetOperationRequest
+	(*Operation)(nil),                    // 19: instance.v1.Operation
+	(*ResolveTerminalTargetRequest)(nil), // 20: instance.v1.ResolveTerminalTargetRequest
+	(*v1.GpuRequest)(nil),                // 21: accelerator.v1.GpuRequest
+	(*v11.GpuOwnerCreateAttachment)(nil), // 22: accelerator.integration.v1.GpuOwnerCreateAttachment
+	(*v11.GpuOwnerDeleteAttachment)(nil), // 23: accelerator.integration.v1.GpuOwnerDeleteAttachment
+	(*v11.DurableOwnerAck)(nil),          // 24: accelerator.integration.v1.DurableOwnerAck
+	(*v12.TerminalTarget)(nil),           // 25: instance.terminal.v1.TerminalTarget
 }
 var file_instance_v1_instance_proto_depIdxs = []int32{
-	19, // 0: instance.v1.Preset.gpu:type_name -> accelerator.v1.GpuRequest
+	21, // 0: instance.v1.Preset.gpu:type_name -> accelerator.v1.GpuRequest
 	1,  // 1: instance.v1.ListPresetsResponse.items:type_name -> instance.v1.Preset
 	0,  // 2: instance.v1.ResolveCreateSpecRequest.data:type_name -> instance.v1.CreateInstanceData
 	0,  // 3: instance.v1.CreateBusiness.data:type_name -> instance.v1.CreateInstanceData
 	5,  // 4: instance.v1.CreateBusiness.spec:type_name -> instance.v1.FrozenSpec
-	19, // 5: instance.v1.CreateBusiness.gpu:type_name -> accelerator.v1.GpuRequest
+	21, // 5: instance.v1.CreateBusiness.gpu:type_name -> accelerator.v1.GpuRequest
 	6,  // 6: instance.v1.AcceptCreateRequest.business:type_name -> instance.v1.CreateBusiness
-	20, // 7: instance.v1.AcceptCreateRequest.gpu_owner_attachment:type_name -> accelerator.integration.v1.GpuOwnerCreateAttachment
+	22, // 7: instance.v1.AcceptCreateRequest.gpu_owner_attachment:type_name -> accelerator.integration.v1.GpuOwnerCreateAttachment
 	7,  // 8: instance.v1.AcceptCreateRequest.original_charges:type_name -> instance.v1.OriginalQuotaCharge
-	21, // 9: instance.v1.AcceptDeleteRequest.gpu_owner_attachment:type_name -> accelerator.integration.v1.GpuOwnerDeleteAttachment
-	7,  // 10: instance.v1.AcceptDeleteRequest.original_charges:type_name -> instance.v1.OriginalQuotaCharge
-	22, // 11: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.integration.v1.DurableOwnerAck
-	15, // 12: instance.v1.ListInstancesResponse.items:type_name -> instance.v1.Instance
-	2,  // 13: instance.v1.InstanceService.ListPresets:input_type -> instance.v1.ListPresetsRequest
-	4,  // 14: instance.v1.InstanceService.ResolveCreateSpec:input_type -> instance.v1.ResolveCreateSpecRequest
-	8,  // 15: instance.v1.InstanceService.AcceptCreate:input_type -> instance.v1.AcceptCreateRequest
-	9,  // 16: instance.v1.InstanceService.AcceptDelete:input_type -> instance.v1.AcceptDeleteRequest
-	10, // 17: instance.v1.InstanceService.Start:input_type -> instance.v1.ChangeInstanceRequest
-	10, // 18: instance.v1.InstanceService.Stop:input_type -> instance.v1.ChangeInstanceRequest
-	12, // 19: instance.v1.InstanceService.GetInstance:input_type -> instance.v1.GetInstanceRequest
-	13, // 20: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
-	16, // 21: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
-	18, // 22: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
-	3,  // 23: instance.v1.InstanceService.ListPresets:output_type -> instance.v1.ListPresetsResponse
-	6,  // 24: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateBusiness
-	11, // 25: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
-	11, // 26: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
-	11, // 27: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
-	11, // 28: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
-	15, // 29: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
-	14, // 30: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
-	17, // 31: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
-	23, // 32: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
-	23, // [23:33] is the sub-list for method output_type
-	13, // [13:23] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	9,  // 9: instance.v1.AcceptCreateRequest.cpu_owner_attachment:type_name -> instance.v1.CpuOwnerCreateAttachment
+	23, // 10: instance.v1.AcceptDeleteRequest.gpu_owner_attachment:type_name -> accelerator.integration.v1.GpuOwnerDeleteAttachment
+	7,  // 11: instance.v1.AcceptDeleteRequest.original_charges:type_name -> instance.v1.OriginalQuotaCharge
+	11, // 12: instance.v1.AcceptDeleteRequest.cpu_owner_attachment:type_name -> instance.v1.CpuOwnerDeleteAttachment
+	24, // 13: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.integration.v1.DurableOwnerAck
+	17, // 14: instance.v1.ListInstancesResponse.items:type_name -> instance.v1.Instance
+	2,  // 15: instance.v1.InstanceService.ListPresets:input_type -> instance.v1.ListPresetsRequest
+	4,  // 16: instance.v1.InstanceService.ResolveCreateSpec:input_type -> instance.v1.ResolveCreateSpecRequest
+	8,  // 17: instance.v1.InstanceService.AcceptCreate:input_type -> instance.v1.AcceptCreateRequest
+	10, // 18: instance.v1.InstanceService.AcceptDelete:input_type -> instance.v1.AcceptDeleteRequest
+	12, // 19: instance.v1.InstanceService.Start:input_type -> instance.v1.ChangeInstanceRequest
+	12, // 20: instance.v1.InstanceService.Stop:input_type -> instance.v1.ChangeInstanceRequest
+	14, // 21: instance.v1.InstanceService.GetInstance:input_type -> instance.v1.GetInstanceRequest
+	15, // 22: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
+	18, // 23: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
+	20, // 24: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
+	3,  // 25: instance.v1.InstanceService.ListPresets:output_type -> instance.v1.ListPresetsResponse
+	6,  // 26: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateBusiness
+	13, // 27: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
+	13, // 28: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
+	13, // 29: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
+	13, // 30: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
+	17, // 31: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
+	16, // 32: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
+	19, // 33: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
+	25, // 34: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
+	25, // [25:35] is the sub-list for method output_type
+	15, // [15:25] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_instance_v1_instance_proto_init() }
@@ -1585,7 +1782,7 @@ func file_instance_v1_instance_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_instance_v1_instance_proto_rawDesc), len(file_instance_v1_instance_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -10,6 +10,18 @@
 
 > 2026-10-13 执行范围调整：用户要求本轮只完成后端，前端由专人接手。本文页面条目作为接口交接要求；本轮执行范围、实际结果和环境断点只见 [执行状态](../execution/status.md#gpu-container-instance-mvp-v15)。
 
+> 2026-10-15 用户追加 CPU 产品入口：分别创建 CPU、GPU 实例，创建后类型与规格固定，不支持互转。以下 CPU 规则替代原纯 CPU 排除项；GPU 的配额、冻结 plan 与实机验收要求继续有效，CPU 验收不替代 GPU 验收。
+
+### CPU 增量合同
+
+CPU 和 GPU 共用 Gov 当前授权、原公开请求幂等、持久命令投递、Res 持久 ACK、镜像解析、Notebook/PVC、启停、终端和最终清理。类型由受信 preset 决定并冻结，公共创建 DTO 仍只接受名称、镜像与 preset ID/版本；列表、详情和 preset 返回 `instance_type=cpu|gpu`。历史未保存类型的实例继续按 GPU 解释。
+
+CPU 冻结规格必须显式为 `cpu`，没有 GPU request/plan/charges，不调用 Acc，不写 GPU 资源、调度器、Queue、runtime、签名或 plan 注解；CPU/内存同时设置 requests 和 limits。Gov 仅对固定 Resource CREATE/DELETE 的 `instance-cpu-v1` 严格合同允许空 charges，复用原持久队列；不新增 CPU 计费体系。CPU 删除的 `quota_returned=true` 表示无待退 GPU 配额。
+
+CPU DELETE 保存原 CREATE、期望业务版本和幂等键。Stop/Start 保留类型、规格、镜像 digest、原 CREATE 和专属 PVC；无变配或互转入口。终端通过可信 InstanceBinding 核验业务版本及实际 Notebook/Pod UID，SG 使用已有 `CONTAINER` 类型。最终删除须同时完成计算和专属 PVC/PV 回收；停止、删除意图立即撤销旧终端权限。
+
+CPU 最小交付是正式 Gov API 创建 → 实际 Notebook 运行 → SG 终端写 `/workspace` → 多次启停后文件仍在 → 正式删除并核对专属卷回收。前端由专人接手，本轮只提供接口及隔离运行环境。
+
 ## 1. 本轮交付与明确边界
 
 ### 1.1 用户闭环
@@ -42,7 +54,7 @@ Notebook 运行，通过 SG 浏览器终端使用
 
 **共享 GPU 不能后置，也不能用“CPU 路径通过”代替产品验收。**
 
-不做容器日志产品、JupyterLab／VS Code 网页、原生 SSH、任意应用端口、纯 CPU 产品入口、变配、多卷、多集群、批量和定时回收。服务自身日志及实例失败原因保留。后续功能不预建空接口或占位实现。
+不做容器日志产品、JupyterLab／VS Code 网页、原生 SSH、任意应用端口、变配、多卷、多集群、批量和定时回收。服务自身日志及实例失败原因保留。后续功能不预建空接口或占位实现。
 
 ### 1.2 两条必须展示的产品提示
 

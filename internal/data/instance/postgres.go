@@ -208,7 +208,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			return biz.ACK{}, biz.ErrConflict
 		}
 		if i.CreateRequestHash == "" && i.Desired == biz.Deleted {
-			if i.Spec.GPU.Digest != c.Spec.GPU.Digest || !equalCharges(i.Charges, c.Charges) {
+			if i.Spec.Type() != c.Spec.Type() || i.Spec.GPU.Digest != c.Spec.GPU.Digest || !equalCharges(i.Charges, c.Charges) {
 				return biz.ACK{}, biz.ErrConflict
 			}
 			i.CreateRequestHash = c.RequestHash
@@ -229,7 +229,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			}
 			return ack, tx.Commit(ctx)
 		}
-		if i.CreateRequestHash != c.RequestHash || i.BusinessDigest != c.BusinessDigest {
+		if i.Spec.Type() != c.Spec.Type() || i.CreateRequestHash != c.RequestHash || i.BusinessDigest != c.BusinessDigest {
 			return biz.ACK{}, biz.ErrConflict
 		}
 		var old []byte
@@ -270,8 +270,8 @@ func equalCharges(a, b []biz.Charge) bool {
 }
 func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, error) {
 	ack := biz.ACK{OperationID: d.OperationID, ResourceID: d.ID, Accepted: true}
-	if !biz.UUID(d.TenantID) || !biz.UUID(d.ID) || !biz.UUID(d.OperationID) || !biz.UUID(d.CreateOperationID) || len(d.RequestHash) != 64 || len(d.Charges) == 0 || len(d.GPU.Digest) != 64 {
-		return ack, biz.ErrInvalid
+	if e := biz.ValidateDelete(d); e != nil {
+		return ack, e
 	}
 	tx, e := p.pool.Begin(ctx)
 	if e != nil {
@@ -286,7 +286,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		if d.ExpectedVersion > 1 {
 			return ack, biz.ErrVersion
 		}
-		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{GPU: d.GPU}, Charges: d.Charges, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
+		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceType: d.InstanceType, GPU: d.GPU}, Charges: d.Charges, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return ack, e
@@ -300,7 +300,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 	} else if e != nil {
 		return ack, e
 	} else {
-		if i.CreateOperationID != d.CreateOperationID || i.Spec.GPU.Digest != d.GPU.Digest || !equalCharges(i.Charges, d.Charges) {
+		if i.Spec.Type() != d.Type() || i.CreateOperationID != d.CreateOperationID || i.Spec.GPU.Digest != d.GPU.Digest || !equalCharges(i.Charges, d.Charges) {
 			return ack, biz.ErrConflict
 		}
 		var old []byte

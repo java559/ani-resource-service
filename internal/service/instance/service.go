@@ -36,18 +36,36 @@ type Service struct {
 
 func NewService(r biz.Repository, images biz.ImageResolver, environment biz.EnvironmentValidator, c Config) (*Service, error) {
 	// An empty supply catalog is a valid closed experiment. Query and recovery
-	// stay available; new creates still require a configured, frozen GPU preset.
+	// stay available; new creates still require a configured, frozen preset.
 	if r == nil || images == nil || environment == nil || !biz.UUID(c.ClusterID) || c.ServiceAccount == "" || c.StorageClass == "" || c.WorkspaceSize == "" || c.Shell == "" || c.UID < 0 || c.GID < 0 {
 		return nil, biz.ErrInvalid
 	}
 	seen := map[string]bool{}
 	for _, p := range c.Presets {
-		if p == nil || p.Id == "" || p.Version < 1 || p.Cpu == "" || p.Memory == "" || p.Gpu == nil || p.Gpu.ClusterId != c.ClusterID || p.Gpu.Replicas != 1 || p.Gpu.DevicesPerReplica != 1 || p.Gpu.ContainerName != biz.Container || seen[p.Id] {
+		if p == nil || p.Id == "" || p.Version < 1 || p.Cpu == "" || p.Memory == "" || seen[p.Id] {
+			return nil, biz.ErrInvalid
+		}
+		switch presetType(p) {
+		case biz.TypeCPU:
+			if p.Gpu != nil {
+				return nil, biz.ErrInvalid
+			}
+		case biz.TypeGPU:
+			if p.Gpu == nil || p.Gpu.ClusterId != c.ClusterID || p.Gpu.Replicas != 1 || p.Gpu.DevicesPerReplica != 1 || p.Gpu.ContainerName != biz.Container {
+				return nil, biz.ErrInvalid
+			}
+		default:
 			return nil, biz.ErrInvalid
 		}
 		seen[p.Id] = true
 	}
 	return &Service{repo: r, images: images, environment: environment, config: c}, nil
+}
+func presetType(p *pb.Preset) string {
+	if p.InstanceType == "" {
+		return biz.TypeGPU
+	}
+	return p.InstanceType
 }
 func rpcError(e error) error {
 	if e == nil {
@@ -77,7 +95,9 @@ func (s *Service) ListPresets(ctx context.Context, r *pb.ListPresetsRequest) (*p
 	}
 	out := new(pb.ListPresetsResponse)
 	for _, p := range s.config.Presets {
-		out.Items = append(out.Items, proto.Clone(p).(*pb.Preset))
+		item := proto.Clone(p).(*pb.Preset)
+		item.InstanceType = presetType(p)
+		out.Items = append(out.Items, item)
 	}
 	return out, nil
 }
@@ -113,17 +133,27 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 		return nil, rpcError(e)
 	}
 	c := s.config
-	return &pb.CreateBusiness{Data: proto.Clone(r.Data).(*pb.CreateInstanceData), Gpu: proto.Clone(preset.Gpu).(*acc.GpuRequest), Spec: &pb.FrozenSpec{ImageReference: image.Reference, ImageDigest: image.Digest, Cpu: preset.Cpu, Memory: preset.Memory, ClusterId: c.ClusterID, Namespace: ns, ServiceAccount: c.ServiceAccount, StorageClass: c.StorageClass, WorkspaceSize: c.WorkspaceSize, Shell: c.Shell, Uid: c.UID, Gid: c.GID}}, nil
+	var gpu *acc.GpuRequest
+	if preset.Gpu != nil {
+		gpu = proto.Clone(preset.Gpu).(*acc.GpuRequest)
+	}
+	return &pb.CreateBusiness{Data: proto.Clone(r.Data).(*pb.CreateInstanceData), Gpu: gpu, Spec: &pb.FrozenSpec{InstanceType: presetType(preset), ImageReference: image.Reference, ImageDigest: image.Digest, Cpu: preset.Cpu, Memory: preset.Memory, ClusterId: c.ClusterID, Namespace: ns, ServiceAccount: c.ServiceAccount, StorageClass: c.StorageClass, WorkspaceSize: c.WorkspaceSize, Shell: c.Shell, Uid: c.UID, Gid: c.GID}}, nil
 }
 func ack(a biz.ACK) *pb.OperationResponse {
 	return &pb.OperationResponse{DurableOwnerAck: &attachment.DurableOwnerAck{OperationId: a.OperationID, ResourceId: a.ResourceID, Accepted: a.Accepted}}
 }
 func (s *Service) AcceptCreate(ctx context.Context, r *pb.AcceptCreateRequest) (*pb.OperationResponse, error) {
-	if r == nil || r.Business == nil || r.Business.Spec == nil || r.Business.Data == nil || r.GpuOwnerAttachment == nil {
+	if r == nil || r.Business == nil || r.Business.Spec == nil || r.Business.Data == nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
 		return nil, rpcError(e)
+	}
+	if r.CpuOwnerAttachment != nil {
+		return s.acceptCPUCreate(ctx, r)
+	}
+	if r.GpuOwnerAttachment == nil || (r.Business.Spec.InstanceType != "" && r.Business.Spec.InstanceType != biz.TypeGPU) {
+		return nil, rpcError(biz.ErrInvalid)
 	}
 	a := r.GpuOwnerAttachment
 	ref := a.Ref
@@ -172,7 +202,7 @@ func (s *Service) AcceptCreate(ctx context.Context, r *pb.AcceptCreateRequest) (
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	spec := biz.Spec{Name: d.Name, ImageID: d.ImageId, ImageScope: d.ImageScope, ImageReference: f.ImageReference, ImageDigest: f.ImageDigest, PresetID: d.PresetId, PresetVersion: d.PresetVersion, CPU: f.Cpu, Memory: f.Memory, UID: f.Uid, GID: f.Gid, Shell: f.Shell, ServiceAccount: f.ServiceAccount, StorageClass: f.StorageClass, WorkspaceSize: f.WorkspaceSize, ClusterID: f.ClusterId, Namespace: f.Namespace, NotebookName: "instance-" + ref.ResourceId, PVCName: "workspace-" + ref.ResourceId, ImagePullSecret: "ani-instance-image-pull", GPU: biz.GPU{Scheduler: p.Runtime.SchedulerName, Queue: p.Runtime.QueueName, RuntimeClass: p.Runtime.RuntimeClassName, Recipe: p.Runtime.RecipeVersion, Digest: p.ResolutionDigest, NodeLabels: nodes, Annotations: annotations, Limits: limits, Plan: raw}}
+	spec := biz.Spec{InstanceType: biz.TypeGPU, Name: d.Name, ImageID: d.ImageId, ImageScope: d.ImageScope, ImageReference: f.ImageReference, ImageDigest: f.ImageDigest, PresetID: d.PresetId, PresetVersion: d.PresetVersion, CPU: f.Cpu, Memory: f.Memory, UID: f.Uid, GID: f.Gid, Shell: f.Shell, ServiceAccount: f.ServiceAccount, StorageClass: f.StorageClass, WorkspaceSize: f.WorkspaceSize, ClusterID: f.ClusterId, Namespace: f.Namespace, NotebookName: "instance-" + ref.ResourceId, PVCName: "workspace-" + ref.ResourceId, ImagePullSecret: "ani-instance-image-pull", GPU: biz.GPU{Scheduler: p.Runtime.SchedulerName, Queue: p.Runtime.QueueName, RuntimeClass: p.Runtime.RuntimeClassName, Recipe: p.Runtime.RecipeVersion, Digest: p.ResolutionDigest, NodeLabels: nodes, Annotations: annotations, Limits: limits, Plan: raw}}
 	accepted, e := s.repo.AcceptCreate(ctx, biz.Create{TenantID: r.TenantId, ID: ref.ResourceId, OperationID: r.OperationId, RequestHash: a.RequestHash, BusinessDigest: digest, Spec: spec, Charges: charges})
 	return ack(accepted), rpcError(e)
 }
@@ -214,11 +244,17 @@ func validateCharges(p *acc.ResolvedGpuPlan, gpu []*attachment.GpuChargeRef, ful
 	return out, nil
 }
 func (s *Service) AcceptDelete(ctx context.Context, r *pb.AcceptDeleteRequest) (*pb.OperationResponse, error) {
-	if r == nil || r.GpuOwnerAttachment == nil {
+	if r == nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
 		return nil, rpcError(e)
+	}
+	if r.CpuOwnerAttachment != nil {
+		return s.acceptCPUDelete(ctx, r)
+	}
+	if r.GpuOwnerAttachment == nil {
+		return nil, rpcError(biz.ErrInvalid)
 	}
 	a := r.GpuOwnerAttachment
 	ref := a.Ref
@@ -260,7 +296,7 @@ func (s *Service) Stop(ctx context.Context, r *pb.ChangeInstanceRequest) (*pb.Op
 	return s.change(ctx, r, "stop")
 }
 func wire(i biz.Instance) *pb.Instance {
-	return &pb.Instance{Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, PresetVersion: i.Spec.PresetVersion, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned}
+	return &pb.Instance{InstanceType: i.Spec.Type(), Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, PresetVersion: i.Spec.PresetVersion, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned}
 }
 func (s *Service) GetInstance(ctx context.Context, r *pb.GetInstanceRequest) (*pb.Instance, error) {
 	if r == nil {

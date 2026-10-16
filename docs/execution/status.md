@@ -459,6 +459,28 @@ Harbor 实际版本 `v2.15.2-a97e7b83`；CA 缺 Key Usage 导致 Python 默认 S
 ## 详情响应格式（2026-10-09）
 
 基于 Resource main `73c4170`、Governance main `134686f` 自查对外 JSON 详情：Governance 的 9 个单对象详情统一展开，Resource 同步 [VPC/网络查询规格](../specs/governance-vpc-read.md#governance-对外详情格式) 和 [Image API 规格](../specs/image-api.md)。Resource 仅提供内部 gRPC，消息/字段编号、租户谓词及权限保持既有合同；业务代码没有变化。实际 HTTP、生成和编译结果在 Governance 的接口集成登记 `DETAIL-FORMAT-01` 维护。部署及目标环境验收仍为 not_verified。
+## CPU instance backend 20261015
+
+用户追加分别创建 CPU/GPU，创建后类型和规格固定、不互转；只做后端，前端由专人接手。CPU 与 GPU 共用实例持久化、Notebook/PVC、启停、终端及最终清理；CPU 通过严格 `instance-cpu-v1` 复用 Gov 持久命令，不构造 GPU plan/charges、不调用 Acc。合同见 [CPU 增量](../specs/instance-mvp.md#cpu-增量合同)，运行和前端接线见 [runbook](../runbooks/instance-mvp-fedora.md#cpu-实例与前端联调)。原 GPU Goal 的设备与实机验收边界保持。
+
+两仓从执行时重新获取的最新 main 创建 `codex/instance-cpu-mvp-20261015`：Resource `98a534804231c7842acaa080fe1ebec066d921b2`，Governance `dc54bc0605ef93997436dc5600cad348ba7e8511`。复用原隔离 worktree，原 Image dirty 工作区保留。Acc `03765d169b07c00ce2f2aa20928729d52744c2ee`、SG `fb354938978250506cb22409e6ce8545d779ab4f` 无业务源码修改。2026-10-15 验收时跨仓使用任务私有 Go workspace。2026-10-16 用户授权全部任务代码发布 main，按 Resource provider → Gov 锁定正式 SDK 的顺序交付；正式消费使用 GOWORK=off 并核对来源 SHA/checksums，不提交 sibling replace。
+
+本次 Fedora 根 `/home/chabking/workspace/ani-resource-service-runs/instance-cpu-mvp-20261015`；冻结源及逐文件哈希在 `snapshots/`，命令/脱敏结果在 `private/*-*.{sh,log}`。Go 1.26.9、Buf 1.60.0，同既有 heavy lock、最多 2 编译并发与 6 GiB 上限。只跑改动相关检查，不运行 `make verify` 中的全量测试。
+
+`controlled_cpu_live_verified`：真实 Gov 当前 JWT/套餐/角色 → CPU preset/Image 冻结 → Gov 持久投递 → Res 持久 ACK → 实际 Notebook/CSI → SG WebSocket shell 写 `/workspace` → 两轮 Stop/Start 读回原文件 → 正式 Delete 的计算与专属 PVC/PV 清理，全部 pass。始终复用同一个 CREATE，镜像/preset/CPU/内存/PVC/PV 固定，每轮 Pod UID 更新；旧票据未获得 exec。创建立即 operation 查询、同键重放、删除重放以及删除后新 Start/Stop/Exec 拒绝均通过。未改前端代码；浏览器页面验收由前端接手，未用协议验收冒充浏览器 UI 完成。CPU 计费/额度体系与完整不互信租户隔离不在本轮范围，GPU 实机仍 blocked。
+
+实例 `03e07a73-0ed1-4ffe-99c0-086ab6374bd3`，CREATE `1081f3ae-3675-4e2f-a304-6555e55c9cee`，DELETE `0ce98423-ab29-42fa-ad32-e5f4578c36eb`；最终业务版本 6，desired/observed 均 deleted、compute_cleaned/workspace_cleaned 均 true，原 Notebook/StatefulSet/Pod/PVC/PV 已不存在。保留幂等操作记录，未手改产品状态、手建业务 Pod 或移除存储 finalizer。实际集群 UID `5277649d-e28d-4a0a-ae76-8354365c63bc`，原业务 Namespace UID `f6468af7-627b-4bd3-8434-859f222a4331`；沿用原普通 SA 与 `ani-block` Delete 策略。
+
+前端配置：preset `cpu` v1，1 CPU / 2Gi 内存 / 1Gi 工作盘，`/bin/bash`、UID/GID 1000；镜像 `img_add4a49b0c694553a9e85768132584ec`，digest `sha256:96080017b9975e9413906505d72f2ee4215ac428fd221cd90535edb08c8bd7be`，scope `platform`。工作镜像从已缓存 Ubuntu 24.04 固定 image ID 受控派生，提供 bash、可写 workspace 与长驻入口，经 task Harbor project 9 和正式 Image register-platform 登记；未覆盖旧 Jupyter 候选。
+
+前端按 runbook 建专用 SSH 隧道后使用 Gov `http://127.0.0.1:18080` 与票据 WS `ws://127.0.0.1:18081/api/v1/realtime/...`。任务专用 Gov/Resource/SG Docker 容器保持运行、`restart=unless-stopped`，仅 loopback 监听，不依赖持续 SSH 会话，不启动 Acc。PG/Redis/Harbor 与身份材料保留；临时测试 PG/Redis 已清理。SG token 实际到期 **2026-10-16 20:04:59 CST**，使用 runbook 的手动刷新入口；任务 TLS 到 2026-11-12，过期按既有 CA 流程续签。
+
+必要验证：Resource Proto 生成、CPU transport/canonical/Notebook 及真实 PG 生命周期/未知 CREATE/删除先到和受影响 GPU 定向回归 pass；Gov slice/OpenAPI 生成、目标编译、CPU command PG 以及原当前授权/幂等/owner release 的 GPU+CPU 子例 pass；SG 使用正式模块 `GOWORK=off` 重新静态编译。默认 instance-integration 筛选已纳入 CPU PG 两例。命令保存在 Fedora `private/{verify-01,resource-02,gov-build-02,cpu-pg-joint}.sh`；最终有效日志 `resource-02.log`、`gov-build-02.log`、`cpu-pg-service-03.log`、`cpu-product-live-03.log` 均 exit 0。CPU data command 沿用 `cpu-pg-joint-01.log` 的单项 PASS（该轮整体因随后 fixture 失败 exit 1），未重复。
+
+保留原始失败：首次 PG 的 JSON null plan 语义错误已修；真实 replay/worker 遇空 charges 返回 NotFound 已收敛为严格 CPU 特例，GPU 缺 charge 继续拒绝。两阶段恢复保持原 CREATE/resource/PVC；`cpu-product-live-01.log` 的原 replay 失败、`cpu-product-live-02.log` 的 WS 驱动握手误判均保留。实际 SG 在 101 升级后、exec 前验证目标并发送 runtime error/1011 关闭；最终驱动以无终端输出且明确拒绝为准，不以 HTTP 握手代替 shell 权限。
+
+精确代码清单：`snapshots/res-code-final.json` SHA256 `470d9ee95e0c35c19fc72e0ef88b23cf8c40f05572de8f8afd7f8c912605c82a`，`gov-code-final.json` SHA256 `371fdc256c585663a6ff1fe1224c27cca3ee9a14a8565c4aaffc435c9783bea6`；逐文件与实际验证源码一致。真实结果 `private/cpu-product/receipt.json` SHA256 `c67a30b61f55034f4bfce0bb2af8cf1817822042d886284a9ecf22f6b695a65b`。隔离环境启动适配只用官方 Network 13→14 迁移及任务管理员必要 4 API 授权修复，备份和受限 runtime 核验在 `private/network-upgrade/`、`private/admin-repair/`；未更新共享服务。2026-10-15 上述验收快照尚未提交或推送。2026-10-16 用户授权本节 CPU 后端全部源码、生成物、定向测试和交接文档发布 main；本条随 Resource 实现一并交付，准确版本以 Git 远端 main 和 Gov go.mod 为准。发布检查与正式模块消费记录在同一 Fedora 根 `publication-20261016/`；复用已通过且代码未漂移的 CPU/GPU 定向及真实 CPU 证据，不重复运行业务场景。本次按原 Goal 的限定范围拆取必要检查，不运行 make verify 中的全量测试，也不等待远端 CI；源码发布不更新共享部署，GPU 实机/浏览器和生产验收仍未完成。
+
 ## GPU container instance MVP v1.5
 
 2026-10-13 用户启动持续 Goal；后续明确本轮只负责后端，前端由专人接手。用户随后授权等待 GPU 期间适配实际调度器、准备真实隔离后端环境并完成 CPU 基础设施验证；这些独立工作及实际 Image 接线已推进。Goal **blocked / 未完成**：恢复后的原用户轮及后续两轮中，同一实际 GPU 前提持续缺失；本轮 Fedora 只读复核确认三节点 GPU allocatable 空、设备插件无、scheduler 没有 deviceshare/VGPUEnable，四个任务服务 inactive/dead、ExecMainStatus=0，没有可等待的运行验收任务。当前必须依赖平台条件变化才能继续真实 GPU 产品主链；不安装缺失组件，不用 CPU/替身结果替代共享/整卡验收。原 MVP-01～04 后端目标保持。

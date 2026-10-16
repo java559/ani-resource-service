@@ -100,6 +100,155 @@ func create() biz.Create {
 	return biz.Create{TenantID: tenant, ID: id, OperationID: op, RequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Charges: []biz.Charge{{ID: uuid.NewString(), Code: "gpu.shared_memory_mib", Units: 6144}}, Spec: biz.Spec{Name: "workspace", ImageID: uuid.NewString(), ImageScope: "platform", ImageReference: "registry.invalid/platform/workspace@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), PresetID: "shared", PresetVersion: 1, CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: uuid.NewString(), Namespace: "tenant-" + tenant, NotebookName: "instance-" + id, PVCName: "workspace-" + id, GPU: biz.GPU{Scheduler: "volcano", Queue: "default", Recipe: "volcano-hami-v1", Digest: strings.Repeat("d", 64), NodeLabels: map[string]string{"accelerator.ani.io/supply-group": "test"}, Annotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "6", "volcano.sh/vgpu-cores": "25"}, Plan: json.RawMessage(`{"frozen_external_plan":true}`)}}}
 }
 
+func cpuCreate() biz.Create {
+	c := create()
+	c.Spec.InstanceType = biz.TypeCPU
+	c.Spec.PresetID = "cpu-small"
+	c.Spec.GPU = biz.GPU{}
+	c.Charges = nil
+	return c
+}
+
+func TestCPUInstancePersistentLifecycleAndTerminal(t *testing.T) {
+	f := database(t)
+	ctx := context.Background()
+	c := cpuCreate()
+	ack, err := f.repo.AcceptCreate(ctx, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if replay, err := f.repo.AcceptCreate(ctx, c); err != nil || replay != ack {
+		t.Fatal("CPU admission did not replay its durable ACK", replay, err)
+	}
+	if _, err := f.repo.Get(ctx, uuid.NewString(), c.ID); !errors.Is(err, biz.ErrNotFound) {
+		t.Fatal("CPU instance leaked across tenants", err)
+	}
+	p := &provider{}
+	remote := &releaseEndpoint{}
+	reporter, err := data.NewQuota(f.repo, remote)
+	if err != nil {
+		t.Fatal(err)
+	}
+	w, _ := biz.NewWorker(f.repo, p, reporter, "cpu-worker")
+	var i biz.Instance
+	for n := 0; n < 3; n++ {
+		i = step(t, f, w, c)
+	}
+	if i.Observed != biz.Running || i.Spec.Type() != biz.TypeCPU || !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
+		t.Fatal("CPU instance did not reach running with its fixed specification", i.Reason)
+	}
+	authority := service.NewTerminalValidation(f.repo, p)
+	target := func(i biz.Instance) *terminal.TerminalTarget {
+		return &terminal.TerminalTarget{TenantId: i.TenantID, InstanceId: i.ID, Version: i.Version, ClusterId: i.Spec.ClusterID, Namespace: i.Spec.Namespace, NotebookName: i.Spec.NotebookName, NotebookUid: i.NotebookUID, PodName: i.PodName, PodUid: i.PodUID, ContainerName: biz.Container, Shell: i.Spec.Shell}
+	}
+	old := target(i)
+	if _, err := authority.ValidateTerminalTarget(ctx, old); err != nil {
+		t.Fatal("running CPU terminal rejected", err)
+	}
+	frozen, _ := json.Marshal(i.Spec)
+	command(t, f, c, i, "stop")
+	if _, err := authority.ValidateTerminalTarget(ctx, old); status.Code(err) != codes.FailedPrecondition {
+		t.Fatal("CPU stop intent retained old terminal authority", err)
+	}
+	for n := 0; n < 2; n++ {
+		i = step(t, f, w, c)
+	}
+	if i.Observed != biz.Stopped || i.PVCUID != "pvc-original" {
+		t.Fatal("CPU stop lost workspace binding", i)
+	}
+	command(t, f, c, i, "start")
+	for n := 0; n < 2; n++ {
+		i = step(t, f, w, c)
+	}
+	current, _ := json.Marshal(i.Spec)
+	if i.Observed != biz.Running || i.PVCUID != "pvc-original" || i.CreateOperationID != c.OperationID || string(frozen) != string(current) || p.creates != 1 {
+		t.Fatal("CPU restart changed the frozen create or original workspace", i)
+	}
+	if _, err := authority.ValidateTerminalTarget(ctx, old); status.Code(err) != codes.FailedPrecondition {
+		t.Fatal("old CPU ticket survived restart", err)
+	}
+	if _, err := authority.ValidateTerminalTarget(ctx, target(i)); err != nil {
+		t.Fatal("new CPU terminal rejected", err)
+	}
+	d := biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
+	if _, err := f.repo.AcceptDelete(ctx, d); err != nil {
+		t.Fatal("CPU delete required a GPU plan or ledger", err)
+	}
+	p.failReclaim = true
+	for n := 0; n < 6; n++ {
+		i = step(t, f, w, c)
+	}
+	if !i.ComputeCleaned || !i.QuotaReturned || i.WorkspaceCleaned || i.Observed == biz.Deleted || i.Reason != "WAITING_FOR_WORKSPACE_RECLAIM" {
+		t.Fatal("CPU deletion completed before its original volume was reclaimed", i)
+	}
+	p.obs.VolumeExists = false
+	i = step(t, f, w, c)
+	if i.Observed != biz.Deleted || !i.WorkspaceCleaned || remote.calls != 0 {
+		t.Fatal("CPU cleanup failed or called the GPU ledger", i, remote.calls)
+	}
+	if err := reporter.Report(ctx, i); err != nil {
+		t.Fatal("CPU reporter unexpectedly required GPU charges", err)
+	}
+	var releases int
+	if err := f.runtime.QueryRow(ctx, "SELECT count(*) FROM instance.instance_quota_release_outbox WHERE tenant_id=$1 AND instance_id=$2", c.TenantID, c.ID).Scan(&releases); err != nil || releases != 0 || remote.calls != 0 {
+		t.Fatal("CPU lifecycle created a GPU outbox event", releases, remote.calls, err)
+	}
+	op, err := f.repo.GetOperation(ctx, c.TenantID, d.OperationID)
+	if err != nil || op.State != "completed" {
+		t.Fatal("CPU delete did not complete durably", op, err)
+	}
+}
+
+func TestCPUDeleteFirstAndUnknownCreate(t *testing.T) {
+	f := database(t)
+	ctx := context.Background()
+	c := cpuCreate()
+	d := biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64)}
+	ack, err := f.repo.AcceptDelete(ctx, d)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if replay, err := f.repo.AcceptDelete(ctx, d); err != nil || replay != ack {
+		t.Fatal("CPU delete-first replay failed", err)
+	}
+	conflicting := create()
+	conflicting.TenantID, conflicting.ID, conflicting.OperationID = c.TenantID, c.ID, c.OperationID
+	if _, err := f.repo.AcceptCreate(ctx, conflicting); !errors.Is(err, biz.ErrConflict) {
+		t.Fatal("CPU tombstone admitted a GPU create", err)
+	}
+	if _, err := f.repo.AcceptCreate(ctx, c); err != nil {
+		t.Fatal("late CPU create did not receive its superseded ACK", err)
+	}
+	p, q := &provider{}, &quota{}
+	w, _ := biz.NewWorker(f.repo, p, q, "cpu-delete-first")
+	var i biz.Instance
+	for n := 0; n < 3; n++ {
+		i = step(t, f, w, c)
+	}
+	if i.Observed != biz.Deleted || p.creates != 0 || q.calls != 0 {
+		t.Fatal("CPU tombstone created a workload or released GPU quota", i, p.creates, q.calls)
+	}
+	c = cpuCreate()
+	if _, err := f.repo.AcceptCreate(ctx, c); err != nil {
+		t.Fatal(err)
+	}
+	p = &provider{unknown: true}
+	w, _ = biz.NewWorker(f.repo, p, q, "cpu-before-restart")
+	step(t, f, w, c)
+	i = step(t, f, w, c)
+	d = biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
+	if _, err := f.repo.AcceptDelete(ctx, d); err != nil {
+		t.Fatal(err)
+	}
+	w, _ = biz.NewWorker(f.repo, p, q, "cpu-after-restart")
+	for n := 0; n < 3; n++ {
+		i = step(t, f, w, c)
+	}
+	if i.Pending == nil || i.Reason != "CREATE_RESULT_UNKNOWN" || p.creates != 1 || q.calls != 0 || i.ComputeCleaned || i.WorkspaceCleaned {
+		t.Fatal("unknown CPU create was retried or prematurely cleaned", i, p.creates, q.calls)
+	}
+}
+
 // The only substitutes are the external Kubernetes and Gov boundaries. All
 // admission, versions, pending actions, leasing and cleanup progress use PG.
 type provider struct {

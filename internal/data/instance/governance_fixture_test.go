@@ -51,12 +51,30 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 	if dir == "" {
 		t.Fatal("isolated fixture directory required")
 	}
-	gpu := new(acc.GpuRequest)
-	if e := protojson.Unmarshal([]byte(os.Getenv("INSTANCE_JOINT_GPU_JSON")), gpu); e != nil {
-		t.Fatal(e)
+	var gpu *acc.GpuRequest
+	rawGPU := strings.TrimSpace(os.Getenv("INSTANCE_JOINT_GPU_JSON"))
+	if rawGPU != "" && rawGPU != "null" {
+		gpu = new(acc.GpuRequest)
+		if e := protojson.Unmarshal([]byte(rawGPU), gpu); e != nil {
+			t.Fatal(e)
+		}
+	}
+	clusterID := os.Getenv("INSTANCE_JOINT_CLUSTER_ID")
+	if clusterID == "" {
+		clusterID = "11111111-1111-4111-8111-111111111111"
+	}
+	preset := &pb.Preset{Id: "cpu", Version: 1, Name: "cpu", Cpu: "1", Memory: "2Gi", InstanceType: biz.TypeCPU}
+	if gpu != nil {
+		clusterID = gpu.ClusterId
+		preset.Id, preset.Name, preset.InstanceType, preset.Gpu = "shared", "shared", biz.TypeGPU, gpu
 	}
 	f := database(t)
 	providerState := &provider{}
+	var reporter biz.QuotaReporter
+	cpuQuota := &quota{}
+	if gpu == nil {
+		reporter = cpuQuota
+	}
 	if path := os.Getenv("INSTANCE_JOINT_QUOTA_FILE"); path != "" {
 		var cfg struct{ Address, CAFile, CertFile, KeyFile, ServerName string }
 		raw, e := os.ReadFile(path)
@@ -83,10 +101,12 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 			t.Fatal(e)
 		}
 		defer connection.Close()
-		reporter, e := data.NewQuota(f.repo, quotapb.NewQuotaReleaseServiceClient(connection))
+		reporter, e = data.NewQuota(f.repo, quotapb.NewQuotaReleaseServiceClient(connection))
 		if e != nil {
 			t.Fatal(e)
 		}
+	}
+	if reporter != nil {
 		// Only the external Kubernetes boundary is controlled in this ledger
 		// slice. Admission, worker, cleanup decisions, outbox and Gov RPC are real.
 		worker, e := biz.NewWorker(f.repo, providerState, reporter, "cross-service-worker")
@@ -105,9 +125,12 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 			if e := <-done; e != nil {
 				t.Error(e)
 			}
+			if gpu == nil && cpuQuota.calls != 0 {
+				t.Error("CPU lifecycle called the GPU quota boundary")
+			}
 		}()
 	}
-	handler, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: gpu.ClusterId, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000, Presets: []*pb.Preset{{Id: "shared", Version: 1, Name: "shared", Cpu: "1", Memory: "2Gi", Gpu: gpu}}})
+	handler, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: clusterID, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000, Presets: []*pb.Preset{preset}})
 	if e != nil {
 		t.Fatal(e)
 	}

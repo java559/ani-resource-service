@@ -1,7 +1,8 @@
-// Package instance owns the lifecycle of GPU container instances.
+// Package instance owns the lifecycle of fixed-specification container instances.
 package instance
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -27,6 +28,8 @@ var (
 const Owner = "ani-resource-service"
 const Container = "workspace"
 const (
+	TypeCPU = "cpu"
+	TypeGPU = "gpu"
 	Running = "running"
 	Stopped = "stopped"
 	Deleted = "deleted"
@@ -81,7 +84,16 @@ type GPU struct {
 	NodeLabels, Annotations, Limits                map[string]string
 	Plan                                           json.RawMessage
 }
+
+func (g GPU) Empty() bool {
+	// A nil RawMessage is stored as JSON null in an instance snapshot. Decoding
+	// it yields the literal bytes "null", which still means no GPU plan.
+	emptyPlan := len(g.Plan) == 0 || bytes.Equal(bytes.TrimSpace(g.Plan), []byte("null"))
+	return g.Scheduler == "" && g.Queue == "" && g.RuntimeClass == "" && g.Recipe == "" && g.Digest == "" && len(g.NodeLabels) == 0 && len(g.Annotations) == 0 && len(g.Limits) == 0 && emptyPlan
+}
+
 type Spec struct {
+	InstanceType                                           string
 	Name, ImageID, ImageScope, ImageReference, ImageDigest string
 	PresetID                                               string
 	PresetVersion                                          int64
@@ -92,17 +104,31 @@ type Spec struct {
 	ClusterID, Namespace, NotebookName, PVCName            string
 	GPU                                                    GPU
 }
+
+// Type preserves snapshots created before the instance type was explicit.
+// Only those legacy empty values mean GPU; CPU is always explicitly selected.
+func (s Spec) Type() string {
+	if s.InstanceType == "" {
+		return TypeGPU
+	}
+	return s.InstanceType
+}
+
 type Create struct {
 	TenantID, ID, OperationID, RequestHash, BusinessDigest string
 	Spec                                                   Spec
 	Charges                                                []Charge
 }
 type Delete struct {
+	InstanceType                                              string
 	TenantID, ID, OperationID, CreateOperationID, RequestHash string
 	ExpectedVersion                                           int64
 	GPU                                                       GPU
 	Charges                                                   []Charge
 }
+
+func (d Delete) Type() string { return (Spec{InstanceType: d.InstanceType}).Type() }
+
 type Command struct {
 	TenantID, ID, OperationID, Key, RequestHash, Action string
 	ExpectedVersion                                     int64
@@ -191,7 +217,7 @@ type EnvironmentValidator interface {
 }
 
 func ValidateCreate(c Create) error {
-	if !UUID(c.TenantID) || !UUID(c.ID) || !UUID(c.OperationID) || len(c.RequestHash) != 64 || len(c.BusinessDigest) != 64 || len(c.Charges) == 0 {
+	if !UUID(c.TenantID) || !UUID(c.ID) || !UUID(c.OperationID) || len(c.RequestHash) != 64 || len(c.BusinessDigest) != 64 {
 		return ErrInvalid
 	}
 	s := c.Spec
@@ -201,11 +227,38 @@ func ValidateCreate(c Create) error {
 	if !UUID(s.ClusterID) || len(s.Namespace) > 63 || !dnsName.MatchString(s.Namespace) || s.NotebookName == "" || s.PVCName == "" || s.ImageReference == "" || s.ImageDigest == "" || s.CPU == "" || s.Memory == "" || s.UID < 0 || s.GID < 0 || s.ServiceAccount == "" || s.StorageClass == "" || s.WorkspaceSize == "" || s.Shell == "" {
 		return ErrInvalid
 	}
-	if s.GPU.Scheduler != "volcano" || s.GPU.Queue == "" || s.GPU.Recipe != "volcano-hami-v1" || len(s.GPU.Digest) != 64 || len(s.GPU.Plan) == 0 || len(s.GPU.Limits) == 0 || len(s.GPU.NodeLabels) == 0 {
+	if err := validateResources(s.Type(), s.GPU, c.Charges); err != nil {
+		return err
+	}
+	if s.Type() == TypeGPU && (s.GPU.Scheduler != "volcano" || s.GPU.Queue == "" || s.GPU.Recipe != "volcano-hami-v1" || len(s.GPU.Plan) == 0 || len(s.GPU.Limits) == 0 || len(s.GPU.NodeLabels) == 0) {
+		return ErrInvalid
+	}
+	return nil
+}
+
+func ValidateDelete(d Delete) error {
+	if !UUID(d.TenantID) || !UUID(d.ID) || !UUID(d.OperationID) || !UUID(d.CreateOperationID) || len(d.RequestHash) != 64 || d.ExpectedVersion < 0 {
+		return ErrInvalid
+	}
+	return validateResources(d.Type(), d.GPU, d.Charges)
+}
+
+func validateResources(kind string, gpu GPU, charges []Charge) error {
+	switch kind {
+	case TypeCPU:
+		if !gpu.Empty() || len(charges) != 0 {
+			return ErrInvalid
+		}
+		return nil
+	case TypeGPU:
+		if len(gpu.Digest) != 64 || len(charges) == 0 {
+			return ErrInvalid
+		}
+	default:
 		return ErrInvalid
 	}
 	seen := map[string]bool{}
-	for _, q := range c.Charges {
+	for _, q := range charges {
 		if !UUID(q.ID) || q.Code == "" || q.Units <= 0 || seen[q.ID] {
 			return ErrInvalid
 		}

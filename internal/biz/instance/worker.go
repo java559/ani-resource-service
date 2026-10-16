@@ -117,7 +117,9 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		}
 		// A stable event is rebuilt from original CREATE/charges; PVC errors do not hold GPU quota.
 		if !i.QuotaReturned {
-			if err := w.quota.Report(ctx, p.Instance); err != nil {
+			if i.Spec.Type() == TypeCPU {
+				p.Instance.QuotaReturned = true
+			} else if err := w.quota.Report(ctx, p.Instance); err != nil {
 				p.Instance.Reason = "QUOTA_RETURN_PENDING"
 			} else {
 				p.Instance.QuotaReturned = true
