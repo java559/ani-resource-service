@@ -1,4 +1,4 @@
-# Res GPU 容器实例 MVP 实施方案 v1.5
+# Res 容器实例合同
 
 > 本版基于 v1.4 和后续讨论修订，面向当前受控实验环境。文中接口、字段及工作包是实施约定，不代表已经修改代码、部署或通过验收。
 
@@ -12,15 +12,29 @@
 
 > 2026-10-15 用户追加 CPU 产品入口：分别创建 CPU、GPU 实例，创建后类型与规格固定，不支持互转。以下 CPU 规则替代原纯 CPU 排除项；GPU 的配额、冻结 plan 与实机验收要求继续有效，CPU 验收不替代 GPU 验收。
 
-### CPU 增量合同
+### 2026-10-16 联合合同
 
-CPU 和 GPU 共用 Gov 当前授权、原公开请求幂等、持久命令投递、Res 持久 ACK、镜像解析、Notebook/PVC、启停、终端和最终清理。类型由受信 preset 决定并冻结，公共创建 DTO 仍只接受名称、镜像与 preset ID/版本；列表、详情和 preset 返回 `instance_type=cpu|gpu`。历史未保存类型的实例继续按 GPU 解释。
+本节是当前有效合同；下文保留历史生命周期依据，冲突处以本节为准。
 
-CPU 冻结规格必须显式为 `cpu`，没有 GPU request/plan/charges，不调用 Acc，不写 GPU 资源、调度器、Queue、runtime、签名或 plan 注解；CPU/内存同时设置 requests 和 limits。Gov 仅对固定 Resource CREATE/DELETE 的 `instance-cpu-v1` 严格合同允许空 charges，复用原持久队列；不新增 CPU 计费体系。CPU 删除的 `quota_returned=true` 表示无待退 GPU 配额。
+本节取代下文历史方案中的单卡、配置规格、旧类型/版本及旧分页约定。完整规格唯一来源是 `instance.compute_presets`：UUID、不可变唯一 code、名称/描述、cpu/gpu、正整数 cpu_millis/memory_mib、enabled 和受管 GPU 引用。新增默认禁用，无草稿/发布/版本表。CPU 引用为空；GPU 引用由受信 Gov 读取 ACC 后补全。PATCH 锁行后在同一事务按非空 FieldMask 合并、校验最终对象；gpu 整体替换或清除。删除不级联实例/ACC。
 
-CPU DELETE 保存原 CREATE、期望业务版本和幂等键。Stop/Start 保留类型、规格、镜像 digest、原 CREATE 和专属 PVC；无变配或互转入口。终端通过可信 InstanceBinding 核验业务版本及实际 Notebook/Pod UID，SG 使用已有 `CONTAINER` 类型。最终删除须同时完成计算和专属 PVC/PV 回收；停止、删除意图立即撤销旧终端权限。
+实例内外只有 `instance_kind=container`、`compute_type=cpu|gpu`，类型来自数据库规格并冻结。删除 `instance_type`、外层 `preset_version`、空类型默认 GPU、旧 canonical 分支及 `Config.Presets`。当前 schema 缺必填类型或实际调度对象直接拒绝。profile_version 与 expected_version 保留现有语义。
 
-CPU 最小交付是正式 Gov API 创建 → 实际 Notebook 运行 → SG 终端写 `/workspace` → 多次启停后文件仍在 → 正式删除并核对专属卷回收。前端由专人接手，本轮只提供接口及隔离运行环境。
+Gov 首先检查原始幂等记录，然后解析规格和默认值，一次持久受理/占额后投递。Res Resolve 只解析，不创建/占额；Accept 只消费冻结参数，不重读当前规格。CPU 没有 GPU request/plan/charges，不调用 ACC；GPU 沿用完整 plan、Runtime 与原 charges。整卡每容器申请正 uint32 数量，且不超过 Profile.max_devices_per_replica；共享为 1；实例副本始终 1。原始迁移002保持不可变，003前向迁移将规格数量约束扩展为精确整数1..4294967295，不接受小数取整；完整plan负责按本次Profile上限校验。
+
+规格 CPU/内存采用精确整数，分别转换为 `<cpu_millis>m` 与 `<memory_mib>Mi`，requests=limits。内存值必须可表达为合法 Kubernetes Quantity，超出 int64 字节上限拒绝。实例独立保存规格 ID/名称/编码、两维类型、CPU/内存、GPU 安全摘要、完整 plan、镜像/环境和实际调度。修改、禁用或删除规格不影响已受理重试、静态展示、启停及清理。
+
+原始 CreateInstanceData.scheduling 可缺失；出现时拒绝空对象、非法枚举或空优先级。FrozenSpec.scheduling 必须存在且 placement 明确，按用户值 > 本次合法默认 > NONE，priority 无来源保持缺失。接收端再次校验原始明确值与实际值相等，正确摘要不能免除这项检查。原始哈希只包含原始意图；业务摘要覆盖完整冻结对象。
+
+GPU 的 FrozenSpec.gpu_spec_digest 必须存在并冻结规格引用的 spec_digest，CPU 必须缺失。共享纯函数 `api/instance/v1.ValidateGpuBusinessPlan` 核对冻结摘要、完整 request 和安全 summary 与 ACC plan 的 Profile/Request；Gov 计划解析后和投递前、Res Accept 均调用。原 plan/charges/runtime/digest 校验继续独立执行。
+
+`ApplySchedulingOptions` 只消费冻结 scheduling，COLOCATE/SPREAD 分别合并 weight=100、hostname 拓扑的软亲和/软反亲和，selector 固定可信 tenant+instance 并明确当前 namespace；NONE 不新增规则。节点约束、GPU Runtime 和不相关 affinity 保留，重复渲染去重；固定 priority 或相反受管关系冲突拒绝，不整体覆盖 affinity。Notebook v1.10 的 labels/annotations 从 Notebook metadata 传播，PodSpec 从 spec.template.spec 传播；最终 Pod 再核对所选规则与 priority。GPU Pod 引用现有 Volcano PodGroup 且本次选了 priority 时，只读核对同 namespace Group 的 priorityClassName，冲突回显 SCHEDULING_FIELD_CONFLICT，不重写 Group。
+
+AdminList/Get/Create/Update/SetPresetEnabled/DeletePreset 走现有 Gov mTLS 平台委托和独立实例平台 Caller，无伪租户。ListPresets/实例方法走可信租户。租户目录仅启用项，GPU 按可信授权 profile_id/version/digest/cluster/pool 交集过滤后分页；空允许集合严格禁止 GPU，返回内部 has_gpu_candidates 供 Gov 处理 ACC 故障。
+
+ListInstances 直接改为 page/page_size 与 items/total；删除 keyset 双轨。规格与实例 Count/List 在同一只读 Repeatable Read 事务、相同租户/筛选/授权 WHERE 中执行，按 created_at DESC 和唯一 ID DESC 排序。name 大小写不敏感字面子串，%/_ 不作为通配符。静态列表/详情同一安全映射，不查 Kubernetes/ACC/当前规格；返回真实 createdAt、workspaceSize、两维类型、CPU/内存、preset_name/code、gpu_summary、实际 scheduling。操作状态与清理标志沿原合同。
+
+CPU 最小运行验收仍为 Gov 正式入口 → 真实 PG → Notebook/控制器/Pod；GPU 需读取 Whole1/Shared1/Whole2 实际 Pod 字段。Pending 仅可作为字段证据，不是运行/硬件/隔离/释放通过。软件和外部边界替身单独报告。运行详情、事件与日志通过纯GET/LIST目标解析：可信租户/实例DB记录 → 保存cluster/namespace → Notebook/STS/Pod owner UID链。诊断不调用带签名写入的Observe、不清理/占额/usage同步。runtime仅返回安全状态、来源类别、挂载类别，不返回环境值/Secret内容/宿主路径；缺对象为null、读取失败为错误。事件只取当前Pod UID的core/v1 Event，每页200、最多1000、真实truncated，时间与计数缺失保持null。日志仅固定workspace stdout/stderr，开流前后GET同UID、READY后才传bytes，替换Pod终止；鉴权、取消和保护上限见[调用登记](governance-calls.md#平台规格与实例日志)。真实公开日志/SSE、长连接和Pod传播必须另行实测，软件测试不替代现场验收。
 
 ## 1. 本轮交付与明确边界
 

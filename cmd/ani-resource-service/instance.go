@@ -131,6 +131,9 @@ func openInstance(ctx context.Context, network *conf.Network, images *imageCompo
 	if e != nil {
 		return nil, e
 	}
+	if e = provider.ConfigureLogs(kube, cfg.Service.LogLimits); e != nil {
+		return nil, e
+	}
 	if e = provider.ConfigureSigningKey(ed25519.PrivateKey(signing)); e != nil {
 		return nil, e
 	}

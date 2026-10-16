@@ -33,7 +33,7 @@ func (q *Quota) Report(ctx context.Context, i biz.Instance) error {
 		return biz.ErrInvalid
 	}
 	// CPU instances never own a GPU charge or a GPU release outbox record.
-	if i.Spec.Type() == biz.TypeCPU {
+	if i.Spec.ComputeType == biz.TypeCPU {
 		if !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
 			return biz.ErrInvalid
 		}

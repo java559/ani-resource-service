@@ -236,6 +236,8 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "read-only composition permits only GetVPC")
 		}
 		_, platformMethod := governancePlatformMethods[info.FullMethod]
+		_, instancePlatformMethod := instancePlatformMethods[info.FullMethod]
+		platformMethod = platformMethod || instancePlatformMethod
 		if platformMethod != p.Platform {
 			return nil, status.Error(codes.PermissionDenied, "governance scope does not permit this method")
 		}
@@ -255,6 +257,9 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 				return nil, status.Error(codes.PermissionDenied, "instance tenant differs from authenticated scope")
 			}
 			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{TenantID: p.TenantID, Actor: p.Actor}), req)
+		}
+		if instancePlatformMethod {
+			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{Platform: true, Actor: p.Actor}), req)
 		}
 		if platformMethod {
 			ctx = biz.WithEgressCaller(ctx, biz.EgressCaller{PlatformAdministrator: true, Attribution: biz.Attribution{Actor: p.Actor, DirectCaller: p.Workload, CorrelationID: p.RequestID}})

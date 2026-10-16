@@ -18,6 +18,8 @@ import (
 // fixed-type conflict handling are exercised by the real PostgreSQL tests.
 type cpuIntake struct {
 	biz.Repository
+	biz.PresetRepository
+	preset  biz.Preset
 	creates []biz.Create
 	deletes []biz.Delete
 }
@@ -59,20 +61,21 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 	const operation = "33333333-3333-4333-8333-333333333333"
 	const actor = "governance:user:42"
 	repo, images, environment := &cpuIntake{}, &cpuImageBoundary{}, &cpuEnvironmentBoundary{}
-	s, err := NewService(repo, images, environment, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/bash", UID: 1000, GID: 1000, Presets: []*pb.Preset{{Id: "cpu", Version: 1, Name: "CPU", Cpu: "1", Memory: "2Gi", InstanceType: biz.TypeCPU}}})
+	repo.preset = biz.Preset{ID: resource, Code: "cpu-small", Name: "CPU", ComputeType: biz.TypeCPU, CPUMillis: 1000, MemoryMiB: 2048, Enabled: true}
+	s, err := NewService(repo, images, environment, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/bash", UID: 1000, GID: 1000})
 	if err != nil {
 		t.Fatal(err)
 	}
 	ctx := biz.WithCaller(context.Background(), biz.Caller{TenantID: tenant, Actor: actor})
 	presets, err := s.ListPresets(ctx, &pb.ListPresetsRequest{TenantId: tenant})
-	if err != nil || len(presets.Items) != 1 || presets.Items[0].InstanceType != biz.TypeCPU || presets.Items[0].Gpu != nil {
+	if err != nil || len(presets.Items) != 1 || presets.Items[0].ComputeType != biz.TypeCPU || presets.Items[0].Gpu != nil {
 		t.Fatal("CPU preset not exposed without GPU dependencies", presets, err)
 	}
-	business, err := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenant, Data: &pb.CreateInstanceData{Name: "cpu-work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: "cpu", PresetVersion: 1}})
+	business, err := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenant, Data: &pb.CreateInstanceData{Name: "cpu-work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: resource}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if business.Gpu != nil || business.Spec.InstanceType != biz.TypeCPU || business.Spec.Cpu != "1" || business.Spec.Memory != "2Gi" || business.Spec.Namespace != "tenant-"+tenant || images.calls != 1 || environment.calls != 1 {
+	if business.Gpu != nil || business.Spec.ComputeType != biz.TypeCPU || business.Spec.Cpu != "1000m" || business.Spec.Memory != "2048Mi" || business.Spec.Namespace != "tenant-"+tenant || images.calls != 1 || environment.calls != 1 {
 		t.Fatal("CPU resolution did not freeze the configured runtime and external image", business)
 	}
 	digest, err := pb.BusinessPayloadDigest(business)
@@ -85,7 +88,7 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 		t.Fatal("trusted CPU create did not reach the repository", accepted, err)
 	}
 	c := repo.creates[0]
-	if c.TenantID != tenant || c.ID != resource || c.OperationID != operation || c.Spec.Type() != biz.TypeCPU || !c.Spec.GPU.Empty() || len(c.Charges) != 0 || c.Spec.NotebookName != "instance-"+resource || c.Spec.PVCName != "workspace-"+resource {
+	if c.TenantID != tenant || c.ID != resource || c.OperationID != operation || c.Spec.ComputeType != biz.TypeCPU || !c.Spec.GPU.Empty() || len(c.Charges) != 0 || c.Spec.NotebookName != "instance-"+resource || c.Spec.PVCName != "workspace-"+resource {
 		t.Fatal("CPU intake gained GPU state or lost its trusted identity", c)
 	}
 	for name, mutate := range map[string]func(*pb.AcceptCreateRequest){
@@ -93,9 +96,9 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 		"GPU charge": func(r *pb.AcceptCreateRequest) {
 			r.OriginalCharges = []*pb.OriginalQuotaCharge{{ChargeId: resource, QuotaCode: "gpu.shared_memory_mib", OriginalUnits: 1}}
 		},
-		"GPU request in CPU business":            func(r *pb.AcceptCreateRequest) { r.Business.Gpu = &acc.GpuRequest{} },
-		"GPU type through CPU attachment":        func(r *pb.AcceptCreateRequest) { r.Business.Spec.InstanceType = biz.TypeGPU },
-		"legacy GPU type through CPU attachment": func(r *pb.AcceptCreateRequest) { r.Business.Spec.InstanceType = "" },
+		"GPU request in CPU business":                 func(r *pb.AcceptCreateRequest) { r.Business.Gpu = &acc.GpuRequest{} },
+		"GPU type through CPU attachment":             func(r *pb.AcceptCreateRequest) { r.Business.Spec.ComputeType = biz.TypeGPU },
+		"missing compute type through CPU attachment": func(r *pb.AcceptCreateRequest) { r.Business.Spec.ComputeType = "" },
 		"CPU type through GPU attachment": func(r *pb.AcceptCreateRequest) {
 			r.CpuOwnerAttachment = nil
 			r.GpuOwnerAttachment = &attachment.GpuOwnerCreateAttachment{}
@@ -134,7 +137,7 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 		t.Fatal("trusted CPU delete required a GPU attachment", err)
 	}
 	d := repo.deletes[0]
-	if d.Type() != biz.TypeCPU || !d.GPU.Empty() || len(d.Charges) != 0 || d.TenantID != tenant || d.CreateOperationID != operation || d.ExpectedVersion != 1 {
+	if d.ComputeType != biz.TypeCPU || !d.GPU.Empty() || len(d.Charges) != 0 || d.TenantID != tenant || d.CreateOperationID != operation || d.ExpectedVersion != 1 {
 		t.Fatal("CPU deletion lost its original identity or gained GPU state", d)
 	}
 	mixedDelete := proto.Clone(deleteRequest).(*pb.AcceptDeleteRequest)
@@ -153,4 +156,14 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 	if len(repo.creates) != 1 || len(repo.deletes) != 1 {
 		t.Fatal("rejected transport requests reached persistence")
 	}
+}
+
+func (r *cpuIntake) GetPreset(_ context.Context, id string) (biz.Preset, error) {
+	if id != r.preset.ID {
+		return biz.Preset{}, biz.ErrNotFound
+	}
+	return r.preset, nil
+}
+func (r *cpuIntake) ListPresets(context.Context, biz.PresetFilter) ([]biz.Preset, int64, bool, error) {
+	return []biz.Preset{r.preset}, 1, false, nil
 }

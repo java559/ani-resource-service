@@ -97,12 +97,12 @@ func database(t *testing.T) *fixture {
 }
 func create() biz.Create {
 	tenant, id, op := uuid.NewString(), uuid.NewString(), uuid.NewString()
-	return biz.Create{TenantID: tenant, ID: id, OperationID: op, RequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Charges: []biz.Charge{{ID: uuid.NewString(), Code: "gpu.shared_memory_mib", Units: 6144}}, Spec: biz.Spec{Name: "workspace", ImageID: uuid.NewString(), ImageScope: "platform", ImageReference: "registry.invalid/platform/workspace@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), PresetID: "shared", PresetVersion: 1, CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: uuid.NewString(), Namespace: "tenant-" + tenant, NotebookName: "instance-" + id, PVCName: "workspace-" + id, GPU: biz.GPU{Scheduler: "volcano", Queue: "default", Recipe: "volcano-hami-v1", Digest: strings.Repeat("d", 64), NodeLabels: map[string]string{"accelerator.ani.io/supply-group": "test"}, Annotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "6", "volcano.sh/vgpu-cores": "25"}, Plan: json.RawMessage(`{"frozen_external_plan":true}`)}}}
+	return biz.Create{TenantID: tenant, ID: id, OperationID: op, RequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Charges: []biz.Charge{{ID: uuid.NewString(), Code: "gpu.shared_memory_mib", Units: 6144}}, Spec: biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, Scheduling: biz.Scheduling{PodPlacement: "NONE"}, Name: "workspace", ImageID: uuid.NewString(), ImageScope: "platform", ImageReference: "registry.invalid/platform/workspace@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), PresetID: "shared", CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: uuid.NewString(), Namespace: "tenant-" + tenant, NotebookName: "instance-" + id, PVCName: "workspace-" + id, GPU: biz.GPU{Scheduler: "volcano", Queue: "default", Recipe: "volcano-hami-v1", Digest: strings.Repeat("d", 64), NodeLabels: map[string]string{"accelerator.ani.io/supply-group": "test"}, Annotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "6", "volcano.sh/vgpu-cores": "25"}, Plan: json.RawMessage(`{"frozen_external_plan":true}`)}}}
 }
 
 func cpuCreate() biz.Create {
 	c := create()
-	c.Spec.InstanceType = biz.TypeCPU
+	c.Spec.ComputeType = biz.TypeCPU
 	c.Spec.PresetID = "cpu-small"
 	c.Spec.GPU = biz.GPU{}
 	c.Charges = nil
@@ -134,7 +134,7 @@ func TestCPUInstancePersistentLifecycleAndTerminal(t *testing.T) {
 	for n := 0; n < 3; n++ {
 		i = step(t, f, w, c)
 	}
-	if i.Observed != biz.Running || i.Spec.Type() != biz.TypeCPU || !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
+	if i.Observed != biz.Running || i.Spec.ComputeType != biz.TypeCPU || !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
 		t.Fatal("CPU instance did not reach running with its fixed specification", i.Reason)
 	}
 	authority := service.NewTerminalValidation(f.repo, p)
@@ -170,7 +170,7 @@ func TestCPUInstancePersistentLifecycleAndTerminal(t *testing.T) {
 	if _, err := authority.ValidateTerminalTarget(ctx, target(i)); err != nil {
 		t.Fatal("new CPU terminal rejected", err)
 	}
-	d := biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
+	d := biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
 	if _, err := f.repo.AcceptDelete(ctx, d); err != nil {
 		t.Fatal("CPU delete required a GPU plan or ledger", err)
 	}
@@ -203,7 +203,7 @@ func TestCPUDeleteFirstAndUnknownCreate(t *testing.T) {
 	f := database(t)
 	ctx := context.Background()
 	c := cpuCreate()
-	d := biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64)}
+	d := biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64)}
 	ack, err := f.repo.AcceptDelete(ctx, d)
 	if err != nil {
 		t.Fatal(err)
@@ -236,7 +236,7 @@ func TestCPUDeleteFirstAndUnknownCreate(t *testing.T) {
 	w, _ = biz.NewWorker(f.repo, p, q, "cpu-before-restart")
 	step(t, f, w, c)
 	i = step(t, f, w, c)
-	d = biz.Delete{InstanceType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
+	d = biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeCPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), ExpectedVersion: i.Version}
 	if _, err := f.repo.AcceptDelete(ctx, d); err != nil {
 		t.Fatal(err)
 	}
@@ -487,7 +487,7 @@ func TestInstanceDeleteFirstAndTenant(t *testing.T) {
 	f := database(t)
 	ctx := context.Background()
 	c := create()
-	d := biz.Delete{TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), GPU: c.Spec.GPU, Charges: c.Charges}
+	d := biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), GPU: c.Spec.GPU, Charges: c.Charges}
 	a, e := f.repo.AcceptDelete(ctx, d)
 	if e != nil {
 		t.Fatal(e)

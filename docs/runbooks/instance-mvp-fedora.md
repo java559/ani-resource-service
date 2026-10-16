@@ -37,23 +37,14 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
     "WorkspaceSize": "10Gi",
     "Shell": "/bin/bash",
     "UID": 1000,
-    "GID": 1000,
-    "Presets": [{
-      "id": "shared", "version": 1, "name": "共享 GPU",
-      "cpu": "2", "memory": "4Gi",
-      "gpu": {
-        "cluster_id": "<同一真实 UUID>", "pool_id": "<已登记 UUID>",
-        "profile_id": "<已发布 UUID>", "profile_version": 1,
-        "replicas": 1, "devices_per_replica": 1, "container_name": "workspace"
-      }
-    }]
+    "GID": 1000
   }
 }
 ```
 
 示例中的 UUID、地址与私有路径必须替换；未配置默认拒绝。NamespacePrefix 始终从当前 Network 配置读入，不由该 JSON 改写。SigningKeyFile 为 64 字节原始 Ed25519 私钥，不放入源码、普通归档或日志。
 
-GPU 供给尚未就绪时，可使用真实 ClusterID 和 `"Presets": []` 启动隔离查询与持久恢复；规格查询返回空目录，新创建仍因没有匹配规格而拒绝，不占额、不生成 owner 操作。不得填入虚构 profile/设备来启动实验。供给就绪后再冻结真实 profile/version 并重启应用配置。
+规格唯一来源为 Resource 的 `instance.compute_presets`，配置中的 `Presets` 已删除，严格配置解码会拒绝该旧字段。规格通过 Gov 的平台管理入口创建，CPU 创建不依赖 ACC；GPU 新建/替换引用必须使用可信 ACC 目录的完整事实。
 
 首次迁移由独立 owner 身份显式运行 `ANI_INSTANCE_OWNER_DSN_FILE=<私有文件> ANI_INSTANCE_RUNTIME_ROLE=<受限角色> ./ani-resource-service -instance-migrate`。迁移维护本域 checksum/version 并向已有 runtime 角色授予本域权限；应用只用受限角色，不在启动时迁移，不用超级用户。启动方式沿用现有 Resource 的 `-conf` 与 Image 配置，新增 `ANI_INSTANCE_CONFIG_FILE`。
 
@@ -71,29 +62,25 @@ Notebook 1.10 的标签/注解放在 Notebook 顶层 metadata，`spec.template` 
 
 ## CPU 实例与前端联调
 
-2026-10-15 用户追加分别创建 CPU/GPU、类型和规格固定。CPU 使用同一套实例 API，配置显式 CPU preset，例如：
+实例内外统一为 `instance_kind=container` 与来自数据库规格的 `compute_type=cpu|gpu`。无空类型推断，不接受 `instance_type` 或外层 `preset_version`。
+
+先经平台入口创建规格，再使用返回的 UUID `preset_id` 创建租户实例：
 
 ```json
-{"id":"cpu","version":1,"name":"CPU 1核 / 2Gi","cpu":"1","memory":"2Gi","instance_type":"cpu"}
+{"data":{"code":"cpu-1c-2g","name":"CPU 1核 / 2Gi","compute_type":"cpu","cpu_millis":"1000","memory_mib":"2048","enabled":true}}
 ```
-
-该 preset 不得带 `gpu`。`Service.ClusterID` 仍指向实际受管集群；Notebook 使用默认调度器，无 GPU 设备、Acc plan/签名或 GPU quota。现有程序的受管私有配置与 TLS 配置仍按上述启动合同提供，CPU 请求不会调用 GPU 解析或退额。GPU preset 继续包含真实 GPU request；旧未显式填类型的 GPU 配置兼容。
-
-本次可用镜像 ID 为 `img_add4a49b0c694553a9e85768132584ec`，scope `platform`；选 `cpu` / version `1`。固定 digest 和实际验收只在当前状态维护。
-
-最小创建请求（沿用正常 Bearer 身份）：
 
 ```json
-{"data":{"idempotencyKey":"<新 UUID>","name":"cpu-dev","imageId":"img_add4a49b0c694553a9e85768132584ec","imageScope":"platform","presetId":"cpu","presetVersion":"1"}}
+{"data":{"idempotency_key":"<新UUID>","name":"cpu-dev","image_id":"<已登记镜像ID>","image_scope":"platform","preset_id":"<规格UUID>"}}
 ```
 
-HTTP JSON 的类型字段为 `instanceType`；版本等 int64 返回字符串，后续 `expectedVersion` 回传详情中的最新 `version`。其他字段及响应以 Gov OpenAPI 为准。
+CPU 不带 GPU request/plan/charges。CPU/内存精确转换为 Quantity 并冻结；规格修改、禁用、删除都不改变已经持久受理的命令或已有实例。调度原始缺失与实际 `NONE` 分别保留。已受理重试使用原命令；Start/Stop/Delete 继续使用新的幂等键和最新 `expected_version`。
 
-创建、查询、操作、启停、删除和终端沿用 [规格中的公开接口](../specs/instance-mvp.md#11-api数据与代码落点)，以 Gov 的 `api/protos/instance/service/v1/instance.proto` 和 OpenAPI 为正式 DTO。创建只选 preset ID/版本，不提交 `instance_type`、namespace、plan 或 charges。写请求使用 `{data:{...}}`；Start/Stop/Delete 带新的幂等键和最新 `expected_version`。创建受理后轮询 operation 与实例，只有 `running` 且当前版本可解析终端时才请求 exec。Gov 尚在投递时，CPU operation 返回真实 `QUEUED` / `DISPATCHING` / `UNKNOWN`；`CANCELED_UNSENT` 为未发送即取消的终态。Res 接单后使用原 Res operation 状态。
+普通列表使用 `page`/`pageSize`、`items`/`total`。静态详情返回冻结 CPU/内存、规格名称/编码、实际调度、安全 GPU 摘要及真实创建时间，不查询当前规格、ACC 或 Kubernetes。CPU `quota_returned=true` 表示无待退 GPU 配额。
 
 Exec 返回一次性 `ws_url`，通过 SG 的 `ani.terminal.v1` WebSocket 子协议传输终端帧；不要保存票据到普通日志或在停止/重启后复用旧票据。停止后保留 `/workspace`，最终删除会清除专属工作目录。CPU 不展示“仍占 GPU 配额”。
 
-本次 CPU 隔离运行根：`/home/chabking/workspace/ani-resource-service-runs/instance-cpu-mvp-20261015`。`private/cpu-runtime.sh start|stop|status [resource|gov|sg]` 管理任务专用 Docker 服务，SSH 退出后继续运行；不启动 Acc、不改共享部署。原持久 PG/Redis 与私有身份材料保留，任务容器按 label 核对归属。配置、二进制、Image receipt 只在该任务目录，登录密码/token 不进入仓库。
+以下 2026-10-15 隔离环境记录属于旧版运行证据，不是新合同启动配置；升级必须先完成本批迁移和配置切换。旧运行根：`/home/chabking/workspace/ani-resource-service-runs/instance-cpu-mvp-20261015`。`private/cpu-runtime.sh start|stop|status [resource|gov|sg]` 管理任务专用 Docker 服务，SSH 退出后继续运行；不启动 Acc、不改共享部署。原持久 PG/Redis 与私有身份材料保留，任务容器按 label 核对归属。配置、二进制、Image receipt 只在该任务目录，登录密码/token 不进入仓库。
 
 前端开发机可建立专用隧道：
 

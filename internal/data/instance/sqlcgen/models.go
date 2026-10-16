@@ -8,6 +8,22 @@ import (
 	"time"
 )
 
+type InstanceComputePreset struct {
+	ID          string
+	Code        string
+	Name        string
+	Description string
+	ComputeType string
+	CpuMillis   int64
+	MemoryMib   int64
+	Enabled     bool
+	Gpu         []byte
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	CreatedBy   string
+	UpdatedBy   string
+}
+
 type InstanceInstance struct {
 	TenantID          string
 	InstanceID        string

@@ -1,14 +1,17 @@
 package instance
 
 import (
+	"bytes"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"reflect"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -38,6 +41,9 @@ func OpenPostgres(ctx context.Context, dsn string) (*Postgres, error) {
 }
 func (p *Postgres) Close() { p.pool.Close() }
 func (p *Postgres) CheckReady(ctx context.Context) error {
+	if e := p.checkPresetSchema(ctx); e != nil {
+		return e
+	}
 	var checksum string
 	body, e := migrations.Files.ReadFile("001_instance.sql")
 	if e != nil {
@@ -109,8 +115,33 @@ func Migrate(ctx context.Context, dsn, role string) error {
 			return e
 		}
 	}
+	for i, name := range presetSchemaFiles {
+		body, e := migrations.Files.ReadFile(name)
+		if e != nil {
+			return e
+		}
+		sum := sha256.Sum256(body)
+		checksum := hex.EncodeToString(sum[:])
+		var old string
+		e = tx.QueryRow(ctx, "SELECT checksum FROM instance.schema_version WHERE version=$1", i+2).Scan(&old)
+		if errors.Is(e, pgx.ErrNoRows) {
+			if _, e = tx.Exec(ctx, string(body)); e != nil {
+				return e
+			}
+			if _, e = tx.Exec(ctx, "INSERT INTO instance.schema_version VALUES($1,$2)", i+2, checksum); e != nil {
+				return e
+			}
+		} else if e != nil {
+			return e
+		} else if old != checksum {
+			return fmt.Errorf("compute preset migration %s checksum differs", name)
+		}
+	}
 	quoted := pgx.Identifier{role}.Sanitize()
 	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox TO "+quoted); e != nil {
+		return e
+	}
+	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON instance.compute_presets TO "+quoted); e != nil {
 		return e
 	}
 	return tx.Commit(ctx)
@@ -131,7 +162,7 @@ func scanInstance(row scanner) (biz.Instance, error) {
 		return i, e
 	}
 	version, desired, created, updated := i.Version, i.Desired, i.CreatedAt, i.UpdatedAt
-	e = json.Unmarshal(raw, &i)
+	e = decodeSnapshot(raw, &i)
 	i.Version = version
 	i.Desired = desired
 	i.CreatedAt = created
@@ -148,32 +179,77 @@ func (p *Postgres) Get(ctx context.Context, tenant, id string) (biz.Instance, er
 	}
 	return decodeInstance(r.Snapshot, r.Version, r.Desired, r.CreatedAt, r.UpdatedAt)
 }
+func decodeSnapshot(raw []byte, i *biz.Instance) error {
+	dec := json.NewDecoder(bytes.NewReader(raw))
+	dec.DisallowUnknownFields()
+	if e := dec.Decode(i); e != nil {
+		return e
+	}
+	if dec.Decode(new(any)) != io.EOF {
+		return biz.ErrInvalid
+	}
+	if i.Spec.InstanceKind != biz.KindContainer || (i.Spec.ComputeType != biz.TypeCPU && i.Spec.ComputeType != biz.TypeGPU) {
+		return biz.ErrInvalid
+	}
+	if i.CreateRequestHash != "" && biz.ValidateScheduling(i.Spec.Scheduling) != nil {
+		return biz.ErrInvalid
+	}
+	return nil
+}
 func decodeInstance(raw []byte, version int64, desired string, created, updated time.Time) (biz.Instance, error) {
 	var i biz.Instance
-	e := json.Unmarshal(raw, &i)
+	e := decodeSnapshot(raw, &i)
 	i.Version = version
 	i.Desired = desired
 	i.CreatedAt = created
 	i.UpdatedAt = updated
 	return i, e
 }
-func (p *Postgres) List(ctx context.Context, tenant string, limit int, after string) ([]biz.Instance, error) {
-	if limit < 1 || limit > 100 {
-		return nil, biz.ErrInvalid
+func (p *Postgres) List(ctx context.Context, tenant string, f biz.ListFilter) ([]biz.Instance, int64, error) {
+	if e := biz.RequireTenant(ctx, tenant); e != nil {
+		return nil, 0, e
 	}
-	rows, e := sqlcgen.New(p.pool).ListInstances(ctx, sqlcgen.ListInstancesParams{TenantID: tenant, AfterID: after, PageSize: int32(limit)})
+	_, size, offset, e := biz.PageWindow(f.Page, f.PageSize)
 	if e != nil {
-		return nil, e
+		return nil, 0, e
+	}
+	if (f.InstanceKind != "" && f.InstanceKind != biz.KindContainer) || (f.ComputeType != "" && f.ComputeType != biz.TypeCPU && f.ComputeType != biz.TypeGPU) || (f.ObservedState != "" && f.ObservedState != "pending" && f.ObservedState != "running" && f.ObservedState != "stopped" && f.ObservedState != "deleted") || len([]rune(f.Name)) > 80 {
+		return nil, 0, biz.ErrInvalid
+	}
+	tx, e := p.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
+	if e != nil {
+		return nil, 0, e
+	}
+	defer tx.Rollback(ctx)
+	where := " WHERE tenant_id=$1 AND ($2::text='' OR snapshot->'Spec'->>'instance_kind'=$2) AND ($3::text='' OR snapshot->'Spec'->>'compute_type'=$3) AND ($4::text='' OR snapshot->>'Observed'=$4) AND ($5::text='' OR position(lower($5) in lower(snapshot->'Spec'->>'Name'))>0)"
+	args := []any{tenant, f.InstanceKind, f.ComputeType, f.ObservedState, strings.TrimSpace(f.Name)}
+	var total int64
+	if e = tx.QueryRow(ctx, "SELECT count(*) FROM instance.instances"+where, args...).Scan(&total); e != nil {
+		return nil, 0, e
+	}
+	args = append(args, int64(size), offset)
+	rows, e := tx.Query(ctx, "SELECT snapshot,version,desired,created_at,updated_at FROM instance.instances"+where+" ORDER BY created_at DESC,instance_id DESC LIMIT $6 OFFSET $7", args...)
+	if e != nil {
+		return nil, 0, e
 	}
 	out := []biz.Instance{}
-	for _, r := range rows {
-		i, e := decodeInstance(r.Snapshot, r.Version, r.Desired, r.CreatedAt, r.UpdatedAt)
+	for rows.Next() {
+		i, e := scanInstance(rows)
 		if e != nil {
-			return nil, e
+			rows.Close()
+			return nil, 0, e
 		}
 		out = append(out, i)
 	}
-	return out, nil
+	e = rows.Err()
+	rows.Close()
+	if e != nil {
+		return nil, 0, e
+	}
+	if e = tx.Commit(ctx); e != nil {
+		return nil, 0, e
+	}
+	return out, total, nil
 }
 func (p *Postgres) GetOperation(ctx context.Context, tenant, id string) (biz.Operation, error) {
 	var o biz.Operation
@@ -208,7 +284,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			return biz.ACK{}, biz.ErrConflict
 		}
 		if i.CreateRequestHash == "" && i.Desired == biz.Deleted {
-			if i.Spec.Type() != c.Spec.Type() || i.Spec.GPU.Digest != c.Spec.GPU.Digest || !equalCharges(i.Charges, c.Charges) {
+			if i.Spec.ComputeType != c.Spec.ComputeType || i.Spec.GPU.Digest != c.Spec.GPU.Digest || !equalCharges(i.Charges, c.Charges) {
 				return biz.ACK{}, biz.ErrConflict
 			}
 			i.CreateRequestHash = c.RequestHash
@@ -229,7 +305,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			}
 			return ack, tx.Commit(ctx)
 		}
-		if i.Spec.Type() != c.Spec.Type() || i.CreateRequestHash != c.RequestHash || i.BusinessDigest != c.BusinessDigest {
+		if i.Spec.ComputeType != c.Spec.ComputeType || i.CreateRequestHash != c.RequestHash || i.BusinessDigest != c.BusinessDigest {
 			return biz.ACK{}, biz.ErrConflict
 		}
 		var old []byte
@@ -286,7 +362,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		if d.ExpectedVersion > 1 {
 			return ack, biz.ErrVersion
 		}
-		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceType: d.InstanceType, GPU: d.GPU}, Charges: d.Charges, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
+		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceKind: d.InstanceKind, ComputeType: d.ComputeType, GPU: d.GPU}, Charges: d.Charges, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return ack, e
@@ -300,7 +376,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 	} else if e != nil {
 		return ack, e
 	} else {
-		if i.Spec.Type() != d.Type() || i.CreateOperationID != d.CreateOperationID || i.Spec.GPU.Digest != d.GPU.Digest || !equalCharges(i.Charges, d.Charges) {
+		if i.Spec.ComputeType != d.ComputeType || i.CreateOperationID != d.CreateOperationID || i.Spec.GPU.Digest != d.GPU.Digest || !equalCharges(i.Charges, d.Charges) {
 			return ack, biz.ErrConflict
 		}
 		var old []byte

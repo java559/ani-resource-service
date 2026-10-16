@@ -34,6 +34,9 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 	}
 	if err != nil {
 		p.Instance.Reason = "PROVIDER_OBSERVATION_FAILED"
+		if errors.Is(err, ErrSchedulingConflict) {
+			p.Instance.Reason = "SCHEDULING_FIELD_CONFLICT"
+		}
 		return true, w.repo.Finish(ctx, *work, p)
 	}
 	if obs.NotebookExists {
@@ -117,7 +120,7 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		}
 		// A stable event is rebuilt from original CREATE/charges; PVC errors do not hold GPU quota.
 		if !i.QuotaReturned {
-			if i.Spec.Type() == TypeCPU {
+			if i.Spec.ComputeType == TypeCPU {
 				p.Instance.QuotaReturned = true
 			} else if err := w.quota.Report(ctx, p.Instance); err != nil {
 				p.Instance.Reason = "QUOTA_RETURN_PENDING"
