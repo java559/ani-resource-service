@@ -10,6 +10,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
+	ktesting "k8s.io/client-go/testing"
 )
 
 func TestSchedulingNotebookFrozenProjectionAndPodVerification(t *testing.T) {
@@ -148,21 +149,28 @@ func TestSchedulingPodGroupPriorityGuardReadOnly(t *testing.T) {
 	priority := "normal"
 	i.Spec.Scheduling.PriorityClassName = &priority
 	annotations := pod.GetAnnotations()
-	annotations[podGroupAnnotation] = "managed-group"
+	annotations["scheduling.k8s.io/group-name"] = "managed-group"
 	pod.SetAnnotations(annotations)
 	group := &unstructured.Unstructured{Object: map[string]any{"apiVersion": "scheduling.volcano.sh/v1beta1", "kind": "PodGroup", "metadata": map[string]any{"name": "managed-group", "namespace": i.Spec.Namespace}, "spec": map[string]any{"priorityClassName": priority, "queue": i.Spec.GPU.Queue}}}
 	if _, err := client.Resource(podGroupGVR).Namespace(i.Spec.Namespace).Create(context.Background(), group, metav1.CreateOptions{}); err != nil {
 		t.Fatal(err)
 	}
 	client.ClearActions()
+	assertGroupRead := func() {
+		t.Helper()
+		actions := client.Actions()
+		if len(actions) != 1 {
+			t.Fatal("guard must read the annotated PodGroup exactly once", actions)
+		}
+		action, ok := actions[0].(ktesting.GetAction)
+		if !ok || action.GetVerb() != "get" || action.GetNamespace() != i.Spec.Namespace || action.GetName() != "managed-group" || action.GetResource().Group != "scheduling.volcano.sh" || action.GetResource().Version != "v1beta1" || action.GetResource().Resource != "podgroups" {
+			t.Fatal("guard read a different group/namespace or wrote an object", actions)
+		}
+	}
 	if err := n.verifyPodGroupPriority(context.Background(), pod, i); err != nil {
 		t.Fatal("matching group", err)
 	}
-	for _, action := range client.Actions() {
-		if action.GetVerb() != "get" {
-			t.Fatal("priority guard wrote group")
-		}
-	}
+	assertGroupRead()
 	group.Object["spec"].(map[string]any)["priorityClassName"] = "other"
 	if _, err := client.Resource(podGroupGVR).Namespace(i.Spec.Namespace).Update(context.Background(), group, metav1.UpdateOptions{}); err != nil {
 		t.Fatal(err)
@@ -171,11 +179,7 @@ func TestSchedulingPodGroupPriorityGuardReadOnly(t *testing.T) {
 	if err := n.verifyPodGroupPriority(context.Background(), pod, i); !errors.Is(err, biz.ErrSchedulingConflict) {
 		t.Fatal("group conflict silently accepted", err)
 	}
-	for _, action := range client.Actions() {
-		if action.GetVerb() != "get" {
-			t.Fatal("conflict changed group")
-		}
-	}
+	assertGroupRead()
 	client.ClearActions()
 	i.Spec.Scheduling.PriorityClassName = nil
 	if err := n.verifyPodGroupPriority(context.Background(), pod, i); err != nil || len(client.Actions()) != 0 {

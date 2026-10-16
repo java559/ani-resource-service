@@ -14,7 +14,7 @@ import (
 
 const preferredPlacement = "preferredDuringSchedulingIgnoredDuringExecution"
 const requiredPlacement = "requiredDuringSchedulingIgnoredDuringExecution"
-const podGroupAnnotation = "scheduling.volcano.sh/group-name"
+const podGroupAnnotation = "scheduling.k8s.io/group-name"
 
 var podGroupGVR = schema.GroupVersionResource{Group: "scheduling.volcano.sh", Version: "v1beta1", Resource: "podgroups"}
 
