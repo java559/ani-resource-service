@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -65,6 +66,21 @@ func DecodeBusinessPayload(raw []byte) (*CreateBusiness, error) {
 var ErrInvalidBusiness = errors.New("INVALID_INSTANCE_REQUEST")
 var ErrInvalidScheduling = errors.New("INVALID_SCHEDULING_OPTIONS")
 var ErrSchedulingConflict = errors.New("SCHEDULING_FIELD_CONFLICT")
+
+var runtimeClassLabel = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
+
+// ValidateGPURuntimeClassName checks the managed owner RuntimeClass name.
+func ValidateGPURuntimeClassName(name string) error {
+	if len(name) == 0 || len(name) > 253 {
+		return ErrInvalidBusiness
+	}
+	for _, label := range strings.Split(name, ".") {
+		if len(label) > 63 || !runtimeClassLabel.MatchString(label) {
+			return ErrInvalidBusiness
+		}
+	}
+	return nil
+}
 
 // ValidateSchedulingOptions preserves optional presence. Effective options always
 // contain a concrete placement; raw intent may omit the whole object.
@@ -142,7 +158,10 @@ func ValidateCreateBusiness(b *CreateBusiness) error {
 	if err := ValidateSchedulingConsistency(b.Data.Scheduling, f.Scheduling); err != nil {
 		return err
 	}
-	if f.ComputeType == "cpu" && (b.Gpu != nil || f.GpuSummary != nil || f.GpuSpecDigest != nil) {
+	if f.GpuRuntimeClassName != nil && ValidateGPURuntimeClassName(f.GetGpuRuntimeClassName()) != nil {
+		return ErrInvalidBusiness
+	}
+	if f.ComputeType == "cpu" && (b.Gpu != nil || f.GpuSummary != nil || f.GpuSpecDigest != nil || f.GpuRuntimeClassName != nil) {
 		return ErrInvalidBusiness
 	}
 	if f.ComputeType == "gpu" && (f.GpuSpecDigest == nil || len(f.GetGpuSpecDigest()) != 64 || b.Gpu == nil || f.GpuSummary == nil || b.Gpu.ProfileId != f.GpuSummary.ProfileId || b.Gpu.ProfileVersion != f.GpuSummary.ProfileVersion || b.Gpu.DevicesPerReplica != f.GpuSummary.DevicesPerInstance) {

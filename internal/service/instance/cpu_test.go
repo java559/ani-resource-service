@@ -62,7 +62,7 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 	const actor = "governance:user:42"
 	repo, images, environment := &cpuIntake{}, &cpuImageBoundary{}, &cpuEnvironmentBoundary{}
 	repo.preset = biz.Preset{ID: resource, Code: "cpu-small", Name: "CPU", ComputeType: biz.TypeCPU, CPUMillis: 1000, MemoryMiB: 2048, Enabled: true}
-	s, err := NewService(repo, images, environment, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/bash", UID: 1000, GID: 1000})
+	s, err := NewService(repo, images, environment, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/bash", UID: 1000, GID: 1000, GPURuntimeClassName: "nvidia"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +75,7 @@ func TestCPUServiceFrozenResolutionAndIntake(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if business.Gpu != nil || business.Spec.ComputeType != biz.TypeCPU || business.Spec.Cpu != "1000m" || business.Spec.Memory != "2048Mi" || business.Spec.Namespace != "tenant-"+tenant || images.calls != 1 || environment.calls != 1 {
+	if business.Gpu != nil || business.Spec.GpuRuntimeClassName != nil || business.Spec.ComputeType != biz.TypeCPU || business.Spec.Cpu != "1000m" || business.Spec.Memory != "2048Mi" || business.Spec.Namespace != "tenant-"+tenant || images.calls != 1 || environment.calls != 1 {
 		t.Fatal("CPU resolution did not freeze the configured runtime and external image", business)
 	}
 	digest, err := pb.BusinessPayloadDigest(business)

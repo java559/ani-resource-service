@@ -26,6 +26,7 @@ import (
 
 type Config struct {
 	NamespacePrefix, ClusterID, ServiceAccount, StorageClass, WorkspaceSize, Shell string
+	GPURuntimeClassName                                                            string
 	LogLimits                                                                      biz.LogLimits
 	UID, GID                                                                       int64
 }
@@ -49,6 +50,9 @@ func NewService(r biz.Repository, images biz.ImageResolver, environment biz.Envi
 		return nil, biz.ErrInvalid
 	}
 	if r == nil || images == nil || environment == nil || !biz.UUID(c.ClusterID) || c.ServiceAccount == "" || c.StorageClass == "" || c.WorkspaceSize == "" || c.Shell == "" || c.UID < 0 || c.GID < 0 {
+		return nil, biz.ErrInvalid
+	}
+	if c.GPURuntimeClassName != "" && pb.ValidateGPURuntimeClassName(c.GPURuntimeClassName) != nil {
 		return nil, biz.ErrInvalid
 	}
 	presets, ok := r.(biz.PresetRepository)
@@ -140,6 +144,10 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 		gpu = &acc.GpuRequest{ClusterId: g.ClusterID, PoolId: g.PoolID, ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Replicas: 1, DevicesPerReplica: g.DevicesPerInstance, ContainerName: biz.Container}
 	}
 	out := &pb.CreateBusiness{Data: proto.Clone(r.Data).(*pb.CreateInstanceData), Gpu: gpu, Spec: &pb.FrozenSpec{InstanceKind: biz.KindContainer, ComputeType: preset.ComputeType, ImageReference: image.Reference, ImageDigest: image.Digest, Cpu: fmt.Sprintf("%dm", preset.CPUMillis), Memory: fmt.Sprintf("%dMi", preset.MemoryMiB), ClusterId: c.ClusterID, Namespace: ns, ServiceAccount: c.ServiceAccount, StorageClass: c.StorageClass, WorkspaceSize: c.WorkspaceSize, Shell: c.Shell, Uid: c.UID, Gid: c.GID, Scheduling: scheduling, PresetName: preset.Name, PresetCode: preset.Code, GpuSummary: gpuSummary(preset.GPU), GpuSpecDigest: gpuSpecDigest}}
+	if gpu != nil && c.GPURuntimeClassName != "" {
+		value := c.GPURuntimeClassName
+		out.Spec.GpuRuntimeClassName = &value
+	}
 	if e = pb.ValidateCreateBusiness(out); e != nil {
 		return nil, rpcError(e)
 	}
@@ -217,7 +225,13 @@ func (s *Service) AcceptCreate(ctx context.Context, r *pb.AcceptCreateRequest) (
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	spec := biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, PresetName: f.PresetName, PresetCode: f.PresetCode, Scheduling: domainScheduling(f.Scheduling), GPUSummary: domainSummary(f.GpuSummary), GPUSpecDigest: f.GpuSpecDigest, Name: d.Name, ImageID: d.ImageId, ImageScope: d.ImageScope, ImageReference: f.ImageReference, ImageDigest: f.ImageDigest, PresetID: d.PresetId, CPU: f.Cpu, Memory: f.Memory, UID: f.Uid, GID: f.Gid, Shell: f.Shell, ServiceAccount: f.ServiceAccount, StorageClass: f.StorageClass, WorkspaceSize: f.WorkspaceSize, ClusterID: f.ClusterId, Namespace: f.Namespace, NotebookName: "instance-" + ref.ResourceId, PVCName: "workspace-" + ref.ResourceId, ImagePullSecret: "ani-instance-image-pull", GPU: biz.GPU{Scheduler: p.Runtime.SchedulerName, Queue: p.Runtime.QueueName, RuntimeClass: p.Runtime.RuntimeClassName, Recipe: p.Runtime.RecipeVersion, Digest: p.ResolutionDigest, NodeLabels: nodes, Annotations: annotations, Limits: limits, Plan: raw}}
+	runtimeClass := p.Runtime.RuntimeClassName
+	if runtimeClass == "" {
+		// This value was frozen before Governance signed the business payload.
+		// Never consult current owner settings during intake or replay.
+		runtimeClass = f.GetGpuRuntimeClassName()
+	}
+	spec := biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, PresetName: f.PresetName, PresetCode: f.PresetCode, Scheduling: domainScheduling(f.Scheduling), GPUSummary: domainSummary(f.GpuSummary), GPUSpecDigest: f.GpuSpecDigest, Name: d.Name, ImageID: d.ImageId, ImageScope: d.ImageScope, ImageReference: f.ImageReference, ImageDigest: f.ImageDigest, PresetID: d.PresetId, CPU: f.Cpu, Memory: f.Memory, UID: f.Uid, GID: f.Gid, Shell: f.Shell, ServiceAccount: f.ServiceAccount, StorageClass: f.StorageClass, WorkspaceSize: f.WorkspaceSize, ClusterID: f.ClusterId, Namespace: f.Namespace, NotebookName: "instance-" + ref.ResourceId, PVCName: "workspace-" + ref.ResourceId, ImagePullSecret: "ani-instance-image-pull", GPU: biz.GPU{Scheduler: p.Runtime.SchedulerName, Queue: p.Runtime.QueueName, RuntimeClass: runtimeClass, Recipe: p.Runtime.RecipeVersion, Digest: p.ResolutionDigest, NodeLabels: nodes, Annotations: annotations, Limits: limits, Plan: raw}}
 	accepted, e := s.repo.AcceptCreate(ctx, biz.Create{TenantID: r.TenantId, ID: ref.ResourceId, OperationID: r.OperationId, RequestHash: a.RequestHash, BusinessDigest: digest, Spec: spec, Charges: charges})
 	return ack(accepted), rpcError(e)
 }

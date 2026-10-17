@@ -36,6 +36,7 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
     "StorageClass": "ani-block",
     "WorkspaceSize": "10Gi",
     "Shell": "/bin/bash",
+    "GPURuntimeClassName": "nvidia",
     "UID": 1000,
     "GID": 1000
   }
@@ -43,6 +44,8 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
 ```
 
 示例中的 UUID、地址与私有路径必须替换；未配置默认拒绝。NamespacePrefix 始终从当前 Network 配置读入，不由该 JSON 改写。SigningKeyFile 为 64 字节原始 Ed25519 私钥，不放入源码、普通归档或日志。
+
+`Service.GPURuntimeClassName` 是受管 GPU 工作负载环境要求；节点默认使用 runc、NVIDIA 设备需要独立 runtime 时配置 `nvidia`。新 GPU 受理先由 Resource 将该值冻结在 `FrozenSpec.gpu_runtime_class_name`，再由 Gov 纳入业务摘要并持久化；ACC plan 已指定 RuntimeClass 时以 plan 为准，否则使用该冻结值。重放和已有实例不读取新配置，不改 ACC plan/baseline 或硬件资格。CPU 不携带该字段。空配置保留使用节点默认 runtime 的既有语义；部署者必须核对实际节点能力，不能用空值假定已有 NVIDIA 注入。
 
 规格唯一来源为 Resource 的 `instance.compute_presets`，配置中的 `Presets` 已删除，严格配置解码会拒绝该旧字段。规格通过 Gov 的平台管理入口创建，CPU 创建不依赖 ACC；GPU 新建/替换引用必须使用可信 ACC 目录的完整事实。
 

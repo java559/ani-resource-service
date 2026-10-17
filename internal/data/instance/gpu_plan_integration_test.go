@@ -50,7 +50,7 @@ func TestGpuCompletePlanPersistenceOriginalChargesAndRendering(t *testing.T) {
 			if e != nil {
 				t.Fatal(e)
 			}
-			s, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: p.Request.ClusterId, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000})
+			s, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: p.Request.ClusterId, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000, GPURuntimeClassName: "nvidia"})
 			if e != nil {
 				t.Fatal(e)
 			}
@@ -58,7 +58,7 @@ func TestGpuCompletePlanPersistenceOriginalChargesAndRendering(t *testing.T) {
 			if e != nil {
 				t.Fatal(e)
 			}
-			if !proto.Equal(b.Gpu, p.Request) || b.Spec.GetGpuSpecDigest() != p.Profile.SpecDigest {
+			if !proto.Equal(b.Gpu, p.Request) || b.Spec.GetGpuSpecDigest() != p.Profile.SpecDigest || b.Spec.GetGpuRuntimeClassName() != "nvidia" {
 				t.Fatal("database reference not frozen")
 			}
 			digest, e := pb.BusinessPayloadDigest(b)
@@ -97,6 +97,10 @@ func TestGpuCompletePlanPersistenceOriginalChargesAndRendering(t *testing.T) {
 			notebook, e := data.RenderNotebook(record)
 			if e != nil {
 				t.Fatal(e)
+			}
+			runtimeClass, _, _ := unstructured.NestedString(notebook.Object, "spec", "template", "spec", "runtimeClassName")
+			if record.Spec.GPU.RuntimeClass != "nvidia" || runtimeClass != "nvidia" || restored.Runtime.RuntimeClassName != "" {
+				t.Fatal("frozen owner runtime lost or original provider plan changed", runtimeClass)
 			}
 			containers, _, _ := unstructured.NestedSlice(notebook.Object, "spec", "template", "spec", "containers")
 			if len(containers) != 1 {

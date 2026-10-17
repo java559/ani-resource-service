@@ -24,6 +24,8 @@ Gov 首先检查原始幂等记录，然后解析规格和默认值，一次持�
 
 规格 CPU/内存采用精确整数，分别转换为 `<cpu_millis>m` 与 `<memory_mib>Mi`，requests=limits。内存值必须可表达为合法 Kubernetes Quantity，超出 int64 字节上限拒绝。实例独立保存规格 ID/名称/编码、两维类型、CPU/内存、GPU 安全摘要、完整 plan、镜像/环境和实际调度。修改、禁用或删除规格不影响已受理重试、静态展示、启停及清理。
 
+GPU 工作负载所需的 owner 运行环境也须在受理前冻结：受管 `Service.GPURuntimeClassName` 非空时，由 Resource resolver 写入可选 `FrozenSpec.gpu_runtime_class_name`，Gov 将其纳入原业务摘要。ACC plan 的显式 RuntimeClass 优先，plan 为空时才使用该冻结环境值，不能在接收已签请求或重放时读取当前配置补值。CPU 不接受此字段；未配置的旧业务保持字段缺省及原 canonical 摘要。该环境要求不改写 ACC plan 或硬件验收 baseline。
+
 原始 CreateInstanceData.scheduling 可缺失；出现时拒绝空对象、非法枚举或空优先级。FrozenSpec.scheduling 必须存在且 placement 明确，按用户值 > 本次合法默认 > NONE，priority 无来源保持缺失。接收端再次校验原始明确值与实际值相等，正确摘要不能免除这项检查。原始哈希只包含原始意图；业务摘要覆盖完整冻结对象。
 
 GPU 的 FrozenSpec.gpu_spec_digest 必须存在并冻结规格引用的 spec_digest，CPU 必须缺失。共享纯函数 `api/instance/v1.ValidateGpuBusinessPlan` 核对冻结摘要、完整 request 和安全 summary 与 ACC plan 的 Profile/Request；Gov 计划解析后和投递前、Res Accept 均调用。原 plan/charges/runtime/digest 校验继续独立执行。

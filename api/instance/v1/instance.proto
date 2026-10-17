@@ -128,6 +128,9 @@ message FrozenSpec {
   string preset_code = 18 [json_name = "preset_code"];
   GpuSummary gpu_summary = 19 [json_name = "gpu_summary"];
   optional string gpu_spec_digest = 20 [json_name = "gpu_spec_digest"];
+  // Managed owner runtime requirement, frozen before Governance signs the business.
+  // Used only when the ACC plan does not specify a RuntimeClass.
+  optional string gpu_runtime_class_name = 21 [json_name = "gpu_runtime_class_name"];
 }
 message CreateBusiness {
   CreateInstanceData data = 1;

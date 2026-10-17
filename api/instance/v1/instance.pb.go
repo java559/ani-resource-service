@@ -1288,8 +1288,11 @@ type FrozenSpec struct {
 	PresetCode     string                 `protobuf:"bytes,18,opt,name=preset_code,proto3" json:"preset_code,omitempty"`
 	GpuSummary     *GpuSummary            `protobuf:"bytes,19,opt,name=gpu_summary,proto3" json:"gpu_summary,omitempty"`
 	GpuSpecDigest  *string                `protobuf:"bytes,20,opt,name=gpu_spec_digest,proto3,oneof" json:"gpu_spec_digest,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Managed owner runtime requirement, frozen before Governance signs the business.
+	// Used only when the ACC plan does not specify a RuntimeClass.
+	GpuRuntimeClassName *string `protobuf:"bytes,21,opt,name=gpu_runtime_class_name,proto3,oneof" json:"gpu_runtime_class_name,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *FrozenSpec) Reset() {
@@ -1451,6 +1454,13 @@ func (x *FrozenSpec) GetGpuSummary() *GpuSummary {
 func (x *FrozenSpec) GetGpuSpecDigest() string {
 	if x != nil && x.GpuSpecDigest != nil {
 		return *x.GpuSpecDigest
+	}
+	return ""
+}
+
+func (x *FrozenSpec) GetGpuRuntimeClassName() string {
+	if x != nil && x.GpuRuntimeClassName != nil {
+		return *x.GpuRuntimeClassName
 	}
 	return ""
 }
@@ -3382,7 +3392,7 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x123\n" +
 	"\x04data\x18\x02 \x01(\v2\x1f.instance.v1.CreateInstanceDataR\x04data\x12\x1c\n" +
 	"\tnamespace\x18\x03 \x01(\tR\tnamespace\x12O\n" +
-	"\x13scheduling_defaults\x18\x04 \x01(\v2\x1e.instance.v1.SchedulingOptionsR\x12schedulingDefaults\"\xcf\x05\n" +
+	"\x13scheduling_defaults\x18\x04 \x01(\v2\x1e.instance.v1.SchedulingOptionsR\x12schedulingDefaults\"\xa7\x06\n" +
 	"\n" +
 	"FrozenSpec\x12'\n" +
 	"\x0fimage_reference\x18\x01 \x01(\tR\x0eimageReference\x12!\n" +
@@ -3407,8 +3417,10 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\vpreset_name\x18\x11 \x01(\tR\vpreset_name\x12 \n" +
 	"\vpreset_code\x18\x12 \x01(\tR\vpreset_code\x129\n" +
 	"\vgpu_summary\x18\x13 \x01(\v2\x17.instance.v1.GpuSummaryR\vgpu_summary\x12-\n" +
-	"\x0fgpu_spec_digest\x18\x14 \x01(\tH\x00R\x0fgpu_spec_digest\x88\x01\x01B\x12\n" +
-	"\x10_gpu_spec_digestJ\x04\b\r\x10\x0eR\rinstance_type\"\xa0\x01\n" +
+	"\x0fgpu_spec_digest\x18\x14 \x01(\tH\x00R\x0fgpu_spec_digest\x88\x01\x01\x12;\n" +
+	"\x16gpu_runtime_class_name\x18\x15 \x01(\tH\x01R\x16gpu_runtime_class_name\x88\x01\x01B\x12\n" +
+	"\x10_gpu_spec_digestB\x19\n" +
+	"\x17_gpu_runtime_class_nameJ\x04\b\r\x10\x0eR\rinstance_type\"\xa0\x01\n" +
 	"\x0eCreateBusiness\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.instance.v1.CreateInstanceDataR\x04data\x12+\n" +
 	"\x04spec\x18\x02 \x01(\v2\x17.instance.v1.FrozenSpecR\x04spec\x12,\n" +
