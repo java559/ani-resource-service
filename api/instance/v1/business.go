@@ -7,7 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"google.golang.org/protobuf/encoding/protojson"
@@ -19,7 +21,7 @@ import (
 // command identities are separate messages and never enter the public hash.
 func CanonicalBusinessPayload(m proto.Message) ([]byte, error) {
 	switch m.(type) {
-	case *CreateInstanceData, *CreateBusiness:
+	case *CreateInstanceData, *CreateSpec:
 	default:
 		return nil, errors.New("unsupported instance business message")
 	}
@@ -52,12 +54,12 @@ func BusinessPayloadDigest(m proto.Message) (string, error) {
 	sum := sha256.Sum256(raw)
 	return hex.EncodeToString(sum[:]), nil
 }
-func DecodeBusinessPayload(raw []byte) (*CreateBusiness, error) {
-	b := new(CreateBusiness)
+func DecodeBusinessPayload(raw []byte) (*CreateSpec, error) {
+	b := new(CreateSpec)
 	if e := protojson.Unmarshal(raw, b); e != nil {
 		return nil, e
 	}
-	if e := ValidateCreateBusiness(b); e != nil {
+	if e := ValidateCreateSpec(b, b.GpuExecution != nil); e != nil {
 		return nil, e
 	}
 	return b, nil
@@ -147,27 +149,94 @@ func ValidateSchedulingConsistency(raw, effective *SchedulingOptions) error {
 	}
 	return nil
 }
-func ValidateCreateBusiness(b *CreateBusiness) error {
-	if b == nil || b.Data == nil || b.Spec == nil || hasUnknown(b.ProtoReflect()) {
+func ValidateCreateSpec(s *CreateSpec, accepted bool) error {
+	if s == nil || hasUnknown(s.ProtoReflect()) || s.InstanceKind != "container" || (s.ComputeType != "cpu" && s.ComputeType != "gpu") || s.Name == "" || s.ImageId == "" || (s.ImageScope != "tenant" && s.ImageScope != "platform") || s.PresetId == "" || s.Cpu == "" || s.Memory == "" || s.ClusterId == "" || s.Namespace == "" {
 		return ErrInvalidBusiness
 	}
-	f := b.Spec
-	if f.InstanceKind != "container" || (f.ComputeType != "cpu" && f.ComputeType != "gpu") {
-		return ErrInvalidBusiness
-	}
-	if err := ValidateSchedulingConsistency(b.Data.Scheduling, f.Scheduling); err != nil {
+	if err := ValidateSchedulingOptions(s.Scheduling, true); err != nil {
 		return err
 	}
-	if f.GpuRuntimeClassName != nil && ValidateGPURuntimeClassName(f.GetGpuRuntimeClassName()) != nil {
+	if s.ComputeType == "cpu" {
+		if s.GpuExecution != nil || s.GpuDisplay != nil || s.GpuSelection != nil {
+			return ErrInvalidBusiness
+		}
+		return nil
+	}
+	if !accepted {
+		if s.GpuSelection == nil {
+			return ErrInvalidBusiness
+		}
+		return nil
+	}
+	if s.GpuSelection != nil || s.GpuDisplay == nil || s.GpuDisplay.ProfileId == "" || s.GpuDisplay.ProfileVersion == 0 {
 		return ErrInvalidBusiness
 	}
-	if f.ComputeType == "cpu" && (b.Gpu != nil || f.GpuSummary != nil || f.GpuSpecDigest != nil || f.GpuRuntimeClassName != nil) {
+	if err := ValidateGpuExecution(s.GpuExecution); err != nil {
+		return err
+	}
+	g, d := s.GpuExecution, s.GpuDisplay
+	cores, _ := strconv.ParseInt(g.Resources["volcano.sh/vgpu-cores"], 10, 32)
+	if d.ModelKey != g.NodeSelector["accelerator.ani.io/model-key"] {
 		return ErrInvalidBusiness
 	}
-	if f.ComputeType == "gpu" && (f.GpuSpecDigest == nil || len(f.GetGpuSpecDigest()) != 64 || b.Gpu == nil || f.GpuSummary == nil || b.Gpu.ProfileId != f.GpuSummary.ProfileId || b.Gpu.ProfileVersion != f.GpuSummary.ProfileVersion || b.Gpu.DevicesPerReplica != f.GpuSummary.DevicesPerInstance) {
+	switch d.Mode {
+	case acc.SupplyMode_SHARED_FIXED:
+		if g.Resources["volcano.sh/vgpu-number"] != "1" || cores >= 100 {
+			return ErrInvalidBusiness
+		}
+	case acc.SupplyMode_WHOLE_EXCLUSIVE:
+		if cores != 100 {
+			return ErrInvalidBusiness
+		}
+	default:
 		return ErrInvalidBusiness
 	}
 	return nil
+}
+
+// CommandDigest covers the immutable command identity and explicit business fields.
+// The GPU execution has its own fixed-field digest; display remains audit data.
+func CommandDigest(c *CommandContext, s *CreateSpec) (string, error) {
+	if c == nil || s == nil || hasUnknown(c.ProtoReflect()) || hasUnknown(s.ProtoReflect()) {
+		return "", ErrInvalidBusiness
+	}
+	execution := ""
+	if s.GpuExecution != nil {
+		execution = s.GpuExecution.ExecutionDigest
+	}
+	var scheduling, display any
+	if p := s.Scheduling; p != nil {
+		var placement, priority any
+		if p.PodPlacement != nil {
+			placement = fmt.Sprint(int32(p.GetPodPlacement()))
+		}
+		if p.PriorityClassName != nil {
+			priority = p.GetPriorityClassName()
+		}
+		scheduling = map[string]any{"pod_placement": placement, "priority_class_name": priority}
+	}
+	if d := s.GpuDisplay; d != nil {
+		display = map[string]any{"profile_id": d.ProfileId, "profile_version": fmt.Sprint(d.ProfileVersion), "profile_name": d.ProfileName, "model_key": d.ModelKey, "mode": fmt.Sprint(int32(d.Mode))}
+	}
+	value := map[string]any{"tenant_id": c.TenantId, "resource_id": c.ResourceId, "operation_id": c.OperationId, "name": s.Name, "image_id": s.ImageId, "image_scope": s.ImageScope, "preset_id": s.PresetId, "image_reference": s.ImageReference, "cpu": s.Cpu, "memory": s.Memory, "cluster_id": s.ClusterId, "namespace": s.Namespace, "service_account": s.ServiceAccount, "storage_class": s.StorageClass, "workspace_size": s.WorkspaceSize, "shell": s.Shell, "uid": fmt.Sprint(s.Uid), "gid": fmt.Sprint(s.Gid), "instance_kind": s.InstanceKind, "compute_type": s.ComputeType, "scheduling": scheduling, "preset_name": s.PresetName, "preset_code": s.PresetCode, "gpu_display": display, "execution_digest": execution}
+	raw, err := json.Marshal(value)
+	if err != nil {
+		return "", err
+	}
+	sum := sha256.Sum256(append([]byte("resource-create-v1\n"), raw...))
+	return hex.EncodeToString(sum[:]), nil
+}
+func DeleteCommandDigest(r *AcceptDeleteRequest) (string, error) {
+	if r == nil || r.Context == nil || hasUnknown(r.ProtoReflect()) {
+		return "", ErrInvalidBusiness
+	}
+	c := r.Context
+	raw, err := json.Marshal(map[string]any{"tenant_id": c.TenantId, "resource_id": c.ResourceId, "operation_id": c.OperationId, "create_operation_id": r.CreateOperationId, "expected_version": fmt.Sprint(r.ExpectedVersion), "instance_kind": r.InstanceKind, "compute_type": r.ComputeType})
+	if err != nil {
+		return "", err
+	}
+	sum := sha256.Sum256(append([]byte("resource-delete-v1\n"), raw...))
+	return hex.EncodeToString(sum[:]), nil
 }
 
 // Reserved fields must not disappear when gRPC messages enter the JSON digest.

@@ -2,9 +2,7 @@
 package instance
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"regexp"
@@ -89,23 +87,14 @@ func ResolveNamespace(tenant, trusted, prefix string) (string, error) {
 	return ns, nil
 }
 
-type Charge struct {
-	ID, Code string
-	Units    int64
-}
-
-// GPU contains the frozen execution values; no memory-factor recomputation occurs.
+// GPU is the sole frozen execution authority. Values are already absolute MiB.
 type GPU struct {
-	Scheduler, Queue, RuntimeClass, Recipe, Digest string
-	NodeLabels, Annotations, Limits                map[string]string
-	Plan                                           json.RawMessage
+	Scheduler, Queue, RuntimeClass, Digest string
+	NodeLabels, Annotations, Limits        map[string]string
 }
 
 func (g GPU) Empty() bool {
-	// A nil RawMessage is stored as JSON null in an instance snapshot. Decoding
-	// it yields the literal bytes "null", which still means no GPU plan.
-	emptyPlan := len(g.Plan) == 0 || bytes.Equal(bytes.TrimSpace(g.Plan), []byte("null"))
-	return g.Scheduler == "" && g.Queue == "" && g.RuntimeClass == "" && g.Recipe == "" && g.Digest == "" && len(g.NodeLabels) == 0 && len(g.Annotations) == 0 && len(g.Limits) == 0 && emptyPlan
+	return g.Scheduler == "" && g.Queue == "" && g.RuntimeClass == "" && g.Digest == "" && len(g.NodeLabels) == 0 && len(g.Annotations) == 0 && len(g.Limits) == 0
 }
 
 type Spec struct {
@@ -116,7 +105,6 @@ type Spec struct {
 	PresetName, PresetCode                                 string
 	Scheduling                                             Scheduling
 	GPUSummary                                             *GPUSummary
-	GPUSpecDigest                                          *string `json:"gpu_spec_digest,omitempty"`
 	CPU, Memory                                            string
 	UID, GID                                               int64
 	Shell, ServiceAccount, StorageClass, WorkspaceSize     string
@@ -130,26 +118,20 @@ type Scheduling struct {
 	PriorityClassName *string
 }
 type GPUSummary struct {
-	ProfileID                                      string
-	ProfileVersion                                 uint64
-	Mode, ModelKey                                 string
-	DevicesPerInstance                             uint32
-	SharedMemoryMiBPerDevice, SharedMemoryMiBTotal *int64
-	CoreLimitPercent                               uint32
+	ProfileID                   string
+	ProfileVersion              uint64
+	ProfileName, Mode, ModelKey string
 }
 
 type Create struct {
 	TenantID, ID, OperationID, RequestHash, BusinessDigest string
 	Spec                                                   Spec
-	Charges                                                []Charge
 }
 type Delete struct {
 	InstanceKind                                              string `json:"instance_kind"`
 	ComputeType                                               string `json:"compute_type"`
 	TenantID, ID, OperationID, CreateOperationID, RequestHash string
 	ExpectedVersion                                           int64
-	GPU                                                       GPU
-	Charges                                                   []Charge
 }
 
 type Command struct {
@@ -169,7 +151,6 @@ type Operation struct {
 type Instance struct {
 	TenantID, ID, CreateOperationID, CreateRequestHash, BusinessDigest string
 	Spec                                                               Spec
-	Charges                                                            []Charge
 	Version                                                            int64
 	Desired, Observed, Reason, LastOperationID                         string
 	NotebookUID, NotebookRV, PVCUID                                    string
@@ -253,13 +234,13 @@ func ValidateCreate(c Create) error {
 	if !UUID(s.ClusterID) || len(s.Namespace) > 63 || !dnsName.MatchString(s.Namespace) || s.NotebookName == "" || s.PVCName == "" || s.ImageReference == "" || s.ImageDigest == "" || s.CPU == "" || s.Memory == "" || s.UID < 0 || s.GID < 0 || s.ServiceAccount == "" || s.StorageClass == "" || s.WorkspaceSize == "" || s.Shell == "" {
 		return ErrInvalid
 	}
-	if s.ComputeType == TypeCPU && (s.GPUSpecDigest != nil || s.GPUSummary != nil) {
+	if s.ComputeType == TypeCPU && (s.GPUSummary != nil) {
 		return ErrInvalid
 	}
-	if err := validateResources(s.ComputeType, s.GPU, c.Charges); err != nil {
+	if err := validateResources(s.ComputeType, s.GPU); err != nil {
 		return err
 	}
-	if s.ComputeType == TypeGPU && (s.GPU.Scheduler != "volcano" || s.GPU.Queue == "" || s.GPU.Recipe != "volcano-hami-v1" || len(s.GPU.Plan) == 0 || len(s.GPU.Limits) == 0 || len(s.GPU.NodeLabels) == 0) {
+	if s.ComputeType == TypeGPU && (s.GPU.Scheduler != "volcano" || s.GPU.Queue == "" || len(s.GPU.Limits) == 0 || len(s.GPU.NodeLabels) == 0) {
 		return ErrInvalid
 	}
 	return nil
@@ -272,29 +253,24 @@ func ValidateDelete(d Delete) error {
 	if d.InstanceKind != KindContainer {
 		return ErrInvalid
 	}
-	return validateResources(d.ComputeType, d.GPU, d.Charges)
+	if d.ComputeType != TypeCPU && d.ComputeType != TypeGPU {
+		return ErrInvalid
+	}
+	return nil
 }
 
-func validateResources(kind string, gpu GPU, charges []Charge) error {
+func validateResources(kind string, gpu GPU) error {
 	switch kind {
 	case TypeCPU:
-		if !gpu.Empty() || len(charges) != 0 {
+		if !gpu.Empty() {
 			return ErrInvalid
 		}
-		return nil
 	case TypeGPU:
-		if len(gpu.Digest) != 64 || len(charges) == 0 {
+		if len(gpu.Digest) != 64 || gpu.Scheduler != "volcano" || gpu.Queue == "" || gpu.RuntimeClass == "" || len(gpu.Limits) != 3 {
 			return ErrInvalid
 		}
 	default:
 		return ErrInvalid
-	}
-	seen := map[string]bool{}
-	for _, q := range charges {
-		if !UUID(q.ID) || q.Code == "" || q.Units <= 0 || seen[q.ID] {
-			return ErrInvalid
-		}
-		seen[q.ID] = true
 	}
 	return nil
 }

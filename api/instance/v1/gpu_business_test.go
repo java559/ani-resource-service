@@ -1,66 +1,49 @@
 package instancev1
 
 import (
-	"encoding/json"
 	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"os"
-	"strings"
 	"testing"
 )
 
-func TestFrozenGpuReferenceAndSummaryPlanAgreement(t *testing.T) {
-	raw, e := os.ReadFile("testdata/gpu-plan-vectors.json")
-	if e != nil {
+func executionFixture() *acc.GpuExecution {
+	g := &acc.GpuExecution{SchedulerName: "volcano", QueueName: "default", RuntimeClassName: "nvidia", NodeSelector: map[string]string{"accelerator.ani.io/supply-group": "group", "accelerator.ani.io/model-key": "t4", "accelerator.ani.io/baseline-id": "config"}, PodAnnotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Resources: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "8192", "volcano.sh/vgpu-cores": "25"}}
+	g.ExecutionDigest, _ = ExecutionDigest(g)
+	return g
+}
+func TestExecutionAbsoluteMemoryAndWhitelist(t *testing.T) {
+	g := executionFixture()
+	if e := ValidateGpuExecution(g); e != nil {
 		t.Fatal(e)
 	}
-	var vectors map[string]json.RawMessage
-	if e = json.Unmarshal(raw, &vectors); e != nil {
-		t.Fatal(e)
-	}
-	for name, raw := range vectors {
+	for name, change := range map[string]func(*acc.GpuExecution){"percentage": func(g *acc.GpuExecution) {
+		delete(g.Resources, "volcano.sh/vgpu-memory")
+		g.Resources["volcano.sh/vgpu-memory-percentage"] = "100"
+	}, "resource injection": func(g *acc.GpuExecution) { g.Resources["cpu"] = "100" }, "unknown selector": func(g *acc.GpuExecution) { g.NodeSelector["unknown"] = "x" }, "missing runtime": func(g *acc.GpuExecution) { g.RuntimeClassName = "" }, "noncanonical integer": func(g *acc.GpuExecution) { g.Resources["volcano.sh/vgpu-memory"] = "08192" }} {
 		t.Run(name, func(t *testing.T) {
-			p := new(acc.ResolvedGpuPlan)
-			if e := protojson.Unmarshal(raw, p); e != nil {
-				t.Fatal(e)
-			}
-			b := currentBusiness()
-			b.Gpu = proto.Clone(p.Request).(*acc.GpuRequest)
-			f := b.Spec
-			f.ComputeType = "gpu"
-			f.ClusterId = p.Request.ClusterId
-			digest := p.Profile.SpecDigest
-			f.GpuSpecDigest = &digest
-			s := p.Profile.Spec
-			f.GpuSummary = &GpuSummary{ProfileId: p.Request.ProfileId, ProfileVersion: p.Request.ProfileVersion, Mode: s.Mode, ModelKey: s.ModelKey, DevicesPerInstance: p.Request.DevicesPerReplica, CoreLimitPercent: s.CoreLimitPercent}
-			if s.Mode == acc.SupplyMode_SHARED_FIXED {
-				m, total := s.SharedMemoryMib, p.Totals.SharedMemoryMib
-				f.GpuSummary.SharedMemoryMibPerDevice = &m
-				f.GpuSummary.SharedMemoryMibTotal = &total
-			}
-			if e := ValidateGpuBusinessPlan(b, p); e != nil {
-				t.Fatal("builder plan rejected", e)
-			}
-			for label, change := range map[string]func(*CreateBusiness){"missing digest": func(b *CreateBusiness) { b.Spec.GpuSpecDigest = nil }, "different digest": func(b *CreateBusiness) { v := strings.Repeat("e", 64); b.Spec.GpuSpecDigest = &v }, "model": func(b *CreateBusiness) { b.Spec.GpuSummary.ModelKey = "other" }, "core": func(b *CreateBusiness) { b.Spec.GpuSummary.CoreLimitPercent++ }, "count": func(b *CreateBusiness) { b.Spec.GpuSummary.DevicesPerInstance++ }} {
-				t.Run(label, func(t *testing.T) {
-					changed := proto.Clone(b).(*CreateBusiness)
-					change(changed)
-					if _, e := BusinessPayloadDigest(changed); e != nil {
-						t.Fatal(e)
-					}
-					if ValidateGpuBusinessPlan(changed, p) == nil {
-						t.Fatal("correct digest authorized conflicting facts")
-					}
-				})
+			v := proto.Clone(g).(*acc.GpuExecution)
+			change(v)
+			v.ExecutionDigest, _ = ExecutionDigest(v)
+			if ValidateGpuExecution(v) == nil {
+				t.Fatal("unsafe execution accepted")
 			}
 		})
 	}
-	cpu := currentBusiness()
-	if e := ValidateGpuBusinessPlan(cpu, nil); e != nil {
-		t.Fatal(e)
+	v := proto.Clone(g).(*acc.GpuExecution)
+	v.Resources["volcano.sh/vgpu-memory"] = "1"
+	if ValidateGpuExecution(v) == nil {
+		t.Fatal("stale digest accepted")
 	}
-	if ValidateGpuBusinessPlan(cpu, &acc.ResolvedGpuPlan{}) == nil {
-		t.Fatal("CPU acquired GPU plan")
+	v.ExecutionDigest, _ = ExecutionDigest(v)
+	if e := ValidateGpuExecution(v); e != nil {
+		t.Fatal("1MiB step rejected", e)
+	}
+}
+
+func TestFixedExecutionCanonicalVector(t *testing.T) {
+	// Independently generated on Fedora with sorted, compact UTF-8 JSON.
+	g := executionFixture()
+	if g.ExecutionDigest != "e320e19ba66a3c3da30b0649b37625ec322385853aa0cdfbace5f4807b62e679" {
+		t.Fatal("wire digest vector changed", g.ExecutionDigest)
 	}
 }

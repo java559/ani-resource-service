@@ -59,7 +59,7 @@ type InstanceServiceClient interface {
 	ListInstanceEvents(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceEvents, error)
 	StreamInstanceLogs(ctx context.Context, in *StreamInstanceLogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InstanceLogFrame], error)
 	ListPresets(ctx context.Context, in *ListPresetsRequest, opts ...grpc.CallOption) (*ListPresetsResponse, error)
-	ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateBusiness, error)
+	ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateSpec, error)
 	AcceptCreate(ctx context.Context, in *AcceptCreateRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	AcceptDelete(ctx context.Context, in *AcceptDeleteRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	Start(ctx context.Context, in *ChangeInstanceRequest, opts ...grpc.CallOption) (*OperationResponse, error)
@@ -187,9 +187,9 @@ func (c *instanceServiceClient) ListPresets(ctx context.Context, in *ListPresets
 	return out, nil
 }
 
-func (c *instanceServiceClient) ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateBusiness, error) {
+func (c *instanceServiceClient) ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateSpec, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateBusiness)
+	out := new(CreateSpec)
 	err := c.cc.Invoke(ctx, InstanceService_ResolveCreateSpec_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -294,7 +294,7 @@ type InstanceServiceServer interface {
 	ListInstanceEvents(context.Context, *GetInstanceRequest) (*InstanceEvents, error)
 	StreamInstanceLogs(*StreamInstanceLogsRequest, grpc.ServerStreamingServer[InstanceLogFrame]) error
 	ListPresets(context.Context, *ListPresetsRequest) (*ListPresetsResponse, error)
-	ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateBusiness, error)
+	ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateSpec, error)
 	AcceptCreate(context.Context, *AcceptCreateRequest) (*OperationResponse, error)
 	AcceptDelete(context.Context, *AcceptDeleteRequest) (*OperationResponse, error)
 	Start(context.Context, *ChangeInstanceRequest) (*OperationResponse, error)
@@ -343,7 +343,7 @@ func (UnimplementedInstanceServiceServer) StreamInstanceLogs(*StreamInstanceLogs
 func (UnimplementedInstanceServiceServer) ListPresets(context.Context, *ListPresetsRequest) (*ListPresetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPresets not implemented")
 }
-func (UnimplementedInstanceServiceServer) ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateBusiness, error) {
+func (UnimplementedInstanceServiceServer) ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateSpec, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResolveCreateSpec not implemented")
 }
 func (UnimplementedInstanceServiceServer) AcceptCreate(context.Context, *AcceptCreateRequest) (*OperationResponse, error) {

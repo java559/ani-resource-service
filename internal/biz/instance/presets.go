@@ -16,16 +16,16 @@ var ErrPresetDisabled = errors.New("COMPUTE_PRESET_DISABLED")
 var presetCode = regexp.MustCompile(`^[a-z][a-z0-9-]{0,63}$`)
 
 type GPUReference struct {
-	ProfileID                string `json:"profile_id"`
-	ProfileVersion           uint64 `json:"profile_version"`
-	SpecDigest               string `json:"spec_digest"`
-	DevicesPerInstance       uint32 `json:"devices_per_instance"`
-	ClusterID                string `json:"cluster_id"`
-	PoolID                   string `json:"pool_id"`
-	Mode                     string `json:"mode"`
-	ModelKey                 string `json:"model_key"`
-	SharedMemoryMiBPerDevice *int64 `json:"shared_memory_mib_per_device"`
-	CoreLimitPercent         uint32 `json:"core_limit_percent"`
+	ProfileID          string `json:"profile_id"`
+	ProfileVersion     uint64 `json:"profile_version"`
+	SpecDigest         string `json:"spec_digest"`
+	DevicesPerInstance uint32 `json:"devices_per_instance"`
+	ClusterID          string `json:"cluster_id"`
+	PoolID             string `json:"pool_id"`
+	Mode               string `json:"mode"`
+	ModelKey           string `json:"model_key"`
+	MemoryMiBPerDevice int64  `json:"memory_mib_per_device"`
+	CoreLimitPercent   uint32 `json:"core_limit_percent"`
 }
 type Preset struct {
 	ID, Code, Name, Description, ComputeType string
@@ -60,11 +60,11 @@ func ValidateGPUReference(g *GPUReference) error {
 	}
 	switch g.Mode {
 	case "WHOLE_EXCLUSIVE":
-		if g.DevicesPerInstance < 1 || g.SharedMemoryMiBPerDevice != nil || g.CoreLimitPercent != 100 {
+		if g.DevicesPerInstance < 1 || g.MemoryMiBPerDevice <= 0 || g.CoreLimitPercent != 100 {
 			return ErrInvalid
 		}
 	case "SHARED_FIXED":
-		if g.DevicesPerInstance != 1 || g.SharedMemoryMiBPerDevice == nil || *g.SharedMemoryMiBPerDevice <= 0 || g.CoreLimitPercent < 1 || g.CoreLimitPercent > 99 {
+		if g.DevicesPerInstance != 1 || g.MemoryMiBPerDevice <= 0 || g.CoreLimitPercent < 1 || g.CoreLimitPercent > 99 {
 			return ErrInvalid
 		}
 	default:

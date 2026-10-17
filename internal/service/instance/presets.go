@@ -7,42 +7,29 @@ import (
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"strconv"
 )
 
 func gpuReference(g *pb.GpuPresetReference) *biz.GPUReference {
 	if g == nil {
 		return nil
 	}
-	return &biz.GPUReference{ProfileID: g.ProfileId, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerInstance: g.DevicesPerInstance, ClusterID: g.ClusterId, PoolID: g.PoolId, Mode: g.Mode.String(), ModelKey: g.ModelKey, SharedMemoryMiBPerDevice: g.SharedMemoryMibPerDevice, CoreLimitPercent: g.CoreLimitPercent}
+	return &biz.GPUReference{ProfileID: g.ProfileId, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerInstance: g.DevicesPerInstance, ClusterID: g.ClusterId, PoolID: g.PoolId, Mode: g.Mode.String(), ModelKey: g.ModelKey, MemoryMiBPerDevice: g.MemoryMibPerDevice, CoreLimitPercent: g.CoreLimitPercent}
 }
 func wireReference(g *biz.GPUReference) *pb.GpuPresetReference {
 	if g == nil {
 		return nil
 	}
-	return &pb.GpuPresetReference{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerInstance: g.DevicesPerInstance, ClusterId: g.ClusterID, PoolId: g.PoolID, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, SharedMemoryMibPerDevice: g.SharedMemoryMiBPerDevice, CoreLimitPercent: g.CoreLimitPercent}
+	return &pb.GpuPresetReference{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerInstance: g.DevicesPerInstance, ClusterId: g.ClusterID, PoolId: g.PoolID, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, MemoryMibPerDevice: g.MemoryMiBPerDevice, CoreLimitPercent: g.CoreLimitPercent}
 }
-func gpuSummary(g *biz.GPUReference) *pb.GpuSummary {
+func wireSummary(g *biz.GPUSummary, execution biz.GPU) *pb.GpuSummary {
 	if g == nil {
 		return nil
 	}
-	out := &pb.GpuSummary{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, DevicesPerInstance: g.DevicesPerInstance, CoreLimitPercent: g.CoreLimitPercent, SharedMemoryMibPerDevice: g.SharedMemoryMiBPerDevice}
-	if g.SharedMemoryMiBPerDevice != nil {
-		v := *g.SharedMemoryMiBPerDevice * int64(g.DevicesPerInstance)
-		out.SharedMemoryMibTotal = &v
-	}
-	return out
-}
-func domainSummary(g *pb.GpuSummary) *biz.GPUSummary {
-	if g == nil {
-		return nil
-	}
-	return &biz.GPUSummary{ProfileID: g.ProfileId, ProfileVersion: g.ProfileVersion, Mode: g.Mode.String(), ModelKey: g.ModelKey, DevicesPerInstance: g.DevicesPerInstance, SharedMemoryMiBPerDevice: g.SharedMemoryMibPerDevice, SharedMemoryMiBTotal: g.SharedMemoryMibTotal, CoreLimitPercent: g.CoreLimitPercent}
-}
-func wireSummary(g *biz.GPUSummary) *pb.GpuSummary {
-	if g == nil {
-		return nil
-	}
-	return &pb.GpuSummary{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, DevicesPerInstance: g.DevicesPerInstance, SharedMemoryMibPerDevice: g.SharedMemoryMiBPerDevice, SharedMemoryMibTotal: g.SharedMemoryMiBTotal, CoreLimitPercent: g.CoreLimitPercent}
+	n, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-number"], 10, 32)
+	m, _ := strconv.ParseInt(execution.Limits["volcano.sh/vgpu-memory"], 10, 64)
+	c, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-cores"], 10, 32)
+	return &pb.GpuSummary{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, DevicesPerInstance: uint32(n), MemoryMibPerDevice: m, MemoryMibTotal: m * int64(n), CoreLimitPercent: uint32(c)}
 }
 func domainScheduling(s *pb.SchedulingOptions) biz.Scheduling {
 	return biz.Scheduling{PodPlacement: s.GetPodPlacement().String(), PriorityClassName: s.PriorityClassName}
@@ -54,7 +41,11 @@ func presetData(d *pb.PresetData) biz.Preset {
 	return biz.Preset{Code: d.Code, Name: d.Name, Description: d.Description, ComputeType: d.ComputeType, CPUMillis: d.CpuMillis, MemoryMiB: d.MemoryMib, Enabled: d.GetEnabled(), GPU: gpuReference(d.Gpu)}
 }
 func wirePreset(p biz.Preset) *pb.Preset {
-	return &pb.Preset{Id: p.ID, Code: p.Code, Name: p.Name, Description: p.Description, ComputeType: p.ComputeType, CpuMillis: p.CPUMillis, MemoryMib: p.MemoryMiB, Enabled: p.Enabled, Gpu: wireReference(p.GPU), CreatedAt: timestamppb.New(p.CreatedAt), UpdatedAt: timestamppb.New(p.UpdatedAt)}
+	reason := ""
+	if !p.Enabled {
+		reason = "COMPUTE_PRESET_DISABLED"
+	}
+	return &pb.Preset{Selectable: p.Enabled, UnavailableReason: reason, Id: p.ID, Code: p.Code, Name: p.Name, Description: p.Description, ComputeType: p.ComputeType, CpuMillis: p.CPUMillis, MemoryMib: p.MemoryMiB, Enabled: p.Enabled, Gpu: wireReference(p.GPU), CreatedAt: timestamppb.New(p.CreatedAt), UpdatedAt: timestamppb.New(p.UpdatedAt)}
 }
 func (s *Service) checkedPresetData(d *pb.PresetData) error {
 	if d == nil {

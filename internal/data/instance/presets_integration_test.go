@@ -37,7 +37,7 @@ func TestComputePresetTransactionsAndIsolation(t *testing.T) {
 	if _, e = f.repo.CreatePreset(tenantCtx, p); !errors.Is(e, biz.ErrDenied) {
 		t.Fatal("tenant wrote platform catalog", e)
 	}
-	g := &biz.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 1, SpecDigest: strings.Repeat("a", 64), DevicesPerInstance: 2, ClusterID: uuid.NewString(), PoolID: uuid.NewString(), Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", CoreLimitPercent: 100}
+	g := &biz.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 1, SpecDigest: strings.Repeat("a", 64), DevicesPerInstance: 2, ClusterID: uuid.NewString(), PoolID: uuid.NewString(), Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", MemoryMiBPerDevice: 15360, CoreLimitPercent: 100}
 	gpu, e := f.repo.UpdatePreset(ctx, p.ID, biz.Preset{ComputeType: biz.TypeGPU, GPU: g}, []string{"compute_type", "gpu"})
 	if e != nil {
 		t.Fatal(e)
@@ -120,7 +120,7 @@ func TestComputePresetAuthorizedPages(t *testing.T) {
 	for n := 0; n < 9; n++ {
 		p := biz.Preset{Code: fmt.Sprintf("preset-%d", n), Name: "literal%_Name", ComputeType: biz.TypeCPU, CPUMillis: 1000, MemoryMiB: 1024, Enabled: true}
 		if n >= 5 {
-			g := biz.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 2, SpecDigest: strings.Repeat("b", 64), DevicesPerInstance: 1, ClusterID: uuid.NewString(), PoolID: uuid.NewString(), Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", CoreLimitPercent: 100}
+			g := biz.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 2, SpecDigest: strings.Repeat("b", 64), DevicesPerInstance: 1, ClusterID: uuid.NewString(), PoolID: uuid.NewString(), Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", MemoryMiBPerDevice: 15360, CoreLimitPercent: 100}
 			p.ComputeType = biz.TypeGPU
 			p.GPU = &g
 			if n%2 == 0 {
@@ -173,14 +173,14 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	if frozen.Spec.Cpu != "1250m" || frozen.Spec.Memory != "1536Mi" || frozen.Spec.Scheduling.GetPodPlacement() != pb.SchedulingOptions_SPREAD_PREFERRED || frozen.Spec.Scheduling.GetPriorityClassName() != priorityBefore || frozen.Data.Scheduling != nil || frozen.Gpu != nil {
+	if frozen.Cpu != "1250m" || frozen.Memory != "1536Mi" || frozen.Scheduling.GetPodPlacement() != pb.SchedulingOptions_SPREAD_PREFERRED || frozen.Scheduling.GetPriorityClassName() != priorityBefore || frozen.GpuExecution != nil {
 		t.Fatal("incorrect CPU freeze", frozen)
 	}
-	digest, e := pb.BusinessPayloadDigest(frozen)
+	request := &pb.AcceptCreateRequest{Context: &pb.CommandContext{TenantId: tenantID, OperationId: uuid.NewString(), ResourceId: uuid.NewString()}, Spec: frozen}
+	request.Context.RequestDigest, e = pb.CommandDigest(request.Context, request.Spec)
 	if e != nil {
 		t.Fatal(e)
 	}
-	request := &pb.AcceptCreateRequest{TenantId: tenantID, OperationId: uuid.NewString(), Business: frozen, CpuOwnerAttachment: &pb.CpuOwnerCreateAttachment{ResourceId: uuid.NewString(), RequestHash: strings.Repeat("c", 64), BusinessPayloadDigest: digest, Actor: "governance:user:42"}}
 	if _, e = s.AcceptCreate(ctx, request); e != nil {
 		t.Fatal(e)
 	}
@@ -188,7 +188,7 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 		t.Fatal(e)
 	}
 	next, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenantID, Data: raw, SchedulingDefaults: &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_COLOCATE_PREFERRED.Enum(), PriorityClassName: &priorityAfter}})
-	if e != nil || next.Spec.Cpu != "3000m" || next.Spec.Scheduling.GetPodPlacement() != pb.SchedulingOptions_COLOCATE_PREFERRED || next.Spec.Scheduling.GetPriorityClassName() != priorityAfter {
+	if e != nil || next.Cpu != "3000m" || next.Scheduling.GetPodPlacement() != pb.SchedulingOptions_COLOCATE_PREFERRED || next.Scheduling.GetPriorityClassName() != priorityAfter {
 		t.Fatal("new resolution ignored update", next, e)
 	}
 	if e = f.repo.DeletePreset(admin, p.ID); e != nil {
@@ -197,7 +197,7 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 	if _, e = s.AcceptCreate(ctx, request); e != nil {
 		t.Fatal("accepted replay queried deleted preset", e)
 	}
-	got, e := s.GetInstance(ctx, &pb.GetInstanceRequest{TenantId: tenantID, InstanceId: request.CpuOwnerAttachment.ResourceId})
+	got, e := s.GetInstance(ctx, &pb.GetInstanceRequest{TenantId: tenantID, InstanceId: request.Context.ResourceId})
 	if e != nil || got.Cpu != "1250m" || got.PresetName != "Frozen CPU" || got.CreatedAt == nil || got.Scheduling.GetPodPlacement() != pb.SchedulingOptions_SPREAD_PREFERRED || got.Scheduling.GetPriorityClassName() != priorityBefore {
 		t.Fatal("static snapshot drifted", got, e)
 	}

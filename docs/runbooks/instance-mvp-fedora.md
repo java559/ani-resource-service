@@ -36,7 +36,6 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
     "StorageClass": "ani-block",
     "WorkspaceSize": "10Gi",
     "Shell": "/bin/bash",
-    "GPURuntimeClassName": "nvidia",
     "UID": 1000,
     "GID": 1000
   }
@@ -45,7 +44,7 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
 
 示例中的 UUID、地址与私有路径必须替换；未配置默认拒绝。NamespacePrefix 始终从当前 Network 配置读入，不由该 JSON 改写。SigningKeyFile 为 64 字节原始 Ed25519 私钥，不放入源码、普通归档或日志。
 
-`Service.GPURuntimeClassName` 是受管 GPU 工作负载环境要求；节点默认使用 runc、NVIDIA 设备需要独立 runtime 时配置 `nvidia`。新 GPU 受理先由 Resource 将该值冻结在 `FrozenSpec.gpu_runtime_class_name`，再由 Gov 纳入业务摘要并持久化；ACC plan 已指定 RuntimeClass 时以 plan 为准，否则使用该冻结值。重放和已有实例不读取新配置，不改 ACC plan/baseline 或硬件资格。CPU 不携带该字段。空配置保留使用节点默认 runtime 的既有语义；部署者必须核对实际节点能力，不能用空值假定已有 NVIDIA 注入。
+GPU RuntimeClass 必须由 ACC 受管配置写入唯一 `GpuExecution.runtime_class_name`；Res 没有第二个配置来源。切换新合同前先完整结束旧 GPU 活动并确认释放 outbox 已匹配确认，再显式运行实例 migration，发布新 GPU Profile/Preset。不得把旧 F256 或百分比状态交给新服务恢复。
 
 规格唯一来源为 Resource 的 `instance.compute_presets`，配置中的 `Presets` 已删除，严格配置解码会拒绝该旧字段。规格通过 Gov 的平台管理入口创建，CPU 创建不依赖 ACC；GPU 新建/替换引用必须使用可信 ACC 目录的完整事实。
 
@@ -115,10 +114,10 @@ ssh fedora 'python3 /home/chabking/workspace/ani-resource-service-runs/instance-
 
 ## 恢复与回退
 
-- 重启后由同一受限 PG、原冻结 spec/plan/charges、待定 mutation 和 lease epoch 恢复；普通 Stop/Start 不重占额、不重新解析镜像或 Namespace，不更换 PVC。
+- 重启后由同一受限 PG、原冻结 spec 和唯一 GPU execution、待定 mutation 和 lease epoch 恢复；普通 Stop/Start 不重占额、不重新解析镜像或 Namespace，不更换 PVC。
 - `CREATE_RESULT_UNKNOWN` / `WORKSPACE_CREATE_RESULT_UNKNOWN` 保留原待定动作与原账。404、等待和重启不能清除它；只有原归属对象或可归因的确定外部结果才可推进。未实现绕过该规则的管理强制完成接口。
 - 旧 worker 结果只能写入所属原操作的 receipt，不能覆盖新业务意图；过期 lease 拒绝回写。版本冲突后重新读取当前状态，不能重试旧 Start。
-- `QUOTA_RETURN_PENDING` 使用持久 outbox 中的原事件、原 CREATE 和完整原 GPU charge 向量重试。Gov 已入账但回执丢失也不能生成新事件。PVC 删除失败时允许 GPU 已归还，整体删除仍保持未完成。
+- `QUOTA_RETURN_PENDING` 使用持久 outbox 中的原事件、原 CREATE、resource 与 reason重试。Gov 已入账但回执丢失也不能生成新事件。PVC 删除失败时允许 GPU 已归还，整体删除仍保持未完成。
 - `WORKSPACE_OBSERVATION_FAILED` 保留磁盘重试，计算已清理时仍可归还原 GPU quota。`WAITING_FOR_WORKSPACE_RECLAIM` 表示 PVC 已消失、原 PV 尚未回收；只有回收核验通过才完成整体删除。不通过手改状态、移除存储 finalizer 或直接删 PV 解阻。
 - 回退前保存共享服务原配置、镜像、证书引用和数据库迁移点；恢复原启动配置可禁用新接入，但不能删除实例账本、待定动作或退额 outbox。已有接受请求未收敛时，保留 owner 执行与可靠退额能力。不得删除共享 Namespace、租户 Image pull secret 或其他任务对象。
 

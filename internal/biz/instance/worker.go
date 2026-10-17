@@ -118,7 +118,7 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		if !i.ComputeCleaned {
 			return true, w.repo.Finish(ctx, *work, p)
 		}
-		// A stable event is rebuilt from original CREATE/charges; PVC errors do not hold GPU quota.
+		// A stable event is rebuilt from the original CREATE identity; PVC errors do not hold GPU quota.
 		if !i.QuotaReturned {
 			if i.Spec.ComputeType == TypeCPU {
 				p.Instance.QuotaReturned = true

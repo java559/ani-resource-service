@@ -9,8 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"reflect"
-	"sort"
 	"strings"
 	"time"
 
@@ -284,7 +282,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			return biz.ACK{}, biz.ErrConflict
 		}
 		if i.CreateRequestHash == "" && i.Desired == biz.Deleted {
-			if i.Spec.ComputeType != c.Spec.ComputeType || i.Spec.GPU.Digest != c.Spec.GPU.Digest || !equalCharges(i.Charges, c.Charges) {
+			if i.Spec.ComputeType != c.Spec.ComputeType {
 				return biz.ACK{}, biz.ErrConflict
 			}
 			i.CreateRequestHash = c.RequestHash
@@ -318,7 +316,7 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 	if !errors.Is(e, biz.ErrNotFound) {
 		return biz.ACK{}, e
 	}
-	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Charges: c.Charges, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID}
+	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID}
 	raw, e := json.Marshal(i)
 	if e != nil {
 		return ack, e
@@ -336,13 +334,6 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 		return ack, e
 	}
 	return ack, tx.Commit(ctx)
-}
-func equalCharges(a, b []biz.Charge) bool {
-	a = append([]biz.Charge(nil), a...)
-	b = append([]biz.Charge(nil), b...)
-	sort.Slice(a, func(i, j int) bool { return a[i].ID < a[j].ID })
-	sort.Slice(b, func(i, j int) bool { return b[i].ID < b[j].ID })
-	return reflect.DeepEqual(a, b)
 }
 func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, error) {
 	ack := biz.ACK{OperationID: d.OperationID, ResourceID: d.ID, Accepted: true}
@@ -362,7 +353,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		if d.ExpectedVersion > 1 {
 			return ack, biz.ErrVersion
 		}
-		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceKind: d.InstanceKind, ComputeType: d.ComputeType, GPU: d.GPU}, Charges: d.Charges, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
+		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceKind: d.InstanceKind, ComputeType: d.ComputeType}, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return ack, e
@@ -376,7 +367,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 	} else if e != nil {
 		return ack, e
 	} else {
-		if i.Spec.ComputeType != d.ComputeType || i.CreateOperationID != d.CreateOperationID || i.Spec.GPU.Digest != d.GPU.Digest || !equalCharges(i.Charges, d.Charges) {
+		if i.Spec.ComputeType != d.ComputeType || i.CreateOperationID != d.CreateOperationID {
 			return ack, biz.ErrConflict
 		}
 		var old []byte

@@ -97,7 +97,7 @@ func database(t *testing.T) *fixture {
 }
 func create() biz.Create {
 	tenant, id, op := uuid.NewString(), uuid.NewString(), uuid.NewString()
-	return biz.Create{TenantID: tenant, ID: id, OperationID: op, RequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Charges: []biz.Charge{{ID: uuid.NewString(), Code: "gpu.shared_memory_mib", Units: 6144}}, Spec: biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, Scheduling: biz.Scheduling{PodPlacement: "NONE"}, Name: "workspace", ImageID: uuid.NewString(), ImageScope: "platform", ImageReference: "registry.invalid/platform/workspace@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), PresetID: "shared", CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: uuid.NewString(), Namespace: "tenant-" + tenant, NotebookName: "instance-" + id, PVCName: "workspace-" + id, GPU: biz.GPU{Scheduler: "volcano", Queue: "default", Recipe: "volcano-hami-v1", Digest: strings.Repeat("d", 64), NodeLabels: map[string]string{"accelerator.ani.io/supply-group": "test"}, Annotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "6", "volcano.sh/vgpu-cores": "25"}, Plan: json.RawMessage(`{"frozen_external_plan":true}`)}}}
+	return biz.Create{TenantID: tenant, ID: id, OperationID: op, RequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Spec: biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, Scheduling: biz.Scheduling{PodPlacement: "NONE"}, Name: "workspace", ImageID: uuid.NewString(), ImageScope: "platform", ImageReference: "registry.invalid/platform/workspace@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), PresetID: "shared", CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/bash", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: uuid.NewString(), Namespace: "tenant-" + tenant, NotebookName: "instance-" + id, PVCName: "workspace-" + id, GPU: biz.GPU{Scheduler: "volcano", RuntimeClass: "nvidia", Queue: "default", Digest: strings.Repeat("d", 64), NodeLabels: map[string]string{"accelerator.ani.io/supply-group": "test"}, Annotations: map[string]string{"volcano.sh/vgpu-mode": "hami-core"}, Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-memory": "6144", "volcano.sh/vgpu-cores": "25"}}}}
 }
 
 func cpuCreate() biz.Create {
@@ -105,7 +105,6 @@ func cpuCreate() biz.Create {
 	c.Spec.ComputeType = biz.TypeCPU
 	c.Spec.PresetID = "cpu-small"
 	c.Spec.GPU = biz.GPU{}
-	c.Charges = nil
 	return c
 }
 
@@ -134,7 +133,7 @@ func TestCPUInstancePersistentLifecycleAndTerminal(t *testing.T) {
 	for n := 0; n < 3; n++ {
 		i = step(t, f, w, c)
 	}
-	if i.Observed != biz.Running || i.Spec.ComputeType != biz.TypeCPU || !i.Spec.GPU.Empty() || len(i.Charges) != 0 {
+	if i.Observed != biz.Running || i.Spec.ComputeType != biz.TypeCPU || !i.Spec.GPU.Empty() {
 		t.Fatal("CPU instance did not reach running with its fixed specification", i.Reason)
 	}
 	authority := service.NewTerminalValidation(f.repo, p)
@@ -425,7 +424,7 @@ func TestInstancePersistentLifecycle(t *testing.T) {
 		command(t, f, c, i, "start")
 		i = step(t, f, w, c)
 		i = step(t, f, w, c)
-		if i.CreateOperationID != c.OperationID || !samePlan(i, c) || i.Observed != biz.Running || p.creates != 1 {
+		if i.CreateOperationID != c.OperationID || !sameSnapshot(i, c) || i.Observed != biz.Running || p.creates != 1 {
 			t.Fatal("start changed original freeze")
 		}
 	}
@@ -478,16 +477,16 @@ func TestInstancePersistentLifecycle(t *testing.T) {
 		t.Fatal("unknown CREATE incorrectly closed", i.Reason)
 	}
 }
-func samePlan(i biz.Instance, c biz.Create) bool {
+func sameSnapshot(i biz.Instance, c biz.Create) bool {
 	a, _ := json.Marshal(i.Spec)
 	b, _ := json.Marshal(c.Spec)
-	return string(a) == string(b) && len(i.Charges) == len(c.Charges) && i.Charges[0] == c.Charges[0]
+	return string(a) == string(b)
 }
 func TestInstanceDeleteFirstAndTenant(t *testing.T) {
 	f := database(t)
 	ctx := context.Background()
 	c := create()
-	d := biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64), GPU: c.Spec.GPU, Charges: c.Charges}
+	d := biz.Delete{InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, TenantID: c.TenantID, ID: c.ID, OperationID: uuid.NewString(), CreateOperationID: c.OperationID, RequestHash: strings.Repeat("e", 64)}
 	a, e := f.repo.AcceptDelete(ctx, d)
 	if e != nil {
 		t.Fatal(e)
@@ -526,23 +525,24 @@ func TestInstanceDeleteFirstAndTenant(t *testing.T) {
 // This substitutes only the remote Gov boundary. The production Resource
 // outbox, worker and terminal authority all share the restricted real PG repo.
 type releaseEndpoint struct {
-	request        *quotapb.ReportQuotaReleaseRequest
+	request        *quotapb.ReportResourceReleasedRequest
 	calls, applied int
+	wrongReceipt   bool
 }
 
-func (q *releaseEndpoint) ReportQuotaRelease(_ context.Context, r *quotapb.ReportQuotaReleaseRequest, _ ...grpc.CallOption) (*quotapb.ReportQuotaReleaseResponse, error) {
+func (q *releaseEndpoint) ReportResourceReleased(_ context.Context, r *quotapb.ReportResourceReleasedRequest, _ ...grpc.CallOption) (*quotapb.ReportResourceReleasedResponse, error) {
 	q.calls++
 	if q.request == nil {
-		q.request = proto.Clone(r).(*quotapb.ReportQuotaReleaseRequest)
+		q.request = proto.Clone(r).(*quotapb.ReportResourceReleasedRequest)
 		q.applied++
 		return nil, status.Error(codes.Unavailable, "response lost after commit")
 	}
 	if !proto.Equal(q.request, r) {
 		return nil, errors.New("release retry changed original event")
 	}
-	reply := new(quotapb.ReportQuotaReleaseResponse)
-	for _, c := range r.Items {
-		reply.Items = append(reply.Items, &quotapb.QuotaReleaseResult{ChargeId: c.ChargeId, ReleasedTotal: c.ReleasedTotal})
+	reply := &quotapb.ReportResourceReleasedResponse{ReleaseEventId: r.ReleaseEventId, CreateOperationId: r.CreateOperationId, ResourceId: r.ResourceId, Status: quotapb.ResourceReleaseStatus_ALREADY_APPLIED}
+	if q.wrongReceipt {
+		reply.ResourceId = uuid.NewString()
 	}
 	return reply, nil
 }
@@ -611,7 +611,7 @@ func TestInstanceReleaseRetryAndTerminalRevocation(t *testing.T) {
 	if remote.calls != 2 || remote.applied != 1 || !i.QuotaReturned || i.WorkspaceCleaned || i.Observed == biz.Deleted {
 		t.Fatal("durable release retry/partial delete failed")
 	}
-	if remote.request.OperationId != c.OperationID || len(remote.request.Items) != len(c.Charges) || remote.request.Items[0].ChargeId != c.Charges[0].ID {
+	if remote.request.CreateOperationId != c.OperationID || remote.request.ResourceId != c.ID {
 		t.Fatal("release lost original ledger binding")
 	}
 	p.failPVC = false
@@ -679,5 +679,42 @@ func TestInstanceSupersededMutationAndLeaseFencing(t *testing.T) {
 	current, e = f.repo.Get(ctx, c.TenantID, c.ID)
 	if e != nil || current.Desired != biz.Running || current.Version != 3 {
 		t.Fatal("lease fence lost newest intent", e)
+	}
+}
+
+func TestResourceReleaseRequiresMatchingAck(t *testing.T) {
+	f := database(t)
+	ctx := context.Background()
+	c := create()
+	if _, e := f.repo.AcceptCreate(ctx, c); e != nil {
+		t.Fatal(e)
+	}
+	remote := &releaseEndpoint{wrongReceipt: true}
+	reporter, e := data.NewQuota(f.repo, remote)
+	if e != nil {
+		t.Fatal(e)
+	}
+	i, e := f.repo.Get(ctx, c.TenantID, c.ID)
+	if e != nil {
+		t.Fatal(e)
+	}
+	i.Desired = biz.Deleted
+	i.ComputeCleaned = true
+	if e = reporter.Report(ctx, i); e == nil {
+		t.Fatal("lost initial receipt accepted")
+	}
+	if e = reporter.Report(ctx, i); e == nil {
+		t.Fatal("mismatched resource ACK accepted")
+	}
+	var acknowledged bool
+	if e = f.runtime.QueryRow(ctx, "SELECT acknowledged FROM instance.instance_quota_release_outbox WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID).Scan(&acknowledged); e != nil || acknowledged {
+		t.Fatal("mismatched outbox settled", e)
+	}
+	remote.wrongReceipt = false
+	if e = reporter.Report(ctx, i); e != nil {
+		t.Fatal(e)
+	}
+	if e = reporter.Report(ctx, i); e != nil || remote.calls != 3 || remote.applied != 1 {
+		t.Fatal("confirmed event retransmitted", e, remote.calls)
 	}
 }

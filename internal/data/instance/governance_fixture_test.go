@@ -77,7 +77,7 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 		preset.Code = "shared"
 		preset.Name = "shared"
 		preset.ComputeType = biz.TypeGPU
-		preset.GPU = &biz.GPUReference{ProfileID: ref.ProfileId, ProfileVersion: ref.ProfileVersion, SpecDigest: ref.SpecDigest, DevicesPerInstance: ref.DevicesPerInstance, ClusterID: ref.ClusterId, PoolID: ref.PoolId, Mode: ref.Mode.String(), ModelKey: ref.ModelKey, SharedMemoryMiBPerDevice: ref.SharedMemoryMibPerDevice, CoreLimitPercent: ref.CoreLimitPercent}
+		preset.GPU = &biz.GPUReference{ProfileID: ref.ProfileId, ProfileVersion: ref.ProfileVersion, SpecDigest: ref.SpecDigest, DevicesPerInstance: ref.DevicesPerInstance, ClusterID: ref.ClusterId, PoolID: ref.PoolId, Mode: ref.Mode.String(), ModelKey: ref.ModelKey, MemoryMiBPerDevice: ref.MemoryMibPerDevice, CoreLimitPercent: ref.CoreLimitPercent}
 	}
 	preset, e := f.repo.CreatePreset(adminCtx, preset)
 	if e != nil {

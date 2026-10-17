@@ -26,7 +26,7 @@ func TestPresetFinalObjectValidation(t *testing.T) {
 			t.Fatal("invalid mask", mask)
 		}
 	}
-	g := GPUReference{ProfileID: id, ProfileVersion: 2, SpecDigest: strings.Repeat("a", 64), DevicesPerInstance: 1, ClusterID: id, PoolID: id, Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", CoreLimitPercent: 100}
+	g := GPUReference{ProfileID: id, ProfileVersion: 2, SpecDigest: strings.Repeat("a", 64), DevicesPerInstance: 1, ClusterID: id, PoolID: id, Mode: "WHOLE_EXCLUSIVE", ModelKey: "A100", MemoryMiBPerDevice: 15360, CoreLimitPercent: 100}
 	for _, n := range []uint32{1, 2, 4, math.MaxUint32} {
 		g.DevicesPerInstance = n
 		if ValidateGPUReference(&g) != nil {
@@ -40,7 +40,7 @@ func TestPresetFinalObjectValidation(t *testing.T) {
 	g.DevicesPerInstance = 2
 	g.Mode = "SHARED_FIXED"
 	m := int64(6144)
-	g.SharedMemoryMiBPerDevice = &m
+	g.MemoryMiBPerDevice = m
 	g.CoreLimitPercent = 25
 	if ValidateGPUReference(&g) == nil {
 		t.Fatal("shared two devices accepted")

@@ -30,8 +30,7 @@ func diagnosticFixture(t *testing.T, gpu bool) (*Notebook, biz.Instance, *fake.F
 	i := biz.Instance{TenantID: id, ID: id, CreateOperationID: id, CreateRequestHash: strings.Repeat("a", 64), BusinessDigest: strings.Repeat("b", 64), Version: 1, Desired: biz.Running, Spec: biz.Spec{InstanceKind: biz.KindContainer, ComputeType: biz.TypeCPU, Scheduling: biz.Scheduling{PodPlacement: "NONE"}, ImageReference: "registry.invalid/work@sha256:" + strings.Repeat("c", 64), ImageDigest: "sha256:" + strings.Repeat("c", 64), CPU: "1", Memory: "2Gi", UID: 1000, GID: 1000, Shell: "/bin/sh", ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", ClusterID: id, Namespace: "tenant-" + id, NotebookName: "instance-" + id, PVCName: "workspace-" + id}}
 	if gpu {
 		i.Spec.ComputeType = biz.TypeGPU
-		i.Charges = []biz.Charge{{ID: id, Code: "gpu.physical.count", Units: 1}}
-		i.Spec.GPU = biz.GPU{Scheduler: "volcano", Queue: "default", Recipe: "volcano-hami-v1", Digest: strings.Repeat("d", 64), Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-cores": "100", "volcano.sh/vgpu-memory-percentage": "100"}, NodeLabels: map[string]string{"gpu": "test"}, Plan: json.RawMessage(`{"test_external_plan":true}`)}
+		i.Spec.GPU = biz.GPU{Scheduler: "volcano", RuntimeClass: "nvidia", Queue: "default", Digest: strings.Repeat("d", 64), Limits: map[string]string{"volcano.sh/vgpu-number": "1", "volcano.sh/vgpu-cores": "100", "volcano.sh/vgpu-memory": "15360"}, NodeLabels: map[string]string{"gpu": "test"}}
 	}
 	notebook, e := RenderNotebook(i)
 	if e != nil {
