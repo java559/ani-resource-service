@@ -128,8 +128,8 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
-github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017032557-b985202b4350 h1:B5Gdxilic3swRSTFDY/KHZyK11e7k8PAezWgWKU8Qmg=
-github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017032557-b985202b4350/go.mod h1:88qTWpamcj3AopZ5MDK0NVO1KFhp0gWjZUTcJ4RVvdQ=
+github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017035933-b161c30a2fc2 h1:LiKFtb+nYADxxHkpoUdoMjyvMWwwTOkLZVEPAEhnKAM=
+github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017035933-b161c30a2fc2/go.mod h1:88qTWpamcj3AopZ5MDK0NVO1KFhp0gWjZUTcJ4RVvdQ=
 github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261009133356-1ab461604c74 h1:cfxpluUd6AVt8vBb6Z4vb5FQg2/3fK67BGDRmzbUFIA=
 github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261009133356-1ab461604c74/go.mod h1:OmpTNUUTOEMzeXx5cOUdOYqNxrmA+KBthlt44mfZ4s8=
 github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal v0.0.0-20261013075021-0937f5aa9c6c h1:+Z/R4AX9U0RpY+smnrCO9cVFTxLqjjp0r7NbUWdchNE=
