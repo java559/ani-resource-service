@@ -209,11 +209,16 @@ func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation
 		if e := n.verifyPodGroupPriority(ctx, p, i); e != nil {
 			return out, e
 		}
-		if out.PodName != "" {
-			return out, fmt.Errorf("instance has multiple Pods")
+		if i.Spec.ComputeType == biz.TypeGPU {
+			out.GPUPods = append(out.GPUPods, biz.PodRef{ClusterID: i.Spec.ClusterID, Namespace: i.Spec.Namespace, Name: p.GetName(), UID: string(p.GetUID()), ContainerName: biz.Container})
 		}
 		out.PodName = p.GetName()
 		out.PodUID = string(p.GetUID())
+		if i.Spec.ComputeType == biz.TypeGPU && len(n.signingKey) == ed25519.PrivateKeySize {
+			if e := n.signPod(ctx, p, i); e != nil {
+				return out, e
+			}
+		}
 		if p.GetDeletionTimestamp() == nil {
 			phase, _, _ := unstructured.NestedString(p.Object, "status", "phase")
 			conditions, _, _ := unstructured.NestedSlice(p.Object, "status", "conditions")
@@ -231,11 +236,6 @@ func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation
 				name, _ := c["name"].(string)
 				if phase == "Running" && podReady && name == biz.Container && ready {
 					out.PodReady = true
-				}
-			}
-			if i.Spec.ComputeType == biz.TypeGPU && len(n.signingKey) == ed25519.PrivateKeySize {
-				if e := n.signPod(ctx, p, i); e != nil {
-					return out, e
 				}
 			}
 		}

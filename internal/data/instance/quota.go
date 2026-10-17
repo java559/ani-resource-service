@@ -37,6 +37,9 @@ func (q *Quota) Report(ctx context.Context, i biz.Instance) error {
 	if i.Spec.ComputeType != biz.TypeGPU {
 		return biz.ErrInvalid
 	}
+	if i.ExternalComputeStarted && (i.ComputeSealAt.IsZero() || !releaseDigest.MatchString(i.PhysicalReleaseDigest)) {
+		return biz.ErrInvalid
+	}
 	event := uuid.NewSHA1(uuid.NameSpaceOID, []byte("resource-release:"+i.TenantID+":"+i.ID+":"+i.CreateOperationID)).String()
 	const reason = "RESOURCE_RELEASED"
 	if _, e := q.repo.pool.Exec(ctx, "INSERT INTO instance.instance_quota_release_outbox(tenant_id,instance_id,event_id,original_create_operation_id,reason) VALUES($1,$2,$3,$4,$5) ON CONFLICT(tenant_id,instance_id) DO NOTHING", i.TenantID, i.ID, event, i.CreateOperationID, reason); e != nil {

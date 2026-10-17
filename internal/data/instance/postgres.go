@@ -528,6 +528,10 @@ func (p *Postgres) BeginMutation(ctx context.Context, w biz.Work, m biz.Mutation
 		return biz.ErrVersion
 	}
 	i.Pending = &m
+	i.GPUPods = biz.MergePodRefs(i.GPUPods, w.Instance.GPUPods)
+	if m.Kind == "create_notebook" || w.Instance.ExternalComputeStarted {
+		i.ExternalComputeStarted = true
+	}
 	raw, e := json.Marshal(i)
 	if e != nil {
 		return e
@@ -564,6 +568,8 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		}
 	}
 	if i.Version == w.Instance.Version {
+		progress.Instance.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
+		progress.Instance.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		i = progress.Instance
 		raw, e := json.Marshal(i)
 		if e != nil {
@@ -588,6 +594,8 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 	} else {
 		// A newer intent must not discard an attributable old call result. Keep
 		// the current business version and retain only immutable runtime evidence.
+		i.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
+		i.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		if progress.Receipt != nil {
 			i.Pending = nil
 			if i.NotebookUID == "" {
@@ -603,13 +611,13 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 				i.VolumeName = progress.Instance.VolumeName
 				i.VolumeUID = progress.Instance.VolumeUID
 			}
-			raw, e := json.Marshal(i)
-			if e != nil {
-				return e
-			}
-			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET snapshot=$3,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, raw); e != nil {
-				return e
-			}
+		}
+		raw, e := json.Marshal(i)
+		if e != nil {
+			return e
+		}
+		if _, e = tx.Exec(ctx, "UPDATE instance.instances SET snapshot=$3,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, raw); e != nil {
+			return e
 		}
 		progress.Next = time.Millisecond
 	}

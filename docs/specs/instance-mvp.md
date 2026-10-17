@@ -323,7 +323,7 @@ Kubernetes 支持通过 resourceVersion 检测并拒绝基于旧对象版本的�
 
 ## 10. 完整释放及 Gov 原账退额
 
-Res 在计算资源清理完成且没有待确认写、已封闭迟到创建之后持久化释放 outbox，再发送 `ReportResourceReleased`。该通知只有稳定 release_event_id、create_operation_id、resource_id、reason。Stop、重启、普通退出及来源缺项不能触发完整释放。Pending 从未分配 GPU 时可在可靠封闭创建后退额。
+Res 在计算资源清理完成且没有待确认写、已封闭迟到创建之后持久化释放 outbox，再发送 `ReportResourceReleased`。计算清理须同时满足 Kubernetes 对象消失及 ACC 物理释放确认：外部创建前持久开始标记和已见 Pod 历史，清理后先持久封闭时间，再以 cluster/owner 全范围 `ObserveRelease` 验证来源水位与正向释放事实。API absence、节点离线和未知证据不能单独完成清理；仅从未开始外部创建的封闭取消可凭内部未执行事实跳过物理观察。该通知只有稳定 release_event_id、create_operation_id、resource_id、reason。Stop、重启、普通退出及来源缺项不能触发完整释放。Pending 从未分配 GPU 时可在可靠封闭创建后退额。
 
 Gov 从已认证 owner 与原创建操作查原账，验证归属后幂等全退；Res 不接受或存储 charge/code/units，也不根据当前目录重算。响应必须匹配事件、原操作、资源且为 APPLIED／ALREADY_APPLIED，Res 才确认 outbox。丢回执重试相同内容；同事件异内容拒绝，同资源换事件不得重复退额。
 

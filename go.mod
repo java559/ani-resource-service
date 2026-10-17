@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/prometheus/client_golang v1.24.1
-	github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017190559-93a539326e40
+	github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017194326-24820240a6b0
 	github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261017184327-1c605c793b88
 	github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal v0.0.0-20261013075021-0937f5aa9c6c
 	go.opentelemetry.io/otel v1.45.0

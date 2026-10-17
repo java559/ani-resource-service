@@ -71,6 +71,7 @@ func RequirePlatform(ctx context.Context) (Caller, error) {
 }
 func UUID(v string) bool { u, e := uuid.Parse(v); return e == nil && u != uuid.Nil && u.String() == v }
 
+var digest64 = regexp.MustCompile(`^[0-9a-f]{64}$`)
 var dnsName = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 
 func ResolveNamespace(tenant, trusted, prefix string) (string, error) {
@@ -158,6 +159,11 @@ type Instance struct {
 	VolumeName, VolumeUID                                              string
 	PodUID, PodName                                                    string
 	ComputeCleaned, WorkspaceCleaned, QuotaReturned                    bool
+	// The scope is durable before any external Notebook creation or mutation.
+	ExternalComputeStarted bool
+	GPUPods                []PodRef
+	ComputeSealAt          time.Time
+	PhysicalReleaseDigest  string
 	// Pending is written before sending. Absence of a target never clears an unknown CREATE.
 	Pending              *Mutation
 	CreatedAt, UpdatedAt time.Time
@@ -179,7 +185,36 @@ type Observation struct {
 	IntentVersion                                           int64
 	VolumeExists                                            bool
 	VolumeName, VolumeUID, WorkspaceReason                  string
+	GPUPods                                                 []PodRef
 }
+type PodRef struct {
+	ClusterID, Namespace, Name, UID, ContainerName string
+}
+type ReleaseEvidence struct {
+	Confirmed bool
+	Digest    string
+}
+type PhysicalReleaseObserver interface {
+	ObserveRelease(context.Context, Instance) (ReleaseEvidence, error)
+}
+
+func MergePodRefs(a, b []PodRef) []PodRef {
+	out := append([]PodRef(nil), a...)
+	for _, p := range b {
+		found := false
+		for _, old := range out {
+			if old == p {
+				found = true
+				break
+			}
+		}
+		if !found {
+			out = append(out, p)
+		}
+	}
+	return out
+}
+
 type MutationReceipt struct {
 	Mutation Mutation
 	Outcome  string

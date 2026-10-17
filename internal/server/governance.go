@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	instancepb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	instancebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	"google.golang.org/grpc"
@@ -252,8 +253,22 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 		}
 		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
 		if instanceMethod {
-			fd := r.ProtoReflect().Descriptor().Fields().ByName("tenant_id")
-			if fd == nil || r.ProtoReflect().Get(fd).String() != p.TenantID {
+			var tenant string
+			switch info.FullMethod {
+			case instancepb.InstanceService_AcceptCreate_FullMethodName:
+				if command, ok := r.(*instancepb.AcceptCreateRequest); ok {
+					tenant = command.GetContext().GetTenantId()
+				}
+			case instancepb.InstanceService_AcceptDelete_FullMethodName:
+				if command, ok := r.(*instancepb.AcceptDeleteRequest); ok {
+					tenant = command.GetContext().GetTenantId()
+				}
+			default:
+				if fd := r.ProtoReflect().Descriptor().Fields().ByName("tenant_id"); fd != nil {
+					tenant = r.ProtoReflect().Get(fd).String()
+				}
+			}
+			if tenant == "" || tenant != p.TenantID {
 				return nil, status.Error(codes.PermissionDenied, "instance tenant differs from authenticated scope")
 			}
 			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{TenantID: p.TenantID, Actor: p.Actor}), req)

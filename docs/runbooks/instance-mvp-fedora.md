@@ -6,7 +6,7 @@
 
 本任务重任务仅在 `ssh fedora` 执行，使用任务独占源码、缓存和 TMPDIR；互斥锁、资源预算、固定基线及快照见当前状态。按 [远程执行约定](../remote-execution.md) 同步带文件哈希的源码，不同步私钥、DSN 或 kubeconfig。
 
-Resource 的 [实例 API 生成器](../../scripts/generate-instance-api) 使用固定 Buf/Go 插件及正式 Acc proto；sqlc 使用根 `sqlc.yaml`。实例定向 PG 验证入口为 [instance-integration](../../scripts/instance-integration)，只创建、迁移和清理带任务标签的独占 PostgreSQL；`INSTANCE_TEST_RUN` 可限制相关场景。`make verify` 的全量测试入口不用于本 Goal。
+Resource 的 [实例 API 生成器](../../scripts/generate-instance-api) 使用固定 Buf/Go 插件及正式 Acc proto；sqlc 使用根 `sqlc.yaml`。实例定向 PG 验证入口为 [instance-integration](../../scripts/instance-integration)，只创建、迁移和清理带任务标签的独占 PostgreSQL；`INSTANCE_TEST_RUN` 可限制相关场景。提交前仍执行仓库要求的 `make verify`；实例真实 PG 门禁单独执行，不能由普通单元测试代替。
 
 终端验证协议单独发布为 `github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal`，只依赖 protobuf/gRPC，SG 不依赖 Resource 根模块及其 Kubernetes SDK。正式版本固定在各消费者 `go.mod`；升级先发布 provider，核验下载来源 SHA/sums，再用 `GOWORK=off` 构建消费者。早期受控联调使用任务私有 go.work；2026-10-13 发布前已改为正式下载并验证 Resource/SG 独立构建，不提交兄弟目录 replace。
 
@@ -29,6 +29,11 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
   "QuotaCertFile": "/managed/resource-client.pem",
   "QuotaKeyFile": "/managed/resource-client.key",
   "QuotaServerName": "ani-governance",
+  "ReleaseAddress": "accelerator.internal:9443",
+  "ReleaseCAFile": "/managed/accelerator-ca.pem",
+  "ReleaseCertFile": "/managed/resource-accelerator.pem",
+  "ReleaseKeyFile": "/managed/resource-accelerator.key",
+  "ReleaseServerName": "ani-accelerator-service",
   "TerminalAddress": ":9446",
   "Service": {
     "ClusterID": "<Acc 的真实 cluster UUID>",
@@ -43,6 +48,10 @@ Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener
 ```
 
 示例中的 UUID、地址与私有路径必须替换；未配置默认拒绝。NamespacePrefix 始终从当前 Network 配置读入，不由该 JSON 改写。SigningKeyFile 为 64 字节原始 Ed25519 私钥，不放入源码、普通归档或日志。
+
+ACC 物理释放只使用独立 `spiffe://ani.internal/service/ani-resource-service` 客户端身份，权限仅为 `ObserveRelease`，不复用 Gov 或 Quota 身份。`Release*` 字段全部必填，TLS 1.3 校验受管 CA 和精确 DNS SAN。创建 Notebook 的外部调用前，同一实例/lease 事务先持久 `ExternalComputeStarted` 与完整已见 Pod 历史；进程重启、Stop/Start 和并发删除均保留原 UID。普通 Notebook 删除采用 UID/RV 条件和 Foreground GC，不强制删除 Pod。
+
+Notebook、StatefulSet 和 Pod 全部消失且没有待确认写后，先持久 `ComputeSealAt`，下一轮才查询 ACC 的 cluster/owner 全范围物理证据。ACC 必须确认完整来源水位已越过该 fence、无活分配，所有已知分配都有正向释放事实；未知、节点离线、缺来源或不匹配回执继续占额，不能设置 `ComputeCleaned` 或发送退额事件。只有从未开始外部计算创建且已封闭的取消/删除先到，才使用内部未执行事实跳过物理查询。该证据不增加规格资格或有效期限制。
 
 GPU RuntimeClass 必须由 ACC 受管配置写入唯一 `GpuExecution.runtime_class_name`；Res 没有第二个配置来源。切换新合同前先完整结束旧 GPU 活动并确认释放 outbox 已匹配确认，再显式运行实例 migration，发布新 GPU Profile/Preset。不得把旧 F256 或百分比状态交给新服务恢复。
 
