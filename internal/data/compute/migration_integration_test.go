@@ -5,6 +5,7 @@ package compute_test
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/url"
 	"os"
 	"reflect"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute"
 	instance "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
@@ -24,7 +26,7 @@ type migrationFixture struct {
 	ownerDSN, runtimeDSN, role string
 }
 
-func migrationDatabase(t *testing.T) migrationFixture {
+func freshMigrationDatabase(t *testing.T) migrationFixture {
 	t.Helper()
 	ctx := context.Background()
 	raw, err := os.ReadFile(os.Getenv("INSTANCE_TEST_ADMIN_DSN_FILE"))
@@ -45,7 +47,7 @@ func migrationDatabase(t *testing.T) migrationFixture {
 	password, _ := u.User.Password()
 	literal := "'" + strings.ReplaceAll(password, "'", "''") + "'"
 	for _, r := range []string{owner, role} {
-		if _, err = admin.Exec(ctx, "CREATE ROLE "+pgx.Identifier{r}.Sanitize()+" LOGIN NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE PASSWORD "+literal); err != nil {
+		if _, err = admin.Exec(ctx, "CREATE ROLE "+pgx.Identifier{r}.Sanitize()+" LOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE PASSWORD "+literal); err != nil {
 			t.Fatal("fixture role creation failed")
 		}
 		r := r
@@ -66,9 +68,6 @@ func migrationDatabase(t *testing.T) migrationFixture {
 	u.Path = "/" + db
 	u.User = url.UserPassword(owner, password)
 	ownerDSN := u.String()
-	if err = instance.Migrate(ctx, ownerDSN, role); err != nil {
-		t.Fatal(err)
-	}
 	pool, err := pgxpool.New(ctx, ownerDSN)
 	if err != nil {
 		t.Fatal("fixture owner unavailable")
@@ -76,6 +75,27 @@ func migrationDatabase(t *testing.T) migrationFixture {
 	t.Cleanup(pool.Close)
 	u.User = url.UserPassword(role, password)
 	return migrationFixture{pool, ownerDSN, u.String(), role}
+}
+
+func migrationDatabase(t *testing.T) migrationFixture {
+	t.Helper()
+	f := freshMigrationDatabase(t)
+	if err := instance.Migrate(context.Background(), f.ownerDSN, f.role); err != nil {
+		t.Fatal(err)
+	}
+	return f
+}
+
+func requireRehearsalPostgres17(t *testing.T, p *pgxpool.Pool) {
+	t.Helper()
+	var version string
+	if err := p.QueryRow(context.Background(), `SELECT current_setting('server_version_num')`).Scan(&version); err != nil {
+		t.Fatal(err)
+	}
+	if version != "170011" {
+		t.Fatalf("PG17.11 rehearsal requires server_version_num=170011; actual=%s", version)
+	}
+	t.Log("actual PostgreSQL server_version_num=170011")
 }
 
 func exec(t *testing.T, p *pgxpool.Pool, sql string, args ...any) {
@@ -264,5 +284,100 @@ func TestComputeMigrationFailureIsAtomic(t *testing.T) {
 				t.Fatal("half-applied compute ledger", err)
 			}
 		})
+	}
+}
+
+// Fresh means the task-owned database has neither instance nor compute before
+// running the unchanged historical chain followed by the explicit new stage.
+func TestComputeMigrationPG17FreshAndReplay(t *testing.T) {
+	f := freshMigrationDatabase(t)
+	requireRehearsalPostgres17(t, f.owner)
+	ctx := context.Background()
+	var empty bool
+	if err := f.owner.QueryRow(ctx, `SELECT NOT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname IN ('instance','compute'))`).Scan(&empty); err != nil || !empty {
+		t.Fatal("fixture database was not empty", err)
+	}
+	if err := compute.Migrate(ctx, f.ownerDSN, f.role); err == nil {
+		t.Fatal("compute migration accepted missing historical instance stage")
+	}
+	if err := instance.Migrate(ctx, f.ownerDSN, f.role); err != nil {
+		t.Fatal("fresh instance chain", err)
+	}
+	before := state(t, f.owner, "instance.compute_presets")
+	if before.Rows != "[]" {
+		t.Fatal("fresh chain unexpectedly seeded presets")
+	}
+	if err := compute.Migrate(ctx, f.ownerDSN, f.role); err != nil {
+		t.Fatal("fresh compute stage", err)
+	}
+	after := state(t, f.owner, "compute.presets")
+	if !reflect.DeepEqual(before, after) {
+		t.Fatal("fresh compute stage changed OID, structure, defaults, owner or history")
+	}
+	for n := 0; n < 2; n++ {
+		if err := instance.Migrate(ctx, f.ownerDSN, f.role); err != nil {
+			t.Fatal("fresh historical replay", err)
+		}
+		if err := compute.Migrate(ctx, f.ownerDSN, f.role); err != nil {
+			t.Fatal("fresh compute replay", err)
+		}
+		if got := state(t, f.owner, "compute.presets"); !reflect.DeepEqual(after, got) {
+			t.Fatal("fresh replay changed structure or history")
+		}
+	}
+	repo, err := compute.OpenPostgres(ctx, f.runtimeDSN)
+	if err != nil {
+		t.Fatal("fresh restricted runtime readiness", err)
+	}
+	defer repo.Close()
+	var oldMissing, noInherit bool
+	if err = f.owner.QueryRow(ctx, `SELECT to_regclass('instance.compute_presets') IS NULL,NOT rolinherit FROM pg_roles WHERE rolname=$1`, f.role).Scan(&oldMissing, &noInherit); err != nil || !oldMissing || !noInherit {
+		t.Fatal("fresh old-entry or runtime-role invariant", err)
+	}
+	if err = compute.Restore(ctx, f.ownerDSN, f.role); err != nil {
+		t.Fatal("fresh restore", err)
+	}
+	if got := state(t, f.owner, "instance.compute_presets"); !reflect.DeepEqual(before, got) {
+		t.Fatal("fresh restore changed original structure/history")
+	}
+	if err = compute.Migrate(ctx, f.ownerDSN, f.role); err != nil {
+		t.Fatal("fresh forward after restore", err)
+	}
+	if err = repo.CheckReady(ctx); err != nil {
+		t.Fatal("fresh readiness after recovery", err)
+	}
+}
+
+// An unexpected constraint name passes the ownership/dependency preflight and
+// fails inside the shipped DO block, after CREATE SCHEMA and both table ALTERs.
+// No product failpoint or modified migration is used to exercise rollback.
+func TestComputeMigrationPG17MidDDLFailureIsAtomic(t *testing.T) {
+	f := migrationDatabase(t)
+	requireRehearsalPostgres17(t, f.owner)
+	exec(t, f.owner, `ALTER TABLE instance.compute_presets RENAME CONSTRAINT compute_presets_check TO unexpected_check`)
+	before := state(t, f.owner, "instance.compute_presets")
+	err := compute.Migrate(context.Background(), f.ownerDSN, f.role)
+	var pgerr *pgconn.PgError
+	if !errors.As(err, &pgerr) || pgerr.Code != "P0001" || !strings.Contains(pgerr.Message, "unrecognized preset constraint name") {
+		t.Fatal("did not reach the shipped post-move DO failure", err)
+	}
+	after := state(t, f.owner, "instance.compute_presets")
+	if !reflect.DeepEqual(before, after) {
+		t.Fatal("middle DDL failure changed source OID/data/constraints/history")
+	}
+	var absent bool
+	if err = f.owner.QueryRow(context.Background(), `SELECT NOT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname='compute')`).Scan(&absent); err != nil || !absent {
+		t.Fatal("transaction left partial compute schema/ledger/table", err)
+	}
+	exec(t, f.owner, `ALTER TABLE instance.compute_presets RENAME CONSTRAINT unexpected_check TO compute_presets_check`)
+	recovered := state(t, f.owner, "instance.compute_presets")
+	if err = compute.Migrate(context.Background(), f.ownerDSN, f.role); err != nil {
+		t.Fatal("corrected fixture could not migrate", err)
+	}
+	if err = compute.Restore(context.Background(), f.ownerDSN, f.role); err != nil {
+		t.Fatal("corrected fixture could not restore", err)
+	}
+	if got := state(t, f.owner, "instance.compute_presets"); !reflect.DeepEqual(recovered, got) {
+		t.Fatal("recovery changed corrected source state")
 	}
 }

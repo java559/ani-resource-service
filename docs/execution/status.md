@@ -4,11 +4,19 @@
 
 ## Compute Preset Resolution
 
-`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次候选合同，尚未正式发布/切换。Res compute提供方与容器一次解析已完成定向验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。Gov正式消费者未迁移，完整Gov→Res主链尚未接通。
+`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次合同；API 根module已正式发布 `v0.0.0-20261019174951-733f625995f8`（提交 `733f625995f89ee71b86192c5995eec4602df408`，Fedora官方proxy Origin/双checksum已核对），尚未目标切换。Res compute提供方与容器一次解析、Gov正式消费者迁移和真实mTLS/PG的最小CPU/GPU持久主链已验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。HTTP联合恢复门禁已通过，正在固定匹配版本；真实Notebook/GPU验收尚未执行。
 
-迁移切片在 Fedora 的 `20261019T170601Z-res02-fb58e8` 独占快照通过：`INSTANCE_TEST_RUN='^TestComputeMigration' scripts/instance-integration ./internal/data/compute` exit0，两个具名用例含目标冲突、checksum、视图依赖、锁超时失败子场景；同OID/数据/审计/约束验证状态/历史、重跑/逆向恢复、runtime权限隔离有效。HEAD加dirty archive SHA256 `1a1613d9995989ba3d5a1024543c355345ed8476239f0b23cda990b32bb54b35`；日志/manifest在本地 `.work/compute-preset-resolution/runs/` 及 Fedora `/home/chabking/workspace/compute-preset-resolution-runs/` 的同名run。原脚本固定镜像实际为PG18.6；目标PG17.11匹配演练尚未执行。任务PG容器已清理。此结果不替代联合持久主链或目标运行验收。
+迁移切片在 Fedora 的 `20261019T170601Z-res02-fb58e8` 独占快照通过：`INSTANCE_TEST_RUN='^TestComputeMigration' scripts/instance-integration ./internal/data/compute` exit0，两个具名用例含目标冲突、checksum、视图依赖、锁超时失败子场景；同OID/数据/审计/约束验证状态/历史、重跑/逆向恢复、runtime权限隔离有效。HEAD加dirty archive SHA256 `1a1613d9995989ba3d5a1024543c355345ed8476239f0b23cda990b32bb54b35`；日志/manifest在本地 `.work/compute-preset-resolution/runs/` 及 Fedora `/home/chabking/workspace/compute-preset-resolution-runs/` 的同名run。原脚本固定镜像实际为PG18.6；PG17.11匹配演练见下文。任务PG容器已清理。此结果不替代联合持久主链或目标运行验收。
 
 提供方快照 `20261019T172233Z-res03-6ebd68`（archive SHA256 `0f03e23fa5d1a1919036f10540c6bb638656aab9c94ce20617faeafecaf23556`）正式Proto/sqlc生成、API/biz/service/server/cmd定向测试及7个PG18.6门禁exit0：可信Scope的真实mTLS/PG三用途CPU/GPU、目录事务与授权分页、CPU规格变化冻结、GPU删目录后重放、借用卷引用及CPU持久生命周期/终端。外部运行系统使用既有fixture；32个生成/格式化文件按base/返回SHA核对无漂移应用。仓库必需提交前 `make verify` 在 `20261019T174309Z-res03-shorttmp-verify-ff4244` 全部通过（Fedora、实际-p1/2300M、2026-10-20 01:43:44–01:48:52 CST、exit0，archive SHA256 `f5478d09b9d382c198f85cb8d332b547bff410e963505f815b026b843d922ca5`）。此前漏格式化embed.go和过长TMPDIR导致的exit2保留；修正格式及任务独占短TMPDIR后原测试通过，未跳过测试，不重复已通过PG。
+
+匹配PG17.11演练在 `20261019T181501Z-task08-pg17-cutover-0cc3e6` exit0（archive `d20dd83f723cc59dfd4e07dc3cf1330cc4964f3f98825382474ea68cd0f08c2c`）：真正fresh、正式DDL中途异常整体回滚、CPU/GPU四状态的真实Res受理/worker/冻结/operation/outbox逐行保持、原ACK重放及正逆恢复通过。Gov权限/真实Casbin重载和两库部分提交的协调恢复也通过；Gov fixture冻结06加单测试overlay，未冒充05新消费者。PG/角色/容器已清理。外部Kubernetes/ACC观察/Gov receipt仍为fixture；不等于真实Pod/GPU、Gov投递或账本退款验收。
+
+Gov正式生成/目录与生产装配检查已通过。Fedora `20261019T185123Z-gov07-persistent-chain-0df45c` 的unit、`20261019T190146Z-gov07-pg-overlay-b955a5` 的data PG和`20261019T190641Z-gov07-service-overlay-1aaa97` 的service PG依次通过；两次测试编译失败及最小修复保留在原任务07 Result。最终service exit0，CPU/GPU真实当前授权→冻结/原子占额→投递→Res持久ACK、原键/并发/原账退额与TRAINING独立资格通过；Res测试进程由正式733f625 module构建，SHA `c594d796fb4d36c2043e4fd51bd680f8c2022d9b11b4cb9b136c6171adfc16a3`。使用独占PG17.11与受限runtime，资源已清理；ACC计划/Kubernetes/镜像为外部边界fixture，GPU运行和outbox真实回调不由此认定。
+
+联合门禁在 `20261019T191025Z-gov09-remaining-c20ab9` 通过真实provider三用途/删目录原载荷重放及10个SIGKILL提交前后恢复；缓存依赖元数据缺Origin的driver失败保留。随后 `20261019T191424Z-gov09-http-resume-67dc45` 仅续HTTP，exit0（用例51.09s）：JWT/当前权限、mTLS/PG持久链、查询分页、启停删除、真实Gov退款回调与Res worker通过，Kubernetes/硬件为外部边界fixture。各独占库/角色/容器均清理，源与overlay无漂移。Gov最终源码提交 `813ae539e1e324e65bdbcd4143a9ed03bbac418f` 已推送任务分支，未改main。
+
+新增PG17回归提交前 `20261019T191731Z-res10-final-verify-783bcb` 完整 `make verify` exit0（19:18:05.420404–19:20:49.998917Z，archive `d9d583722572651e49871a74d91277aa4f1b5b7b5b10f6db1edb4a4b3b7297e4`，2300M/p1），返回文件0/local drift0；运行代码及API相对733f625无变化。最终提交差异仅含08回归与执行状态更新。
 
 目标10–12集群身份只读已核对，GPU资源存在；目标数据库/权限迁移、服务切换、存量与新建CPU/GPU的22项真实验收均尚未执行，不能据readiness/模块测试宣布无回归。其它服务未修改或部署。
 
