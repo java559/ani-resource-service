@@ -2,6 +2,8 @@
 
 行为合同见 [v1.5 规格](../specs/instance-mvp.md)，实际执行结果只看 [当前状态](../execution/status.md#gpu-container-instance-mvp-v15)。本说明提供配置和恢复步骤，不代表共享集群已部署或真实 GPU 已验收。
 
+当前配置、已有卷及显式 VPC 接入使用[增量合同](../specs/instance-configuration-network.md)，本批实际结果见[配置与网络执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。只支持当前实例配置合同 2；升级前清理旧实例及原账，维护时先关闭 Gov 新建和 Res 新网络写入，保留已受理命令的恢复与删除能力。所有读者升级并通过正式依赖及生成门禁后才重新开放，不部署旧配置 reader。
+
 ## 源码与验证
 
 本任务重任务仅在 `ssh fedora` 执行，使用任务独占源码、缓存和 TMPDIR；互斥锁、资源预算、固定基线及快照见当前状态。按 [远程执行约定](../remote-execution.md) 同步带文件哈希的源码，不同步私钥、DSN 或 kubeconfig。
@@ -17,6 +19,8 @@ Resource 的 [实例 API 生成器](../../scripts/generate-instance-api) 使用�
 环境预先提供保存 Namespace 和普通 SA。Namespace 兼容现有 Network 标签 `network.ani.io/tenant-id=<完整资源租户 UUID>`、`network.ani.io/managed-by=ani-network-service`；缺省 Namespace 取当前 Network 配置前缀加完整 UUID。工作盘 StorageClass 必须采用 Delete reclaim policy。服务使用已有受管 Kubernetes 身份，实例 SA 不挂载 API token；本任务不是不互信租户隔离认证。
 
 Resource 的 Kubernetes 身份还需要 PV 的 `get/list` 只读权限，以记录 PVC 的实际绑定和核对回收；实例普通 SA 不需要这项权限。删除只针对保存 UID 的专属 PVC，不直接删除 PV。PVC 消失后仍存在的原 PV、Retain 回收策略或归属不符都不能完成工作盘清理；PV 绑定按 claimRef 的完整 UID/Namespace/name 及保存的 PV UID 核验。
+
+显式 VPC 的 controller-managed 释放路径还需要 Resource 服务身份在 `kcn-system` 对 `networking.kubercloud.com/nics` 的 `list` 权限，以确认系统网卡已消失。这项读取不在 14 类 full observer 的 LIST/WATCH 检查内，应使用实际运行服务账号单独验证；缺少时会保持 `PROVIDER_UNAVAILABLE` 并等待释放。仅向 Resource SA 绑定所需命名空间 Role，不向实例工作负载授予该权限。用户已有 PVC 的删除准入须覆盖实际借用引用；GET/UID 检查不能代替防同名替换的权限保障。
 
 Resource 使用 `ANI_NETWORK_MODE=governance`，保留现有业务 mTLS listener 与服务器 DNS SAN `ani-network-service`，启用现有 Image runtime 后才可启用实例。私有 `ANI_INSTANCE_CONFIG_FILE` 是严格 JSON，字段以 [instanceSettings](../../cmd/ani-resource-service/instance.go) 为准：
 

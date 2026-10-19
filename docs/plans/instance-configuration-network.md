@@ -45,7 +45,7 @@ IC-01/02 和 IC-03 的实现可由明确 owner 并行推进，但 shared Proto�
 4. 核验实际 governance/full 的 Instance、Network Adapter、Consumer 和 Attachment worker 完整装配；确认卷目录、引用保护、admission 键及实际环境前提。
 5. 确认所有 Gov/Res 副本及恢复、删除、清理 worker 均支持当前合同，旧副本退出后，才开放新受理并交付前端选择器和配置表单；每次接受在原受理事务内原子保存明确版本及完整生效快照。
 
-任务分支发布、draft PR 以及现有测试环境 Gov/Res 升级和旧实例清理均已获用户授权；合并、正式 tag/release 保持独立。回退先停止新受理，只使用经验证支持当前合同和 schema 的候选，不恢复旧实例受理或重解释账本。现有 ACC/SG/kcn/CSI/Notebook 组件及 GPU 供给组归属保持。
+任务分支发布、PR、现有测试环境 Gov/Res 升级和旧实例清理均已获用户授权。用户随后明确授权无需人工审核、直接合入 main；正式 tag/release 仍不在该授权内。最后文档和 SBOM 元数据收尾复用已通过的业务检查，不因文档重跑整套检查或漏洞扫描。回退先停止新受理，只使用经验证支持当前合同和 schema 的候选，不恢复旧实例受理或重解释账本。现有 ACC/SG/kcn/CSI/Notebook 组件及 GPU 供给组归属保持。
 
 ## 5. 验证和停止条件
 

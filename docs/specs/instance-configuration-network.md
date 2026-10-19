@@ -98,7 +98,7 @@ Instance 在 `internal/biz` 声明自己需要的窄 Network 和卷查询 Interf
 
 ### 3.2 可选目录与配置回显
 
-新增 `ListMountablePVCs` 及批量解析端口，Gov 公开候选入口建议为 `GET /api/v1/instances/mountable-pvcs?page=1&pageSize=20&name=...`。静态路由必须先于 `{instance_id}` 路由匹配。分页沿用 `page/pageSize → items,total`，最大 pageSize=100；Kubernetes LIST 使用一次完整一致的分页快照，完成租户过滤、确定性名称排序后计算真实 total 并切页。内部每页 200、单次最多 2,000 个 PVC；continue 过期重启本次查询，超限返回明确容量错误，不返回截断集合或伪造 total。内部上限同样属于首版建议值。
+已实现 `ListMountablePVCs` 及批量解析端口，Gov 公开候选入口为 `GET /api/v1/instances/mountable-pvcs?page=1&pageSize=20&name=...`。静态路由先于 `{instance_id}` 路由匹配。分页沿用 `page/pageSize → items,total`，最大 pageSize=100；Kubernetes LIST 使用一次完整一致的分页快照，完成租户过滤、确定性名称排序后计算真实 total 并切页。内部每页 200、单次最多 2,000 个 PVC；continue 过期重启本次查询，超限返回明确容量错误，不返回截断集合或伪造 total。
 
 候选返回 `pvc_name、phase、requested_capacity、access_modes、volume_mode、selectable、unavailable_reason`；容量使用 Kubernetes quantity 字符串，例如 `20Gi`。UID 由 Res 内部冻结，不作为公开可写字段。候选只在可信租户 Namespace 内查询，过滤其他实例专属工作盘及非授权资源。目录展示不能替代创建时重查。
 
@@ -208,6 +208,8 @@ Instance 侧新增 submission/网络绑定记录，保存网络选择、步骤�
 新关系均带 tenant_id，本域关系使用租户复合 FK；Instance 与 Network 各自事务，不跨域数据库 FK、联表或全局事务。现有 lease/epoch、观察新鲜度、关系索引、持久通知及释放证明继续复用。
 
 composition root 在 `governance`、`full` 实际实例路径装配：Instance Network Adapter→Network Attachments、Network Consumer→Instance 只读提交查询、Attachment worker 和 Provider。既有外部 Consumer 按登记的 owner/协议路由，不因新本地 owner 消费者而丢失。内部调用不通过 loopback gRPC，也不因此放开 Gov 的 Attachment 写 RPC allowlist；已有业务 mTLS、租户身份与方法授权保持有效。
+
+没有显式选择 VPC/Subnet 时不建立 Attachment，也不等待 Network 的 attached/released；保留原计算、工作盘和原账流程。显式选择时，Instance 通过窄端口读取 Network 的业务结果，用于整体就绪及删除完成判断。Network 自己负责 Kubernetes 观察和网络释放证明，Instance 不跨域查询网络表。
 
 Attachment 的独立地址证明只消费 Pod、VNic、VNicIP 和 EIP 事实；同属一个 Notebook 的 Service 更新不能使该证明永久失效。相关对象的旧/新 UID、删除事件以及全局 source continuity/overflow 仍使旧证明失效，Network/LB 原有观察范围不变。
 
