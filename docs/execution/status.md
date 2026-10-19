@@ -4,7 +4,7 @@
 
 ## Compute Preset Resolution
 
-`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次合同；API 根module已正式发布 `v0.0.0-20261019174951-733f625995f8`（提交 `733f625995f89ee71b86192c5995eec4602df408`，Fedora官方proxy Origin/双checksum已核对），尚未目标切换。Res compute提供方与容器一次解析、Gov正式消费者迁移和真实mTLS/PG的最小CPU/GPU持久主链已验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。HTTP联合恢复门禁已通过，正在固定匹配版本；真实Notebook/GPU验收尚未执行。
+`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次合同；API 根module已正式发布 `v0.0.0-20261019174951-733f625995f8`（提交 `733f625995f89ee71b86192c5995eec4602df408`，Fedora官方proxy Origin/双checksum已核对），尚未目标切换。Res compute提供方与容器一次解析、Gov正式消费者迁移和真实mTLS/PG的最小CPU/GPU持久主链已验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。HTTP联合恢复门禁通过，匹配源码/镜像已发布；正在准备迁移前真实样本，尚未目标数据库/服务切换及22项完整验收。
 
 迁移切片在 Fedora 的 `20261019T170601Z-res02-fb58e8` 独占快照通过：`INSTANCE_TEST_RUN='^TestComputeMigration' scripts/instance-integration ./internal/data/compute` exit0，两个具名用例含目标冲突、checksum、视图依赖、锁超时失败子场景；同OID/数据/审计/约束验证状态/历史、重跑/逆向恢复、runtime权限隔离有效。HEAD加dirty archive SHA256 `1a1613d9995989ba3d5a1024543c355345ed8476239f0b23cda990b32bb54b35`；日志/manifest在本地 `.work/compute-preset-resolution/runs/` 及 Fedora `/home/chabking/workspace/compute-preset-resolution-runs/` 的同名run。原脚本固定镜像实际为PG18.6；PG17.11匹配演练见下文。任务PG容器已清理。此结果不替代联合持久主链或目标运行验收。
 
@@ -18,7 +18,9 @@ Gov正式生成/目录与生产装配检查已通过。Fedora `20261019T185123Z-
 
 新增PG17回归提交前 `20261019T191731Z-res10-final-verify-783bcb` 完整 `make verify` exit0（19:18:05.420404–19:20:49.998917Z，archive `d9d583722572651e49871a74d91277aa4f1b5b7b5b10f6db1edb4a4b3b7297e4`，2300M/p1），返回文件0/local drift0；运行代码及API相对733f625无变化。最终提交差异仅含08回归与执行状态更新。
 
-目标10–12集群身份只读已核对，GPU资源存在；目标数据库/权限迁移、服务切换、存量与新建CPU/GPU的22项真实验收均尚未执行，不能据readiness/模块测试宣布无回归。其它服务未修改或部署。
+匹配运行候选为Res `831e931314c6029be3ec62d78c698febff324caa`、Gov `813ae539e1e324e65bdbcd4143a9ed03bbac418f`，精确镜像已发布。目标仍运行旧pair，已通过真实业务入口准备1个CPU运行、3个CPU停止样本，验证实际Notebook/Pod、1核/2GiB requests=limits、原冻结字节、终端/环境/挂载、日志和实际CPU/内存指标；这只是迁移前基线，不是迁移后OLD验收。首个不兼容nginx样本已正式删除，借用PVC原UID保持。
+
+GPU样本目前被ACC所选供给组CLOSED及平台静态委托缺动作阻断；原Goal排除ACC修改，额外临时双动作/同镜像重启/OPEN及恢复授权待输入，未修改ACC。公共旧pair入口已恢复，既有工作负载保持；目标数据库/权限迁移、新pair切换和22项完整真实验收未执行，不能据CPU准备、readiness或模块测试宣布无回归。其它服务未修改或部署。
 
 ## VPC R01 页码参考实现
 
