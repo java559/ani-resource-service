@@ -28,6 +28,7 @@ service InstanceService {
   rpc Start(ChangeInstanceRequest) returns (OperationResponse);
   rpc Stop(ChangeInstanceRequest) returns (OperationResponse);
   rpc GetInstance(GetInstanceRequest) returns (Instance);
+  rpc ResolveInstanceMetricScope(GetInstanceRequest) returns (InstanceMetricScope);
   rpc ListInstances(ListInstancesRequest) returns (ListInstancesResponse);
   rpc GetOperation(GetOperationRequest) returns (Operation);
   rpc ResolveTerminalTarget(ResolveTerminalTargetRequest) returns (instance.terminal.v1.TerminalTarget);
@@ -220,3 +221,12 @@ message InstanceLogFrame {
 message GetOperationRequest { string tenant_id = 1; string operation_id = 2; }
 message Operation { string id = 1; string instance_id = 2; string action = 3; int64 intent_version = 4; string state = 5; string reason = 6; }
 message ResolveTerminalTargetRequest { string tenant_id = 1; string instance_id = 2; int64 expected_version = 3; }
+
+// Persisted scope for historical metrics, independent of current runtime state.
+message InstanceMetricScope {
+  string tenant_id = 1;
+  string instance_id = 2;
+  string cluster_id = 3;
+  string namespace = 4;
+  string container_name = 5;
+}

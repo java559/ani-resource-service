@@ -63,6 +63,7 @@
 | `/instance.v1.InstanceService/Start` | 原键 + expected_version |
 | `/instance.v1.InstanceService/Stop` | 原键 + expected_version |
 | `/instance.v1.InstanceService/GetInstance` | 查询 |
+| `/instance.v1.InstanceService/ResolveInstanceMetricScope` | 仅持久化范围读取；历史查询不要求当前运行对象 |
 | `/instance.v1.InstanceService/ListInstances` | page/page_size，默认1/20、最大100，items/total；同RR快照Count/List |
 | `/instance.v1.InstanceService/GetOperation` | 查询 |
 | `/instance.v1.InstanceService/GetInstanceRuntime` | 只读当前owner UID链，不调用Observe/签名 |
@@ -74,6 +75,14 @@
 `/instance.terminal.v1.InstanceTerminalService/ValidateTerminalTarget` 不在 Gov 委托清单中。它由 Resource 同进程独立 mTLS listener 仅授权唯一 SG URI `spiffe://ani.internal/service/ani-session-gateway`，核对持久意图/版本、保存位置、Notebook/Pod UID、容器及当前 provider 观察。详见 [运行与恢复](../runbooks/instance-mvp-fedora.md)。
 
 ## 结果和重试
+
+### 实例监控历史范围
+
+`ResolveInstanceMetricScope(GetInstanceRequest)` 复用规范非零 UUID 的 `tenant_id`、`instance_id`；只读流程为请求校验、可信租户校验、现有 `Repository.Get` 和持久化位置校验。响应 `InstanceMetricScope` 的 `tenant_id`、`instance_id`、`cluster_id`、`namespace` 分别来自记录的 `TenantID`、`ID`、`Spec.ClusterID`、`Spec.Namespace`，`container_name` 固定使用领域 `Container`（`workspace`）。不接受调用者指定的集群、namespace 或 Pod，不使用进程配置填补缺失范围。
+
+停止或正常删除后的记录，只要仍保留完整位置即可解析；不要求 Running/Ready、不调用 Kubernetes、Observe 或 runtime，也不更新持久化、配额或生命周期，不用 UpdatedAt 推算历史终点。不存在沿用 `NotFound`；delete-first tombstone、缺少或非法集群/namespace 返回 `FailedPrecondition`，并携带 `google.rpc.ErrorInfo { domain: "instance.ani.io", reason: "INSTANCE_METRIC_SCOPE_UNAVAILABLE" }`，Gov 对应 HTTP 409。跨租户和不受信调用仍按上述 mTLS、精确方法清单、单值 metadata 和请求 tenant 匹配规则拒绝。
+
+一期完整契约由 `ani-observability-service/docs/specs/observability-phase1/CONTRACT.md` 维护，本仓不另复制任务包。历史数据是否仍在 Prometheus 保留期内由指标查询判定；位置可解析不代表必有样本。
 
 Gov 关闭未审查的 gRPC retry/service config；调用超时不证明操作未执行。用户重放沿用原业务键，创建报文 Attribution 和 metadata 共用本次追踪 ID。接收方的持久受理、幂等、worker 和租户约束沿用既有业务实现，不在传输层伪造成功。
 

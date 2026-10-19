@@ -21,25 +21,26 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	InstanceService_AdminListPresets_FullMethodName      = "/instance.v1.InstanceService/AdminListPresets"
-	InstanceService_AdminGetPreset_FullMethodName        = "/instance.v1.InstanceService/AdminGetPreset"
-	InstanceService_AdminCreatePreset_FullMethodName     = "/instance.v1.InstanceService/AdminCreatePreset"
-	InstanceService_AdminUpdatePreset_FullMethodName     = "/instance.v1.InstanceService/AdminUpdatePreset"
-	InstanceService_AdminSetPresetEnabled_FullMethodName = "/instance.v1.InstanceService/AdminSetPresetEnabled"
-	InstanceService_AdminDeletePreset_FullMethodName     = "/instance.v1.InstanceService/AdminDeletePreset"
-	InstanceService_GetInstanceRuntime_FullMethodName    = "/instance.v1.InstanceService/GetInstanceRuntime"
-	InstanceService_ListInstanceEvents_FullMethodName    = "/instance.v1.InstanceService/ListInstanceEvents"
-	InstanceService_StreamInstanceLogs_FullMethodName    = "/instance.v1.InstanceService/StreamInstanceLogs"
-	InstanceService_ListPresets_FullMethodName           = "/instance.v1.InstanceService/ListPresets"
-	InstanceService_ResolveCreateSpec_FullMethodName     = "/instance.v1.InstanceService/ResolveCreateSpec"
-	InstanceService_AcceptCreate_FullMethodName          = "/instance.v1.InstanceService/AcceptCreate"
-	InstanceService_AcceptDelete_FullMethodName          = "/instance.v1.InstanceService/AcceptDelete"
-	InstanceService_Start_FullMethodName                 = "/instance.v1.InstanceService/Start"
-	InstanceService_Stop_FullMethodName                  = "/instance.v1.InstanceService/Stop"
-	InstanceService_GetInstance_FullMethodName           = "/instance.v1.InstanceService/GetInstance"
-	InstanceService_ListInstances_FullMethodName         = "/instance.v1.InstanceService/ListInstances"
-	InstanceService_GetOperation_FullMethodName          = "/instance.v1.InstanceService/GetOperation"
-	InstanceService_ResolveTerminalTarget_FullMethodName = "/instance.v1.InstanceService/ResolveTerminalTarget"
+	InstanceService_AdminListPresets_FullMethodName           = "/instance.v1.InstanceService/AdminListPresets"
+	InstanceService_AdminGetPreset_FullMethodName             = "/instance.v1.InstanceService/AdminGetPreset"
+	InstanceService_AdminCreatePreset_FullMethodName          = "/instance.v1.InstanceService/AdminCreatePreset"
+	InstanceService_AdminUpdatePreset_FullMethodName          = "/instance.v1.InstanceService/AdminUpdatePreset"
+	InstanceService_AdminSetPresetEnabled_FullMethodName      = "/instance.v1.InstanceService/AdminSetPresetEnabled"
+	InstanceService_AdminDeletePreset_FullMethodName          = "/instance.v1.InstanceService/AdminDeletePreset"
+	InstanceService_GetInstanceRuntime_FullMethodName         = "/instance.v1.InstanceService/GetInstanceRuntime"
+	InstanceService_ListInstanceEvents_FullMethodName         = "/instance.v1.InstanceService/ListInstanceEvents"
+	InstanceService_StreamInstanceLogs_FullMethodName         = "/instance.v1.InstanceService/StreamInstanceLogs"
+	InstanceService_ListPresets_FullMethodName                = "/instance.v1.InstanceService/ListPresets"
+	InstanceService_ResolveCreateSpec_FullMethodName          = "/instance.v1.InstanceService/ResolveCreateSpec"
+	InstanceService_AcceptCreate_FullMethodName               = "/instance.v1.InstanceService/AcceptCreate"
+	InstanceService_AcceptDelete_FullMethodName               = "/instance.v1.InstanceService/AcceptDelete"
+	InstanceService_Start_FullMethodName                      = "/instance.v1.InstanceService/Start"
+	InstanceService_Stop_FullMethodName                       = "/instance.v1.InstanceService/Stop"
+	InstanceService_GetInstance_FullMethodName                = "/instance.v1.InstanceService/GetInstance"
+	InstanceService_ResolveInstanceMetricScope_FullMethodName = "/instance.v1.InstanceService/ResolveInstanceMetricScope"
+	InstanceService_ListInstances_FullMethodName              = "/instance.v1.InstanceService/ListInstances"
+	InstanceService_GetOperation_FullMethodName               = "/instance.v1.InstanceService/GetOperation"
+	InstanceService_ResolveTerminalTarget_FullMethodName      = "/instance.v1.InstanceService/ResolveTerminalTarget"
 )
 
 // InstanceServiceClient is the client API for InstanceService service.
@@ -65,6 +66,7 @@ type InstanceServiceClient interface {
 	Start(ctx context.Context, in *ChangeInstanceRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	Stop(ctx context.Context, in *ChangeInstanceRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	GetInstance(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*Instance, error)
+	ResolveInstanceMetricScope(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceMetricScope, error)
 	ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error)
 	GetOperation(ctx context.Context, in *GetOperationRequest, opts ...grpc.CallOption) (*Operation, error)
 	ResolveTerminalTarget(ctx context.Context, in *ResolveTerminalTargetRequest, opts ...grpc.CallOption) (*v1.TerminalTarget, error)
@@ -247,6 +249,16 @@ func (c *instanceServiceClient) GetInstance(ctx context.Context, in *GetInstance
 	return out, nil
 }
 
+func (c *instanceServiceClient) ResolveInstanceMetricScope(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceMetricScope, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(InstanceMetricScope)
+	err := c.cc.Invoke(ctx, InstanceService_ResolveInstanceMetricScope_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *instanceServiceClient) ListInstances(ctx context.Context, in *ListInstancesRequest, opts ...grpc.CallOption) (*ListInstancesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListInstancesResponse)
@@ -300,6 +312,7 @@ type InstanceServiceServer interface {
 	Start(context.Context, *ChangeInstanceRequest) (*OperationResponse, error)
 	Stop(context.Context, *ChangeInstanceRequest) (*OperationResponse, error)
 	GetInstance(context.Context, *GetInstanceRequest) (*Instance, error)
+	ResolveInstanceMetricScope(context.Context, *GetInstanceRequest) (*InstanceMetricScope, error)
 	ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error)
 	GetOperation(context.Context, *GetOperationRequest) (*Operation, error)
 	ResolveTerminalTarget(context.Context, *ResolveTerminalTargetRequest) (*v1.TerminalTarget, error)
@@ -360,6 +373,9 @@ func (UnimplementedInstanceServiceServer) Stop(context.Context, *ChangeInstanceR
 }
 func (UnimplementedInstanceServiceServer) GetInstance(context.Context, *GetInstanceRequest) (*Instance, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInstance not implemented")
+}
+func (UnimplementedInstanceServiceServer) ResolveInstanceMetricScope(context.Context, *GetInstanceRequest) (*InstanceMetricScope, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResolveInstanceMetricScope not implemented")
 }
 func (UnimplementedInstanceServiceServer) ListInstances(context.Context, *ListInstancesRequest) (*ListInstancesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListInstances not implemented")
@@ -672,6 +688,24 @@ func _InstanceService_GetInstance_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InstanceService_ResolveInstanceMetricScope_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServiceServer).ResolveInstanceMetricScope(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstanceService_ResolveInstanceMetricScope_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServiceServer).ResolveInstanceMetricScope(ctx, req.(*GetInstanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _InstanceService_ListInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListInstancesRequest)
 	if err := dec(in); err != nil {
@@ -792,6 +826,10 @@ var InstanceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetInstance",
 			Handler:    _InstanceService_GetInstance_Handler,
+		},
+		{
+			MethodName: "ResolveInstanceMetricScope",
+			Handler:    _InstanceService_ResolveInstanceMetricScope_Handler,
 		},
 		{
 			MethodName: "ListInstances",
