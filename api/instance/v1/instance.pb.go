@@ -2690,33 +2690,37 @@ func (x *ListInstancesResponse) GetTotal() int64 {
 }
 
 type Instance struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name              string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Version           int64                  `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
-	DesiredState      string                 `protobuf:"bytes,4,opt,name=desired_state,json=desiredState,proto3" json:"desired_state,omitempty"`
-	ObservedState     string                 `protobuf:"bytes,5,opt,name=observed_state,json=observedState,proto3" json:"observed_state,omitempty"`
-	Reason            string                 `protobuf:"bytes,6,opt,name=reason,proto3" json:"reason,omitempty"`
-	ImageId           string                 `protobuf:"bytes,7,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
-	ImageDigest       string                 `protobuf:"bytes,8,opt,name=image_digest,json=imageDigest,proto3" json:"image_digest,omitempty"`
-	PresetId          string                 `protobuf:"bytes,9,opt,name=preset_id,json=presetId,proto3" json:"preset_id,omitempty"`
-	CreateOperationId string                 `protobuf:"bytes,11,opt,name=create_operation_id,json=createOperationId,proto3" json:"create_operation_id,omitempty"`
-	LastOperationId   string                 `protobuf:"bytes,12,opt,name=last_operation_id,json=lastOperationId,proto3" json:"last_operation_id,omitempty"`
-	ComputeCleaned    bool                   `protobuf:"varint,13,opt,name=compute_cleaned,json=computeCleaned,proto3" json:"compute_cleaned,omitempty"`
-	WorkspaceCleaned  bool                   `protobuf:"varint,14,opt,name=workspace_cleaned,json=workspaceCleaned,proto3" json:"workspace_cleaned,omitempty"`
-	QuotaReturned     bool                   `protobuf:"varint,15,opt,name=quota_returned,json=quotaReturned,proto3" json:"quota_returned,omitempty"`
-	InstanceKind      string                 `protobuf:"bytes,17,opt,name=instance_kind,proto3" json:"instance_kind,omitempty"`
-	ComputeType       string                 `protobuf:"bytes,18,opt,name=compute_type,proto3" json:"compute_type,omitempty"`
-	Cpu               string                 `protobuf:"bytes,19,opt,name=cpu,proto3" json:"cpu,omitempty"`
-	Memory            string                 `protobuf:"bytes,20,opt,name=memory,proto3" json:"memory,omitempty"`
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,21,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	WorkspaceSize     string                 `protobuf:"bytes,22,opt,name=workspace_size,json=workspaceSize,proto3" json:"workspace_size,omitempty"`
-	PresetName        string                 `protobuf:"bytes,23,opt,name=preset_name,proto3" json:"preset_name,omitempty"`
-	PresetCode        string                 `protobuf:"bytes,24,opt,name=preset_code,proto3" json:"preset_code,omitempty"`
-	GpuSummary        *GpuSummary            `protobuf:"bytes,25,opt,name=gpu_summary,proto3" json:"gpu_summary,omitempty"`
-	Scheduling        *SchedulingOptions     `protobuf:"bytes,26,opt,name=scheduling,proto3" json:"scheduling,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state                    protoimpl.MessageState `protogen:"open.v1"`
+	Id                       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                     string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Version                  int64                  `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	DesiredState             string                 `protobuf:"bytes,4,opt,name=desired_state,json=desiredState,proto3" json:"desired_state,omitempty"`
+	ObservedState            string                 `protobuf:"bytes,5,opt,name=observed_state,json=observedState,proto3" json:"observed_state,omitempty"`
+	Reason                   string                 `protobuf:"bytes,6,opt,name=reason,proto3" json:"reason,omitempty"`
+	ImageId                  string                 `protobuf:"bytes,7,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
+	ImageDigest              string                 `protobuf:"bytes,8,opt,name=image_digest,json=imageDigest,proto3" json:"image_digest,omitempty"`
+	PresetId                 string                 `protobuf:"bytes,9,opt,name=preset_id,json=presetId,proto3" json:"preset_id,omitempty"`
+	CreateOperationId        string                 `protobuf:"bytes,11,opt,name=create_operation_id,json=createOperationId,proto3" json:"create_operation_id,omitempty"`
+	LastOperationId          string                 `protobuf:"bytes,12,opt,name=last_operation_id,json=lastOperationId,proto3" json:"last_operation_id,omitempty"`
+	ComputeCleaned           bool                   `protobuf:"varint,13,opt,name=compute_cleaned,json=computeCleaned,proto3" json:"compute_cleaned,omitempty"`
+	WorkspaceCleaned         bool                   `protobuf:"varint,14,opt,name=workspace_cleaned,json=workspaceCleaned,proto3" json:"workspace_cleaned,omitempty"`
+	QuotaReturned            bool                   `protobuf:"varint,15,opt,name=quota_returned,json=quotaReturned,proto3" json:"quota_returned,omitempty"`
+	InstanceKind             string                 `protobuf:"bytes,17,opt,name=instance_kind,proto3" json:"instance_kind,omitempty"`
+	ComputeType              string                 `protobuf:"bytes,18,opt,name=compute_type,proto3" json:"compute_type,omitempty"`
+	Cpu                      string                 `protobuf:"bytes,19,opt,name=cpu,proto3" json:"cpu,omitempty"`
+	Memory                   string                 `protobuf:"bytes,20,opt,name=memory,proto3" json:"memory,omitempty"`
+	CreatedAt                *timestamppb.Timestamp `protobuf:"bytes,21,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	WorkspaceSize            string                 `protobuf:"bytes,22,opt,name=workspace_size,json=workspaceSize,proto3" json:"workspace_size,omitempty"`
+	PresetName               string                 `protobuf:"bytes,23,opt,name=preset_name,proto3" json:"preset_name,omitempty"`
+	PresetCode               string                 `protobuf:"bytes,24,opt,name=preset_code,proto3" json:"preset_code,omitempty"`
+	GpuSummary               *GpuSummary            `protobuf:"bytes,25,opt,name=gpu_summary,proto3" json:"gpu_summary,omitempty"`
+	Scheduling               *SchedulingOptions     `protobuf:"bytes,26,opt,name=scheduling,proto3" json:"scheduling,omitempty"`
+	NetworkState             string                 `protobuf:"bytes,27,opt,name=network_state,json=networkState,proto3" json:"network_state,omitempty"`
+	NetworkReason            string                 `protobuf:"bytes,28,opt,name=network_reason,json=networkReason,proto3" json:"network_reason,omitempty"`
+	NetworkCleaned           bool                   `protobuf:"varint,29,opt,name=network_cleaned,json=networkCleaned,proto3" json:"network_cleaned,omitempty"`
+	VolumeReferencesReleased bool                   `protobuf:"varint,30,opt,name=volume_references_released,json=volumeReferencesReleased,proto3" json:"volume_references_released,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
 }
 
 func (x *Instance) Reset() {
@@ -2915,6 +2919,34 @@ func (x *Instance) GetScheduling() *SchedulingOptions {
 		return x.Scheduling
 	}
 	return nil
+}
+
+func (x *Instance) GetNetworkState() string {
+	if x != nil {
+		return x.NetworkState
+	}
+	return ""
+}
+
+func (x *Instance) GetNetworkReason() string {
+	if x != nil {
+		return x.NetworkReason
+	}
+	return ""
+}
+
+func (x *Instance) GetNetworkCleaned() bool {
+	if x != nil {
+		return x.NetworkCleaned
+	}
+	return false
+}
+
+func (x *Instance) GetVolumeReferencesReleased() bool {
+	if x != nil {
+		return x.VolumeReferencesReleased
+	}
+	return false
 }
 
 type EnvironmentSource struct {
@@ -4041,7 +4073,7 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\x04name\x18\t \x01(\tR\x04nameJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04R\bafter_id\"o\n" +
 	"\x15ListInstancesResponse\x12+\n" +
 	"\x05items\x18\x01 \x03(\v2\x15.instance.v1.InstanceR\x05items\x12\x14\n" +
-	"\x05total\x18\x03 \x01(\x03R\x05totalJ\x04\b\x02\x10\x03R\rnext_after_id\"\xa0\a\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05totalJ\x04\b\x02\x10\x03R\rnext_after_id\"\xd3\b\n" +
 	"\bInstance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
@@ -4069,7 +4101,11 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\vgpu_summary\x18\x19 \x01(\v2\x17.instance.v1.GpuSummaryR\vgpu_summary\x12>\n" +
 	"\n" +
 	"scheduling\x18\x1a \x01(\v2\x1e.instance.v1.SchedulingOptionsR\n" +
-	"schedulingJ\x04\b\n" +
+	"scheduling\x12#\n" +
+	"\rnetwork_state\x18\x1b \x01(\tR\fnetworkState\x12%\n" +
+	"\x0enetwork_reason\x18\x1c \x01(\tR\rnetworkReason\x12'\n" +
+	"\x0fnetwork_cleaned\x18\x1d \x01(\bR\x0enetworkCleaned\x12<\n" +
+	"\x1avolume_references_released\x18\x1e \x01(\bR\x18volumeReferencesReleasedJ\x04\b\n" +
 	"\x10\vJ\x04\b\x10\x10\x11R\x0epreset_versionR\rinstance_type\"H\n" +
 	"\x11EnvironmentSource\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1f\n" +

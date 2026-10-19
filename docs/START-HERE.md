@@ -2,6 +2,8 @@
 
 GPU 容器实例 v1.5：[规格](specs/instance-mvp.md)、[实施计划](plans/instance-mvp-v1.5.md)、[运行与恢复](runbooks/instance-mvp-fedora.md)、[当前执行状态](execution/status.md#gpu-container-instance-mvp-v15)。本轮按用户调整只负责后端，前端接入交由专人。
 
+容器实例配置与 VPC 接入：[增量设计](specs/instance-configuration-network.md)、[IC-01～IC-05 计划](plans/instance-configuration-network.md)；实施与真实验收只看[本任务状态](execution/status.md#instance-configuration-and-network-2026-10-19)。
+
 这是本仓库唯一正式文档导航。项目入口为 [README](../README.md)，工程约定为 [AGENTS](../AGENTS.md)。
 当前实施与验证进度只在 [执行状态](execution/status.md) 维护，本文不复制进度表。
 

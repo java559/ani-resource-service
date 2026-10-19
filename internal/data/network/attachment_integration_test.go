@@ -11,9 +11,12 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network"
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"k8s.io/client-go/rest"
+	"net/http"
 	"net/http/httptest"
 	"strconv"
+	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -360,5 +363,40 @@ func TestAttachmentLateAfterSubnetDeletedProtectsCIDRAndVPC(t *testing.T) {
 	}
 	if _, e = f.n.CreateSubnet(ctx, biz.CreateSubnet{TenantID: a.TenantID, VPCID: a.VPCID, Name: "reuse", CIDR: subnet.CIDR, IdempotencyKey: "reuse"}); biz.ReasonOf(e) != biz.CIDROverlap {
 		t.Fatal("late tombstone allowed address reuse", e)
+	}
+}
+
+func TestAttachmentPodReadsUseTrustedTenantNamespace(t *testing.T) {
+	for _, mode := range []string{"single_pod", "controller_managed"} {
+		t.Run(mode, func(t *testing.T) {
+			f := newAttachmentFixture(t)
+			f.r.WorkloadMode = mode
+			a := f.prepare(t)
+			var scoped atomic.Int64
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method == "GET" && strings.HasSuffix(r.URL.Path, "/pods") {
+					if r.URL.Path != "/api/v1/namespaces/"+a.Namespace+"/pods" || r.URL.Query().Get("labelSelector") != "" || r.URL.Query().Get("limit") != "500" {
+						t.Errorf("attachment Pod read escaped frozen namespace or hid historic Pods: path=%s selector=%s", r.URL.Path, r.URL.Query().Get("labelSelector"))
+						http.Error(w, "read scope denied", http.StatusForbidden)
+						return
+					}
+					scoped.Add(1)
+				}
+				f.api.ServeHTTP(w, r)
+			}))
+			defer server.Close()
+			provider, err := data.NewKCProvider(f.p, &rest.Config{Host: server.URL, QPS: 1000, Burst: 1000})
+			if err != nil {
+				t.Fatal(err)
+			}
+			work := biz.AttachmentWork{Attachment: a, Plan: *a.Plan, Now: time.Now(), Relations: []byte("[]")}
+			if _, err = provider.ObserveAttachment(context.Background(), work); err != nil || scoped.Load() != 1 {
+				t.Fatal("trusted attachment namespace could not be observed", err, scoped.Load())
+			}
+			work.Attachment.Namespace = "untrusted-input"
+			if _, err = provider.ObserveAttachment(context.Background(), work); err == nil || scoped.Load() != 1 {
+				t.Fatal("untrusted namespace bypassed saved binding verification", err, scoped.Load())
+			}
+		})
 	}
 }

@@ -85,7 +85,21 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	execution := server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration())
+	attachments := biz.NewAttachments(repository, policy.StaleAfter)
+	fallback, err := data.NewInstanceConsumer(bc.Network.InstanceConsumerEndpoint)
+	if err != nil {
+		return err
+	}
+	defer fallback.Close()
+	consumer, err := wireInstanceNetwork(instances, networkUC, attachments, fallback, bc.Network.ClusterId, bc.Network.NamespacePrefix, policy.StaleAfter)
+	if err != nil {
+		return err
+	}
+	attachmentWorker, err := biz.NewAttachmentWorker(repository, provider, consumer, uuid.NewString(), policy)
+	if err != nil {
+		return err
+	}
+	execution := server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration(), attachmentWorker)
 	readiness := server.NewReadiness(func() bool { return execution.Ready() })
 	observability, err := server.NewObservability(Name, Version, readiness)
 	if err != nil {
@@ -101,7 +115,7 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	networkv1.RegisterNetworkServiceServer(gs, networkService.NewNetworkService(networkUC))
+	networkv1.RegisterNetworkServiceServer(gs, networkService.NewNetworkService(networkUC, attachments))
 	networkv1.RegisterTenantEgressServiceServer(gs, networkService.NewTenantEgressService(egress))
 	networkv1.RegisterPlatformNetworkServiceServer(gs, networkService.NewPlatformNetworkService(egress))
 	networkv1.RegisterTenantLoadBalancerServiceServer(gs, networkService.NewTenantLoadBalancerService(lbs))

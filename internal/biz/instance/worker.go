@@ -12,13 +12,14 @@ type Worker struct {
 	quota    QuotaReporter
 	releases PhysicalReleaseObserver
 	owner    string
+	network  NetworkPort
 }
 
 func NewWorker(r Repository, p Provider, q QuotaReporter, releases PhysicalReleaseObserver, owner string) (*Worker, error) {
 	if r == nil || p == nil || q == nil || releases == nil || owner == "" {
 		return nil, ErrInvalid
 	}
-	return &Worker{r, p, q, releases, owner}, nil
+	return &Worker{repo: r, provider: p, quota: q, releases: releases, owner: owner}, nil
 }
 func (w *Worker) Step(ctx context.Context) (bool, error) {
 	work, err := w.repo.Claim(ctx, w.owner, 45*time.Second)
@@ -27,6 +28,7 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 	}
 	i := work.Instance
 	p := Progress{Instance: i, Next: 5 * time.Second}
+	p.Instance.Network = CloneNetwork(i.Network)
 	var obs Observation
 	// A DELETE-first tombstone has never accepted an external creation. Its
 	// admission lock prevents any later CREATE from enabling external writes.
@@ -94,8 +96,33 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		p.Instance.Pending = nil
 		p.Receipt = &MutationReceipt{Mutation: *i.Pending, Outcome: "recovered_by_observation"}
 		p.Instance.Reason = ""
+		ReconcileSubmission(&p.Instance, obs)
 		// Persist recovered evidence before any next mutation.
 		return true, w.repo.Finish(ctx, *work, p)
+	}
+	if ReconcileSubmission(&p.Instance, obs) {
+		if i.Desired == Running {
+			p.Instance.Observed = "pending"
+			p.Instance.Reason = "WAITING_FOR_NETWORK"
+		}
+		return true, w.repo.Finish(ctx, *work, p)
+	}
+	if i.Desired != Deleted {
+		if changed, e := w.prepareNetwork(ctx, &p.Instance); changed || e != nil {
+			return true, w.repo.Finish(ctx, *work, p)
+		}
+	}
+	networkReady := w.observeNetwork(ctx, &p.Instance)
+	// Later mutation/Confirm paths can return before the final readiness branch.
+	// Revoke a previous Running state before any such durable return.
+	if !networkReady && p.Instance.Network != nil && p.Instance.Observed == Running {
+		p.Instance.Observed = "pending"
+		p.Instance.Reason = "WAITING_FOR_NETWORK"
+	}
+	if i.Desired == Running && i.Network != nil {
+		if changed, e := w.confirmNetwork(ctx, &p.Instance); changed || e != nil {
+			return true, w.repo.Finish(ctx, *work, p)
+		}
 	}
 	mutate := func(kind string, call func() error) (bool, error) {
 		m := Mutation{Kind: kind, OperationID: i.LastOperationID, Version: i.Version, TargetUID: obs.NotebookUID, ResourceVersion: obs.NotebookRV}
@@ -190,6 +217,13 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 			return true, w.repo.Finish(ctx, *work, p)
 		}
 		p.Instance.WorkspaceCleaned = true
+		if changed, e := w.prepareNetwork(ctx, &p.Instance); changed || e != nil {
+			return true, w.repo.Finish(ctx, *work, p)
+		}
+		if !w.releaseNetwork(ctx, &p.Instance) {
+			p.Instance.Reason = "WAITING_FOR_NETWORK_RELEASE"
+			return true, w.repo.Finish(ctx, *work, p)
+		}
 		p.Instance.Observed = Deleted
 		p.Instance.Reason = ""
 		p.Next = 0
@@ -237,13 +271,16 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		p.Instance.Observed = Stopped
 		p.Instance.Reason = ""
 		p.Next = 30 * time.Second
-	} else if !stopped && obs.PodReady {
+	} else if !stopped && obs.PodReady && networkReady {
 		p.Instance.Observed = Running
 		p.Instance.Reason = ""
 		p.Next = 30 * time.Second
 	} else {
 		p.Instance.Observed = "pending"
 		p.Instance.Reason = "WAITING_FOR_NOTEBOOK"
+		if obs.PodReady && !networkReady {
+			p.Instance.Reason = "WAITING_FOR_NETWORK"
+		}
 	}
 	return true, w.repo.Finish(ctx, *work, p)
 }

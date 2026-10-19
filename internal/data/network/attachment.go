@@ -18,12 +18,16 @@ func attachment(row sqlcgen.NetworkAttachment) (biz.Attachment, error) {
 		return biz.Attachment{}, databaseFailure(err)
 	}
 	a := biz.Attachment{ID: row.AttachmentID, TenantID: row.TenantID, VPCID: row.VpcID, SubnetID: row.SubnetID, InstanceID: row.InstanceID, Slot: row.Slot, SubmissionID: row.SubmissionID, Generation: row.Generation, ClusterID: row.ClusterID, Namespace: row.Namespace, BindingRevision: row.BindingRevision, State: biz.AttachmentState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, PodName: row.PodName, PodUID: row.PodUid, ConfirmUID: row.ConfirmUid, FinalizationID: textValue(row.FinalizationID), CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, ReleasedAt: row.ReleasedAt}
+	a.WorkloadMode = plan.WorkloadMode
+	if a.WorkloadMode == "" {
+		a.WorkloadMode = "single_pod"
+	}
 	if a.State == biz.Reserved || a.State == biz.Attached {
 		a.Plan = &plan
 	}
 	return a, nil
 }
-func attachmentReplay(ctx context.Context, q *sqlcgen.Queries, r biz.PrepareAttachment) (biz.Attachment, bool, error) {
+func attachmentReplay(ctx context.Context, q *sqlcgen.Queries, db attachmentSnapshotReader, r biz.PrepareAttachment) (biz.Attachment, bool, error) {
 	row, e := q.GetAttachmentReplay(ctx, sqlcgen.GetAttachmentReplayParams{TenantID: r.TenantID, InstanceID: r.InstanceID, Slot: r.Slot, RequestKey: r.RequestKey})
 	if errors.Is(e, pgx.ErrNoRows) {
 		return biz.Attachment{}, false, nil
@@ -34,14 +38,14 @@ func attachmentReplay(ctx context.Context, q *sqlcgen.Queries, r biz.PrepareAtta
 	if row.Fingerprint != r.Fingerprint() {
 		return biz.Attachment{}, true, biz.Fail(biz.IdempotencyConflict, "attachment key already accepted another intent")
 	}
-	a, e := attachment(row)
+	a, e := managedAttachment(ctx, db, row)
 	return a, true, e
 }
 func attachmentHistory(ctx context.Context, q *sqlcgen.Queries, row sqlcgen.NetworkAttachment, event string) error {
 	return q.InsertAttachmentHistory(ctx, sqlcgen.InsertAttachmentHistoryParams{TenantID: row.TenantID, HistoryID: uuid.NewString(), AttachmentID: row.AttachmentID, Version: row.Version, Event: event, State: row.State, Reason: row.Reason, PodUid: row.PodUid, FinalizationID: row.FinalizationID})
 }
 func (p *Postgres) PrepareAttachment(ctx context.Context, r biz.PrepareAttachment, freshness time.Duration) (biz.Attachment, error) {
-	if a, found, e := attachmentReplay(ctx, p.queries, r); found || e != nil {
+	if a, found, e := attachmentReplay(ctx, p.queries, p.pool, r); found || e != nil {
 		return a, e
 	}
 	tx, e := p.pool.Begin(ctx)
@@ -65,7 +69,7 @@ func (p *Postgres) PrepareAttachment(ctx context.Context, r biz.PrepareAttachmen
 	if e = q.LockAttachmentSlot(ctx, sqlcgen.LockAttachmentSlotParams{TenantID: r.TenantID, InstanceID: r.InstanceID, Slot: r.Slot}); e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	if a, found, e := attachmentReplay(ctx, q, r); found || e != nil {
+	if a, found, e := attachmentReplay(ctx, q, tx, r); found || e != nil {
 		return a, e
 	}
 	occupied, e := q.HasAttachmentSlot(ctx, sqlcgen.HasAttachmentSlotParams{TenantID: r.TenantID, InstanceID: r.InstanceID, Slot: r.Slot})
@@ -96,10 +100,15 @@ func (p *Postgres) PrepareAttachment(ctx context.Context, r biz.PrepareAttachmen
 		return biz.Attachment{}, biz.Fail(biz.NetworkNotReady, "subnet binding identity is unavailable")
 	}
 	id := "att_" + strings.ReplaceAll(uuid.NewString(), "-", "")
-	plan, _ := json.Marshal(biz.PodPrimaryPlan{FormatVersion: 1, Namespace: b.Namespace, PrimaryNetworkRef: b.Namespace + "/" + b.ProviderName, TenantID: r.TenantID, InstanceID: r.InstanceID, AttachmentID: id, SubmissionID: r.SubmissionID, Generation: r.Generation})
+	plan, _ := json.Marshal(biz.PodPrimaryPlan{FormatVersion: 1, WorkloadMode: r.WorkloadMode, Namespace: b.Namespace, PrimaryNetworkRef: b.Namespace + "/" + b.ProviderName, TenantID: r.TenantID, InstanceID: r.InstanceID, AttachmentID: id, SubmissionID: r.SubmissionID, Generation: r.Generation})
 	row, e := q.InsertAttachment(ctx, sqlcgen.InsertAttachmentParams{TenantID: r.TenantID, AttachmentID: id, VpcID: s.VpcID, SubnetID: s.SubnetID, BindingID: b.BindingID, InstanceID: r.InstanceID, Slot: r.Slot, RequestKey: r.RequestKey, SubmissionID: r.SubmissionID, Generation: r.Generation, Fingerprint: r.Fingerprint(), ClusterID: b.ClusterID, Namespace: b.Namespace, BindingRevision: b.BindingID + ":" + b.ProviderUid, Plan: plan})
 	if e != nil {
 		return biz.Attachment{}, databaseFailure(e)
+	}
+	if r.WorkloadMode == "controller_managed" {
+		if _, e = tx.Exec(ctx, `INSERT INTO network_attachment_consumer_snapshots(tenant_id,attachment_id) VALUES($1,$2)`, r.TenantID, id); e != nil {
+			return biz.Attachment{}, databaseFailure(e)
+		}
 	}
 	if e = attachmentHistory(ctx, q, row, "prepared"); e != nil {
 		return biz.Attachment{}, databaseFailure(e)
@@ -107,14 +116,14 @@ func (p *Postgres) PrepareAttachment(ctx context.Context, r biz.PrepareAttachmen
 	if e = tx.Commit(ctx); e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	return attachment(row)
+	return managedAttachment(ctx, p.pool, row)
 }
 func (p *Postgres) GetAttachment(ctx context.Context, t, id string) (biz.Attachment, error) {
 	row, e := p.queries.GetAttachment(ctx, sqlcgen.GetAttachmentParams{TenantID: t, AttachmentID: id})
 	if e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	return attachment(row)
+	return managedAttachment(ctx, p.pool, row)
 }
 func lockAttachmentParents(ctx context.Context, q *sqlcgen.Queries, t, id string) (sqlcgen.NetworkAttachment, error) {
 	initial, e := q.GetAttachment(ctx, sqlcgen.GetAttachmentParams{TenantID: t, AttachmentID: id})
@@ -142,6 +151,13 @@ func (p *Postgres) ConfirmAttachment(ctx context.Context, r biz.ConfirmAttachmen
 	}
 	if r.ClusterID != row.ClusterID || r.Namespace != row.Namespace {
 		return biz.Attachment{}, biz.Fail(biz.PlacementMismatch, "Pod placement differs from attachment")
+	}
+	mode, e := attachment(row)
+	if e != nil {
+		return biz.Attachment{}, e
+	}
+	if mode.WorkloadMode == "controller_managed" {
+		return p.confirmManagedAttachment(ctx, tx, q, row, r)
 	}
 	// Immutable identity replay precedes mutable version and state checks, also
 	// when the worker recovered the same Pod before Confirm arrived.
@@ -184,7 +200,7 @@ func (p *Postgres) ReleaseAttachment(ctx context.Context, r biz.ReleaseAttachmen
 		if *row.FinalizationID != r.FinalizationID {
 			return biz.Attachment{}, biz.Fail(biz.AttachmentConflict, "attachment has another finalization identity")
 		}
-		return attachment(row)
+		return managedAttachment(ctx, tx, row)
 	}
 	if row.Version != r.ExpectedVersion {
 		return biz.Attachment{}, biz.Fail(biz.VersionConflict, "attachment version changed")
@@ -199,5 +215,5 @@ func (p *Postgres) ReleaseAttachment(ctx context.Context, r biz.ReleaseAttachmen
 	if e = tx.Commit(ctx); e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	return attachment(row)
+	return managedAttachment(ctx, p.pool, row)
 }

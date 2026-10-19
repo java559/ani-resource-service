@@ -248,6 +248,10 @@ message Instance {
   string preset_code = 24 [json_name = "preset_code"];
   GpuSummary gpu_summary = 25 [json_name = "gpu_summary"];
   SchedulingOptions scheduling = 26;
+  string network_state = 27;
+  string network_reason = 28;
+  bool network_cleaned = 29;
+  bool volume_references_released = 30;
 }
 message EnvironmentSource { string name = 1; string source_type = 2; }
 message RuntimeMount { string name = 1; string volume_type = 2; string mount_path = 3; bool read_only = 4; }

@@ -1,12 +1,12 @@
-# 容器实例挂载、配置与 VPC 接入改造草案
+# 容器实例挂载、配置与 VPC 接入合同
 
-日期：2026-10-19。状态：**待审阅的增量设计，尚未实施**。
+日期：2026-10-19。状态：**增量实现合同；实际交付与未验证范围只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)**。原固定输入的哈希保留在任务源清单中。
 
 目标是让用户通过 Gov 创建容器实例时选择已有 PVC 和挂载路径、VPC/Subnet，以及标签、注解和环境变量；配置经过授权、校验、冻结和持久化后进入真实 Notebook/Pod，启停和重建继续生效，最终删除正确处理卷引用和网络关联。
 
 本文只定义新增行为。现有实例、GPU 执行和原账退额规则继续引用[实例规格](instance-mvp.md)，网络资源所有权继续引用 [ADR-0001](../adr/0001-own-network-lifecycle.md)，租户数据约束继续引用 [ADR-0002](../adr/0002-use-tenant-owned-data-without-rls.md)。实施顺序见[改造计划](../plans/instance-configuration-network.md)，实际交付结果只记入[执行状态](../execution/status.md)。
 
-本草案经确认并实施时，将定点替代原实例规格中“工作盘固定路径、不引入已有卷”和“仅复用现有网络”的范围限制；本次不把旧规格提前改写成已交付能力，也不授权部署、跨仓库代码修改或 kcn 修改。
+本 Goal 已明确授权 Res/Gov 后端实施及任务隔离环境验收。本合同定点替代原实例规格中“工作盘固定路径、不引入已有卷”和“仅复用现有网络”的范围限制；实现、正式模块交付和真实环境验收分别确认。本次不修改 kcn/ACC/SG 源码或共享部署。
 
 ## 1. 业务主链和当前断点
 
@@ -25,7 +25,7 @@ flowchart LR
 
 首个可观察结果：正式 Gov 创建一个 CPU 实例，两个已有 PVC 挂载到指定路径，自定义环境变量可在容器读取，标签/注解出现在实际 Pod；启停后数据和配置保留；删除后用户 PVC 保留、系统工作盘回收。下一条纵向链在此基础上指定 VPC/Subnet，验证取址、通信、Pod 自动重建及最终网络释放。GPU 继续走同一配置实现，并单独验证执行参数和原账退额。
 
-核查快照：Res `f7459f7ae71c5573f53a50c5d20908b129c17e0c`；Gov `90b1ecc8cfa31b96ac43a8e4ff3aa18d41f03812`；用户提供的 kcn 本地 checkout `2b9467c66dc9024fbf321a4b3a98a9e5f3fef377`。以下是源码事实，不是部署或数据面验收。
+原设计核查快照：Res `f7459f7ae71c5573f53a50c5d20908b129c17e0c`；Gov `90b1ecc8cfa31b96ac43a8e4ff3aa18d41f03812`；用户提供的 kcn 本地 checkout `2b9467c66dc9024fbf321a4b3a98a9e5f3fef377`。下表记录实施前断点，当前实现及部署/数据面结论见执行状态。
 
 | 断点 | 固定源码落点 | 对改造的影响 |
 |---|---|---|
@@ -56,7 +56,7 @@ Instance 在 `internal/biz` 声明自己需要的窄 Network 和卷查询 Interf
 
 ### 3.1 公开字段
 
-保留现有 `POST /api/v1/instances` 和 `data` 外壳。以下为新增字段提案；`idempotency_key/name/image_id/image_scope/preset_id/scheduling` 沿用原合同。
+保留现有 `POST /api/v1/instances` 和 `data` 外壳。以下为新增字段合同；`idempotency_key/name/image_id/image_scope/preset_id/scheduling` 沿用原合同。
 
 ```json
 {
@@ -72,8 +72,8 @@ Instance 在 `internal/biz` 声明自己需要的窄 Network 和卷查询 Interf
       {"pvc_name": "outputs", "mount_path": "/outputs", "read_only": false}
     ],
     "network": {
-      "vpc_id": "10000000-0000-4000-8000-000000000003",
-      "subnet_id": "10000000-0000-4000-8000-000000000004"
+      "vpc_id": "vpc_10000000000040008000000000000003",
+      "subnet_id": "subnet_10000000000040008000000000000004"
     },
     "labels": {"team": "ml"},
     "annotations": {"example.com/purpose": "training"},
@@ -92,9 +92,9 @@ Instance 在 `internal/biz` 声明自己需要的窄 Network 和卷查询 Interf
 | `labels`、`annotations` | 缺省空；字符串 map，校验 Kubernetes 格式及本方案保留键 |
 | `env[]` | 缺省空；有序 name/value 数组，允许空字符串，拒绝重名；首版是字面值，不开放任意 valueFrom/envFrom |
 
-显式 `null`、未知字段、无效类型和重复 JSON key 均拒绝。v2 内缺省与空集合视为相同意图；`network: {}` 和空路径非法。路径不自动清洗，环境值不 trim、不展开。环境数组保持输入顺序，`$(VAR)` 的前项引用语义不能被排序破坏。
+显式 `null`、未知字段、无效类型和重复 JSON key 均拒绝。v2 内缺省与空集合视为相同意图；`network: {}` 和空路径非法。路径不自动清洗，环境值不 trim、不展开。环境数组保持输入顺序，`$(VAR)` 也是字面值；Notebook 渲染必须处理 kubelet 的变量展开规则，容器内仍得到用户原值。
 
-拟定首版上限：附加卷 8 个、环境变量 64 个、用户 labels/annotations 各 32 项，环境值总计 16 KiB、用户 metadata 总计 16 KiB；保留现有 64 KiB 请求体上限。数值是本草案建议，确认后固定到两端验证及前端提示，不能只在页面限制。
+首版上限：附加卷 8 个、环境变量 64 个、用户 labels/annotations 各 32 项，环境值总计 16 KiB、用户 metadata 总计 16 KiB；保留现有 64 KiB 请求体上限。两端验证和前端提示使用同一限制，不能只在页面限制。
 
 ### 3.2 可选目录与配置回显
 
@@ -224,9 +224,9 @@ Res 的 decoder 和 AcceptCreate 还必须拒绝“version=1/缺省版本但携�
 
 ## 8. 错误 状态和前端交接
 
-以下 reason 是拟新增合同，实施时更新两端错误映射及 OpenAPI，不让依赖错误一律变成 503，也不让新资源上限误映射成日志连接错误。
+以下 reason 是新增合同，两端错误映射及 OpenAPI 同步维护，不让依赖错误一律变成 503，也不让新资源上限误映射成日志连接错误。
 
-| HTTP | 拟定 reason | 处理 |
+| HTTP | reason | 处理 |
 |---|---|---|
 | 400 | INVALID_INSTANCE_REQUEST、INSTANCE_RESERVED_CONFIG | 显示字段路径和安全原因；保留键、路径或重复 env 等输入问题 |
 | 403 | INSTANCE_SCOPE_DENIED | 当前动作无权限；不回显环境值或他租户资源 |
@@ -255,6 +255,6 @@ Res 的 decoder 和 AcceptCreate 还必须拒绝“version=1/缺省版本但携�
 
 ## 10. 方案取舍与外部前提
 
-建议首版保留一个系统工作盘，另允许最多 8 个已有卷；用户卷默认保留；配置创建后冻结；未选网络保持现有行为；显式 VPC 使用一个 primary Subnet。这些是供审阅的产品取舍，不伪装成已经逐项批准的规则。
+首版保留一个系统工作盘，另允许最多 8 个已有卷；用户卷默认保留；配置创建后冻结；未选网络保持现有行为；显式 VPC 使用一个 primary Subnet。这些取舍由本 Goal 的固定输入采用；是否已通过真实环境验收仍以执行状态为准。
 
 Notebook 原生 PodSpec 支持 PVC 与挂载路径，见 [Notebook v1.10 API](https://github.com/kubeflow/kubeflow/blob/v1.10.0/components/notebook-controller/api/v1/notebook_types.go#L23-L31)。卷同 Namespace、访问模式和延迟绑定以 [Kubernetes 存储合同](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)为基础。实际支持的镜像目录权限、CSI、PVC 删除保护、kcn/OVN 及 admission 保留键需要在真实验收环境核对；源码路径存在不等于该组合已验收。

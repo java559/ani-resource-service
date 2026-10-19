@@ -10,6 +10,7 @@ import (
 )
 
 type AttachmentWork struct {
+	ConsumerSnapshot      *ConsumerSubmission
 	Requirement           ObservationRequirement
 	Now                   time.Time
 	RequireFreshRelations bool
@@ -22,6 +23,7 @@ type AttachmentWork struct {
 	Epoch                 int64
 }
 type AttachmentProgress struct {
+	ConsumerSnapshot                *ConsumerSubmission
 	Proof                           ObservationProof
 	Backoff                         bool
 	State                           AttachmentState
@@ -36,6 +38,8 @@ type AttachmentWorkRepository interface {
 	FinishAttachment(context.Context, AttachmentWork, AttachmentProgress) error
 }
 type AttachmentObservation struct {
+	VerifiedCurrent         bool
+	PendingCandidate        bool
 	Proof                   ObservationProof
 	Exists, HasDependencies bool
 	PodName, PodUID         string
@@ -45,6 +49,11 @@ type AttachmentProvider interface {
 	ObserveAttachment(context.Context, AttachmentWork) (AttachmentObservation, error)
 }
 type ConsumerSubmission struct {
+	SnapshotRevision                                                       int64
+	DesiredRunState                                                        string
+	RootController                                                         WorkloadReference
+	Controllers                                                            []ControllerReference
+	CurrentPods, RetiredPods                                               []PodReference
 	ProtocolVersion                                                        int32
 	TenantID, InstanceID, SubmissionID, AttachmentID, ClusterID, Namespace string
 	Generation                                                             int64
@@ -87,6 +96,9 @@ func (w *AttachmentWorker) Step(ctx context.Context) (bool, error) {
 	call, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
 	consumer, consumerErr := w.consumer.GetSubmission(call, a)
 	cancel()
+	if a.WorkloadMode == "controller_managed" {
+		return w.stepManaged(ctx, work, consumer, consumerErr)
+	}
 	if consumerErr == nil && validConsumer(a, consumer) {
 		work.ConsumerPodUIDs = consumer.PodUIDs
 		work.RequireFreshRelations = consumer.State == "closed" && a.State != Released
@@ -169,6 +181,9 @@ func (w *AttachmentWorker) Step(ctx context.Context) (bool, error) {
 	return true, err
 }
 func validConsumer(a Attachment, c ConsumerSubmission) bool {
+	if a.WorkloadMode == "controller_managed" {
+		return validManagedConsumer(a, c)
+	}
 	if len(c.PodUIDs) > 1 {
 		return false
 	}

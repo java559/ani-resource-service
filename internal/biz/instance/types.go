@@ -30,6 +30,9 @@ var (
 	ErrPVCReferenceChanged = errors.New("INSTANCE_PVC_REFERENCE_CHANGED")
 	ErrPVCCatalogLimit     = errors.New("INSTANCE_PVC_CATALOG_LIMIT")
 	ErrReservedConfig      = errors.New("INSTANCE_RESERVED_CONFIG")
+	ErrNetworkNotFound     = errors.New("INSTANCE_NETWORK_NOT_FOUND")
+	ErrNetworkConflict     = errors.New("INSTANCE_NETWORK_CONFLICT")
+	ErrNetworkUnavailable  = errors.New("INSTANCE_DEPENDENCY_UNAVAILABLE")
 )
 
 const Owner = "ani-resource-service"
@@ -178,6 +181,7 @@ type Operation struct {
 	CreatedAt                                                         time.Time
 }
 type Instance struct {
+	Network                                                            *NetworkRuntime
 	TenantID, ID, CreateOperationID, CreateRequestHash, BusinessDigest string
 	Spec                                                               Spec
 	Version                                                            int64

@@ -42,7 +42,7 @@ func (p *Postgres) ClaimAttachment(ctx context.Context, owner string, lease time
 	if e != nil {
 		return biz.AttachmentWork{}, false, databaseFailure(e)
 	}
-	value, e := attachment(a)
+	value, e := managedAttachment(ctx, tx, a)
 	if e != nil {
 		return biz.AttachmentWork{}, false, e
 	}
@@ -78,8 +78,28 @@ func (p *Postgres) FinishAttachment(ctx context.Context, w biz.AttachmentWork, p
 	}
 	old := biz.AttachmentState(a.State)
 	valid := old == progress.State || (old == biz.Reserved && (progress.State == biz.Attached || progress.State == biz.Releasing || progress.State == biz.Released)) || (old == biz.Attached && (progress.State == biz.Releasing || progress.State == biz.Released)) || (old == biz.Releasing && progress.State == biz.Released)
-	if !valid || (a.PodUid != "" && a.PodUid != progress.PodUID) || (a.FinalizationID != nil && *a.FinalizationID != progress.FinalizationID) {
+	managed, e := managedAttachment(ctx, tx, a)
+	if e != nil {
+		return e
+	}
+	isManaged := managed.WorkloadMode == "controller_managed"
+	if isManaged && old == biz.Attached && progress.State == biz.Reserved {
+		valid = true
+	}
+	if !valid || (!isManaged && a.PodUid != "" && a.PodUid != progress.PodUID) || (a.FinalizationID != nil && *a.FinalizationID != progress.FinalizationID) {
 		return biz.ErrLeaseLost
+	}
+	if isManaged {
+		if progress.ConsumerSnapshot != nil {
+			if e = persistConsumerSnapshot(ctx, tx, managed, *progress.ConsumerSnapshot); e != nil {
+				return e
+			}
+		}
+		if a.ConfirmUid != "" && a.ConfirmUid != progress.PodUID {
+			if _, e = tx.Exec(ctx, `UPDATE network_attachments SET confirm_uid='' WHERE tenant_id=$1 AND attachment_id=$2`, a.TenantID, a.AttachmentID); e != nil {
+				return databaseFailure(e)
+			}
+		}
 	}
 	var finalization *string
 	if progress.FinalizationID != "" {

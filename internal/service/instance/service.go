@@ -26,6 +26,7 @@ type Config struct {
 	LogLimits                                                                      biz.LogLimits
 	UID, GID                                                                       int64
 	ConfigurationV2Writes                                                          bool
+	NetworkV2Writes                                                                bool
 }
 type Service struct {
 	pb.UnimplementedInstanceServiceServer
@@ -37,6 +38,7 @@ type Service struct {
 	logTenants, logInstances map[string]int
 	images                   biz.ImageResolver
 	environment              biz.EnvironmentValidator
+	network                  biz.NetworkPort
 	volumes                  biz.VolumeResolver
 	config                   Config
 }
@@ -65,6 +67,12 @@ func rpcError(e error) error {
 	switch {
 	case errors.Is(e, biz.ErrReservedConfig), errors.Is(e, pb.ErrReservedConfig):
 		return status.Error(codes.InvalidArgument, "INSTANCE_RESERVED_CONFIG")
+	case errors.Is(e, biz.ErrNetworkNotFound):
+		return status.Error(codes.NotFound, "INSTANCE_NETWORK_NOT_FOUND")
+	case errors.Is(e, biz.ErrNetworkConflict):
+		return status.Error(codes.FailedPrecondition, "INSTANCE_NETWORK_CONFLICT")
+	case errors.Is(e, biz.ErrNetworkUnavailable):
+		return status.Error(codes.Unavailable, "INSTANCE_DEPENDENCY_UNAVAILABLE")
 	case errors.Is(e, biz.ErrPVCNotFound):
 		return status.Error(codes.NotFound, "INSTANCE_PVC_NOT_FOUND")
 	case errors.Is(e, biz.ErrPVCReferenceChanged):
@@ -161,7 +169,14 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 		out.Annotations = r.Data.Annotations
 		out.Env = r.Data.Env
 		if r.Data.Network != nil {
-			return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
+			if !s.config.NetworkV2Writes || s.network == nil {
+				return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
+			}
+			selection := biz.NetworkSelection{VPCID: r.Data.Network.VpcId, SubnetID: r.Data.Network.SubnetId}
+			if e := s.network.ValidateSelection(ctx, r.TenantId, c.ClusterID, ns, selection); e != nil {
+				return nil, rpcError(e)
+			}
+			out.Network = &pb.NetworkSelection{VpcId: selection.VPCID, SubnetId: selection.SubnetID}
 		}
 		if len(r.Data.VolumeMounts) > 0 {
 			if s.volumes == nil {
@@ -219,7 +234,7 @@ func (s *Service) AcceptCreate(ctx context.Context, r *pb.AcceptCreateRequest) (
 		spec.Env = append(spec.Env, biz.EnvVar{Name: v.Name, Value: v.Value})
 	}
 	if f.Network != nil {
-		return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
+		spec.Network = &biz.NetworkSelection{VPCID: f.Network.VpcId, SubnetID: f.Network.SubnetId}
 	}
 	if g := f.GpuExecution; g != nil {
 		spec.GPU = biz.GPU{Scheduler: g.SchedulerName, Queue: g.QueueName, RuntimeClass: g.RuntimeClassName, Digest: g.ExecutionDigest, NodeLabels: g.NodeSelector, Annotations: g.PodAnnotations, Limits: g.Resources}
@@ -263,7 +278,16 @@ func (s *Service) Stop(ctx context.Context, r *pb.ChangeInstanceRequest) (*pb.Op
 	return s.change(ctx, r, "stop")
 }
 func wire(i biz.Instance) *pb.Instance {
-	return &pb.Instance{InstanceKind: i.Spec.InstanceKind, ComputeType: i.Spec.ComputeType, Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned, Cpu: i.Spec.CPU, Memory: i.Spec.Memory, CreatedAt: timestamppb.New(i.CreatedAt), WorkspaceSize: i.Spec.WorkspaceSize, PresetName: i.Spec.PresetName, PresetCode: i.Spec.PresetCode, GpuSummary: wireSummary(i.Spec.GPUSummary, i.Spec.GPU), Scheduling: wireScheduling(i.Spec.Scheduling)}
+	out := &pb.Instance{InstanceKind: i.Spec.InstanceKind, ComputeType: i.Spec.ComputeType, Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned, Cpu: i.Spec.CPU, Memory: i.Spec.Memory, CreatedAt: timestamppb.New(i.CreatedAt), WorkspaceSize: i.Spec.WorkspaceSize, PresetName: i.Spec.PresetName, PresetCode: i.Spec.PresetCode, GpuSummary: wireSummary(i.Spec.GPUSummary, i.Spec.GPU), Scheduling: wireScheduling(i.Spec.Scheduling)}
+	out.NetworkState = "not_requested"
+	out.NetworkCleaned = true
+	out.VolumeReferencesReleased = i.VolumeReferencesReleased
+	if i.Network != nil {
+		out.NetworkState = i.Network.NetworkState
+		out.NetworkReason = i.Network.Reason
+		out.NetworkCleaned = i.Network.Cleaned
+	}
+	return out
 }
 func (s *Service) GetInstance(ctx context.Context, r *pb.GetInstanceRequest) (*pb.Instance, error) {
 	if r == nil {
@@ -318,4 +342,12 @@ func (s *Service) ResolveTerminalTarget(ctx context.Context, r *pb.ResolveTermin
 		return nil, status.Error(codes.FailedPrecondition, "INSTANCE_TERMINAL_NOT_READY")
 	}
 	return &terminal.TerminalTarget{TenantId: i.TenantID, InstanceId: i.ID, Version: i.Version, ClusterId: i.Spec.ClusterID, Namespace: i.Spec.Namespace, NotebookName: i.Spec.NotebookName, NotebookUid: i.NotebookUID, PodName: i.PodName, PodUid: i.PodUID, ContainerName: biz.Container, Shell: i.Spec.Shell}, nil
+}
+
+func (s *Service) UseNetwork(network biz.NetworkPort) error {
+	if network == nil {
+		return biz.ErrInvalid
+	}
+	s.network = network
+	return nil
 }

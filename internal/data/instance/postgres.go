@@ -136,7 +136,7 @@ func Migrate(ctx context.Context, dsn, role string) error {
 		}
 	}
 	quoted := pgx.Identifier{role}.Sanitize()
-	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox,instance.borrowed_volume_references TO "+quoted); e != nil {
+	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox,instance.borrowed_volume_references,instance.network_submissions TO "+quoted); e != nil {
 		return e
 	}
 	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON instance.compute_presets TO "+quoted); e != nil {
@@ -191,6 +191,15 @@ func decodeSnapshot(raw []byte, i *biz.Instance) error {
 	}
 	if i.CreateRequestHash != "" && (biz.ValidateScheduling(i.Spec.Scheduling) != nil || biz.ValidateConfiguration(i.Spec) != nil) {
 		return biz.ErrInvalid
+	}
+	if (i.Spec.Network == nil) != (i.Network == nil) {
+		return biz.ErrInvalid
+	}
+	if i.Network != nil {
+		n := i.Network
+		if !biz.UUID(n.SubmissionID) || n.RequestKey == "" || n.Generation < 1 || n.SnapshotRevision < 1 || (n.State != "open" && n.State != "closing" && n.State != "closed") || n.DesiredRunState != i.Desired || (n.State == "open" && n.FinalizationID != "") || (n.State != "open" && !biz.UUID(n.FinalizationID)) || (n.State == "closed" && (n.ClosedAt == nil || n.ClosedAt.IsZero())) {
+			return biz.ErrInvalid
+		}
 	}
 	return nil
 }
@@ -289,11 +298,15 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			i.BusinessDigest = c.BusinessDigest
 			i.Spec = c.Spec
 			i.VolumeReferencesReleased = true
+			i.Network = initialNetworkSubmission(i)
 			raw, e := json.Marshal(i)
 			if e != nil {
 				return ack, e
 			}
 			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET create_request_hash=$3,snapshot=$4,instance_contract_version=$5 WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, c.RequestHash, raw, contractVersion(c.Spec.ContractVersion)); e != nil {
+				return ack, e
+			}
+			if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 				return ack, e
 			}
 			if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -318,11 +331,15 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 		return biz.ACK{}, e
 	}
 	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID, VolumeReferencesReleased: len(c.Spec.VolumeMounts) == 0}
+	i.Network = initialNetworkSubmission(i)
 	raw, e := json.Marshal(i)
 	if e != nil {
 		return ack, e
 	}
 	if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot,instance_contract_version) VALUES($1,$2,$3,$4,1,'running',$5,$6)", c.TenantID, c.ID, c.OperationID, c.RequestHash, raw, contractVersion(c.Spec.ContractVersion)); e != nil {
+		return ack, e
+	}
+	if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 		return ack, e
 	}
 	if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -394,6 +411,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		}
 		i.Version++
 		i.Desired = biz.Deleted
+		networkIntent(&i)
 		i.LastOperationID = d.OperationID
 		i.Reason = ""
 		raw, e := json.Marshal(i)
@@ -401,6 +419,9 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 			return ack, e
 		}
 		if _, e = tx.Exec(ctx, "UPDATE instance.instances SET desired='deleted',version=$3,snapshot=$4,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, i.Version, raw); e != nil {
+			return ack, e
+		}
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 			return ack, e
 		}
 		if _, e = tx.Exec(ctx, "UPDATE instance.instance_work SET due_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID); e != nil {
@@ -459,6 +480,7 @@ func (p *Postgres) AcceptCommand(ctx context.Context, c biz.Command) (biz.ACK, e
 	}
 	i.Version++
 	i.Desired = desired
+	networkIntent(&i)
 	i.LastOperationID = c.OperationID
 	i.Reason = ""
 	raw, e = json.Marshal(i)
@@ -467,6 +489,9 @@ func (p *Postgres) AcceptCommand(ctx context.Context, c biz.Command) (biz.ACK, e
 	}
 	ack := biz.ACK{OperationID: c.OperationID, ResourceID: c.ID, Accepted: true}
 	if _, e = tx.Exec(ctx, "UPDATE instance.instances SET version=$3,desired=$4,snapshot=$5,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", c.TenantID, c.ID, i.Version, i.Desired, raw); e != nil {
+		return ack, e
+	}
+	if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 		return ack, e
 	}
 	if e = insertOperation(ctx, tx, i, c.OperationID, c.Action, c.Key, c.RequestHash, ack); e != nil {
@@ -577,6 +602,9 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		progress.Instance.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		progress.Instance.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		i = progress.Instance
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
+			return e
+		}
 		if i.Desired == biz.Deleted && i.ComputeCleaned {
 			if _, e = tx.Exec(ctx, "UPDATE instance.borrowed_volume_references SET state='released' WHERE tenant_id=$1 AND instance_id=$2 AND state='active'", i.TenantID, i.ID); e != nil {
 				return e
@@ -594,7 +622,7 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 			return e
 		}
 		state := "accepted"
-		if i.Reason == "" && i.Pending == nil && ((i.Desired == biz.Deleted && i.ComputeCleaned && i.WorkspaceCleaned && i.QuotaReturned) || (i.Desired != biz.Deleted && i.Desired == i.Observed)) {
+		if i.Reason == "" && i.Pending == nil && ((i.Desired == biz.Deleted && i.ComputeCleaned && i.WorkspaceCleaned && i.QuotaReturned && (i.Network == nil || i.Network.Cleaned)) || (i.Desired != biz.Deleted && i.Desired == i.Observed)) {
 			state = "completed"
 		}
 		if i.Reason == "CREATE_RESULT_UNKNOWN" || i.Reason == "WORKSPACE_CREATE_RESULT_UNKNOWN" {
@@ -608,6 +636,10 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		// the current business version and retain only immutable runtime evidence.
 		i.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		i.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
+		mergeNetworkResult(i.Network, progress.Instance.Network)
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
+			return e
+		}
 		if progress.Receipt != nil {
 			i.Pending = nil
 			if i.NotebookUID == "" {

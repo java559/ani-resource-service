@@ -11,7 +11,7 @@ func (s *NetworkService) PrepareAttachment(ctx context.Context, r *networkv1.Pre
 	if s.attachments == nil {
 		return nil, rpcError(biz.Fail(biz.DependencyUnavailable, "attachment service unavailable"))
 	}
-	a, e := s.attachments.Prepare(ctx, biz.PrepareAttachment{TenantID: r.GetTenantId(), InstanceID: r.GetInstanceId(), SubnetID: r.GetSubnetId(), VPCID: r.GetVpcId(), Slot: r.GetSlot(), RequestKey: r.GetRequestKey(), SubmissionID: r.GetSubmissionId(), Generation: r.GetGeneration(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace()})
+	a, e := s.attachments.Prepare(ctx, biz.PrepareAttachment{TenantID: r.GetTenantId(), InstanceID: r.GetInstanceId(), SubnetID: r.GetSubnetId(), VPCID: r.GetVpcId(), Slot: r.GetSlot(), RequestKey: r.GetRequestKey(), SubmissionID: r.GetSubmissionId(), Generation: r.GetGeneration(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), WorkloadMode: r.GetWorkloadMode()})
 	v, e := wireAttachment(a, e)
 	if e != nil {
 		return nil, e
@@ -33,7 +33,7 @@ func (s *NetworkService) ConfirmAttachment(ctx context.Context, r *networkv1.Con
 	if s.attachments == nil {
 		return nil, rpcError(biz.Fail(biz.DependencyUnavailable, "attachment service unavailable"))
 	}
-	a, e := s.attachments.Confirm(ctx, biz.ConfirmAttachment{TenantID: r.GetTenantId(), AttachmentID: r.GetAttachmentId(), ExpectedVersion: r.GetExpectedVersion(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), PodName: r.GetPodName(), PodUID: r.GetPodUid()})
+	a, e := s.attachments.Confirm(ctx, biz.ConfirmAttachment{TenantID: r.GetTenantId(), AttachmentID: r.GetAttachmentId(), ExpectedVersion: r.GetExpectedVersion(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), PodName: r.GetPodName(), PodUID: r.GetPodUid(), ExpectedSnapshotRevision: r.GetExpectedSnapshotRevision()})
 	v, e := wireAttachment(a, e)
 	if e != nil {
 		return nil, e
@@ -55,7 +55,7 @@ func wireAttachment(a biz.Attachment, e error) (*networkv1.Attachment, error) {
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	v := &networkv1.Attachment{Id: a.ID, TenantId: a.TenantID, VpcId: a.VPCID, SubnetId: a.SubnetID, InstanceId: a.InstanceID, Slot: a.Slot, SubmissionId: a.SubmissionID, Generation: a.Generation, ClusterId: a.ClusterID, Namespace: a.Namespace, BindingRevision: a.BindingRevision, State: attachmentStates[a.State], Reason: string(a.Reason), Version: a.Version, PodName: a.PodName, PodUid: a.PodUID, ConsumerFinalizationId: a.FinalizationID, CreatedAt: timestamppb.New(a.CreatedAt), UpdatedAt: timestamppb.New(a.UpdatedAt), ObservedAt: optionalTime(a.ObservedAt), ReleasedAt: optionalTime(a.ReleasedAt)}
+	v := &networkv1.Attachment{WorkloadMode: a.WorkloadMode, SnapshotRevision: a.SnapshotRevision, RootController: wireWorkloadReference(a.RootController), Id: a.ID, TenantId: a.TenantID, VpcId: a.VPCID, SubnetId: a.SubnetID, InstanceId: a.InstanceID, Slot: a.Slot, SubmissionId: a.SubmissionID, Generation: a.Generation, ClusterId: a.ClusterID, Namespace: a.Namespace, BindingRevision: a.BindingRevision, State: attachmentStates[a.State], Reason: string(a.Reason), Version: a.Version, PodName: a.PodName, PodUid: a.PodUID, ConsumerFinalizationId: a.FinalizationID, CreatedAt: timestamppb.New(a.CreatedAt), UpdatedAt: timestamppb.New(a.UpdatedAt), ObservedAt: optionalTime(a.ObservedAt), ReleasedAt: optionalTime(a.ReleasedAt)}
 	if a.Plan != nil {
 		p := a.Plan
 		v.PodPrimary = &networkv1.PodPrimaryPlan{FormatVersion: p.FormatVersion, Namespace: p.Namespace, SubnetAnnotation: p.PrimaryNetworkRef, Labels: &networkv1.AttachmentLabels{TenantId: p.TenantID, InstanceId: p.InstanceID, AttachmentId: p.AttachmentID, SubmissionId: p.SubmissionID, Generation: p.Generation}}
@@ -64,3 +64,10 @@ func wireAttachment(a biz.Attachment, e error) (*networkv1.Attachment, error) {
 }
 
 var attachmentStates = map[biz.AttachmentState]networkv1.AttachmentState{biz.Reserved: networkv1.AttachmentState_ATTACHMENT_STATE_RESERVED, biz.Attached: networkv1.AttachmentState_ATTACHMENT_STATE_ATTACHED, biz.Releasing: networkv1.AttachmentState_ATTACHMENT_STATE_RELEASING, biz.Released: networkv1.AttachmentState_ATTACHMENT_STATE_RELEASED}
+
+func wireWorkloadReference(r biz.WorkloadReference) *networkv1.WorkloadReference {
+	if r.UID == "" {
+		return nil
+	}
+	return &networkv1.WorkloadReference{ApiVersion: r.APIVersion, Kind: r.Kind, Namespace: r.Namespace, Name: r.Name, Uid: r.UID}
+}

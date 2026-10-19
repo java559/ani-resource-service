@@ -116,6 +116,9 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 		return nil, e
 	}
 	s := i.Spec
+	if s.Network != nil && (i.Network == nil || i.Network.AttachmentID == "" || i.Network.PrimaryNetworkRef == "" || i.Network.BindingRevision == "") {
+		return nil, biz.ErrNetworkUnavailable
+	}
 	if err := ValidateNotebookConfiguration(s); err != nil {
 		return nil, err
 	}
@@ -129,6 +132,9 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 	ann := map[string]string{}
 	for k, v := range s.Annotations {
 		ann[k] = v
+	}
+	if s.Network != nil {
+		ann["networking.kubercloud.com/subnet"] = i.Network.PrimaryNetworkRef
 	}
 	for k, v := range s.GPU.Annotations {
 		ann[k] = v
@@ -173,6 +179,9 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 		metaAnn[stoppedAnnotation] = "true"
 	}
 	metadataLabels := labels(i)
+	for key, value := range instanceNetworkLabels(i) {
+		metadataLabels[key] = value
+	}
 	for k, v := range s.Labels {
 		metadataLabels[k] = v
 	}
@@ -241,8 +250,13 @@ func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation
 		if i.Spec.ComputeType == biz.TypeGPU {
 			out.GPUPods = append(out.GPUPods, biz.PodRef{ClusterID: i.Spec.ClusterID, Namespace: i.Spec.Namespace, Name: p.GetName(), UID: string(p.GetUID()), ContainerName: biz.Container})
 		}
-		out.PodName = p.GetName()
-		out.PodUID = string(p.GetUID())
+		if p.GetDeletionTimestamp() == nil {
+			if out.PodUID != "" && out.PodUID != string(p.GetUID()) {
+				return out, biz.ErrOwnership
+			}
+			out.PodName = p.GetName()
+			out.PodUID = string(p.GetUID())
+		}
 		if i.Spec.ComputeType == biz.TypeGPU && len(n.signingKey) == ed25519.PrivateKeySize {
 			if e := n.signPod(ctx, p, i); e != nil {
 				return out, e
@@ -375,6 +389,16 @@ func (n *Notebook) observeWorkspace(ctx context.Context, i biz.Instance, out *bi
 	}
 }
 func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
+	if i.Spec.Network != nil {
+		if i.Network == nil || i.Network.PrimaryNetworkRef == "" || p.GetAnnotations()["networking.kubercloud.com/subnet"] != i.Network.PrimaryNetworkRef {
+			return biz.ErrOwnership
+		}
+		for key, value := range instanceNetworkLabels(i) {
+			if p.GetLabels()[key] != value {
+				return biz.ErrOwnership
+			}
+		}
+	}
 	if err := verifySchedulingOptions(p, i); err != nil {
 		return err
 	}

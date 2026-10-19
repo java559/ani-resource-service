@@ -6,6 +6,8 @@ package sqlcgen
 
 import (
 	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type InstanceBorrowedVolumeReference struct {
@@ -89,6 +91,20 @@ type InstanceInstanceWork struct {
 	LeaseOwner string
 	LeaseEpoch int64
 	LeaseUntil time.Time
+}
+
+type InstanceNetworkSubmission struct {
+	TenantID         string
+	InstanceID       string
+	SubmissionID     string
+	RequestKey       string
+	Generation       int64
+	SnapshotRevision int64
+	State            string
+	AttachmentID     string
+	FinalizationID   pgtype.UUID
+	Snapshot         []byte
+	UpdatedAt        time.Time
 }
 
 type InstanceSchemaVersion struct {

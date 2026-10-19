@@ -56,7 +56,15 @@ func (p *KCProvider) Observe(ctx context.Context, t biz.ProviderTarget) (biz.Pro
 
 func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork) (biz.AttachmentObservation, error) {
 	if p.observation == nil {
-		return p.observeAttachment(ctx, w, p.listAll)
+		// observeAttachment validates this Namespace against the saved Subnet
+		// binding before invoking the reader. Preserve an unfiltered Pod list
+		// within that boundary so missing labels cannot hide historic Pods.
+		return p.observeAttachment(ctx, w, func(ctx context.Context, gvr schema.GroupVersionResource) ([]unstructured.Unstructured, error) {
+			if gvr == pods {
+				return p.listScoped(ctx, gvr, w.Attachment.Namespace, "")
+			}
+			return p.listAll(ctx, gvr)
+		})
 	}
 	a := w.Attachment
 	keys := []string{"attachment:" + a.ID, "uid:" + a.PodUID, "object:Pod/" + a.Namespace + "/" + a.PodName, "podname:" + a.Namespace + "/" + a.PodName, "eip-subnet:" + w.Plan.PrimaryNetworkRef}

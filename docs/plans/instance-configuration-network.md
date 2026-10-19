@@ -1,6 +1,6 @@
-# 容器实例配置与 VPC 接入实施计划草案
+# 容器实例配置与 VPC 接入实施计划
 
-日期：2026-10-19。仅为待审阅计划；当前授权只完成方案，不启动代码实施、生成、迁移、发布或部署。
+日期：2026-10-19。本 Goal 已明确授权本计划 IC-01～IC-05 的后端实施、任务隔离验收和 review 分支/draft PR；实际进展只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。
 
 新增字段、生命周期、数据和验收规则统一见[增量设计](../specs/instance-configuration-network.md)。本计划只分配实现顺序、文件责任和退出证据，不复制第二份合同或当前执行台账。
 
@@ -8,7 +8,7 @@
 
 先把 PVC、路径、metadata/env 通过正式创建入口连到真实 CPU Notebook；再接 VPC、受控 Pod 替换及真实释放。公共摘要版本和必要授权随首条主链实现。每批按新增行为做 red/green，不先完成全部字段、通用框架或边界矩阵才开始运行。
 
-方案确认后的实施沿用实例任务的 Fedora 执行约定：本地编辑/审查/Git，生成、构建、测试、PostgreSQL、API 驱动和集群操作在 `ssh fedora` 的隔离目录执行，见[远程约定](../remote-execution.md)及[实例手册](../runbooks/instance-mvp-fedora.md)。实施前核对最新 HEAD、依赖、现有任务和真实集群身份；不把旧快照或历史 PASS 当作新候选通过。
+实施沿用本 Goal 的 Fedora 执行约定：本地编辑/审查/Git，生成、构建、测试、PostgreSQL、API 驱动和集群操作在 `ssh fedora` 的隔离目录执行，见[远程约定](../remote-execution.md)及[实例手册](../runbooks/instance-mvp-fedora.md)。实施前核对最新 HEAD、依赖、现有任务和真实集群身份；不把旧快照或历史 PASS 当作新候选通过。
 
 ## 2. 工作包
 
@@ -45,11 +45,11 @@ IC-01/02 和 IC-03 的实现可由明确 owner 并行推进，但 shared Proto�
 4. 核验实际 governance/full 的 Instance、Network Adapter、Consumer 和 Attachment worker 完整装配；确认卷目录、引用保护、admission 键及实际环境前提。
 5. 确认所有 Gov/Res 副本及恢复、删除、清理 worker 均已完成双版本升级，旧副本退出后，才开启 v2 新受理并交付前端选择器和配置表单；每次接受在原受理事务内原子保存明确版本及完整生效快照。
 
-发布、合并和环境部署需要各自的实施授权，本次方案交付不代替这些动作。回退先关闭新受理；已存在 v2 操作时保留能读 v2 的恢复/清理 worker，不能直接回滚到只懂 v1 的旧二进制或删除新列。旧账和旧摘要保持原样，清理存量后再评估版本回退。
+本 Goal 已授权任务分支发布、draft PR 和隔离环境部署；合并、正式 tag/release 与共享部署仍不在范围内。回退先关闭新受理；已存在 v2 操作时保留能读 v2 的恢复/清理 worker，不能直接回滚到只懂 v1 的旧二进制或删除新列。旧账和旧摘要保持原样，清理存量后再评估版本回退。
 
 ## 5. 验证和停止条件
 
-先复用现有 Instance PG/Notebook adapter、Network Attachment 和 Gov 受理测试设施。默认只跑改动对应行为测试；跨模块 schema/规范摘要改动扩大到明确受影响的旧 CPU/GPU 恢复、原账 create/replay/delete/duplicate-refund、旧 single_pod 和 LB 地址资格用例。提交前按仓库要求执行 `make verify`；无新改动/失败/未解风险时不反复跑全量。
+先复用现有 Instance PG/Notebook adapter、Network Attachment 和 Gov 受理测试设施。默认只跑改动对应行为测试；跨模块 schema/规范摘要改动扩大到明确受影响的旧 CPU/GPU 恢复、原账 create/replay/delete/duplicate-refund、旧 single_pod 和 LB 地址资格用例。提交前按仓库要求执行 Res `make verify`、Gov `make verify-ci`；无新改动/失败/未解风险时不反复跑全量。
 
 最终证据按同一源快照分别记录：定向测试、真实 PG/重启恢复、外部边界替身、真实 CPU/CSI/kcn 数据面、GPU 硬件、浏览器页面；使用 pass/fail/not_verified，Pending Pod、注解投影、HTTP 接受或文档检查均不替代业务验收。
 
@@ -60,6 +60,6 @@ IC-01/02 和 IC-03 的实现可由明确 owner 并行推进，但 shared Proto�
 - 未查明的 CREATE、旧关系残留或 observer 证据过期；不提前 closed/released，不手工改账或强删网络/storage finalizer。
 - GPU/浏览器或外部环境缺前提；保留独立 not_verified，不覆盖已完成的真实 CPU 主链证据。
 
-## 6. 本次方案交付边界
+## 6. 交付边界
 
-本次仅新增设计和计划、维护文档索引并做静态文档检查。未修改业务 Proto/Go/SQL、未运行生成/构建/行为测试、未迁移或部署，也未改变当前实施台账。设计被确认后，再按上述顺序形成真正可运行的增量。
+交付包括本批 Res/Gov 后端、可正式消费的精确模块版本、显式迁移、受影响回归、真实 CPU/CSI/网络/GPU 验收和前端合同。前端页面由其 owner 实现，浏览器状态独立记录；不能据后端接口存在推断页面已可用。退出条件不因计划文字或批次划分缩减，实际未完成项保留在唯一执行状态。

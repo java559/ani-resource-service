@@ -1,5 +1,7 @@
 # 租户 VPC / Subnet 首片规格
 
+> 2026-10-19：Notebook 实例接入新增[受控工作负载合同](instance-configuration-network.md#6-res-network-支持-notebook-的-pod-替换)。下文不同 Pod UID 冲突和 Consumer v1 描述继续适用于原 `single_pod` 模式；`controller_managed` 使用持久版本、独立 owner 链核验和当前/历史/待核验关系，不能据新模式放松旧模式的身份保护。实际交付只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。
+
 > 2026-09-14 的[统一方案](vpc-connectivity-lb.md)增加 VPC 基础内网创建/删除/观察、既有 VPC 补齐和 LB 占用。这些目标调整接替本文件相应的创建完成和删除准入限制，不改写首片历史验收结果；其余 Subnet/Attachment 协议继续适用。
 
 日期：2026-09-09；更新：2026-09-10。文档版本：2。新增 NET-05A 观察目标及后续依赖，未改变当前实施状态。
