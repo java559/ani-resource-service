@@ -1,0 +1,77 @@
+//go:build instanceintegration
+
+package instance_test
+
+import (
+	"context"
+	"errors"
+	"github.com/google/uuid"
+	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
+	"testing"
+	"time"
+)
+
+func TestBorrowedVolumeReferencesPersistAndReleaseWithCompute(t *testing.T) {
+	f := database(t)
+	ctx := context.Background()
+	c := cpuCreate()
+	c.Spec.ContractVersion = 2
+	c.Spec.WorkspaceMountPath = "/work"
+	c.Spec.VolumeMounts = []biz.VolumeMount{{ClusterID: c.Spec.ClusterID, Namespace: c.Spec.Namespace, PVCName: "datasets", PVCUID: uuid.NewString(), MountPath: "/data", ReadOnly: true, Ownership: "borrowed"}}
+	c.Spec.Env = []biz.EnvVar{{Name: "APP_MODE", Value: "  literal  "}}
+	if _, e := f.repo.AcceptCreate(ctx, c); e != nil {
+		t.Fatal(e)
+	}
+	got, e := f.repo.Get(ctx, c.TenantID, c.ID)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if got.Spec.ContractVersion != 2 || got.Spec.VolumeMounts[0].PVCUID != c.Spec.VolumeMounts[0].PVCUID || got.Spec.Env[0].Value != "  literal  " {
+		t.Fatal("frozen configuration changed")
+	}
+	var version int
+	var state string
+	if e = f.runtime.QueryRow(ctx, "SELECT instance_contract_version FROM instance.instances WHERE tenant_id=$1 AND instance_id=$2", c.TenantID, c.ID).Scan(&version); e != nil || version != 2 {
+		t.Fatal("version not persisted", e)
+	}
+	check := func(want string) {
+		t.Helper()
+		if e := f.runtime.QueryRow(ctx, "SELECT state FROM instance.borrowed_volume_references WHERE tenant_id=$1 AND instance_id=$2 AND mount_path='/data'", c.TenantID, c.ID).Scan(&state); e != nil || state != want {
+			t.Fatal("reference state", state, e)
+		}
+	}
+	check("active")
+	if _, e = f.runtime.Exec(ctx, "INSERT INTO instance.borrowed_volume_references(tenant_id,instance_id,mount_path,cluster_id,namespace,pvc_name,pvc_uid,read_only) VALUES($1,$2,'/other',$3,$4,'other',$5,false)", uuid.NewString(), c.ID, c.Spec.ClusterID, c.Spec.Namespace, uuid.NewString()); e == nil {
+		t.Fatal("cross-tenant reference accepted")
+	}
+	if _, e = f.repo.Get(ctx, uuid.NewString(), c.ID); !errors.Is(e, biz.ErrNotFound) {
+		t.Fatal("cross-tenant instance visible", e)
+	}
+	work, e := f.repo.Claim(ctx, "config-test", time.Minute)
+	if e != nil || work == nil {
+		t.Fatal(e)
+	}
+	progress := biz.Progress{Instance: work.Instance, Next: time.Millisecond}
+	progress.Instance.Desired = biz.Deleted
+	// Before compute release, a delete intent cannot drop the borrowed reference.
+	if e = f.repo.Finish(ctx, *work, progress); e != nil {
+		t.Fatal(e)
+	}
+	check("active")
+	time.Sleep(3 * time.Millisecond)
+	work, e = f.repo.Claim(ctx, "config-test", time.Minute)
+	if e != nil || work == nil {
+		t.Fatal(e)
+	}
+	progress = biz.Progress{Instance: work.Instance}
+	progress.Instance.Desired = biz.Deleted
+	progress.Instance.ComputeCleaned = true
+	if e = f.repo.Finish(ctx, *work, progress); e != nil {
+		t.Fatal(e)
+	}
+	check("released")
+	got, e = f.repo.Get(ctx, c.TenantID, c.ID)
+	if e != nil || !got.VolumeReferencesReleased || got.Spec.VolumeMounts[0].PVCUID != c.Spec.VolumeMounts[0].PVCUID {
+		t.Fatal("release lost frozen evidence", e)
+	}
+}

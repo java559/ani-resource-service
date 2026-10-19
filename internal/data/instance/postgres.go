@@ -136,7 +136,7 @@ func Migrate(ctx context.Context, dsn, role string) error {
 		}
 	}
 	quoted := pgx.Identifier{role}.Sanitize()
-	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox TO "+quoted); e != nil {
+	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox,instance.borrowed_volume_references TO "+quoted); e != nil {
 		return e
 	}
 	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON instance.compute_presets TO "+quoted); e != nil {
@@ -189,7 +189,7 @@ func decodeSnapshot(raw []byte, i *biz.Instance) error {
 	if i.Spec.InstanceKind != biz.KindContainer || (i.Spec.ComputeType != biz.TypeCPU && i.Spec.ComputeType != biz.TypeGPU) {
 		return biz.ErrInvalid
 	}
-	if i.CreateRequestHash != "" && biz.ValidateScheduling(i.Spec.Scheduling) != nil {
+	if i.CreateRequestHash != "" && (biz.ValidateScheduling(i.Spec.Scheduling) != nil || biz.ValidateConfiguration(i.Spec) != nil) {
 		return biz.ErrInvalid
 	}
 	return nil
@@ -288,11 +288,12 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			i.CreateRequestHash = c.RequestHash
 			i.BusinessDigest = c.BusinessDigest
 			i.Spec = c.Spec
+			i.VolumeReferencesReleased = true
 			raw, e := json.Marshal(i)
 			if e != nil {
 				return ack, e
 			}
-			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET create_request_hash=$3,snapshot=$4 WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, c.RequestHash, raw); e != nil {
+			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET create_request_hash=$3,snapshot=$4,instance_contract_version=$5 WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, c.RequestHash, raw, contractVersion(c.Spec.ContractVersion)); e != nil {
 				return ack, e
 			}
 			if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -316,12 +317,12 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 	if !errors.Is(e, biz.ErrNotFound) {
 		return biz.ACK{}, e
 	}
-	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID}
+	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID, VolumeReferencesReleased: len(c.Spec.VolumeMounts) == 0}
 	raw, e := json.Marshal(i)
 	if e != nil {
 		return ack, e
 	}
-	if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot) VALUES($1,$2,$3,$4,1,'running',$5)", c.TenantID, c.ID, c.OperationID, c.RequestHash, raw); e != nil {
+	if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot,instance_contract_version) VALUES($1,$2,$3,$4,1,'running',$5,$6)", c.TenantID, c.ID, c.OperationID, c.RequestHash, raw, contractVersion(c.Spec.ContractVersion)); e != nil {
 		return ack, e
 	}
 	if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -329,6 +330,11 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 	}
 	if _, e = tx.Exec(ctx, "INSERT INTO instance.workspace_bindings(tenant_id,instance_id,namespace,pvc_name) VALUES($1,$2,$3,$4)", c.TenantID, c.ID, c.Spec.Namespace, c.Spec.PVCName); e != nil {
 		return ack, e
+	}
+	for _, m := range c.Spec.VolumeMounts {
+		if _, e = tx.Exec(ctx, "INSERT INTO instance.borrowed_volume_references(tenant_id,instance_id,mount_path,cluster_id,namespace,pvc_name,pvc_uid,read_only) VALUES($1,$2,$3,$4,$5,$6,$7,$8)", c.TenantID, c.ID, m.MountPath, m.ClusterID, m.Namespace, m.PVCName, m.PVCUID, m.ReadOnly); e != nil {
+			return ack, e
+		}
 	}
 	if _, e = tx.Exec(ctx, "INSERT INTO instance.instance_work(tenant_id,instance_id) VALUES($1,$2)", c.TenantID, c.ID); e != nil {
 		return ack, e
@@ -571,6 +577,12 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		progress.Instance.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		progress.Instance.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		i = progress.Instance
+		if i.Desired == biz.Deleted && i.ComputeCleaned {
+			if _, e = tx.Exec(ctx, "UPDATE instance.borrowed_volume_references SET state='released' WHERE tenant_id=$1 AND instance_id=$2 AND state='active'", i.TenantID, i.ID); e != nil {
+				return e
+			}
+			i.VolumeReferencesReleased = true
+		}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return e
@@ -632,3 +644,10 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 }
 
 var _ biz.Repository = (*Postgres)(nil)
+
+func contractVersion(v uint32) uint32 {
+	if v == 0 {
+		return 1
+	}
+	return v
+}

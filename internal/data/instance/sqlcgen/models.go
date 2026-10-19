@@ -8,6 +8,19 @@ import (
 	"time"
 )
 
+type InstanceBorrowedVolumeReference struct {
+	TenantID   string
+	InstanceID string
+	MountPath  string
+	ClusterID  string
+	Namespace  string
+	PvcName    string
+	PvcUid     string
+	ReadOnly   bool
+	Ownership  string
+	State      string
+}
+
 type InstanceComputePreset struct {
 	ID          string
 	Code        string
@@ -32,15 +45,16 @@ type InstanceGpuCutoverAudit struct {
 }
 
 type InstanceInstance struct {
-	TenantID          string
-	InstanceID        string
-	CreateOperationID string
-	CreateRequestHash string
-	Version           int64
-	Desired           string
-	Snapshot          []byte
-	CreatedAt         time.Time
-	UpdatedAt         time.Time
+	TenantID                string
+	InstanceID              string
+	CreateOperationID       string
+	CreateRequestHash       string
+	Version                 int64
+	Desired                 string
+	Snapshot                []byte
+	CreatedAt               time.Time
+	UpdatedAt               time.Time
+	InstanceContractVersion int32
 }
 
 type InstanceInstanceOperation struct {

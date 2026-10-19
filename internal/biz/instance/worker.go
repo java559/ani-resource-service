@@ -48,6 +48,12 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		if errors.Is(err, ErrSchedulingConflict) {
 			p.Instance.Reason = "SCHEDULING_FIELD_CONFLICT"
 		}
+		if errors.Is(err, ErrPVCReferenceChanged) {
+			p.Instance.Reason = "INSTANCE_PVC_REFERENCE_CHANGED"
+		}
+		if errors.Is(err, ErrPVCNotFound) {
+			p.Instance.Reason = "INSTANCE_PVC_NOT_FOUND"
+		}
 		return true, w.repo.Finish(ctx, *work, p)
 	}
 	if obs.NotebookExists {
@@ -119,6 +125,15 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 		} else {
 			p.Instance.Pending = nil
 			p.Instance.Reason = "PROVIDER_MUTATION_FAILED"
+			if errors.Is(err, ErrPVCReferenceChanged) {
+				p.Instance.Reason = "INSTANCE_PVC_REFERENCE_CHANGED"
+			}
+			if errors.Is(err, ErrPVCNotFound) {
+				p.Instance.Reason = "INSTANCE_PVC_NOT_FOUND"
+			}
+			if errors.Is(err, ErrReservedConfig) {
+				p.Instance.Reason = "INSTANCE_RESERVED_CONFIG"
+			}
 			p.Receipt = &MutationReceipt{Mutation: m, Outcome: "definitive_rejection"}
 		}
 		return true, w.repo.Finish(ctx, *work, p)

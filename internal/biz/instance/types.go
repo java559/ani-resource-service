@@ -13,19 +13,23 @@ import (
 )
 
 var (
-	ErrInvalid            = errors.New("INVALID_INSTANCE_REQUEST")
-	ErrDenied             = errors.New("INSTANCE_SCOPE_DENIED")
-	ErrNotFound           = errors.New("INSTANCE_NOT_FOUND")
-	ErrConflict           = errors.New("INSTANCE_IDEMPOTENCY_CONFLICT")
-	ErrVersion            = errors.New("INSTANCE_VERSION_CONFLICT")
-	ErrLease              = errors.New("INSTANCE_LEASE_LOST")
-	ErrUnknown            = errors.New("INSTANCE_EXTERNAL_RESULT_UNKNOWN")
-	ErrOwnership          = errors.New("INSTANCE_OBJECT_OWNERSHIP_CONFLICT")
-	ErrDiagnosticTarget   = errors.New("INSTANCE_DIAGNOSTIC_TARGET_UNAVAILABLE")
-	ErrPodChanged         = errors.New("INSTANCE_LOG_POD_CHANGED")
-	ErrLogLimit           = errors.New("INSTANCE_LOG_CONNECTION_LIMIT")
-	ErrLogSlow            = errors.New("INSTANCE_LOG_CLIENT_TOO_SLOW")
-	ErrSchedulingConflict = errors.New("SCHEDULING_FIELD_CONFLICT")
+	ErrInvalid             = errors.New("INVALID_INSTANCE_REQUEST")
+	ErrDenied              = errors.New("INSTANCE_SCOPE_DENIED")
+	ErrNotFound            = errors.New("INSTANCE_NOT_FOUND")
+	ErrConflict            = errors.New("INSTANCE_IDEMPOTENCY_CONFLICT")
+	ErrVersion             = errors.New("INSTANCE_VERSION_CONFLICT")
+	ErrLease               = errors.New("INSTANCE_LEASE_LOST")
+	ErrUnknown             = errors.New("INSTANCE_EXTERNAL_RESULT_UNKNOWN")
+	ErrOwnership           = errors.New("INSTANCE_OBJECT_OWNERSHIP_CONFLICT")
+	ErrDiagnosticTarget    = errors.New("INSTANCE_DIAGNOSTIC_TARGET_UNAVAILABLE")
+	ErrPodChanged          = errors.New("INSTANCE_LOG_POD_CHANGED")
+	ErrLogLimit            = errors.New("INSTANCE_LOG_CONNECTION_LIMIT")
+	ErrLogSlow             = errors.New("INSTANCE_LOG_CLIENT_TOO_SLOW")
+	ErrSchedulingConflict  = errors.New("SCHEDULING_FIELD_CONFLICT")
+	ErrPVCNotFound         = errors.New("INSTANCE_PVC_NOT_FOUND")
+	ErrPVCReferenceChanged = errors.New("INSTANCE_PVC_REFERENCE_CHANGED")
+	ErrPVCCatalogLimit     = errors.New("INSTANCE_PVC_CATALOG_LIMIT")
+	ErrReservedConfig      = errors.New("INSTANCE_RESERVED_CONFIG")
 )
 
 const Owner = "ani-resource-service"
@@ -98,7 +102,31 @@ func (g GPU) Empty() bool {
 	return g.Scheduler == "" && g.Queue == "" && g.RuntimeClass == "" && g.Digest == "" && len(g.NodeLabels) == 0 && len(g.Annotations) == 0 && len(g.Limits) == 0
 }
 
+type VolumeMount struct {
+	ClusterID, Namespace, PVCName, PVCUID, MountPath string
+	ReadOnly                                         bool
+	Ownership                                        string
+}
+type EnvVar struct{ Name, Value string }
+type NetworkSelection struct{ VPCID, SubnetID string }
+type MountablePVC struct {
+	PVCName, Phase, RequestedCapacity string
+	AccessModes                       []string
+	VolumeMode                        string
+	Selectable                        bool
+	UnavailableReason                 string
+}
+type VolumeResolver interface {
+	ResolveVolumes(context.Context, string, string, string, []VolumeMount) ([]VolumeMount, error)
+	ListMountablePVCs(context.Context, string, string, string, uint32, uint32, string) ([]MountablePVC, int64, error)
+}
 type Spec struct {
+	ContractVersion                                        uint32
+	WorkspaceMountPath                                     string
+	VolumeMounts                                           []VolumeMount
+	Network                                                *NetworkSelection
+	Labels, Annotations                                    map[string]string
+	Env                                                    []EnvVar
 	InstanceKind                                           string `json:"instance_kind"`
 	ComputeType                                            string `json:"compute_type"`
 	Name, ImageID, ImageScope, ImageReference, ImageDigest string
@@ -159,6 +187,7 @@ type Instance struct {
 	VolumeName, VolumeUID                                              string
 	PodUID, PodName                                                    string
 	ComputeCleaned, WorkspaceCleaned, QuotaReturned                    bool
+	VolumeReferencesReleased                                           bool
 	// The scope is durable before any external Notebook creation or mutation.
 	ExternalComputeStarted bool
 	GPUPods                []PodRef
@@ -260,6 +289,9 @@ func ValidateCreate(c Create) error {
 		return ErrInvalid
 	}
 	s := c.Spec
+	if e := ValidateConfiguration(s); e != nil {
+		return e
+	}
 	if s.InstanceKind != KindContainer || ValidateScheduling(s.Scheduling) != nil {
 		return ErrInvalid
 	}
