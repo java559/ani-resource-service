@@ -6,7 +6,7 @@
 
 本文只定义新增行为。现有实例、GPU 执行和原账退额规则继续引用[实例规格](instance-mvp.md)，网络资源所有权继续引用 [ADR-0001](../adr/0001-own-network-lifecycle.md)，租户数据约束继续引用 [ADR-0002](../adr/0002-use-tenant-owned-data-without-rls.md)。实施顺序见[改造计划](../plans/instance-configuration-network.md)，实际交付结果只记入[执行状态](../execution/status.md)。
 
-本 Goal 已明确授权 Res/Gov 后端实施及任务隔离环境验收。本合同定点替代原实例规格中“工作盘固定路径、不引入已有卷”和“仅复用现有网络”的范围限制；实现、正式模块交付和真实环境验收分别确认。本次不修改 kcn/ACC/SG 源码或共享部署。
+本合同定点替代原实例规格中“工作盘固定路径、不引入已有卷”和“仅复用现有网络”的范围限制；实现、正式模块交付和真实环境验收分别确认。用户于 2026-10-19 后续明确授权升级现有测试环境 Gov/Res，并要求先清理旧实例及其业务记录、删除旧实例配置兼容代码。后续真实 GPU 验收统一走现有 `tenant-a`，复用既有 ACC 目录、供给组和 T4；不另建隔离 GPU 后端。kcn/ACC/SG 源码及相应共享组件保持既有版本。
 
 ## 1. 业务主链和当前断点
 
@@ -171,11 +171,21 @@ GetSubmission v2 保留 `open/closing/closed、finalization_id`，增加以下�
 | `retired_pods` | 曾登记的旧 Pod 身份，仅用于清理核验，不能提供地址资格 |
 | `closed_at` | 不再可能创建工作负载、未知创建已查明且控制器已消失后的最终封闭时点 |
 
-Instance 持久登记自己创建和观察到的身份；Network 自己通过 Kubernetes GET/LIST 逐跳复核 Pod→StatefulSet→Notebook 的 GVK/name/namespace/UID、controller ownerReference、租户和关联标签、网络投影。Consumer 的 UID 是待核验声明，不是直接授权。
+Instance 持久登记自己创建和观察到的身份；Network 自己通过 Kubernetes GET/LIST 逐跳复核 Pod→StatefulSet→Notebook 的 Group/Kind/name/namespace/UID、规范化版本、controller ownerReference、租户和关联标签、网络投影。Consumer 的 UID 是待核验声明，不是直接授权。
+
+Notebook ownerReference 仅接受已核实的 `kubeflow.org/v1` 和 `kubeflow.org/v1beta1`，统一规范为 `kubeflow.org/v1`。这只处理同一对象的已知 served 版本别名；仍要求唯一 `controller=true` 引用，并独立 GET StatefulSet 和 Notebook，核对 namespace/name/UID 及完整父链。未知版本、错误 Group/Kind/UID 或非 controller 引用不能借规范化通过，见 [managed Provider](../../internal/data/network/kc_attachment_managed.go)。
 
 Network 比 Instance 快照先看到新 Pod 时，保存待核验候选并等待新快照，不仅因 UID 变化就永久 ProtocolBlocked；候选和历史资源均进入清理观察，但只有核验通过的当前 Pod 可以提供地址和 LB 后端资格。错误租户、矛盾 owner 链、根 UID 偷换或不符合单实例策略的并发 live Pod 仍是协议冲突。不能单纯移除现有所有 UID 检查。
 
 Network 持久保存最高已接受 snapshot_revision、固定根 UID、相应快照摘要和 finalization_id。低版本响应只忽略并重试，不回退当前 Pod、生命周期或地址资格；同版本异内容判协议冲突。Confirm 携带 submission/generation、Pod UID 和 expected_snapshot_revision，按前置版本条件更新，重复同值幂等；旧代迟到 Confirm 不能覆盖新代，closing/closed 不能被旧 open 快照恢复。进程重启后继续使用已保存的栅栏。
+
+已有 `ProtocolBlocked` 的可信重证恢复仅适用于 `controller_managed`、Attachment 为 reserved/attached、提交为 open/running 且无 finalization 的情形，并须同时满足：
+
+- 当前 Consumer 匹配持久化的最高已接受快照；revision、内容摘要和固定根 UID 均不变，保存的快照内容也须匹配该摘要，不能用新 revision 本身解除阻塞。
+- 唯一当前 Pod 的 name/UID 匹配独立观察；Network 已持久保存该 revision 和 Pod UID 的 Confirm 回执。Instance 展示整体 running 仍要求自己的持久 Confirm 回执匹配。
+- 重新采集的完整 owner 链和当前 VNic/VNicIP 地址事实核验成功，无待核验候选，fresh proof 覆盖本次观察要求；冲突前的地址缓存不能单独用于恢复。
+
+[managed worker](../../internal/biz/network/attachment_managed.go) 仅据上述证明请求恢复；[持久化事务](../../internal/data/network/attachment_worker.go) 在原 version、lease owner/epoch 和未过期 lease 条件下再次核对冻结快照、Confirm 回执及 proof，才清除阻塞。低版本、同版异内容、根 UID 更换、未知关系或 closing/closed 后迟到的 open 不具备该恢复资格；不能手工清标志或修改冻结快照代替重证。
 
 ### 6.3 创建 启停 重建和删除
 
@@ -199,26 +209,26 @@ Instance 侧新增 submission/网络绑定记录，保存网络选择、步骤�
 
 composition root 在 `governance`、`full` 实际实例路径装配：Instance Network Adapter→Network Attachments、Network Consumer→Instance 只读提交查询、Attachment worker 和 Provider。既有外部 Consumer 按登记的 owner/协议路由，不因新本地 owner 消费者而丢失。内部调用不通过 loopback gRPC，也不因此放开 Gov 的 Attachment 写 RPC allowlist；已有业务 mTLS、租户身份与方法授权保持有效。
 
-## 7. 摘要版本 旧数据与原账
+Attachment 的独立地址证明只消费 Pod、VNic、VNicIP 和 EIP 事实；同属一个 Notebook 的 Service 更新不能使该证明永久失效。相关对象的旧/新 UID、删除事件以及全局 source continuity/overflow 仍使旧证明失效，Network/LB 原有观察范围不变。
 
-由服务端确定并持久保存 `instance_contract_version`。旧记录和缺省旧命令为 v1；新功能开启后的新受理为 v2。版本贯穿 Gov 幂等记录、冻结载荷、Res 命令与实例快照，用户不能指定降级版本。
+## 7. 当前配置合同与原账
 
-| 数据 | v2 规则 |
+按用户后续修订，清理完成后只接受显式 `instance_contract_version=2`；缺省、0 和 1 均拒绝，不保留旧实例配置读取、摘要投影或恢复分支。版本由服务端确定并贯穿 Gov 幂等记录、冻结载荷、Res 命令与实例快照，用户不填写或选择版本。正常新请求的缺省工作目录等配置仍在 Resolve 时解析一次，并显式冻结。
+
+| 数据 | 当前规则 |
 |---|---|
 | 原始请求意图 | 包括用户输入的全部新增字段；metadata 稳定按键编码，挂载按规范路径排序，env 保持原顺序；固定缺省/空值规则 |
 | 生效 CreateSpec | 保存实际工作目录、PVC UID、网络选择、用户 metadata/env 和既有受管字段；默认只解析一次 |
 | 命令摘要 | 使用独立 `resource-create-v2` 域和显式字段集合覆盖完整冻结配置；GPU Execution 仍用它原有摘要 |
 | 动态观察 | Attachment 投影、当前 Pod、地址和清理进展单独保存，不能回写并改变原 CREATE 摘要 |
 
-Gov 仍先做当前授权，然后按租户/主体/action/幂等键查旧操作，再用旧操作保存版本的固定字段投影比较。合法旧请求直接返回原 operation/resource/charges，不重新 Resolve；旧键携带新增配置必须冲突，不能把未知字段丢掉后误判为同一次请求。新键才解析默认值及外部引用。
+Gov 先做当前授权，再按租户/主体/action/幂等键查已受理的当前合同操作。重放比较完整原始请求意图，返回原 operation/resource/charges，不重新 Resolve；配置不同必须冲突。新键才解析默认值及外部引用，不能丢弃未知字段后误判为同一次请求。
 
-首次受理把版本、请求意图摘要、冻结载荷和原有占额记录在同一事务中确定。两个并发请求争用同一幂等键时，未胜出的请求按胜出记录保存的版本重新比较，不沿用自己预先选择的版本。运行开关只决定新受理策略，不能改变存量操作的解释方式。
+首次受理把当前版本、请求意图摘要、冻结载荷和原有占额记录在同一事务中确定。两个并发请求争用同一幂等键时，未胜出的请求按胜出记录重新比较。新写维护闸门关闭时直接拒绝新受理，不能退回生成旧版本命令。
 
-v1 摘要函数冻结原字段集合及原默认值，不能借当前 protobuf descriptor 和 EmitUnpopulated 重建历史字节。CPU frozen decoder 必须按保存版本校验规范编码及原 business_payload 字节摘要；GPU 继续验证原冻结载荷。历史 JSON、原请求摘要、ChargeID 和原始计费数量不批量重写。
+CPU frozen decoder 只校验当前合同的规范编码及原 business_payload 字节摘要，不做旧字段投影、HTML 反转义或旧 envelope 恢复。GPU 当前唯一冻结 Execution、原始 charges、稳定退额事件和物理释放 fence 保持原合同；它们自身的协议版本不因实例配置清理而改写。
 
-Res 的 decoder 和 AcceptCreate 还必须拒绝“version=1/缺省版本但携带任意新增配置字段”的命令，不能让渲染读取 v1 摘要没有覆盖的值。只保留固定 v1 字段投影不足以完成这项校验；旧冻结载荷必须严格满足旧字段集合，v2 全量配置必须绑定 v2 摘要。
-
-旧实例的 `/workspace` 等兼容生效值在完成 v1 严格验证后由内部版本投影补出，不能作为新增请求字段参与旧摘要重算。
+部署只读当前合同的候选前，先用仍能处理旧记录的产品入口正常删除旧实例，核对计算、工作盘、网络及原账，再清除已终结的旧实例/操作/幂等记录。保留删除及退额证据；不能用删库、改账或注入完成状态代替实际释放。历史 migration/checksum 不改写，必要结构变化追加显式迁移。
 
 例：T0 创建时缺省路径解析为 `/workspace`，PVC UID 为 U1。T1 平台改了路径默认值，原 key 重放仍返回 T0 的实例和快照；T2 卷同名换成 U2，Start 返回引用已变，不重新选择 U2；T3 原 key 增加新的 env，返回幂等冲突。更换网络、env 或卷必须是新意图，不能通过重试改旧实例。
 
@@ -249,7 +259,7 @@ Res 的 decoder 和 AcceptCreate 还必须拒绝“version=1/缺省版本但携�
 | B2 | Stop/Start 和删除 Pod 触发自动重建均能重新联网；新旧 UID 交接无永久误冲突，旧地址不再被作为有效后端 |
 | B3 | Prepare/Confirm/Release 丢回执、Instance/Network 重启、Consumer 快照落后、未知 CREATE 均可恢复或明确等待；覆盖快照/Confirm 乱序、closing 后迟到 open、旧 Pod Confirm 迟到，不能回退状态或提前释放 |
 | B4 | 最终删除等待当前/历史 Pod、VNic/VNicIP/Nic 等依赖清理，Network released；原 GPU 退额不被网络失败错误重扣或永久扣留 |
-| C1 | 旧 v1 CPU/GPU 请求重放、CPU worker 恢复、Start/Delete 和原账退额通过；新 v2 配置差异触发幂等冲突 |
+| C1 | 旧实例和终结记录已清理；0/1/缺省配置版本明确拒绝；当前 CPU/GPU 创建、重放、恢复、Start/Delete、原账与重复退额保持，配置差异触发幂等冲突 |
 | C2 | GPU 模式验证用户配置不改变冻结执行、额度占退及系统注解；真实硬件运行与仅字段传播分别报告 |
 | C3 | 实际 governance/full 装配可推进网络，旧 single_pod Consumer 定向回归；真实前端页面验收独立记录 |
 

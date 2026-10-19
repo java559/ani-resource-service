@@ -139,14 +139,14 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 	for k, v := range s.GPU.Annotations {
 		ann[k] = v
 	}
-	mounts := []any{map[string]any{"name": "workspace", "mountPath": workspaceMountPath(s)}}
+	mounts := []any{map[string]any{"name": "workspace", "mountPath": s.WorkspaceMountPath}}
 	volumes := []any{map[string]any{"name": "workspace", "persistentVolumeClaim": map[string]any{"claimName": s.PVCName}}}
 	for index, mount := range s.VolumeMounts {
 		name := borrowedVolumeName(index)
 		mounts = append(mounts, map[string]any{"name": name, "mountPath": mount.MountPath, "readOnly": mount.ReadOnly})
 		volumes = append(volumes, map[string]any{"name": name, "persistentVolumeClaim": map[string]any{"claimName": mount.PVCName, "readOnly": mount.ReadOnly}})
 	}
-	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": workspaceMountPath(s), "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": mounts}}, "volumes": volumes}
+	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": s.WorkspaceMountPath, "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": mounts}}, "volumes": volumes}
 	if s.ComputeType == biz.TypeGPU {
 		ann["scheduling.volcano.sh/queue-name"] = s.GPU.Queue
 		ann["accelerator.ani.io/execution-digest"] = s.GPU.Digest
@@ -424,7 +424,7 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 	if c["name"] != biz.Container || c["image"] != i.Spec.ImageReference {
 		return biz.ErrOwnership
 	}
-	if c["workingDir"] != workspaceMountPath(i.Spec) {
+	if c["workingDir"] != i.Spec.WorkspaceMountPath {
 		return biz.ErrOwnership
 	}
 	for key, value := range i.Spec.Labels {

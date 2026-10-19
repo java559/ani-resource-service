@@ -20,20 +20,13 @@ var namespaceGVR = schema.GroupVersionResource{Version: "v1", Resource: "namespa
 const pvcListPage = 200
 const pvcListMaximum = 2000
 
-func workspaceMountPath(s biz.Spec) string {
-	if s.ContractVersion < 2 {
-		return "/workspace"
-	}
-	return s.WorkspaceMountPath
-}
-
 // ValidateNotebookConfiguration applies Kubernetes-specific input constraints.
 // It deliberately reports field names and safe reasons, never literal values.
 func ValidateNotebookConfiguration(s biz.Spec) error {
 	if err := biz.ValidateConfiguration(s); err != nil {
 		return err
 	}
-	if err := validateMountPath(workspaceMountPath(s)); err != nil {
+	if err := validateMountPath(s.WorkspaceMountPath); err != nil {
 		return err
 	}
 	for _, mount := range s.VolumeMounts {
@@ -299,7 +292,7 @@ func verifyFrozenMounts(pod *unstructured.Unstructured, container map[string]any
 		claim, path string
 		readOnly    bool
 	}
-	expected := map[string]projection{"workspace": {claim: s.PVCName, path: workspaceMountPath(s)}}
+	expected := map[string]projection{"workspace": {claim: s.PVCName, path: s.WorkspaceMountPath}}
 	for index, mount := range s.VolumeMounts {
 		expected[borrowedVolumeName(index)] = projection{claim: mount.PVCName, path: mount.MountPath, readOnly: mount.ReadOnly}
 	}

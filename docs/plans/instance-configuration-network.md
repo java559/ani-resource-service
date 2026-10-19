@@ -1,6 +1,6 @@
 # 容器实例配置与 VPC 接入实施计划
 
-日期：2026-10-19。本 Goal 已明确授权本计划 IC-01～IC-05 的后端实施、任务隔离验收和 review 分支/draft PR；实际进展只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。
+日期：2026-10-19。本 Goal 已明确授权本计划 IC-01～IC-05 的后端实施和 review 分支/draft PR。用户后续明确授权升级现有测试环境 Gov/Res，要求清理旧实例及其业务记录并删除旧实例配置兼容；后续真实 GPU 验收统一走现有 `tenant-a`/ACC/T4。实际进展只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。
 
 新增字段、生命周期、数据和验收规则统一见[增量设计](../specs/instance-configuration-network.md)。本计划只分配实现顺序、文件责任和退出证据，不复制第二份合同或当前执行台账。
 
@@ -14,13 +14,13 @@
 
 | 包 | 实现内容和主要文件责任 | 退出证据 |
 |---|---|---|
-| IC-01 最小配置纵向链 | Res Proto/business 版本、Instance Spec、Resolve/Accept、Notebook render/verify；Gov DTO/strict input、受理摘要和依赖消费；先接一个已有 PVC、一项 env/label/annotation | 正式 Gov→真实 PG→Notebook/Pod→终端，完成一次实际挂载读写和配置读取；旧 CPU/GPU 规范字节 fixture 定向通过 |
+| IC-01 最小配置纵向链 | Res Proto/business 版本、Instance Spec、Resolve/Accept、Notebook render/verify；Gov DTO/strict input、受理摘要和依赖消费；先接一个已有 PVC、一项 env/label/annotation | 正式 Gov→真实 PG→Notebook/Pod→终端，完成一次实际挂载读写和配置读取；当前 CPU/GPU 规范字节及旧配置版本拒绝回归通过 |
 | IC-02 卷生命周期及目录 | Res 卷查询 Adapter、借用引用迁移、工作目录、多卷/只读及引用复核；Gov mountable-pvcs/configuration 查询、授权与错误映射 | A1—A4；两轮启停和最终删除证明用户卷保留、专属盘回收；并发/同名替换/跨租户负例及 worker 重启恢复 |
 | IC-03 VPC 最小受控实例链 | Instance Network 端口和 Adapter、durable submission；Network controller_managed 模式、Consumer v2、最小 owner 链验证、当前 Pod 关系；composition 装配 | B1，加一次 Stop/Start：真实取址、对照通信、新 UID 重新联网、最终释放；旧 single_pod 定向回归 |
 | IC-04 自动重建和失败恢复 | Network 多代关系、待核验候选、历史清理、地址/LB 资格；Instance 最终封闭；必要独立迁移 | B2—B4；自动重建、快照落后、迟到响应、未知 CREATE、双 worker/lease fencing 相关用例及删除清理 |
-| IC-05 发布准备与前端交接 | Res/Gov 正式模块版本、OpenAPI、配置视图和前端联调说明；更新旧规格冲突段和状态证据 | C1—C3；先读后写升级演练、旧操作恢复、新配置主链、GPU 受影响回归和可执行前端验收清单 |
+| IC-05 发布准备与前端交接 | Res/Gov 正式模块版本、OpenAPI、配置视图和前端联调说明；更新旧规格冲突段和状态证据 | C1—C3；旧环境正常清理、仅当前合同升级、新配置主链、GPU 受影响回归和可执行前端验收清单 |
 
-IC-01 必须同时带来可运行行为和旧摘要保护，不作为纯合同整理批次。IC-03 也同时交付能合法换 Pod 的最小模式，不先交一个只能首次创建、无法启停的 VPC 功能。IC-04 只补有实际风险的恢复场景，不重新研究已固定接口。
+IC-01 必须同时带来可运行行为和当前摘要防篡改，不作为纯合同整理批次。IC-03 也同时交付能合法换 Pod 的最小模式，不先交一个只能首次创建、无法启停的 VPC 功能。IC-04 只补有实际风险的恢复场景，不重新研究已固定接口。
 
 IC-01/02 和 IC-03 的实现可由明确 owner 并行推进，但 shared Proto、Spec、worker 和 composition 的修改由单一集成人维护；不能让多个代理并发覆盖同一文件。前端由其 owner 按冻结合同接入，不提前展示未接通的选择器。
 
@@ -40,16 +40,16 @@ IC-01/02 和 IC-03 的实现可由明确 owner 并行推进，但 shared Proto�
 ## 4. 版本发布和回退
 
 1. 先发布可被正式消费的 Res Proto/规范化实现；Gov 用正式 module ref 和 `GOWORK=off`，不用复制生成代码或长期 replace。
-2. 显式执行 Res Instance/Network 及 Gov operation/账本的增量 schema 迁移，部署可读取 v1/v2 的 Res；新功能写入开关保持关闭。Gov 版本字段必须先于新版 Gov 的受理/恢复逻辑就绪，旧记录按 v1 解释，不重算旧摘要。
-3. 部署 Gov 双版本读取/恢复和按旧版本比较幂等的实现；验证旧 CPU/GPU 操作继续恢复和原账退额。
+2. 用当前仍可处理旧记录的产品入口正常清理旧实例，确认工作盘/网络退出和原账退额；保留恢复点及清理证据，再清除已终结的旧实例/操作/幂等记录。
+3. 显式执行所需增量迁移，部署仅支持当前实例配置合同的 Res/Gov；旧配置 0/1/缺省版本明确拒绝，新写维护闸门关闭时不能回退生成旧命令。
 4. 核验实际 governance/full 的 Instance、Network Adapter、Consumer 和 Attachment worker 完整装配；确认卷目录、引用保护、admission 键及实际环境前提。
-5. 确认所有 Gov/Res 副本及恢复、删除、清理 worker 均已完成双版本升级，旧副本退出后，才开启 v2 新受理并交付前端选择器和配置表单；每次接受在原受理事务内原子保存明确版本及完整生效快照。
+5. 确认所有 Gov/Res 副本及恢复、删除、清理 worker 均支持当前合同，旧副本退出后，才开放新受理并交付前端选择器和配置表单；每次接受在原受理事务内原子保存明确版本及完整生效快照。
 
-本 Goal 已授权任务分支发布、draft PR 和隔离环境部署；合并、正式 tag/release 与共享部署仍不在范围内。回退先关闭新受理；已存在 v2 操作时保留能读 v2 的恢复/清理 worker，不能直接回滚到只懂 v1 的旧二进制或删除新列。旧账和旧摘要保持原样，清理存量后再评估版本回退。
+任务分支发布、draft PR 以及现有测试环境 Gov/Res 升级和旧实例清理均已获用户授权；合并、正式 tag/release 保持独立。回退先停止新受理，只使用经验证支持当前合同和 schema 的候选，不恢复旧实例受理或重解释账本。现有 ACC/SG/kcn/CSI/Notebook 组件及 GPU 供给组归属保持。
 
 ## 5. 验证和停止条件
 
-先复用现有 Instance PG/Notebook adapter、Network Attachment 和 Gov 受理测试设施。默认只跑改动对应行为测试；跨模块 schema/规范摘要改动扩大到明确受影响的旧 CPU/GPU 恢复、原账 create/replay/delete/duplicate-refund、旧 single_pod 和 LB 地址资格用例。提交前按仓库要求执行 Res `make verify`、Gov `make verify-ci`；无新改动/失败/未解风险时不反复跑全量。
+先复用现有 Instance PG/Notebook adapter、Network Attachment 和 Gov 受理测试设施。默认只跑改动对应行为测试；本次删除旧实例配置分支须覆盖 0/1 拒绝、当前 CPU/GPU 恢复、原账 create/replay/delete/duplicate-refund、相关 single_pod 和 LB 地址资格。提交前按仓库要求执行 Res `make verify`、Gov `make verify-ci`；无新改动/失败/未解风险时不反复跑全量。
 
 最终证据按同一源快照分别记录：定向测试、真实 PG/重启恢复、外部边界替身、真实 CPU/CSI/kcn 数据面、GPU 硬件、浏览器页面；使用 pass/fail/not_verified，Pending Pod、注解投影、HTTP 接受或文档检查均不替代业务验收。
 

@@ -169,7 +169,7 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 	}
 	raw := &pb.CreateInstanceData{Name: "literal%_Workspace", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: p.ID}
 	priorityBefore, priorityAfter := "before-priority", "after-priority"
-	frozen, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenantID, Data: raw, SchedulingDefaults: &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_SPREAD_PREFERRED.Enum(), PriorityClassName: &priorityBefore}})
+	frozen, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenantID, Data: raw, SchedulingDefaults: &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_SPREAD_PREFERRED.Enum(), PriorityClassName: &priorityBefore}})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -187,7 +187,7 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 	if _, e = f.repo.UpdatePreset(admin, p.ID, biz.Preset{CPUMillis: 3000, Name: "new CPU"}, []string{"cpu_millis", "name"}); e != nil {
 		t.Fatal(e)
 	}
-	next, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenantID, Data: raw, SchedulingDefaults: &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_COLOCATE_PREFERRED.Enum(), PriorityClassName: &priorityAfter}})
+	next, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenantID, Data: raw, SchedulingDefaults: &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_COLOCATE_PREFERRED.Enum(), PriorityClassName: &priorityAfter}})
 	if e != nil || next.Cpu != "3000m" || next.Scheduling.GetPodPlacement() != pb.SchedulingOptions_COLOCATE_PREFERRED || next.Scheduling.GetPriorityClassName() != priorityAfter {
 		t.Fatal("new resolution ignored update", next, e)
 	}
@@ -209,7 +209,7 @@ func TestDatabaseCPUFreezeSurvivesPresetMutationAndDeletion(t *testing.T) {
 	if _, e = s.GetInstance(foreign, &pb.GetInstanceRequest{TenantId: tenantID, InstanceId: got.Id}); e == nil {
 		t.Fatal("cross tenant query accepted")
 	}
-	if _, e = s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenantID, Data: raw}); e == nil {
+	if _, e = s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenantID, Data: raw}); e == nil {
 		t.Fatal("deleted preset allowed new resolution")
 	}
 }

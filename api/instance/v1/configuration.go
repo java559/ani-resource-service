@@ -6,23 +6,12 @@ import (
 	"sort"
 )
 
-const ContractV1 uint32 = 1
 const ContractV2 uint32 = 2
 
 var ErrReservedConfig = instanceconfig.ErrReserved
 
-func ContractVersion(v uint32) uint32 {
-	if v == 0 {
-		return ContractV1
-	}
-	return v
-}
-func inputConfigurationPresent(d *CreateInstanceData) bool {
-	return d != nil && (d.WorkspaceMountPath != nil || len(d.VolumeMounts) > 0 || d.Network != nil || len(d.Labels) > 0 || len(d.Annotations) > 0 || len(d.Env) > 0)
-}
-func specConfigurationPresent(s *CreateSpec) bool {
-	return s != nil && (s.WorkspaceMountPath != "" || len(s.VolumeMounts) > 0 || s.Network != nil || len(s.Labels) > 0 || len(s.Annotations) > 0 || len(s.Env) > 0)
-}
+// ContractVersion preserves explicit configuration identity. Only ContractV2 is accepted.
+func ContractVersion(v uint32) uint32 { return v }
 func ValidateInstanceConfiguration(d *CreateInstanceData) error {
 	if d == nil || hasUnknown(d.ProtoReflect()) {
 		return ErrInvalidBusiness
@@ -59,14 +48,7 @@ func ValidateInstanceConfiguration(d *CreateInstanceData) error {
 	return nil
 }
 func validateSpecConfiguration(s *CreateSpec) error {
-	version := ContractVersion(s.InstanceContractVersion)
-	if version == ContractV1 {
-		if specConfigurationPresent(s) {
-			return ErrInvalidBusiness
-		}
-		return nil
-	}
-	if version != ContractV2 {
+	if s.InstanceContractVersion != ContractV2 {
 		return ErrInvalidBusiness
 	}
 	path := s.WorkspaceMountPath

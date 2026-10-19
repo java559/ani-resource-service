@@ -5,15 +5,8 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig"
 )
 
-// ValidateConfiguration also guards decoded snapshots. Version 1 never renders
-// fields which were absent from its immutable command digest.
+// ValidateConfiguration guards the current frozen configuration and decoded snapshots.
 func ValidateConfiguration(s Spec) error {
-	if s.ContractVersion <= 1 {
-		if s.WorkspaceMountPath != "" || len(s.VolumeMounts) != 0 || s.Network != nil || len(s.Labels) != 0 || len(s.Annotations) != 0 || len(s.Env) != 0 {
-			return ErrInvalid
-		}
-		return nil
-	}
 	if s.ContractVersion != 2 {
 		return ErrInvalid
 	}

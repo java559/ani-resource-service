@@ -25,7 +25,6 @@ type Config struct {
 	NamespacePrefix, ClusterID, ServiceAccount, StorageClass, WorkspaceSize, Shell string
 	LogLimits                                                                      biz.LogLimits
 	UID, GID                                                                       int64
-	ConfigurationV2Writes                                                          bool
 	NetworkV2Writes                                                                bool
 }
 type Service struct {
@@ -119,12 +118,9 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	if _, e := imagebiz.ParseImageID(r.Data.ImageId); e != nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
-	version := pb.ContractVersion(r.InstanceContractVersion)
-	if version != pb.ContractV1 && version != pb.ContractV2 {
+	version := r.InstanceContractVersion
+	if version != pb.ContractV2 {
 		return nil, rpcError(biz.ErrInvalid)
-	}
-	if version == pb.ContractV2 && !s.config.ConfigurationV2Writes {
-		return nil, status.Error(codes.Unavailable, "INSTANCE_CONFIGURATION_NOT_ENABLED")
 	}
 	if _, e := pb.CanonicalBusinessPayloadVersion(r.Data, version); e != nil {
 		return nil, rpcError(e)
@@ -159,42 +155,41 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	}
 	c := s.config
 	out := &pb.CreateSpec{Name: r.Data.Name, ImageId: r.Data.ImageId, ImageScope: r.Data.ImageScope, PresetId: r.Data.PresetId, InstanceKind: biz.KindContainer, ComputeType: preset.ComputeType, ImageReference: image.Reference, Cpu: fmt.Sprintf("%dm", preset.CPUMillis), Memory: fmt.Sprintf("%dMi", preset.MemoryMiB), ClusterId: c.ClusterID, Namespace: ns, ServiceAccount: c.ServiceAccount, StorageClass: c.StorageClass, WorkspaceSize: c.WorkspaceSize, Shell: c.Shell, Uid: c.UID, Gid: c.GID, Scheduling: scheduling, PresetName: preset.Name, PresetCode: preset.Code, GpuSelection: wireReference(preset.GPU)}
-	if version == pb.ContractV2 {
-		out.InstanceContractVersion = version
-		out.WorkspaceMountPath = "/workspace"
-		if r.Data.WorkspaceMountPath != nil {
-			out.WorkspaceMountPath = *r.Data.WorkspaceMountPath
+	out.InstanceContractVersion = version
+	out.WorkspaceMountPath = "/workspace"
+	if r.Data.WorkspaceMountPath != nil {
+		out.WorkspaceMountPath = *r.Data.WorkspaceMountPath
+	}
+	out.Labels = r.Data.Labels
+	out.Annotations = r.Data.Annotations
+	out.Env = r.Data.Env
+	if r.Data.Network != nil {
+		if !s.config.NetworkV2Writes || s.network == nil {
+			return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
 		}
-		out.Labels = r.Data.Labels
-		out.Annotations = r.Data.Annotations
-		out.Env = r.Data.Env
-		if r.Data.Network != nil {
-			if !s.config.NetworkV2Writes || s.network == nil {
-				return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
-			}
-			selection := biz.NetworkSelection{VPCID: r.Data.Network.VpcId, SubnetID: r.Data.Network.SubnetId}
-			if e := s.network.ValidateSelection(ctx, r.TenantId, c.ClusterID, ns, selection); e != nil {
-				return nil, rpcError(e)
-			}
-			out.Network = &pb.NetworkSelection{VpcId: selection.VPCID, SubnetId: selection.SubnetID}
+		selection := biz.NetworkSelection{VPCID: r.Data.Network.VpcId, SubnetID: r.Data.Network.SubnetId}
+		if e := s.network.ValidateSelection(ctx, r.TenantId, c.ClusterID, ns, selection); e != nil {
+			return nil, rpcError(e)
 		}
-		if len(r.Data.VolumeMounts) > 0 {
-			if s.volumes == nil {
-				return nil, status.Error(codes.Unavailable, "INSTANCE_DEPENDENCY_UNAVAILABLE")
-			}
-			mounts := make([]biz.VolumeMount, 0, len(r.Data.VolumeMounts))
-			for _, m := range r.Data.VolumeMounts {
-				mounts = append(mounts, biz.VolumeMount{PVCName: m.PvcName, MountPath: m.MountPath, ReadOnly: m.ReadOnly})
-			}
-			frozen, e := s.volumes.ResolveVolumes(ctx, r.TenantId, c.ClusterID, ns, mounts)
-			if e != nil {
-				return nil, rpcError(e)
-			}
-			for _, m := range frozen {
-				out.VolumeMounts = append(out.VolumeMounts, &pb.FrozenVolumeMount{ClusterId: m.ClusterID, Namespace: m.Namespace, PvcName: m.PVCName, PvcUid: m.PVCUID, MountPath: m.MountPath, ReadOnly: m.ReadOnly, Ownership: m.Ownership})
-			}
+		out.Network = &pb.NetworkSelection{VpcId: selection.VPCID, SubnetId: selection.SubnetID}
+	}
+	if len(r.Data.VolumeMounts) > 0 {
+		if s.volumes == nil {
+			return nil, status.Error(codes.Unavailable, "INSTANCE_DEPENDENCY_UNAVAILABLE")
+		}
+		mounts := make([]biz.VolumeMount, 0, len(r.Data.VolumeMounts))
+		for _, m := range r.Data.VolumeMounts {
+			mounts = append(mounts, biz.VolumeMount{PVCName: m.PvcName, MountPath: m.MountPath, ReadOnly: m.ReadOnly})
+		}
+		frozen, e := s.volumes.ResolveVolumes(ctx, r.TenantId, c.ClusterID, ns, mounts)
+		if e != nil {
+			return nil, rpcError(e)
+		}
+		for _, m := range frozen {
+			out.VolumeMounts = append(out.VolumeMounts, &pb.FrozenVolumeMount{ClusterId: m.ClusterID, Namespace: m.Namespace, PvcName: m.PVCName, PvcUid: m.PVCUID, MountPath: m.MountPath, ReadOnly: m.ReadOnly, Ownership: m.Ownership})
 		}
 	}
+
 	if e = pb.ValidateCreateSpec(out, false); e != nil {
 		return nil, rpcError(e)
 	}

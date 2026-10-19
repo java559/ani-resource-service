@@ -20,15 +20,15 @@ import (
 // CanonicalBusinessPayload is shared by Gov and Res. Trusted attachments and
 // command identities are separate messages and never enter the public hash.
 func CanonicalBusinessPayload(m proto.Message) ([]byte, error) {
-	version := ContractV1
+	version := ContractV2
 	if s, ok := m.(*CreateSpec); ok && s != nil {
 		version = ContractVersion(s.InstanceContractVersion)
 	}
 	return CanonicalBusinessPayloadVersion(m, version)
 }
 
-// CanonicalBusinessPayloadVersion freezes the v1 top-level field set. It never
-// asks the current protobuf descriptor which default fields existed in v1.
+// CanonicalBusinessPayloadVersion freezes the current explicit field set. It never
+// uses descriptor defaults to change an accepted payload.
 func CanonicalBusinessPayloadVersion(m proto.Message, version uint32) ([]byte, error) {
 	if m == nil || !m.ProtoReflect().IsValid() || hasUnknown(m.ProtoReflect()) {
 		return nil, ErrInvalidBusiness
@@ -37,37 +37,31 @@ func CanonicalBusinessPayloadVersion(m proto.Message, version uint32) ([]byte, e
 		return nil, e
 	}
 	version = ContractVersion(version)
-	if version != ContractV1 && version != ContractV2 {
+	if version != ContractV2 {
 		return nil, ErrInvalidBusiness
 	}
 	var value map[string]any
 	switch v := m.(type) {
 	case *CreateInstanceData:
-		if version == ContractV1 && inputConfigurationPresent(v) {
-			return nil, ErrInvalidBusiness
-		}
-		if version == ContractV2 {
-			if e := ValidateInstanceConfiguration(v); e != nil {
-				return nil, e
-			}
+		if e := ValidateInstanceConfiguration(v); e != nil {
+			return nil, e
 		}
 		value = map[string]any{"name": v.Name, "image_id": v.ImageId, "image_scope": v.ImageScope, "preset_id": v.PresetId, "scheduling": wireJSON(v.Scheduling)}
-		if version == ContractV2 {
-			workspace := "/workspace"
-			if v.WorkspaceMountPath != nil {
-				workspace = *v.WorkspaceMountPath
-			}
-			value["workspace_mount_path"] = workspace
-			mounts := []any{}
-			for _, x := range sortedInputMounts(v.VolumeMounts) {
-				mounts = append(mounts, wireJSON(x))
-			}
-			value["volume_mounts"] = mounts
-			value["network"] = wireJSON(v.Network)
-			value["labels"] = nonNilMap(v.Labels)
-			value["annotations"] = nonNilMap(v.Annotations)
-			value["env"] = wireEnv(v.Env)
+		workspace := "/workspace"
+		if v.WorkspaceMountPath != nil {
+			workspace = *v.WorkspaceMountPath
 		}
+		value["workspace_mount_path"] = workspace
+		mounts := []any{}
+		for _, x := range sortedInputMounts(v.VolumeMounts) {
+			mounts = append(mounts, wireJSON(x))
+		}
+		value["volume_mounts"] = mounts
+		value["network"] = wireJSON(v.Network)
+		value["labels"] = nonNilMap(v.Labels)
+		value["annotations"] = nonNilMap(v.Annotations)
+		value["env"] = wireEnv(v.Env)
+
 	case *CreateSpec:
 		if ContractVersion(v.InstanceContractVersion) != version {
 			return nil, ErrInvalidBusiness
@@ -76,19 +70,18 @@ func CanonicalBusinessPayloadVersion(m proto.Message, version uint32) ([]byte, e
 			return nil, e
 		}
 		value = map[string]any{"name": v.Name, "image_id": v.ImageId, "image_scope": v.ImageScope, "preset_id": v.PresetId, "image_reference": v.ImageReference, "cpu": v.Cpu, "memory": v.Memory, "cluster_id": v.ClusterId, "namespace": v.Namespace, "service_account": v.ServiceAccount, "storage_class": v.StorageClass, "workspace_size": v.WorkspaceSize, "shell": v.Shell, "uid": strconv.FormatInt(v.Uid, 10), "gid": strconv.FormatInt(v.Gid, 10), "instance_kind": v.InstanceKind, "compute_type": v.ComputeType, "scheduling": wireJSON(v.Scheduling), "preset_name": v.PresetName, "preset_code": v.PresetCode, "gpu_execution": wireJSON(v.GpuExecution), "gpu_display": wireJSON(v.GpuDisplay), "gpu_selection": wireJSON(v.GpuSelection)}
-		if version == ContractV2 {
-			value["instance_contract_version"] = v.InstanceContractVersion
-			value["workspace_mount_path"] = v.WorkspaceMountPath
-			mounts := []any{}
-			for _, x := range sortedFrozenMounts(v.VolumeMounts) {
-				mounts = append(mounts, wireJSON(x))
-			}
-			value["volume_mounts"] = mounts
-			value["network"] = wireJSON(v.Network)
-			value["labels"] = nonNilMap(v.Labels)
-			value["annotations"] = nonNilMap(v.Annotations)
-			value["env"] = wireEnv(v.Env)
+		value["instance_contract_version"] = v.InstanceContractVersion
+		value["workspace_mount_path"] = v.WorkspaceMountPath
+		mounts := []any{}
+		for _, x := range sortedFrozenMounts(v.VolumeMounts) {
+			mounts = append(mounts, wireJSON(x))
 		}
+		value["volume_mounts"] = mounts
+		value["network"] = wireJSON(v.Network)
+		value["labels"] = nonNilMap(v.Labels)
+		value["annotations"] = nonNilMap(v.Annotations)
+		value["env"] = wireEnv(v.Env)
+
 	default:
 		return nil, errors.New("unsupported instance business message")
 	}
@@ -101,8 +94,8 @@ func CanonicalBusinessPayloadVersion(m proto.Message, version uint32) ([]byte, e
 	return bytes.TrimSuffix(out.Bytes(), []byte{'\n'}), nil
 }
 
-// wireJSON is a closed field projection, including nested v1 defaults. Adding
-// fields to any current descriptor must not rewrite an accepted v1 payload.
+// wireJSON is a closed field projection, including nested defaults. Adding
+// descriptor fields must not rewrite an accepted current payload.
 func wireJSON(m proto.Message) any {
 	if m == nil || !m.ProtoReflect().IsValid() {
 		return nil
@@ -177,17 +170,6 @@ func DecodeBusinessPayload(raw []byte) (*CreateSpec, error) {
 	b := new(CreateSpec)
 	if e := protojson.Unmarshal(raw, b); e != nil {
 		return nil, e
-	}
-	if ContractVersion(b.InstanceContractVersion) == ContractV1 {
-		var fields map[string]json.RawMessage
-		if e := json.Unmarshal(raw, &fields); e != nil {
-			return nil, e
-		}
-		for _, key := range []string{"workspace_mount_path", "workspaceMountPath", "volume_mounts", "volumeMounts", "network", "labels", "annotations", "env"} {
-			if _, ok := fields[key]; ok {
-				return nil, ErrInvalidBusiness
-			}
-		}
 	}
 	if e := ValidateCreateSpec(b, b.GpuExecution != nil); e != nil {
 		return nil, e
@@ -355,21 +337,19 @@ func CommandDigest(c *CommandContext, s *CreateSpec) (string, error) {
 		display = map[string]any{"profile_id": d.ProfileId, "profile_version": fmt.Sprint(d.ProfileVersion), "profile_name": d.ProfileName, "model_key": d.ModelKey, "mode": fmt.Sprint(int32(d.Mode))}
 	}
 	value := map[string]any{"tenant_id": c.TenantId, "resource_id": c.ResourceId, "operation_id": c.OperationId, "name": s.Name, "image_id": s.ImageId, "image_scope": s.ImageScope, "preset_id": s.PresetId, "image_reference": s.ImageReference, "cpu": s.Cpu, "memory": s.Memory, "cluster_id": s.ClusterId, "namespace": s.Namespace, "service_account": s.ServiceAccount, "storage_class": s.StorageClass, "workspace_size": s.WorkspaceSize, "shell": s.Shell, "uid": fmt.Sprint(s.Uid), "gid": fmt.Sprint(s.Gid), "instance_kind": s.InstanceKind, "compute_type": s.ComputeType, "scheduling": scheduling, "preset_name": s.PresetName, "preset_code": s.PresetCode, "gpu_display": display, "execution_digest": execution}
-	domain := "resource-create-v1\n"
-	if ContractVersion(s.InstanceContractVersion) == ContractV2 {
-		domain = "resource-create-v2\n"
-		value["instance_contract_version"] = s.InstanceContractVersion
-		value["workspace_mount_path"] = s.WorkspaceMountPath
-		mounts := []any{}
-		for _, m := range sortedFrozenMounts(s.VolumeMounts) {
-			mounts = append(mounts, wireJSON(m))
-		}
-		value["volume_mounts"] = mounts
-		value["network"] = wireJSON(s.Network)
-		value["labels"] = nonNilMap(s.Labels)
-		value["annotations"] = nonNilMap(s.Annotations)
-		value["env"] = wireEnv(s.Env)
+	domain := "resource-create-v2\n"
+	value["instance_contract_version"] = s.InstanceContractVersion
+	value["workspace_mount_path"] = s.WorkspaceMountPath
+	mounts := []any{}
+	for _, m := range sortedFrozenMounts(s.VolumeMounts) {
+		mounts = append(mounts, wireJSON(m))
 	}
+	value["volume_mounts"] = mounts
+	value["network"] = wireJSON(s.Network)
+	value["labels"] = nonNilMap(s.Labels)
+	value["annotations"] = nonNilMap(s.Annotations)
+	value["env"] = wireEnv(s.Env)
+
 	raw, err := json.Marshal(value)
 	if err != nil {
 		return "", err

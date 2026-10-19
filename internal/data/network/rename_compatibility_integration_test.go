@@ -26,9 +26,10 @@ import (
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 )
 
-// Fixed pre-rename generated client and published schema-14-compatible server,
-// with separate executables and descriptor registries. Earlier schema-8,
-// schema-12 and schema-13 servers are not valid rollback targets for this database schema.
+// Fixed pre-rename generated client and published schema-15/v2-reader server,
+// with separate executables and descriptor registries. The earliest supported
+// rollback is 586f861; schema-14 4e7ef74 rejects migration 15 and cannot resume
+// controller_managed cleanup. Keep that older schema guard intact.
 // This controlled PG/HTTP check does not replace real Kubernetes R4 evidence.
 func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	if os.Getenv("NETWORK_TEST_ADMIN_DSN") == "" {
@@ -55,7 +56,7 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 	if rollbackRoot == "" {
 		rollbackRoot = t.TempDir()
 		archive := filepath.Join(t.TempDir(), "rollback-baseline.tar")
-		command := exec.Command("git", "archive", "--output", archive, "4e7ef74fd177678c8d99f9645afcd3286107bb3d")
+		command := exec.Command("git", "archive", "--output", archive, "586f8619576b44117195fc7fffa99bbc66a6d108")
 		command.Dir = root
 		if output, err := command.CombinedOutput(); err != nil {
 			t.Fatalf("fixed schema-compatible server archive: %v %s", err, output)
@@ -64,11 +65,11 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 			t.Fatalf("schema-compatible server extraction: %v %s", err, output)
 		}
 	}
-	// Guard the published schema-14 composition even when a supplied archive avoids
+	// Guard the published schema-15/v2-reader composition even when a supplied archive avoids
 	// accessing Git history on an isolated remote test host.
 	serverSource, err := os.ReadFile(filepath.Join(rollbackRoot, "cmd/ani-resource-service/app.go"))
-	if err != nil || fmt.Sprintf("%x", sha256.Sum256(serverSource)) != "af99d7274ac7b87ac5d4970f79dca347bd6b41f4003a8e0b6ae3131c5aa87620" {
-		t.Fatalf("fixed 4e7ef74 schema-14 server composition guard failed: %v", err)
+	if err != nil || fmt.Sprintf("%x", sha256.Sum256(serverSource)) != "25abef2cdfa4e3cc3e94f42851e5fbe52743c8aaf33906419948e2066b4a61a5" {
+		t.Fatalf("fixed 586f861 schema-15/v2-reader server composition guard failed: %v", err)
 	}
 	build := func(dir, target, name string) string {
 		binary := filepath.Join(t.TempDir(), name)
@@ -284,7 +285,7 @@ func TestResourceOldClientSchemaCompatibleSameDatabaseRollback(t *testing.T) {
 			t.Fatalf("Provider resource remains after API cleanup: %s", name)
 		}
 	}
-	t.Log("fixed 66f787 generated client with test-only transport/context overlay: published schema-14 4e7ef74 mTLS -> candidate mTLS -> 4e7ef74 rollback with pending work -> candidate mTLS; same schema-14 DB, endpoint, config, cursor key; identities, receipts, migration rows/checksums/timestamps preserved; API cleanup complete; older incompatible server rollback not asserted")
+	t.Log("fixed 66f787 generated client with test-only transport/context overlay: published schema-15/v2-reader 586f861 mTLS -> candidate mTLS -> 586f861 rollback with pending work -> candidate mTLS; same schema-15 DB, endpoint, config, cursor key; identities, receipts, migration rows/checksums/timestamps preserved; API cleanup complete; older incompatible server rollback not asserted")
 
 	// Candidate outbound adapter talks to an independent old generated owner.
 	ownerDir, err := os.MkdirTemp("", "rename-owner-")

@@ -43,10 +43,10 @@ func (s *Service) GetInstanceConfiguration(ctx context.Context, r *pb.GetInstanc
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	out := &pb.InstanceConfiguration{InstanceId: i.ID, InstanceContractVersion: pb.ContractVersion(i.Spec.ContractVersion), WorkspaceMountPath: i.Spec.WorkspaceMountPath, Labels: i.Spec.Labels, Annotations: i.Spec.Annotations}
-	if out.WorkspaceMountPath == "" {
-		out.WorkspaceMountPath = "/workspace"
+	if e := biz.ValidateConfiguration(i.Spec); e != nil {
+		return nil, rpcError(e)
 	}
+	out := &pb.InstanceConfiguration{InstanceId: i.ID, InstanceContractVersion: i.Spec.ContractVersion, WorkspaceMountPath: i.Spec.WorkspaceMountPath, Labels: i.Spec.Labels, Annotations: i.Spec.Annotations}
 	for _, m := range i.Spec.VolumeMounts {
 		out.VolumeMounts = append(out.VolumeMounts, &pb.VolumeMount{PvcName: m.PVCName, MountPath: m.MountPath, ReadOnly: m.ReadOnly})
 	}
