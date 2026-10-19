@@ -56,7 +56,15 @@ func (p *KCProvider) Observe(ctx context.Context, t biz.ProviderTarget) (biz.Pro
 
 func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork) (biz.AttachmentObservation, error) {
 	if p.observation == nil {
-		return p.observeAttachment(ctx, w, p.listAll)
+		// observeAttachment validates this Namespace against the saved Subnet
+		// binding before invoking the reader. Preserve an unfiltered Pod list
+		// within that boundary so missing labels cannot hide historic Pods.
+		return p.observeAttachment(ctx, w, func(ctx context.Context, gvr schema.GroupVersionResource) ([]unstructured.Unstructured, error) {
+			if gvr == pods {
+				return p.listScoped(ctx, gvr, w.Attachment.Namespace, "")
+			}
+			return p.listAll(ctx, gvr)
+		})
 	}
 	a := w.Attachment
 	keys := []string{"attachment:" + a.ID, "uid:" + a.PodUID, "object:Pod/" + a.Namespace + "/" + a.PodName, "podname:" + a.Namespace + "/" + a.PodName, "eip-subnet:" + w.Plan.PrimaryNetworkRef}
@@ -97,7 +105,9 @@ func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork
 		allKeys := append([]string{}, keys...)
 		// Expand Pod UID -> VNic UID -> VNicIP references in the shared indices.
 		// Persisted relations keep orphaned IPs and same-name UID changes attributable.
-		for _, gvr := range observationGVRs[2:] {
+		// Only these four GVRs are read by observeAttachment or its EIP dependency
+		// check. Other objects sharing a controller UID are not address evidence.
+		for _, gvr := range observationGVRs[2:6] {
 			objects := indexedObjects(v.indices[gvr], allKeys)
 			candidates[gvr] = objects
 			p.observation.candidates.Add(int64(len(objects)))
@@ -109,7 +119,7 @@ func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork
 			}
 		}
 		proof := biz.ObservationProof{CollectedAt: v.collected, Hash: contentHash(candidatesForHash(candidates)), CoveredGeneration: v.generations[observationTarget{a.TenantID, a.ID, "attachment"}.key()]}
-		if !proof.Covers(w.Requirement) || !p.observation.valid(v, allKeys) {
+		if !proof.Covers(w.Requirement) || !p.observation.validAttachment(v, allKeys) {
 			after, err = p.repository.queries.DatabaseTime(ctx)
 			if err != nil {
 				return biz.AttachmentObservation{}, readFailure(err)
@@ -126,7 +136,7 @@ func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork
 		if len(eips) > 0 {
 			result.HasDependencies = true
 		}
-		if !p.observation.valid(v, allKeys) {
+		if !p.observation.validAttachment(v, allKeys) {
 			after, err = p.repository.queries.DatabaseTime(ctx)
 			if err != nil {
 				return biz.AttachmentObservation{}, readFailure(err)

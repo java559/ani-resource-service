@@ -72,7 +72,7 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 				renewFacts(r)
 				if r.Method == "GET" {
 					switch r.URL.Path {
-					case "/api/v1/nodes", "/api/v1/configmaps", "/api/v1/pods", "/apis/networking.k8s.io/v1/servicecidrs", "/apis/networking.kubercloud.com/v1/subnets":
+					case "/api/v1/nodes", "/api/v1/configmaps", "/api/v1/pods", "/api/v1/namespaces/kcn-system/configmaps", "/api/v1/namespaces/kcn-system/pods", "/apis/networking.k8s.io/v1/servicecidrs", "/apis/networking.kubercloud.com/v1/subnets":
 						platform.ServeHTTP(w, r)
 						return
 					}
@@ -105,7 +105,9 @@ func TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller(t *testing.T) 
 				}
 				api.ServeHTTP(w, r)
 			}))
-			defer host.Close()
+			// Processes register cleanup below; stop them before closing their
+			// long-lived watch server, including when an assertion fails early.
+			t.Cleanup(host.Close)
 			defer close(release)
 			defer close(deleteRelease)
 			kubeconfig := testenv.Kubeconfig(t, host.URL)
@@ -267,7 +269,7 @@ func seedProcessVPCPlatformFacts(t *testing.T, api *controlled.Server) func(*htt
 	}
 	renew()
 	return func(r *http.Request) {
-		if r.Method == "GET" && r.URL.Path == "/api/v1/configmaps" && r.URL.Query().Get("watch") != "true" {
+		if r.Method == "GET" && (r.URL.Path == "/api/v1/configmaps" || r.URL.Path == "/api/v1/namespaces/kcn-system/configmaps") && r.URL.Query().Get("watch") != "true" {
 			renew()
 		}
 	}

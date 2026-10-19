@@ -118,9 +118,8 @@ func run(logger *slog.Logger) error {
 	}
 	switch mode := os.Getenv("ANI_NETWORK_MODE"); mode {
 	case "", "full":
-		if os.Getenv("ANI_INSTANCE_CONFIG_FILE") != "" {
-			return fmt.Errorf("enabled instances require the trusted governance composition")
-		}
+		// The full composition uses the same trusted mTLS listener and method
+		// authorization as governance and wires the local Instance consumer.
 	case "vpc-read":
 		return runVPCRead(&bc, logger)
 	case "governance":

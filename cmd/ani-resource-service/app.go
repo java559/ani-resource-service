@@ -8,7 +8,10 @@ import (
 	"time"
 
 	kratos "github.com/go-kratos/kratos/v3"
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/uuid"
+	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
+	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
@@ -31,9 +34,22 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	if err != nil {
 		return nil, err
 	}
+	images, err := openImage(context.Background(), bc.Image)
+	if err != nil {
+		repository.Close()
+		return nil, err
+	}
+	instances, err := openInstance(context.Background(), bc.Network, images, logger)
+	if err != nil {
+		images.Close()
+		repository.Close()
+		return nil, err
+	}
 	configured := false
 	defer func() {
 		if !configured {
+			instances.Close()
+			images.Close()
 			repository.Close()
 		}
 	}()
@@ -90,7 +106,14 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		_ = observability.Shutdown(ctx)
 		return nil, err
 	}
-	attachmentWorker, err := biz.NewAttachmentWorker(repository, provider, consumer, uuid.NewString(), policy, observability.ObserveAttachmentWork)
+	attachments := biz.NewAttachments(repository, policy.StaleAfter)
+	routedConsumer, err := wireInstanceNetwork(instances, network, attachments, consumer, bc.Network.ClusterId, bc.Network.NamespacePrefix, policy.StaleAfter)
+	if err != nil {
+		consumer.Close()
+		_ = observability.Shutdown(ctx)
+		return nil, err
+	}
+	attachmentWorker, err := biz.NewAttachmentWorker(repository, provider, routedConsumer, uuid.NewString(), policy, observability.ObserveAttachmentWork)
 	if err != nil {
 		consumer.Close()
 		_ = observability.Shutdown(ctx)
@@ -112,7 +135,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	networkv1.RegisterNetworkServiceServer(grpcServer, service.NewNetworkService(network, biz.NewAttachments(repository, policy.StaleAfter)))
+	networkv1.RegisterNetworkServiceServer(grpcServer, service.NewNetworkService(network, attachments))
 	repository.UseEgressInfrastructure(provider)
 	egress, err := biz.NewEgress(repository, provider, biz.ContextEgressAuthorization{}, key, policy.StaleAfter, time.Now)
 	if err != nil {
@@ -127,14 +150,26 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		}
 		networkv1.RegisterTenantLoadBalancerServiceServer(grpcServer, service.NewTenantLoadBalancerService(lbs))
 	}
+	if images != nil {
+		imagev1.RegisterTenantImageServiceServer(grpcServer, images.tenant)
+	}
+	if instances != nil {
+		instancev1.RegisterInstanceServiceServer(grpcServer, instances.service)
+	}
 	adminServer := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
+	servers := []transport.Server{grpcServer, adminServer, observation, execution}
+	if instances != nil {
+		servers = append(servers, instances.execution, instances.terminal)
+	}
 	app := kratos.New(
 		kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Logger(logger),
-		kratos.Server(grpcServer, adminServer, observation, execution),
+		kratos.Server(servers...),
 		kratos.AfterStart(func(context.Context) error { readiness.Set(true); return nil }),
 		kratos.BeforeStop(func(context.Context) error { readiness.Set(false); return nil }),
 		kratos.AfterStop(func(ctx context.Context) error {
 			consumer.Close()
+			instances.Close()
+			images.Close()
 			repository.Close()
 			return observability.Shutdown(ctx)
 		}),

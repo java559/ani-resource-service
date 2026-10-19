@@ -53,35 +53,36 @@ type auditCollection struct {
 // KCObservation supplies invalidation hints and independently audited facts.
 // Only domain workers apply facts. Watch never writes product state or freshness.
 type KCObservation struct {
-	provider        *KCProvider
-	client          dynamic.Interface
-	options         ObservationOptions
-	informers       []cache.SharedIndexInformer
-	mu              sync.Mutex
-	view            *auditView
-	pending         map[string]struct{}
-	pendingSince    time.Time
-	changes         map[string]uint64
-	sequence, epoch uint64
-	overflow        bool
-	refreshing      *auditCollection
-	cancel          context.CancelFunc
-	ctx             context.Context
-	done            chan struct{}
-	started         bool
-	synced          atomic.Bool
-	auditSuccess    atomic.Int64
-	watchErrors     atomic.Int64
-	sourceStarts    atomic.Int64
-	watchIndexBytes atomic.Int64
-	auditFailures   atomic.Int64
-	auditMaxSeconds float64
-	collectingSince time.Time
-	notifications   atomic.Int64
-	coalesced       atomic.Int64
-	overflows       atomic.Int64
-	candidates      atomic.Int64
-	pgMetrics       map[string]float64
+	provider          *KCProvider
+	client            dynamic.Interface
+	options           ObservationOptions
+	informers         []cache.SharedIndexInformer
+	mu                sync.Mutex
+	view              *auditView
+	pending           map[string]struct{}
+	pendingSince      time.Time
+	changes           map[string]uint64
+	attachmentChanges map[string]uint64
+	sequence, epoch   uint64
+	overflow          bool
+	refreshing        *auditCollection
+	cancel            context.CancelFunc
+	ctx               context.Context
+	done              chan struct{}
+	started           bool
+	synced            atomic.Bool
+	auditSuccess      atomic.Int64
+	watchErrors       atomic.Int64
+	sourceStarts      atomic.Int64
+	watchIndexBytes   atomic.Int64
+	auditFailures     atomic.Int64
+	auditMaxSeconds   float64
+	collectingSince   time.Time
+	notifications     atomic.Int64
+	coalesced         atomic.Int64
+	overflows         atomic.Int64
+	candidates        atomic.Int64
+	pgMetrics         map[string]float64
 }
 
 func (p *KCProvider) EnableObservation(options ObservationOptions) (*KCObservation, error) {
@@ -161,11 +162,18 @@ func (o *KCObservation) changed(old, new any) {
 		for _, key := range keys {
 			if len(o.changes) >= o.options.QueueCapacity*8 {
 				clear(o.changes)
+				clear(o.attachmentChanges)
 				o.epoch++
 				o.overflow = true
 				o.overflows.Add(1)
 			}
 			o.changes[key] = o.sequence
+			if attachmentObservationObject(object) {
+				if o.attachmentChanges == nil {
+					o.attachmentChanges = map[string]uint64{}
+				}
+				o.attachmentChanges[key] = o.sequence
+			}
 			if _, ok := o.pending[key]; ok {
 				o.coalesced.Add(1)
 				continue
@@ -511,14 +519,42 @@ func (o *KCObservation) collect(ctx context.Context) (*auditView, error) {
 	}
 	return v, nil
 }
+
+// Attachment observations consume only Pod/VNic/VNicIP/EIP facts. A sibling
+// Service can share a Notebook owner UID without changing any of those facts.
+// Retain general changes for Network/LB and the same overflow/continuity epoch.
+func attachmentObservationObject(object *unstructured.Unstructured) bool {
+	if object.GetAPIVersion() == "v1" && object.GetKind() == "Pod" {
+		return true
+	}
+	if object.GetAPIVersion() != "networking.kubercloud.com/v1" {
+		return false
+	}
+	switch object.GetKind() {
+	case "VNic", "VNicIP", "EIP":
+		return true
+	}
+	return false
+}
+
 func (o *KCObservation) valid(v *auditView, keys []string) bool {
+	return o.validChanges(v, keys, false)
+}
+func (o *KCObservation) validAttachment(v *auditView, keys []string) bool {
+	return o.validChanges(v, keys, true)
+}
+func (o *KCObservation) validChanges(v *auditView, keys []string, attachment bool) bool {
 	o.mu.Lock()
 	defer o.mu.Unlock()
 	if v.epoch != o.epoch {
 		return false
 	}
+	changes := o.changes
+	if attachment {
+		changes = o.attachmentChanges
+	}
 	for _, key := range keys {
-		if o.changes[key] > v.sequence {
+		if changes[key] > v.sequence {
 			return false
 		}
 	}

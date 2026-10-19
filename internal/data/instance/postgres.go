@@ -136,7 +136,7 @@ func Migrate(ctx context.Context, dsn, role string) error {
 		}
 	}
 	quoted := pgx.Identifier{role}.Sanitize()
-	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox TO "+quoted); e != nil {
+	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox,instance.borrowed_volume_references,instance.network_submissions TO "+quoted); e != nil {
 		return e
 	}
 	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON instance.compute_presets TO "+quoted); e != nil {
@@ -145,19 +145,23 @@ func Migrate(ctx context.Context, dsn, role string) error {
 	return tx.Commit(ctx)
 }
 
-const instanceSelect = "SELECT snapshot,version,desired,created_at,updated_at FROM instance.instances WHERE tenant_id=$1 AND instance_id=$2"
+const instanceSelect = "SELECT snapshot,version,desired,created_at,updated_at,instance_contract_version FROM instance.instances WHERE tenant_id=$1 AND instance_id=$2"
 
 type scanner interface{ Scan(...any) error }
 
 func scanInstance(row scanner) (biz.Instance, error) {
 	var i biz.Instance
 	var raw []byte
-	e := row.Scan(&raw, &i.Version, &i.Desired, &i.CreatedAt, &i.UpdatedAt)
+	var contract int32
+	e := row.Scan(&raw, &i.Version, &i.Desired, &i.CreatedAt, &i.UpdatedAt, &contract)
 	if errors.Is(e, pgx.ErrNoRows) {
 		return i, biz.ErrNotFound
 	}
 	if e != nil {
 		return i, e
+	}
+	if contract != 2 {
+		return i, biz.ErrInvalid
 	}
 	version, desired, created, updated := i.Version, i.Desired, i.CreatedAt, i.UpdatedAt
 	e = decodeSnapshot(raw, &i)
@@ -175,6 +179,9 @@ func (p *Postgres) Get(ctx context.Context, tenant, id string) (biz.Instance, er
 	if e != nil {
 		return biz.Instance{}, e
 	}
+	if r.InstanceContractVersion != 2 {
+		return biz.Instance{}, biz.ErrInvalid
+	}
 	return decodeInstance(r.Snapshot, r.Version, r.Desired, r.CreatedAt, r.UpdatedAt)
 }
 func decodeSnapshot(raw []byte, i *biz.Instance) error {
@@ -189,8 +196,17 @@ func decodeSnapshot(raw []byte, i *biz.Instance) error {
 	if i.Spec.InstanceKind != biz.KindContainer || (i.Spec.ComputeType != biz.TypeCPU && i.Spec.ComputeType != biz.TypeGPU) {
 		return biz.ErrInvalid
 	}
-	if i.CreateRequestHash != "" && biz.ValidateScheduling(i.Spec.Scheduling) != nil {
+	if biz.ValidateConfiguration(i.Spec) != nil || (i.CreateRequestHash != "" && biz.ValidateScheduling(i.Spec.Scheduling) != nil) {
 		return biz.ErrInvalid
+	}
+	if (i.Spec.Network == nil) != (i.Network == nil) {
+		return biz.ErrInvalid
+	}
+	if i.Network != nil {
+		n := i.Network
+		if !biz.UUID(n.SubmissionID) || n.RequestKey == "" || n.Generation < 1 || n.SnapshotRevision < 1 || (n.State != "open" && n.State != "closing" && n.State != "closed") || n.DesiredRunState != i.Desired || (n.State == "open" && n.FinalizationID != "") || (n.State != "open" && !biz.UUID(n.FinalizationID)) || (n.State == "closed" && (n.ClosedAt == nil || n.ClosedAt.IsZero())) {
+			return biz.ErrInvalid
+		}
 	}
 	return nil
 }
@@ -226,7 +242,7 @@ func (p *Postgres) List(ctx context.Context, tenant string, f biz.ListFilter) ([
 		return nil, 0, e
 	}
 	args = append(args, int64(size), offset)
-	rows, e := tx.Query(ctx, "SELECT snapshot,version,desired,created_at,updated_at FROM instance.instances"+where+" ORDER BY created_at DESC,instance_id DESC LIMIT $6 OFFSET $7", args...)
+	rows, e := tx.Query(ctx, "SELECT snapshot,version,desired,created_at,updated_at,instance_contract_version FROM instance.instances"+where+" ORDER BY created_at DESC,instance_id DESC LIMIT $6 OFFSET $7", args...)
 	if e != nil {
 		return nil, 0, e
 	}
@@ -288,11 +304,16 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 			i.CreateRequestHash = c.RequestHash
 			i.BusinessDigest = c.BusinessDigest
 			i.Spec = c.Spec
+			i.VolumeReferencesReleased = true
+			i.Network = initialNetworkSubmission(i)
 			raw, e := json.Marshal(i)
 			if e != nil {
 				return ack, e
 			}
-			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET create_request_hash=$3,snapshot=$4 WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, c.RequestHash, raw); e != nil {
+			if _, e = tx.Exec(ctx, "UPDATE instance.instances SET create_request_hash=$3,snapshot=$4,instance_contract_version=$5 WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, c.RequestHash, raw, c.Spec.ContractVersion); e != nil {
+				return ack, e
+			}
+			if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 				return ack, e
 			}
 			if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -316,12 +337,16 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 	if !errors.Is(e, biz.ErrNotFound) {
 		return biz.ACK{}, e
 	}
-	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID}
+	i = biz.Instance{TenantID: c.TenantID, ID: c.ID, CreateOperationID: c.OperationID, CreateRequestHash: c.RequestHash, BusinessDigest: c.BusinessDigest, Spec: c.Spec, Version: 1, Desired: biz.Running, Observed: "pending", LastOperationID: c.OperationID, VolumeReferencesReleased: len(c.Spec.VolumeMounts) == 0}
+	i.Network = initialNetworkSubmission(i)
 	raw, e := json.Marshal(i)
 	if e != nil {
 		return ack, e
 	}
-	if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot) VALUES($1,$2,$3,$4,1,'running',$5)", c.TenantID, c.ID, c.OperationID, c.RequestHash, raw); e != nil {
+	if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot,instance_contract_version) VALUES($1,$2,$3,$4,1,'running',$5,$6)", c.TenantID, c.ID, c.OperationID, c.RequestHash, raw, c.Spec.ContractVersion); e != nil {
+		return ack, e
+	}
+	if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 		return ack, e
 	}
 	if e = insertOperation(ctx, tx, i, c.OperationID, "create", c.OperationID, c.RequestHash, ack); e != nil {
@@ -329,6 +354,11 @@ func (p *Postgres) AcceptCreate(ctx context.Context, c biz.Create) (biz.ACK, err
 	}
 	if _, e = tx.Exec(ctx, "INSERT INTO instance.workspace_bindings(tenant_id,instance_id,namespace,pvc_name) VALUES($1,$2,$3,$4)", c.TenantID, c.ID, c.Spec.Namespace, c.Spec.PVCName); e != nil {
 		return ack, e
+	}
+	for _, m := range c.Spec.VolumeMounts {
+		if _, e = tx.Exec(ctx, "INSERT INTO instance.borrowed_volume_references(tenant_id,instance_id,mount_path,cluster_id,namespace,pvc_name,pvc_uid,read_only) VALUES($1,$2,$3,$4,$5,$6,$7,$8)", c.TenantID, c.ID, m.MountPath, m.ClusterID, m.Namespace, m.PVCName, m.PVCUID, m.ReadOnly); e != nil {
+			return ack, e
+		}
 	}
 	if _, e = tx.Exec(ctx, "INSERT INTO instance.instance_work(tenant_id,instance_id) VALUES($1,$2)", c.TenantID, c.ID); e != nil {
 		return ack, e
@@ -353,12 +383,12 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		if d.ExpectedVersion > 1 {
 			return ack, biz.ErrVersion
 		}
-		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceKind: d.InstanceKind, ComputeType: d.ComputeType}, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
+		i = biz.Instance{TenantID: d.TenantID, ID: d.ID, CreateOperationID: d.CreateOperationID, Spec: biz.Spec{InstanceKind: d.InstanceKind, ComputeType: d.ComputeType, ContractVersion: 2, WorkspaceMountPath: "/workspace"}, Version: 1, Desired: biz.Deleted, Observed: "pending", LastOperationID: d.OperationID}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return ack, e
 		}
-		if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot) VALUES($1,$2,$3,'',1,'deleted',$4)", d.TenantID, d.ID, d.CreateOperationID, raw); e != nil {
+		if _, e = tx.Exec(ctx, "INSERT INTO instance.instances(tenant_id,instance_id,create_operation_id,create_request_hash,version,desired,snapshot,instance_contract_version) VALUES($1,$2,$3,'',1,'deleted',$4,2)", d.TenantID, d.ID, d.CreateOperationID, raw); e != nil {
 			return ack, e
 		}
 		if _, e = tx.Exec(ctx, "INSERT INTO instance.instance_work(tenant_id,instance_id) VALUES($1,$2)", d.TenantID, d.ID); e != nil {
@@ -388,6 +418,7 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 		}
 		i.Version++
 		i.Desired = biz.Deleted
+		networkIntent(&i)
 		i.LastOperationID = d.OperationID
 		i.Reason = ""
 		raw, e := json.Marshal(i)
@@ -395,6 +426,9 @@ func (p *Postgres) AcceptDelete(ctx context.Context, d biz.Delete) (biz.ACK, err
 			return ack, e
 		}
 		if _, e = tx.Exec(ctx, "UPDATE instance.instances SET desired='deleted',version=$3,snapshot=$4,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID, i.Version, raw); e != nil {
+			return ack, e
+		}
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 			return ack, e
 		}
 		if _, e = tx.Exec(ctx, "UPDATE instance.instance_work SET due_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", i.TenantID, i.ID); e != nil {
@@ -453,6 +487,7 @@ func (p *Postgres) AcceptCommand(ctx context.Context, c biz.Command) (biz.ACK, e
 	}
 	i.Version++
 	i.Desired = desired
+	networkIntent(&i)
 	i.LastOperationID = c.OperationID
 	i.Reason = ""
 	raw, e = json.Marshal(i)
@@ -461,6 +496,9 @@ func (p *Postgres) AcceptCommand(ctx context.Context, c biz.Command) (biz.ACK, e
 	}
 	ack := biz.ACK{OperationID: c.OperationID, ResourceID: c.ID, Accepted: true}
 	if _, e = tx.Exec(ctx, "UPDATE instance.instances SET version=$3,desired=$4,snapshot=$5,updated_at=clock_timestamp() WHERE tenant_id=$1 AND instance_id=$2", c.TenantID, c.ID, i.Version, i.Desired, raw); e != nil {
+		return ack, e
+	}
+	if e = saveNetworkSubmission(ctx, tx, i); e != nil {
 		return ack, e
 	}
 	if e = insertOperation(ctx, tx, i, c.OperationID, c.Action, c.Key, c.RequestHash, ack); e != nil {
@@ -571,6 +609,15 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		progress.Instance.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		progress.Instance.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		i = progress.Instance
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
+			return e
+		}
+		if i.Desired == biz.Deleted && i.ComputeCleaned {
+			if _, e = tx.Exec(ctx, "UPDATE instance.borrowed_volume_references SET state='released' WHERE tenant_id=$1 AND instance_id=$2 AND state='active'", i.TenantID, i.ID); e != nil {
+				return e
+			}
+			i.VolumeReferencesReleased = true
+		}
 		raw, e := json.Marshal(i)
 		if e != nil {
 			return e
@@ -582,7 +629,7 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 			return e
 		}
 		state := "accepted"
-		if i.Reason == "" && i.Pending == nil && ((i.Desired == biz.Deleted && i.ComputeCleaned && i.WorkspaceCleaned && i.QuotaReturned) || (i.Desired != biz.Deleted && i.Desired == i.Observed)) {
+		if i.Reason == "" && i.Pending == nil && ((i.Desired == biz.Deleted && i.ComputeCleaned && i.WorkspaceCleaned && i.QuotaReturned && (i.Network == nil || i.Network.Cleaned)) || (i.Desired != biz.Deleted && i.Desired == i.Observed)) {
 			state = "completed"
 		}
 		if i.Reason == "CREATE_RESULT_UNKNOWN" || i.Reason == "WORKSPACE_CREATE_RESULT_UNKNOWN" {
@@ -596,6 +643,10 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		// the current business version and retain only immutable runtime evidence.
 		i.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		i.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
+		mergeNetworkResult(i.Network, progress.Instance.Network)
+		if e = saveNetworkSubmission(ctx, tx, i); e != nil {
+			return e
+		}
 		if progress.Receipt != nil {
 			i.Pending = nil
 			if i.NotebookUID == "" {

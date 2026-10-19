@@ -49,7 +49,7 @@ func (s *KC) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else if len(parts) > offset+1 {
 		name = parts[offset+1]
 	}
-	kinds := map[string]string{"namespaces": "Namespace", "vpcs": "VPC", "subnets": "Subnet", "vnics": "VNic", "vnicips": "VNicIP", "eips": "EIP", "pods": "Pod", "snats": "Snat", "nats": "Nat", "eipgateways": "EIPGateway", "vlannetworks": "VlanNetwork", "nodes": "Node", "configmaps": "ConfigMap", "services": "Service", "servicecidrs": "ServiceCIDR"}
+	kinds := map[string]string{"namespaces": "Namespace", "vpcs": "VPC", "subnets": "Subnet", "vnics": "VNic", "vnicips": "VNicIP", "eips": "EIP", "pods": "Pod", "notebooks": "Notebook", "statefulsets": "StatefulSet", "nics": "Nic", "snats": "Snat", "nats": "Nat", "eipgateways": "EIPGateway", "vlannetworks": "VlanNetwork", "nodes": "Node", "configmaps": "ConfigMap", "services": "Service", "servicecidrs": "ServiceCIDR"}
 	objectKind, ok := kinds[kind]
 	if !ok {
 		s.Invalid = "unexpected resource " + kind
@@ -59,6 +59,12 @@ func (s *KC) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	apiVersion := "networking.kubercloud.com/v1"
 	if kind == "namespaces" || kind == "pods" || kind == "nodes" || kind == "configmaps" || kind == "services" {
 		apiVersion = "v1"
+	}
+	if kind == "notebooks" {
+		apiVersion = "kubeflow.org/v1"
+	}
+	if kind == "statefulsets" {
+		apiVersion = "apps/v1"
 	}
 	key := kind + "/" + ns + "/" + name
 	fail := func(code int, reason string) {

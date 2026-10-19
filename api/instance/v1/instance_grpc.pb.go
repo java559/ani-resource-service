@@ -31,6 +31,8 @@ const (
 	InstanceService_ListInstanceEvents_FullMethodName         = "/instance.v1.InstanceService/ListInstanceEvents"
 	InstanceService_StreamInstanceLogs_FullMethodName         = "/instance.v1.InstanceService/StreamInstanceLogs"
 	InstanceService_ListPresets_FullMethodName                = "/instance.v1.InstanceService/ListPresets"
+	InstanceService_ListMountablePVCs_FullMethodName          = "/instance.v1.InstanceService/ListMountablePVCs"
+	InstanceService_GetInstanceConfiguration_FullMethodName   = "/instance.v1.InstanceService/GetInstanceConfiguration"
 	InstanceService_ResolveCreateSpec_FullMethodName          = "/instance.v1.InstanceService/ResolveCreateSpec"
 	InstanceService_AcceptCreate_FullMethodName               = "/instance.v1.InstanceService/AcceptCreate"
 	InstanceService_AcceptDelete_FullMethodName               = "/instance.v1.InstanceService/AcceptDelete"
@@ -60,6 +62,8 @@ type InstanceServiceClient interface {
 	ListInstanceEvents(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceEvents, error)
 	StreamInstanceLogs(ctx context.Context, in *StreamInstanceLogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InstanceLogFrame], error)
 	ListPresets(ctx context.Context, in *ListPresetsRequest, opts ...grpc.CallOption) (*ListPresetsResponse, error)
+	ListMountablePVCs(ctx context.Context, in *ListMountablePVCsRequest, opts ...grpc.CallOption) (*ListMountablePVCsResponse, error)
+	GetInstanceConfiguration(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceConfiguration, error)
 	ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateSpec, error)
 	AcceptCreate(ctx context.Context, in *AcceptCreateRequest, opts ...grpc.CallOption) (*OperationResponse, error)
 	AcceptDelete(ctx context.Context, in *AcceptDeleteRequest, opts ...grpc.CallOption) (*OperationResponse, error)
@@ -189,6 +193,26 @@ func (c *instanceServiceClient) ListPresets(ctx context.Context, in *ListPresets
 	return out, nil
 }
 
+func (c *instanceServiceClient) ListMountablePVCs(ctx context.Context, in *ListMountablePVCsRequest, opts ...grpc.CallOption) (*ListMountablePVCsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListMountablePVCsResponse)
+	err := c.cc.Invoke(ctx, InstanceService_ListMountablePVCs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *instanceServiceClient) GetInstanceConfiguration(ctx context.Context, in *GetInstanceRequest, opts ...grpc.CallOption) (*InstanceConfiguration, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(InstanceConfiguration)
+	err := c.cc.Invoke(ctx, InstanceService_GetInstanceConfiguration_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *instanceServiceClient) ResolveCreateSpec(ctx context.Context, in *ResolveCreateSpecRequest, opts ...grpc.CallOption) (*CreateSpec, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateSpec)
@@ -306,6 +330,8 @@ type InstanceServiceServer interface {
 	ListInstanceEvents(context.Context, *GetInstanceRequest) (*InstanceEvents, error)
 	StreamInstanceLogs(*StreamInstanceLogsRequest, grpc.ServerStreamingServer[InstanceLogFrame]) error
 	ListPresets(context.Context, *ListPresetsRequest) (*ListPresetsResponse, error)
+	ListMountablePVCs(context.Context, *ListMountablePVCsRequest) (*ListMountablePVCsResponse, error)
+	GetInstanceConfiguration(context.Context, *GetInstanceRequest) (*InstanceConfiguration, error)
 	ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateSpec, error)
 	AcceptCreate(context.Context, *AcceptCreateRequest) (*OperationResponse, error)
 	AcceptDelete(context.Context, *AcceptDeleteRequest) (*OperationResponse, error)
@@ -355,6 +381,12 @@ func (UnimplementedInstanceServiceServer) StreamInstanceLogs(*StreamInstanceLogs
 }
 func (UnimplementedInstanceServiceServer) ListPresets(context.Context, *ListPresetsRequest) (*ListPresetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPresets not implemented")
+}
+func (UnimplementedInstanceServiceServer) ListMountablePVCs(context.Context, *ListMountablePVCsRequest) (*ListMountablePVCsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListMountablePVCs not implemented")
+}
+func (UnimplementedInstanceServiceServer) GetInstanceConfiguration(context.Context, *GetInstanceRequest) (*InstanceConfiguration, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInstanceConfiguration not implemented")
 }
 func (UnimplementedInstanceServiceServer) ResolveCreateSpec(context.Context, *ResolveCreateSpecRequest) (*CreateSpec, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResolveCreateSpec not implemented")
@@ -576,6 +608,42 @@ func _InstanceService_ListPresets_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InstanceServiceServer).ListPresets(ctx, req.(*ListPresetsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InstanceService_ListMountablePVCs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListMountablePVCsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServiceServer).ListMountablePVCs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstanceService_ListMountablePVCs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServiceServer).ListMountablePVCs(ctx, req.(*ListMountablePVCsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InstanceService_GetInstanceConfiguration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InstanceServiceServer).GetInstanceConfiguration(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InstanceService_GetInstanceConfiguration_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InstanceServiceServer).GetInstanceConfiguration(ctx, req.(*GetInstanceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -802,6 +870,14 @@ var InstanceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListPresets",
 			Handler:    _InstanceService_ListPresets_Handler,
+		},
+		{
+			MethodName: "ListMountablePVCs",
+			Handler:    _InstanceService_ListMountablePVCs_Handler,
+		},
+		{
+			MethodName: "GetInstanceConfiguration",
+			Handler:    _InstanceService_GetInstanceConfiguration_Handler,
 		},
 		{
 			MethodName: "ResolveCreateSpec",

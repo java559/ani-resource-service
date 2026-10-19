@@ -36,12 +36,28 @@ func (c *InstanceConsumer) GetSubmission(ctx context.Context, a biz.Attachment) 
 	if c.client == nil {
 		return biz.ConsumerSubmission{}, fmt.Errorf("instance consumer unavailable")
 	}
-	r, e := c.client.GetSubmission(ctx, &networkv1.GetSubmissionRequest{ProtocolVersion: 1, TenantId: a.TenantID, InstanceId: a.InstanceID, SubmissionId: a.SubmissionID, Generation: a.Generation, AttachmentId: a.ID, ExpectedFinalizationId: a.FinalizationID})
+	version := int32(1)
+	if a.WorkloadMode == "controller_managed" {
+		version = 2
+	}
+	r, e := c.client.GetSubmission(ctx, &networkv1.GetSubmissionRequest{ProtocolVersion: version, TenantId: a.TenantID, InstanceId: a.InstanceID, SubmissionId: a.SubmissionID, Generation: a.Generation, AttachmentId: a.ID, ExpectedFinalizationId: a.FinalizationID})
 	if e != nil {
 		return biz.ConsumerSubmission{}, e
 	}
 	states := map[networkv1.SubmissionState]string{networkv1.SubmissionState_SUBMISSION_STATE_OPEN: "open", networkv1.SubmissionState_SUBMISSION_STATE_CLOSING: "closing", networkv1.SubmissionState_SUBMISSION_STATE_CLOSED: "closed"}
 	value := biz.ConsumerSubmission{ProtocolVersion: r.GetProtocolVersion(), TenantID: r.GetTenantId(), InstanceID: r.GetInstanceId(), SubmissionID: r.GetSubmissionId(), AttachmentID: r.GetAttachmentId(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), Generation: r.GetGeneration(), State: states[r.GetState()], FinalizationID: r.GetFinalizationId(), PodUIDs: r.GetPodUids(), ControllerUIDs: r.GetControllerUids()}
+	value.SnapshotRevision = r.GetSnapshotRevision()
+	value.DesiredRunState = r.GetDesiredRunState()
+	value.RootController = consumerWorkload(r.GetRootController())
+	for _, set := range r.GetControllers() {
+		value.Controllers = append(value.Controllers, biz.ControllerReference{Reference: consumerWorkload(set.GetReference()), Owner: consumerWorkload(set.GetOwner())})
+	}
+	for _, pod := range r.GetCurrentPods() {
+		value.CurrentPods = append(value.CurrentPods, biz.PodReference{Reference: consumerWorkload(pod.GetReference()), Owner: consumerWorkload(pod.GetOwner())})
+	}
+	for _, pod := range r.GetRetiredPods() {
+		value.RetiredPods = append(value.RetiredPods, biz.PodReference{Reference: consumerWorkload(pod.GetReference()), Owner: consumerWorkload(pod.GetOwner())})
+	}
 	if r.ClosedAt != nil {
 		if e := r.ClosedAt.CheckValid(); e != nil {
 			return biz.ConsumerSubmission{}, e
@@ -50,4 +66,11 @@ func (c *InstanceConsumer) GetSubmission(ctx context.Context, a biz.Attachment) 
 		value.ClosedAt = &t
 	}
 	return value, nil
+}
+
+func consumerWorkload(r *networkv1.WorkloadReference) biz.WorkloadReference {
+	if r == nil {
+		return biz.WorkloadReference{}
+	}
+	return biz.WorkloadReference{APIVersion: r.GetApiVersion(), Kind: r.GetKind(), Namespace: r.GetNamespace(), Name: r.GetName(), UID: r.GetUid()}
 }

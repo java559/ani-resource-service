@@ -2,6 +2,8 @@ package server
 
 // Domain registration extends the existing trusted Governance listener.
 var instanceGovernanceMethods = map[string]struct{}{
+	"/instance.v1.InstanceService/ListMountablePVCs":          {},
+	"/instance.v1.InstanceService/GetInstanceConfiguration":   {},
 	"/instance.v1.InstanceService/GetInstanceRuntime":         {},
 	"/instance.v1.InstanceService/ListInstanceEvents":         {},
 	"/instance.v1.InstanceService/ListPresets":                {},

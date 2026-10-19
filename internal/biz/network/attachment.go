@@ -29,11 +29,19 @@ const (
 // annotation keys; business logic neither builds nor merges arbitrary patches.
 type PodPrimaryPlan struct {
 	FormatVersion                                    int32
+	WorkloadMode                                     string `json:",omitempty"`
 	Namespace, PrimaryNetworkRef                     string
 	TenantID, InstanceID, AttachmentID, SubmissionID string
 	Generation                                       int64
 }
 type Attachment struct {
+	WorkloadMode                                                  string
+	SnapshotRevision                                              int64
+	SnapshotHash                                                  string
+	ConfirmedSnapshotRevision                                     int64
+	ConfirmedPodUID                                               string
+	RootController                                                WorkloadReference
+	ConsumerSnapshot                                              *ConsumerSubmission
 	ID, TenantID, VPCID, SubnetID, InstanceID, Slot, SubmissionID string
 	Generation                                                    int64
 	ClusterID, Namespace, BindingRevision                         string
@@ -46,6 +54,7 @@ type Attachment struct {
 	ObservedAt, ReleasedAt                                        *time.Time
 }
 type PrepareAttachment struct {
+	WorkloadMode                                            string `json:",omitempty"`
 	TenantID, InstanceID, SubnetID, VPCID, Slot, RequestKey string
 	SubmissionID                                            string
 	Generation                                              int64
@@ -63,6 +72,7 @@ func (r PrepareAttachment) Fingerprint() string {
 }
 
 type ConfirmAttachment struct {
+	ExpectedSnapshotRevision                                      int64
 	TenantID, AttachmentID, ClusterID, Namespace, PodName, PodUID string
 	ExpectedVersion                                               int64
 }
@@ -94,6 +104,13 @@ func (a *Attachments) Prepare(ctx context.Context, r PrepareAttachment) (Attachm
 		return Attachment{}, err
 	}
 	r.TenantID = tenant
+	if r.WorkloadMode != "" && r.WorkloadMode != "single_pod" && r.WorkloadMode != "controller_managed" {
+		return Attachment{}, Fail(InvalidArgument, "invalid attachment workload mode")
+	}
+	// Empty is the immutable v1 spelling and remains omitted from its digest.
+	if r.WorkloadMode == "single_pod" {
+		r.WorkloadMode = ""
+	}
 	submission, err := uuid.Parse(r.SubmissionID)
 	if err != nil || submission == uuid.Nil || r.SubmissionID != submission.String() || r.Generation < 1 || !attachmentName.MatchString(r.InstanceID) || r.Slot != "primary" || strings.TrimSpace(r.RequestKey) != r.RequestKey || len(r.RequestKey) < 1 || len(r.RequestKey) > 128 || !validSubnetID(r.SubnetID) || (r.VPCID != "" && !validVPCID(r.VPCID)) || strings.TrimSpace(r.ClusterID) == "" || len(r.ClusterID) > 128 || !namespaceName.MatchString(r.Namespace) {
 		return Attachment{}, Fail(InvalidArgument, "invalid attachment intent")

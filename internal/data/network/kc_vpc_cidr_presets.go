@@ -26,7 +26,7 @@ func (p *KCProvider) PlatformCIDRs(ctx context.Context) ([]string, time.Time, er
 	if err != nil {
 		return nil, time.Time{}, err
 	}
-	maps, err := p.listAll(ctx, kcConfigMaps)
+	maps, err := p.listScoped(ctx, kcConfigMaps, kcSystemNamespace, ownerLabel+"="+factsOwner)
 	if err != nil {
 		return nil, time.Time{}, err
 	}
@@ -38,7 +38,7 @@ func (p *KCProvider) PlatformCIDRs(ctx context.Context) ([]string, time.Time, er
 	if err != nil {
 		return nil, time.Time{}, err
 	}
-	controllers, err := p.listAll(ctx, pods)
+	controllers, err := p.listScoped(ctx, pods, kcSystemNamespace, "networking.kubercloud.com/app=controller")
 	if err != nil {
 		return nil, time.Time{}, err
 	}

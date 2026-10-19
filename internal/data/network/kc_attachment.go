@@ -32,12 +32,18 @@ type attachmentRelation struct {
 }
 
 func (p *KCProvider) listAll(ctx context.Context, resource schema.GroupVersionResource) ([]unstructured.Unstructured, error) {
+	return p.listScoped(ctx, resource, "", "")
+}
+
+// Namespace and selector come only from fixed platform policy or a binding
+// already verified by the caller; pagination retains the original safeguards.
+func (p *KCProvider) listScoped(ctx context.Context, resource schema.GroupVersionResource, namespace, selector string) ([]unstructured.Unstructured, error) {
 	var values []unstructured.Unstructured
 	next := ""
 	revision := ""
 	seen := map[string]bool{}
 	for {
-		page, e := p.client.Resource(resource).List(ctx, metav1.ListOptions{Limit: 500, Continue: next})
+		page, e := p.client.Resource(resource).Namespace(namespace).List(ctx, metav1.ListOptions{Limit: 500, Continue: next, LabelSelector: selector})
 		if e != nil {
 			return nil, readFailure(e)
 		}
@@ -76,6 +82,14 @@ func ownerUID(o unstructured.Unstructured, kind string, ids map[string]bool) (st
 }
 func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork, list func(context.Context, schema.GroupVersionResource) ([]unstructured.Unstructured, error)) (biz.AttachmentObservation, error) {
 	a, plan := w.Attachment, w.Plan
+	managed := a.WorkloadMode == "controller_managed"
+	identityKey := func(kind, namespace, name, uid string) string {
+		key := relationKey(kind, namespace, name)
+		if managed {
+			key += "/" + uid
+		}
+		return key
+	}
 	conflict := func() (biz.AttachmentObservation, error) {
 		return biz.AttachmentObservation{}, &biz.ProviderError{Kind: biz.ProviderConflict}
 	}
@@ -102,7 +116,10 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 	vnicNames := map[string]string{}
 	for _, r := range prior {
 		r.Current, r.AddressEligible = false, false
-		tracked[relationKey(r.Kind, r.Namespace, r.Name)] = r
+		tracked[identityKey(r.Kind, r.Namespace, r.Name, r.UID)] = r
+		if r.Kind == "Pod" {
+			podUIDs[r.UID] = true
+		}
 		if r.Kind == "VNic" {
 			vnicUIDs[r.UID] = true
 			vnicNames[r.Namespace+"/"+r.Name] = r.UID
@@ -114,13 +131,14 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 	}
 	result := biz.AttachmentObservation{}
 	var pod *unstructured.Unstructured
+	livePods := 0
 	for _, o := range allPods {
 		labels := o.GetLabels()
 		candidate := labels[attachmentLabel] == a.ID || podUIDs[string(o.GetUID())] || (a.PodName != "" && o.GetNamespace() == a.Namespace && o.GetName() == a.PodName)
 		if !candidate {
 			continue
 		}
-		if pod != nil || o.GetKind() != "Pod" || o.GetAPIVersion() != "v1" || o.GetNamespace() != a.Namespace || o.GetUID() == "" || o.GetResourceVersion() == "" || labels[tenantLabel] != a.TenantID || labels[instanceLabel] != a.InstanceID || labels[attachmentLabel] != a.ID || labels[submissionLabel] != a.SubmissionID || labels[generationLabel] != strconv.FormatInt(a.Generation, 10) || o.GetAnnotations()[subnetAnnotation] != plan.PrimaryNetworkRef || (a.PodUID != "" && a.PodUID != string(o.GetUID())) {
+		if (!managed && pod != nil) || o.GetKind() != "Pod" || o.GetAPIVersion() != "v1" || o.GetNamespace() != a.Namespace || o.GetUID() == "" || o.GetResourceVersion() == "" || labels[tenantLabel] != a.TenantID || labels[instanceLabel] != a.InstanceID || labels[attachmentLabel] != a.ID || labels[submissionLabel] != a.SubmissionID || labels[generationLabel] != strconv.FormatInt(a.Generation, 10) || o.GetAnnotations()[subnetAnnotation] != plan.PrimaryNetworkRef || (!managed && a.PodUID != "" && a.PodUID != string(o.GetUID())) {
 			return conflict()
 		}
 		for key, value := range o.GetAnnotations() {
@@ -129,19 +147,39 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 			}
 		}
 		copy := o
-		pod = &copy
 		result.Exists = true
+		podUIDs[string(o.GetUID())] = true
+		if managed {
+			verified, pending, err := p.verifyManagedPod(ctx, w, &copy, func(r attachmentRelation) { tracked[identityKey(r.Kind, r.Namespace, r.Name, r.UID)] = r })
+			if err != nil {
+				return result, err
+			}
+			result.PendingCandidate = result.PendingCandidate || pending
+			if o.GetDeletionTimestamp() == nil {
+				livePods++
+				if livePods > 1 {
+					return conflict()
+				}
+			}
+			owner, _ := workloadController(&copy, "apps/v1", "StatefulSet")
+			tracked[identityKey("Pod", o.GetNamespace(), o.GetName(), string(o.GetUID()))] = attachmentRelation{Kind: "Pod", Namespace: o.GetNamespace(), Name: o.GetName(), UID: string(o.GetUID()), OwnerUID: owner.UID, Current: verified}
+			if !verified {
+				continue
+			}
+			result.VerifiedCurrent = true
+		}
+		pod = &copy
 		result.PodName = o.GetName()
 		result.PodUID = string(o.GetUID())
-		podUIDs[result.PodUID] = true
 	}
 	vnics, e := list(ctx, schema.GroupVersionResource{Group: kcVPCs.Group, Version: kcVPCs.Version, Resource: "vnics"})
 	if e != nil {
 		return result, e
 	}
 	liveVNics := map[string]string{}
+	currentVNics := map[string]bool{}
 	for _, o := range vnics {
-		key := relationKey("VNic", o.GetNamespace(), o.GetName())
+		key := identityKey("VNic", o.GetNamespace(), o.GetName(), string(o.GetUID()))
 		old, seen := tracked[key]
 		owner, owned := ownerUID(o, "Pod", podUIDs)
 		podAnnotation := false
@@ -161,10 +199,11 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 			return conflict()
 		}
 		uid := string(o.GetUID())
-		tracked[key] = attachmentRelation{Kind: "VNic", Namespace: o.GetNamespace(), Name: o.GetName(), UID: uid, OwnerUID: owner, Current: o.GetDeletionTimestamp() == nil}
+		tracked[key] = attachmentRelation{Kind: "VNic", Namespace: o.GetNamespace(), Name: o.GetName(), UID: uid, OwnerUID: owner, Current: o.GetDeletionTimestamp() == nil && (!managed || (pod != nil && owner == string(pod.GetUID())))}
 		vnicUIDs[uid] = true
 		vnicNames[o.GetNamespace()+"/"+o.GetName()] = uid
 		liveVNics[o.GetNamespace()+"/"+o.GetName()] = uid
+		currentVNics[uid] = !managed || (pod != nil && owner == string(pod.GetUID()))
 		result.HasDependencies = true
 	}
 	ips, e := list(ctx, schema.GroupVersionResource{Group: kcVPCs.Group, Version: kcVPCs.Version, Resource: "vnicips"})
@@ -173,7 +212,7 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 	}
 	liveIPs := map[string]string{}
 	for _, o := range ips {
-		key := relationKey("VNicIP", o.GetNamespace(), o.GetName())
+		key := identityKey("VNicIP", o.GetNamespace(), o.GetName(), string(o.GetUID()))
 		old, seen := tracked[key]
 		owner, owned := ownerUID(o, "VNic", vnicUIDs)
 		ref, _, _ := unstructured.NestedString(o.Object, "spec", "vNic")
@@ -183,11 +222,11 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 			continue
 		}
 		subnet, _, _ := unstructured.NestedString(o.Object, "spec", "subnet")
-		if !owned || o.GetKind() != "VNicIP" || o.GetAPIVersion() != "networking.kubercloud.com/v1" || o.GetNamespace() != a.Namespace || o.GetUID() == "" || kcRef(subnet, o.GetNamespace()) != plan.PrimaryNetworkRef || (seen && old.UID != string(o.GetUID())) || (ref != "" && vnicNames[kcRef(ref, o.GetNamespace())] != owner) || (statusRef != "" && vnicNames[kcRef(statusRef, o.GetNamespace())] != owner) {
+		if !owned || o.GetKind() != "VNicIP" || o.GetAPIVersion() != "networking.kubercloud.com/v1" || o.GetNamespace() != a.Namespace || o.GetUID() == "" || kcRef(subnet, o.GetNamespace()) != plan.PrimaryNetworkRef || (seen && old.UID != string(o.GetUID())) || ((!managed || currentVNics[owner]) && ((ref != "" && vnicNames[kcRef(ref, o.GetNamespace())] != owner) || (statusRef != "" && vnicNames[kcRef(statusRef, o.GetNamespace())] != owner))) {
 			return conflict()
 		}
 		address, _, _ := unstructured.NestedString(o.Object, "spec", "ipAddress")
-		eligible := pod != nil && pod.GetDeletionTimestamp() == nil && o.GetDeletionTimestamp() == nil && liveVNics[kcRef(ref, o.GetNamespace())] == owner && kcRef(statusRef, o.GetNamespace()) == kcRef(ref, o.GetNamespace())
+		eligible := currentVNics[owner] && pod != nil && pod.GetDeletionTimestamp() == nil && o.GetDeletionTimestamp() == nil && liveVNics[kcRef(ref, o.GetNamespace())] == owner && kcRef(statusRef, o.GetNamespace()) == kcRef(ref, o.GetNamespace())
 		podIP := ""
 		if pod != nil {
 			podIP, _, _ = unstructured.NestedString(pod.Object, "status", "podIP")
@@ -204,6 +243,30 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 		}
 		if value := annotations["networking.kubercloud.com/vnicip"]; value != "" && liveIPs[kcRef(value, a.Namespace)] == "" {
 			return conflict()
+		}
+	}
+	if managed && result.VerifiedCurrent {
+		addressReady := false
+		for _, relation := range tracked {
+			if relation.Kind == "VNicIP" && relation.AddressEligible {
+				addressReady = true
+			}
+		}
+		result.VerifiedCurrent = addressReady
+	}
+	if managed && w.ConsumerSnapshot != nil && w.ConsumerSnapshot.State != "open" {
+		controllers, err := p.managedControllersExist(ctx, w)
+		if err != nil {
+			return result, err
+		}
+		result.HasDependencies = result.HasDependencies || controllers
+		nics, err := p.managedNics(ctx, w, vnicNames)
+		if err != nil {
+			return result, err
+		}
+		for _, nic := range nics {
+			tracked[identityKey(nic.Kind, nic.Namespace, nic.Name, nic.UID)] = nic
+			result.HasDependencies = true
 		}
 	}
 	// Keep every witnessed UID after absence: a later same-name replacement or

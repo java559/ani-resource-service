@@ -20,34 +20,146 @@ import (
 // CanonicalBusinessPayload is shared by Gov and Res. Trusted attachments and
 // command identities are separate messages and never enter the public hash.
 func CanonicalBusinessPayload(m proto.Message) ([]byte, error) {
-	switch m.(type) {
-	case *CreateInstanceData, *CreateSpec:
+	version := ContractV2
+	if s, ok := m.(*CreateSpec); ok && s != nil {
+		version = ContractVersion(s.InstanceContractVersion)
+	}
+	return CanonicalBusinessPayloadVersion(m, version)
+}
+
+// CanonicalBusinessPayloadVersion freezes the current explicit field set. It never
+// uses descriptor defaults to change an accepted payload.
+func CanonicalBusinessPayloadVersion(m proto.Message, version uint32) ([]byte, error) {
+	if m == nil || !m.ProtoReflect().IsValid() || hasUnknown(m.ProtoReflect()) {
+		return nil, ErrInvalidBusiness
+	}
+	if _, e := (protojson.MarshalOptions{}).Marshal(m); e != nil {
+		return nil, e
+	}
+	version = ContractVersion(version)
+	if version != ContractV2 {
+		return nil, ErrInvalidBusiness
+	}
+	var value map[string]any
+	switch v := m.(type) {
+	case *CreateInstanceData:
+		if e := ValidateInstanceConfiguration(v); e != nil {
+			return nil, e
+		}
+		value = map[string]any{"name": v.Name, "image_id": v.ImageId, "image_scope": v.ImageScope, "preset_id": v.PresetId, "scheduling": wireJSON(v.Scheduling)}
+		workspace := "/workspace"
+		if v.WorkspaceMountPath != nil {
+			workspace = *v.WorkspaceMountPath
+		}
+		value["workspace_mount_path"] = workspace
+		mounts := []any{}
+		for _, x := range sortedInputMounts(v.VolumeMounts) {
+			mounts = append(mounts, wireJSON(x))
+		}
+		value["volume_mounts"] = mounts
+		value["network"] = wireJSON(v.Network)
+		value["labels"] = nonNilMap(v.Labels)
+		value["annotations"] = nonNilMap(v.Annotations)
+		value["env"] = wireEnv(v.Env)
+
+	case *CreateSpec:
+		if ContractVersion(v.InstanceContractVersion) != version {
+			return nil, ErrInvalidBusiness
+		}
+		if e := validateSpecConfiguration(v); e != nil {
+			return nil, e
+		}
+		value = map[string]any{"name": v.Name, "image_id": v.ImageId, "image_scope": v.ImageScope, "preset_id": v.PresetId, "image_reference": v.ImageReference, "cpu": v.Cpu, "memory": v.Memory, "cluster_id": v.ClusterId, "namespace": v.Namespace, "service_account": v.ServiceAccount, "storage_class": v.StorageClass, "workspace_size": v.WorkspaceSize, "shell": v.Shell, "uid": strconv.FormatInt(v.Uid, 10), "gid": strconv.FormatInt(v.Gid, 10), "instance_kind": v.InstanceKind, "compute_type": v.ComputeType, "scheduling": wireJSON(v.Scheduling), "preset_name": v.PresetName, "preset_code": v.PresetCode, "gpu_execution": wireJSON(v.GpuExecution), "gpu_display": wireJSON(v.GpuDisplay), "gpu_selection": wireJSON(v.GpuSelection)}
+		value["instance_contract_version"] = v.InstanceContractVersion
+		value["workspace_mount_path"] = v.WorkspaceMountPath
+		mounts := []any{}
+		for _, x := range sortedFrozenMounts(v.VolumeMounts) {
+			mounts = append(mounts, wireJSON(x))
+		}
+		value["volume_mounts"] = mounts
+		value["network"] = wireJSON(v.Network)
+		value["labels"] = nonNilMap(v.Labels)
+		value["annotations"] = nonNilMap(v.Annotations)
+		value["env"] = wireEnv(v.Env)
+
 	default:
 		return nil, errors.New("unsupported instance business message")
-	}
-	if m == nil || !m.ProtoReflect().IsValid() || hasUnknown(m.ProtoReflect()) {
-		return nil, errors.New("invalid instance business")
-	}
-	raw, e := (protojson.MarshalOptions{UseProtoNames: true, EmitUnpopulated: true}).Marshal(m)
-	if e != nil {
-		return nil, e
-	}
-	var value any
-	dec := json.NewDecoder(bytes.NewReader(raw))
-	dec.UseNumber()
-	if e = dec.Decode(&value); e != nil {
-		return nil, e
 	}
 	var out bytes.Buffer
 	enc := json.NewEncoder(&out)
 	enc.SetEscapeHTML(false)
-	if e = enc.Encode(value); e != nil {
+	if e := enc.Encode(value); e != nil {
 		return nil, e
 	}
 	return bytes.TrimSuffix(out.Bytes(), []byte{'\n'}), nil
 }
+
+// wireJSON is a closed field projection, including nested defaults. Adding
+// descriptor fields must not rewrite an accepted current payload.
+func wireJSON(m proto.Message) any {
+	if m == nil || !m.ProtoReflect().IsValid() {
+		return nil
+	}
+	switch v := m.(type) {
+	case *SchedulingOptions:
+		out := map[string]any{}
+		if v.PodPlacement != nil {
+			out["pod_placement"] = fixedEnum(int32(*v.PodPlacement), map[int32]string{0: "POD_PLACEMENT_UNSPECIFIED", 1: "NONE", 2: "COLOCATE_PREFERRED", 3: "SPREAD_PREFERRED"})
+		}
+		if v.PriorityClassName != nil {
+			out["priority_class_name"] = *v.PriorityClassName
+		}
+		return out
+	case *acc.GpuExecution:
+		return map[string]any{"scheduler_name": v.SchedulerName, "queue_name": v.QueueName, "runtime_class_name": v.RuntimeClassName, "node_selector": nonNilMap(v.NodeSelector), "pod_annotations": nonNilMap(v.PodAnnotations), "resources": nonNilMap(v.Resources), "execution_digest": v.ExecutionDigest}
+	case *acc.GpuDisplay:
+		return map[string]any{"profile_id": v.ProfileId, "profile_version": strconv.FormatUint(v.ProfileVersion, 10), "profile_name": v.ProfileName, "model_key": v.ModelKey, "mode": supplyModeJSON(int32(v.Mode))}
+	case *GpuPresetReference:
+		return map[string]any{"profile_id": v.ProfileId, "profile_version": strconv.FormatUint(v.ProfileVersion, 10), "spec_digest": v.SpecDigest, "devices_per_instance": v.DevicesPerInstance, "cluster_id": v.ClusterId, "pool_id": v.PoolId, "mode": supplyModeJSON(int32(v.Mode)), "model_key": v.ModelKey, "memory_mib_per_device": strconv.FormatInt(v.MemoryMibPerDevice, 10), "core_limit_percent": v.CoreLimitPercent}
+	case *VolumeMount:
+		return map[string]any{"pvc_name": v.PvcName, "mount_path": v.MountPath, "read_only": v.ReadOnly}
+	case *FrozenVolumeMount:
+		return map[string]any{"cluster_id": v.ClusterId, "namespace": v.Namespace, "pvc_name": v.PvcName, "pvc_uid": v.PvcUid, "mount_path": v.MountPath, "read_only": v.ReadOnly, "ownership": v.Ownership}
+	case *NetworkSelection:
+		return map[string]any{"vpc_id": v.VpcId, "subnet_id": v.SubnetId}
+	case *InstanceEnvVar:
+		return map[string]any{"name": v.Name, "value": v.Value}
+	default:
+		panic("unsupported immutable instance field projection")
+	}
+}
+func fixedEnum(number int32, names map[int32]string) any {
+	if name, ok := names[number]; ok {
+		return name
+	}
+	return number
+}
+func supplyModeJSON(number int32) any {
+	return fixedEnum(number, map[int32]string{int32(acc.SupplyMode_SUPPLY_MODE_UNSPECIFIED): "SUPPLY_MODE_UNSPECIFIED", int32(acc.SupplyMode_WHOLE_EXCLUSIVE): "WHOLE_EXCLUSIVE", int32(acc.SupplyMode_SHARED_FIXED): "SHARED_FIXED"})
+}
+func nonNilMap(m map[string]string) map[string]string {
+	if m == nil {
+		return map[string]string{}
+	}
+	return m
+}
+func wireEnv(env []*InstanceEnvVar) []any {
+	out := []any{}
+	for _, v := range env {
+		out = append(out, wireJSON(v))
+	}
+	return out
+}
 func BusinessPayloadDigest(m proto.Message) (string, error) {
 	raw, e := CanonicalBusinessPayload(m)
+	if e != nil {
+		return "", e
+	}
+	sum := sha256.Sum256(raw)
+	return hex.EncodeToString(sum[:]), nil
+}
+func BusinessPayloadDigestVersion(m proto.Message, version uint32) (string, error) {
+	raw, e := CanonicalBusinessPayloadVersion(m, version)
 	if e != nil {
 		return "", e
 	}
@@ -153,6 +265,9 @@ func ValidateCreateSpec(s *CreateSpec, accepted bool) error {
 	if s == nil || hasUnknown(s.ProtoReflect()) || s.InstanceKind != "container" || (s.ComputeType != "cpu" && s.ComputeType != "gpu") || s.Name == "" || s.ImageId == "" || (s.ImageScope != "tenant" && s.ImageScope != "platform") || s.PresetId == "" || s.Cpu == "" || s.Memory == "" || s.ClusterId == "" || s.Namespace == "" {
 		return ErrInvalidBusiness
 	}
+	if err := validateSpecConfiguration(s); err != nil {
+		return err
+	}
 	if err := ValidateSchedulingOptions(s.Scheduling, true); err != nil {
 		return err
 	}
@@ -200,6 +315,9 @@ func CommandDigest(c *CommandContext, s *CreateSpec) (string, error) {
 	if c == nil || s == nil || hasUnknown(c.ProtoReflect()) || hasUnknown(s.ProtoReflect()) {
 		return "", ErrInvalidBusiness
 	}
+	if err := validateSpecConfiguration(s); err != nil {
+		return "", err
+	}
 	execution := ""
 	if s.GpuExecution != nil {
 		execution = s.GpuExecution.ExecutionDigest
@@ -219,11 +337,24 @@ func CommandDigest(c *CommandContext, s *CreateSpec) (string, error) {
 		display = map[string]any{"profile_id": d.ProfileId, "profile_version": fmt.Sprint(d.ProfileVersion), "profile_name": d.ProfileName, "model_key": d.ModelKey, "mode": fmt.Sprint(int32(d.Mode))}
 	}
 	value := map[string]any{"tenant_id": c.TenantId, "resource_id": c.ResourceId, "operation_id": c.OperationId, "name": s.Name, "image_id": s.ImageId, "image_scope": s.ImageScope, "preset_id": s.PresetId, "image_reference": s.ImageReference, "cpu": s.Cpu, "memory": s.Memory, "cluster_id": s.ClusterId, "namespace": s.Namespace, "service_account": s.ServiceAccount, "storage_class": s.StorageClass, "workspace_size": s.WorkspaceSize, "shell": s.Shell, "uid": fmt.Sprint(s.Uid), "gid": fmt.Sprint(s.Gid), "instance_kind": s.InstanceKind, "compute_type": s.ComputeType, "scheduling": scheduling, "preset_name": s.PresetName, "preset_code": s.PresetCode, "gpu_display": display, "execution_digest": execution}
+	domain := "resource-create-v2\n"
+	value["instance_contract_version"] = s.InstanceContractVersion
+	value["workspace_mount_path"] = s.WorkspaceMountPath
+	mounts := []any{}
+	for _, m := range sortedFrozenMounts(s.VolumeMounts) {
+		mounts = append(mounts, wireJSON(m))
+	}
+	value["volume_mounts"] = mounts
+	value["network"] = wireJSON(s.Network)
+	value["labels"] = nonNilMap(s.Labels)
+	value["annotations"] = nonNilMap(s.Annotations)
+	value["env"] = wireEnv(s.Env)
+
 	raw, err := json.Marshal(value)
 	if err != nil {
 		return "", err
 	}
-	sum := sha256.Sum256(append([]byte("resource-create-v1\n"), raw...))
+	sum := sha256.Sum256(append([]byte(domain), raw...))
 	return hex.EncodeToString(sum[:]), nil
 }
 func DeleteCommandDigest(r *AcceptDeleteRequest) (string, error) {

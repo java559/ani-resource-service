@@ -18,7 +18,7 @@ import (
 
 const presetColumns = "id::text,code,name,description,compute_type,cpu_millis,memory_mib,enabled,gpu,created_at,updated_at,created_by,updated_by"
 
-var presetSchemaFiles = []string{"002_compute_presets.sql", "003_whole_gpu_quantity.sql", "004_gpu_execution.sql"}
+var presetSchemaFiles = []string{"002_compute_presets.sql", "003_whole_gpu_quantity.sql", "004_gpu_execution.sql", "005_instance_configuration.sql", "006_instance_network_submissions.sql"}
 
 func (p *Postgres) checkPresetSchema(ctx context.Context) error {
 	for i, name := range presetSchemaFiles {

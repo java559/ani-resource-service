@@ -224,6 +224,15 @@ message AttachmentLabels {
  string submission_id = 4;
  int64 generation = 5;
 }
+message WorkloadReference {
+ string api_version = 1;
+ string kind = 2;
+ string namespace = 3;
+ string name = 4;
+ string uid = 5;
+}
+message ControllerReference { WorkloadReference reference = 1; WorkloadReference owner = 2; }
+message PodReference { WorkloadReference reference = 1; WorkloadReference owner = 2; }
 enum AttachmentState {
  ATTACHMENT_STATE_UNSPECIFIED = 0;
  ATTACHMENT_STATE_RESERVED = 1;
@@ -255,6 +264,9 @@ message Attachment {
  google.protobuf.Timestamp updated_at = 20;
  google.protobuf.Timestamp observed_at = 21;
  google.protobuf.Timestamp released_at = 22;
+ string workload_mode = 23;
+ int64 snapshot_revision = 24;
+ WorkloadReference root_controller = 25;
 }
 message PrepareAttachmentRequest {
  string tenant_id = 1;
@@ -267,6 +279,7 @@ message PrepareAttachmentRequest {
  int64 generation = 8;
  string cluster_id = 9;
  string namespace = 10;
+ string workload_mode = 11;
 }
 message GetAttachmentRequest { string tenant_id = 1; string attachment_id = 2; }
 message ConfirmAttachmentRequest {
@@ -277,6 +290,7 @@ message ConfirmAttachmentRequest {
  string namespace = 5;
  string pod_name = 6;
  string pod_uid = 7;
+ int64 expected_snapshot_revision = 8;
 }
 message ReleaseAttachmentRequest {
  string tenant_id = 1;
@@ -323,6 +337,12 @@ message GetSubmissionResponse {
  repeated string pod_uids = 11;
  repeated string controller_uids = 12;
  google.protobuf.Timestamp closed_at = 13;
+ int64 snapshot_revision = 14;
+ string desired_run_state = 15;
+ WorkloadReference root_controller = 16;
+ repeated ControllerReference controllers = 17;
+ repeated PodReference current_pods = 18;
+ repeated PodReference retired_pods = 19;
 }
 
 message ListVPCCIDRPresetsRequest { string tenant_id = 1; }

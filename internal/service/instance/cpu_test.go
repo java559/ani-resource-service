@@ -81,9 +81,18 @@ func TestTrustedCPUAndGPUIntake(t *testing.T) {
 				t.Fatal(e)
 			}
 			ctx := biz.WithCaller(context.Background(), biz.Caller{TenantID: tenant, Actor: "governance:user:42"})
-			resolved, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{TenantId: tenant, Data: &pb.CreateInstanceData{Name: "work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: resource}})
+			input := &pb.CreateInstanceData{Name: "work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: resource}
+			for _, version := range []uint32{0, 1} {
+				if _, err := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: version, TenantId: tenant, Data: input}); status.Code(err) != codes.InvalidArgument {
+					t.Fatal("retired resolver version accepted", version, err)
+				}
+			}
+			resolved, e := s.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenant, Data: input})
 			if e != nil {
 				t.Fatal(e)
+			}
+			if resolved.InstanceContractVersion != 2 || resolved.WorkspaceMountPath != "/workspace" {
+				t.Fatal("resolution did not freeze current defaults")
 			}
 			if images.calls != 1 || environment.calls != 1 || resolved.Cpu != "4000m" || resolved.Memory != "8192Mi" {
 				t.Fatal("managed resolution missing", resolved)

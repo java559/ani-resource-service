@@ -45,15 +45,16 @@ func configureVPCPresetFixture(t *testing.T, f *egressFixture, api *controlled.S
 }
 
 func TestVPCCIDRPresetAcceptsFactsRenewedDuringRead(t *testing.T) {
-	var armed atomic.Bool
+	var armed, renewed atomic.Bool
 	f, _, _, _ := newBaseKCFixture(t, func(_ http.ResponseWriter, r *http.Request, api *controlled.Server) bool {
-		if armed.Load() && r.Method == "GET" && r.URL.Path == "/api/v1/configmaps" {
+		if armed.Load() && r.Method == "GET" && r.URL.Path == "/api/v1/namespaces/kcn-system/configmaps" {
 			cm := api.Object("configmaps", "kcn-system", "node-facts-node-1")
 			var doc data.NodeFactsDocument
 			if err := json.Unmarshal([]byte(cm["data"].(map[string]any)["facts.json"].(string)), &doc); err != nil {
 				t.Error(err)
 				return false
 			}
+			renewed.Store(true)
 			doc.CollectedAt = time.Now()
 			raw, err := json.Marshal(doc)
 			if err != nil {
@@ -67,7 +68,7 @@ func TestVPCCIDRPresetAcceptsFactsRenewedDuringRead(t *testing.T) {
 	})
 	armed.Store(true)
 	values, err := f.n.ListVPCCIDRPresets(f.ctx, f.tenant)
-	if err != nil || len(values) != 3 {
+	if err != nil || len(values) != 3 || !renewed.Load() {
 		t.Fatal("normal renewal was treated as future facts", values, err)
 	}
 }
@@ -201,5 +202,30 @@ func TestVPCCIDRPresetsMainFlow(t *testing.T) {
 			t.Fatal(err)
 		}
 		baseState(t, f, id, biz.Deleted)
+	}
+}
+
+func TestVPCCIDRPresetsUseTrustedSystemReadScope(t *testing.T) {
+	for _, resource := range []struct{ name, selector string }{{"configmaps", "network.ani.io/managed-by=ani-network-node-facts"}, {"pods", "networking.kubercloud.com/app=controller"}} {
+		t.Run(resource.name, func(t *testing.T) {
+			var armed, seen atomic.Bool
+			f, _, _, _ := newBaseKCFixture(t, func(w http.ResponseWriter, r *http.Request, _ *controlled.Server) bool {
+				if !armed.Load() || r.Method != "GET" || !strings.HasSuffix(r.URL.Path, "/"+resource.name) {
+					return false
+				}
+				seen.Store(true)
+				if r.URL.Path != "/api/v1/namespaces/kcn-system/"+resource.name || r.URL.Query().Get("labelSelector") != resource.selector || r.URL.Query().Get("limit") != "500" {
+					t.Errorf("platform facts read escaped trusted namespace/selector: path=%s selector=%s", r.URL.Path, r.URL.Query().Get("labelSelector"))
+					http.Error(w, "read scope denied", http.StatusForbidden)
+					return true
+				}
+				return false
+			})
+			armed.Store(true)
+			values, err := f.n.ListVPCCIDRPresets(f.ctx, f.tenant)
+			if err != nil || len(values) != 3 || !seen.Load() {
+				t.Fatal("scoped real platform facts did not produce the allowed presets", values, err)
+			}
+		})
 	}
 }

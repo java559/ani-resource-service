@@ -54,6 +54,9 @@ func (n *Notebook) resolveRuntimeTarget(ctx context.Context, i biz.Instance) (ru
 		if e = verifyPod(p, i); e != nil {
 			return target, fmt.Errorf("%w: managed workspace differs", biz.ErrOwnership)
 		}
+		if e = n.verifyBorrowedVolumes(ctx, i); e != nil {
+			return target, e
+		}
 		if e = n.verifyPodGroupPriority(ctx, p, i); e != nil {
 			return target, e
 		}

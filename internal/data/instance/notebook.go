@@ -116,6 +116,12 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 		return nil, e
 	}
 	s := i.Spec
+	if s.Network != nil && (i.Network == nil || i.Network.AttachmentID == "" || i.Network.PrimaryNetworkRef == "" || i.Network.BindingRevision == "") {
+		return nil, biz.ErrNetworkUnavailable
+	}
+	if err := ValidateNotebookConfiguration(s); err != nil {
+		return nil, err
+	}
 	limits := map[string]any{"cpu": s.CPU, "memory": s.Memory}
 	for k, v := range s.GPU.Limits {
 		if !strings.HasPrefix(k, "volcano.sh/vgpu-") {
@@ -124,10 +130,23 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 		limits[k] = v
 	}
 	ann := map[string]string{}
+	for k, v := range s.Annotations {
+		ann[k] = v
+	}
+	if s.Network != nil {
+		ann["networking.kubercloud.com/subnet"] = i.Network.PrimaryNetworkRef
+	}
 	for k, v := range s.GPU.Annotations {
 		ann[k] = v
 	}
-	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": "/workspace", "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": []any{map[string]any{"name": "workspace", "mountPath": "/workspace"}}}}, "volumes": []any{map[string]any{"name": "workspace", "persistentVolumeClaim": map[string]any{"claimName": s.PVCName}}}}
+	mounts := []any{map[string]any{"name": "workspace", "mountPath": s.WorkspaceMountPath}}
+	volumes := []any{map[string]any{"name": "workspace", "persistentVolumeClaim": map[string]any{"claimName": s.PVCName}}}
+	for index, mount := range s.VolumeMounts {
+		name := borrowedVolumeName(index)
+		mounts = append(mounts, map[string]any{"name": name, "mountPath": mount.MountPath, "readOnly": mount.ReadOnly})
+		volumes = append(volumes, map[string]any{"name": name, "persistentVolumeClaim": map[string]any{"claimName": mount.PVCName, "readOnly": mount.ReadOnly}})
+	}
+	pod := map[string]any{"serviceAccountName": s.ServiceAccount, "automountServiceAccountToken": false, "securityContext": map[string]any{"runAsUser": s.UID, "runAsGroup": s.GID, "fsGroup": s.GID}, "containers": []any{map[string]any{"name": biz.Container, "image": s.ImageReference, "imagePullPolicy": "Always", "workingDir": s.WorkspaceMountPath, "securityContext": map[string]any{"allowPrivilegeEscalation": false, "capabilities": map[string]any{"drop": []any{"ALL"}}}, "resources": map[string]any{"requests": map[string]any{"cpu": s.CPU, "memory": s.Memory}, "limits": limits}, "volumeMounts": mounts}}, "volumes": volumes}
 	if s.ComputeType == biz.TypeGPU {
 		ann["scheduling.volcano.sh/queue-name"] = s.GPU.Queue
 		ann["accelerator.ani.io/execution-digest"] = s.GPU.Digest
@@ -138,7 +157,14 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 		pod["runtimeClassName"] = s.GPU.RuntimeClass
 	}
 	cs := pod["containers"].([]any)
-	cs[0].(map[string]any)["env"] = []any{map[string]any{"name": "ANI_INSTANCE_POD_UID", "valueFrom": map[string]any{"fieldRef": map[string]any{"fieldPath": "metadata.uid"}}}}
+	env := make([]any, 0, len(s.Env)+1)
+	// Kubelet expands previous-env references; doubling every dollar preserves literal values.
+	// https://kubernetes.io/docs/reference/kubernetes-api/core/pod-v1/
+	for _, variable := range s.Env {
+		env = append(env, map[string]any{"name": variable.Name, "value": strings.ReplaceAll(variable.Value, "$", "$$")})
+	}
+	env = append(env, map[string]any{"name": "ANI_INSTANCE_POD_UID", "valueFrom": map[string]any{"fieldRef": map[string]any{"fieldPath": "metadata.uid"}}})
+	cs[0].(map[string]any)["env"] = env
 	if s.ImagePullSecret != "" {
 		pod["imagePullSecrets"] = []any{map[string]any{"name": s.ImagePullSecret}}
 	}
@@ -152,7 +178,14 @@ func RenderNotebook(i biz.Instance) (*unstructured.Unstructured, error) {
 	if i.Desired == biz.Stopped {
 		metaAnn[stoppedAnnotation] = "true"
 	}
-	return &unstructured.Unstructured{Object: map[string]any{"apiVersion": "kubeflow.org/v1", "kind": "Notebook", "metadata": map[string]any{"name": s.NotebookName, "namespace": s.Namespace, "labels": stringMap(labels(i)), "annotations": stringMap(metaAnn)}, "spec": map[string]any{"template": map[string]any{"spec": pod}}}}, nil
+	metadataLabels := labels(i)
+	for key, value := range instanceNetworkLabels(i) {
+		metadataLabels[key] = value
+	}
+	for k, v := range s.Labels {
+		metadataLabels[k] = v
+	}
+	return &unstructured.Unstructured{Object: map[string]any{"apiVersion": "kubeflow.org/v1", "kind": "Notebook", "metadata": map[string]any{"name": s.NotebookName, "namespace": s.Namespace, "labels": stringMap(metadataLabels), "annotations": stringMap(metaAnn)}, "spec": map[string]any{"template": map[string]any{"spec": pod}}}}, nil
 }
 func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation, error) {
 	var out biz.Observation
@@ -206,14 +239,24 @@ func (n *Notebook) Observe(ctx context.Context, i biz.Instance) (biz.Observation
 		if e := verifyPod(p, i); e != nil {
 			return out, e
 		}
+		if i.Desired == biz.Running {
+			if e := n.verifyBorrowedVolumes(ctx, i); e != nil {
+				return out, e
+			}
+		}
 		if e := n.verifyPodGroupPriority(ctx, p, i); e != nil {
 			return out, e
 		}
 		if i.Spec.ComputeType == biz.TypeGPU {
 			out.GPUPods = append(out.GPUPods, biz.PodRef{ClusterID: i.Spec.ClusterID, Namespace: i.Spec.Namespace, Name: p.GetName(), UID: string(p.GetUID()), ContainerName: biz.Container})
 		}
-		out.PodName = p.GetName()
-		out.PodUID = string(p.GetUID())
+		if p.GetDeletionTimestamp() == nil {
+			if out.PodUID != "" && out.PodUID != string(p.GetUID()) {
+				return out, biz.ErrOwnership
+			}
+			out.PodName = p.GetName()
+			out.PodUID = string(p.GetUID())
+		}
 		if i.Spec.ComputeType == biz.TypeGPU && len(n.signingKey) == ed25519.PrivateKeySize {
 			if e := n.signPod(ctx, p, i); e != nil {
 				return out, e
@@ -346,6 +389,16 @@ func (n *Notebook) observeWorkspace(ctx context.Context, i biz.Instance, out *bi
 	}
 }
 func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
+	if i.Spec.Network != nil {
+		if i.Network == nil || i.Network.PrimaryNetworkRef == "" || p.GetAnnotations()["networking.kubercloud.com/subnet"] != i.Network.PrimaryNetworkRef {
+			return biz.ErrOwnership
+		}
+		for key, value := range instanceNetworkLabels(i) {
+			if p.GetLabels()[key] != value {
+				return biz.ErrOwnership
+			}
+		}
+	}
 	if err := verifySchedulingOptions(p, i); err != nil {
 		return err
 	}
@@ -371,8 +424,20 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 	if c["name"] != biz.Container || c["image"] != i.Spec.ImageReference {
 		return biz.ErrOwnership
 	}
-	if c["workingDir"] != "/workspace" {
+	if c["workingDir"] != i.Spec.WorkspaceMountPath {
 		return biz.ErrOwnership
+	}
+	for key, value := range i.Spec.Labels {
+		actual, exists := p.GetLabels()[key]
+		if !exists || actual != value {
+			return biz.ErrOwnership
+		}
+	}
+	for key, value := range i.Spec.Annotations {
+		actual, exists := p.GetAnnotations()[key]
+		if !exists || actual != value {
+			return biz.ErrOwnership
+		}
 	}
 	serviceAccount, _, _ := unstructured.NestedString(p.Object, "spec", "serviceAccountName")
 	automount, present, err := unstructured.NestedBool(p.Object, "spec", "automountServiceAccountToken")
@@ -421,28 +486,11 @@ func verifyPod(p *unstructured.Unstructured, i biz.Instance) error {
 	if guard != 1 {
 		return biz.ErrOwnership
 	}
-	workspace := false
-	volumes, _, _ := unstructured.NestedSlice(p.Object, "spec", "volumes")
-	for _, value := range volumes {
-		volume, _ := value.(map[string]any)
-		if volume["name"] == "workspace" {
-			claim, _, _ := unstructured.NestedString(volume, "persistentVolumeClaim", "claimName")
-			workspace = claim == i.Spec.PVCName
-		}
+	if err := verifyFrozenEnvironment(env, i.Spec.Env); err != nil {
+		return err
 	}
-	if !workspace {
-		return biz.ErrOwnership
-	}
-	mounted := false
-	mounts, _, _ := unstructured.NestedSlice(c, "volumeMounts")
-	for _, value := range mounts {
-		mount, _ := value.(map[string]any)
-		if mount["name"] == "workspace" && mount["mountPath"] == "/workspace" {
-			mounted = true
-		}
-	}
-	if !mounted {
-		return biz.ErrOwnership
+	if err := verifyFrozenMounts(p, c, i.Spec); err != nil {
+		return err
 	}
 	limits, _, _ := unstructured.NestedStringMap(c, "resources", "limits")
 	for k, v := range i.Spec.GPU.Limits {
@@ -527,14 +575,17 @@ func (n *Notebook) EnsureWorkspace(ctx context.Context, i biz.Instance) (string,
 	return string(created.GetUID()), nil
 }
 func (n *Notebook) CreateNotebook(ctx context.Context, i biz.Instance) (string, error) {
+	obj, e := RenderNotebook(i)
+	if e != nil {
+		return "", e
+	}
+	if err := n.verifyBorrowedVolumes(ctx, i); err != nil {
+		return "", err
+	}
 	if i.Spec.ImagePullSecret != "" {
 		if e := n.ensurePullSecret(ctx, i); e != nil {
 			return "", e
 		}
-	}
-	obj, e := RenderNotebook(i)
-	if e != nil {
-		return "", e
 	}
 	created, e := n.client.Resource(notebookGVR).Namespace(i.Spec.Namespace).Create(ctx, obj, metav1.CreateOptions{})
 	if e != nil {
@@ -585,6 +636,11 @@ func (n *Notebook) ensurePullSecret(ctx context.Context, i biz.Instance) error {
 	return mutationError(e)
 }
 func (n *Notebook) SetStopped(ctx context.Context, i biz.Instance, o biz.Observation, stopped bool) error {
+	if !stopped {
+		if err := n.verifyBorrowedVolumes(ctx, i); err != nil {
+			return err
+		}
+	}
 	obj, e := n.client.Resource(notebookGVR).Namespace(i.Spec.Namespace).Get(ctx, i.Spec.NotebookName, metav1.GetOptions{})
 	if e != nil {
 		return e
@@ -623,6 +679,11 @@ func (n *Notebook) DeleteNotebook(ctx context.Context, i biz.Instance, o biz.Obs
 func (n *Notebook) DeleteWorkspace(ctx context.Context, i biz.Instance, o biz.Observation) error {
 	if o.PVCUID == "" || o.PodExists || o.NotebookExists {
 		return biz.ErrInvalid
+	}
+	for _, mount := range i.Spec.VolumeMounts {
+		if mount.PVCName == i.Spec.PVCName || mount.PVCUID == o.PVCUID {
+			return biz.ErrOwnership
+		}
 	}
 	uid := types.UID(o.PVCUID)
 	e := n.client.Resource(pvcGVR).Namespace(i.Spec.Namespace).Delete(ctx, i.Spec.PVCName, metav1.DeleteOptions{Preconditions: &metav1.Preconditions{UID: &uid}})

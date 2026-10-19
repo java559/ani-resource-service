@@ -25,6 +25,7 @@ type Config struct {
 	NamespacePrefix, ClusterID, ServiceAccount, StorageClass, WorkspaceSize, Shell string
 	LogLimits                                                                      biz.LogLimits
 	UID, GID                                                                       int64
+	NetworkV2Writes                                                                bool
 }
 type Service struct {
 	pb.UnimplementedInstanceServiceServer
@@ -36,6 +37,8 @@ type Service struct {
 	logTenants, logInstances map[string]int
 	images                   biz.ImageResolver
 	environment              biz.EnvironmentValidator
+	network                  biz.NetworkPort
+	volumes                  biz.VolumeResolver
 	config                   Config
 }
 
@@ -53,13 +56,28 @@ func NewService(r biz.Repository, images biz.ImageResolver, environment biz.Envi
 		return nil, biz.ErrInvalid
 	}
 	diagnostics, _ := environment.(biz.Diagnostics)
-	return &Service{repo: r, presets: presets, images: images, environment: environment, diagnostics: diagnostics, config: c, logTenants: map[string]int{}, logInstances: map[string]int{}}, nil
+	volumes, _ := environment.(biz.VolumeResolver)
+	return &Service{repo: r, presets: presets, images: images, environment: environment, volumes: volumes, diagnostics: diagnostics, config: c, logTenants: map[string]int{}, logInstances: map[string]int{}}, nil
 }
 func rpcError(e error) error {
 	if e == nil {
 		return nil
 	}
 	switch {
+	case errors.Is(e, biz.ErrReservedConfig), errors.Is(e, pb.ErrReservedConfig):
+		return status.Error(codes.InvalidArgument, "INSTANCE_RESERVED_CONFIG")
+	case errors.Is(e, biz.ErrNetworkNotFound):
+		return status.Error(codes.NotFound, "INSTANCE_NETWORK_NOT_FOUND")
+	case errors.Is(e, biz.ErrNetworkConflict):
+		return status.Error(codes.FailedPrecondition, "INSTANCE_NETWORK_CONFLICT")
+	case errors.Is(e, biz.ErrNetworkUnavailable):
+		return status.Error(codes.Unavailable, "INSTANCE_DEPENDENCY_UNAVAILABLE")
+	case errors.Is(e, biz.ErrPVCNotFound):
+		return status.Error(codes.NotFound, "INSTANCE_PVC_NOT_FOUND")
+	case errors.Is(e, biz.ErrPVCReferenceChanged):
+		return status.Error(codes.FailedPrecondition, "INSTANCE_PVC_REFERENCE_CHANGED")
+	case errors.Is(e, biz.ErrPVCCatalogLimit):
+		return status.Error(codes.ResourceExhausted, "INSTANCE_PVC_CATALOG_LIMIT")
 	case errors.Is(e, pb.ErrInvalidScheduling):
 		return status.Error(codes.InvalidArgument, "INVALID_SCHEDULING_OPTIONS")
 	case errors.Is(e, pb.ErrSchedulingConflict), errors.Is(e, biz.ErrSchedulingConflict):
@@ -100,6 +118,13 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	if _, e := imagebiz.ParseImageID(r.Data.ImageId); e != nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
+	version := r.InstanceContractVersion
+	if version != pb.ContractV2 {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	if _, e := pb.CanonicalBusinessPayloadVersion(r.Data, version); e != nil {
+		return nil, rpcError(e)
+	}
 	scheduling, e := pb.ResolveSchedulingOptions(r.Data.Scheduling, r.SchedulingDefaults)
 	if e != nil {
 		return nil, rpcError(e)
@@ -130,6 +155,41 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	}
 	c := s.config
 	out := &pb.CreateSpec{Name: r.Data.Name, ImageId: r.Data.ImageId, ImageScope: r.Data.ImageScope, PresetId: r.Data.PresetId, InstanceKind: biz.KindContainer, ComputeType: preset.ComputeType, ImageReference: image.Reference, Cpu: fmt.Sprintf("%dm", preset.CPUMillis), Memory: fmt.Sprintf("%dMi", preset.MemoryMiB), ClusterId: c.ClusterID, Namespace: ns, ServiceAccount: c.ServiceAccount, StorageClass: c.StorageClass, WorkspaceSize: c.WorkspaceSize, Shell: c.Shell, Uid: c.UID, Gid: c.GID, Scheduling: scheduling, PresetName: preset.Name, PresetCode: preset.Code, GpuSelection: wireReference(preset.GPU)}
+	out.InstanceContractVersion = version
+	out.WorkspaceMountPath = "/workspace"
+	if r.Data.WorkspaceMountPath != nil {
+		out.WorkspaceMountPath = *r.Data.WorkspaceMountPath
+	}
+	out.Labels = r.Data.Labels
+	out.Annotations = r.Data.Annotations
+	out.Env = r.Data.Env
+	if r.Data.Network != nil {
+		if !s.config.NetworkV2Writes || s.network == nil {
+			return nil, status.Error(codes.Unavailable, "INSTANCE_NETWORK_NOT_ENABLED")
+		}
+		selection := biz.NetworkSelection{VPCID: r.Data.Network.VpcId, SubnetID: r.Data.Network.SubnetId}
+		if e := s.network.ValidateSelection(ctx, r.TenantId, c.ClusterID, ns, selection); e != nil {
+			return nil, rpcError(e)
+		}
+		out.Network = &pb.NetworkSelection{VpcId: selection.VPCID, SubnetId: selection.SubnetID}
+	}
+	if len(r.Data.VolumeMounts) > 0 {
+		if s.volumes == nil {
+			return nil, status.Error(codes.Unavailable, "INSTANCE_DEPENDENCY_UNAVAILABLE")
+		}
+		mounts := make([]biz.VolumeMount, 0, len(r.Data.VolumeMounts))
+		for _, m := range r.Data.VolumeMounts {
+			mounts = append(mounts, biz.VolumeMount{PVCName: m.PvcName, MountPath: m.MountPath, ReadOnly: m.ReadOnly})
+		}
+		frozen, e := s.volumes.ResolveVolumes(ctx, r.TenantId, c.ClusterID, ns, mounts)
+		if e != nil {
+			return nil, rpcError(e)
+		}
+		for _, m := range frozen {
+			out.VolumeMounts = append(out.VolumeMounts, &pb.FrozenVolumeMount{ClusterId: m.ClusterID, Namespace: m.Namespace, PvcName: m.PVCName, PvcUid: m.PVCUID, MountPath: m.MountPath, ReadOnly: m.ReadOnly, Ownership: m.Ownership})
+		}
+	}
+
 	if e = pb.ValidateCreateSpec(out, false); e != nil {
 		return nil, rpcError(e)
 	}
@@ -158,6 +218,19 @@ func (s *Service) AcceptCreate(ctx context.Context, r *pb.AcceptCreateRequest) (
 		return nil, rpcError(biz.ErrInvalid)
 	}
 	spec := biz.Spec{InstanceKind: f.InstanceKind, ComputeType: f.ComputeType, Name: f.Name, ImageID: f.ImageId, ImageScope: f.ImageScope, ImageReference: f.ImageReference, ImageDigest: f.ImageReference[image+1:], PresetID: f.PresetId, PresetName: f.PresetName, PresetCode: f.PresetCode, Scheduling: domainScheduling(f.Scheduling), CPU: f.Cpu, Memory: f.Memory, UID: f.Uid, GID: f.Gid, Shell: f.Shell, ServiceAccount: f.ServiceAccount, StorageClass: f.StorageClass, WorkspaceSize: f.WorkspaceSize, ClusterID: f.ClusterId, Namespace: f.Namespace, NotebookName: "instance-" + c.ResourceId, PVCName: "workspace-" + c.ResourceId, ImagePullSecret: "ani-instance-image-pull"}
+	spec.ContractVersion = f.InstanceContractVersion
+	spec.WorkspaceMountPath = f.WorkspaceMountPath
+	spec.Labels = f.Labels
+	spec.Annotations = f.Annotations
+	for _, m := range f.VolumeMounts {
+		spec.VolumeMounts = append(spec.VolumeMounts, biz.VolumeMount{ClusterID: m.ClusterId, Namespace: m.Namespace, PVCName: m.PvcName, PVCUID: m.PvcUid, MountPath: m.MountPath, ReadOnly: m.ReadOnly, Ownership: m.Ownership})
+	}
+	for _, v := range f.Env {
+		spec.Env = append(spec.Env, biz.EnvVar{Name: v.Name, Value: v.Value})
+	}
+	if f.Network != nil {
+		spec.Network = &biz.NetworkSelection{VPCID: f.Network.VpcId, SubnetID: f.Network.SubnetId}
+	}
 	if g := f.GpuExecution; g != nil {
 		spec.GPU = biz.GPU{Scheduler: g.SchedulerName, Queue: g.QueueName, RuntimeClass: g.RuntimeClassName, Digest: g.ExecutionDigest, NodeLabels: g.NodeSelector, Annotations: g.PodAnnotations, Limits: g.Resources}
 		d := f.GpuDisplay
@@ -200,7 +273,16 @@ func (s *Service) Stop(ctx context.Context, r *pb.ChangeInstanceRequest) (*pb.Op
 	return s.change(ctx, r, "stop")
 }
 func wire(i biz.Instance) *pb.Instance {
-	return &pb.Instance{InstanceKind: i.Spec.InstanceKind, ComputeType: i.Spec.ComputeType, Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned, Cpu: i.Spec.CPU, Memory: i.Spec.Memory, CreatedAt: timestamppb.New(i.CreatedAt), WorkspaceSize: i.Spec.WorkspaceSize, PresetName: i.Spec.PresetName, PresetCode: i.Spec.PresetCode, GpuSummary: wireSummary(i.Spec.GPUSummary, i.Spec.GPU), Scheduling: wireScheduling(i.Spec.Scheduling)}
+	out := &pb.Instance{InstanceKind: i.Spec.InstanceKind, ComputeType: i.Spec.ComputeType, Id: i.ID, Name: i.Spec.Name, Version: i.Version, DesiredState: i.Desired, ObservedState: i.Observed, Reason: i.Reason, ImageId: i.Spec.ImageID, ImageDigest: i.Spec.ImageDigest, PresetId: i.Spec.PresetID, CreateOperationId: i.CreateOperationID, LastOperationId: i.LastOperationID, ComputeCleaned: i.ComputeCleaned, WorkspaceCleaned: i.WorkspaceCleaned, QuotaReturned: i.QuotaReturned, Cpu: i.Spec.CPU, Memory: i.Spec.Memory, CreatedAt: timestamppb.New(i.CreatedAt), WorkspaceSize: i.Spec.WorkspaceSize, PresetName: i.Spec.PresetName, PresetCode: i.Spec.PresetCode, GpuSummary: wireSummary(i.Spec.GPUSummary, i.Spec.GPU), Scheduling: wireScheduling(i.Spec.Scheduling)}
+	out.NetworkState = "not_requested"
+	out.NetworkCleaned = true
+	out.VolumeReferencesReleased = i.VolumeReferencesReleased
+	if i.Network != nil {
+		out.NetworkState = i.Network.NetworkState
+		out.NetworkReason = i.Network.Reason
+		out.NetworkCleaned = i.Network.Cleaned
+	}
+	return out
 }
 func (s *Service) GetInstance(ctx context.Context, r *pb.GetInstanceRequest) (*pb.Instance, error) {
 	if r == nil {
@@ -255,4 +337,12 @@ func (s *Service) ResolveTerminalTarget(ctx context.Context, r *pb.ResolveTermin
 		return nil, status.Error(codes.FailedPrecondition, "INSTANCE_TERMINAL_NOT_READY")
 	}
 	return &terminal.TerminalTarget{TenantId: i.TenantID, InstanceId: i.ID, Version: i.Version, ClusterId: i.Spec.ClusterID, Namespace: i.Spec.Namespace, NotebookName: i.Spec.NotebookName, NotebookUid: i.NotebookUID, PodName: i.PodName, PodUid: i.PodUID, ContainerName: biz.Container, Shell: i.Spec.Shell}, nil
+}
+
+func (s *Service) UseNetwork(network biz.NetworkPort) error {
+	if network == nil {
+		return biz.ErrInvalid
+	}
+	s.network = network
+	return nil
 }

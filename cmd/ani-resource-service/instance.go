@@ -19,6 +19,7 @@ import (
 	accelerator "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
 	quota "github.com/zhangzhe-ctrl/ani-governance/api/quota/gen/go/quota/service/v1"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
+	networkbiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/server"
@@ -38,6 +39,7 @@ type instanceSettings struct {
 }
 type instanceComponents struct {
 	service           *service.Service
+	worker            *biz.Worker
 	execution         *server.InstanceWorkerServer
 	terminal          *server.InstanceTerminalServer
 	repo              *data.Postgres
@@ -173,6 +175,7 @@ func openInstance(ctx context.Context, network *conf.Network, images *imageCompo
 		return nil, e
 	}
 	c.service = handler
+	c.worker = worker
 	c.execution = server.NewInstanceWorkerServer(worker, logger)
 	c.terminal, e = server.NewInstanceTerminalServer(cfg.TerminalAddress, os.Getenv("ANI_NETWORK_CLIENT_CA"), os.Getenv("ANI_NETWORK_TLS_CERT"), os.Getenv("ANI_NETWORK_TLS_KEY"), service.NewTerminalValidation(repo, provider))
 	if e != nil {
@@ -210,4 +213,23 @@ func instanceClientConnection(address, caFile, certFile, keyFile, serverName str
 		return fmt.Errorf("instance peer exact DNS SAN mismatch")
 	}}
 	return grpc.NewClient(address, grpc.WithDisableServiceConfig(), grpc.WithDisableRetry(), grpc.WithTransportCredentials(credentials.NewTLS(tlsConfig)))
+}
+
+// Cross-domain wiring stays in the composition root and uses only public use
+// cases plus the Instance read port. Existing external consumers stay routed.
+func wireInstanceNetwork(c *instanceComponents, network *networkbiz.Network, attachments *networkbiz.Attachments, fallback networkbiz.InstanceConsumer, clusterID, prefix string, freshness time.Duration) (networkbiz.InstanceConsumer, error) {
+	if c == nil {
+		return fallback, nil
+	}
+	adapter, err := data.NewInstanceNetwork(network, attachments, clusterID, prefix, freshness)
+	if err != nil {
+		return nil, err
+	}
+	if err = c.worker.UseNetwork(adapter); err != nil {
+		return nil, err
+	}
+	if err = c.service.UseNetwork(adapter); err != nil {
+		return nil, err
+	}
+	return data.NewInstanceNetworkConsumer(c.repo, fallback)
 }
