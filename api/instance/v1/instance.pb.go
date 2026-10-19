@@ -3781,6 +3781,83 @@ func (x *ResolveTerminalTargetRequest) GetExpectedVersion() int64 {
 	return 0
 }
 
+// Persisted scope for historical metrics, independent of current runtime state.
+type InstanceMetricScope struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	InstanceId    string                 `protobuf:"bytes,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
+	ClusterId     string                 `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	Namespace     string                 `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	ContainerName string                 `protobuf:"bytes,5,opt,name=container_name,json=containerName,proto3" json:"container_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InstanceMetricScope) Reset() {
+	*x = InstanceMetricScope{}
+	mi := &file_instance_v1_instance_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InstanceMetricScope) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InstanceMetricScope) ProtoMessage() {}
+
+func (x *InstanceMetricScope) ProtoReflect() protoreflect.Message {
+	mi := &file_instance_v1_instance_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InstanceMetricScope.ProtoReflect.Descriptor instead.
+func (*InstanceMetricScope) Descriptor() ([]byte, []int) {
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *InstanceMetricScope) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *InstanceMetricScope) GetInstanceId() string {
+	if x != nil {
+		return x.InstanceId
+	}
+	return ""
+}
+
+func (x *InstanceMetricScope) GetClusterId() string {
+	if x != nil {
+		return x.ClusterId
+	}
+	return ""
+}
+
+func (x *InstanceMetricScope) GetNamespace() string {
+	if x != nil {
+		return x.Namespace
+	}
+	return ""
+}
+
+func (x *InstanceMetricScope) GetContainerName() string {
+	if x != nil {
+		return x.ContainerName
+	}
+	return ""
+}
+
 var File_instance_v1_instance_proto protoreflect.FileDescriptor
 
 const file_instance_v1_instance_proto_rawDesc = "" +
@@ -4191,7 +4268,15 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x1f\n" +
 	"\vinstance_id\x18\x02 \x01(\tR\n" +
 	"instanceId\x12)\n" +
-	"\x10expected_version\x18\x03 \x01(\x03R\x0fexpectedVersion2\x8b\x0e\n" +
+	"\x10expected_version\x18\x03 \x01(\x03R\x0fexpectedVersion\"\xb7\x01\n" +
+	"\x13InstanceMetricScope\x12\x1b\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x1f\n" +
+	"\vinstance_id\x18\x02 \x01(\tR\n" +
+	"instanceId\x12\x1d\n" +
+	"\n" +
+	"cluster_id\x18\x03 \x01(\tR\tclusterId\x12\x1c\n" +
+	"\tnamespace\x18\x04 \x01(\tR\tnamespace\x12%\n" +
+	"\x0econtainer_name\x18\x05 \x01(\tR\rcontainerName2\xec\x0e\n" +
 	"\x0fInstanceService\x12Z\n" +
 	"\x10AdminListPresets\x12$.instance.v1.AdminListPresetsRequest\x1a .instance.v1.ListPresetsResponse\x12I\n" +
 	"\x0eAdminGetPreset\x12\".instance.v1.AdminGetPresetRequest\x1a\x13.instance.v1.Preset\x12O\n" +
@@ -4210,7 +4295,8 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\fAcceptDelete\x12 .instance.v1.AcceptDeleteRequest\x1a\x1e.instance.v1.OperationResponse\x12K\n" +
 	"\x05Start\x12\".instance.v1.ChangeInstanceRequest\x1a\x1e.instance.v1.OperationResponse\x12J\n" +
 	"\x04Stop\x12\".instance.v1.ChangeInstanceRequest\x1a\x1e.instance.v1.OperationResponse\x12E\n" +
-	"\vGetInstance\x12\x1f.instance.v1.GetInstanceRequest\x1a\x15.instance.v1.Instance\x12V\n" +
+	"\vGetInstance\x12\x1f.instance.v1.GetInstanceRequest\x1a\x15.instance.v1.Instance\x12_\n" +
+	"\x1aResolveInstanceMetricScope\x12\x1f.instance.v1.GetInstanceRequest\x1a .instance.v1.InstanceMetricScope\x12V\n" +
 	"\rListInstances\x12!.instance.v1.ListInstancesRequest\x1a\".instance.v1.ListInstancesResponse\x12H\n" +
 	"\fGetOperation\x12 .instance.v1.GetOperationRequest\x1a\x16.instance.v1.Operation\x12h\n" +
 	"\x15ResolveTerminalTarget\x12).instance.v1.ResolveTerminalTargetRequest\x1a$.instance.terminal.v1.TerminalTargetBJZHgithub.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1;instancev1b\x06proto3"
@@ -4228,7 +4314,7 @@ func file_instance_v1_instance_proto_rawDescGZIP() []byte {
 }
 
 var file_instance_v1_instance_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 51)
+var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 52)
 var file_instance_v1_instance_proto_goTypes = []any{
 	(SchedulingOptions_PodPlacement)(0),  // 0: instance.v1.SchedulingOptions.PodPlacement
 	(InstanceLogFrame_Kind)(0),           // 1: instance.v1.InstanceLogFrame.Kind
@@ -4277,72 +4363,73 @@ var file_instance_v1_instance_proto_goTypes = []any{
 	(*GetOperationRequest)(nil),          // 44: instance.v1.GetOperationRequest
 	(*Operation)(nil),                    // 45: instance.v1.Operation
 	(*ResolveTerminalTargetRequest)(nil), // 46: instance.v1.ResolveTerminalTargetRequest
-	nil,                                  // 47: instance.v1.CreateInstanceData.LabelsEntry
-	nil,                                  // 48: instance.v1.CreateInstanceData.AnnotationsEntry
-	nil,                                  // 49: instance.v1.InstanceConfiguration.LabelsEntry
-	nil,                                  // 50: instance.v1.InstanceConfiguration.AnnotationsEntry
-	nil,                                  // 51: instance.v1.CreateSpec.LabelsEntry
-	nil,                                  // 52: instance.v1.CreateSpec.AnnotationsEntry
-	(v1.SupplyMode)(0),                   // 53: accelerator.v1.SupplyMode
-	(*timestamppb.Timestamp)(nil),        // 54: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 55: google.protobuf.FieldMask
-	(*v1.GpuExecution)(nil),              // 56: accelerator.v1.GpuExecution
-	(*v1.GpuDisplay)(nil),                // 57: accelerator.v1.GpuDisplay
-	(*v11.DurableOwnerAck)(nil),          // 58: accelerator.command.v1.DurableOwnerAck
-	(*emptypb.Empty)(nil),                // 59: google.protobuf.Empty
-	(*v12.TerminalTarget)(nil),           // 60: instance.terminal.v1.TerminalTarget
+	(*InstanceMetricScope)(nil),          // 47: instance.v1.InstanceMetricScope
+	nil,                                  // 48: instance.v1.CreateInstanceData.LabelsEntry
+	nil,                                  // 49: instance.v1.CreateInstanceData.AnnotationsEntry
+	nil,                                  // 50: instance.v1.InstanceConfiguration.LabelsEntry
+	nil,                                  // 51: instance.v1.InstanceConfiguration.AnnotationsEntry
+	nil,                                  // 52: instance.v1.CreateSpec.LabelsEntry
+	nil,                                  // 53: instance.v1.CreateSpec.AnnotationsEntry
+	(v1.SupplyMode)(0),                   // 54: accelerator.v1.SupplyMode
+	(*timestamppb.Timestamp)(nil),        // 55: google.protobuf.Timestamp
+	(*fieldmaskpb.FieldMask)(nil),        // 56: google.protobuf.FieldMask
+	(*v1.GpuExecution)(nil),              // 57: accelerator.v1.GpuExecution
+	(*v1.GpuDisplay)(nil),                // 58: accelerator.v1.GpuDisplay
+	(*v11.DurableOwnerAck)(nil),          // 59: accelerator.command.v1.DurableOwnerAck
+	(*emptypb.Empty)(nil),                // 60: google.protobuf.Empty
+	(*v12.TerminalTarget)(nil),           // 61: instance.terminal.v1.TerminalTarget
 }
 var file_instance_v1_instance_proto_depIdxs = []int32{
 	0,  // 0: instance.v1.SchedulingOptions.pod_placement:type_name -> instance.v1.SchedulingOptions.PodPlacement
 	2,  // 1: instance.v1.CreateInstanceData.scheduling:type_name -> instance.v1.SchedulingOptions
 	4,  // 2: instance.v1.CreateInstanceData.volume_mounts:type_name -> instance.v1.VolumeMount
 	7,  // 3: instance.v1.CreateInstanceData.network:type_name -> instance.v1.NetworkSelection
-	47, // 4: instance.v1.CreateInstanceData.labels:type_name -> instance.v1.CreateInstanceData.LabelsEntry
-	48, // 5: instance.v1.CreateInstanceData.annotations:type_name -> instance.v1.CreateInstanceData.AnnotationsEntry
+	48, // 4: instance.v1.CreateInstanceData.labels:type_name -> instance.v1.CreateInstanceData.LabelsEntry
+	49, // 5: instance.v1.CreateInstanceData.annotations:type_name -> instance.v1.CreateInstanceData.AnnotationsEntry
 	6,  // 6: instance.v1.CreateInstanceData.env:type_name -> instance.v1.InstanceEnvVar
 	9,  // 7: instance.v1.ListMountablePVCsResponse.items:type_name -> instance.v1.MountablePVC
 	4,  // 8: instance.v1.InstanceConfiguration.volume_mounts:type_name -> instance.v1.VolumeMount
 	7,  // 9: instance.v1.InstanceConfiguration.network:type_name -> instance.v1.NetworkSelection
-	49, // 10: instance.v1.InstanceConfiguration.labels:type_name -> instance.v1.InstanceConfiguration.LabelsEntry
-	50, // 11: instance.v1.InstanceConfiguration.annotations:type_name -> instance.v1.InstanceConfiguration.AnnotationsEntry
+	50, // 10: instance.v1.InstanceConfiguration.labels:type_name -> instance.v1.InstanceConfiguration.LabelsEntry
+	51, // 11: instance.v1.InstanceConfiguration.annotations:type_name -> instance.v1.InstanceConfiguration.AnnotationsEntry
 	6,  // 12: instance.v1.InstanceConfiguration.env:type_name -> instance.v1.InstanceEnvVar
-	53, // 13: instance.v1.GpuPresetReference.mode:type_name -> accelerator.v1.SupplyMode
-	53, // 14: instance.v1.GpuSummary.mode:type_name -> accelerator.v1.SupplyMode
+	54, // 13: instance.v1.GpuPresetReference.mode:type_name -> accelerator.v1.SupplyMode
+	54, // 14: instance.v1.GpuSummary.mode:type_name -> accelerator.v1.SupplyMode
 	12, // 15: instance.v1.Preset.gpu:type_name -> instance.v1.GpuPresetReference
-	54, // 16: instance.v1.Preset.created_at:type_name -> google.protobuf.Timestamp
-	54, // 17: instance.v1.Preset.updated_at:type_name -> google.protobuf.Timestamp
+	55, // 16: instance.v1.Preset.created_at:type_name -> google.protobuf.Timestamp
+	55, // 17: instance.v1.Preset.updated_at:type_name -> google.protobuf.Timestamp
 	12, // 18: instance.v1.PresetData.gpu:type_name -> instance.v1.GpuPresetReference
 	12, // 19: instance.v1.ListPresetsRequest.allowed_gpu_profiles:type_name -> instance.v1.GpuPresetReference
 	14, // 20: instance.v1.ListPresetsResponse.items:type_name -> instance.v1.Preset
 	15, // 21: instance.v1.AdminCreatePresetRequest.data:type_name -> instance.v1.PresetData
 	15, // 22: instance.v1.AdminUpdatePresetRequest.data:type_name -> instance.v1.PresetData
-	55, // 23: instance.v1.AdminUpdatePresetRequest.update_mask:type_name -> google.protobuf.FieldMask
+	56, // 23: instance.v1.AdminUpdatePresetRequest.update_mask:type_name -> google.protobuf.FieldMask
 	3,  // 24: instance.v1.ResolveCreateSpecRequest.data:type_name -> instance.v1.CreateInstanceData
 	2,  // 25: instance.v1.ResolveCreateSpecRequest.scheduling_defaults:type_name -> instance.v1.SchedulingOptions
 	2,  // 26: instance.v1.CreateSpec.scheduling:type_name -> instance.v1.SchedulingOptions
-	56, // 27: instance.v1.CreateSpec.gpu_execution:type_name -> accelerator.v1.GpuExecution
-	57, // 28: instance.v1.CreateSpec.gpu_display:type_name -> accelerator.v1.GpuDisplay
+	57, // 27: instance.v1.CreateSpec.gpu_execution:type_name -> accelerator.v1.GpuExecution
+	58, // 28: instance.v1.CreateSpec.gpu_display:type_name -> accelerator.v1.GpuDisplay
 	12, // 29: instance.v1.CreateSpec.gpu_selection:type_name -> instance.v1.GpuPresetReference
 	5,  // 30: instance.v1.CreateSpec.volume_mounts:type_name -> instance.v1.FrozenVolumeMount
 	7,  // 31: instance.v1.CreateSpec.network:type_name -> instance.v1.NetworkSelection
-	51, // 32: instance.v1.CreateSpec.labels:type_name -> instance.v1.CreateSpec.LabelsEntry
-	52, // 33: instance.v1.CreateSpec.annotations:type_name -> instance.v1.CreateSpec.AnnotationsEntry
+	52, // 32: instance.v1.CreateSpec.labels:type_name -> instance.v1.CreateSpec.LabelsEntry
+	53, // 33: instance.v1.CreateSpec.annotations:type_name -> instance.v1.CreateSpec.AnnotationsEntry
 	6,  // 34: instance.v1.CreateSpec.env:type_name -> instance.v1.InstanceEnvVar
 	26, // 35: instance.v1.AcceptCreateRequest.context:type_name -> instance.v1.CommandContext
 	25, // 36: instance.v1.AcceptCreateRequest.spec:type_name -> instance.v1.CreateSpec
 	26, // 37: instance.v1.AcceptDeleteRequest.context:type_name -> instance.v1.CommandContext
-	58, // 38: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.command.v1.DurableOwnerAck
+	59, // 38: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.command.v1.DurableOwnerAck
 	34, // 39: instance.v1.ListInstancesResponse.items:type_name -> instance.v1.Instance
-	54, // 40: instance.v1.Instance.created_at:type_name -> google.protobuf.Timestamp
+	55, // 40: instance.v1.Instance.created_at:type_name -> google.protobuf.Timestamp
 	13, // 41: instance.v1.Instance.gpu_summary:type_name -> instance.v1.GpuSummary
 	2,  // 42: instance.v1.Instance.scheduling:type_name -> instance.v1.SchedulingOptions
 	35, // 43: instance.v1.RuntimePod.environment_sources:type_name -> instance.v1.EnvironmentSource
 	36, // 44: instance.v1.RuntimePod.mounts:type_name -> instance.v1.RuntimeMount
-	54, // 45: instance.v1.InstanceRuntime.observed_at:type_name -> google.protobuf.Timestamp
+	55, // 45: instance.v1.InstanceRuntime.observed_at:type_name -> google.protobuf.Timestamp
 	37, // 46: instance.v1.InstanceRuntime.pod:type_name -> instance.v1.RuntimePod
 	38, // 47: instance.v1.InstanceRuntime.stateful_set:type_name -> instance.v1.RuntimeStatefulSet
-	54, // 48: instance.v1.InstanceEvent.last_occurred_at:type_name -> google.protobuf.Timestamp
-	54, // 49: instance.v1.InstanceEvents.observed_at:type_name -> google.protobuf.Timestamp
+	55, // 48: instance.v1.InstanceEvent.last_occurred_at:type_name -> google.protobuf.Timestamp
+	55, // 49: instance.v1.InstanceEvents.observed_at:type_name -> google.protobuf.Timestamp
 	40, // 50: instance.v1.InstanceEvents.events:type_name -> instance.v1.InstanceEvent
 	1,  // 51: instance.v1.InstanceLogFrame.kind:type_name -> instance.v1.InstanceLogFrame.Kind
 	18, // 52: instance.v1.InstanceService.AdminListPresets:input_type -> instance.v1.AdminListPresetsRequest
@@ -4363,32 +4450,34 @@ var file_instance_v1_instance_proto_depIdxs = []int32{
 	29, // 67: instance.v1.InstanceService.Start:input_type -> instance.v1.ChangeInstanceRequest
 	29, // 68: instance.v1.InstanceService.Stop:input_type -> instance.v1.ChangeInstanceRequest
 	31, // 69: instance.v1.InstanceService.GetInstance:input_type -> instance.v1.GetInstanceRequest
-	32, // 70: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
-	44, // 71: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
-	46, // 72: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
-	17, // 73: instance.v1.InstanceService.AdminListPresets:output_type -> instance.v1.ListPresetsResponse
-	14, // 74: instance.v1.InstanceService.AdminGetPreset:output_type -> instance.v1.Preset
-	14, // 75: instance.v1.InstanceService.AdminCreatePreset:output_type -> instance.v1.Preset
-	14, // 76: instance.v1.InstanceService.AdminUpdatePreset:output_type -> instance.v1.Preset
-	14, // 77: instance.v1.InstanceService.AdminSetPresetEnabled:output_type -> instance.v1.Preset
-	59, // 78: instance.v1.InstanceService.AdminDeletePreset:output_type -> google.protobuf.Empty
-	39, // 79: instance.v1.InstanceService.GetInstanceRuntime:output_type -> instance.v1.InstanceRuntime
-	41, // 80: instance.v1.InstanceService.ListInstanceEvents:output_type -> instance.v1.InstanceEvents
-	43, // 81: instance.v1.InstanceService.StreamInstanceLogs:output_type -> instance.v1.InstanceLogFrame
-	17, // 82: instance.v1.InstanceService.ListPresets:output_type -> instance.v1.ListPresetsResponse
-	10, // 83: instance.v1.InstanceService.ListMountablePVCs:output_type -> instance.v1.ListMountablePVCsResponse
-	11, // 84: instance.v1.InstanceService.GetInstanceConfiguration:output_type -> instance.v1.InstanceConfiguration
-	25, // 85: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateSpec
-	30, // 86: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
-	30, // 87: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
-	30, // 88: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
-	30, // 89: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
-	34, // 90: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
-	33, // 91: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
-	45, // 92: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
-	60, // 93: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
-	73, // [73:94] is the sub-list for method output_type
-	52, // [52:73] is the sub-list for method input_type
+	31, // 70: instance.v1.InstanceService.ResolveInstanceMetricScope:input_type -> instance.v1.GetInstanceRequest
+	32, // 71: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
+	44, // 72: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
+	46, // 73: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
+	17, // 74: instance.v1.InstanceService.AdminListPresets:output_type -> instance.v1.ListPresetsResponse
+	14, // 75: instance.v1.InstanceService.AdminGetPreset:output_type -> instance.v1.Preset
+	14, // 76: instance.v1.InstanceService.AdminCreatePreset:output_type -> instance.v1.Preset
+	14, // 77: instance.v1.InstanceService.AdminUpdatePreset:output_type -> instance.v1.Preset
+	14, // 78: instance.v1.InstanceService.AdminSetPresetEnabled:output_type -> instance.v1.Preset
+	60, // 79: instance.v1.InstanceService.AdminDeletePreset:output_type -> google.protobuf.Empty
+	39, // 80: instance.v1.InstanceService.GetInstanceRuntime:output_type -> instance.v1.InstanceRuntime
+	41, // 81: instance.v1.InstanceService.ListInstanceEvents:output_type -> instance.v1.InstanceEvents
+	43, // 82: instance.v1.InstanceService.StreamInstanceLogs:output_type -> instance.v1.InstanceLogFrame
+	17, // 83: instance.v1.InstanceService.ListPresets:output_type -> instance.v1.ListPresetsResponse
+	10, // 84: instance.v1.InstanceService.ListMountablePVCs:output_type -> instance.v1.ListMountablePVCsResponse
+	11, // 85: instance.v1.InstanceService.GetInstanceConfiguration:output_type -> instance.v1.InstanceConfiguration
+	25, // 86: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateSpec
+	30, // 87: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
+	30, // 88: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
+	30, // 89: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
+	30, // 90: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
+	34, // 91: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
+	47, // 92: instance.v1.InstanceService.ResolveInstanceMetricScope:output_type -> instance.v1.InstanceMetricScope
+	33, // 93: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
+	45, // 94: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
+	61, // 95: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
+	74, // [74:96] is the sub-list for method output_type
+	52, // [52:74] is the sub-list for method input_type
 	52, // [52:52] is the sub-list for extension type_name
 	52, // [52:52] is the sub-list for extension extendee
 	0,  // [0:52] is the sub-list for field type_name
@@ -4413,7 +4502,7 @@ func file_instance_v1_instance_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_instance_v1_instance_proto_rawDesc), len(file_instance_v1_instance_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   51,
+			NumMessages:   52,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

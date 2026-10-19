@@ -24,7 +24,7 @@ func managedAttachment(ctx context.Context, db attachmentSnapshotReader, row sql
 		return a, err
 	}
 	var snapshot, root []byte
-	err = db.QueryRow(ctx, `SELECT snapshot_revision,snapshot_hash,root_controller,snapshot FROM network_attachment_consumer_snapshots WHERE tenant_id=$1 AND attachment_id=$2`, a.TenantID, a.ID).Scan(&a.SnapshotRevision, &a.SnapshotHash, &root, &snapshot)
+	err = db.QueryRow(ctx, `SELECT snapshot_revision,snapshot_hash,root_controller,snapshot,confirmed_snapshot_revision,confirmed_pod_uid FROM network_attachment_consumer_snapshots WHERE tenant_id=$1 AND attachment_id=$2`, a.TenantID, a.ID).Scan(&a.SnapshotRevision, &a.SnapshotHash, &root, &snapshot, &a.ConfirmedSnapshotRevision, &a.ConfirmedPodUID)
 	if err != nil {
 		return biz.Attachment{}, databaseFailure(err)
 	}

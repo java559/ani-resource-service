@@ -44,6 +44,199 @@ func setManagedConsumer(f attachmentFixture, c biz.ConsumerSubmission) {
 	f.consumer.value = c
 }
 
+func managedNotebookOwner(f attachmentFixture) map[string]any {
+	set := f.api.Objects["statefulsets/"+f.r.Namespace+"/notebook"]
+	return set["metadata"].(map[string]any)["ownerReferences"].([]any)[0].(map[string]any)
+}
+
+func attachmentProtocolBlocked(t *testing.T, f attachmentFixture, id string) bool {
+	t.Helper()
+	var blocked bool
+	if err := f.owner.QueryRow(context.Background(), `SELECT protocol_blocked FROM network_attachments WHERE tenant_id=$1 AND attachment_id=$2`, f.r.TenantID, id).Scan(&blocked); err != nil {
+		t.Fatal(err)
+	}
+	return blocked
+}
+
+func TestManagedAttachmentPGNotebookServedOwnerAliases(t *testing.T) {
+	for _, tc := range []struct {
+		name, api, kind, uid string
+		controller, valid    bool
+	}{
+		{"v1", "kubeflow.org/v1", "Notebook", "notebook-uid", true, true},
+		// Notebook 1.10 emits this served-version owner while GET returns v1.
+		{"v1beta1", "kubeflow.org/v1beta1", "Notebook", "notebook-uid", true, true},
+		{"unknown-version", "kubeflow.org/v9", "Notebook", "notebook-uid", true, false},
+		{"wrong-group", "other.org/v1beta1", "Notebook", "notebook-uid", true, false},
+		{"wrong-kind", "kubeflow.org/v1beta1", "Other", "notebook-uid", true, false},
+		{"wrong-uid", "kubeflow.org/v1beta1", "Notebook", "replacement-uid", true, false},
+		{"not-controller", "kubeflow.org/v1beta1", "Notebook", "notebook-uid", false, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			f := newAttachmentFixture(t)
+			f.r.WorkloadMode = "controller_managed"
+			a := f.prepare(t)
+			c := managedConsumerFor(a, "pod-1", 1)
+			f.api.Mu.Lock()
+			managedControllerObjects(f, a, c)
+			owner := managedNotebookOwner(f)
+			owner["apiVersion"], owner["kind"], owner["uid"], owner["controller"] = tc.api, tc.kind, tc.uid, tc.controller
+			f.api.Objects["pods/"+a.Namespace+"/notebook-0"] = managedPodObject(a, "pod-1")
+			managedNetworkObjects(f, a, "pod-1")
+			f.api.Mu.Unlock()
+			setManagedConsumer(f, c)
+			a = f.step(t, a.ID)
+			if tc.valid {
+				if a.State != biz.Attached || a.PodUID != "pod-1" || a.RootController != c.RootController || attachmentProtocolBlocked(t, f, a.ID) {
+					t.Fatalf("served Notebook owner did not retain canonical independent UID identity: state=%s reason=%s", a.State, a.Reason)
+				}
+			} else if a.Reason != biz.AttachmentProtocol || !attachmentProtocolBlocked(t, f, a.ID) {
+				t.Fatal("invalid controller identity was accepted", a)
+			}
+		})
+	}
+}
+
+func TestManagedAttachmentPGProtocolRecoveryRequiresFrozenSnapshotAndConfirm(t *testing.T) {
+	f := newAttachmentFixture(t)
+	f.r.WorkloadMode = "controller_managed"
+	a := f.prepare(t)
+	c := managedConsumerFor(a, "pod-1", 1)
+	f.api.Mu.Lock()
+	managedControllerObjects(f, a, c)
+	managedNotebookOwner(f)["apiVersion"] = "kubeflow.org/v9"
+	f.api.Objects["pods/"+a.Namespace+"/notebook-0"] = managedPodObject(a, "pod-1")
+	managedNetworkObjects(f, a, "pod-1")
+	f.api.Mu.Unlock()
+	setManagedConsumer(f, c)
+	// Create the historic block through the real worker and PostgreSQL, never
+	// UPDATE the flag or synthesize a Confirm receipt.
+	a = f.step(t, a.ID)
+	if a.Reason != biz.AttachmentProtocol || !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("prior independent provider refusal was not durable", a)
+	}
+	frozenHash := a.SnapshotHash
+	f.api.Mu.Lock()
+	managedNotebookOwner(f)["apiVersion"] = "kubeflow.org/v1beta1"
+	f.api.Mu.Unlock()
+	a = f.step(t, a.ID)
+	if !attachmentProtocolBlocked(t, f, a.ID) || a.Reason != biz.AttachmentProtocol {
+		t.Fatal("recovery without durable Confirm was accepted", a)
+	}
+	confirmed, err := f.a.Confirm(context.Background(), biz.ConfirmAttachment{TenantID: a.TenantID, AttachmentID: a.ID, ClusterID: a.ClusterID, Namespace: a.Namespace, PodName: "notebook-0", PodUID: "pod-1", ExpectedVersion: a.Version, ExpectedSnapshotRevision: 1})
+	if err != nil {
+		t.Fatal(err)
+	}
+	a = confirmed
+	for _, tc := range []string{"older-snapshot", "same-version-mutation", "root-replacement", "missing-current-address"} {
+		t.Run(tc, func(t *testing.T) {
+			candidate := managedConsumerFor(a, "pod-1", 1)
+			switch tc {
+			case "older-snapshot":
+				candidate.SnapshotRevision = 0
+			case "same-version-mutation":
+				candidate.DesiredRunState = "stopped"
+			case "root-replacement":
+				candidate.RootController.UID = "replaced-root"
+				candidate.Controllers[0].Owner = candidate.RootController
+			case "missing-current-address":
+				f.api.Mu.Lock()
+				delete(f.api.Objects, "vnicips/"+a.Namespace+"/current-ip")
+				f.api.Mu.Unlock()
+			}
+			setManagedConsumer(f, candidate)
+			a = f.step(t, a.ID)
+			if !attachmentProtocolBlocked(t, f, a.ID) || a.Reason != biz.AttachmentProtocol || a.SnapshotHash != frozenHash || a.SnapshotRevision != 1 {
+				t.Fatal("unproven recovery cleared the durable fence or changed the frozen snapshot", a)
+			}
+			f.api.Mu.Lock()
+			managedNetworkObjects(f, a, "pod-1")
+			f.api.Mu.Unlock()
+		})
+	}
+	setManagedConsumer(f, c)
+	a = f.step(t, a.ID)
+	if a.State != biz.Attached || a.Reason != "" || a.PodUID != "pod-1" || a.SnapshotRevision != 1 || a.SnapshotHash != frozenHash || attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatalf("durable Confirm plus unchanged snapshot and complete owner/address proof failed to recover: state=%s reason=%s", a.State, a.Reason)
+	}
+	// The clean result and the high water survive a fresh production read.
+	a, err = f.a.Get(context.Background(), a.TenantID, a.ID)
+	if err != nil || a.State != biz.Attached || a.SnapshotHash != frozenHash || a.RootController != c.RootController {
+		t.Fatal("recovery was not durable", a, err)
+	}
+}
+
+func TestManagedAttachmentPGProtocolRecoveryFencesConcurrentConfirmAndClosing(t *testing.T) {
+	f := newAttachmentFixture(t)
+	f.r.WorkloadMode = "controller_managed"
+	a := f.prepare(t)
+	c := managedConsumerFor(a, "pod-1", 1)
+	f.api.Mu.Lock()
+	managedControllerObjects(f, a, c)
+	managedNotebookOwner(f)["apiVersion"] = "kubeflow.org/v9"
+	f.api.Objects["pods/"+a.Namespace+"/notebook-0"] = managedPodObject(a, "pod-1")
+	managedNetworkObjects(f, a, "pod-1")
+	f.api.Mu.Unlock()
+	setManagedConsumer(f, c)
+	a = f.step(t, a.ID)
+	if !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("missing prior durable fence")
+	}
+	f.api.Mu.Lock()
+	managedNotebookOwner(f)["apiVersion"] = "kubeflow.org/v1beta1"
+	f.api.Mu.Unlock()
+	// A real Confirm commits after Claim and independent observation but before
+	// Finish. Its version/lease change must fence the in-flight worker's result.
+	provider := net05aAttachmentProviderFunc(func(ctx context.Context, work biz.AttachmentWork) (biz.AttachmentObservation, error) {
+		o, err := f.provider.ObserveAttachment(ctx, work)
+		if err != nil {
+			return o, err
+		}
+		_, err = f.a.Confirm(ctx, biz.ConfirmAttachment{TenantID: a.TenantID, AttachmentID: a.ID, ClusterID: a.ClusterID, Namespace: a.Namespace, PodName: "notebook-0", PodUID: "pod-1", ExpectedVersion: work.Attachment.Version, ExpectedSnapshotRevision: 1})
+		return o, err
+	})
+	policy := biz.DefaultWorkerPolicy()
+	policy.ObserveEvery = time.Millisecond
+	race, err := biz.NewAttachmentWorker(f.p, provider, f.consumer, uuid.NewString(), policy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	time.Sleep(6 * time.Millisecond)
+	if _, err = race.Step(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	if !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("stale lease cleared the fence after concurrent Confirm")
+	}
+	a = f.step(t, a.ID)
+	if a.Reason != "" || a.State != biz.Attached || attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("fresh worker did not consume durable Confirm and recover", a)
+	}
+	// Reproduce another independent refusal, then accept a closing high water.
+	f.api.Mu.Lock()
+	managedNotebookOwner(f)["uid"] = "wrong-root"
+	f.api.Mu.Unlock()
+	a = f.step(t, a.ID)
+	if !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("wrong UID did not fence")
+	}
+	f.api.Mu.Lock()
+	managedNotebookOwner(f)["uid"] = c.RootController.UID
+	f.api.Mu.Unlock()
+	closing := managedConsumerFor(a, "pod-1", 2)
+	closing.State, closing.DesiredRunState, closing.FinalizationID = "closing", "deleted", uuid.NewString()
+	setManagedConsumer(f, closing)
+	a = f.step(t, a.ID)
+	if a.State != biz.Releasing || a.SnapshotRevision != 2 || !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("closing was reopened during recovery", a)
+	}
+	setManagedConsumer(f, c)
+	a = f.step(t, a.ID)
+	if a.State != biz.Releasing || a.SnapshotRevision != 2 || !attachmentProtocolBlocked(t, f, a.ID) {
+		t.Fatal("late open snapshot cleared closing fence", a)
+	}
+}
+
 func TestManagedAttachmentPGStopStartRevisionAndFinalClosure(t *testing.T) {
 	f := newAttachmentFixture(t)
 	f.r.WorkloadMode = "controller_managed"

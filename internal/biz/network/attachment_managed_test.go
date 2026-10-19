@@ -125,3 +125,57 @@ func TestManagedAttachmentStopStartReplacesCurrentWithoutPermanentConflict(t *te
 		t.Fatal("Start rejected a verified replacement", r.progress)
 	}
 }
+
+func TestManagedProtocolRecoveryKeepsFrozenIdentityAndConfirmFence(t *testing.T) {
+	for _, name := range []string{"verified", "missing-confirm", "wrong-confirm-revision", "wrong-confirm-uid", "old-snapshot", "new-snapshot", "same-version-content", "root-replaced", "closing", "no-address", "pending-candidate"} {
+		t.Run(name, func(t *testing.T) {
+			a, frozen := managedSnapshotFixture()
+			a.ConsumerSnapshot = &frozen
+			a.SnapshotRevision = frozen.SnapshotRevision
+			a.SnapshotHash = ConsumerSnapshotHash(frozen)
+			a.RootController = frozen.RootController
+			a.ConfirmedSnapshotRevision = frozen.SnapshotRevision
+			a.ConfirmedPodUID = "pod-1"
+			c := frozen
+			o := AttachmentObservation{Exists: true, PodName: "instance-0", PodUID: "pod-1", VerifiedCurrent: true}
+			switch name {
+			case "missing-confirm":
+				a.ConfirmedSnapshotRevision = 0
+			case "wrong-confirm-revision":
+				a.ConfirmedSnapshotRevision++
+			case "wrong-confirm-uid":
+				a.ConfirmedPodUID = "old-pod"
+			case "old-snapshot":
+				c.SnapshotRevision--
+			case "new-snapshot":
+				c.SnapshotRevision++
+			case "same-version-content":
+				c.DesiredRunState = "stopped"
+			case "root-replaced":
+				c.RootController.UID = "different-root"
+			case "closing":
+				c.State, c.DesiredRunState, c.FinalizationID = "closing", "deleted", "33333333-3333-4333-8333-333333333333"
+				c.SnapshotRevision++
+			case "no-address":
+				o.VerifiedCurrent = false
+			case "pending-candidate":
+				o.PendingCandidate = true
+			}
+			r := &managedWorkRepository{work: AttachmentWork{Attachment: a, ProtocolBlocked: true, Now: time.Now()}}
+			w, err := NewAttachmentWorker(r, managedProvider{o}, managedConsumer{c}, "44444444-4444-4444-8444-444444444444", DefaultWorkerPolicy())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err = w.Step(context.Background()); err != nil {
+				t.Fatal(err)
+			}
+			if name == "verified" {
+				if r.progress.ProtocolBlocked || !r.progress.ProtocolRecovered || r.progress.State != Attached {
+					t.Fatal("complete unchanged proof did not recover", r.progress)
+				}
+			} else if !r.progress.ProtocolBlocked || r.progress.ProtocolRecovered {
+				t.Fatal("unproven retry cleared the protocol fence", r.progress)
+			}
+		})
+	}
+}

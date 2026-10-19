@@ -89,6 +89,16 @@ func (p *Postgres) FinishAttachment(ctx context.Context, w biz.AttachmentWork, p
 	if !valid || (!isManaged && a.PodUid != "" && a.PodUid != progress.PodUID) || (a.FinalizationID != nil && *a.FinalizationID != progress.FinalizationID) {
 		return biz.ErrLeaseLost
 	}
+	protocolBlocked := a.ProtocolBlocked || progress.ProtocolBlocked
+	if progress.ProtocolRecovered {
+		// Recheck the existing high water and Confirm ACK while the attachment
+		// parents/version/lease are locked. No caller can clear a fence merely
+		// by setting ProtocolBlocked=false in a stale progress value.
+		if !isManaged || !a.ProtocolBlocked || progress.ProtocolBlocked || !progress.Observed || progress.State != biz.Attached || progress.Reason != "" || progress.ConsumerSnapshot == nil || !biz.ManagedProtocolRecoveryMatches(managed, *progress.ConsumerSnapshot, progress.PodName, progress.PodUID) {
+			return biz.ErrLeaseLost
+		}
+		protocolBlocked = false
+	}
 	if isManaged {
 		if progress.ConsumerSnapshot != nil {
 			if e = persistConsumerSnapshot(ctx, tx, managed, *progress.ConsumerSnapshot); e != nil {
@@ -105,7 +115,7 @@ func (p *Postgres) FinishAttachment(ctx context.Context, w biz.AttachmentWork, p
 	if progress.FinalizationID != "" {
 		finalization = &progress.FinalizationID
 	}
-	row, e := q.FinishAttachment(ctx, sqlcgen.FinishAttachmentParams{TenantID: a.TenantID, AttachmentID: a.AttachmentID, Version: a.Version, Epoch: w.Epoch, Owner: w.Owner, State: string(progress.State), Reason: string(progress.Reason), ProtocolBlocked: a.ProtocolBlocked || progress.ProtocolBlocked, PodName: progress.PodName, PodUid: progress.PodUID, FinalizationID: finalization, ProviderRelations: progress.Relations, Observed: progress.Observed, ObservedAt: proofTime(progress.Observed, progress.Proof), CoveredGeneration: coveredGeneration(progress.Observed, progress.Proof, w.Requirement), EvidenceHash: progress.Proof.Hash, Backoff: progress.Backoff, DelayMicros: progress.NextDelay.Microseconds()})
+	row, e := q.FinishAttachment(ctx, sqlcgen.FinishAttachmentParams{TenantID: a.TenantID, AttachmentID: a.AttachmentID, Version: a.Version, Epoch: w.Epoch, Owner: w.Owner, State: string(progress.State), Reason: string(progress.Reason), ProtocolBlocked: protocolBlocked, PodName: progress.PodName, PodUid: progress.PodUID, FinalizationID: finalization, ProviderRelations: progress.Relations, Observed: progress.Observed, ObservedAt: proofTime(progress.Observed, progress.Proof), CoveredGeneration: coveredGeneration(progress.Observed, progress.Proof, w.Requirement), EvidenceHash: progress.Proof.Hash, Backoff: progress.Backoff, DelayMicros: progress.NextDelay.Microseconds()})
 	if errors.Is(e, pgx.ErrNoRows) {
 		return biz.ErrLeaseLost
 	}

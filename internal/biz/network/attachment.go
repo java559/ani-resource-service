@@ -38,6 +38,8 @@ type Attachment struct {
 	WorkloadMode                                                  string
 	SnapshotRevision                                              int64
 	SnapshotHash                                                  string
+	ConfirmedSnapshotRevision                                     int64
+	ConfirmedPodUID                                               string
 	RootController                                                WorkloadReference
 	ConsumerSnapshot                                              *ConsumerSubmission
 	ID, TenantID, VPCID, SubnetID, InstanceID, Slot, SubmissionID string

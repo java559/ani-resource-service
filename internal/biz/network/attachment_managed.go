@@ -132,6 +132,23 @@ func CompareConsumerSnapshot(a Attachment, c ConsumerSubmission) SnapshotCompari
 	return SnapshotAccepted
 }
 
+// ManagedProtocolRecoveryMatches binds a retry to an already accepted, unchanged
+// snapshot and its durable Confirm ACK. It never accepts a new revision as a
+// recovery. Provider owner/address proof and the lease are checked separately.
+func ManagedProtocolRecoveryMatches(a Attachment, c ConsumerSubmission, podName, podUID string) bool {
+	if a.WorkloadMode != "controller_managed" || (a.State != Reserved && a.State != Attached) || a.FinalizationID != "" || a.ConsumerSnapshot == nil || a.SnapshotRevision < 1 || a.SnapshotHash == "" || a.RootController.UID == "" {
+		return false
+	}
+	if CompareConsumerSnapshot(a, c) != SnapshotAccepted || c.SnapshotRevision != a.SnapshotRevision || ConsumerSnapshotHash(c) != a.SnapshotHash || ConsumerSnapshotHash(*a.ConsumerSnapshot) != a.SnapshotHash {
+		return false
+	}
+	if c.State != "open" || c.DesiredRunState != "running" || c.FinalizationID != "" || c.ClosedAt != nil || len(c.CurrentPods) != 1 || c.RootController != a.RootController {
+		return false
+	}
+	pod := c.CurrentPods[0].Reference
+	return podName != "" && podUID != "" && pod.Name == podName && pod.UID == podUID && a.ConfirmedSnapshotRevision == a.SnapshotRevision && a.ConfirmedPodUID == podUID
+}
+
 func (w *AttachmentWorker) stepManaged(ctx context.Context, work AttachmentWork, consumer ConsumerSubmission, consumerErr error) (bool, error) {
 	a := work.Attachment
 	p := AttachmentProgress{State: a.State, Reason: a.Reason, PodName: a.PodName, PodUID: a.PodUID, FinalizationID: a.FinalizationID, Relations: work.Relations, ProtocolBlocked: work.ProtocolBlocked, NextDelay: w.policy.ObserveEvery}
@@ -157,6 +174,9 @@ func (w *AttachmentWorker) stepManaged(ctx context.Context, work AttachmentWork,
 			}
 		}
 		work.RequireFreshRelations = accepted.State == "closed" && a.State != Released
+		// A blocked attachment needs a new independent collection, not an old
+		// address cache that predates the rejected owner relation.
+		work.RequireFreshRelations = work.RequireFreshRelations || work.ProtocolBlocked
 	}
 	call, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
 	o, observeErr := w.provider.ObserveAttachment(call, work)
@@ -211,6 +231,10 @@ func (w *AttachmentWorker) stepManaged(ctx context.Context, work AttachmentWork,
 			} else {
 				p.Reason = ""
 			}
+		}
+		if work.ProtocolBlocked && consumerErr == nil && o.Exists && o.VerifiedCurrent && !o.PendingCandidate && p.State == Attached && p.Proof.Covers(work.Requirement) && ManagedProtocolRecoveryMatches(a, consumer, o.PodName, o.PodUID) {
+			p.ProtocolBlocked = false
+			p.ProtocolRecovered = true
 		}
 	}
 	if p.ProtocolBlocked {

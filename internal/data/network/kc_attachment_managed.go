@@ -18,10 +18,17 @@ func workloadController(o *unstructured.Unstructured, api, kind string) (biz.Wor
 		if owner.Controller == nil || !*owner.Controller {
 			continue
 		}
-		if found.UID != "" || owner.APIVersion != api || owner.Kind != kind || owner.Name == "" || owner.UID == "" {
+		versionMatches := owner.APIVersion == api
+		// Notebook 1.10 writes the served v1beta1 owner even when the same
+		// object is read through v1. Canonicalize only this known alias; the
+		// independent GET below must still match group/kind/name/namespace/UID.
+		if api == "kubeflow.org/v1" && kind == "Notebook" && owner.APIVersion == "kubeflow.org/v1beta1" {
+			versionMatches = true
+		}
+		if found.UID != "" || !versionMatches || owner.Kind != kind || owner.Name == "" || owner.UID == "" {
 			return biz.WorkloadReference{}, false
 		}
-		found = biz.WorkloadReference{APIVersion: owner.APIVersion, Kind: owner.Kind, Namespace: o.GetNamespace(), Name: owner.Name, UID: string(owner.UID)}
+		found = biz.WorkloadReference{APIVersion: api, Kind: owner.Kind, Namespace: o.GetNamespace(), Name: owner.Name, UID: string(owner.UID)}
 	}
 	return found, found.UID != ""
 }

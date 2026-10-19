@@ -31,6 +31,7 @@ type AttachmentProgress struct {
 	PodName, PodUID, FinalizationID string
 	Relations                       []byte
 	Observed, ProtocolBlocked       bool
+	ProtocolRecovered               bool
 	NextDelay                       time.Duration
 }
 type AttachmentWorkRepository interface {
