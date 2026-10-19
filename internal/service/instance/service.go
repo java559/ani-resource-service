@@ -15,6 +15,7 @@ import (
 	command "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/command/v1"
 	terminal "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal/v1"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	imagebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"google.golang.org/grpc/codes"
@@ -30,7 +31,7 @@ type Config struct {
 type Service struct {
 	pb.UnimplementedInstanceServiceServer
 	repo                     biz.Repository
-	presets                  biz.PresetRepository
+	compute                  *compute.Resolver
 	diagnostics              biz.Diagnostics
 	logMu                    sync.Mutex
 	logTotal                 int
@@ -42,22 +43,18 @@ type Service struct {
 	config                   Config
 }
 
-func NewService(r biz.Repository, images biz.ImageResolver, environment biz.EnvironmentValidator, c Config) (*Service, error) {
+func NewService(r biz.Repository, resolver *compute.Resolver, images biz.ImageResolver, environment biz.EnvironmentValidator, c Config) (*Service, error) {
 	// An empty supply catalog is a valid closed experiment. Query and recovery
 	// stay available; new creates still require a configured, frozen preset.
 	if biz.ValidateLogLimits(c.LogLimits) != nil {
 		return nil, biz.ErrInvalid
 	}
-	if r == nil || images == nil || environment == nil || !biz.UUID(c.ClusterID) || c.ServiceAccount == "" || c.StorageClass == "" || c.WorkspaceSize == "" || c.Shell == "" || c.UID < 0 || c.GID < 0 {
-		return nil, biz.ErrInvalid
-	}
-	presets, ok := r.(biz.PresetRepository)
-	if !ok {
+	if r == nil || resolver == nil || images == nil || environment == nil || !biz.UUID(c.ClusterID) || c.ServiceAccount == "" || c.StorageClass == "" || c.WorkspaceSize == "" || c.Shell == "" || c.UID < 0 || c.GID < 0 {
 		return nil, biz.ErrInvalid
 	}
 	diagnostics, _ := environment.(biz.Diagnostics)
 	volumes, _ := environment.(biz.VolumeResolver)
-	return &Service{repo: r, presets: presets, images: images, environment: environment, volumes: volumes, diagnostics: diagnostics, config: c, logTenants: map[string]int{}, logInstances: map[string]int{}}, nil
+	return &Service{repo: r, compute: resolver, images: images, environment: environment, volumes: volumes, diagnostics: diagnostics, config: c, logTenants: map[string]int{}, logInstances: map[string]int{}}, nil
 }
 func rpcError(e error) error {
 	if e == nil {
@@ -82,9 +79,7 @@ func rpcError(e error) error {
 		return status.Error(codes.InvalidArgument, "INVALID_SCHEDULING_OPTIONS")
 	case errors.Is(e, pb.ErrSchedulingConflict), errors.Is(e, biz.ErrSchedulingConflict):
 		return status.Error(codes.FailedPrecondition, "SCHEDULING_FIELD_CONFLICT")
-	case errors.Is(e, biz.ErrPresetConflict):
-		return status.Error(codes.AlreadyExists, "COMPUTE_PRESET_CODE_CONFLICT")
-	case errors.Is(e, biz.ErrPresetDisabled):
+	case errors.Is(e, compute.ErrPresetDisabled):
 		return status.Error(codes.FailedPrecondition, "COMPUTE_PRESET_DISABLED")
 	case errors.Is(e, biz.ErrOwnership):
 		return status.Error(codes.FailedPrecondition, "INSTANCE_OBJECT_OWNERSHIP_CONFLICT")
@@ -94,11 +89,11 @@ func rpcError(e error) error {
 		return status.Error(codes.ResourceExhausted, e.Error())
 	case errors.Is(e, context.Canceled), errors.Is(e, context.DeadlineExceeded):
 		return status.FromContextError(e).Err()
-	case errors.Is(e, biz.ErrDenied):
+	case errors.Is(e, biz.ErrDenied), errors.Is(e, compute.ErrDenied):
 		return status.Error(codes.PermissionDenied, "INSTANCE_SCOPE_DENIED")
-	case errors.Is(e, biz.ErrInvalid), errors.Is(e, pb.ErrInvalidBusiness):
+	case errors.Is(e, biz.ErrInvalid), errors.Is(e, compute.ErrInvalid), errors.Is(e, pb.ErrInvalidBusiness):
 		return status.Error(codes.InvalidArgument, "INVALID_INSTANCE_REQUEST")
-	case errors.Is(e, biz.ErrNotFound):
+	case errors.Is(e, biz.ErrNotFound), errors.Is(e, compute.ErrNotFound):
 		return status.Error(codes.NotFound, "INSTANCE_NOT_FOUND")
 	case errors.Is(e, biz.ErrConflict):
 		return status.Error(codes.AlreadyExists, "INSTANCE_IDEMPOTENCY_CONFLICT")
@@ -129,18 +124,9 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	preset, e := s.presets.GetPreset(ctx, r.Data.PresetId)
+	preset, e := s.compute.Resolve(ctx, r.TenantId, r.Data.PresetId, compute.ContainerInstance)
 	if e != nil {
 		return nil, rpcError(e)
-	}
-	if !preset.Enabled {
-		return nil, rpcError(biz.ErrPresetDisabled)
-	}
-	if e = biz.ValidatePreset(preset); e != nil {
-		return nil, rpcError(e)
-	}
-	if preset.GPU != nil && preset.GPU.ClusterID != s.config.ClusterID {
-		return nil, rpcError(biz.ErrInvalid)
 	}
 	ns, e := biz.ResolveNamespace(r.TenantId, r.Namespace, s.config.NamespacePrefix)
 	if e != nil {

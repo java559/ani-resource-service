@@ -21,6 +21,7 @@ import (
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	networkbiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
+	computedata "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute"
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/server"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance"
@@ -55,7 +56,22 @@ func runInstanceMigration() error {
 	defer clear(dsn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
-	return data.Migrate(ctx, strings.TrimSpace(string(dsn)), os.Getenv("ANI_INSTANCE_RUNTIME_ROLE"))
+	ownerDSN, role := strings.TrimSpace(string(dsn)), os.Getenv("ANI_INSTANCE_RUNTIME_ROLE")
+	if e = data.Migrate(ctx, ownerDSN, role); e != nil {
+		return e
+	}
+	return computedata.Migrate(ctx, ownerDSN, role)
+}
+
+func runComputeRestore() error {
+	dsn, e := readImagePrivateFile(os.Getenv("ANI_INSTANCE_OWNER_DSN_FILE"))
+	if e != nil {
+		return e
+	}
+	defer clear(dsn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
+	return computedata.Restore(ctx, strings.TrimSpace(string(dsn)), os.Getenv("ANI_INSTANCE_RUNTIME_ROLE"))
 }
 func (c *instanceComponents) Close() {
 	if c == nil {
@@ -71,7 +87,7 @@ func (c *instanceComponents) Close() {
 		c.repo.Close()
 	}
 }
-func openInstance(ctx context.Context, network *conf.Network, images *imageComponents, logger *slog.Logger) (*instanceComponents, error) {
+func openInstance(ctx context.Context, network *conf.Network, images *imageComponents, compute *computeComponents, logger *slog.Logger) (*instanceComponents, error) {
 	path := os.Getenv("ANI_INSTANCE_CONFIG_FILE")
 	if path == "" {
 		return nil, nil
@@ -89,6 +105,9 @@ func openInstance(ctx context.Context, network *conf.Network, images *imageCompo
 	decoder.DisallowUnknownFields()
 	if e = decoder.Decode(&cfg); e != nil || decoder.Decode(new(any)) != io.EOF {
 		return nil, fmt.Errorf("invalid instance configuration")
+	}
+	if e = requireInstanceCompute(compute, cfg); e != nil {
+		return nil, e
 	}
 	// Namespace configuration is shared by value only, never Network tables.
 	cfg.Service.NamespacePrefix = network.NamespacePrefix
@@ -170,7 +189,7 @@ func openInstance(ctx context.Context, network *conf.Network, images *imageCompo
 	if e != nil {
 		return nil, e
 	}
-	handler, e := service.NewService(repo, data.Image{Runtime: images.runtime}, provider, cfg.Service)
+	handler, e := service.NewService(repo, compute.resolver, data.Image{Runtime: images.runtime}, provider, cfg.Service)
 	if e != nil {
 		return nil, e
 	}

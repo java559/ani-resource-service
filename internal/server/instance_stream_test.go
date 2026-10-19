@@ -6,7 +6,9 @@ import (
 	"crypto/x509"
 	"testing"
 
+	computepb "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	computebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	instancebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -72,15 +74,15 @@ func TestInstanceLogStreamExclusiveAuthority(t *testing.T) {
 		})
 	}
 }
-func TestInstancePresetScopeUsesOwnPlatformCaller(t *testing.T) {
+func TestComputePresetScopeUsesOwnPlatformCaller(t *testing.T) {
 	cert := &x509.Certificate{DNSNames: []string{GovernanceSAN}}
 	base := peer.NewContext(context.Background(), &peer.Peer{AuthInfo: credentials.TLSInfo{State: tls.ConnectionState{Version: tls.VersionTLS13, PeerCertificates: []*x509.Certificate{cert}, VerifiedChains: [][]*x509.Certificate{{cert}}}}})
 	platform := metadata.NewIncomingContext(base, metadata.Pairs("x-ani-scope", "platform", "x-ani-actor", "governance:user:42", "x-ani-request-id", "22222222-2222-4222-8222-222222222222"))
-	for method := range instancePlatformMethods {
-		_, e := GovernanceUnary()(platform, &pb.AdminGetPresetRequest{Id: "11111111-1111-4111-8111-111111111111"}, &grpc.UnaryServerInfo{FullMethod: method}, func(ctx context.Context, _ any) (any, error) {
-			c, e := instancebiz.RequirePlatform(ctx)
+	for method := range computePlatformMethods {
+		_, e := GovernanceUnary()(platform, &computepb.AdminGetPresetRequest{Id: "11111111-1111-4111-8111-111111111111"}, &grpc.UnaryServerInfo{FullMethod: method}, func(ctx context.Context, _ any) (any, error) {
+			c, e := computebiz.RequirePlatform(ctx)
 			if e != nil || !c.Platform || c.TenantID != "" {
-				t.Fatal("instance platform caller missing", c, e)
+				t.Fatal("compute platform scope missing", c, e)
 			}
 			return nil, nil
 		})

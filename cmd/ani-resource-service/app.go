@@ -10,6 +10,7 @@ import (
 	kratos "github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/uuid"
+	computev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1"
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
@@ -39,8 +40,15 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		repository.Close()
 		return nil, err
 	}
-	instances, err := openInstance(context.Background(), bc.Network, images, logger)
+	compute, err := openCompute(context.Background())
 	if err != nil {
+		images.Close()
+		repository.Close()
+		return nil, err
+	}
+	instances, err := openInstance(context.Background(), bc.Network, images, compute, logger)
+	if err != nil {
+		compute.Close()
 		images.Close()
 		repository.Close()
 		return nil, err
@@ -49,6 +57,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	defer func() {
 		if !configured {
 			instances.Close()
+			compute.Close()
 			images.Close()
 			repository.Close()
 		}
@@ -153,6 +162,9 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(grpcServer, images.tenant)
 	}
+	if compute != nil {
+		computev1.RegisterComputePresetServiceServer(grpcServer, compute.service)
+	}
 	if instances != nil {
 		instancev1.RegisterInstanceServiceServer(grpcServer, instances.service)
 	}
@@ -169,6 +181,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		kratos.AfterStop(func(ctx context.Context) error {
 			consumer.Close()
 			instances.Close()
+			compute.Close()
 			images.Close()
 			repository.Close()
 			return observability.Shutdown(ctx)

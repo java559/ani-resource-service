@@ -39,7 +39,7 @@ func OpenPostgres(ctx context.Context, dsn string) (*Postgres, error) {
 }
 func (p *Postgres) Close() { p.pool.Close() }
 func (p *Postgres) CheckReady(ctx context.Context) error {
-	if e := p.checkPresetSchema(ctx); e != nil {
+	if e := p.checkInstanceSchema(ctx); e != nil {
 		return e
 	}
 	var checksum string
@@ -113,7 +113,7 @@ func Migrate(ctx context.Context, dsn, role string) error {
 			return e
 		}
 	}
-	for i, name := range presetSchemaFiles {
+	for i, name := range instanceSchemaFiles {
 		body, e := migrations.Files.ReadFile(name)
 		if e != nil {
 			return e
@@ -137,9 +137,6 @@ func Migrate(ctx context.Context, dsn, role string) error {
 	}
 	quoted := pgx.Identifier{role}.Sanitize()
 	if _, e = tx.Exec(ctx, "GRANT USAGE ON SCHEMA instance TO "+quoted+"; GRANT SELECT ON instance.schema_version TO "+quoted+"; GRANT SELECT,INSERT,UPDATE ON instance.instances,instance.instance_operations,instance.instance_work,instance.workspace_bindings,instance.instance_quota_release_outbox,instance.borrowed_volume_references,instance.network_submissions TO "+quoted); e != nil {
-		return e
-	}
-	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON instance.compute_presets TO "+quoted); e != nil {
 		return e
 	}
 	return tx.Commit(ctx)

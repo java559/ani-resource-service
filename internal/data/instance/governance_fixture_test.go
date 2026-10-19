@@ -19,10 +19,13 @@ import (
 
 	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
 	quotapb "github.com/zhangzhe-ctrl/ani-governance/api/quota/gen/go/quota/service/v1"
+	computepb "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
 	server "github.com/zhangzhe-ctrl/ani-resource-service/internal/server"
+	computeservice "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
 	"google.golang.org/grpc"
@@ -64,8 +67,8 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 		clusterID = "11111111-1111-4111-8111-111111111111"
 	}
 	f := database(t)
-	adminCtx := biz.WithCaller(context.Background(), biz.Caller{Platform: true, Actor: "governance:user:fixture"})
-	preset := biz.Preset{Code: "cpu", Name: "cpu", ComputeType: biz.TypeCPU, CPUMillis: 1000, MemoryMiB: 2048, Enabled: true}
+	adminCtx := platformContext()
+	preset := compute.Preset{Code: "cpu", Name: "cpu", ComputeType: biz.TypeCPU, CPUMillis: 1000, MemoryMiB: 2048, Enabled: true}
 	if gpu != nil {
 		clusterID = gpu.ClusterId
 		var ref pb.GpuPresetReference
@@ -77,9 +80,9 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 		preset.Code = "shared"
 		preset.Name = "shared"
 		preset.ComputeType = biz.TypeGPU
-		preset.GPU = &biz.GPUReference{ProfileID: ref.ProfileId, ProfileVersion: ref.ProfileVersion, SpecDigest: ref.SpecDigest, DevicesPerInstance: ref.DevicesPerInstance, ClusterID: ref.ClusterId, PoolID: ref.PoolId, Mode: ref.Mode.String(), ModelKey: ref.ModelKey, MemoryMiBPerDevice: ref.MemoryMibPerDevice, CoreLimitPercent: ref.CoreLimitPercent}
+		preset.GPU = &compute.GPUReference{ProfileID: ref.ProfileId, ProfileVersion: ref.ProfileVersion, SpecDigest: ref.SpecDigest, DevicesPerInstance: ref.DevicesPerInstance, ClusterID: ref.ClusterId, PoolID: ref.PoolId, Mode: ref.Mode.String(), ModelKey: ref.ModelKey, MemoryMiBPerDevice: ref.MemoryMibPerDevice, CoreLimitPercent: ref.CoreLimitPercent}
 	}
-	preset, e := f.repo.CreatePreset(adminCtx, preset)
+	preset, e := f.presets.CreatePreset(adminCtx, preset)
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -144,7 +147,7 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 			}
 		}()
 	}
-	handler, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: clusterID, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000})
+	handler, e := service.NewService(f.repo, computeResolver(t, f, clusterID), fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: clusterID, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000})
 	if e != nil {
 		t.Fatal(e)
 	}
@@ -181,6 +184,11 @@ func TestInstanceGovernanceFixture(t *testing.T) {
 	}
 	transport := grpc.NewServer(grpc.Creds(credentials.NewTLS(tlsConfig)), grpc.UnaryInterceptor(server.GovernanceUnary()), grpc.StreamInterceptor(server.GovernanceStreams(false)))
 	pb.RegisterInstanceServiceServer(transport, handler)
+	catalog, e := computeservice.NewService(f.presets, computeResolver(t, f, clusterID), clusterID)
+	if e != nil {
+		t.Fatal(e)
+	}
+	computepb.RegisterComputePresetServiceServer(transport, catalog)
 	done := make(chan error, 1)
 	go func() { done <- transport.Serve(listener) }()
 	defer func() {

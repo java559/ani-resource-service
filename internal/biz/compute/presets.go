@@ -1,15 +1,37 @@
-package instance
+package compute
 
 import (
 	"context"
 	"encoding/hex"
 	"errors"
+	"github.com/google/uuid"
 	"math"
 	"regexp"
 	"strings"
 	"time"
 	"unicode/utf8"
 )
+
+var ErrInvalid = errors.New("INVALID_COMPUTE_PRESET_REQUEST")
+var ErrDenied = errors.New("COMPUTE_SCOPE_DENIED")
+var ErrNotFound = errors.New("COMPUTE_PRESET_NOT_FOUND")
+
+const TypeCPU = "cpu"
+const TypeGPU = "gpu"
+
+func UUID(v string) bool { u, e := uuid.Parse(v); return e == nil && u != uuid.Nil && u.String() == v }
+func PageWindow(page, size uint32) (uint32, uint32, int64, error) {
+	if page == 0 {
+		page = 1
+	}
+	if size == 0 {
+		size = 20
+	}
+	if size > 100 {
+		return 0, 0, 0, ErrInvalid
+	}
+	return page, size, int64(page-1) * int64(size), nil
+}
 
 var ErrPresetConflict = errors.New("COMPUTE_PRESET_CODE_CONFLICT")
 var ErrPresetDisabled = errors.New("COMPUTE_PRESET_DISABLED")

@@ -1,9 +1,7 @@
-package instance
+package compute
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,28 +10,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
-	migrations "github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance"
+	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 )
+
+type scanner interface{ Scan(...any) error }
 
 const presetColumns = "id::text,code,name,description,compute_type,cpu_millis,memory_mib,enabled,gpu,created_at,updated_at,created_by,updated_by"
 
-var presetSchemaFiles = []string{"002_compute_presets.sql", "003_whole_gpu_quantity.sql", "004_gpu_execution.sql", "005_instance_configuration.sql", "006_instance_network_submissions.sql"}
-
-func (p *Postgres) checkPresetSchema(ctx context.Context) error {
-	for i, name := range presetSchemaFiles {
-		body, e := migrations.Files.ReadFile(name)
-		if e != nil {
-			return e
-		}
-		sum := sha256.Sum256(body)
-		var checksum string
-		if e = p.pool.QueryRow(ctx, "SELECT checksum FROM instance.schema_version WHERE version=$1", i+2).Scan(&checksum); e != nil || checksum != hex.EncodeToString(sum[:]) {
-			return fmt.Errorf("compute preset schema %s not migrated or checksum differs", name)
-		}
-	}
-	return nil
-}
 func scanPreset(row scanner) (biz.Preset, error) {
 	var p biz.Preset
 	var gpu []byte
@@ -79,7 +62,7 @@ func (p *Postgres) CreatePreset(ctx context.Context, v biz.Preset) (biz.Preset, 
 	if e != nil {
 		return biz.Preset{}, e
 	}
-	out, e := scanPreset(p.pool.QueryRow(ctx, "INSERT INTO instance.compute_presets(id,code,name,description,compute_type,cpu_millis,memory_mib,enabled,gpu,created_by,updated_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$10) RETURNING "+presetColumns, v.ID, v.Code, v.Name, v.Description, v.ComputeType, v.CPUMillis, v.MemoryMiB, v.Enabled, gpu, c.Actor))
+	out, e := scanPreset(p.pool.QueryRow(ctx, "INSERT INTO compute.presets(id,code,name,description,compute_type,cpu_millis,memory_mib,enabled,gpu,created_by,updated_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$10) RETURNING "+presetColumns, v.ID, v.Code, v.Name, v.Description, v.ComputeType, v.CPUMillis, v.MemoryMiB, v.Enabled, gpu, c.Actor))
 	return out, presetWriteError(e)
 }
 func (p *Postgres) GetPreset(ctx context.Context, id string) (biz.Preset, error) {
@@ -91,7 +74,7 @@ func (p *Postgres) GetPreset(ctx context.Context, id string) (biz.Preset, error)
 	if !biz.UUID(id) {
 		return biz.Preset{}, biz.ErrInvalid
 	}
-	return scanPreset(p.pool.QueryRow(ctx, "SELECT "+presetColumns+" FROM instance.compute_presets WHERE id=$1", id))
+	return scanPreset(p.pool.QueryRow(ctx, "SELECT "+presetColumns+" FROM compute.presets WHERE id=$1", id))
 }
 func (p *Postgres) ListPresets(ctx context.Context, f biz.PresetFilter) ([]biz.Preset, int64, bool, error) {
 	if f.Tenant {
@@ -121,7 +104,7 @@ func (p *Postgres) ListPresets(ctx context.Context, f biz.PresetFilter) ([]biz.P
 	defer tx.Rollback(ctx)
 	var candidates bool
 	if f.Tenant {
-		if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM instance.compute_presets"+where+" AND compute_type='gpu')", args...).Scan(&candidates); e != nil {
+		if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM compute.presets"+where+" AND compute_type='gpu')", args...).Scan(&candidates); e != nil {
 			return nil, 0, false, e
 		}
 		allowed := f.AllowedGPUProfiles
@@ -136,12 +119,12 @@ func (p *Postgres) ListPresets(ctx context.Context, f biz.PresetFilter) ([]biz.P
 		where += " AND (compute_type='cpu' OR EXISTS(SELECT 1 FROM jsonb_array_elements($6::jsonb) a WHERE a->>'profile_id'=gpu->>'profile_id' AND a->>'profile_version'=gpu->>'profile_version' AND a->>'spec_digest'=gpu->>'spec_digest' AND a->>'cluster_id'=gpu->>'cluster_id' AND a->>'pool_id'=gpu->>'pool_id'))"
 	}
 	var total int64
-	if e = tx.QueryRow(ctx, "SELECT count(*) FROM instance.compute_presets"+where, args...).Scan(&total); e != nil {
+	if e = tx.QueryRow(ctx, "SELECT count(*) FROM compute.presets"+where, args...).Scan(&total); e != nil {
 		return nil, 0, false, e
 	}
 	n := len(args)
 	args = append(args, int64(size), offset)
-	rows, e := tx.Query(ctx, "SELECT "+presetColumns+" FROM instance.compute_presets"+where+fmt.Sprintf(" ORDER BY created_at DESC,id DESC LIMIT $%d OFFSET $%d", n+1, n+2), args...)
+	rows, e := tx.Query(ctx, "SELECT "+presetColumns+" FROM compute.presets"+where+fmt.Sprintf(" ORDER BY created_at DESC,id DESC LIMIT $%d OFFSET $%d", n+1, n+2), args...)
 	if e != nil {
 		return nil, 0, false, e
 	}
@@ -177,7 +160,7 @@ func (p *Postgres) UpdatePreset(ctx context.Context, id string, changes biz.Pres
 		return biz.Preset{}, e
 	}
 	defer tx.Rollback(ctx)
-	current, e := scanPreset(tx.QueryRow(ctx, "SELECT "+presetColumns+" FROM instance.compute_presets WHERE id=$1 FOR UPDATE", id))
+	current, e := scanPreset(tx.QueryRow(ctx, "SELECT "+presetColumns+" FROM compute.presets WHERE id=$1 FOR UPDATE", id))
 	if e != nil {
 		return biz.Preset{}, e
 	}
@@ -189,7 +172,7 @@ func (p *Postgres) UpdatePreset(ctx context.Context, id string, changes biz.Pres
 	if e != nil {
 		return biz.Preset{}, e
 	}
-	out, e := scanPreset(tx.QueryRow(ctx, "UPDATE instance.compute_presets SET name=$2,description=$3,compute_type=$4,cpu_millis=$5,memory_mib=$6,enabled=$7,gpu=$8,updated_at=clock_timestamp(),updated_by=$9 WHERE id=$1 RETURNING "+presetColumns, id, merged.Name, merged.Description, merged.ComputeType, merged.CPUMillis, merged.MemoryMiB, merged.Enabled, gpu, c.Actor))
+	out, e := scanPreset(tx.QueryRow(ctx, "UPDATE compute.presets SET name=$2,description=$3,compute_type=$4,cpu_millis=$5,memory_mib=$6,enabled=$7,gpu=$8,updated_at=clock_timestamp(),updated_by=$9 WHERE id=$1 RETURNING "+presetColumns, id, merged.Name, merged.Description, merged.ComputeType, merged.CPUMillis, merged.MemoryMiB, merged.Enabled, gpu, c.Actor))
 	if e != nil {
 		return biz.Preset{}, e
 	}
@@ -208,7 +191,7 @@ func (p *Postgres) DeletePreset(ctx context.Context, id string) error {
 	if !biz.UUID(id) {
 		return biz.ErrInvalid
 	}
-	r, e := p.pool.Exec(ctx, "DELETE FROM instance.compute_presets WHERE id=$1", id)
+	r, e := p.pool.Exec(ctx, "DELETE FROM compute.presets WHERE id=$1", id)
 	if e != nil {
 		return e
 	}

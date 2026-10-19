@@ -1,15 +1,53 @@
-package instance
+package compute
 
 import (
 	"context"
+	"encoding/hex"
+	"errors"
 	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
-	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
-	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
+	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1"
+	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"strconv"
+	"strings"
+	"time"
 )
 
+type Service struct {
+	pb.UnimplementedComputePresetServiceServer
+	repo      biz.PresetRepository
+	resolver  *biz.Resolver
+	clusterID string
+}
+
+func NewService(r biz.PresetRepository, resolver *biz.Resolver, clusterID string) (*Service, error) {
+	if r == nil || resolver == nil || !biz.UUID(clusterID) {
+		return nil, biz.ErrInvalid
+	}
+	return &Service{repo: r, resolver: resolver, clusterID: clusterID}, nil
+}
+func rpcError(e error) error {
+	switch {
+	case e == nil:
+		return nil
+	case errors.Is(e, biz.ErrInvalid):
+		return status.Error(codes.InvalidArgument, "INVALID_COMPUTE_PRESET_REQUEST")
+	case errors.Is(e, biz.ErrDenied):
+		return status.Error(codes.PermissionDenied, "COMPUTE_SCOPE_DENIED")
+	case errors.Is(e, biz.ErrNotFound):
+		return status.Error(codes.NotFound, "COMPUTE_PRESET_NOT_FOUND")
+	case errors.Is(e, biz.ErrPresetConflict):
+		return status.Error(codes.AlreadyExists, "COMPUTE_PRESET_CODE_CONFLICT")
+	case errors.Is(e, biz.ErrPresetDisabled):
+		return status.Error(codes.FailedPrecondition, "COMPUTE_PRESET_DISABLED")
+	case errors.Is(e, context.Canceled), errors.Is(e, context.DeadlineExceeded):
+		return status.FromContextError(e).Err()
+	default:
+		return status.Error(codes.Unavailable, "COMPUTE_DEPENDENCY_UNAVAILABLE")
+	}
+}
 func gpuReference(g *pb.GpuPresetReference) *biz.GPUReference {
 	if g == nil {
 		return nil
@@ -21,21 +59,6 @@ func wireReference(g *biz.GPUReference) *pb.GpuPresetReference {
 		return nil
 	}
 	return &pb.GpuPresetReference{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerInstance: g.DevicesPerInstance, ClusterId: g.ClusterID, PoolId: g.PoolID, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, MemoryMibPerDevice: g.MemoryMiBPerDevice, CoreLimitPercent: g.CoreLimitPercent}
-}
-func wireSummary(g *biz.GPUSummary, execution biz.GPU) *pb.GpuSummary {
-	if g == nil {
-		return nil
-	}
-	n, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-number"], 10, 32)
-	m, _ := strconv.ParseInt(execution.Limits["volcano.sh/vgpu-memory"], 10, 64)
-	c, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-cores"], 10, 32)
-	return &pb.GpuSummary{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, DevicesPerInstance: uint32(n), MemoryMibPerDevice: m, MemoryMibTotal: m * int64(n), CoreLimitPercent: uint32(c)}
-}
-func domainScheduling(s *pb.SchedulingOptions) biz.Scheduling {
-	return biz.Scheduling{PodPlacement: s.GetPodPlacement().String(), PriorityClassName: s.PriorityClassName}
-}
-func wireScheduling(s biz.Scheduling) *pb.SchedulingOptions {
-	return &pb.SchedulingOptions{PodPlacement: pb.SchedulingOptions_PodPlacement(pb.SchedulingOptions_PodPlacement_value[s.PodPlacement]).Enum(), PriorityClassName: s.PriorityClassName}
 }
 func presetData(d *pb.PresetData) biz.Preset {
 	return biz.Preset{Code: d.Code, Name: d.Name, Description: d.Description, ComputeType: d.ComputeType, CPUMillis: d.CpuMillis, MemoryMiB: d.MemoryMib, Enabled: d.GetEnabled(), GPU: gpuReference(d.Gpu)}
@@ -51,21 +74,24 @@ func (s *Service) checkedPresetData(d *pb.PresetData) error {
 	if d == nil {
 		return biz.ErrInvalid
 	}
-	if d.Gpu != nil && d.Gpu.ClusterId != s.config.ClusterID {
+	if d.Gpu != nil && d.Gpu.ClusterId != s.clusterID {
 		return biz.ErrInvalid
 	}
 	return nil
 }
 func (s *Service) ListPresets(ctx context.Context, r *pb.ListPresetsRequest) (*pb.ListPresetsResponse, error) {
-	if r == nil {
+	if r == nil || len(r.ProtoReflect().GetUnknown()) != 0 || !biz.ValidUsage(biz.Usage(r.Usage)) {
 		return nil, rpcError(biz.ErrInvalid)
 	}
-	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
+	if e := biz.RequireTenant(ctx, r.TenantId, biz.Usage(r.Usage)); e != nil {
 		return nil, rpcError(e)
 	}
 	f := biz.PresetFilter{Page: r.Page, PageSize: r.PageSize, Name: r.Name, Code: r.Code, ComputeType: r.ComputeType, GPUMode: r.GpuMode, Tenant: true}
 	for _, g := range r.AllowedGpuProfiles {
-		if g == nil || g.ClusterId != s.config.ClusterID || !biz.UUID(g.ProfileId) || !biz.UUID(g.PoolId) || g.ProfileVersion == 0 || len(g.SpecDigest) != 64 {
+		if g == nil || g.ClusterId != s.clusterID || !biz.UUID(g.ProfileId) || !biz.UUID(g.PoolId) || g.ProfileVersion == 0 || len(g.SpecDigest) != 64 || strings.ToLower(g.SpecDigest) != g.SpecDigest {
+			return nil, rpcError(biz.ErrInvalid)
+		}
+		if _, e := hex.DecodeString(g.SpecDigest); e != nil {
 			return nil, rpcError(biz.ErrInvalid)
 		}
 		f.AllowedGPUProfiles = append(f.AllowedGPUProfiles, *gpuReference(g))
@@ -73,7 +99,7 @@ func (s *Service) ListPresets(ctx context.Context, r *pb.ListPresetsRequest) (*p
 	return s.listPresets(ctx, f)
 }
 func (s *Service) listPresets(ctx context.Context, f biz.PresetFilter) (*pb.ListPresetsResponse, error) {
-	items, total, has, e := s.presets.ListPresets(ctx, f)
+	items, total, has, e := s.repo.ListPresets(ctx, f)
 	if e != nil {
 		return nil, rpcError(e)
 	}
@@ -99,7 +125,7 @@ func (s *Service) AdminGetPreset(ctx context.Context, r *pb.AdminGetPresetReques
 	if _, e := biz.RequirePlatform(ctx); e != nil {
 		return nil, rpcError(e)
 	}
-	v, e := s.presets.GetPreset(ctx, r.Id)
+	v, e := s.repo.GetPreset(ctx, r.Id)
 	if e != nil {
 		return nil, rpcError(e)
 	}
@@ -115,7 +141,7 @@ func (s *Service) AdminCreatePreset(ctx context.Context, r *pb.AdminCreatePreset
 	if e := s.checkedPresetData(r.Data); e != nil {
 		return nil, rpcError(e)
 	}
-	v, e := s.presets.CreatePreset(ctx, presetData(r.Data))
+	v, e := s.repo.CreatePreset(ctx, presetData(r.Data))
 	if e != nil {
 		return nil, rpcError(e)
 	}
@@ -132,11 +158,11 @@ func (s *Service) AdminUpdatePreset(ctx context.Context, r *pb.AdminUpdatePreset
 		if path == "enabled" && r.Data.Enabled == nil {
 			return nil, rpcError(biz.ErrInvalid)
 		}
-		if path == "gpu" && r.Data.Gpu != nil && r.Data.Gpu.ClusterId != s.config.ClusterID {
+		if path == "gpu" && r.Data.Gpu != nil && r.Data.Gpu.ClusterId != s.clusterID {
 			return nil, rpcError(biz.ErrInvalid)
 		}
 	}
-	v, e := s.presets.UpdatePreset(ctx, r.Id, presetData(r.Data), r.UpdateMask.Paths)
+	v, e := s.repo.UpdatePreset(ctx, r.Id, presetData(r.Data), r.UpdateMask.Paths)
 	if e != nil {
 		return nil, rpcError(e)
 	}
@@ -149,7 +175,7 @@ func (s *Service) AdminSetPresetEnabled(ctx context.Context, r *pb.AdminSetPrese
 	if _, e := biz.RequirePlatform(ctx); e != nil {
 		return nil, rpcError(e)
 	}
-	v, e := s.presets.SetPresetEnabled(ctx, r.Id, *r.Enabled)
+	v, e := s.repo.SetPresetEnabled(ctx, r.Id, *r.Enabled)
 	if e != nil {
 		return nil, rpcError(e)
 	}
@@ -162,8 +188,29 @@ func (s *Service) AdminDeletePreset(ctx context.Context, r *pb.AdminDeletePreset
 	if _, e := biz.RequirePlatform(ctx); e != nil {
 		return nil, rpcError(e)
 	}
-	if e := s.presets.DeletePreset(ctx, r.Id); e != nil {
+	if e := s.repo.DeletePreset(ctx, r.Id); e != nil {
 		return nil, rpcError(e)
 	}
 	return &emptypb.Empty{}, nil
+}
+
+func (s *Service) ResolveComputePreset(ctx context.Context, r *pb.ResolveComputePresetRequest) (*pb.ComputeSelection, error) {
+	if r == nil || len(r.ProtoReflect().GetUnknown()) != 0 || !biz.ValidUsage(biz.Usage(r.Usage)) {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	v, e := s.resolver.Resolve(ctx, r.TenantId, r.PresetId, biz.Usage(r.Usage))
+	if e != nil {
+		return nil, rpcError(e)
+	}
+	out := &pb.ComputeSelection{SchemaVersion: pb.SelectionSchemaVersion, PresetId: v.PresetID, Code: v.Code, Name: v.Name, ComputeType: v.ComputeType, CpuMillis: v.CPUMillis, MemoryMib: v.MemoryMiB}
+	if g := v.GPU; g != nil {
+		out.Gpu = &pb.GpuSelection{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, SpecDigest: g.SpecDigest, DevicesPerUnit: g.DevicesPerInstance, ClusterId: g.ClusterID, PoolId: g.PoolID, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, MemoryMibPerDevice: g.MemoryMiBPerDevice, CoreLimitPercent: g.CoreLimitPercent}
+	}
+	out.SelectionDigest, e = pb.SelectionDigest(out)
+	if e != nil {
+		return nil, rpcError(e)
+	}
+	return out, nil
 }

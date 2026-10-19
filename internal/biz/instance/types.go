@@ -69,13 +69,6 @@ func RequireTenant(ctx context.Context, tenant string) error {
 	}
 	return nil
 }
-func RequirePlatform(ctx context.Context) (Caller, error) {
-	c, ok := ctx.Value(callerKey{}).(Caller)
-	if !ok || !c.Platform || c.TenantID != "" || c.Actor == "" {
-		return Caller{}, ErrDenied
-	}
-	return c, nil
-}
 func UUID(v string) bool { u, e := uuid.Parse(v); return e == nil && u != uuid.Nil && u.String() == v }
 
 var digest64 = regexp.MustCompile(`^[0-9a-f]{64}$`)

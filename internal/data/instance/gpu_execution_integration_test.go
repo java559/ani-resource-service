@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance"
@@ -27,16 +28,16 @@ func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
 			if mode == acc.SupplyMode_WHOLE_EXCLUSIVE {
 				memory, cores = 15360, 100
 			}
-			ref := &biz.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 1, SpecDigest: strings.Repeat("c", 64), DevicesPerInstance: 1, ClusterID: cluster, PoolID: uuid.NewString(), Mode: mode.String(), ModelKey: "t4", MemoryMiBPerDevice: memory, CoreLimitPercent: cores}
-			preset, e := f.repo.CreatePreset(admin, biz.Preset{Code: "gpu", Name: "GPU", ComputeType: biz.TypeGPU, CPUMillis: 4000, MemoryMiB: 8192, Enabled: true, GPU: ref})
+			ref := &compute.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 1, SpecDigest: strings.Repeat("c", 64), DevicesPerInstance: 1, ClusterID: cluster, PoolID: uuid.NewString(), Mode: mode.String(), ModelKey: "t4", MemoryMiBPerDevice: memory, CoreLimitPercent: cores}
+			preset, e := f.presets.CreatePreset(admin, compute.Preset{Code: "gpu", Name: "GPU", ComputeType: biz.TypeGPU, CPUMillis: 4000, MemoryMiB: 8192, Enabled: true, GPU: ref})
 			if e != nil {
 				t.Fatal(e)
 			}
-			handler, e := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: cluster, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000})
+			handler, e := service.NewService(f.repo, computeResolver(t, f, cluster), fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: cluster, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", UID: 1000, GID: 1000})
 			if e != nil {
 				t.Fatal(e)
 			}
-			spec, e := handler.ResolveCreateSpec(ctx, &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenant, Data: &pb.CreateInstanceData{Name: "gpu-work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: preset.ID}})
+			spec, e := handler.ResolveCreateSpec(containerScope(ctx, tenant), &pb.ResolveCreateSpecRequest{InstanceContractVersion: 2, TenantId: tenant, Data: &pb.CreateInstanceData{Name: "gpu-work", ImageId: "img_" + strings.Repeat("a", 32), ImageScope: "platform", PresetId: preset.ID}})
 			if e != nil {
 				t.Fatal(e)
 			}
@@ -60,10 +61,10 @@ func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
 			if _, e = handler.AcceptCreate(ctx, request); e != nil {
 				t.Fatal("replay", e)
 			}
-			if e = f.repo.DeletePreset(admin, preset.ID); e != nil {
+			if e = f.presets.DeletePreset(admin, preset.ID); e != nil {
 				t.Fatal(e)
 			}
-			handler, e = service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: cluster, ServiceAccount: "changed", StorageClass: "changed", WorkspaceSize: "2Gi", Shell: "/bin/bash", UID: 1001, GID: 1001})
+			handler, e = service.NewService(f.repo, computeResolver(t, f, cluster), fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "tenant-", ClusterID: cluster, ServiceAccount: "changed", StorageClass: "changed", WorkspaceSize: "2Gi", Shell: "/bin/bash", UID: 1001, GID: 1001})
 			if e != nil {
 				t.Fatal(e)
 			}

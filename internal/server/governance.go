@@ -11,6 +11,7 @@ import (
 
 	"github.com/google/uuid"
 	instancepb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	computebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	instancebiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	"google.golang.org/grpc"
@@ -237,14 +238,15 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "read-only composition permits only GetVPC")
 		}
 		_, platformMethod := governancePlatformMethods[info.FullMethod]
-		_, instancePlatformMethod := instancePlatformMethods[info.FullMethod]
-		platformMethod = platformMethod || instancePlatformMethod
+		_, computePlatformMethod := computePlatformMethods[info.FullMethod]
+		platformMethod = platformMethod || computePlatformMethod
 		if platformMethod != p.Platform {
 			return nil, status.Error(codes.PermissionDenied, "governance scope does not permit this method")
 		}
 		_, imageMethod := imageGovernanceMethods[info.FullMethod]
 		_, instanceMethod := instanceGovernanceMethods[info.FullMethod]
-		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod {
+		_, computeMethod := computeGovernanceMethods[info.FullMethod]
+		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod && !computeMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)
@@ -252,6 +254,13 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "governance requests must be proto messages")
 		}
 		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
+		if computeMethod || computePlatformMethod {
+			ctx, err = withComputeGovernanceScope(ctx, p, r, info.FullMethod)
+			if err != nil {
+				return nil, err
+			}
+			return next(ctx, req)
+		}
 		if instanceMethod {
 			var tenant string
 			switch info.FullMethod {
@@ -271,10 +280,10 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			if tenant == "" || tenant != p.TenantID {
 				return nil, status.Error(codes.PermissionDenied, "instance tenant differs from authenticated scope")
 			}
+			if info.FullMethod == instancepb.InstanceService_ResolveCreateSpec_FullMethodName {
+				ctx = computeScope(ctx, p, info.FullMethod, computebiz.ContainerInstance)
+			}
 			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{TenantID: p.TenantID, Actor: p.Actor}), req)
-		}
-		if instancePlatformMethod {
-			return next(instancebiz.WithCaller(ctx, instancebiz.Caller{Platform: true, Actor: p.Actor}), req)
 		}
 		if platformMethod {
 			ctx = biz.WithEgressCaller(ctx, biz.EgressCaller{PlatformAdministrator: true, Attribution: biz.Attribution{Actor: p.Actor, DirectCaller: p.Workload, CorrelationID: p.RequestID}})

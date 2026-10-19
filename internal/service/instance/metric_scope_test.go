@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
+	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -18,7 +19,7 @@ import (
 // Only Get is implemented: an unexpected persistence write fails immediately.
 type metricScopeRepository struct {
 	biz.Repository
-	biz.PresetRepository
+	compute.PresetRepository
 	item  biz.Instance
 	err   error
 	reads int
@@ -41,7 +42,7 @@ func TestMetricScopePersistedReadOnlyHistory(t *testing.T) {
 			item := biz.Instance{TenantID: uuid.NewString(), ID: uuid.NewString(), Desired: state, Observed: state, Spec: biz.Spec{ClusterID: uuid.NewString(), Namespace: "saved-namespace"}}
 			repo := &metricScopeRepository{item: item}
 			images, environment := &cpuImageBoundary{}, &cpuEnvironmentBoundary{}
-			s, err := NewService(repo, images, environment, Config{NamespacePrefix: "different-", ClusterID: uuid.NewString(), ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
+			s, err := NewService(repo, newTestComputeResolver(t, repo, uuid.NewString()), images, environment, Config{NamespacePrefix: "different-", ClusterID: uuid.NewString(), ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -87,7 +88,7 @@ func TestMetricScopeRejectsInvalidAndUnavailableRanges(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			repo := &metricScopeRepository{item: biz.Instance{TenantID: tenant, ID: id, Spec: biz.Spec{ClusterID: tc.cluster, Namespace: tc.namespace}}, err: tc.repoError}
-			s, err := NewService(repo, &cpuImageBoundary{}, &cpuEnvironmentBoundary{}, Config{ClusterID: cluster, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
+			s, err := NewService(repo, newTestComputeResolver(t, repo, cluster), &cpuImageBoundary{}, &cpuEnvironmentBoundary{}, Config{ClusterID: cluster, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
 			if err != nil {
 				t.Fatal(err)
 			}

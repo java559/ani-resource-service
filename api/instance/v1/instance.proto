@@ -5,23 +5,14 @@ option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/
 import "accelerator/v1/accelerator.proto";
 import "accelerator/command/v1/command.proto";
 import "instance/terminal/v1/terminal.proto";
-import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
 
 // Trusted Governance listener only. Public HTTP DTOs exclude the frozen fields,
 // namespace, tenant, plan and original charges.
 service InstanceService {
-  rpc AdminListPresets(AdminListPresetsRequest) returns (ListPresetsResponse);
-  rpc AdminGetPreset(AdminGetPresetRequest) returns (Preset);
-  rpc AdminCreatePreset(AdminCreatePresetRequest) returns (Preset);
-  rpc AdminUpdatePreset(AdminUpdatePresetRequest) returns (Preset);
-  rpc AdminSetPresetEnabled(AdminSetPresetEnabledRequest) returns (Preset);
-  rpc AdminDeletePreset(AdminDeletePresetRequest) returns (google.protobuf.Empty);
   rpc GetInstanceRuntime(GetInstanceRequest) returns (InstanceRuntime);
   rpc ListInstanceEvents(GetInstanceRequest) returns (InstanceEvents);
   rpc StreamInstanceLogs(StreamInstanceLogsRequest) returns (stream InstanceLogFrame);
-  rpc ListPresets(ListPresetsRequest) returns (ListPresetsResponse);
   rpc ListMountablePVCs(ListMountablePVCsRequest) returns (ListMountablePVCsResponse);
   rpc GetInstanceConfiguration(GetInstanceRequest) returns (InstanceConfiguration);
   rpc ResolveCreateSpec(ResolveCreateSpecRequest) returns (CreateSpec);
@@ -120,46 +111,6 @@ message GpuSummary {
   int64 memory_mib_total = 10 [json_name = "memory_mib_total"];
   uint32 core_limit_percent = 8 [json_name = "core_limit_percent"];
 }
-message Preset {
-  string id = 1;
-  reserved 2, 4, 5, 6, 7;
-  reserved "version", "cpu", "memory", "instance_type";
-  string name = 3;
-  string code = 8;
-  string description = 9;
-  string compute_type = 10 [json_name = "compute_type"];
-  int64 cpu_millis = 11 [json_name = "cpu_millis"];
-  int64 memory_mib = 12 [json_name = "memory_mib"];
-  bool enabled = 13;
-  GpuPresetReference gpu = 14;
-  google.protobuf.Timestamp created_at = 15 [json_name = "created_at"];
-  google.protobuf.Timestamp updated_at = 16 [json_name = "updated_at"];
-  bool selectable = 17;
-  string unavailable_reason = 18 [json_name = "unavailable_reason"];
-}
-message PresetData {
-  string code = 1; string name = 2; string description = 3;
-  string compute_type = 4 [json_name = "compute_type"];
-  int64 cpu_millis = 5 [json_name = "cpu_millis"];
-  int64 memory_mib = 6 [json_name = "memory_mib"];
-  optional bool enabled = 7;
-  GpuPresetReference gpu = 8;
-}
-message ListPresetsRequest {
-  string tenant_id = 1; uint32 page = 2; uint32 page_size = 3;
-  string name = 4; string code = 5; string compute_type = 6; string gpu_mode = 7;
-  repeated GpuPresetReference allowed_gpu_profiles = 8;
-}
-message ListPresetsResponse { repeated Preset items = 1; int64 total = 2; bool has_gpu_candidates = 3; }
-message AdminListPresetsRequest {
-  uint32 page = 1; uint32 page_size = 2; string name = 3; string code = 4;
-  string compute_type = 5; string gpu_mode = 6; optional bool enabled = 7;
-}
-message AdminGetPresetRequest { string id = 1; }
-message AdminCreatePresetRequest { PresetData data = 1; }
-message AdminUpdatePresetRequest { string id = 1; PresetData data = 2; google.protobuf.FieldMask update_mask = 3; }
-message AdminSetPresetEnabledRequest { string id = 1; optional bool enabled = 2; }
-message AdminDeletePresetRequest { string id = 1; }
 message ResolveCreateSpecRequest {
   string tenant_id = 1;
   CreateInstanceData data = 2;

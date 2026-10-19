@@ -51,7 +51,7 @@ func newDiagnosticService(t *testing.T, b diagnosticBoundary, limits biz.LogLimi
 	const tenant = "11111111-1111-4111-8111-111111111111"
 	const id = "22222222-2222-4222-8222-222222222222"
 	repo := &diagnosticRepo{view: biz.Instance{TenantID: tenant, ID: id, Spec: biz.Spec{ClusterID: tenant}}}
-	s, e := NewService(repo, &cpuImageBoundary{}, &b, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", LogLimits: limits})
+	s, e := NewService(repo, newTestComputeResolver(t, repo, tenant), &cpuImageBoundary{}, &b, Config{NamespacePrefix: "tenant-", ClusterID: tenant, ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh", LogLimits: limits})
 	if e != nil {
 		t.Fatal(e)
 	}

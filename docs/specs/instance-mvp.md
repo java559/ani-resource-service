@@ -18,7 +18,7 @@
 
 本节是当前有效合同；下文保留历史生命周期依据，冲突处以本节为准。
 
-本节取代下文历史方案中的单卡、配置规格、旧类型/版本及旧分页约定。完整规格唯一来源是 `instance.compute_presets`：UUID、不可变唯一 code、名称/描述、cpu/gpu、正整数 cpu_millis/memory_mib、enabled 和受管 GPU 引用。新增默认禁用，无草稿/发布/版本表。CPU 引用为空；GPU 引用由受信 Gov 读取 ACC 后补全。PATCH 锁行后在同一事务按非空 FieldMask 合并、校验最终对象；gpu 整体替换或清除。删除不级联实例/ACC。
+本节取代下文历史方案中的单卡、配置规格、旧类型/版本及旧分页约定。完整规格由[算力目录](compute-presets.md)拥有，唯一实表为 `compute.presets`；管理、列表、引用、FieldMask与解析合同在该文维护。实例保留已受理时冻结的规格来源和资源值，不依赖当前目录继续存在。
 
 实例内外只有 `instance_kind=container`、`compute_type=cpu|gpu`，类型来自数据库规格并冻结。删除 `instance_type`、外层 `preset_version`、空类型默认 GPU、旧 canonical 分支及 `Config.Presets`。当前 schema 缺必填类型或实际调度对象直接拒绝。profile_version 与 expected_version 保留现有语义。
 
@@ -34,11 +34,11 @@ GPU 运行参数只来自 ACC 的 `GpuExecution`。Resource 保存一次执行�
 
 `ApplySchedulingOptions` 只消费冻结 scheduling，COLOCATE/SPREAD 分别合并 weight=100、hostname 拓扑的软亲和/软反亲和，selector 固定可信 tenant+instance 并明确当前 namespace；NONE 不新增规则。节点约束、GPU Runtime 和不相关 affinity 保留，重复渲染去重；固定 priority 或相反受管关系冲突拒绝，不整体覆盖 affinity。Notebook v1.10 的 labels/annotations 从 Notebook metadata 传播，PodSpec 从 spec.template.spec 传播；最终 Pod 再核对所选规则与 priority。GPU Pod 引用现有 Volcano PodGroup 且本次选了 priority 时，只读核对同 namespace Group 的 priorityClassName，冲突回显 SCHEDULING_FIELD_CONFLICT，不重写 Group。
 
-AdminList/Get/Create/Update/SetPresetEnabled/DeletePreset 走现有 Gov mTLS 平台委托和独立实例平台 Caller，无伪租户。ListPresets/实例方法走可信租户。租户目录仅启用项，GPU 按可信授权 profile_id/version/digest/cluster/pool 交集过滤后分页；空允许集合严格禁止 GPU，返回内部 has_gpu_candidates 供 Gov 处理 ACC 故障。
+ComputePresetService 管理与列表使用[独立compute范围](compute-presets.md#身份用途与时效)，实例方法继续使用实例可信租户。容器 ResolveCreateSpec 内部固定 CONTAINER_INSTANCE，用同一 compute resolver 读取一次规格，再组合完整容器条件；Gov 不重复调用公共算力解析。目录与业务创建分别授权，新 GPU 使用准入不要求 Profile 目录读权限。原键仍先检查当前业务授权，再返回原冻结结果。
 
 ListInstances 直接改为 page/page_size 与 items/total；删除 keyset 双轨。规格与实例 Count/List 在同一只读 Repeatable Read 事务、相同租户/筛选/授权 WHERE 中执行，按 created_at DESC 和唯一 ID DESC 排序。name 大小写不敏感字面子串，%/_ 不作为通配符。静态列表/详情同一安全映射，不查 Kubernetes/ACC/当前规格；返回真实 createdAt、workspaceSize、两维类型、CPU/内存、preset_name/code、gpu_summary、实际 scheduling。操作状态与清理标志沿原合同。
 
-CPU 最小运行验收仍为 Gov 正式入口 → 真实 PG → Notebook/控制器/Pod；GPU 需读取 Whole1/Shared1/Whole2 实际 Pod 字段。Pending 仅可作为字段证据，不是运行/硬件/隔离/释放通过。软件和外部边界替身单独报告。运行详情、事件与日志通过纯GET/LIST目标解析：可信租户/实例DB记录 → 保存cluster/namespace → Notebook/STS/Pod owner UID链。诊断不调用带签名写入的Observe、不清理/占额/usage同步。runtime仅返回安全状态、来源类别、挂载类别，不返回环境值/Secret内容/宿主路径；缺对象为null、读取失败为错误。事件只取当前Pod UID的core/v1 Event，每页200、最多1000、真实truncated，时间与计数缺失保持null。日志仅固定workspace stdout/stderr，开流前后GET同UID、READY后才传bytes，替换Pod终止；鉴权、取消和保护上限见[调用登记](governance-calls.md#平台规格与实例日志)。真实公开日志/SSE、长连接和Pod传播必须另行实测，软件测试不替代现场验收。
+CPU 最小运行验收仍为 Gov 正式入口 → 真实 PG → Notebook/控制器/Pod；GPU 需读取 Whole1/Shared1/Whole2 实际 Pod 字段。Pending 仅可作为字段证据，不是运行/硬件/隔离/释放通过。软件和外部边界替身单独报告。运行详情、事件与日志通过纯GET/LIST目标解析：可信租户/实例DB记录 → 保存cluster/namespace → Notebook/STS/Pod owner UID链。诊断不调用带签名写入的Observe、不清理/占额/usage同步。runtime仅返回安全状态、来源类别、挂载类别，不返回环境值/Secret内容/宿主路径；缺对象为null、读取失败为错误。事件只取当前Pod UID的core/v1 Event，每页200、最多1000、真实truncated，时间与计数缺失保持null。日志仅固定workspace stdout/stderr，开流前后GET同UID、READY后才传bytes，替换Pod终止；鉴权、取消和保护上限见[调用登记](governance-calls.md#实例日志)。真实公开日志/SSE、长连接和Pod传播必须另行实测，软件测试不替代现场验收。
 
 ## 1. 本轮交付与明确边界
 

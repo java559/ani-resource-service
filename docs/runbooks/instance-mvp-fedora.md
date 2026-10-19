@@ -2,7 +2,7 @@
 
 行为合同见 [v1.5 规格](../specs/instance-mvp.md)，实际执行结果只看 [当前状态](../execution/status.md#gpu-container-instance-mvp-v15)。本说明提供配置和恢复步骤，不代表共享集群已部署或真实 GPU 已验收。
 
-当前配置、已有卷及显式 VPC 接入使用[增量合同](../specs/instance-configuration-network.md)，本批实际结果见[配置与网络执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。只支持当前实例配置合同 2；升级前清理旧实例及原账，维护时先关闭 Gov 新建和 Res 新网络写入，保留已受理命令的恢复与删除能力。所有读者升级并通过正式依赖及生成门禁后才重新开放，不部署旧配置 reader。
+当前配置、已有卷及显式 VPC 接入使用[增量合同](../specs/instance-configuration-network.md)，实际结果见[配置与网络执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)。只支持当前实例配置合同2；此前从旧配置合同切换的清理前置不适用于本次算力目录改名。本次保留迁移前实例、原账及运行对象，维护时关闭新的受理与规格写入，按[目录迁移手册](compute-presets-migration.md)停止旧SQL/RPC进程、切换匹配版本及验证恢复；不部署旧配置reader。
 
 ## 源码与验证
 
@@ -57,11 +57,11 @@ ACC 物理释放只使用独立 `spiffe://ani.internal/service/ani-resource-serv
 
 Notebook、StatefulSet 和 Pod 全部消失且没有待确认写后，先持久 `ComputeSealAt`，下一轮才查询 ACC 的 cluster/owner 全范围物理证据。ACC 必须确认完整来源水位已越过该 fence、无活分配，所有已知分配都有正向释放事实；未知、节点离线、缺来源或不匹配回执继续占额，不能设置 `ComputeCleaned` 或发送退额事件。只有从未开始外部计算创建且已封闭的取消/删除先到，才使用内部未执行事实跳过物理查询。该证据不增加规格资格或有效期限制。
 
-GPU RuntimeClass 必须由 ACC 受管配置写入唯一 `GpuExecution.runtime_class_name`；Res 没有第二个配置来源。切换新合同前先完整结束旧 GPU 活动并确认释放 outbox 已匹配确认，再显式运行实例 migration，发布新 GPU Profile/Preset。不得把旧 F256 或百分比状态交给新服务恢复。
+GPU RuntimeClass 必须由 ACC 受管配置写入唯一 `GpuExecution.runtime_class_name`；Res 没有第二个配置来源。只有历史004从F256/百分比迁往绝对显存合同的首次切换才要求先结束不兼容GPU活动并确认outbox；不得将旧F256状态交给当前reader。本次目录迁移校验已应用004且不重放，保留当前合同的GPU活动、冻结执行和原账，不要求重新发布ACC Profile。
 
-规格唯一来源为 Resource 的 `instance.compute_presets`，配置中的 `Presets` 已删除，严格配置解码会拒绝该旧字段。规格通过 Gov 的平台管理入口创建，CPU 创建不依赖 ACC；GPU 新建/替换引用必须使用可信 ACC 目录的完整事实。
+规格唯一来源为 Resource compute 的 `compute.presets`，配置中的 `Presets` 已删除，严格配置解码会拒绝该旧字段。规格通过 Gov 的 ComputePresetService 平台管理入口创建，CPU 创建不依赖 ACC；GPU 新建/替换引用必须使用可信 ACC 目录的完整事实。独立算力配置与原地迁移见[算力目录合同](../specs/compute-presets.md)及[维护/逆向恢复手册](compute-presets-migration.md)。
 
-首次迁移由独立 owner 身份显式运行 `ANI_INSTANCE_OWNER_DSN_FILE=<私有文件> ANI_INSTANCE_RUNTIME_ROLE=<受限角色> ./ani-resource-service -instance-migrate`。迁移维护本域 checksum/version 并向已有 runtime 角色授予本域权限；应用只用受限角色，不在启动时迁移，不用超级用户。启动方式沿用现有 Resource 的 `-conf` 与 Image 配置，新增 `ANI_INSTANCE_CONFIG_FILE`。
+首次迁移由独立 owner 身份显式运行 `ANI_INSTANCE_OWNER_DSN_FILE=<私有文件> ANI_INSTANCE_RUNTIME_ROLE=<受限角色> ./ani-resource-service -instance-migrate`，按历史instance阶段再进入独立compute阶段。已有001..006只验证checksum，不重放004；本次目录迁移保留已有实例和GPU活动，前文旧F256切换前置不适用于目录改名。应用只用受限角色，不在启动时迁移，不用超级用户。启动方式沿用现有 Resource 的 `-conf`、Image及`ANI_INSTANCE_CONFIG_FILE`，并提供显式`ANI_COMPUTE_CONFIG_FILE`；两者使用同一受管实例/规格数据库及cluster。
 
 Governance 配置 `ANI_INSTANCE_ADDR/CA/CERT/KEY`（现有 Resource DNS-only mTLS），登记 INSTANCE 套餐模块、九个具体 API 及实验用户当前角色权限、GPU quota。先执行既有 `sync-apis --dry-run`，审阅后执行 `sync-apis`；Governance 仓的 `scripts/ops/sql/register-instance-permissions.sql` 只登记对应 action，不自动扩大租户或角色授权。退额 listener 增加 `ANI_QUOTA_RESOURCE_DNS_SAN=<Resource 客户端精确 DNS SAN>`，固定映射 `ani-resource-service`，不能与 Inference 名称复用。
 

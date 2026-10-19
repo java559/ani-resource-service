@@ -18,7 +18,9 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	quotapb "github.com/zhangzhe-ctrl/ani-governance/api/quota/gen/go/quota/service/v1"
 	terminal "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal/v1"
+	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
+	computedata "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute"
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance"
 	"google.golang.org/grpc"
@@ -29,6 +31,7 @@ import (
 
 type fixture struct {
 	repo    *data.Postgres
+	presets *computedata.Postgres
 	runtime *pgxpool.Pool
 	dsn     string
 }
@@ -82,18 +85,26 @@ func database(t *testing.T) *fixture {
 	if e = data.Migrate(ctx, u.String(), role); e != nil {
 		t.Fatal("migration replay", e)
 	}
+	if e = computedata.Migrate(ctx, u.String(), role); e != nil {
+		t.Fatal(e)
+	}
 	u.User = url.UserPassword(role, password)
 	repo, e := data.OpenPostgres(ctx, u.String())
 	if e != nil {
 		t.Fatal(e)
 	}
 	t.Cleanup(repo.Close)
+	presets, e := computedata.OpenPostgres(ctx, u.String())
+	if e != nil {
+		t.Fatal(e)
+	}
+	t.Cleanup(presets.Close)
 	runtime, e := pgxpool.New(ctx, u.String())
 	if e != nil {
 		t.Fatal("runtime unavailable")
 	}
 	t.Cleanup(runtime.Close)
-	return &fixture{repo, runtime, u.String()}
+	return &fixture{repo: repo, presets: presets, runtime: runtime, dsn: u.String()}
 }
 func create() biz.Create {
 	tenant, id, op := uuid.NewString(), uuid.NewString(), uuid.NewString()
@@ -849,4 +860,19 @@ func TestGPUCreatedWithoutSeenPodStillRequiresOwnerWidePhysicalObservation(t *te
 	if !i.ComputeCleaned || !i.QuotaReturned || quota.calls != 1 {
 		t.Fatal("complete owner-wide no-allocation evidence cannot close Pending")
 	}
+}
+
+func computeResolver(t *testing.T, f *fixture, cluster string) *compute.Resolver {
+	t.Helper()
+	r, e := compute.NewResolver(f.presets, cluster)
+	if e != nil {
+		t.Fatal(e)
+	}
+	return r
+}
+func containerScope(ctx context.Context, tenant string) context.Context {
+	return compute.WithScope(ctx, compute.Scope{TenantID: tenant, Actor: "governance:user:42", RequestID: "33333333-3333-4333-8333-333333333333", Workload: "ani-governance", Method: compute.ContainerResolveMethod, Usage: compute.ContainerInstance})
+}
+func presetTenantScope(tenant string) context.Context {
+	return compute.WithScope(context.Background(), compute.Scope{TenantID: tenant, Actor: "governance:user:42", RequestID: "33333333-3333-4333-8333-333333333333", Workload: "ani-governance", Method: compute.ListMethod, Usage: compute.ContainerInstance})
 }

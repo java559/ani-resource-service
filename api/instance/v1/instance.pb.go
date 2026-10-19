@@ -12,8 +12,6 @@ import (
 	v12 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -131,7 +129,7 @@ func (x InstanceLogFrame_Kind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use InstanceLogFrame_Kind.Descriptor instead.
 func (InstanceLogFrame_Kind) EnumDescriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{41, 0}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{31, 0}
 }
 
 type SchedulingOptions struct {
@@ -1095,742 +1093,6 @@ func (x *GpuSummary) GetCoreLimitPercent() uint32 {
 	return 0
 }
 
-type Preset struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name              string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Code              string                 `protobuf:"bytes,8,opt,name=code,proto3" json:"code,omitempty"`
-	Description       string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
-	ComputeType       string                 `protobuf:"bytes,10,opt,name=compute_type,proto3" json:"compute_type,omitempty"`
-	CpuMillis         int64                  `protobuf:"varint,11,opt,name=cpu_millis,proto3" json:"cpu_millis,omitempty"`
-	MemoryMib         int64                  `protobuf:"varint,12,opt,name=memory_mib,proto3" json:"memory_mib,omitempty"`
-	Enabled           bool                   `protobuf:"varint,13,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Gpu               *GpuPresetReference    `protobuf:"bytes,14,opt,name=gpu,proto3" json:"gpu,omitempty"`
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,proto3" json:"created_at,omitempty"`
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,proto3" json:"updated_at,omitempty"`
-	Selectable        bool                   `protobuf:"varint,17,opt,name=selectable,proto3" json:"selectable,omitempty"`
-	UnavailableReason string                 `protobuf:"bytes,18,opt,name=unavailable_reason,proto3" json:"unavailable_reason,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
-}
-
-func (x *Preset) Reset() {
-	*x = Preset{}
-	mi := &file_instance_v1_instance_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Preset) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Preset) ProtoMessage() {}
-
-func (x *Preset) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Preset.ProtoReflect.Descriptor instead.
-func (*Preset) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *Preset) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *Preset) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Preset) GetCode() string {
-	if x != nil {
-		return x.Code
-	}
-	return ""
-}
-
-func (x *Preset) GetDescription() string {
-	if x != nil {
-		return x.Description
-	}
-	return ""
-}
-
-func (x *Preset) GetComputeType() string {
-	if x != nil {
-		return x.ComputeType
-	}
-	return ""
-}
-
-func (x *Preset) GetCpuMillis() int64 {
-	if x != nil {
-		return x.CpuMillis
-	}
-	return 0
-}
-
-func (x *Preset) GetMemoryMib() int64 {
-	if x != nil {
-		return x.MemoryMib
-	}
-	return 0
-}
-
-func (x *Preset) GetEnabled() bool {
-	if x != nil {
-		return x.Enabled
-	}
-	return false
-}
-
-func (x *Preset) GetGpu() *GpuPresetReference {
-	if x != nil {
-		return x.Gpu
-	}
-	return nil
-}
-
-func (x *Preset) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *Preset) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *Preset) GetSelectable() bool {
-	if x != nil {
-		return x.Selectable
-	}
-	return false
-}
-
-func (x *Preset) GetUnavailableReason() string {
-	if x != nil {
-		return x.UnavailableReason
-	}
-	return ""
-}
-
-type PresetData struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	ComputeType   string                 `protobuf:"bytes,4,opt,name=compute_type,proto3" json:"compute_type,omitempty"`
-	CpuMillis     int64                  `protobuf:"varint,5,opt,name=cpu_millis,proto3" json:"cpu_millis,omitempty"`
-	MemoryMib     int64                  `protobuf:"varint,6,opt,name=memory_mib,proto3" json:"memory_mib,omitempty"`
-	Enabled       *bool                  `protobuf:"varint,7,opt,name=enabled,proto3,oneof" json:"enabled,omitempty"`
-	Gpu           *GpuPresetReference    `protobuf:"bytes,8,opt,name=gpu,proto3" json:"gpu,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PresetData) Reset() {
-	*x = PresetData{}
-	mi := &file_instance_v1_instance_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PresetData) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PresetData) ProtoMessage() {}
-
-func (x *PresetData) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PresetData.ProtoReflect.Descriptor instead.
-func (*PresetData) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *PresetData) GetCode() string {
-	if x != nil {
-		return x.Code
-	}
-	return ""
-}
-
-func (x *PresetData) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *PresetData) GetDescription() string {
-	if x != nil {
-		return x.Description
-	}
-	return ""
-}
-
-func (x *PresetData) GetComputeType() string {
-	if x != nil {
-		return x.ComputeType
-	}
-	return ""
-}
-
-func (x *PresetData) GetCpuMillis() int64 {
-	if x != nil {
-		return x.CpuMillis
-	}
-	return 0
-}
-
-func (x *PresetData) GetMemoryMib() int64 {
-	if x != nil {
-		return x.MemoryMib
-	}
-	return 0
-}
-
-func (x *PresetData) GetEnabled() bool {
-	if x != nil && x.Enabled != nil {
-		return *x.Enabled
-	}
-	return false
-}
-
-func (x *PresetData) GetGpu() *GpuPresetReference {
-	if x != nil {
-		return x.Gpu
-	}
-	return nil
-}
-
-type ListPresetsRequest struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	TenantId           string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
-	Page               uint32                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize           uint32                 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Name               string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Code               string                 `protobuf:"bytes,5,opt,name=code,proto3" json:"code,omitempty"`
-	ComputeType        string                 `protobuf:"bytes,6,opt,name=compute_type,json=computeType,proto3" json:"compute_type,omitempty"`
-	GpuMode            string                 `protobuf:"bytes,7,opt,name=gpu_mode,json=gpuMode,proto3" json:"gpu_mode,omitempty"`
-	AllowedGpuProfiles []*GpuPresetReference  `protobuf:"bytes,8,rep,name=allowed_gpu_profiles,json=allowedGpuProfiles,proto3" json:"allowed_gpu_profiles,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
-}
-
-func (x *ListPresetsRequest) Reset() {
-	*x = ListPresetsRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListPresetsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListPresetsRequest) ProtoMessage() {}
-
-func (x *ListPresetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListPresetsRequest.ProtoReflect.Descriptor instead.
-func (*ListPresetsRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{14}
-}
-
-func (x *ListPresetsRequest) GetTenantId() string {
-	if x != nil {
-		return x.TenantId
-	}
-	return ""
-}
-
-func (x *ListPresetsRequest) GetPage() uint32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-func (x *ListPresetsRequest) GetPageSize() uint32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
-}
-
-func (x *ListPresetsRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *ListPresetsRequest) GetCode() string {
-	if x != nil {
-		return x.Code
-	}
-	return ""
-}
-
-func (x *ListPresetsRequest) GetComputeType() string {
-	if x != nil {
-		return x.ComputeType
-	}
-	return ""
-}
-
-func (x *ListPresetsRequest) GetGpuMode() string {
-	if x != nil {
-		return x.GpuMode
-	}
-	return ""
-}
-
-func (x *ListPresetsRequest) GetAllowedGpuProfiles() []*GpuPresetReference {
-	if x != nil {
-		return x.AllowedGpuProfiles
-	}
-	return nil
-}
-
-type ListPresetsResponse struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	Items            []*Preset              `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-	Total            int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
-	HasGpuCandidates bool                   `protobuf:"varint,3,opt,name=has_gpu_candidates,json=hasGpuCandidates,proto3" json:"has_gpu_candidates,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
-}
-
-func (x *ListPresetsResponse) Reset() {
-	*x = ListPresetsResponse{}
-	mi := &file_instance_v1_instance_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListPresetsResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListPresetsResponse) ProtoMessage() {}
-
-func (x *ListPresetsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListPresetsResponse.ProtoReflect.Descriptor instead.
-func (*ListPresetsResponse) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *ListPresetsResponse) GetItems() []*Preset {
-	if x != nil {
-		return x.Items
-	}
-	return nil
-}
-
-func (x *ListPresetsResponse) GetTotal() int64 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
-}
-
-func (x *ListPresetsResponse) GetHasGpuCandidates() bool {
-	if x != nil {
-		return x.HasGpuCandidates
-	}
-	return false
-}
-
-type AdminListPresetsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          uint32                 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      uint32                 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Code          string                 `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
-	ComputeType   string                 `protobuf:"bytes,5,opt,name=compute_type,json=computeType,proto3" json:"compute_type,omitempty"`
-	GpuMode       string                 `protobuf:"bytes,6,opt,name=gpu_mode,json=gpuMode,proto3" json:"gpu_mode,omitempty"`
-	Enabled       *bool                  `protobuf:"varint,7,opt,name=enabled,proto3,oneof" json:"enabled,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminListPresetsRequest) Reset() {
-	*x = AdminListPresetsRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminListPresetsRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminListPresetsRequest) ProtoMessage() {}
-
-func (x *AdminListPresetsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminListPresetsRequest.ProtoReflect.Descriptor instead.
-func (*AdminListPresetsRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{16}
-}
-
-func (x *AdminListPresetsRequest) GetPage() uint32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-func (x *AdminListPresetsRequest) GetPageSize() uint32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
-}
-
-func (x *AdminListPresetsRequest) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *AdminListPresetsRequest) GetCode() string {
-	if x != nil {
-		return x.Code
-	}
-	return ""
-}
-
-func (x *AdminListPresetsRequest) GetComputeType() string {
-	if x != nil {
-		return x.ComputeType
-	}
-	return ""
-}
-
-func (x *AdminListPresetsRequest) GetGpuMode() string {
-	if x != nil {
-		return x.GpuMode
-	}
-	return ""
-}
-
-func (x *AdminListPresetsRequest) GetEnabled() bool {
-	if x != nil && x.Enabled != nil {
-		return *x.Enabled
-	}
-	return false
-}
-
-type AdminGetPresetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminGetPresetRequest) Reset() {
-	*x = AdminGetPresetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminGetPresetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminGetPresetRequest) ProtoMessage() {}
-
-func (x *AdminGetPresetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminGetPresetRequest.ProtoReflect.Descriptor instead.
-func (*AdminGetPresetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *AdminGetPresetRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type AdminCreatePresetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          *PresetData            `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminCreatePresetRequest) Reset() {
-	*x = AdminCreatePresetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminCreatePresetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminCreatePresetRequest) ProtoMessage() {}
-
-func (x *AdminCreatePresetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminCreatePresetRequest.ProtoReflect.Descriptor instead.
-func (*AdminCreatePresetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{18}
-}
-
-func (x *AdminCreatePresetRequest) GetData() *PresetData {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-type AdminUpdatePresetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Data          *PresetData            `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	UpdateMask    *fieldmaskpb.FieldMask `protobuf:"bytes,3,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminUpdatePresetRequest) Reset() {
-	*x = AdminUpdatePresetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminUpdatePresetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminUpdatePresetRequest) ProtoMessage() {}
-
-func (x *AdminUpdatePresetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminUpdatePresetRequest.ProtoReflect.Descriptor instead.
-func (*AdminUpdatePresetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *AdminUpdatePresetRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *AdminUpdatePresetRequest) GetData() *PresetData {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-func (x *AdminUpdatePresetRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
-	if x != nil {
-		return x.UpdateMask
-	}
-	return nil
-}
-
-type AdminSetPresetEnabledRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Enabled       *bool                  `protobuf:"varint,2,opt,name=enabled,proto3,oneof" json:"enabled,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminSetPresetEnabledRequest) Reset() {
-	*x = AdminSetPresetEnabledRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminSetPresetEnabledRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminSetPresetEnabledRequest) ProtoMessage() {}
-
-func (x *AdminSetPresetEnabledRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminSetPresetEnabledRequest.ProtoReflect.Descriptor instead.
-func (*AdminSetPresetEnabledRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *AdminSetPresetEnabledRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *AdminSetPresetEnabledRequest) GetEnabled() bool {
-	if x != nil && x.Enabled != nil {
-		return *x.Enabled
-	}
-	return false
-}
-
-type AdminDeletePresetRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminDeletePresetRequest) Reset() {
-	*x = AdminDeletePresetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminDeletePresetRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminDeletePresetRequest) ProtoMessage() {}
-
-func (x *AdminDeletePresetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminDeletePresetRequest.ProtoReflect.Descriptor instead.
-func (*AdminDeletePresetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *AdminDeletePresetRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
 type ResolveCreateSpecRequest struct {
 	state                   protoimpl.MessageState `protogen:"open.v1"`
 	TenantId                string                 `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
@@ -1844,7 +1106,7 @@ type ResolveCreateSpecRequest struct {
 
 func (x *ResolveCreateSpecRequest) Reset() {
 	*x = ResolveCreateSpecRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[22]
+	mi := &file_instance_v1_instance_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1856,7 +1118,7 @@ func (x *ResolveCreateSpecRequest) String() string {
 func (*ResolveCreateSpecRequest) ProtoMessage() {}
 
 func (x *ResolveCreateSpecRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[22]
+	mi := &file_instance_v1_instance_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1869,7 +1131,7 @@ func (x *ResolveCreateSpecRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResolveCreateSpecRequest.ProtoReflect.Descriptor instead.
 func (*ResolveCreateSpecRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{22}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ResolveCreateSpecRequest) GetTenantId() string {
@@ -1947,7 +1209,7 @@ type CreateSpec struct {
 
 func (x *CreateSpec) Reset() {
 	*x = CreateSpec{}
-	mi := &file_instance_v1_instance_proto_msgTypes[23]
+	mi := &file_instance_v1_instance_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1959,7 +1221,7 @@ func (x *CreateSpec) String() string {
 func (*CreateSpec) ProtoMessage() {}
 
 func (x *CreateSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[23]
+	mi := &file_instance_v1_instance_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1972,7 +1234,7 @@ func (x *CreateSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpec.ProtoReflect.Descriptor instead.
 func (*CreateSpec) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{23}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CreateSpec) GetName() string {
@@ -2197,7 +1459,7 @@ type CommandContext struct {
 
 func (x *CommandContext) Reset() {
 	*x = CommandContext{}
-	mi := &file_instance_v1_instance_proto_msgTypes[24]
+	mi := &file_instance_v1_instance_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2209,7 +1471,7 @@ func (x *CommandContext) String() string {
 func (*CommandContext) ProtoMessage() {}
 
 func (x *CommandContext) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[24]
+	mi := &file_instance_v1_instance_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2222,7 +1484,7 @@ func (x *CommandContext) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommandContext.ProtoReflect.Descriptor instead.
 func (*CommandContext) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{24}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CommandContext) GetTenantId() string {
@@ -2263,7 +1525,7 @@ type AcceptCreateRequest struct {
 
 func (x *AcceptCreateRequest) Reset() {
 	*x = AcceptCreateRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[25]
+	mi := &file_instance_v1_instance_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2275,7 +1537,7 @@ func (x *AcceptCreateRequest) String() string {
 func (*AcceptCreateRequest) ProtoMessage() {}
 
 func (x *AcceptCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[25]
+	mi := &file_instance_v1_instance_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2288,7 +1550,7 @@ func (x *AcceptCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptCreateRequest.ProtoReflect.Descriptor instead.
 func (*AcceptCreateRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{25}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AcceptCreateRequest) GetContext() *CommandContext {
@@ -2318,7 +1580,7 @@ type AcceptDeleteRequest struct {
 
 func (x *AcceptDeleteRequest) Reset() {
 	*x = AcceptDeleteRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[26]
+	mi := &file_instance_v1_instance_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2330,7 +1592,7 @@ func (x *AcceptDeleteRequest) String() string {
 func (*AcceptDeleteRequest) ProtoMessage() {}
 
 func (x *AcceptDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[26]
+	mi := &file_instance_v1_instance_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2343,7 +1605,7 @@ func (x *AcceptDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptDeleteRequest.ProtoReflect.Descriptor instead.
 func (*AcceptDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{26}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *AcceptDeleteRequest) GetExpectedVersion() int64 {
@@ -2393,7 +1655,7 @@ type ChangeInstanceRequest struct {
 
 func (x *ChangeInstanceRequest) Reset() {
 	*x = ChangeInstanceRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[27]
+	mi := &file_instance_v1_instance_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2405,7 +1667,7 @@ func (x *ChangeInstanceRequest) String() string {
 func (*ChangeInstanceRequest) ProtoMessage() {}
 
 func (x *ChangeInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[27]
+	mi := &file_instance_v1_instance_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2418,7 +1680,7 @@ func (x *ChangeInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeInstanceRequest.ProtoReflect.Descriptor instead.
 func (*ChangeInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{27}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ChangeInstanceRequest) GetTenantId() string {
@@ -2458,7 +1720,7 @@ type OperationResponse struct {
 
 func (x *OperationResponse) Reset() {
 	*x = OperationResponse{}
-	mi := &file_instance_v1_instance_proto_msgTypes[28]
+	mi := &file_instance_v1_instance_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2470,7 +1732,7 @@ func (x *OperationResponse) String() string {
 func (*OperationResponse) ProtoMessage() {}
 
 func (x *OperationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[28]
+	mi := &file_instance_v1_instance_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2483,7 +1745,7 @@ func (x *OperationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperationResponse.ProtoReflect.Descriptor instead.
 func (*OperationResponse) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{28}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *OperationResponse) GetDurableOwnerAck() *v11.DurableOwnerAck {
@@ -2503,7 +1765,7 @@ type GetInstanceRequest struct {
 
 func (x *GetInstanceRequest) Reset() {
 	*x = GetInstanceRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[29]
+	mi := &file_instance_v1_instance_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2515,7 +1777,7 @@ func (x *GetInstanceRequest) String() string {
 func (*GetInstanceRequest) ProtoMessage() {}
 
 func (x *GetInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[29]
+	mi := &file_instance_v1_instance_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2528,7 +1790,7 @@ func (x *GetInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetInstanceRequest.ProtoReflect.Descriptor instead.
 func (*GetInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{29}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetInstanceRequest) GetTenantId() string {
@@ -2560,7 +1822,7 @@ type ListInstancesRequest struct {
 
 func (x *ListInstancesRequest) Reset() {
 	*x = ListInstancesRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[30]
+	mi := &file_instance_v1_instance_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2572,7 +1834,7 @@ func (x *ListInstancesRequest) String() string {
 func (*ListInstancesRequest) ProtoMessage() {}
 
 func (x *ListInstancesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[30]
+	mi := &file_instance_v1_instance_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2585,7 +1847,7 @@ func (x *ListInstancesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInstancesRequest.ProtoReflect.Descriptor instead.
 func (*ListInstancesRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{30}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListInstancesRequest) GetTenantId() string {
@@ -2647,7 +1909,7 @@ type ListInstancesResponse struct {
 
 func (x *ListInstancesResponse) Reset() {
 	*x = ListInstancesResponse{}
-	mi := &file_instance_v1_instance_proto_msgTypes[31]
+	mi := &file_instance_v1_instance_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2659,7 +1921,7 @@ func (x *ListInstancesResponse) String() string {
 func (*ListInstancesResponse) ProtoMessage() {}
 
 func (x *ListInstancesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[31]
+	mi := &file_instance_v1_instance_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2672,7 +1934,7 @@ func (x *ListInstancesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInstancesResponse.ProtoReflect.Descriptor instead.
 func (*ListInstancesResponse) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{31}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ListInstancesResponse) GetItems() []*Instance {
@@ -2725,7 +1987,7 @@ type Instance struct {
 
 func (x *Instance) Reset() {
 	*x = Instance{}
-	mi := &file_instance_v1_instance_proto_msgTypes[32]
+	mi := &file_instance_v1_instance_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2737,7 +1999,7 @@ func (x *Instance) String() string {
 func (*Instance) ProtoMessage() {}
 
 func (x *Instance) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[32]
+	mi := &file_instance_v1_instance_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2750,7 +2012,7 @@ func (x *Instance) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Instance.ProtoReflect.Descriptor instead.
 func (*Instance) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{32}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *Instance) GetId() string {
@@ -2959,7 +2221,7 @@ type EnvironmentSource struct {
 
 func (x *EnvironmentSource) Reset() {
 	*x = EnvironmentSource{}
-	mi := &file_instance_v1_instance_proto_msgTypes[33]
+	mi := &file_instance_v1_instance_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2971,7 +2233,7 @@ func (x *EnvironmentSource) String() string {
 func (*EnvironmentSource) ProtoMessage() {}
 
 func (x *EnvironmentSource) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[33]
+	mi := &file_instance_v1_instance_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2984,7 +2246,7 @@ func (x *EnvironmentSource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnvironmentSource.ProtoReflect.Descriptor instead.
 func (*EnvironmentSource) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{33}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *EnvironmentSource) GetName() string {
@@ -3013,7 +2275,7 @@ type RuntimeMount struct {
 
 func (x *RuntimeMount) Reset() {
 	*x = RuntimeMount{}
-	mi := &file_instance_v1_instance_proto_msgTypes[34]
+	mi := &file_instance_v1_instance_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3025,7 +2287,7 @@ func (x *RuntimeMount) String() string {
 func (*RuntimeMount) ProtoMessage() {}
 
 func (x *RuntimeMount) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[34]
+	mi := &file_instance_v1_instance_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3038,7 +2300,7 @@ func (x *RuntimeMount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RuntimeMount.ProtoReflect.Descriptor instead.
 func (*RuntimeMount) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{34}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *RuntimeMount) GetName() string {
@@ -3087,7 +2349,7 @@ type RuntimePod struct {
 
 func (x *RuntimePod) Reset() {
 	*x = RuntimePod{}
-	mi := &file_instance_v1_instance_proto_msgTypes[35]
+	mi := &file_instance_v1_instance_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3099,7 +2361,7 @@ func (x *RuntimePod) String() string {
 func (*RuntimePod) ProtoMessage() {}
 
 func (x *RuntimePod) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[35]
+	mi := &file_instance_v1_instance_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3112,7 +2374,7 @@ func (x *RuntimePod) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RuntimePod.ProtoReflect.Descriptor instead.
 func (*RuntimePod) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{35}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *RuntimePod) GetName() string {
@@ -3195,7 +2457,7 @@ type RuntimeStatefulSet struct {
 
 func (x *RuntimeStatefulSet) Reset() {
 	*x = RuntimeStatefulSet{}
-	mi := &file_instance_v1_instance_proto_msgTypes[36]
+	mi := &file_instance_v1_instance_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3207,7 +2469,7 @@ func (x *RuntimeStatefulSet) String() string {
 func (*RuntimeStatefulSet) ProtoMessage() {}
 
 func (x *RuntimeStatefulSet) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[36]
+	mi := &file_instance_v1_instance_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3220,7 +2482,7 @@ func (x *RuntimeStatefulSet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RuntimeStatefulSet.ProtoReflect.Descriptor instead.
 func (*RuntimeStatefulSet) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{36}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *RuntimeStatefulSet) GetDesiredReplicas() int32 {
@@ -3250,7 +2512,7 @@ type InstanceRuntime struct {
 
 func (x *InstanceRuntime) Reset() {
 	*x = InstanceRuntime{}
-	mi := &file_instance_v1_instance_proto_msgTypes[37]
+	mi := &file_instance_v1_instance_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3262,7 +2524,7 @@ func (x *InstanceRuntime) String() string {
 func (*InstanceRuntime) ProtoMessage() {}
 
 func (x *InstanceRuntime) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[37]
+	mi := &file_instance_v1_instance_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3275,7 +2537,7 @@ func (x *InstanceRuntime) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceRuntime.ProtoReflect.Descriptor instead.
 func (*InstanceRuntime) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{37}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *InstanceRuntime) GetInstanceId() string {
@@ -3326,7 +2588,7 @@ type InstanceEvent struct {
 
 func (x *InstanceEvent) Reset() {
 	*x = InstanceEvent{}
-	mi := &file_instance_v1_instance_proto_msgTypes[38]
+	mi := &file_instance_v1_instance_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3338,7 +2600,7 @@ func (x *InstanceEvent) String() string {
 func (*InstanceEvent) ProtoMessage() {}
 
 func (x *InstanceEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[38]
+	mi := &file_instance_v1_instance_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3351,7 +2613,7 @@ func (x *InstanceEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceEvent.ProtoReflect.Descriptor instead.
 func (*InstanceEvent) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{38}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *InstanceEvent) GetType() string {
@@ -3401,7 +2663,7 @@ type InstanceEvents struct {
 
 func (x *InstanceEvents) Reset() {
 	*x = InstanceEvents{}
-	mi := &file_instance_v1_instance_proto_msgTypes[39]
+	mi := &file_instance_v1_instance_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3413,7 +2675,7 @@ func (x *InstanceEvents) String() string {
 func (*InstanceEvents) ProtoMessage() {}
 
 func (x *InstanceEvents) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[39]
+	mi := &file_instance_v1_instance_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3426,7 +2688,7 @@ func (x *InstanceEvents) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceEvents.ProtoReflect.Descriptor instead.
 func (*InstanceEvents) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{39}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *InstanceEvents) GetPodUid() string {
@@ -3469,7 +2731,7 @@ type StreamInstanceLogsRequest struct {
 
 func (x *StreamInstanceLogsRequest) Reset() {
 	*x = StreamInstanceLogsRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[40]
+	mi := &file_instance_v1_instance_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3481,7 +2743,7 @@ func (x *StreamInstanceLogsRequest) String() string {
 func (*StreamInstanceLogsRequest) ProtoMessage() {}
 
 func (x *StreamInstanceLogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[40]
+	mi := &file_instance_v1_instance_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3494,7 +2756,7 @@ func (x *StreamInstanceLogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamInstanceLogsRequest.ProtoReflect.Descriptor instead.
 func (*StreamInstanceLogsRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{40}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *StreamInstanceLogsRequest) GetTenantId() string {
@@ -3536,7 +2798,7 @@ type InstanceLogFrame struct {
 
 func (x *InstanceLogFrame) Reset() {
 	*x = InstanceLogFrame{}
-	mi := &file_instance_v1_instance_proto_msgTypes[41]
+	mi := &file_instance_v1_instance_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3548,7 +2810,7 @@ func (x *InstanceLogFrame) String() string {
 func (*InstanceLogFrame) ProtoMessage() {}
 
 func (x *InstanceLogFrame) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[41]
+	mi := &file_instance_v1_instance_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3561,7 +2823,7 @@ func (x *InstanceLogFrame) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceLogFrame.ProtoReflect.Descriptor instead.
 func (*InstanceLogFrame) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{41}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *InstanceLogFrame) GetKind() InstanceLogFrame_Kind {
@@ -3595,7 +2857,7 @@ type GetOperationRequest struct {
 
 func (x *GetOperationRequest) Reset() {
 	*x = GetOperationRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[42]
+	mi := &file_instance_v1_instance_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3607,7 +2869,7 @@ func (x *GetOperationRequest) String() string {
 func (*GetOperationRequest) ProtoMessage() {}
 
 func (x *GetOperationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[42]
+	mi := &file_instance_v1_instance_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3620,7 +2882,7 @@ func (x *GetOperationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOperationRequest.ProtoReflect.Descriptor instead.
 func (*GetOperationRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{42}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *GetOperationRequest) GetTenantId() string {
@@ -3651,7 +2913,7 @@ type Operation struct {
 
 func (x *Operation) Reset() {
 	*x = Operation{}
-	mi := &file_instance_v1_instance_proto_msgTypes[43]
+	mi := &file_instance_v1_instance_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3663,7 +2925,7 @@ func (x *Operation) String() string {
 func (*Operation) ProtoMessage() {}
 
 func (x *Operation) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[43]
+	mi := &file_instance_v1_instance_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3676,7 +2938,7 @@ func (x *Operation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Operation.ProtoReflect.Descriptor instead.
 func (*Operation) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{43}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *Operation) GetId() string {
@@ -3732,7 +2994,7 @@ type ResolveTerminalTargetRequest struct {
 
 func (x *ResolveTerminalTargetRequest) Reset() {
 	*x = ResolveTerminalTargetRequest{}
-	mi := &file_instance_v1_instance_proto_msgTypes[44]
+	mi := &file_instance_v1_instance_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3744,7 +3006,7 @@ func (x *ResolveTerminalTargetRequest) String() string {
 func (*ResolveTerminalTargetRequest) ProtoMessage() {}
 
 func (x *ResolveTerminalTargetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[44]
+	mi := &file_instance_v1_instance_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3757,7 +3019,7 @@ func (x *ResolveTerminalTargetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ResolveTerminalTargetRequest.ProtoReflect.Descriptor instead.
 func (*ResolveTerminalTargetRequest) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{44}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *ResolveTerminalTargetRequest) GetTenantId() string {
@@ -3795,7 +3057,7 @@ type InstanceMetricScope struct {
 
 func (x *InstanceMetricScope) Reset() {
 	*x = InstanceMetricScope{}
-	mi := &file_instance_v1_instance_proto_msgTypes[45]
+	mi := &file_instance_v1_instance_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3807,7 +3069,7 @@ func (x *InstanceMetricScope) String() string {
 func (*InstanceMetricScope) ProtoMessage() {}
 
 func (x *InstanceMetricScope) ProtoReflect() protoreflect.Message {
-	mi := &file_instance_v1_instance_proto_msgTypes[45]
+	mi := &file_instance_v1_instance_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3820,7 +3082,7 @@ func (x *InstanceMetricScope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InstanceMetricScope.ProtoReflect.Descriptor instead.
 func (*InstanceMetricScope) Descriptor() ([]byte, []int) {
-	return file_instance_v1_instance_proto_rawDescGZIP(), []int{45}
+	return file_instance_v1_instance_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *InstanceMetricScope) GetTenantId() string {
@@ -3862,7 +3124,7 @@ var File_instance_v1_instance_proto protoreflect.FileDescriptor
 
 const file_instance_v1_instance_proto_rawDesc = "" +
 	"\n" +
-	"\x1ainstance/v1/instance.proto\x12\vinstance.v1\x1a accelerator/v1/accelerator.proto\x1a$accelerator/command/v1/command.proto\x1a#instance/terminal/v1/terminal.proto\x1a google/protobuf/field_mask.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xb3\x02\n" +
+	"\x1ainstance/v1/instance.proto\x12\vinstance.v1\x1a accelerator/v1/accelerator.proto\x1a$accelerator/command/v1/command.proto\x1a#instance/terminal/v1/terminal.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb3\x02\n" +
 	"\x11SchedulingOptions\x12V\n" +
 	"\rpod_placement\x18\x01 \x01(\x0e2+.instance.v1.SchedulingOptions.PodPlacementH\x00R\rpod_placement\x88\x01\x01\x125\n" +
 	"\x13priority_class_name\x18\x02 \x01(\tH\x01R\x13priority_class_name\x88\x01\x01\"e\n" +
@@ -3982,87 +3244,7 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\x15memory_mib_per_device\x18\t \x01(\x03R\x15memory_mib_per_device\x12*\n" +
 	"\x10memory_mib_total\x18\n" +
 	" \x01(\x03R\x10memory_mib_total\x12.\n" +
-	"\x12core_limit_percent\x18\b \x01(\rR\x12core_limit_percentJ\x04\b\x06\x10\aJ\x04\b\a\x10\bR\x1cshared_memory_mib_per_deviceR\x17shared_memory_mib_total\"\x9e\x04\n" +
-	"\x06Preset\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12\x12\n" +
-	"\x04code\x18\b \x01(\tR\x04code\x12 \n" +
-	"\vdescription\x18\t \x01(\tR\vdescription\x12\"\n" +
-	"\fcompute_type\x18\n" +
-	" \x01(\tR\fcompute_type\x12\x1e\n" +
-	"\n" +
-	"cpu_millis\x18\v \x01(\x03R\n" +
-	"cpu_millis\x12\x1e\n" +
-	"\n" +
-	"memory_mib\x18\f \x01(\x03R\n" +
-	"memory_mib\x12\x18\n" +
-	"\aenabled\x18\r \x01(\bR\aenabled\x121\n" +
-	"\x03gpu\x18\x0e \x01(\v2\x1f.instance.v1.GpuPresetReferenceR\x03gpu\x12:\n" +
-	"\n" +
-	"created_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"created_at\x12:\n" +
-	"\n" +
-	"updated_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"updated_at\x12\x1e\n" +
-	"\n" +
-	"selectable\x18\x11 \x01(\bR\n" +
-	"selectable\x12.\n" +
-	"\x12unavailable_reason\x18\x12 \x01(\tR\x12unavailable_reasonJ\x04\b\x02\x10\x03J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06J\x04\b\x06\x10\aJ\x04\b\a\x10\bR\aversionR\x03cpuR\x06memoryR\rinstance_type\"\x98\x02\n" +
-	"\n" +
-	"PresetData\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\tR\x04code\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\"\n" +
-	"\fcompute_type\x18\x04 \x01(\tR\fcompute_type\x12\x1e\n" +
-	"\n" +
-	"cpu_millis\x18\x05 \x01(\x03R\n" +
-	"cpu_millis\x12\x1e\n" +
-	"\n" +
-	"memory_mib\x18\x06 \x01(\x03R\n" +
-	"memory_mib\x12\x1d\n" +
-	"\aenabled\x18\a \x01(\bH\x00R\aenabled\x88\x01\x01\x121\n" +
-	"\x03gpu\x18\b \x01(\v2\x1f.instance.v1.GpuPresetReferenceR\x03gpuB\n" +
-	"\n" +
-	"\b_enabled\"\x9b\x02\n" +
-	"\x12ListPresetsRequest\x12\x1b\n" +
-	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x03 \x01(\rR\bpageSize\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x12\x12\n" +
-	"\x04code\x18\x05 \x01(\tR\x04code\x12!\n" +
-	"\fcompute_type\x18\x06 \x01(\tR\vcomputeType\x12\x19\n" +
-	"\bgpu_mode\x18\a \x01(\tR\agpuMode\x12Q\n" +
-	"\x14allowed_gpu_profiles\x18\b \x03(\v2\x1f.instance.v1.GpuPresetReferenceR\x12allowedGpuProfiles\"\x84\x01\n" +
-	"\x13ListPresetsResponse\x12)\n" +
-	"\x05items\x18\x01 \x03(\v2\x13.instance.v1.PresetR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total\x12,\n" +
-	"\x12has_gpu_candidates\x18\x03 \x01(\bR\x10hasGpuCandidates\"\xdb\x01\n" +
-	"\x17AdminListPresetsRequest\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\rR\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\rR\bpageSize\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12\x12\n" +
-	"\x04code\x18\x04 \x01(\tR\x04code\x12!\n" +
-	"\fcompute_type\x18\x05 \x01(\tR\vcomputeType\x12\x19\n" +
-	"\bgpu_mode\x18\x06 \x01(\tR\agpuMode\x12\x1d\n" +
-	"\aenabled\x18\a \x01(\bH\x00R\aenabled\x88\x01\x01B\n" +
-	"\n" +
-	"\b_enabled\"'\n" +
-	"\x15AdminGetPresetRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"G\n" +
-	"\x18AdminCreatePresetRequest\x12+\n" +
-	"\x04data\x18\x01 \x01(\v2\x17.instance.v1.PresetDataR\x04data\"\x94\x01\n" +
-	"\x18AdminUpdatePresetRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12+\n" +
-	"\x04data\x18\x02 \x01(\v2\x17.instance.v1.PresetDataR\x04data\x12;\n" +
-	"\vupdate_mask\x18\x03 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
-	"updateMask\"Y\n" +
-	"\x1cAdminSetPresetEnabledRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
-	"\aenabled\x18\x02 \x01(\bH\x00R\aenabled\x88\x01\x01B\n" +
-	"\n" +
-	"\b_enabled\"*\n" +
-	"\x18AdminDeletePresetRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\x99\x02\n" +
+	"\x12core_limit_percent\x18\b \x01(\rR\x12core_limit_percentJ\x04\b\x06\x10\aJ\x04\b\a\x10\bR\x1cshared_memory_mib_per_deviceR\x17shared_memory_mib_total\"\x99\x02\n" +
 	"\x18ResolveCreateSpecRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x123\n" +
 	"\x04data\x18\x02 \x01(\v2\x1f.instance.v1.CreateInstanceDataR\x04data\x12\x1c\n" +
@@ -4276,18 +3458,12 @@ const file_instance_v1_instance_proto_rawDesc = "" +
 	"\n" +
 	"cluster_id\x18\x03 \x01(\tR\tclusterId\x12\x1c\n" +
 	"\tnamespace\x18\x04 \x01(\tR\tnamespace\x12%\n" +
-	"\x0econtainer_name\x18\x05 \x01(\tR\rcontainerName2\xec\x0e\n" +
-	"\x0fInstanceService\x12Z\n" +
-	"\x10AdminListPresets\x12$.instance.v1.AdminListPresetsRequest\x1a .instance.v1.ListPresetsResponse\x12I\n" +
-	"\x0eAdminGetPreset\x12\".instance.v1.AdminGetPresetRequest\x1a\x13.instance.v1.Preset\x12O\n" +
-	"\x11AdminCreatePreset\x12%.instance.v1.AdminCreatePresetRequest\x1a\x13.instance.v1.Preset\x12O\n" +
-	"\x11AdminUpdatePreset\x12%.instance.v1.AdminUpdatePresetRequest\x1a\x13.instance.v1.Preset\x12W\n" +
-	"\x15AdminSetPresetEnabled\x12).instance.v1.AdminSetPresetEnabledRequest\x1a\x13.instance.v1.Preset\x12R\n" +
-	"\x11AdminDeletePreset\x12%.instance.v1.AdminDeletePresetRequest\x1a\x16.google.protobuf.Empty\x12S\n" +
+	"\x0econtainer_name\x18\x05 \x01(\tR\rcontainerName2\xa4\n" +
+	"\n" +
+	"\x0fInstanceService\x12S\n" +
 	"\x12GetInstanceRuntime\x12\x1f.instance.v1.GetInstanceRequest\x1a\x1c.instance.v1.InstanceRuntime\x12R\n" +
 	"\x12ListInstanceEvents\x12\x1f.instance.v1.GetInstanceRequest\x1a\x1b.instance.v1.InstanceEvents\x12]\n" +
-	"\x12StreamInstanceLogs\x12&.instance.v1.StreamInstanceLogsRequest\x1a\x1d.instance.v1.InstanceLogFrame0\x01\x12P\n" +
-	"\vListPresets\x12\x1f.instance.v1.ListPresetsRequest\x1a .instance.v1.ListPresetsResponse\x12b\n" +
+	"\x12StreamInstanceLogs\x12&.instance.v1.StreamInstanceLogsRequest\x1a\x1d.instance.v1.InstanceLogFrame0\x01\x12b\n" +
 	"\x11ListMountablePVCs\x12%.instance.v1.ListMountablePVCsRequest\x1a&.instance.v1.ListMountablePVCsResponse\x12_\n" +
 	"\x18GetInstanceConfiguration\x12\x1f.instance.v1.GetInstanceRequest\x1a\".instance.v1.InstanceConfiguration\x12S\n" +
 	"\x11ResolveCreateSpec\x12%.instance.v1.ResolveCreateSpecRequest\x1a\x17.instance.v1.CreateSpec\x12P\n" +
@@ -4314,7 +3490,7 @@ func file_instance_v1_instance_proto_rawDescGZIP() []byte {
 }
 
 var file_instance_v1_instance_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 52)
+var file_instance_v1_instance_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
 var file_instance_v1_instance_proto_goTypes = []any{
 	(SchedulingOptions_PodPlacement)(0),  // 0: instance.v1.SchedulingOptions.PodPlacement
 	(InstanceLogFrame_Kind)(0),           // 1: instance.v1.InstanceLogFrame.Kind
@@ -4330,157 +3506,122 @@ var file_instance_v1_instance_proto_goTypes = []any{
 	(*InstanceConfiguration)(nil),        // 11: instance.v1.InstanceConfiguration
 	(*GpuPresetReference)(nil),           // 12: instance.v1.GpuPresetReference
 	(*GpuSummary)(nil),                   // 13: instance.v1.GpuSummary
-	(*Preset)(nil),                       // 14: instance.v1.Preset
-	(*PresetData)(nil),                   // 15: instance.v1.PresetData
-	(*ListPresetsRequest)(nil),           // 16: instance.v1.ListPresetsRequest
-	(*ListPresetsResponse)(nil),          // 17: instance.v1.ListPresetsResponse
-	(*AdminListPresetsRequest)(nil),      // 18: instance.v1.AdminListPresetsRequest
-	(*AdminGetPresetRequest)(nil),        // 19: instance.v1.AdminGetPresetRequest
-	(*AdminCreatePresetRequest)(nil),     // 20: instance.v1.AdminCreatePresetRequest
-	(*AdminUpdatePresetRequest)(nil),     // 21: instance.v1.AdminUpdatePresetRequest
-	(*AdminSetPresetEnabledRequest)(nil), // 22: instance.v1.AdminSetPresetEnabledRequest
-	(*AdminDeletePresetRequest)(nil),     // 23: instance.v1.AdminDeletePresetRequest
-	(*ResolveCreateSpecRequest)(nil),     // 24: instance.v1.ResolveCreateSpecRequest
-	(*CreateSpec)(nil),                   // 25: instance.v1.CreateSpec
-	(*CommandContext)(nil),               // 26: instance.v1.CommandContext
-	(*AcceptCreateRequest)(nil),          // 27: instance.v1.AcceptCreateRequest
-	(*AcceptDeleteRequest)(nil),          // 28: instance.v1.AcceptDeleteRequest
-	(*ChangeInstanceRequest)(nil),        // 29: instance.v1.ChangeInstanceRequest
-	(*OperationResponse)(nil),            // 30: instance.v1.OperationResponse
-	(*GetInstanceRequest)(nil),           // 31: instance.v1.GetInstanceRequest
-	(*ListInstancesRequest)(nil),         // 32: instance.v1.ListInstancesRequest
-	(*ListInstancesResponse)(nil),        // 33: instance.v1.ListInstancesResponse
-	(*Instance)(nil),                     // 34: instance.v1.Instance
-	(*EnvironmentSource)(nil),            // 35: instance.v1.EnvironmentSource
-	(*RuntimeMount)(nil),                 // 36: instance.v1.RuntimeMount
-	(*RuntimePod)(nil),                   // 37: instance.v1.RuntimePod
-	(*RuntimeStatefulSet)(nil),           // 38: instance.v1.RuntimeStatefulSet
-	(*InstanceRuntime)(nil),              // 39: instance.v1.InstanceRuntime
-	(*InstanceEvent)(nil),                // 40: instance.v1.InstanceEvent
-	(*InstanceEvents)(nil),               // 41: instance.v1.InstanceEvents
-	(*StreamInstanceLogsRequest)(nil),    // 42: instance.v1.StreamInstanceLogsRequest
-	(*InstanceLogFrame)(nil),             // 43: instance.v1.InstanceLogFrame
-	(*GetOperationRequest)(nil),          // 44: instance.v1.GetOperationRequest
-	(*Operation)(nil),                    // 45: instance.v1.Operation
-	(*ResolveTerminalTargetRequest)(nil), // 46: instance.v1.ResolveTerminalTargetRequest
-	(*InstanceMetricScope)(nil),          // 47: instance.v1.InstanceMetricScope
-	nil,                                  // 48: instance.v1.CreateInstanceData.LabelsEntry
-	nil,                                  // 49: instance.v1.CreateInstanceData.AnnotationsEntry
-	nil,                                  // 50: instance.v1.InstanceConfiguration.LabelsEntry
-	nil,                                  // 51: instance.v1.InstanceConfiguration.AnnotationsEntry
-	nil,                                  // 52: instance.v1.CreateSpec.LabelsEntry
-	nil,                                  // 53: instance.v1.CreateSpec.AnnotationsEntry
-	(v1.SupplyMode)(0),                   // 54: accelerator.v1.SupplyMode
-	(*timestamppb.Timestamp)(nil),        // 55: google.protobuf.Timestamp
-	(*fieldmaskpb.FieldMask)(nil),        // 56: google.protobuf.FieldMask
-	(*v1.GpuExecution)(nil),              // 57: accelerator.v1.GpuExecution
-	(*v1.GpuDisplay)(nil),                // 58: accelerator.v1.GpuDisplay
-	(*v11.DurableOwnerAck)(nil),          // 59: accelerator.command.v1.DurableOwnerAck
-	(*emptypb.Empty)(nil),                // 60: google.protobuf.Empty
-	(*v12.TerminalTarget)(nil),           // 61: instance.terminal.v1.TerminalTarget
+	(*ResolveCreateSpecRequest)(nil),     // 14: instance.v1.ResolveCreateSpecRequest
+	(*CreateSpec)(nil),                   // 15: instance.v1.CreateSpec
+	(*CommandContext)(nil),               // 16: instance.v1.CommandContext
+	(*AcceptCreateRequest)(nil),          // 17: instance.v1.AcceptCreateRequest
+	(*AcceptDeleteRequest)(nil),          // 18: instance.v1.AcceptDeleteRequest
+	(*ChangeInstanceRequest)(nil),        // 19: instance.v1.ChangeInstanceRequest
+	(*OperationResponse)(nil),            // 20: instance.v1.OperationResponse
+	(*GetInstanceRequest)(nil),           // 21: instance.v1.GetInstanceRequest
+	(*ListInstancesRequest)(nil),         // 22: instance.v1.ListInstancesRequest
+	(*ListInstancesResponse)(nil),        // 23: instance.v1.ListInstancesResponse
+	(*Instance)(nil),                     // 24: instance.v1.Instance
+	(*EnvironmentSource)(nil),            // 25: instance.v1.EnvironmentSource
+	(*RuntimeMount)(nil),                 // 26: instance.v1.RuntimeMount
+	(*RuntimePod)(nil),                   // 27: instance.v1.RuntimePod
+	(*RuntimeStatefulSet)(nil),           // 28: instance.v1.RuntimeStatefulSet
+	(*InstanceRuntime)(nil),              // 29: instance.v1.InstanceRuntime
+	(*InstanceEvent)(nil),                // 30: instance.v1.InstanceEvent
+	(*InstanceEvents)(nil),               // 31: instance.v1.InstanceEvents
+	(*StreamInstanceLogsRequest)(nil),    // 32: instance.v1.StreamInstanceLogsRequest
+	(*InstanceLogFrame)(nil),             // 33: instance.v1.InstanceLogFrame
+	(*GetOperationRequest)(nil),          // 34: instance.v1.GetOperationRequest
+	(*Operation)(nil),                    // 35: instance.v1.Operation
+	(*ResolveTerminalTargetRequest)(nil), // 36: instance.v1.ResolveTerminalTargetRequest
+	(*InstanceMetricScope)(nil),          // 37: instance.v1.InstanceMetricScope
+	nil,                                  // 38: instance.v1.CreateInstanceData.LabelsEntry
+	nil,                                  // 39: instance.v1.CreateInstanceData.AnnotationsEntry
+	nil,                                  // 40: instance.v1.InstanceConfiguration.LabelsEntry
+	nil,                                  // 41: instance.v1.InstanceConfiguration.AnnotationsEntry
+	nil,                                  // 42: instance.v1.CreateSpec.LabelsEntry
+	nil,                                  // 43: instance.v1.CreateSpec.AnnotationsEntry
+	(v1.SupplyMode)(0),                   // 44: accelerator.v1.SupplyMode
+	(*v1.GpuExecution)(nil),              // 45: accelerator.v1.GpuExecution
+	(*v1.GpuDisplay)(nil),                // 46: accelerator.v1.GpuDisplay
+	(*v11.DurableOwnerAck)(nil),          // 47: accelerator.command.v1.DurableOwnerAck
+	(*timestamppb.Timestamp)(nil),        // 48: google.protobuf.Timestamp
+	(*v12.TerminalTarget)(nil),           // 49: instance.terminal.v1.TerminalTarget
 }
 var file_instance_v1_instance_proto_depIdxs = []int32{
 	0,  // 0: instance.v1.SchedulingOptions.pod_placement:type_name -> instance.v1.SchedulingOptions.PodPlacement
 	2,  // 1: instance.v1.CreateInstanceData.scheduling:type_name -> instance.v1.SchedulingOptions
 	4,  // 2: instance.v1.CreateInstanceData.volume_mounts:type_name -> instance.v1.VolumeMount
 	7,  // 3: instance.v1.CreateInstanceData.network:type_name -> instance.v1.NetworkSelection
-	48, // 4: instance.v1.CreateInstanceData.labels:type_name -> instance.v1.CreateInstanceData.LabelsEntry
-	49, // 5: instance.v1.CreateInstanceData.annotations:type_name -> instance.v1.CreateInstanceData.AnnotationsEntry
+	38, // 4: instance.v1.CreateInstanceData.labels:type_name -> instance.v1.CreateInstanceData.LabelsEntry
+	39, // 5: instance.v1.CreateInstanceData.annotations:type_name -> instance.v1.CreateInstanceData.AnnotationsEntry
 	6,  // 6: instance.v1.CreateInstanceData.env:type_name -> instance.v1.InstanceEnvVar
 	9,  // 7: instance.v1.ListMountablePVCsResponse.items:type_name -> instance.v1.MountablePVC
 	4,  // 8: instance.v1.InstanceConfiguration.volume_mounts:type_name -> instance.v1.VolumeMount
 	7,  // 9: instance.v1.InstanceConfiguration.network:type_name -> instance.v1.NetworkSelection
-	50, // 10: instance.v1.InstanceConfiguration.labels:type_name -> instance.v1.InstanceConfiguration.LabelsEntry
-	51, // 11: instance.v1.InstanceConfiguration.annotations:type_name -> instance.v1.InstanceConfiguration.AnnotationsEntry
+	40, // 10: instance.v1.InstanceConfiguration.labels:type_name -> instance.v1.InstanceConfiguration.LabelsEntry
+	41, // 11: instance.v1.InstanceConfiguration.annotations:type_name -> instance.v1.InstanceConfiguration.AnnotationsEntry
 	6,  // 12: instance.v1.InstanceConfiguration.env:type_name -> instance.v1.InstanceEnvVar
-	54, // 13: instance.v1.GpuPresetReference.mode:type_name -> accelerator.v1.SupplyMode
-	54, // 14: instance.v1.GpuSummary.mode:type_name -> accelerator.v1.SupplyMode
-	12, // 15: instance.v1.Preset.gpu:type_name -> instance.v1.GpuPresetReference
-	55, // 16: instance.v1.Preset.created_at:type_name -> google.protobuf.Timestamp
-	55, // 17: instance.v1.Preset.updated_at:type_name -> google.protobuf.Timestamp
-	12, // 18: instance.v1.PresetData.gpu:type_name -> instance.v1.GpuPresetReference
-	12, // 19: instance.v1.ListPresetsRequest.allowed_gpu_profiles:type_name -> instance.v1.GpuPresetReference
-	14, // 20: instance.v1.ListPresetsResponse.items:type_name -> instance.v1.Preset
-	15, // 21: instance.v1.AdminCreatePresetRequest.data:type_name -> instance.v1.PresetData
-	15, // 22: instance.v1.AdminUpdatePresetRequest.data:type_name -> instance.v1.PresetData
-	56, // 23: instance.v1.AdminUpdatePresetRequest.update_mask:type_name -> google.protobuf.FieldMask
-	3,  // 24: instance.v1.ResolveCreateSpecRequest.data:type_name -> instance.v1.CreateInstanceData
-	2,  // 25: instance.v1.ResolveCreateSpecRequest.scheduling_defaults:type_name -> instance.v1.SchedulingOptions
-	2,  // 26: instance.v1.CreateSpec.scheduling:type_name -> instance.v1.SchedulingOptions
-	57, // 27: instance.v1.CreateSpec.gpu_execution:type_name -> accelerator.v1.GpuExecution
-	58, // 28: instance.v1.CreateSpec.gpu_display:type_name -> accelerator.v1.GpuDisplay
-	12, // 29: instance.v1.CreateSpec.gpu_selection:type_name -> instance.v1.GpuPresetReference
-	5,  // 30: instance.v1.CreateSpec.volume_mounts:type_name -> instance.v1.FrozenVolumeMount
-	7,  // 31: instance.v1.CreateSpec.network:type_name -> instance.v1.NetworkSelection
-	52, // 32: instance.v1.CreateSpec.labels:type_name -> instance.v1.CreateSpec.LabelsEntry
-	53, // 33: instance.v1.CreateSpec.annotations:type_name -> instance.v1.CreateSpec.AnnotationsEntry
-	6,  // 34: instance.v1.CreateSpec.env:type_name -> instance.v1.InstanceEnvVar
-	26, // 35: instance.v1.AcceptCreateRequest.context:type_name -> instance.v1.CommandContext
-	25, // 36: instance.v1.AcceptCreateRequest.spec:type_name -> instance.v1.CreateSpec
-	26, // 37: instance.v1.AcceptDeleteRequest.context:type_name -> instance.v1.CommandContext
-	59, // 38: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.command.v1.DurableOwnerAck
-	34, // 39: instance.v1.ListInstancesResponse.items:type_name -> instance.v1.Instance
-	55, // 40: instance.v1.Instance.created_at:type_name -> google.protobuf.Timestamp
-	13, // 41: instance.v1.Instance.gpu_summary:type_name -> instance.v1.GpuSummary
-	2,  // 42: instance.v1.Instance.scheduling:type_name -> instance.v1.SchedulingOptions
-	35, // 43: instance.v1.RuntimePod.environment_sources:type_name -> instance.v1.EnvironmentSource
-	36, // 44: instance.v1.RuntimePod.mounts:type_name -> instance.v1.RuntimeMount
-	55, // 45: instance.v1.InstanceRuntime.observed_at:type_name -> google.protobuf.Timestamp
-	37, // 46: instance.v1.InstanceRuntime.pod:type_name -> instance.v1.RuntimePod
-	38, // 47: instance.v1.InstanceRuntime.stateful_set:type_name -> instance.v1.RuntimeStatefulSet
-	55, // 48: instance.v1.InstanceEvent.last_occurred_at:type_name -> google.protobuf.Timestamp
-	55, // 49: instance.v1.InstanceEvents.observed_at:type_name -> google.protobuf.Timestamp
-	40, // 50: instance.v1.InstanceEvents.events:type_name -> instance.v1.InstanceEvent
-	1,  // 51: instance.v1.InstanceLogFrame.kind:type_name -> instance.v1.InstanceLogFrame.Kind
-	18, // 52: instance.v1.InstanceService.AdminListPresets:input_type -> instance.v1.AdminListPresetsRequest
-	19, // 53: instance.v1.InstanceService.AdminGetPreset:input_type -> instance.v1.AdminGetPresetRequest
-	20, // 54: instance.v1.InstanceService.AdminCreatePreset:input_type -> instance.v1.AdminCreatePresetRequest
-	21, // 55: instance.v1.InstanceService.AdminUpdatePreset:input_type -> instance.v1.AdminUpdatePresetRequest
-	22, // 56: instance.v1.InstanceService.AdminSetPresetEnabled:input_type -> instance.v1.AdminSetPresetEnabledRequest
-	23, // 57: instance.v1.InstanceService.AdminDeletePreset:input_type -> instance.v1.AdminDeletePresetRequest
-	31, // 58: instance.v1.InstanceService.GetInstanceRuntime:input_type -> instance.v1.GetInstanceRequest
-	31, // 59: instance.v1.InstanceService.ListInstanceEvents:input_type -> instance.v1.GetInstanceRequest
-	42, // 60: instance.v1.InstanceService.StreamInstanceLogs:input_type -> instance.v1.StreamInstanceLogsRequest
-	16, // 61: instance.v1.InstanceService.ListPresets:input_type -> instance.v1.ListPresetsRequest
-	8,  // 62: instance.v1.InstanceService.ListMountablePVCs:input_type -> instance.v1.ListMountablePVCsRequest
-	31, // 63: instance.v1.InstanceService.GetInstanceConfiguration:input_type -> instance.v1.GetInstanceRequest
-	24, // 64: instance.v1.InstanceService.ResolveCreateSpec:input_type -> instance.v1.ResolveCreateSpecRequest
-	27, // 65: instance.v1.InstanceService.AcceptCreate:input_type -> instance.v1.AcceptCreateRequest
-	28, // 66: instance.v1.InstanceService.AcceptDelete:input_type -> instance.v1.AcceptDeleteRequest
-	29, // 67: instance.v1.InstanceService.Start:input_type -> instance.v1.ChangeInstanceRequest
-	29, // 68: instance.v1.InstanceService.Stop:input_type -> instance.v1.ChangeInstanceRequest
-	31, // 69: instance.v1.InstanceService.GetInstance:input_type -> instance.v1.GetInstanceRequest
-	31, // 70: instance.v1.InstanceService.ResolveInstanceMetricScope:input_type -> instance.v1.GetInstanceRequest
-	32, // 71: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
-	44, // 72: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
-	46, // 73: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
-	17, // 74: instance.v1.InstanceService.AdminListPresets:output_type -> instance.v1.ListPresetsResponse
-	14, // 75: instance.v1.InstanceService.AdminGetPreset:output_type -> instance.v1.Preset
-	14, // 76: instance.v1.InstanceService.AdminCreatePreset:output_type -> instance.v1.Preset
-	14, // 77: instance.v1.InstanceService.AdminUpdatePreset:output_type -> instance.v1.Preset
-	14, // 78: instance.v1.InstanceService.AdminSetPresetEnabled:output_type -> instance.v1.Preset
-	60, // 79: instance.v1.InstanceService.AdminDeletePreset:output_type -> google.protobuf.Empty
-	39, // 80: instance.v1.InstanceService.GetInstanceRuntime:output_type -> instance.v1.InstanceRuntime
-	41, // 81: instance.v1.InstanceService.ListInstanceEvents:output_type -> instance.v1.InstanceEvents
-	43, // 82: instance.v1.InstanceService.StreamInstanceLogs:output_type -> instance.v1.InstanceLogFrame
-	17, // 83: instance.v1.InstanceService.ListPresets:output_type -> instance.v1.ListPresetsResponse
-	10, // 84: instance.v1.InstanceService.ListMountablePVCs:output_type -> instance.v1.ListMountablePVCsResponse
-	11, // 85: instance.v1.InstanceService.GetInstanceConfiguration:output_type -> instance.v1.InstanceConfiguration
-	25, // 86: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateSpec
-	30, // 87: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
-	30, // 88: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
-	30, // 89: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
-	30, // 90: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
-	34, // 91: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
-	47, // 92: instance.v1.InstanceService.ResolveInstanceMetricScope:output_type -> instance.v1.InstanceMetricScope
-	33, // 93: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
-	45, // 94: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
-	61, // 95: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
-	74, // [74:96] is the sub-list for method output_type
-	52, // [52:74] is the sub-list for method input_type
-	52, // [52:52] is the sub-list for extension type_name
-	52, // [52:52] is the sub-list for extension extendee
-	0,  // [0:52] is the sub-list for field type_name
+	44, // 13: instance.v1.GpuPresetReference.mode:type_name -> accelerator.v1.SupplyMode
+	44, // 14: instance.v1.GpuSummary.mode:type_name -> accelerator.v1.SupplyMode
+	3,  // 15: instance.v1.ResolveCreateSpecRequest.data:type_name -> instance.v1.CreateInstanceData
+	2,  // 16: instance.v1.ResolveCreateSpecRequest.scheduling_defaults:type_name -> instance.v1.SchedulingOptions
+	2,  // 17: instance.v1.CreateSpec.scheduling:type_name -> instance.v1.SchedulingOptions
+	45, // 18: instance.v1.CreateSpec.gpu_execution:type_name -> accelerator.v1.GpuExecution
+	46, // 19: instance.v1.CreateSpec.gpu_display:type_name -> accelerator.v1.GpuDisplay
+	12, // 20: instance.v1.CreateSpec.gpu_selection:type_name -> instance.v1.GpuPresetReference
+	5,  // 21: instance.v1.CreateSpec.volume_mounts:type_name -> instance.v1.FrozenVolumeMount
+	7,  // 22: instance.v1.CreateSpec.network:type_name -> instance.v1.NetworkSelection
+	42, // 23: instance.v1.CreateSpec.labels:type_name -> instance.v1.CreateSpec.LabelsEntry
+	43, // 24: instance.v1.CreateSpec.annotations:type_name -> instance.v1.CreateSpec.AnnotationsEntry
+	6,  // 25: instance.v1.CreateSpec.env:type_name -> instance.v1.InstanceEnvVar
+	16, // 26: instance.v1.AcceptCreateRequest.context:type_name -> instance.v1.CommandContext
+	15, // 27: instance.v1.AcceptCreateRequest.spec:type_name -> instance.v1.CreateSpec
+	16, // 28: instance.v1.AcceptDeleteRequest.context:type_name -> instance.v1.CommandContext
+	47, // 29: instance.v1.OperationResponse.durable_owner_ack:type_name -> accelerator.command.v1.DurableOwnerAck
+	24, // 30: instance.v1.ListInstancesResponse.items:type_name -> instance.v1.Instance
+	48, // 31: instance.v1.Instance.created_at:type_name -> google.protobuf.Timestamp
+	13, // 32: instance.v1.Instance.gpu_summary:type_name -> instance.v1.GpuSummary
+	2,  // 33: instance.v1.Instance.scheduling:type_name -> instance.v1.SchedulingOptions
+	25, // 34: instance.v1.RuntimePod.environment_sources:type_name -> instance.v1.EnvironmentSource
+	26, // 35: instance.v1.RuntimePod.mounts:type_name -> instance.v1.RuntimeMount
+	48, // 36: instance.v1.InstanceRuntime.observed_at:type_name -> google.protobuf.Timestamp
+	27, // 37: instance.v1.InstanceRuntime.pod:type_name -> instance.v1.RuntimePod
+	28, // 38: instance.v1.InstanceRuntime.stateful_set:type_name -> instance.v1.RuntimeStatefulSet
+	48, // 39: instance.v1.InstanceEvent.last_occurred_at:type_name -> google.protobuf.Timestamp
+	48, // 40: instance.v1.InstanceEvents.observed_at:type_name -> google.protobuf.Timestamp
+	30, // 41: instance.v1.InstanceEvents.events:type_name -> instance.v1.InstanceEvent
+	1,  // 42: instance.v1.InstanceLogFrame.kind:type_name -> instance.v1.InstanceLogFrame.Kind
+	21, // 43: instance.v1.InstanceService.GetInstanceRuntime:input_type -> instance.v1.GetInstanceRequest
+	21, // 44: instance.v1.InstanceService.ListInstanceEvents:input_type -> instance.v1.GetInstanceRequest
+	32, // 45: instance.v1.InstanceService.StreamInstanceLogs:input_type -> instance.v1.StreamInstanceLogsRequest
+	8,  // 46: instance.v1.InstanceService.ListMountablePVCs:input_type -> instance.v1.ListMountablePVCsRequest
+	21, // 47: instance.v1.InstanceService.GetInstanceConfiguration:input_type -> instance.v1.GetInstanceRequest
+	14, // 48: instance.v1.InstanceService.ResolveCreateSpec:input_type -> instance.v1.ResolveCreateSpecRequest
+	17, // 49: instance.v1.InstanceService.AcceptCreate:input_type -> instance.v1.AcceptCreateRequest
+	18, // 50: instance.v1.InstanceService.AcceptDelete:input_type -> instance.v1.AcceptDeleteRequest
+	19, // 51: instance.v1.InstanceService.Start:input_type -> instance.v1.ChangeInstanceRequest
+	19, // 52: instance.v1.InstanceService.Stop:input_type -> instance.v1.ChangeInstanceRequest
+	21, // 53: instance.v1.InstanceService.GetInstance:input_type -> instance.v1.GetInstanceRequest
+	21, // 54: instance.v1.InstanceService.ResolveInstanceMetricScope:input_type -> instance.v1.GetInstanceRequest
+	22, // 55: instance.v1.InstanceService.ListInstances:input_type -> instance.v1.ListInstancesRequest
+	34, // 56: instance.v1.InstanceService.GetOperation:input_type -> instance.v1.GetOperationRequest
+	36, // 57: instance.v1.InstanceService.ResolveTerminalTarget:input_type -> instance.v1.ResolveTerminalTargetRequest
+	29, // 58: instance.v1.InstanceService.GetInstanceRuntime:output_type -> instance.v1.InstanceRuntime
+	31, // 59: instance.v1.InstanceService.ListInstanceEvents:output_type -> instance.v1.InstanceEvents
+	33, // 60: instance.v1.InstanceService.StreamInstanceLogs:output_type -> instance.v1.InstanceLogFrame
+	10, // 61: instance.v1.InstanceService.ListMountablePVCs:output_type -> instance.v1.ListMountablePVCsResponse
+	11, // 62: instance.v1.InstanceService.GetInstanceConfiguration:output_type -> instance.v1.InstanceConfiguration
+	15, // 63: instance.v1.InstanceService.ResolveCreateSpec:output_type -> instance.v1.CreateSpec
+	20, // 64: instance.v1.InstanceService.AcceptCreate:output_type -> instance.v1.OperationResponse
+	20, // 65: instance.v1.InstanceService.AcceptDelete:output_type -> instance.v1.OperationResponse
+	20, // 66: instance.v1.InstanceService.Start:output_type -> instance.v1.OperationResponse
+	20, // 67: instance.v1.InstanceService.Stop:output_type -> instance.v1.OperationResponse
+	24, // 68: instance.v1.InstanceService.GetInstance:output_type -> instance.v1.Instance
+	37, // 69: instance.v1.InstanceService.ResolveInstanceMetricScope:output_type -> instance.v1.InstanceMetricScope
+	23, // 70: instance.v1.InstanceService.ListInstances:output_type -> instance.v1.ListInstancesResponse
+	35, // 71: instance.v1.InstanceService.GetOperation:output_type -> instance.v1.Operation
+	49, // 72: instance.v1.InstanceService.ResolveTerminalTarget:output_type -> instance.terminal.v1.TerminalTarget
+	58, // [58:73] is the sub-list for method output_type
+	43, // [43:58] is the sub-list for method input_type
+	43, // [43:43] is the sub-list for extension type_name
+	43, // [43:43] is the sub-list for extension extendee
+	0,  // [0:43] is the sub-list for field type_name
 }
 
 func init() { file_instance_v1_instance_proto_init() }
@@ -4490,19 +3631,16 @@ func file_instance_v1_instance_proto_init() {
 	}
 	file_instance_v1_instance_proto_msgTypes[0].OneofWrappers = []any{}
 	file_instance_v1_instance_proto_msgTypes[1].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[13].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[16].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[20].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[36].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[38].OneofWrappers = []any{}
-	file_instance_v1_instance_proto_msgTypes[39].OneofWrappers = []any{}
+	file_instance_v1_instance_proto_msgTypes[26].OneofWrappers = []any{}
+	file_instance_v1_instance_proto_msgTypes[28].OneofWrappers = []any{}
+	file_instance_v1_instance_proto_msgTypes[29].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_instance_v1_instance_proto_rawDesc), len(file_instance_v1_instance_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   52,
+			NumMessages:   42,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

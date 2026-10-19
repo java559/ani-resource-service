@@ -158,7 +158,7 @@ func TestInstanceNetworkSubmissionTrustedServiceAcceptsFrozenSelectionAfterWrite
 	f := database(t)
 	c := networkCreate()
 	s := c.Spec
-	intake, err := service.NewService(f.repo, frozenNetworkIntakeBoundary{}, frozenNetworkIntakeBoundary{}, service.Config{NamespacePrefix: "tenant-", ClusterID: s.ClusterID, ServiceAccount: s.ServiceAccount, StorageClass: s.StorageClass, WorkspaceSize: s.WorkspaceSize, Shell: s.Shell, UID: s.UID, GID: s.GID})
+	intake, err := service.NewService(f.repo, computeResolver(t, f, s.ClusterID), frozenNetworkIntakeBoundary{}, frozenNetworkIntakeBoundary{}, service.Config{NamespacePrefix: "tenant-", ClusterID: s.ClusterID, ServiceAccount: s.ServiceAccount, StorageClass: s.StorageClass, WorkspaceSize: s.WorkspaceSize, Shell: s.Shell, UID: s.UID, GID: s.GID})
 	if err != nil {
 		t.Fatal(err)
 	}

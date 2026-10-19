@@ -58,7 +58,7 @@ func TestInstanceDiagnosticDatabaseScopeAndNoWrites(t *testing.T) {
 	if e = provider.ConfigureSigningKey(ed25519.NewKeyFromSeed(make([]byte, ed25519.SeedSize))); e != nil {
 		t.Fatal(e)
 	}
-	s, e := service.NewService(f.repo, fixtureImage{}, provider, service.Config{NamespacePrefix: "tenant-", ClusterID: i.Spec.ClusterID, ServiceAccount: i.Spec.ServiceAccount, StorageClass: i.Spec.StorageClass, WorkspaceSize: i.Spec.WorkspaceSize, Shell: i.Spec.Shell, UID: i.Spec.UID, GID: i.Spec.GID})
+	s, e := service.NewService(f.repo, computeResolver(t, f, i.Spec.ClusterID), fixtureImage{}, provider, service.Config{NamespacePrefix: "tenant-", ClusterID: i.Spec.ClusterID, ServiceAccount: i.Spec.ServiceAccount, StorageClass: i.Spec.StorageClass, WorkspaceSize: i.Spec.WorkspaceSize, Shell: i.Spec.Shell, UID: i.Spec.UID, GID: i.Spec.GID})
 	if e != nil {
 		t.Fatal(e)
 	}

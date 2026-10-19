@@ -10,6 +10,7 @@ import (
 	kratos "github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/uuid"
+	computev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1"
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
@@ -37,7 +38,12 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 		return err
 	}
 	defer images.Close()
-	instances, err := openInstance(context.Background(), bc.Network, images, logger)
+	compute, err := openCompute(context.Background())
+	if err != nil {
+		return err
+	}
+	defer compute.Close()
+	instances, err := openInstance(context.Background(), bc.Network, images, compute, logger)
 	if err != nil {
 		return err
 	}
@@ -121,6 +127,9 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	networkv1.RegisterTenantLoadBalancerServiceServer(gs, networkService.NewTenantLoadBalancerService(lbs))
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(gs, images.tenant)
+	}
+	if compute != nil {
+		computev1.RegisterComputePresetServiceServer(gs, compute.service)
 	}
 	if instances != nil {
 		instancev1.RegisterInstanceServiceServer(gs, instances.service)

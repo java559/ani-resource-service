@@ -10,7 +10,8 @@ upstream=$(go list -m -f '{{.Dir}}' "$module")
 [[ -d $upstream/api/protos ]]
 work=$(mktemp -d "${TMPDIR:?task-owned TMPDIR}/instance-api.XXXXXX")
 trap 'rm -rf -- "$work"' EXIT
-mkdir -p "$work/api/instance" "$work/upstream"
+mkdir -p "$work/api/instance" "$work/api/compute" "$work/upstream"
+cp -R api/compute/v1 "$work/api/compute/"
 cp -R api/instance/v1 "$work/api/instance/"
 mkdir -p "$work/api/instance/terminal"
 cp -R api/instance/terminal/v1 "$work/api/instance/terminal/"
@@ -27,7 +28,7 @@ cat > "$work/buf.gen.yaml" <<'EOF'
 version: v2
 inputs:
   - directory: .
-    paths: [api/instance/v1/instance.proto, api/instance/terminal/v1/terminal.proto]
+    paths: [api/compute/v1/compute.proto, api/instance/v1/instance.proto, api/instance/terminal/v1/terminal.proto]
 plugins:
   - local: [go, run, google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11]
     out: .
@@ -39,3 +40,5 @@ EOF
 (cd "$work" && "$BUF" build && "$BUF" generate)
 cp "$work/api/instance/v1/instance.pb.go" "$work/api/instance/v1/instance_grpc.pb.go" api/instance/v1/
 cp "$work/api/instance/terminal/v1/terminal.pb.go" "$work/api/instance/terminal/v1/terminal_grpc.pb.go" api/instance/terminal/v1/
+
+cp "$work/api/compute/v1/compute.pb.go" "$work/api/compute/v1/compute_grpc.pb.go" api/compute/v1/

@@ -1,6 +1,16 @@
 # Network 执行状态
 
-更新日期：2026-10-12。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+更新日期：2026-10-20。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+
+## Compute Preset Resolution
+
+`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次候选合同，尚未正式发布/切换。Res compute提供方与容器一次解析已完成定向验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。Gov正式消费者未迁移，完整Gov→Res主链尚未接通。
+
+迁移切片在 Fedora 的 `20261019T170601Z-res02-fb58e8` 独占快照通过：`INSTANCE_TEST_RUN='^TestComputeMigration' scripts/instance-integration ./internal/data/compute` exit0，两个具名用例含目标冲突、checksum、视图依赖、锁超时失败子场景；同OID/数据/审计/约束验证状态/历史、重跑/逆向恢复、runtime权限隔离有效。HEAD加dirty archive SHA256 `1a1613d9995989ba3d5a1024543c355345ed8476239f0b23cda990b32bb54b35`；日志/manifest在本地 `.work/compute-preset-resolution/runs/` 及 Fedora `/home/chabking/workspace/compute-preset-resolution-runs/` 的同名run。原脚本固定镜像实际为PG18.6；目标PG17.11匹配演练尚未执行。任务PG容器已清理。此结果不替代联合持久主链或目标运行验收。
+
+提供方快照 `20261019T172233Z-res03-6ebd68`（archive SHA256 `0f03e23fa5d1a1919036f10540c6bb638656aab9c94ce20617faeafecaf23556`）正式Proto/sqlc生成、API/biz/service/server/cmd定向测试及7个PG18.6门禁exit0：可信Scope的真实mTLS/PG三用途CPU/GPU、目录事务与授权分页、CPU规格变化冻结、GPU删目录后重放、借用卷引用及CPU持久生命周期/终端。外部运行系统使用既有fixture；32个生成/格式化文件按base/返回SHA核对无漂移应用。仓库必需提交前 `make verify` 在 `20261019T174309Z-res03-shorttmp-verify-ff4244` 全部通过（Fedora、实际-p1/2300M、2026-10-20 01:43:44–01:48:52 CST、exit0，archive SHA256 `f5478d09b9d382c198f85cb8d332b547bff410e963505f815b026b843d922ca5`）。此前漏格式化embed.go和过长TMPDIR导致的exit2保留；修正格式及任务独占短TMPDIR后原测试通过，未跳过测试，不重复已通过PG。
+
+目标10–12集群身份只读已核对，GPU资源存在；目标数据库/权限迁移、服务切换、存量与新建CPU/GPU的22项真实验收均尚未执行，不能据readiness/模块测试宣布无回归。其它服务未修改或部署。
 
 ## VPC R01 页码参考实现
 

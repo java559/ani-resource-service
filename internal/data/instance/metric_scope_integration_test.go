@@ -35,7 +35,7 @@ func TestInstanceMetricScopePersistentGRPC(t *testing.T) {
 	if _, err := f.repo.AcceptCreate(ctx, c); err != nil {
 		t.Fatal(err)
 	}
-	handler, err := service.NewService(f.repo, fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "different-", ClusterID: uuid.NewString(), ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
+	handler, err := service.NewService(f.repo, computeResolver(t, f, uuid.NewString()), fixtureImage{}, fixtureEnvironment{}, service.Config{NamespacePrefix: "different-", ClusterID: uuid.NewString(), ServiceAccount: "workload", StorageClass: "ani-block", WorkspaceSize: "1Gi", Shell: "/bin/sh"})
 	if err != nil {
 		t.Fatal(err)
 	}

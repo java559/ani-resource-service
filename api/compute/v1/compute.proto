@@ -1,0 +1,111 @@
+syntax = "proto3";
+package compute.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1;computev1";
+
+import "accelerator/v1/accelerator.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// Trusted Governance listener only; selection is read-only and never an ACK.
+service ComputePresetService {
+  rpc AdminListPresets(AdminListPresetsRequest) returns (ListPresetsResponse);
+  rpc AdminGetPreset(AdminGetPresetRequest) returns (Preset);
+  rpc AdminCreatePreset(AdminCreatePresetRequest) returns (Preset);
+  rpc AdminUpdatePreset(AdminUpdatePresetRequest) returns (Preset);
+  rpc AdminSetPresetEnabled(AdminSetPresetEnabledRequest) returns (Preset);
+  rpc AdminDeletePreset(AdminDeletePresetRequest) returns (google.protobuf.Empty);
+  rpc ListPresets(ListPresetsRequest) returns (ListPresetsResponse);
+  rpc ResolveComputePreset(ResolveComputePresetRequest) returns (ComputeSelection);
+}
+
+enum Usage {
+  USAGE_UNSPECIFIED = 0;
+  CONTAINER_INSTANCE = 1;
+  TRAINING = 2;
+  INFERENCE = 3;
+}
+
+// Trusted, managed reference; never accepted directly from public JSON.
+message GpuPresetReference {
+  string profile_id = 1 [json_name = "profile_id"];
+  uint64 profile_version = 2 [json_name = "profile_version"];
+  string spec_digest = 3 [json_name = "spec_digest"];
+  uint32 devices_per_instance = 4 [json_name = "devices_per_instance"];
+  string cluster_id = 5 [json_name = "cluster_id"];
+  string pool_id = 6 [json_name = "pool_id"];
+  accelerator.v1.SupplyMode mode = 7;
+  string model_key = 8 [json_name = "model_key"];
+  reserved 9; reserved "shared_memory_mib_per_device";
+  int64 memory_mib_per_device = 11 [json_name = "memory_mib_per_device"];
+  uint32 core_limit_percent = 10 [json_name = "core_limit_percent"];
+}
+message Preset {
+  string id = 1;
+  reserved 2, 4, 5, 6, 7;
+  reserved "version", "cpu", "memory", "instance_type";
+  string name = 3;
+  string code = 8;
+  string description = 9;
+  string compute_type = 10 [json_name = "compute_type"];
+  int64 cpu_millis = 11 [json_name = "cpu_millis"];
+  int64 memory_mib = 12 [json_name = "memory_mib"];
+  bool enabled = 13;
+  GpuPresetReference gpu = 14;
+  google.protobuf.Timestamp created_at = 15 [json_name = "created_at"];
+  google.protobuf.Timestamp updated_at = 16 [json_name = "updated_at"];
+  bool selectable = 17;
+  string unavailable_reason = 18 [json_name = "unavailable_reason"];
+}
+message PresetData {
+  string code = 1; string name = 2; string description = 3;
+  string compute_type = 4 [json_name = "compute_type"];
+  int64 cpu_millis = 5 [json_name = "cpu_millis"];
+  int64 memory_mib = 6 [json_name = "memory_mib"];
+  optional bool enabled = 7;
+  GpuPresetReference gpu = 8;
+}
+message ListPresetsRequest {
+  string tenant_id = 1; uint32 page = 2; uint32 page_size = 3;
+  string name = 4; string code = 5; string compute_type = 6; string gpu_mode = 7;
+  repeated GpuPresetReference allowed_gpu_profiles = 8;
+  Usage usage = 9;
+}
+message ListPresetsResponse { repeated Preset items = 1; int64 total = 2; bool has_gpu_candidates = 3; }
+message AdminListPresetsRequest {
+  uint32 page = 1; uint32 page_size = 2; string name = 3; string code = 4;
+  string compute_type = 5; string gpu_mode = 6; optional bool enabled = 7;
+}
+message AdminGetPresetRequest { string id = 1; }
+message AdminCreatePresetRequest { PresetData data = 1; }
+message AdminUpdatePresetRequest { string id = 1; PresetData data = 2; google.protobuf.FieldMask update_mask = 3; }
+message AdminSetPresetEnabledRequest { string id = 1; optional bool enabled = 2; }
+message AdminDeletePresetRequest { string id = 1; }
+message ResolveComputePresetRequest {
+  string tenant_id = 1;
+  string preset_id = 2;
+  Usage usage = 3;
+}
+message ComputeSelection {
+  uint32 schema_version = 1;
+  string preset_id = 2 [json_name = "preset_id"];
+  string code = 3;
+  string name = 4;
+  string compute_type = 5 [json_name = "compute_type"];
+  int64 cpu_millis = 6 [json_name = "cpu_millis"];
+  int64 memory_mib = 7 [json_name = "memory_mib"];
+  GpuSelection gpu = 8;
+  string selection_digest = 9 [json_name = "selection_digest"];
+}
+message GpuSelection {
+  string profile_id = 1 [json_name = "profile_id"];
+  uint64 profile_version = 2 [json_name = "profile_version"];
+  string spec_digest = 3 [json_name = "spec_digest"];
+  uint32 devices_per_unit = 4 [json_name = "devices_per_unit"];
+  string cluster_id = 5 [json_name = "cluster_id"];
+  string pool_id = 6 [json_name = "pool_id"];
+  accelerator.v1.SupplyMode mode = 7;
+  string model_key = 8 [json_name = "model_key"];
+  int64 memory_mib_per_device = 9 [json_name = "memory_mib_per_device"];
+  uint32 core_limit_percent = 10 [json_name = "core_limit_percent"];
+}

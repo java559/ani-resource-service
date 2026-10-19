@@ -56,7 +56,8 @@
 | `/image.v1.TenantImageService/ListImages` | 查询，租户镜像或既有平台只读目录 |
 | `/image.v1.TenantImageService/UpdateImage` | 原键 |
 | `/image.v1.TenantImageService/UnregisterImage` | 原键 |
-| `/instance.v1.InstanceService/ListPresets` | page/page_size、items/total；启用项与可信GPU授权交集后分页 |
+| `/compute.v1.ComputePresetService/ListPresets` | 明确usage；page/page_size、items/total；启用项与可信GPU授权交集后分页 |
+| `/compute.v1.ComputePresetService/ResolveComputePreset` | 明确usage、单次一致读取；候选/确定性摘要；无受理/占额/资源副作用，默认3s |
 | `/instance.v1.InstanceService/ResolveCreateSpec` | 仅新公开请求解析，首次冻结 |
 | `/instance.v1.InstanceService/AcceptCreate` | 原 operation/ref/plan/charges 与持久 ACK |
 | `/instance.v1.InstanceService/AcceptDelete` | 原 CREATE + delete operation，expected_version |
@@ -70,7 +71,7 @@
 | `/instance.v1.InstanceService/ListInstanceEvents` | 当前Pod UID的core/v1 Events，有限读取，无持久化 |
 | `/instance.v1.InstanceService/ResolveTerminalTarget` | 保存位置 + 当前业务版本与真实 UID |
 
-接收方允许清单实现为 [governance.go](../../internal/server/governance.go)、[image_identity.go](../../internal/server/image_identity.go) 与 [instance_identity.go](../../internal/server/instance_identity.go)。Instance 普通 unary 调用上限 30s，后台投递继承其更短 deadline；StreamInstanceLogs 使用独立有限生命周期，不套此总期限。修改调用时同时修改登记、允许清单和真实链路测试，不使用 RPC 前缀或通配符授权。
+接收方允许清单实现为 [governance.go](../../internal/server/governance.go)、[image_identity.go](../../internal/server/image_identity.go)、[compute_identity.go](../../internal/server/compute_identity.go) 与 [instance_identity.go](../../internal/server/instance_identity.go)。Instance 普通 unary 调用上限 30s，后台投递继承其更短 deadline；StreamInstanceLogs 使用独立有限生命周期，不套此总期限。修改调用时同时修改登记、允许清单和真实链路测试，不使用 RPC 前缀或通配符授权。
 
 `/instance.terminal.v1.InstanceTerminalService/ValidateTerminalTarget` 不在 Gov 委托清单中。它由 Resource 同进程独立 mTLS listener 仅授权唯一 SG URI `spiffe://ani.internal/service/ani-session-gateway`，核对持久意图/版本、保存位置、Notebook/Pod UID、容器及当前 provider 观察。详见 [运行与恢复](../runbooks/instance-mvp-fedora.md)。
 
@@ -98,9 +99,15 @@ PlatformNetworkService 的完整 27 方法由 [平台允许清单](../../interna
 创建和池配置命令沿用原业务幂等键，池配置保留 expected_version，删除仍由原持久 worker 完成。平台 Get/List 和 total 保持原集群、资源种类及筛选约束，不扩为跨租户查询。真实 KC/网卡/数据面验证独立于 Gov 受控联调。
 
 
-## 平台规格与实例日志
+## 公共算力与平台规格
 
-同一 InstanceService 新增平台规格方法：`/instance.v1.InstanceService/AdminListPresets`、`AdminGetPreset`、`AdminCreatePreset`、`AdminUpdatePreset`、`AdminSetPresetEnabled`、`AdminDeletePreset`（后五项完整前缀均为 `/instance.v1.InstanceService/`）。各项均进入 instancePlatformMethods 精确清单，使用同一 mTLS 的平台互斥委托，不发 tenant_id。接收后注入实例领域专用 Platform Caller，不借网络领域平台 Caller。CRUD 仅写 Resource 的 `instance.compute_presets`，不创建或修改 ACC Profile。
+平台规格方法为 `/compute.v1.ComputePresetService/AdminListPresets`、`AdminGetPreset`、`AdminCreatePreset`、`AdminUpdatePreset`、`AdminSetPresetEnabled`、`AdminDeletePreset`（后五项完整前缀均为 `/compute.v1.ComputePresetService/`）。逐完整方法授权，使用同一 mTLS 的平台互斥委托，不发 tenant_id；接收后注入 compute 专用 Scope。CRUD 仅写 Resource 的 compute.presets，不创建或修改 ACC Profile。Gov 入口 owner=ComputePresetService，既有SYSTEM分类，精确 compute:preset:admin 五码；目录拆分不修改用户套餐或自动补权。
+
+公共 ListPresets/ResolveComputePreset 使用可信租户、actor与request_id，以及明确的 CONTAINER_INSTANCE、TRAINING 或 INFERENCE；未知/UNSPECIFIED及未登记调用者用途拒绝。当前唯一直接调用服务是经证书验证的 Gov。受信Scope记录完整RPC、服务身份与用途；报文tenant须与委托一致，平台范围不能调用租户解析。容器完整ResolveCreateSpec内部适配同一范围并固定CONTAINER_INSTANCE；compute不依赖实例Caller或业务环境。字段/单位/确定性摘要及错误边界的唯一来源为[算力目录合同](compute-presets.md)。
+
+TRAINING供普通训练与微调共享，INFERENCE只声明公共提供方支持。本次不装配训练或推理创建消费，不修改ModelDev/ACC/Inference，不增加Gov推理路由或依赖。VM/沙箱的执行形态和兼容性另行明确。
+
+## 实例日志
 
 唯一获准流为 `/instance.v1.InstanceService/StreamInstanceLogs`：必须 server-streaming、非client-streaming，受信 Gov mTLS + 单值 tenant/actor/request_id，报文 tenant 再与委托比较。`vpc-read` 拒绝该流，其余流全部拒绝。handler 再按可信租户/实例从 DB 读取保存位置与当前 owner UID链，不接受任意 Namespace、Pod、container/path 或 previous。
 
