@@ -10,6 +10,8 @@
 
 数据库变更前保存：原实表 OID、完整 ID/内容/审计摘要、PK/UNIQUE/CHECK定义与 convalidated、索引、默认值、owner/ACL、历史001..006 checksum。以只读 catalog 核对实际附属对象和外部依赖。未知版本、外部FK/view/trigger/RLS、命名冲突或owner不符明确失败，不猜测清洗。
 
+实际入口隔离和恢复必须验证数据面：Service/Endpoints/EndpointSlice 正确不等于 NodePort 已更新。目标环境曾因停止 Notebook 的长 Service/port 名组合触发 kube-proxy nftables `comment too long, 128 characters maximum allowed`，整批同步失败、NodePort 保留旧后端；该行为与[Kubernetes #139515](https://github.com/kubernetes/kubernetes/issues/139515)一致，[上游修复](https://github.com/kubernetes/kubernetes/pull/139516)不能推定已包含于现有镜像。维护前核对实际同步错误，恢复时用新连接和真实鉴权请求确认后端；不能把401当隔离成功，也不能修改已正确的Endpoint或反复修补会被Notebook控制器回写的Service。涉及其他组件的升级/部署应另行取得明确授权，不因数据库已迁移而自动扩大范围。
+
 ## 正向切换
 
 1. 关闭 Gov 新 CREATE 受理，停止新的规格写入；排空或可靠持久化在途请求及 worker。正常停止访问旧 SQL/RPC 的 Gov 和 Res 进程，等待已发起操作的持久事实确定。维护期间保留已有 Notebook/Pod，不变更其资源/Namespace/GPU。

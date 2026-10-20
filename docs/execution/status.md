@@ -4,7 +4,7 @@
 
 ## Compute Preset Resolution
 
-`in_progress`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次合同；API 根module已正式发布 `v0.0.0-20261019174951-733f625995f8`（提交 `733f625995f89ee71b86192c5995eec4602df408`，Fedora官方proxy Origin/双checksum已核对），尚未目标切换。Res compute提供方与容器一次解析、Gov正式消费者迁移和真实mTLS/PG的最小CPU/GPU持久主链已验证；旧七RPC及instance目录实现、生成方法和allowlist已删除。HTTP联合恢复门禁通过，匹配源码/镜像已发布；正在准备迁移前真实样本，尚未目标数据库/服务切换及22项完整验收。
+`complete`：从 Res `5593aed172c18da850b20444dd71ea81d8f2e5d7`、Gov `52922676ec4c047d6bc519bf84e3adc317af5159` 的隔离分支实施。[算力目录合同](../specs/compute-presets.md)与[维护恢复手册](../runbooks/compute-presets-migration.md)是本次合同；API 根module已正式发布 `v0.0.0-20261019174951-733f625995f8`（提交 `733f625995f89ee71b86192c5995eec4602df408`，Fedora官方proxy Origin/双checksum已核对）。旧七RPC及instance目录实现、生成方法和allowlist已删除，匹配源码/镜像已发布。目标两库分别迁移、新Res→新Gov及原公共NodePort恢复通过；存量原UID/冻结、删规格后启动与pending/清理/退款连续转换、迁移后新建CPU/GPU完整生命周期及最终清理均真实通过。01～12及父方案resolved，22项在各自要求层级全部PASS，无必需FAIL/NOT_RUN。
 
 迁移切片在 Fedora 的 `20261019T170601Z-res02-fb58e8` 独占快照通过：`INSTANCE_TEST_RUN='^TestComputeMigration' scripts/instance-integration ./internal/data/compute` exit0，两个具名用例含目标冲突、checksum、视图依赖、锁超时失败子场景；同OID/数据/审计/约束验证状态/历史、重跑/逆向恢复、runtime权限隔离有效。HEAD加dirty archive SHA256 `1a1613d9995989ba3d5a1024543c355345ed8476239f0b23cda990b32bb54b35`；日志/manifest在本地 `.work/compute-preset-resolution/runs/` 及 Fedora `/home/chabking/workspace/compute-preset-resolution-runs/` 的同名run。原脚本固定镜像实际为PG18.6；PG17.11匹配演练见下文。任务PG容器已清理。此结果不替代联合持久主链或目标运行验收。
 
@@ -18,9 +18,17 @@ Gov正式生成/目录与生产装配检查已通过。Fedora `20261019T185123Z-
 
 新增PG17回归提交前 `20261019T191731Z-res10-final-verify-783bcb` 完整 `make verify` exit0（19:18:05.420404–19:20:49.998917Z，archive `d9d583722572651e49871a74d91277aa4f1b5b7b5b10f6db1edb4a4b3b7297e4`，2300M/p1），返回文件0/local drift0；运行代码及API相对733f625无变化。最终提交差异仅含08回归与执行状态更新。
 
-匹配运行候选为Res `831e931314c6029be3ec62d78c698febff324caa`、Gov `813ae539e1e324e65bdbcd4143a9ed03bbac418f`，精确镜像已发布。目标仍运行旧pair，已通过真实业务入口准备1个CPU运行、3个CPU停止样本，验证实际Notebook/Pod、1核/2GiB requests=limits、原冻结字节、终端/环境/挂载、日志和实际CPU/内存指标；这只是迁移前基线，不是迁移后OLD验收。首个不兼容nginx样本已正式删除，借用PVC原UID保持。
+实际运行版本为Res `831e931314c6029be3ec62d78c698febff324caa` / image digest `52874d9a10a2238c20d6950387497a79bd831314d47a189e704c420e76c3f55d`、Gov `813ae539e1e324e65bdbcd4143a9ed03bbac418f` / digest `e92b22e9e21f169fdd61b14fb4c80288d423f4557d0384d03a55c9df450ee2c7`。Fedora真实目标迁移五步exit0：原table OID407906、9条完整Preset行SHA、instance历史001～006及NOT VALID状态保持；Gov旧五管理code归零、新五code生效，permission/API/角色关系ID保持。两库分别事务，新runtime无owner/DDL权限。私有证据以原Goal任务11 Result及Fedora `private-identity-preflight-20261020/cutover-db-*` 为准，未将凭据纳入归档。
 
-GPU样本目前被ACC所选供给组CLOSED及平台静态委托缺动作阻断；原Goal排除ACC修改，额外临时双动作/同镜像重启/OPEN及恢复授权待输入，未修改ACC。公共旧pair入口已恢复，既有工作负载保持；目标数据库/权限迁移、新pair切换和22项完整真实验收未执行，不能据CPU准备、readiness或模块测试宣布无回归。其它服务未修改或部署。
+用户追加授权后，仅给ACC现有root grant追加ListSupplyGroups/SetAdmission并同镜像重启；按其明确要求保留权限。shared组OPEN因CONFIG_DRIFT未提交，原CLOSED保持；采用现有OPEN的WHOLE/T4 Profile准备真实GPU样本，未改插件/标签/baseline。迁移后运行CPU/GPU的原Notebook/Pod UID、资源、canonical和GPU计划保持，真实终端/8MiB CUDA写回及configuration/runtime/events/logs/metrics通过。连续记录证明原CPU pending由QUEUED/attempt0到ACK/attempt1再running；GPU清理由原outbox PENDING到唯一receipt、原账释放1/ACK及全flags完成，usage ENDED/revision2/ACK2。旧CPU/GPU规格编辑、禁用、删除后，旧停止实例均按原冻结成功启动，原挂载marker/网络及CUDA通过；原键重放/冲突/8并发原键回执保持。
+
+新pair HTTP管理/目录/权限门禁通过；刷新正式平台登录后新五权限有效、旧五消失。原公共Service spec已恢复，正式平台/租户请求均200，节点新连接DNAT指向新Gov `10.16.1.84:7788`；私有forward已停止。此前公共旧backend来自Kubernetes v1.35.8 nftables批次被Goal停止Notebook Service的超长comment拒绝；仅重建Gov原NodePort未成功，原spec已恢复；正常业务启动旧停止实例后Endpoint恢复，nftables成功更新。相关原始失败保留，见维护手册；未修改CNI/kube-proxy/Notebook Controller，未声称永久修复该外部缺陷。原nginx失败样本已正式删除，业务删除时借用PVC原UID保持，最终operator清理见下文；无训练/推理消费者或其它服务代码/Proto升级。
+
+任务12真实新CPU `06d64ff7-463e-4117-a993-6afaefe85b45` / 新GPU `41d9ae3f-2fee-476f-b0aa-6d7a61e41a0e` 均完成新目录选择→冻结/ACK→Notebook运行→查询/STOP/START→原marker保持→DELETE/全5flags；CPU为1CPU/2Gi，GPU为500m/1Gi、WHOLE/T4 15360MiB/100%/1设备，两次真实8MiB CUDA写回通过。NEW汇总 `task12-new/final-handoff.json` SHA256 `d8bb615f5f5ee10e381baae0fc390bc806b1314f9756b69447b2ffb3c806607e`。CPU一次GET503后同实例正式200收敛，未重发mutation；GPU latest两指标OK，5分钟range各11点但PARTIAL，不声称完整时间窗覆盖。运行UID/冻结与所有原始失败均按实际保留。
+
+最终只读业务检查exit0：11个accepted原canonical/requesthash/ResSpec与原charge身份保持、全deleted/5flags，4个GPU原账全退/唯一receipt/outbox ACK/usage ENDED2ACK2；Goal Notebook/STS/Pod/Service/workspace PVC严格不存在。借用两PVC/PV在业务删除后原UID仍Bound，再经operator UID/RV删除正常回收；Goal Subnet/VPC、5个自有测试Preset及shared policy29均清理，原physical policy28恢复1/account13 occupied0/version18，原六Preset逐行SHA保持。CPU平台image原key持久command succeeded/completed、活动目录排除；历史GET200符合保留审计合同，原helper exit2/未采到container exit如实保留，不捏造CLI exit0。原GPU image和Harbor artifact、正式API模块及运行release镜像保留。
+
+最终公共/运行核验exit0（UTC2026-10-20T00:18:15Z）：指定Gov/Res新UID/digest、各1副本Ready/无重启/无旧Deployment进程，原Service完整spec及EndpointSlice新Gov targetUID正确，正式公共平台目录/租户实例GET均200；ACC configSHA与用户批准的双动作/scope保持。私有 `final-business-cleanup/all-samples-deleted-20261020a.json` SHA256 `838f11484515a25a3729cce6838399f42dd9f887cf5958650d981858a0e97b09`；`final-runtime-public-verification.json` SHA256 `e70d69182a949c852e9a019edd7372fe5292e1baaeaebf95485ebb8c727e6990`。专用observer按PID/启动/boot/argv/fd指纹SIGTERM正常停止日志cycles5960；私有原始406081237字节SHA256 `77cdbd94ad1692654f4900dacc257e9ba8b7190a525dcfc6b534996e3492a03c`。22项逐行及清理回执SHA在原Goal任务12 Result，不复制第二套台账；凭据/完整载荷不归档。相对运行提交831e931后仅改本文和维护手册，复用已有效完整make verify，文档完成仅做差异/链接轻检查。任务分支交付，未合并main或创建PR；训练/推理只支持提供方用途，未接入执行。
 
 ## VPC R01 页码参考实现
 
