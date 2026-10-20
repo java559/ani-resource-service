@@ -337,7 +337,7 @@ Gov 独立异步同步 ACC 的薄 Usage 投影；失败重试不回滚已经完�
 
 | API | 用途 | 配额影响 |
 |---|---|---|
-| `GET /api/v1/instance-presets` | 查询固定规格 | 无 |
+| `GET /api/v1/compute-presets?usage=CONTAINER_INSTANCE` | 查询固定规格 | 无 |
 | `POST /api/v1/instances` | 创建并启动 | Gov 首次占额 |
 | `GET /api/v1/instances` | 租户列表 | 无 |
 | `GET /api/v1/instances/{id}` | 详情、失败原因与清理进度 | 无 |

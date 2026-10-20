@@ -12,7 +12,7 @@
 
 `ListPresets` 面向可信租户范围，显式传入 usage。只返回 enabled 规格；GPU 按受信 `allowed_gpu_profiles` 的 profile_id/version/spec_digest/cluster_id/pool_id 精确交集过滤，再执行 count/page。空允许集合严格排除 GPU。CPU 不依赖 ACC；`has_gpu_candidates` 仅供 Gov 安全处理目录依赖故障。列表/计数使用同一只读 Repeatable Read 快照，按 created_at DESC、id DESC 排序，分页默认 1/20、最多100；name 为大小写不敏感字面子串。
 
-容器的 `GET /api/v1/instance-presets` 保留 `instance:preset:read`/INSTANCE 授权。创建仍只调用一次活跃的 `instance.v1.InstanceService/ResolveCreateSpec`：服务端复用 compute resolver 的单次读取，再检查镜像、Namespace、SA、存储、调度、网络及卷。Gov 不串行调用公共解析与容器解析来重复读取规格。
+Gov 唯一租户目录为 `GET /api/v1/compute-presets`，usage 必填。CONTAINER_INSTANCE 要求 `instance:preset:read`/INSTANCE；TRAINING（含微调）要求 `modeldev:compute-preset:read`/MODEL；INFERENCE 要求 `inference:compute-preset:read`/INFERENCE。旧 `/api/v1/instance-presets` 删除，无兼容入口。三个用途分别检查当前业务授权，不因共享 URL 互相放行。创建仍只调用一次活跃的 `instance.v1.InstanceService/ResolveCreateSpec`：服务端复用 compute resolver 的单次读取，再检查镜像、Namespace、SA、存储、调度、网络及卷。Gov 不串行调用公共解析与容器解析来重复读取规格。
 
 InstanceService 原七个目录 RPC 直接删除，不保留转发、别名、旧方法失败后的回退或双目录实现。活跃实例 v2、GpuPresetReference、冻结字节/hash、AcceptCreate 和生命周期合同见[实例合同](instance-mvp.md)及[配置与网络合同](instance-configuration-network.md)。目录中的 `devices_per_instance` 存储 JSON 和实例 v2 字段保持原语义，公共解析显式映射为单执行单元设备数。
 
@@ -48,9 +48,9 @@ Res 校验可信服务/RPC/租户/actor/用途，以及规格存在、enabled、
 
 ## 后续消费者
 
-TRAINING/INFERENCE 的本次交付是提供方用途支持。训练/微调以后须组合 ModelDev 的 Release、程序、镜像、Runtime 和最终 Snapshot；`compute_preset_id` 必须区别于训练 preset_id，不能修改 owner 快照后沿用旧 hash。本次不增加训练创建算力消费，不修改 ModelDev 或 Gov 训练受理/worker。
+TRAINING/INFERENCE 已提供 Gov 统一目录查询和 Resource 用途支持，尚未接通创建消费者。训练/微调以后须组合 ModelDev 的 Release、程序、镜像、Runtime 和最终 Snapshot；`compute_preset_id` 必须区别于训练 preset_id，不能修改 owner 快照后沿用旧 hash。本次不增加训练创建算力消费，不修改 ModelDev 或 Gov 训练受理/worker。
 
-INFERENCE 解析不需要模型、引擎、Namespace 或拓扑；未来消费者负责单元到副本/总量的组合与对应业务准入。本次不增加 Gov 推理 DTO/HTTP/Service/Binding/wiring、Inference 依赖或部署。KubeVirt VM 与沙箱仅保留未来显式执行目标和兼容性合同，不把未知目标默认作容器。
+INFERENCE 解析不需要模型、引擎、Namespace 或拓扑；未来消费者负责单元到副本/总量的组合与对应业务准入。本次只增加统一算力目录的 INFERENCE 查询与资格，不增加推理管理、创建受理/执行链、Inference API 依赖或部署。KubeVirt VM 与沙箱仅保留未来显式执行目标和兼容性合同，不把未知目标默认作容器。
 
 ## 数据与运行
 
