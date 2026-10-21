@@ -3,6 +3,7 @@
 package data_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -20,6 +21,7 @@ import (
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network"
 	controlled "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider"
 	jsonpatch "gopkg.in/evanphx/json-patch.v4"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 const jointClusterUID = "b490eae7-5317-411b-8cc1-b8bf79ec1234"
@@ -302,7 +304,11 @@ func (b *networkJointSwitchBoundary) http(w http.ResponseWriter, r *http.Request
 		before = api.Object("subnets", parts[4], parts[6])
 	}
 	recorder := httptest.NewRecorder()
-	api.ServeHTTP(recorder, r)
+	// Preserve the existing Intranet external-controller contract before the
+	// generic controlled API. The switch layer also sees its Subnet requests.
+	if !subnetMutation || !intranetProviderInterceptor(recorder, r, api) {
+		api.ServeHTTP(recorder, r)
+	}
 	if recorder.Code >= 200 && recorder.Code < 300 {
 		if before != nil {
 			spec, _ := before["spec"].(map[string]any)
@@ -327,6 +333,18 @@ func (b *networkJointSwitchBoundary) http(w http.ResponseWriter, r *http.Request
 					resource, namespace = "subnets", parts[4]
 				}
 				if updated := api.Object(resource, namespace, fmt.Sprint(meta["name"])); updated != nil {
+					if subnetMutation {
+						spec, _ := updated["spec"].(map[string]any)
+						underlay, _ := spec["underlayConfig"].(map[string]any)
+						vlanName, _ := underlay["vlanNetwork"].(string)
+						status, _ := updated["status"].(map[string]any)
+						observed, _ := status["underlayState"].(map[string]any)
+						if vlanName != "" && observed != nil && api.Object("vlannetworks", "", vlanName) != nil {
+							observed["vlanNetwork"] = vlanName
+							api.Change(resource, updated, false)
+							updated = api.Object(resource, namespace, fmt.Sprint(meta["name"]))
+						}
+					}
 					recorder.Body.Reset()
 					_ = json.NewEncoder(recorder).Encode(updated)
 				}
@@ -335,4 +353,97 @@ func (b *networkJointSwitchBoundary) http(w http.ResponseWriter, r *http.Request
 	}
 	jointHTTPResponse(w, recorder)
 	return true
+}
+
+func TestNetworkJointBoundaryPreservesIntranetSubnetCreate(t *testing.T) {
+	api := controlled.New()
+	seedEgressInfrastructure(api)
+	seedIntranetInfrastructure(api)
+	body := []byte(`{"apiVersion":"networking.kubercloud.com/v1","kind":"Subnet","metadata":{"name":"joint-intranet","namespace":"kcn-system"},"spec":{"type":"Intranet","gateway":"kcn-system/kcn-cluster","allowedNamespaces":{"from":"All"},"ipVersion":"IPv4","cidrBlock":"10.232.254.0/24"}}`)
+	r := httptest.NewRequest(http.MethodPost, "/apis/networking.kubercloud.com/v1/namespaces/kcn-system/subnets", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	boundary := &networkJointSwitchBoundary{}
+	if !boundary.http(response, r, api) || response.Code != http.StatusCreated {
+		t.Fatalf("switch boundary rejected existing Intranet create contract: status=%d body=%s", response.Code, response.Body.String())
+	}
+	object := api.Object("subnets", "kcn-system", "joint-intranet")
+	if object == nil || object["spec"].(map[string]any)["type"] != "Intranet" {
+		t.Fatal("Intranet provider object was not preserved", object)
+	}
+}
+
+func TestNetworkJointBoundaryPublishesV09UnderlayReference(t *testing.T) {
+	api := controlled.New()
+	api.Change("eipgateways", map[string]any{"apiVersion": "networking.kubercloud.com/v1", "kind": "EIPGateway", "metadata": map[string]any{"name": "joint-gateway", "uid": uuid.NewString()}, "spec": map[string]any{"scope": "Public", "egressType": "Host"}}, false)
+	api.Change("vlannetworks", map[string]any{"apiVersion": "networking.kubercloud.com/v1", "kind": "VlanNetwork", "metadata": map[string]any{"name": "joint-vlan", "uid": uuid.NewString()}, "spec": map[string]any{"devName": "phys1", "vClusterName": "gov-kcn-switch", "vlanID": 0}, "status": map[string]any{"conditions": []any{map[string]any{"type": "Valid", "status": "True"}, map[string]any{"type": "Initialized", "status": "True"}}}}, false)
+	body := []byte(`{"apiVersion":"networking.kubercloud.com/v1","kind":"Subnet","metadata":{"name":"joint-underlay","namespace":"kcn-system"},"spec":{"type":"Public","allowedNamespaces":{"from":"All"},"cidrBlock":"198.51.101.0/24","gatewayIP":"198.51.101.254","gateway":"joint-gateway","underlayConfig":{"gatewayIP":"198.51.101.1","vlanNetwork":"joint-vlan"}}}`)
+	r := httptest.NewRequest(http.MethodPost, "/apis/networking.kubercloud.com/v1/namespaces/kcn-system/subnets", bytes.NewReader(body))
+	r.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	boundary := &networkJointSwitchBoundary{}
+	if !boundary.http(response, r, api) || response.Code != http.StatusCreated {
+		t.Fatalf("underlay controller create failed: status=%d body=%s", response.Code, response.Body.String())
+	}
+	object := api.Object("subnets", "kcn-system", "joint-underlay")
+	status := object["status"].(map[string]any)
+	underlay := status["underlayState"].(map[string]any)
+	if underlay["vlanNetwork"] != "joint-vlan" {
+		t.Fatal("v0.9 readiness must identify the actual native VLAN", underlay)
+	}
+	vlan := api.Object("vlannetworks", "", "joint-vlan")
+	if vlan["status"].(map[string]any)["subnet"] != "kcn-system/joint-underlay" {
+		t.Fatal("VLAN and Subnet observations must refer to each other", vlan)
+	}
+}
+
+func networkJointBackendObserver(t *testing.T, f *lbAdmissionFixture, provider *data.KCProvider, policy biz.WorkerPolicy) *biz.AttachmentWorker {
+	t.Helper()
+	attachments := biz.NewAttachments(f.f.p, time.Minute)
+	owners := lbKnownOwners{}
+	for _, name := range []string{"lb-backend", "lb-second"} {
+		var id string
+		if err := f.f.owner.QueryRow(f.f.ctx, "SELECT attachment_id FROM network_attachments WHERE tenant_id=$1 AND instance_id=$2", f.f.tenant, name).Scan(&id); err != nil {
+			t.Fatal(err)
+		}
+		attachment, err := attachments.Get(f.f.ctx, f.f.tenant, id)
+		if err != nil {
+			t.Fatal(err)
+		}
+		owners[id] = attachment
+	}
+	worker, err := biz.NewAttachmentWorker(f.f.p, provider, owners, uuid.NewString(), policy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return worker
+}
+
+func TestNetworkJointBackendWorkerRefreshesAttachmentObservation(t *testing.T) {
+	f := newLBAdmissionFixture(t)
+	addLBBackend(t, f, f.backendSubnet, "lb-second", "10.42.2.3")
+	cfg, err := clientcmd.BuildConfigFromFlags("", f.kubeconfig)
+	if err != nil {
+		t.Fatal(err)
+	}
+	provider, err := data.NewKCProvider(f.f.p, cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	policy := biz.DefaultWorkerPolicy()
+	policy.ObserveEvery = 10 * time.Millisecond
+	worker := networkJointBackendObserver(t, f, provider, policy)
+	var before time.Time
+	var podUID string
+	if err = f.f.owner.QueryRow(f.f.ctx, "SELECT observed_at,pod_uid FROM network_attachments WHERE tenant_id=$1 AND instance_id='lb-backend'", f.f.tenant).Scan(&before, &podUID); err != nil {
+		t.Fatal(err)
+	}
+	awaitNET05A(t, 3*time.Second, func() bool {
+		if _, err := worker.Step(f.f.ctx); err != nil {
+			t.Fatal(err)
+		}
+		var observed time.Time
+		var samePod bool
+		return f.f.owner.QueryRow(f.f.ctx, "SELECT observed_at,(pod_uid=$2 AND state='attached' AND NOT protocol_blocked) FROM network_attachments WHERE tenant_id=$1 AND instance_id='lb-backend'", f.f.tenant, podUID).Scan(&observed, &samePod) == nil && observed.After(before) && samePod
+	})
 }

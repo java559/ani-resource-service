@@ -1,0 +1,55 @@
+{
+  "run_id": "kcn-network-platform-20261021",
+  "result": "PASS",
+  "execution_host": "fedora",
+  "go_version": "go1.26.9",
+  "verified_at_utc": "2026-10-21T09:00:04Z",
+  "module": "github.com/zhangzhe-ctrl/ani-resource-service",
+  "version": "v0.0.0-20261021072547-267c2d29c611",
+  "source_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+  "sum": "h1:A+KsTZqcKFvXP9a05ySgSySCdvZKNDVXn+w12Jr0yzc=",
+  "go_mod_sum": "h1:prLQ/iOP10ojhngZh07ZEF/mFlmI3Ftm7MRsJvM41Z8=",
+  "origin": {
+    "VCS": "git",
+    "URL": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+    "Hash": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a"
+  },
+  "commands": [
+    {
+      "argv": "go mod download -json github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261021072547-267c2d29c611",
+      "exit_code": 0
+    },
+    {
+      "argv": "go list -m -json github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261021072547-267c2d29c611",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "GOWORK": "off",
+    "GOSUMDB": "sum.golang.org",
+    "GOPROXY": "https://proxy.golang.org,direct",
+    "git_publication_transport": "Git SSH through the existing GitHub port 443 identity",
+    "module_transport": "Official HTTPS proxy and its actual storage.googleapis.com redirect; original URL, SNI, hostname, system CA and Go checksum-database verification retained",
+    "download_cache": "Official immutable zip was resumed on Fedora into task storage, then placed in the standard Go download cache. Go hashZip/checkModSum authenticated it and wrote ziphash; no handcrafted authentication file, local replace or unpublished Provider copy was used.",
+    "official_zip_bytes": 70057298,
+    "official_zip_sha256": "47652f8769abf2ab8751c7e741cc4c9d9ee9063dbce94a164c25f5934ab3aa8f"
+  },
+  "governance_dependency": {
+    "only_mvs_change": "ani-resource-service v0.0.0-20261019174951-733f625995f8 to this published version",
+    "go_mod_sha256": "73bc42ea13ef6dfbb9a9a961019ba8ff0c4b2bdd39a90da4f7850bbfdc3d5d17",
+    "go_sum_sha256": "e1561f406d2cb64584164e9a814f386ae82a01b2b79c02f84b12e1aaacd4c820"
+  },
+  "evidence_directory": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/transfer/gov-final-prep/formal-api-final",
+  "failure_retention": "Original TLS, transport EOF/Broken pipe and timed-out range receipts retained. An explicitly stopped earlier Go unit is not counted as a successful download.",
+  "cleanup": {
+    "local_relay_and_tunnel": "PASS; inactive with no remaining listeners",
+    "remote_proxy_and_reverse_listeners": "PASS; inactive with no remaining listeners",
+    "task_partial_zip": "REMOVED",
+    "standard_verified_go_cache": "RETAINED"
+  },
+  "boundaries": {
+    "governance_joint_business_acceptance": "NOT_COVERED; module verification alone does not establish it. Current execution state is docs/execution/status.md.",
+    "cluster_use_after_user_confirmation_boundary": "NOT_RUN",
+    "deployment_and_public_egress_acceptance": "NOT_RUN"
+  }
+}

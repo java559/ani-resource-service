@@ -186,17 +186,56 @@
     "environment_retry": "Only TMPDIR changed to a real task-owned 0700 short directory after reproducing AF_UNIX path too long; exact original socket test and complete make verify passed. Temporary directory removed.",
     "source_drift": {}
   },
-  "gov_joint_http": "NOT_RUN_PENDING_RELEASED_API",
+  "gov_joint_http": "SEPARATE_GATE; actual current result is recorded only in docs/execution/status.md",
   "target_deployment": "NOT_RUN",
   "live_business_acceptance": "NOT_RUN",
   "maintenance_open": false,
   "kcn_source_changes": "PROHIBITED_WITHDRAWN",
   "note": "This receipt proves the isolated software slice, not existing KCN recovery protocol, physical wiring, public traffic, cleanup or restoration.",
   "joint_test_binary": {
-    "result": "BUILT_NOT_YET_EXECUTED",
+    "result": "HISTORICAL_INITIAL_BINARY; later joint fixture failures retained in task artifacts, not the final continuation input",
     "sha256": "172f2360254fa4d1468b11c967a12157d74d056cefd6b42340149f8a059ece68",
     "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-vertical-r2/logs-final-verify-r2/resource-network.test",
     "build_tag": "networkintegration",
     "note": "Input matches the verified source manifest; deployment and Gov joint execution are separate gates."
+  },
+  "joint_fixture_validation_20261022": {
+    "frozen_production_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+    "build_rc": 0,
+    "narrow_regressions": [
+      "TestNetworkJointBoundaryPublishesV09UnderlayReference",
+      "TestNetworkJointBackendWorkerRefreshesAttachmentObservation"
+    ],
+    "narrow_regressions_rc": 0,
+    "make_verify_rc": 0,
+    "original_runner_rc": 1,
+    "runner_rc_reason": "post-verify source guard found only generated Python bytecode; make verify itself passed",
+    "cleanup": {
+      "generated_file": "scripts/__pycache__/net05a-adapt.cpython-314.pyc",
+      "sha256": "e9ae24bb45f577d4b2a069514fdae704f4304835a033b8619780c2d428dc14ce",
+      "hash_guarded_delete": true,
+      "empty_parent_rmdir": true,
+      "tmpdir_absent": true,
+      "container_absent": true,
+      "heavy_lock_released": true
+    },
+    "source_guard_after_cleanup": "PASS; original manifest restored without rerunning verification",
+    "source_files": 651,
+    "production_files_compared_with_formal_module_zip": 274,
+    "production_unchanged": true,
+    "binary_sha256": "96a222bed2cea34961cdb267bd00f518d9cedb2a27bdadd5cfb1c01c74fe8e07",
+    "source_manifest_sha256": "0440e0ac0279b65f29c77e9c768811f31cb3a863b19bbd958a73ba44ef097286",
+    "remote_binary": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/resource-network.test",
+    "local_binary": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-final-20261022/r2/logs/resource-network.test",
+    "remote_manifest": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/source-manifest.json",
+    "local_manifest": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-final-20261022/r2/logs/source-manifest.json",
+    "systemd_unit": "kcn-res-final-20261022-r2.service",
+    "memory_peak_bytes": 2339287040,
+    "swap_peak_bytes": 0,
+    "no_real_cluster_node_registry_access": true,
+    "no_commit_push_status_edits": true,
+    "execution_host": "fedora",
+    "command": "Two named networkintegration regressions, followed by make verify",
+    "source_guard_boundary": "No production source, migration or module bytes changed; three test-only overlays. The exact source manifest was restored after hash-guarded removal of one generated Python bytecode file."
   }
 }

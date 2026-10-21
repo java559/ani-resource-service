@@ -128,6 +128,7 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 		t.Fatal(err)
 	}
 	f.f.w = worker
+	attachmentWorker := networkJointBackendObserver(t, f, provider, policy)
 	aggregates := wireNetworkJointAggregates(t, f, provider, policy)
 	ca, cert, key, clientCert, clientKey := networkJointCertificates(t, dir)
 	tlsConfig, err := runtime.GovernanceTLS(ca, cert, key)
@@ -166,7 +167,7 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 				return
 			case <-ticker.C:
 				switchBoundary.refresh(f.api)
-				for _, stepper := range append([]runtime.Stepper{worker}, aggregates.steppers...) {
+				for _, stepper := range append([]runtime.Stepper{worker, attachmentWorker}, aggregates.steppers...) {
 					if _, err := stepper.Step(workerCtx); err != nil && workerCtx.Err() == nil {
 						stepping <- err
 						return
@@ -193,6 +194,12 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	scan := bufio.NewScanner(os.Stdin)
 	if !scan.Scan() || scan.Text() != "stop" {
 		t.Error("fixture stopped without explicit product cleanup completion")
+	}
+	// Serving observes the live backend owners continuously. Cleanup switches to
+	// the finalized owner protocol and drives the same production workers serially.
+	stopWorker()
+	if err := <-stepping; err != nil {
+		t.Fatal(err)
 	}
 	// The HTTP suite deletes its tenant resources first. Internal instance-owner
 	// fixture resources follow the production Attachment release protocol.
@@ -253,10 +260,6 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	// Continue the same production worker serially for platform retirement, so
 	// continuous observations cannot invalidate the version between GET and
 	// SetPool. Shared provider observation remains running through deletion.
-	stopWorker()
-	if err := <-stepping; err != nil {
-		t.Fatal(err)
-	}
 	for _, kind := range []string{"public_pool", "intranet_pool", "egress_gateway"} {
 		resources, next, _, err := f.f.e.ListPlatform(f.f.ctx, kind, biz.ListVPCs{Limit: 100})
 		if err != nil {

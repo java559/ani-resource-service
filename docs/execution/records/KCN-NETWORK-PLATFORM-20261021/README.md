@@ -8,6 +8,11 @@ manifests, commands, original test-fixture failures, successful related slice,
 and remaining verification boundaries. Runtime prerequisites are described in
 [the deployment guide](../../../../deployments/egress/README.md).
 
+[Formal API publication](formal-api-publication.json) fixes the published source,
+canonical Go version, Origin and both checksum-database authenticated sums. It
+also records the official module transfer, exact Gov dependency delta and
+temporary transport cleanup; it does not establish joint business acceptance.
+
 [Recovery boundary validation](recovery-isolated-validation.json) records the
 Fedora r2 candidate's 17 passing tests, fixed hashes and observed cleanup. These
 tests use loopback external boundaries; promotion, cluster use, maintenance and

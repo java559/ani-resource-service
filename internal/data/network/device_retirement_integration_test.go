@@ -96,12 +96,59 @@ func TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays(t *testing.T) {
 	if accepted.State != "closing" || !accepted.PendingUnknown || accepted.FenceVersion <= device.Version || accepted.ConfigUID != "installer-config-uid" {
 		t.Fatal(accepted)
 	}
-	if err = f.p.Finish(f.ctx, old, biz.Progress{State: biz.Available, Observed: true, ClearPending: true}); !errors.Is(err, biz.ErrLeaseLost) {
-		t.Fatal("late legacy worker was not fenced", err)
+	// Run the real informer -> NotifyPlatform -> PostgreSQL path. A scheduling
+	// hint may change next_run_at, but cannot reopen a closed registration.
+	options := data.DefaultObservationOptions()
+	options.AuditInterval, options.AuditJitter = 50*time.Millisecond, time.Millisecond
+	options.AuditTimeout, options.FlushInterval = 2*time.Second, 10*time.Millisecond
+	observer, err := provider.EnableObservation(options)
+	if err != nil {
+		t.Fatal(err)
 	}
-	if err = provider.EnsureLegacyDeviceMutationAllowed(f.ctx, target); err == nil {
-		t.Fatal("closed registration allowed a late dispatch")
+	live, stopObservation := context.WithCancel(f.ctx)
+	observationDone := make(chan error, 1)
+	go func() { observationDone <- observer.Start(live) }()
+	defer func() {
+		stopObservation()
+		if err := <-observationDone; err != nil {
+			t.Error(err)
+		}
+	}()
+	var executorEpoch int64
+	if err = f.owner.QueryRow(f.ctx, "SELECT executor_epoch FROM network_legacy_device_retirements WHERE resource_id=$1", device.ID).Scan(&executorEpoch); err != nil {
+		t.Fatal(err)
 	}
+	assertExecutorFenced := func(wantState string, wantRetired bool, notificationsBefore float64) {
+		t.Helper()
+		awaitNET05A(t, 3*time.Second, func() bool {
+			return observer.Snapshot()["source_synced"] == 1 && observer.Snapshot()["notifications_total"] > notificationsBefore
+		})
+		var owner *string
+		var leaseUntil *time.Time
+		var epoch, generation int64
+		var closed, retired, due bool
+		var state string
+		if err := f.owner.QueryRow(f.ctx, `SELECT x.lease_owner,x.lease_until,x.lease_epoch,x.requested_generation,
+ x.next_run_at<=clock_timestamp(),d.registration_closed,d.retired,r.state
+ FROM network_platform_reconciliations x JOIN network_device_adoptions d USING(resource_id)
+ JOIN network_platform_resources r USING(resource_id) WHERE x.resource_id=$1`, device.ID).Scan(&owner, &leaseUntil, &epoch, &generation, &due, &closed, &retired, &state); err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("watch reached closed executor: state=%s generation=%d scheduling_hint_due=%v epoch=%d", state, generation, due, epoch)
+		if owner != nil || leaseUntil != nil || epoch != executorEpoch || !closed || retired != wantRetired || state != wantState {
+			t.Fatal("watch reopened the closed executor", owner, leaseUntil, epoch, executorEpoch, closed, retired, state)
+		}
+		if work, found, err := f.p.Claim(f.ctx, uuid.NewString(), time.Second); err != nil || found {
+			t.Fatal("closed registration was claimable after watch", found, work, err)
+		}
+		if err := f.p.Finish(f.ctx, old, biz.Progress{State: biz.Available, Observed: true, ClearPending: true}); !errors.Is(err, biz.ErrLeaseLost) {
+			t.Fatal("late legacy worker was not fenced after watch", err)
+		}
+		if err := provider.EnsureLegacyDeviceMutationAllowed(f.ctx, target); err == nil {
+			t.Fatal("closed registration allowed a late dispatch after watch")
+		}
+	}
+	assertExecutorFenced("deleting", false, 0)
 	policy := biz.DefaultWorkerPolicy()
 	policy.ObserveEvery = 10 * time.Millisecond
 	stepper, err := biz.NewLegacyDeviceRetirementStepper(f.p, provider, uuid.NewString(), policy)
@@ -186,10 +233,14 @@ func TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays(t *testing.T) {
 	if err != nil || oldReplay.ID != device.ID || oldReplay.LastOperationID != device.LastOperationID {
 		t.Fatal("old adoption replay changed", oldReplay, err)
 	}
-	var stillRetired bool
-	_ = f.owner.QueryRow(f.ctx, "SELECT retired FROM network_device_adoptions WHERE resource_id=$1", device.ID).Scan(&stillRetired)
-	if !stillRetired || retirementPatches.Load() != 1 {
-		t.Fatal("old replay resurrected retired registration")
+	notificationsBefore := observer.Snapshot()["notifications_total"]
+	node := api.Object("nodes", "", "node-a")
+	node["metadata"].(map[string]any)["annotations"].(map[string]any)["network.ani.io/retirement-watch-probe"] = "retired"
+	api.Change("nodes", node, false)
+	assertExecutorFenced("deleted", true, notificationsBefore)
+	current, err := f.e.GetPlatform(f.ctx, "device", device.ID)
+	if err != nil || current.State != biz.Deleted || retirementPatches.Load() != 1 {
+		t.Fatal("old replay or watch resurrected retired registration", current, retirementPatches.Load(), err)
 	}
 }
 
