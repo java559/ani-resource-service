@@ -8,6 +8,11 @@ manifests, commands, original test-fixture failures, successful related slice,
 and remaining verification boundaries. Runtime prerequisites are described in
 [the deployment guide](../../../../deployments/egress/README.md).
 
+[Runtime artifacts](runtime-artifacts-20261022.json) fix the static Res/Gov
+binaries and three locally built candidate images, source/module identities,
+nonroot executable permissions, extracted bytes and exact temporary cleanup.
+Local image IDs do not establish target-registry publication or deployment.
+
 [Formal API publication](formal-api-publication.json) fixes the published source,
 canonical Go version, Origin and both checksum-database authenticated sums. It
 also records the official module transfer, exact Gov dependency delta and

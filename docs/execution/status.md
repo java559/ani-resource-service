@@ -6,7 +6,7 @@
 
 Gov `3dcc1df2efc2e0b156e95cf1f605633928e43b55` 已 SSH 推送并独立核对 remote head，2390 项源码字节与 Git 执行位均匹配通过门禁的清单，附加 [draft PR #37](https://github.com/zhangzhe-ctrl/ani-governance/pull/37)。Res 真实 PG 确定性交错证明原 20 秒租约自然排空、旧提交始终被拒绝；新用例、完整 `make verify` 及 653 项源码守卫全部 `PASS`。Gov 只校正两个具体异步删除等待预算并修正本 run 补偿夹具，默认等待与 LB 首建就绪断言不变；Gov 正式 Resource API 依赖及 Res 生产源码仍固定 267，Res 274 项生产输入未改。
 
-原始[JWT LB 首建失败](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-20261022.json)、后续补偿和 15 秒删除超时均按各轮保留，不用最终 PASS 覆盖历史。原 LB 首建故障本轮未复现，不宣称生产根因已修复。Res 正式静态运行产物已通过；Gov server/admin 与本地候选镜像正在构建。真实共享部署、集群业务、流量和原出口恢复仍为 `NOT_RUN`，下一处必需输入是用户按具体范围确认集群使用；本任务未打开公网维护窗口。
+原始[JWT LB 首建失败](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-20261022.json)、后续补偿和 15 秒删除超时均按各轮保留，不用最终 PASS 覆盖历史。原 LB 首建故障本轮未复现，不宣称生产根因已修复。[运行物料](records/KCN-NETWORK-PLATFORM-20261021/runtime-artifacts-20261022.json)中的 Res、Gov server/admin 三份静态二进制及三个本地候选镜像均 `PASS`，来源、ELF/buildinfo、镜像内字节、nonroot 执行权限及入口已核对；临时容器/context、unit、进程与锁均清理。本地镜像保留，未推送内部仓库或启动真实服务。真实共享部署、集群业务、流量和原出口恢复仍为 `NOT_RUN`，下一处必需输入是用户按具体范围确认集群使用；本任务未打开公网维护窗口。
 
 Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持久 worker、旧登记退役和独立默认出口；原定向 PG/进程切片、最新两项窄回归及完整 `make verify` 通过，见[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)。最新额外 runner 因唯一 Python 缓存文件 rc1，按路径/hash 清理后 651 项源清单恢复，未重复门禁；274 个生产输入与正式 module zip 一致。真实 PG/watch 已证明 closed 登记不能 claim、旧租约/迟到提交被拒绝且不复活。测试修复/证据提交 `9e36dd9bdfc1729b21e32406a580bbff1a2016bb` 已 SSH 推送并由独立 ls-remote 精确核对，附加 [draft PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10)。
 
