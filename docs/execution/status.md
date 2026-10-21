@@ -2,9 +2,13 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
-状态 `in_progress`，2026-10-22 继续。Fedora 真实 Gov HTTP/JWT/Casbin → mTLS → Res/PostgreSQL/worker 上次联合结果仍为 `FAIL`，修复后的统一测试入口已编译，两项新增窄回归及完整 `make verify` 均通过；当前正在执行六场景联合续测。断点已逐项定位：外部 Subnet 夹具缺失真实 `underlayState.vlanNetwork` 引用；夹具未持续运行真实 Attachment worker，导致 60 秒后合法后端事实过期；Gov 公共池基数/原池选择和退役日期断言过强。修复均在测试夹具/断言内，Res 生产/API 字节保持已发布 267；真实 PG/watch 已证明 closed 登记不可 claim、旧 lease/迟到提交被拒绝且不复活。新增窄回归分别验证 v0.9 引用发布和真实 Attachment Worker 刷新；修复后整链与产品最终清理仍待实际结果，不能将局部通过或私有容器删除当作主链通过。`make verify` 后仅新增一个 Python 缓存文件，额外源守卫因此使原 runner rc1；已按路径/hash 清理且 651 项冻结输入完全恢复，未重跑门禁，原失败保留。真实集群接管、流量、清理与原出口恢复仍未执行。
+状态 `in_progress`，2026-10-22 继续。Fedora 真实 Gov HTTP/JWT/Casbin → mTLS → Res/PostgreSQL/worker 的[六场景续测](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-20261022.json)为 `FAIL`：deferred LB、platform network、VPC presets 三组 `PASS`；JWT 首先卡在 LB `provisioning / PROVIDER_NOT_READY`（desired=1、applied=0），未执行后续删除；AK 请求相同 VIP 因仍被该 LB 占用而继发 `VIP_IN_USE`，两组均 `FAIL`；authentication_and_plan 未运行。此前依据筛选日志把 JWT 进度误判为完成，已用完整终端结果纠正。当前先收敛 JWT LB 就绪的最小反馈回路，不改 VIP 排他保护或靠换地址绕过。
 
-Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持久 worker、旧登记退役和独立默认出口，其定向 PG/进程切片及完整 `make verify` 通过，见[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)。正式 API `v0.0.0-20261021072547-267c2d29c611` 的 Origin/双 checksum 已由标准 Go 验证，见[发布回执](records/KCN-NETWORK-PLATFORM-20261021/formal-api-publication.json)；来源已 SSH 发布并附加 [draft PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10)。Gov 已固定该正式依赖，完整生成、认证与 data/service 定向测试通过，server/cmd 编译通过（相关 selector 无测试）。联合测试的默认 VPC 出口、延迟 LB、VPC 候选及新权限拒绝子场景有通过断言，但 Layer2/退役/租户链和产品最终清理未通过，不能据此宣布联合验收完成。原始 OOM、tmpfs 编译超时、错误夹具 422 及后续业务失败均保留，修复后只续相关未通过项。
+本轮 HTTP 产品补偿 EIP/VPC 和 Res 产品清理均 `FAIL`（`RESOURCE_IN_USE`）；私有 PG/Redis 删除、任务进程归零和 TMPDIR 删除分别 `PASS`，不能替代产品生命周期清理。原始响应/日志与失败保留在本 run 任务产物，后续只续实际断点及相关依赖。真实集群接管、流量、清理与原出口恢复仍未执行。
+
+Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持久 worker、旧登记退役和独立默认出口；原定向 PG/进程切片、最新两项窄回归及完整 `make verify` 通过，见[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)。最新额外 runner 因唯一 Python 缓存文件 rc1，按路径/hash 清理后 651 项源清单恢复，未重复门禁；274 个生产输入与正式 module zip 一致。真实 PG/watch 已证明 closed 登记不能 claim、旧租约/迟到提交被拒绝且不复活。测试修复/证据提交 `9e36dd9bdfc1729b21e32406a580bbff1a2016bb` 已 SSH 推送并由独立 ls-remote 精确核对，附加 [draft PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10)。
+
+正式 API `v0.0.0-20261021072547-267c2d29c611` 的 Origin/双 checksum 已由标准 Go 验证，见[发布回执](records/KCN-NETWORK-PLATFORM-20261021/formal-api-publication.json)。Gov 已固定该正式依赖，完整生成、认证与 data/service 定向测试通过，server/cmd 编译通过（相关 selector 无测试）。原始 OOM、tmpfs 超时、外部夹具 422、缺失 v0.9 引用、Attachment 观察过期及后续业务失败均保留；后续修复保持生产/API 字节不变，不能把替身边界通过当成 KCN 真实能力。
 
 批准输入 hash 匹配，Res/Gov/installer 已通过 SSH 固定；KCN GitLab 最新仍未核实。用户明确禁止修改 KCN 源码，原任务候选已全部撤回、缓存工作树 clean，未提交/推送/部署；已撤回候选不能解除现有受支持恢复协议门禁。用户随后明确“需要使用集群就找我确认”：任何后续 10–12 只读 API、节点 SSH、部署、验收或恢复都必须先取得具体用途确认，当前没有集群阶段许可。仅继续 Fedora 软件和完全隔离 loopback 测试，未打开公网维护窗口。所有当前证据集中在[本 run 索引](records/KCN-NETWORK-PLATFORM-20261021/README.md)，真实部署及 P4–P6 验收保持 `NOT_RUN`。
 

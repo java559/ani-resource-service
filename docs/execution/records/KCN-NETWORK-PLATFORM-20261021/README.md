@@ -13,6 +13,11 @@ canonical Go version, Origin and both checksum-database authenticated sums. It
 also records the official module transfer, exact Gov dependency delta and
 temporary transport cleanup; it does not establish joint business acceptance.
 
+[Gov joint continuation](gov-joint-20261022.json) records the actual six-scenario
+result, first JWT LB readiness failure, secondary AK conflict, and separate
+product versus infrastructure cleanup outcomes. The complete original log is
+hash-bound; missing transient Provider state is explicitly not captured.
+
 [Recovery boundary validation](recovery-isolated-validation.json) records the
 Fedora r2 candidate's 17 passing tests, fixed hashes and observed cleanup. These
 tests use loopback external boundaries; promotion, cluster use, maintenance and
