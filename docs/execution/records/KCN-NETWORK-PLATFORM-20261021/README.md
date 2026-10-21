@@ -18,6 +18,12 @@ result, first JWT LB readiness failure, secondary AK conflict, and separate
 product versus infrastructure cleanup outcomes. The complete original log is
 hash-bound; missing transient Provider state is explicitly not captured.
 
+[Gov observed replays](gov-joint-observe-20261022.json) preserve the later full
+scenario outcomes, failure snapshots, fixture-only compensation corrections and
+separate product/infrastructure cleanup. The original LB initial-readiness
+failure is not claimed fixed. The Res software receipt also includes the real
+20-second old-claim lease test and its required verification gate.
+
 [Recovery boundary validation](recovery-isolated-validation.json) records the
 Fedora r2 candidate's 17 passing tests, fixed hashes and observed cleanup. These
 tests use loopback external boundaries; promotion, cluster use, maintenance and

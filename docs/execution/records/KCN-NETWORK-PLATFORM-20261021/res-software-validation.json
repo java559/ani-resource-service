@@ -237,5 +237,143 @@
     "execution_host": "fedora",
     "command": "Two named networkintegration regressions, followed by make verify",
     "source_guard_boundary": "No production source, migration or module bytes changed; three test-only overlays. The exact source manifest was restored after hash-guarded removal of one generated Python bytecode file."
+  },
+  "static_runtime_artifact_20261022": {
+    "result": "PASS",
+    "execution_host": "fedora",
+    "source_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+    "module_version": "v0.0.0-20261021072547-267c2d29c611",
+    "production_inputs": 274,
+    "production_input_manifest_sha256": "1845e1009372a9bfa3640202d99002f58937aae9996c88f84419d17b98005618",
+    "production_inputs_before_after": "PASS; exact official module zip inputs unchanged",
+    "binary_sha256": "c1cfd6fa7a750c9ebdbeb91130ac091f88cb23e527ce1bdc3ab0e3fd58f9b75a",
+    "binary_bytes": 54288546,
+    "binary_modes": [
+      "server",
+      "-node-facts"
+    ],
+    "go": "go1.26.9",
+    "CGO_ENABLED": "0",
+    "GOOS": "linux",
+    "GOARCH": "amd64",
+    "GOAMD64": "v1",
+    "GOWORK": "off",
+    "GOFLAGS": "-p=1 -mod=readonly",
+    "ldflags": "-ldflags=-s -w -X main.Version=v0.0.0-20261021072547-267c2d29c611",
+    "checks": "PASS: static ELF, no INTERP or dynamic section, buildinfo and help-only before runtime configuration",
+    "runtime_behavior": "NOT_RUN",
+    "image": "NOT_RUN",
+    "cluster": "NOT_RUN",
+    "cleanup": {
+      "observed_utc": "2026-10-21T18:51:31.132891+00:00",
+      "unit": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n",
+      "unit_query_rc": 0,
+      "cgroup_exists": false,
+      "known_main_pid_545053_exists": false,
+      "owned_build_or_binary_processes": [],
+      "TMPDIR": "/var/tmp/kr.iPL0sd",
+      "TMPDIR_exists": false,
+      "tmp_cleanup_log": "short_tmp_removed=true",
+      "runner_rc": 0,
+      "build_rc": 0,
+      "heavy_lock_free": true,
+      "source_before_after_equal": true,
+      "source_after_status": "PASS"
+    },
+    "raw_logs_archive_sha256": "5ac15c27862d134fa6d97de8eb0345dd0712173e0ea58e802e13ed8b4597df19"
+  },
+  "switch_delete_lease_drain_20261022": {
+    "purpose": "Deterministic PG regression of configured VirtualSwitch old-claim lease drain; no production fix",
+    "unit": "kcn-res-switch-lease-20261022-r1.service",
+    "execution_host": "fedora",
+    "source": {
+      "head": "5c458c2102e4093ba23be24db001171f0d1b13ac",
+      "production_api_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+      "archive_sha256": "31e8aa1f10d701b2ee9b1308c0f7a16d6e1abca8a1f9ae17c5ef4c7a1acb61a9",
+      "manifest_path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-switch-lease-20261022/logs/source-manifest.json",
+      "manifest_sha256": "75b6a3bb09b5af7d707a755cdc6bedb27edc2a85348abaa02896dd5ae86ae3e8",
+      "source_files": 653,
+      "all_frozen_files_match_local_after_fedora_gofmt": true,
+      "target_file": "internal/data/network/virtual_switch_integration_test.go",
+      "target_sha256": "5aecf300e171437e12e85f9f68fa3d36affd7cf08feb62df2299eca562ce9365",
+      "production_files_unchanged": 274,
+      "comparison": "byte-for-byte with formal cached module ZIP at 267c2d29c611",
+      "source_unchanged_after_gates": true
+    },
+    "gates": {
+      "ast_rc": 0,
+      "target_pg_rc": 0,
+      "target_pg_command": "scripts/integration -timeout=60s -failfast -v -run ^TestVirtualSwitchDeleteWaitsForOldClaimLeaseExpiry$ ./internal/data/network",
+      "target_test_seconds": 20.81,
+      "make_verify_rc": 0,
+      "make_verify_command": "make verify",
+      "runner_rc": 0
+    },
+    "observations": {
+      "configured_lease_seconds": 20,
+      "after_delete": {
+        "state": "deleting",
+        "binding": "cleaning",
+        "operation": "queued",
+        "old_epoch": 4,
+        "lease_remaining_seconds": 19.987649,
+        "next_run_due": true
+      },
+      "at_15s": {
+        "state": "deleting",
+        "binding": "cleaning",
+        "operation": "queued",
+        "old_epoch": 4,
+        "lease_remaining_seconds": 4.995713,
+        "next_run_due": true
+      },
+      "natural_expiry": {
+        "same_object": true,
+        "version": 3,
+        "old_epoch": 4,
+        "final_epoch": 7,
+        "delete_elapsed_seconds": 20.038114,
+        "state": "deleted",
+        "binding": "cleaned",
+        "operation": "succeeded"
+      },
+      "old_finish_and_save_rejected_before_and_after_expiry": true,
+      "lease_not_cleared_or_shortened": true,
+      "historical_gov_old_lease_snapshot": "NOT_AVAILABLE; this regression proves the configured mechanism"
+    },
+    "resources": {
+      "memory.peak": "1528324096",
+      "memory.swap.peak": "0",
+      "cpu.stat": "usage_usec 190194938\nuser_usec 163432377\nsystem_usec 26762561\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 3386\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+    },
+    "cleanup": {
+      "unit": {
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "ControlGroup": ""
+      },
+      "unit_show_rc": 0,
+      "task_cgroup_exists": false,
+      "tmpdir": "/var/tmp/kr.1JppaV",
+      "tmpdir_exists": false,
+      "container": "f78fd89c9ec71436c17b9880a6a9868d34a13def82bb12fa7cd499f128fc2160",
+      "container_inspect_rc": 1,
+      "container_absent": true,
+      "lock_release": "bounded unit exited successfully; flock handle terminated with unit",
+      "candidate_retained": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-switch-lease-r1/candidate",
+      "shared_cache_untouched": true
+    },
+    "scope": {
+      "real_cluster_or_api_or_node_or_registry_access": false,
+      "kcn_source_access": false,
+      "production_query_lease_changes": false,
+      "gov_fixture_binary_rebuilt": false,
+      "extra_pg_or_gov_runs": false
+    },
+    "raw_logs_sha256": {
+      "target_pg": "8b3585449b4d60e746f52ebca45b22d01e54cdf3da0fd242ef148808a3c3770a",
+      "make_verify": "d02f122cec739b119351789156f0aeb80a06c51deda3e5a218ea7599c3ecc49a"
+    }
   }
 }

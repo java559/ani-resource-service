@@ -2,9 +2,11 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
-状态 `in_progress`，2026-10-22 继续。Fedora 真实 Gov HTTP/JWT/Casbin → mTLS → Res/PostgreSQL/worker 的[六场景续测](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-20261022.json)为 `FAIL`：deferred LB、platform network、VPC presets 三组 `PASS`；JWT 首先卡在 LB `provisioning / PROVIDER_NOT_READY`（desired=1、applied=0），未执行后续删除；AK 请求相同 VIP 因仍被该 LB 占用而继发 `VIP_IN_USE`，两组均 `FAIL`；authentication_and_plan 未运行。此前依据筛选日志把 JWT 进度误判为完成，已用完整终端结果纠正。当前先收敛 JWT LB 就绪的最小反馈回路，不改 VIP 排他保护或靠换地址绕过。
+状态 `in_progress`，2026-10-22 继续。**软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。Kubernetes/控制器位于隔离外部边界，不能据此宣称真实集群接管或流量验收通过。
 
-本轮 HTTP 产品补偿 EIP/VPC 和 Res 产品清理均 `FAIL`（`RESOURCE_IN_USE`）；私有 PG/Redis 删除、任务进程归零和 TMPDIR 删除分别 `PASS`，不能替代产品生命周期清理。原始响应/日志与失败保留在本 run 任务产物，后续只续实际断点及相关依赖。真实集群接管、流量、清理与原出口恢复仍未执行。
+Gov `3dcc1df2efc2e0b156e95cf1f605633928e43b55` 已 SSH 推送并独立核对 remote head，2390 项源码字节与 Git 执行位均匹配通过门禁的清单，附加 [draft PR #37](https://github.com/zhangzhe-ctrl/ani-governance/pull/37)。Res 真实 PG 确定性交错证明原 20 秒租约自然排空、旧提交始终被拒绝；新用例、完整 `make verify` 及 653 项源码守卫全部 `PASS`。Gov 只校正两个具体异步删除等待预算并修正本 run 补偿夹具，默认等待与 LB 首建就绪断言不变；Gov 正式 Resource API 依赖及 Res 生产源码仍固定 267，Res 274 项生产输入未改。
+
+原始[JWT LB 首建失败](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-20261022.json)、后续补偿和 15 秒删除超时均按各轮保留，不用最终 PASS 覆盖历史。原 LB 首建故障本轮未复现，不宣称生产根因已修复。Res 正式静态运行产物已通过；Gov server/admin 与本地候选镜像正在构建。真实共享部署、集群业务、流量和原出口恢复仍为 `NOT_RUN`，下一处必需输入是用户按具体范围确认集群使用；本任务未打开公网维护窗口。
 
 Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持久 worker、旧登记退役和独立默认出口；原定向 PG/进程切片、最新两项窄回归及完整 `make verify` 通过，见[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)。最新额外 runner 因唯一 Python 缓存文件 rc1，按路径/hash 清理后 651 项源清单恢复，未重复门禁；274 个生产输入与正式 module zip 一致。真实 PG/watch 已证明 closed 登记不能 claim、旧租约/迟到提交被拒绝且不复活。测试修复/证据提交 `9e36dd9bdfc1729b21e32406a580bbff1a2016bb` 已 SSH 推送并由独立 ls-remote 精确核对，附加 [draft PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10)。
 
