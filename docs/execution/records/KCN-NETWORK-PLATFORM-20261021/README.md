@@ -8,6 +8,12 @@ manifests, commands, original test-fixture failures, successful related slice,
 and remaining verification boundaries. Runtime prerequisites are described in
 [the deployment guide](../../../../deployments/egress/README.md).
 
+[Recovery boundary validation](recovery-isolated-validation.json) records the
+Fedora r2 candidate's 17 passing tests, fixed hashes and observed cleanup. These
+tests use loopback external boundaries; promotion, cluster use, maintenance and
+actual restoration remain `NOT_RUN`. The current user confirmation and supported
+KCN recovery protocol gates remain closed.
+
 Approved inputs were read from `/home/chabking/workspace/ani-resource-service`
 before being copied unchanged into this isolated worktree:
 
@@ -40,3 +46,9 @@ No KCN commit, push, image, release or deployment occurred. Withdrawn candidate
 tests are historical diagnosis only and cannot qualify the existing KCN runtime.
 Res/Gov work continues within the revised boundary; no egress maintenance may
 begin without a supported recovery protocol in the unchanged KCN deployment.
+
+The user's subsequent instruction also requires confirmation before each
+explicitly scoped phase of cluster use, including read-only API checks and Node
+SSH. The original cluster preauthorization is superseded. Current independent
+Fedora software/module work and isolated loopback tests may continue; no cluster
+phase is currently approved.

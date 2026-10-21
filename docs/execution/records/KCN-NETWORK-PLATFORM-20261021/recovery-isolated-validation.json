@@ -1,0 +1,69 @@
+{
+  "run_id": "kcn-network-platform-20261021",
+  "candidate_revision": "r2",
+  "scope": "Isolated external HTTP/Kubernetes/OS boundaries; no live recovery acceptance",
+  "execution_host": "fedora",
+  "started_at_utc": "2026-10-21T07:54:54Z",
+  "python": "3.14.7",
+  "candidate": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime/recovery-candidate/r2",
+  "candidate_mode": "0700",
+  "evidence": {
+    "local_artifact_directory": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/p0-runtime/recovery-tests/results/r2",
+    "receipt": "first-run-receipt.json",
+    "log": "unittest.log",
+    "manifest": "source-manifest.sha256",
+    "manifest_sha256": "17af0a9519cf2a27ecfa436d4440ab2b3685a9e8ae01327badd781e73fe89d69"
+  },
+  "source_sha256": {
+    "restore-egress.py": "d1f7a71c447b337d24d4b44d900edaa18997ad01fc151482680d62bb47c9c931",
+    "recovery-driver.py": "5948d736ae0cfc8034195c0331e79e04ef0d58939b7e851c7fa12900f6c29e11",
+    "recovery-watchdog.py": "4d4aa209b06fac012ae50519920b34f4fe7cb5ef30061a6780ffca8ebd7d7c8d",
+    "recovery-observer.py": "233a2c47ae2636ea721152dbf820361258a35601a8d39abad7fda1e1a7ceb94b",
+    "session-driver.py": "68b0f35e42d20477da4ab546859de51a403a678319f837b743cba3bfce2e7f90",
+    "recovery-tests/test_recovery_boundaries.py": "95e80fe8bccf66a10418a4e70f69fe543030193684caa87e3c37b51006310296",
+    "recovery-tests/isolated_runner.py": "c31ab8515c359b39a13a1cdeeeaef88f84374205a425f69d4268e2bbec244159",
+    "recovery-tests/run-isolated-r2.sh": "5cd9c0dd4025d438d0079f23439bb6700113dcb502093da424e547bcfee7af84"
+  },
+  "execution": {
+    "command": "systemd-run --user --wait --collect --pipe --unit=kcn-recovery-boundaries-r2 --property=CPUQuota=200% --property=MemoryMax=2300M --property=MemorySwapMax=0 --property=RuntimeMaxSec=9m --property=KillMode=control-group /usr/bin/bash /home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime/recovery-candidate/r2/recovery-tests/run-isolated-r2.sh",
+    "shared_lock": "/home/chabking/workspace/ani-network-service-runs/net05a-heavy.lock",
+    "temporary_directory_mode": "0700",
+    "io_fuse": {
+      "only_loopback_sockets": true,
+      "no_kubectl_or_ssh_subprocess": true,
+      "no_protected_runtime_file_access": true,
+      "blocked_external_io": []
+    }
+  },
+  "result": {
+    "syntax": "PASS",
+    "unittest": "PASS",
+    "tests_run": 17,
+    "passed": 17,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rc": 0
+  },
+  "cleanup_observed_after_run": {
+    "short_tmp_removed": true,
+    "boundary_tmp_removed": true,
+    "unit_active": false,
+    "shared_lock_released": true
+  },
+  "live": {
+    "cluster_api": "NOT_RUN",
+    "node_ssh": "NOT_RUN",
+    "promotion": "NOT_RUN",
+    "deployment": "NOT_RUN",
+    "maintenance": "NOT_RUN",
+    "restore": "NOT_RUN",
+    "watchdog": "NOT_RUN",
+    "physical_source_and_consumer_acceptance": "NOT_RUN"
+  },
+  "remaining_gates": {
+    "current_user_purpose_confirmation": "MISSING; source gate FAIL_CLOSED as required; no receipt generated",
+    "kcn_supported_recovery_protocol": "CLOSED; isolated test confirms self-issued flags cannot open the source gate; no live supported protocol evidence was obtained"
+  },
+  "documentation_only_followup": "Task-local usage instructions were corrected after r2; verified candidate code and manifest were not changed and tests were not rerun."
+}

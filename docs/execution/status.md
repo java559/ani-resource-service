@@ -2,7 +2,7 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
-状态 `in_progress`。Res 已实现交换机/二层网络 v2 原子受理、组标签 worker、旧登记退役及独立默认 VPC 出口；Fedora 定向 unit、生产入口 build 与相关真实 PG/worker/进程恢复切片已通过（Kubernetes/KCN 为外部边界替身），[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)保留原始失败和修正后的逐项证据。完整 `make verify` 和新联合测试二进制编译均已通过；正式 API 发布及 Gov 新两步联合链尚未完成；实际集群接管、产品公网及默认出口均未验收。批准输入 hash 匹配，Res/Gov/installer 已 SSH 刷新并固定。用户本轮最新明确禁止修改 KCN 源码，覆盖原 Goal 的 P1 窄改边界；已停止 KCN 工作并撤回本任务 6 个文件，隔离 KCN 工作树恢复到缓存 `2b9467c` 且 clean，未提交/推送/部署。现有 KCN 的组识别与稳定错误恢复缺口仍是必要运行门禁，不能用已撤回候选的隔离通过记录解除。Res/Gov 独立实现继续，所有重任务仅 Fedora。集群身份及原公网已只读冻结，尚未打开公网维护窗口。真实部署、矩阵验收、清理与恢复均 `not_run`，不得据此称 Goal 完成。[本 run 来源与证据](records/KCN-NETWORK-PLATFORM-20261021/README.md)。
+状态 `in_progress`。Res 已实现交换机/二层网络 v2 原子受理、组标签 worker、旧登记退役及独立默认 VPC 出口；Fedora 定向 unit、生产入口 build 与相关真实 PG/worker/进程恢复切片已通过（Kubernetes/KCN 为外部边界替身），[软件回执](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)保留原始失败和修正后的逐项证据。完整 `make verify` 和新联合测试二进制编译均已通过；Res 源码 `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已 SSH 发布并创建 [draft PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10)，正式 Go module 校验及 Gov 新两步联合链尚未完成；实际集群接管、产品公网及默认出口均未验收。批准输入 hash 匹配，Res/Gov/installer 已 SSH 刷新并固定。用户本轮最新明确禁止修改 KCN 源码，覆盖原 Goal 的 P1 窄改边界；已停止 KCN 工作并撤回本任务 6 个文件，隔离 KCN 工作树恢复到缓存 `2b9467c` 且 clean，未提交/推送/部署。现有 KCN 的组识别与稳定错误恢复缺口仍是必要运行门禁，不能用已撤回候选的隔离通过记录解除。Res/Gov 独立实现继续，所有重任务仅 Fedora。此前集群身份及原公网已只读冻结，尚未打开公网维护窗口。用户随后明确“需要使用集群就找我确认”：任何后续 10–12 只读核查、节点 SSH、部署、验收和恢复都须先取得具体用途确认，当前没有集群阶段许可；仅继续 Fedora 软件/正式模块传输/完全隔离测试。真实部署、矩阵验收、清理与恢复均 `not_run`，不得据此称 Goal 完成。[本 run 来源与证据](records/KCN-NETWORK-PLATFORM-20261021/README.md)。
 
 更新日期：2026-10-20。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
 
