@@ -13,6 +13,18 @@ binaries and three locally built candidate images, source/module identities,
 nonroot executable permissions, extracted bytes and exact temporary cleanup.
 Local image IDs do not establish target-registry publication or deployment.
 
+[NodeFacts runtime artifact](nodefacts-runtime-artifacts-20261022.json) records
+the same-source binary, verified UID65534 runtime, exact Debian/packages and
+local image checks/cleanup. It was not published or rolled out.
+
+[Gov deployed-source reconciliation](gov-deployed-compatible-20261022.json)
+maps fixed2385 inputs to merge commit b5ee887, preserving the captured deployed
+ModelDev source. Full generation/auth passed; data/service compilation timed
+out before business cases, and remaining checks/Joint/runtime are NOT_RUN.
+The user requires pausing before further cluster use; this candidate is not
+declared deployable. Historical three-image/six-scenario receipts above apply
+to the earlier fixed source, not this merge.
+
 [Approved read-only cluster and SSH inspection](cluster-readonly-20261022.json)
 fixes current identities/images, ens34 recovery-channel evidence and numeric OVS
 socket ownership. It records the old NodeFacts/RBAC gaps and the deployed Gov

@@ -1,0 +1,183 @@
+{
+  "status": "PARTIAL_VALIDATION_NOT_DEPLOYABLE",
+  "source_commit": "b5ee887bd981ca463017b97d47107af52e58c8bc",
+  "git_tree": "821fb020210bd6ea0687456b49f96ce27d22301f",
+  "parents": [
+    "3dcc1df2efc2e0b156e95cf1f605633928e43b55",
+    "756f5a2aa1d3a0b4b3cdbfa8db0a559816d43440"
+  ],
+  "source_manifest": {
+    "path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/gov-deployed-compatible-20261022/final-source-manifest.json",
+    "sha256": "9084f5375efde64085e15970417905f5fa217ec07c74a6a17669fcbcba44c0b2",
+    "effective_source_tree_sha256": "16881f6a69cc6cb1354eadddf43b45b79cb122c302873d01b83472c0c279f2e3",
+    "files": 2385,
+    "actual_Fedora_mode_and_normalized_Git_mode_both_preserved": true,
+    "known_extra_ELF_tools": [
+      {
+        "path": "tools/bin/gow",
+        "sha256": "70d4c38ba0665e09b43c128c1aa204d1acf77d247d10e4ca0e62484386d343f5",
+        "bytes": 5398796,
+        "git_mode": "100755",
+        "mode": "0o755",
+        "role": "Known locally built generation tool; excluded from business source files and effective source tree hash"
+      },
+      {
+        "path": "tools/bin/protoc-gen-go-redact",
+        "sha256": "87a99aa269d4004c1afabf7563ed152874bc9163a93d4e488e50b2fe980b7996",
+        "bytes": 19071360,
+        "git_mode": "100755",
+        "mode": "0o755",
+        "role": "Known locally built generation tool; excluded from business source files and effective source tree hash"
+      }
+    ]
+  },
+  "commit_mapping_limit": "Manifest was created before commit; root independently matched all2385 bytes and Git executable bits to the committed tree. Snapshot metadata is preserved, not rewritten as a Git identity.",
+  "root_index_guard": "PASS",
+  "deployed_content_guard": "PASS; all 85 deployed unique files/deletions unchanged after generation",
+  "network_content_guard": "PASS; all 27 network unique files unchanged after generation",
+  "generation": {
+    "status": "PASS",
+    "run": "r2",
+    "elapsed_seconds": 181.01888060569763,
+    "changed_files": 1,
+    "changed_path": "app/admin/service/cmd/server/assets/openapi.yaml",
+    "log_sha256": "9e13bfa16eb4b914e0b741123a748bee8496cc4b5f3b2942525e647e826b2284",
+    "local_apply_receipt": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/gov-deployed-compatible-20261022/generated-return/apply-receipt.json"
+  },
+  "r1": {
+    "result": "FAIL_ENVIRONMENT",
+    "exit_code": 2,
+    "reason": "GOPROXY=off rejects Go1.26.10 fixed-version plugin deprecation lookup",
+    "input_transaction_guard": "PASS; no generated source written back"
+  },
+  "r2": {
+    "result": "INTERRUPTED",
+    "exit_code": 143,
+    "generation": "PASS",
+    "auth": "INTERRUPTED_DURING_BUILD; no business result",
+    "reason": "systemd user manager entered shutdown.target and stopped unit; initiator UNKNOWN; not OOM, not RuntimeMax exhaustion"
+  },
+  "r3": {
+    "result": "BUILD_TIMEOUT",
+    "launcher_exec_session": 53510,
+    "launcher_exit_code": 124,
+    "unit": "kcn-gov-deployed-compatible-20261022-r3.service",
+    "invocation_id": "a16778c092804b4ab755acc2dd7eea52",
+    "stages": [
+      {
+        "name": "auth-targeted",
+        "status": "PASS",
+        "exit_code": 0,
+        "elapsed_seconds": 26.317609548568726,
+        "log_sha256": "59eafa08b7b2dca5b8732766f0104a74850abf8be8576e91da5a5444a6f7e14a"
+      },
+      {
+        "name": "network-data-service",
+        "status": "FAIL",
+        "exit_code": 124,
+        "elapsed_seconds": 960.0312716960907,
+        "log_sha256": "9a54b1112a305836fe28bb8ac2d2aff3e44fd6ee67a5ccc205d9abfa9031a0fa"
+      }
+    ],
+    "named_event_counts": {
+      "auth-targeted": {
+        "test_run_events": 110,
+        "top_level_test_passes": 6,
+        "all_test_passes": 110,
+        "test_fail_events": 0,
+        "package_passes": [
+          "go-wind-admin/pkg/middleware/auth"
+        ]
+      },
+      "network-data-service": {
+        "test_run_events": 0,
+        "top_level_test_passes": 0,
+        "all_test_passes": 0,
+        "test_fail_events": 0,
+        "package_passes": []
+      },
+      "modeldev-directed": {
+        "test_run_events": 0,
+        "top_level_test_passes": 0,
+        "all_test_passes": 0,
+        "test_fail_events": 0,
+        "package_passes": []
+      },
+      "server-cmd-compile": {
+        "test_run_events": 0,
+        "top_level_test_passes": 0,
+        "all_test_passes": 0,
+        "test_fail_events": 0,
+        "package_passes": []
+      }
+    },
+    "auth": "PASS",
+    "network_data_service": "BUILD_TIMEOUT_AT_960_SECONDS; no business test run events",
+    "modeldev_directed": "NOT_RUN; preceding stage timed out",
+    "server_cmd_compile": "NOT_RUN; preceding stage timed out",
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+    "memory_peak_bytes": 2073571328
+  },
+  "cleanup": {
+    "observed_unix": 1792620322.6312704,
+    "execution_host": "fedora",
+    "source_files_guard": {
+      "status": "PASS",
+      "files": 2385,
+      "known_extra_ELF_tools": 2,
+      "manifest_sha256": "9084f5375efde64085e15970417905f5fa217ec07c74a6a17669fcbcba44c0b2",
+      "effective_source_tree_sha256": "16881f6a69cc6cb1354eadddf43b45b79cb122c302873d01b83472c0c279f2e3"
+    },
+    "unit_actual_result": "EXIT_124_FROM_RUNNER_AND_JOURNAL",
+    "source_of_r2_user_manager_shutdown": "UNKNOWN; user manager entered shutdown.target; no OOM or RuntimeMax exhaustion",
+    "r3_terminal_stage": "network-data-service BUILD_TIMEOUT after 960s; no data/service business test events",
+    "short_tmp_absent": true,
+    "unit_cgroup_absent": true,
+    "runner_and_stage_pids_absent": true,
+    "heavy_lock_free_at_observation": true,
+    "task_unit_after_reset_failed": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nMainPID=0\nControlGroup=\n",
+    "no_further_unit_started": true
+  },
+  "remaining_verification": {
+    "ModelDev_PG_provider_cases": "NOT_RUN; separate inventory retained",
+    "Joint_six_scenarios_on_this_source": "NOT_RUN",
+    "runtime_server_admin_rebuild_on_this_source": "NOT_RUN",
+    "cluster_nodes_DB_registry_deployment": "NOT_RUN; user forbids current cluster use/deployment"
+  },
+  "historical_six_scenario_pass": "Original3dcc source parent+six PASS in gov-joint-observe-20261022.json; this does not validate new b5ee source",
+  "new_source_six_scenarios": "NOT_RUN; prepared runner remains NOT_RELEASED",
+  "new_source_runtime_binaries_and_images": "NOT_RUN; prepared release inputs remain absent/unreleased; old3dcc images must not replace captured deployed756",
+  "module_identity": {
+    "go_version": "1.26.10",
+    "Resource": "v0.0.0-20261021072547-267c2d29c611",
+    "ModelDev": "v0.0.0-20261021184454-44188466290f",
+    "Accelerator": "v0.0.0-20261021185941-10a73f7ef24e",
+    "files": {
+      "go.mod": "02e3906885b804b5f20f354c9bce9b3eb06bea64bda9f6a73ceb08fcfa26d762",
+      "go.sum": "40c9dda47e6b03232795916bd03f5588e8af4b3324b26f7fbf0961a952f63855"
+    }
+  },
+  "publication": {
+    "draft_pr": "https://github.com/zhangzhe-ctrl/ani-governance/pull/37",
+    "branch": "codex/kcn-network-platform-20261021",
+    "SSH_push_and_independent_ls_remote": "PASS; exact b5ee887bd981ca463017b97d47107af52e58c8bc",
+    "merge_to_main": "NOT_RUN"
+  },
+  "latest_user_direction": "集群正在使用，你不能部署服务，必须使用集群就暂停",
+  "cluster_use_after_that_direction": "NONE",
+  "new_heavy_task_after_r3_terminal": "NONE",
+  "scope": "Only source/Git, Fedora isolated generation/auth/compile attempts and task cleanup. No cluster, node, shared DB, internal registry or deployment.",
+  "raw_receipts_sha256": {
+    "verification-receipt.json": "d552759f6147a2eb83cee694f1484a7269f22b583b1b042dd7cc844b6cd09c43",
+    "root-git-source-proof.json": "fa886b070cf2be5a48a235735f28f1662ca70d15a01d5142ac1255f0bca605ae",
+    "final-source-manifest.json": "9084f5375efde64085e15970417905f5fa217ec07c74a6a17669fcbcba44c0b2"
+  },
+  "run_evidence_sha256": {
+    "run-r1/receipt.json": "3f4e032a1447d5a4e56fdafec170f6f8e327669947aa5981d59e248fc8562000",
+    "run-r2/receipt.json": "7c68fe2708626f808035c7872e4664cc1c05c43bd10f6bf755d3f0ab088f5f40",
+    "run-r2/termination-observation.json": "2764398862247a06a22053f5e77c9b7ee0aaf9874e8d52334e8e4d7b896eabe2",
+    "run-r3/receipt.json": "110b78142d67036507ba51b351105de91c80a1198db37aab29514c58f4bc3503",
+    "run-r3/cleanup-receipt.json": "16b33fba16f0a4b4920385abed5c36d60d00e5b341a2462ab590ede8bb8055fd",
+    "run-r3/terminal-unit.journal.log": "c37ebeac87fc774248e45d258bfb73b8408ac524ddffdc063634dce78a69fcd3"
+  }
+}

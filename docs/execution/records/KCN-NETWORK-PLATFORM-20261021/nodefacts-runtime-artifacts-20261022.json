@@ -1,0 +1,156 @@
+{
+  "status": "PASS",
+  "execution_host": "fedora",
+  "scope": "Same-source local NodeFacts image packaging and network-none version/help checks; no collector rollout or live OVS query",
+  "observed_at": "2026-10-21T21:39:44.271775+00:00",
+  "source_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+  "binary_sha256": "c1cfd6fa7a750c9ebdbeb91130ac091f88cb23e527ce1bdc3ab0e3fd58f9b75a",
+  "binary_original_mode": "0o700",
+  "recipe_sha256": "cd5487fa0eba82bef899cdd566281bd79fa71da84e13058ad40782210d82b604",
+  "bundle_sha256": "c189592f7faf5786e22e47fbe9f1c86d3570deb9ed6af4c16f8961c5b564e725",
+  "runner_sha256": "995cce7e0f830fcf99849e59f6e00035bac83a468ea93c88f7a5faf2fb3df892",
+  "base": "registry-1.docker.io/library/debian@sha256:ec31d744f83f4a73447ba045aaab9409997efe5cc706eca4890c1be36cc1606a",
+  "official_tag_index_digest": "sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8",
+  "base_pull_attempts": 1,
+  "package_versions": [
+    "ca-certificates\t20250419~deb12u2",
+    "iproute2\t6.1.0-3",
+    "openvswitch-common\t3.1.0-2+deb12u1",
+    "openvswitch-switch\t3.1.0-2+deb12u1"
+  ],
+  "local_image": {
+    "tag": "kcn-goal-20261021/node-facts:c1cfd6fa7a75",
+    "local_image_config_id": "sha256:75f3bbb9e4dc4d3b2c960105e2bbc5fcf1ee82f83d8277b3288047dd2e438eb3",
+    "image_id_limit": "Local docker image inspect Id; no published registry digest claimed.",
+    "user": "65534:65534",
+    "entrypoint": [
+      "/usr/local/bin/ani-resource-service"
+    ],
+    "cmd": [
+      "-node-facts"
+    ],
+    "binary_context_mode": "0o555",
+    "notice_context_mode": "0o644",
+    "binary_and_notice_extraction": "PASS"
+  },
+  "socket_owner_basis": {
+    "evidence": "cluster-readonly-20261022.json",
+    "verified_node_socket_uid": 65534,
+    "verified_node_socket_gid": 65534,
+    "verified_node_socket_mode": "0750",
+    "node_count": 3
+  },
+  "checks": [
+    {
+      "name": "binary-help",
+      "command": [
+        "/usr/local/bin/ani-resource-service",
+        "-h"
+      ],
+      "exit_code": 0,
+      "network": "none",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "user": "65534:65534",
+      "host_mounts": []
+    },
+    {
+      "name": "ip-version",
+      "command": [
+        "/bin/sh",
+        "-ec",
+        "exec ip -Version"
+      ],
+      "exit_code": 0,
+      "network": "none",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "user": "65534:65534",
+      "host_mounts": []
+    },
+    {
+      "name": "ovs-version",
+      "command": [
+        "/usr/bin/ovs-vsctl",
+        "--version"
+      ],
+      "exit_code": 0,
+      "network": "none",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "user": "65534:65534",
+      "host_mounts": []
+    },
+    {
+      "name": "package-versions",
+      "command": [
+        "/usr/bin/dpkg-query",
+        "-W",
+        "-f=${Package}\\t${Version}\\n",
+        "iproute2",
+        "openvswitch-switch",
+        "openvswitch-common",
+        "ca-certificates"
+      ],
+      "exit_code": 0,
+      "network": "none",
+      "read_only": true,
+      "cap_drop": [
+        "ALL"
+      ],
+      "user": "65534:65534",
+      "host_mounts": []
+    }
+  ],
+  "service_autostart": [
+    "invoke-rc.d: policy-rc.d denied execution of start.",
+    "invoke-rc.d: policy-rc.d denied execution of start."
+  ],
+  "cleanup": {
+    "containers": {
+      "207e8ec323b857d77c1f8d49e821e19bca5725f3e6605833e1842261cb298f67": "ABSENT",
+      "f394db1b63b514666a4ebf5442bd69ec189789b88cd24344dab24c761815aa3f": "ABSENT",
+      "06db1202d96457efda0512fbc85ed72cb3a2f8fab04bb47d06a721c931205f0c": "ABSENT",
+      "1ff117d5d2ec2b9996c601ac48892285ae99693915b8eb2d685ad376394fa354": "ABSENT"
+    },
+    "labelled_containers": "ABSENT",
+    "unit": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "MainPID": "0",
+      "Result": "success",
+      "ExecMainStatus": "0",
+      "ControlGroup": ""
+    },
+    "PID_964323": "ABSENT",
+    "cgroup": "ABSENT",
+    "tmp_kn_prefix_matches": [],
+    "heavy_lock_free": false,
+    "heavy_lock_owners": [
+      {
+        "kernel_lock": "10: FLOCK  ADVISORY  WRITE 969932 00:21:901308 0 EOF",
+        "belongs_to_finished_nodefacts_pid": false
+      }
+    ],
+    "nodefacts_lock_released": true,
+    "source_binary_bytes_and_mode_unchanged": true
+  },
+  "raw_receipts_sha256": {
+    "build-terminal-receipt.json": "732cd93ee981b5141083b2519c4a686f80eaba45f045caf6de71374df75d5da1",
+    "image-receipt.json": "9168317d00e1c232c976be21478c12cad4924267024c184104ddd97f01afd84a"
+  },
+  "not_run": [
+    "internal registry publication",
+    "collector rollout",
+    "current cluster ConfigMap upgrade",
+    "real socket access and KCN observation/cleanup acceptance"
+  ],
+  "latest_user_constraint": "Cluster is in use; no service deployment or further cluster use; pause when cluster is required"
+}
