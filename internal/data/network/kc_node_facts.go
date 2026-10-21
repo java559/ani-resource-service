@@ -21,11 +21,13 @@ const factsNodeLabel = "network.ani.io/node-uid"
 const managedNetdevAnnotation = "networking.kubercloud.com/managed_netdevs"
 
 type NodeFactsDocument struct {
-	Version     int                 `json:"version"`
-	NodeName    string              `json:"node_name"`
-	NodeUID     string              `json:"node_uid"`
-	CollectedAt time.Time           `json:"collected_at"`
-	Interfaces  []biz.NodeInterface `json:"interfaces"`
+	Version                   int                 `json:"version"`
+	NodeName                  string              `json:"node_name"`
+	NodeUID                   string              `json:"node_uid"`
+	CollectedAt               time.Time           `json:"collected_at"`
+	Interfaces                []biz.NodeInterface `json:"interfaces"`
+	OVSBridgeMappings         map[string]string   `json:"ovs_bridge_mappings,omitempty"`
+	OVSBridgeMappingsObserved bool                `json:"ovs_bridge_mappings_observed,omitempty"`
 }
 
 func (p *KCProvider) ListNodeInterfaces(ctx context.Context) (biz.InterfaceInventory, error) {
@@ -323,6 +325,9 @@ func (p *KCProvider) ensureDevice(ctx context.Context, t biz.ProviderTarget) (bi
 	}
 	ops = append(ops, map[string]any{"op": "add", "path": "/metadata/annotations", "value": annotations})
 	patch, _ := json.Marshal(ops)
+	if err = p.EnsureLegacyDeviceMutationAllowed(ctx, t); err != nil {
+		return existing, err
+	}
 	_, err = endpoint.Patch(ctx, "kcn-config", types.JSONPatchType, patch, metav1.PatchOptions{FieldManager: "ani-network-service"})
 	if err != nil {
 		return existing, mutationFailure(err)

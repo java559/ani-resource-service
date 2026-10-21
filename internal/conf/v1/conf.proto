@@ -49,6 +49,16 @@ message Network {
   LoadBalancer load_balancer = 9;
   // Restart applies changes. Empty rejects first acceptance of new VPCs.
   repeated string vpc_cidr_presets = 10;
+  // Optional deployment guard for the independent platform default-VPC egress
+  // use case. Empty disables its RPCs; identities are never accepted from HTTP.
+  PlatformDefaultVPCEgress platform_default_vpc_egress = 11;
+}
+
+message PlatformDefaultVPCEgress {
+  string cluster_uid = 1;
+  string namespace = 2;
+  string name = 3;
+  string uid = 4;
 }
 
 message LoadBalancer {

@@ -1,0 +1,234 @@
+{
+  "captured_at": "2026-10-21T06:12:28.661902+00:00",
+  "cluster_namespace_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "deployment_uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+  "pod": "ani-resource-service-79f8f68bcd-7lgz5",
+  "pod_uid": "c41af07e-38f8-4b83-bc41-3c2fb7892591",
+  "runtime_config_source": {
+    "secret": "resource-configs",
+    "secret_uid": "73c854a5-8cdc-4f66-8027-6682c2e66916",
+    "key": "config.yaml",
+    "kubeconfig_template": "${NETWORK_KUBECONFIG:}",
+    "resolved_kubeconfig": "",
+    "selected_runtime_environment": {
+      "ANI_NETWORK_KUBECONFIG": "",
+      "NETWORK_KUBECONFIG": "",
+      "ANI_NETWORK_MODE": "full"
+    },
+    "image_environment_verification": "NOT_VERIFIED",
+    "env_from": [],
+    "platform_default_vpc_egress_present": false,
+    "cluster_id": "0fcdb8b1-22bf-4528-af59-82843dc88f21",
+    "resolution_scope": "declared config and Pod env only; OCI ENV and process environment NOT_VERIFIED"
+  },
+  "provider_credential_source": "in-cluster projected ServiceAccount per config resolution; direct actual-token SelfSubjectReview NOT_RUN",
+  "provider_subject_from_source_chain": "system:serviceaccount:ani-system:ani-resource-service",
+  "permission_check_mode": "admin username-only impersonation of declared subject; no extra groups and no actual-token authentication",
+  "self_subject_review": {
+    "result": "NOT_RUN",
+    "reason": "distroless container has no reader; no projected token export or TokenRequest; subject derived from runtime config/Pod SA"
+  },
+  "permissions": {
+    "patch_nodes": "no",
+    "get_nodes": "yes",
+    "list_nodefacts": "yes",
+    "patch_kcn_config": "yes",
+    "list_provider_vlans": "yes"
+  },
+  "bound_node_rules": [
+    {
+      "binding": "ani-network-egress-ani-system",
+      "binding_uid": "57c2ad17-11fa-4fed-a1ee-899381ba092d",
+      "role": "ani-network-egress",
+      "role_uid": "533fb2b0-9ab2-4770-9a04-dfb3cb27efca",
+      "node_rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes",
+            "pods",
+            "services",
+            "configmaps"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        }
+      ]
+    },
+    {
+      "binding": "ani-network-load-balancer-ani-system",
+      "binding_uid": "95fa9bab-3f02-4d67-8321-4df29b990d13",
+      "role": "ani-network-load-balancer",
+      "role_uid": "5c22bfd9-5b2d-46a7-99fa-17d4d85ae855",
+      "node_rules": []
+    },
+    {
+      "binding": "ani-resource-instance",
+      "binding_uid": "46234a62-7813-4bd2-abc3-83cb17ef45e9",
+      "role": "ani-resource-instance",
+      "role_uid": "cc9564ae-1967-408e-b0de-d2c010badbd9",
+      "node_rules": []
+    }
+  ],
+  "nodefacts": [
+    {
+      "configmap": "ani-node-facts-16394552231564376ef22f49",
+      "uid": "4753ca03-a7b2-4726-a670-f3da6cdd856a",
+      "node_name": "ani-01",
+      "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "collected_at": "2026-10-21T06:12:00.96153095Z",
+      "age_seconds": 27.700372,
+      "ovs_bridge_mappings_observed": false,
+      "ovs_bridge_mappings_present": false,
+      "kc_bridge_networks_present": false
+    },
+    {
+      "configmap": "ani-node-facts-3031656f3bb1a90adadca726",
+      "uid": "c829d893-a9e7-4751-894f-f404b3b4de61",
+      "node_name": "ani-02",
+      "node_uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "collected_at": "2026-10-21T06:12:01.291304289Z",
+      "age_seconds": 27.370598,
+      "ovs_bridge_mappings_observed": false,
+      "ovs_bridge_mappings_present": false,
+      "kc_bridge_networks_present": false
+    },
+    {
+      "configmap": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "uid": "6659bcee-a9ba-476a-a662-01e5f2d1069f",
+      "node_name": "ani-03",
+      "node_uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "collected_at": "2026-10-21T06:12:00.706896502Z",
+      "age_seconds": 27.955006,
+      "ovs_bridge_mappings_observed": false,
+      "ovs_bridge_mappings_present": false,
+      "kc_bridge_networks_present": false
+    }
+  ],
+  "collector_delivery": [
+    {
+      "deployment": "ani-node-facts-16394552231564376ef22f49",
+      "uid": "f2efa8b8-157b-4a5d-b023-ab7a213ef5dd",
+      "sa": "ani-node-facts-16394552231564376ef22f49",
+      "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+      "host_network": true,
+      "security_context": {
+        "allowPrivilegeEscalation": false,
+        "capabilities": {
+          "drop": [
+            "ALL"
+          ]
+        },
+        "readOnlyRootFilesystem": true,
+        "runAsNonRoot": true,
+        "runAsUser": 65534
+      },
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ]
+    },
+    {
+      "deployment": "ani-node-facts-3031656f3bb1a90adadca726",
+      "uid": "d0ac1b93-7672-4f08-8c5b-8c320bcdfb94",
+      "sa": "ani-node-facts-3031656f3bb1a90adadca726",
+      "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+      "host_network": true,
+      "security_context": {
+        "allowPrivilegeEscalation": false,
+        "capabilities": {
+          "drop": [
+            "ALL"
+          ]
+        },
+        "readOnlyRootFilesystem": true,
+        "runAsNonRoot": true,
+        "runAsUser": 65534
+      },
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ]
+    },
+    {
+      "deployment": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "uid": "602900fd-655a-4721-a7e7-d0ae53510b98",
+      "sa": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+      "host_network": true,
+      "security_context": {
+        "allowPrivilegeEscalation": false,
+        "capabilities": {
+          "drop": [
+            "ALL"
+          ]
+        },
+        "readOnlyRootFilesystem": true,
+        "runAsNonRoot": true,
+        "runAsUser": 65534
+      },
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ]
+    }
+  ],
+  "default_vpc_guard_input": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "namespace": "kcn-system",
+    "name": "kcn-cluster",
+    "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f"
+  },
+  "mutations": "none; SelfSubjectAccessReview requests under admin impersonation only; no cluster object or permission writes",
+  "provider_subject_status": "UNKNOWN_DIRECT_AUTH; declared source chain points to system:serviceaccount:ani-system:ani-resource-service",
+  "connection_resolution": {
+    "source": "internal/data/network/kc.go:48; cmd/ani-resource-service/app.go:69; cmd/ani-resource-service/governance.go:66",
+    "order": [
+      "explicit bc.Network.Kubeconfig -> clientcmd.BuildConfigFromFlags",
+      "empty bc.Network.Kubeconfig -> rest.InClusterConfig"
+    ],
+    "per_cluster_database_connection_override": false,
+    "scope": "Network KCProvider and shared EgressInfrastructure; instance clients are separate"
+  }
+}

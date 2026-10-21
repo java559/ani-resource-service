@@ -282,6 +282,7 @@ func (q *Queries) CountVlanPools(ctx context.Context, arg CountVlanPoolsParams) 
 const duePlatformCandidate = `-- name: DuePlatformCandidate :one
 SELECT p.resource_id, p.kind, p.cluster_id, p.name, p.description, p.state, p.reason, p.version, p.created_at, p.updated_at, p.observed_at, p.last_operation_id, p.provider_name, p.provider_uid, p.provider_images, p.binding_id, p.pending_action, p.pending_since FROM network_platform_resources p JOIN network_platform_reconciliations r ON r.resource_id=p.resource_id
 WHERE p.cluster_id=$1 AND r.next_run_at<=clock_timestamp() AND (r.lease_until IS NULL OR r.lease_until<=clock_timestamp())
+ AND NOT EXISTS(SELECT 1 FROM network_device_adoptions d WHERE d.resource_id=p.resource_id AND d.registration_closed)
 ORDER BY r.next_run_at,p.resource_id LIMIT 1 FOR UPDATE OF p SKIP LOCKED
 `
 
@@ -357,7 +358,7 @@ func (q *Queries) GetDefaultPublicPool(ctx context.Context, arg GetDefaultPublic
 }
 
 const getDeviceAdoption = `-- name: GetDeviceAdoption :one
-SELECT resource_id, cluster_id, kind, device_name, inventory_fingerprint, node_inventory, node_progress FROM network_device_adoptions WHERE cluster_id=$1 AND resource_id=$2
+SELECT resource_id, cluster_id, kind, device_name, inventory_fingerprint, node_inventory, node_progress, virtual_switch_id, switch_binding_id, registration_version, retired, registration_closed FROM network_device_adoptions WHERE cluster_id=$1 AND resource_id=$2
 `
 
 type GetDeviceAdoptionParams struct {
@@ -376,6 +377,11 @@ func (q *Queries) GetDeviceAdoption(ctx context.Context, arg GetDeviceAdoptionPa
 		&i.InventoryFingerprint,
 		&i.NodeInventory,
 		&i.NodeProgress,
+		&i.VirtualSwitchID,
+		&i.SwitchBindingID,
+		&i.RegistrationVersion,
+		&i.Retired,
+		&i.RegistrationClosed,
 	)
 	return i, err
 }
@@ -510,7 +516,7 @@ func (q *Queries) GetPublicPool(ctx context.Context, arg GetPublicPoolParams) (N
 }
 
 const getVlanNetwork = `-- name: GetVlanNetwork :one
-SELECT resource_id, cluster_id, kind, device_id, vlan_id, retired FROM network_vlan_networks WHERE cluster_id=$1 AND resource_id=$2
+SELECT resource_id, cluster_id, kind, device_id, vlan_id, retired, virtual_switch_id FROM network_vlan_networks WHERE cluster_id=$1 AND resource_id=$2
 `
 
 type GetVlanNetworkParams struct {
@@ -528,6 +534,7 @@ func (q *Queries) GetVlanNetwork(ctx context.Context, arg GetVlanNetworkParams) 
 		&i.DeviceID,
 		&i.VlanID,
 		&i.Retired,
+		&i.VirtualSwitchID,
 	)
 	return i, err
 }
@@ -634,19 +641,20 @@ func (q *Queries) InsertPlatformHistory(ctx context.Context, arg InsertPlatformH
 }
 
 const insertPlatformIdempotency = `-- name: InsertPlatformIdempotency :exec
-INSERT INTO network_platform_idempotency(cluster_id,operation_kind,idempotency_key,fingerprint,resource_id,operation_id,response,created_at)
-VALUES($1,$2,$3,$4,$5,$6,$7,$8)
+INSERT INTO network_platform_idempotency(cluster_id,operation_kind,idempotency_key,fingerprint,resource_id,operation_id,response,created_at,fingerprint_version)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)
 `
 
 type InsertPlatformIdempotencyParams struct {
-	ClusterID      string
-	OperationKind  string
-	IdempotencyKey string
-	Fingerprint    string
-	ResourceID     string
-	OperationID    string
-	Response       []byte
-	CreatedAt      time.Time
+	ClusterID          string
+	OperationKind      string
+	IdempotencyKey     string
+	Fingerprint        string
+	ResourceID         string
+	OperationID        string
+	Response           []byte
+	CreatedAt          time.Time
+	FingerprintVersion int32
 }
 
 func (q *Queries) InsertPlatformIdempotency(ctx context.Context, arg InsertPlatformIdempotencyParams) error {
@@ -659,6 +667,7 @@ func (q *Queries) InsertPlatformIdempotency(ctx context.Context, arg InsertPlatf
 		arg.OperationID,
 		arg.Response,
 		arg.CreatedAt,
+		arg.FingerprintVersion,
 	)
 	return err
 }

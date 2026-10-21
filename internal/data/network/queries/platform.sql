@@ -38,8 +38,8 @@ SELECT pg_advisory_xact_lock(hashtextextended('platform:'||sqlc.arg(cluster_id):
 SELECT * FROM network_platform_idempotency WHERE cluster_id=$1 AND operation_kind=$2 AND idempotency_key=$3;
 
 -- name: InsertPlatformIdempotency :exec
-INSERT INTO network_platform_idempotency(cluster_id,operation_kind,idempotency_key,fingerprint,resource_id,operation_id,response,created_at)
-VALUES($1,$2,$3,$4,$5,$6,$7,$8);
+INSERT INTO network_platform_idempotency(cluster_id,operation_kind,idempotency_key,fingerprint,resource_id,operation_id,response,created_at,fingerprint_version)
+VALUES($1,$2,$3,$4,$5,$6,$7,$8,sqlc.arg(fingerprint_version));
 
 -- name: InsertPlatformResource :one
 INSERT INTO network_platform_resources(resource_id,kind,cluster_id,name,description,state,created_at,updated_at,last_operation_id,provider_name,binding_id)
@@ -109,6 +109,7 @@ UPDATE network_platform_reconciliations SET next_run_at=clock_timestamp(),lease_
 -- name: DuePlatformCandidate :one
 SELECT p.* FROM network_platform_resources p JOIN network_platform_reconciliations r ON r.resource_id=p.resource_id
 WHERE p.cluster_id=sqlc.arg(cluster_id) AND r.next_run_at<=clock_timestamp() AND (r.lease_until IS NULL OR r.lease_until<=clock_timestamp())
+ AND NOT EXISTS(SELECT 1 FROM network_device_adoptions d WHERE d.resource_id=p.resource_id AND d.registration_closed)
 ORDER BY r.next_run_at,p.resource_id LIMIT 1 FOR UPDATE OF p SKIP LOCKED;
 
 -- name: AcquirePlatformLease :one

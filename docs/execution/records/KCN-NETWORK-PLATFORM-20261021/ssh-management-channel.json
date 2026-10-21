@@ -1,0 +1,95 @@
+{
+  "captured_at": "2026-10-21T07:06:42.915456+00:00",
+  "execution_host": "fedora",
+  "cluster_namespace_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "target_identity_guard": "PASS",
+  "known_hosts_policy": {
+    "strict": true,
+    "user_known_hosts": "/home/chabking/.ssh/known_hosts",
+    "update_host_keys": false
+  },
+  "nodes": [
+    {
+      "node": "ani-01",
+      "management_ip": "172.16.101.10",
+      "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "authentication": "user-provided password through anonymous fd",
+      "status": "PASS",
+      "ssh_exit_code": 0,
+      "checks": {
+        "known_hosts_strict": true,
+        "machine_id_matches_node_info": true,
+        "boot_id_matches_node_info": true,
+        "ens34_has_expected_ip": true,
+        "ssh_server_ip_matches_management_ip": true,
+        "return_route_uses_ens34": true,
+        "return_route_source_matches_management_ip": true
+      },
+      "hostname": "ani-01",
+      "machine_id_sha256": "46598892124494555e291082be5ee87e9c52e0c8da19855426e659768b39a63a",
+      "boot_id_sha256": "3d5b463a5db261579ec658c37b942196b39148ac14ffa0f50d9615d3689d3316",
+      "return_route_interface": "ens34",
+      "diagnostics": {
+        "ssh_client_ip_matches_fedora_source": false,
+        "source_equality_required": false,
+        "interpretation": "Observed SSH peer differs from local preferred source; possible address translation. Exact cause not audited; identity is bound by strict host key plus machine/boot identity and ens34 return route."
+      }
+    },
+    {
+      "node": "ani-02",
+      "management_ip": "172.16.101.11",
+      "node_uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "authentication": "user-provided password through anonymous fd",
+      "status": "PASS",
+      "ssh_exit_code": 0,
+      "checks": {
+        "known_hosts_strict": true,
+        "machine_id_matches_node_info": true,
+        "boot_id_matches_node_info": true,
+        "ens34_has_expected_ip": true,
+        "ssh_server_ip_matches_management_ip": true,
+        "return_route_uses_ens34": true,
+        "return_route_source_matches_management_ip": true
+      },
+      "hostname": "ani-02",
+      "machine_id_sha256": "e97da28cd637616f9bde089e8440762974f1d066afaf1e8c1a6a4db68e82632e",
+      "boot_id_sha256": "c57566cf0e05c8c1080bba7e09bba54b2d9bd36eb1cb5c90f24867c8b6d28931",
+      "return_route_interface": "ens34",
+      "diagnostics": {
+        "ssh_client_ip_matches_fedora_source": false,
+        "source_equality_required": false,
+        "interpretation": "Observed SSH peer differs from local preferred source; possible address translation. Exact cause not audited; identity is bound by strict host key plus machine/boot identity and ens34 return route."
+      }
+    },
+    {
+      "node": "ani-03",
+      "management_ip": "172.16.101.12",
+      "node_uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "authentication": "user-provided password through anonymous fd",
+      "status": "PASS",
+      "ssh_exit_code": 0,
+      "checks": {
+        "known_hosts_strict": true,
+        "machine_id_matches_node_info": true,
+        "boot_id_matches_node_info": true,
+        "ens34_has_expected_ip": true,
+        "ssh_server_ip_matches_management_ip": true,
+        "return_route_uses_ens34": true,
+        "return_route_source_matches_management_ip": true
+      },
+      "hostname": "ani-03",
+      "machine_id_sha256": "f38b0a7df29d341e3397d72c9796b214cae961ec05ff1f75a4f8d31d44db6c1a",
+      "boot_id_sha256": "b9f980ff1209dedff134cbfdc5ffbc3e2c25dba3748abd418217f15563ad7d0d",
+      "return_route_interface": "ens34",
+      "diagnostics": {
+        "ssh_client_ip_matches_fedora_source": false,
+        "source_equality_required": false,
+        "interpretation": "Observed SSH peer differs from local preferred source; possible address translation. Exact cause not audited; identity is bound by strict host key plus machine/boot identity and ens34 return route."
+      }
+    }
+  ],
+  "management_ssh_gate": "PASS",
+  "maintenance_open": false,
+  "scope": "read-only hostname/machine-id/boot-id/ens34/return-route; no sudo, network mutations or KCN changes",
+  "evaluation_note": "No SSH connection was repeated. Verdict uses requested host/cluster identity and ens34 path checks; local source/observed peer equality is retained as diagnostic only."
+}

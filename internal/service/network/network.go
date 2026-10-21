@@ -129,7 +129,10 @@ var kindsToWire = map[string]networkv1.OperationKind{"ensure_vpc_base_connectivi
 	"verify_intranet_pool":         networkv1.OperationKind_OPERATION_KIND_VERIFY_INTRANET_POOL,
 	"create_load_balancer":         networkv1.OperationKind_OPERATION_KIND_CREATE_LOAD_BALANCER,
 	"update_load_balancer":         networkv1.OperationKind_OPERATION_KIND_UPDATE_LOAD_BALANCER,
-	"delete_load_balancer":         networkv1.OperationKind_OPERATION_KIND_DELETE_LOAD_BALANCER}
+	"delete_load_balancer":         networkv1.OperationKind_OPERATION_KIND_DELETE_LOAD_BALANCER,
+	"create_virtual_switch":        networkv1.OperationKind_OPERATION_KIND_CREATE_VIRTUAL_SWITCH,
+	"delete_virtual_switch":        networkv1.OperationKind_OPERATION_KIND_DELETE_VIRTUAL_SWITCH,
+}
 
 func rpcError(err error) error {
 	reason := biz.ReasonOf(err)

@@ -133,7 +133,23 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 			consumer.Close()
 		}
 	}()
-	execution = server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration(), attachmentWorker)
+	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy)
+	if err != nil {
+		return nil, err
+	}
+	retirementWorker, err := biz.NewLegacyDeviceRetirementStepper(repository, provider, uuid.NewString(), policy)
+	if err != nil {
+		return nil, err
+	}
+	defaultService, defaultWorker, err := wireDefaultVPCEgress(repository, provider, bc.Network, policy)
+	if err != nil {
+		return nil, err
+	}
+	additional := []server.Stepper{attachmentWorker, switchWorker, retirementWorker}
+	if defaultWorker != nil {
+		additional = append(additional, defaultWorker)
+	}
+	execution = server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration(), additional...)
 	if o := bc.Network.Observation; o != nil {
 		if err = execution.SetConcurrency(int(o.WorkersPerKind)); err != nil {
 			return nil, err
@@ -152,6 +168,10 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	}
 	networkv1.RegisterTenantEgressServiceServer(grpcServer, service.NewTenantEgressService(egress))
 	networkv1.RegisterPlatformNetworkServiceServer(grpcServer, service.NewPlatformNetworkService(egress))
+	networkv1.RegisterPlatformDeviceRetirementServiceServer(grpcServer, service.NewPlatformDeviceRetirementService(egress))
+	if defaultService != nil {
+		networkv1.RegisterPlatformDefaultEgressServiceServer(grpcServer, defaultService)
+	}
 	if lb := bc.Network.LoadBalancer; lb != nil && lb.EnableIsolatedApi {
 		lbs, err := biz.NewLoadBalancers(repository, biz.ContextEgressAuthorization{}, key, policy.StaleAfter, time.Now)
 		if err != nil {

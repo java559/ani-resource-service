@@ -17,6 +17,35 @@ import (
 	"k8s.io/client-go/rest"
 )
 
+// Historical v1 rows are accepted before the simulated profile upgrade. Only
+// the infrastructure boundary's method set changes; authorization, admission,
+// transactions and the KC-backed worker remain production implementations.
+func acceptHistoricalKCVlanFixture(t *testing.T, f *egressFixture, provider *data.KCProvider, intent biz.PlatformIntent) (biz.PlatformResource, error) {
+	t.Helper()
+	if intent.Kind != "create_vlan" || intent.Vlan == nil || intent.Vlan.DeviceID == "" || intent.Vlan.VirtualSwitchID != "" {
+		t.Fatal("historical KC fixture requires an explicit legacy VLAN intent")
+	}
+	f.p.UseEgressInfrastructure(struct{ biz.EgressInfrastructure }{provider})
+	defer f.p.UseEgressInfrastructure(provider)
+	return f.e.CreatePlatform(f.ctx, intent)
+}
+
+func historicalKCVlanFixture(t *testing.T, f *egressFixture, provider *data.KCProvider, intent biz.PlatformIntent) biz.PlatformResource {
+	t.Helper()
+	vlan, err := acceptHistoricalKCVlanFixture(t, f, provider, intent)
+	if err != nil {
+		t.Fatal("historical KC VLAN acceptance failed", err)
+	}
+	f.drive(t, func() bool {
+		vlan, err = f.e.GetPlatform(f.ctx, "vlan", vlan.ID)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return vlan.State == biz.Available
+	})
+	return vlan
+}
+
 func TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan(t *testing.T) {
 	p, owner := database(t)
 	api := controlled.New()
@@ -92,7 +121,11 @@ func TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan(t *testing.T) {
 		}
 		return n == 1 && v.State != biz.Available
 	})
-	if _, err = e.CreatePlatform(f.ctx, biz.PlatformIntent{Kind: "create_vlan", Name: "too-early", IdempotencyKey: "too-early", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}}); biz.ReasonOf(err) != biz.PublicEgressNotReady {
+	partial := biz.PlatformIntent{Kind: "create_vlan", Name: "too-early", IdempotencyKey: "too-early", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}}
+	if _, err = e.CreatePlatform(f.ctx, partial); biz.ReasonOf(err) != biz.InvalidArgument {
+		t.Fatal("current profile admitted new v1 VLAN", err)
+	}
+	if _, err = acceptHistoricalKCVlanFixture(t, f, provider, partial); biz.ReasonOf(err) != biz.PublicEgressNotReady {
 		t.Fatal("partial adoption admitted VLAN", err)
 	}
 	facts("node-b", true, time.Now())
@@ -100,7 +133,12 @@ func TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan(t *testing.T) {
 		v, err := e.GetPlatform(f.ctx, "device", device.ID)
 		return err == nil && v.State == biz.Available
 	})
-	vlan := f.platform(t, biz.PlatformIntent{Kind: "create_vlan", Name: "untagged", IdempotencyKey: "vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
+	legacyIntent := biz.PlatformIntent{Kind: "create_vlan", Name: "untagged", IdempotencyKey: "vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}}
+	vlan := historicalKCVlanFixture(t, f, provider, legacyIntent)
+	replay, err := e.CreatePlatform(f.ctx, legacyIntent)
+	if err != nil || replay.ID != vlan.ID || replay.LastOperationID != vlan.LastOperationID {
+		t.Fatal("current profile did not preserve exact legacy VLAN replay", replay, err)
+	}
 	cr := api.Object("vlannetworks", "", "vlan-"+vlan.ID[5:])
 	if fmt.Sprint(cr["spec"].(map[string]any)["vlanID"]) != "0" || cr["spec"].(map[string]any)["devName"] != "fixture0" {
 		t.Fatal("VLAN zero render", cr)
@@ -159,7 +197,7 @@ func preManagedDeviceFixtureWithHandler(t *testing.T, wrap func(http.Handler) ht
 }
 
 func TestEgressKCPreManagedDeviceRegistrationAndUntaggedVlan(t *testing.T) {
-	f, api := preManagedDeviceFixture(t)
+	f, api, provider := preManagedDeviceFixtureWithHandler(t, nil)
 	e := f.e
 	inv, err := e.ListNodeInterfaces(f.ctx, "")
 	if err != nil || len(inv.Items) != 2 {
@@ -174,7 +212,7 @@ func TestEgressKCPreManagedDeviceRegistrationAndUntaggedVlan(t *testing.T) {
 		v, err := e.GetPlatform(f.ctx, "device", device.ID)
 		return err == nil && v.State == biz.Available
 	})
-	vlan := f.platform(t, biz.PlatformIntent{Kind: "create_vlan", Name: "existing-device-untagged", IdempotencyKey: "vlan-zero", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
+	vlan := historicalKCVlanFixture(t, f, provider, biz.PlatformIntent{Kind: "create_vlan", Name: "existing-device-untagged", IdempotencyKey: "vlan-zero", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
 	cr := api.Object("vlannetworks", "", "vlan-"+vlan.ID[5:])
 	if fmt.Sprint(cr["spec"].(map[string]any)["vlanID"]) != "0" || cr["spec"].(map[string]any)["devName"] != "fixture0" {
 		t.Fatal("existing device did not create untagged VLAN", cr)
@@ -302,7 +340,7 @@ func TestEgressKCManagedVlanWithAuditLongerThanRefreshInterval(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	vlan, err := f.e.CreatePlatform(f.ctx, biz.PlatformIntent{Kind: "create_vlan", Name: "slow-audit-vlan", IdempotencyKey: "slow-audit-vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
+	vlan, err := acceptHistoricalKCVlanFixture(t, f, provider, biz.PlatformIntent{Kind: "create_vlan", Name: "slow-audit-vlan", IdempotencyKey: "slow-audit-vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -415,7 +453,7 @@ func TestEgressKCManagedVlanProgressesWhileFactsAreRenewed(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	vlan, err := f.e.CreatePlatform(f.ctx, biz.PlatformIntent{Kind: "create_vlan", Name: "renewed-vlan", IdempotencyKey: "renewed-vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
+	vlan, err := acceptHistoricalKCVlanFixture(t, f, provider, biz.PlatformIntent{Kind: "create_vlan", Name: "renewed-vlan", IdempotencyKey: "renewed-vlan", Vlan: &biz.VlanConfig{DeviceID: device.ID, VlanID: 0}})
 	if err != nil {
 		t.Fatal(err)
 	}

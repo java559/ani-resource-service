@@ -119,6 +119,8 @@ type egressResolved struct {
 	pool                       sqlcgen.NetworkPublicPool
 	snat                       sqlcgen.NetworkSnatBinding
 	address, vpcCIDR, deviceID string
+	virtualSwitch              *biz.VirtualSwitch
+	switchDevice               sqlcgen.NetworkDeviceAdoption
 }
 
 func (p *KCProvider) resolveEgress(ctx context.Context, t biz.ProviderTarget) (egressResolved, error) {
@@ -227,6 +229,16 @@ func (p *KCProvider) resolveEgress(ctx context.Context, t biz.ProviderTarget) (e
 			return r, readFailure(err)
 		}
 		r.spec = map[string]any{"devName": device.DeviceName, "vlanID": int64(vlan.VlanID)}
+		if device.VirtualSwitchID != nil {
+			sw, err := p.repository.GetVirtualSwitch(ctx, *device.VirtualSwitchID)
+			if err != nil {
+				return r, err
+			}
+			if device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID || sw.State != biz.Available {
+				return r, switchConflict()
+			}
+			r.spec["vClusterName"] = sw.GroupName
+		}
 		r.deviceID = vlan.DeviceID
 	case "public_pool":
 		poolID = t.ResourceID
@@ -283,6 +295,23 @@ func (p *KCProvider) resolveEgress(ctx context.Context, t biz.ProviderTarget) (e
 			} else {
 				r.spec = renderPublicPool(r.pool, r.refs["gateway"].binding.ProviderName, r.refs["vlan"].binding.ProviderName)
 			}
+		}
+	}
+	if r.deviceID != "" {
+		device, err := p.repository.queries.GetDeviceAdoption(ctx, sqlcgen.GetDeviceAdoptionParams{ClusterID: r.binding.ClusterID, ResourceID: r.deviceID})
+		if err != nil {
+			return r, readFailure(err)
+		}
+		if device.VirtualSwitchID != nil {
+			sw, err := p.repository.GetVirtualSwitch(ctx, *device.VirtualSwitchID)
+			if err != nil {
+				return r, err
+			}
+			if device.Retired || device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID || sw.State != biz.Available {
+				return r, switchConflict()
+			}
+			r.virtualSwitch = &sw
+			r.switchDevice = device
 		}
 	}
 	return r, nil
@@ -411,7 +440,7 @@ func matchesEgressSpec(o *unstructured.Unstructured, expected map[string]any, ki
 			return false
 		}
 	}
-	for _, field := range []string{"type", "gatewayConfig", "hostConfig", "cidrs", "securityGroups", "underlayConfig", "routeTable", "policyRoutes"} {
+	for _, field := range []string{"type", "gatewayConfig", "hostConfig", "cidrs", "securityGroups", "underlayConfig", "routeTable", "policyRoutes", "vClusterName"} {
 		if _, specified := expected[field]; specified {
 			continue
 		}
@@ -434,14 +463,15 @@ func matchesEgressSpec(o *unstructured.Unstructured, expected map[string]any, ki
 // Critical calls force a collection after Claim and GET each identity directly.
 // Ordinary observations reuse proven facts and never renew them on cache access.
 type egressReadSet struct {
-	lbBound                     bool
-	lbServiceUID                string
-	deviceRequired, deviceReady bool
-	objects                     map[string]*unstructured.Unstructured
-	view                        *auditView
-	proof                       biz.ObservationProof
-	all                         map[schema.GroupVersionResource][]unstructured.Unstructured
-	keys                        []string
+	lbBound                       bool
+	lbServiceUID                  string
+	deviceRequired, deviceReady   bool
+	switchConfigured, switchWired bool
+	objects                       map[string]*unstructured.Unstructured
+	view                          *auditView
+	proof                         biz.ObservationProof
+	all                           map[schema.GroupVersionResource][]unstructured.Unstructured
+	keys                          []string
 }
 
 func objectKey(b sqlcgen.NetworkProviderBinding) string {
@@ -601,19 +631,37 @@ func (p *KCProvider) readEgressSetOnce(ctx context.Context, r egressResolved, cr
 	}{result.objects, candidatesForHash(result.all)})
 	if r.deviceID != "" && !(r.target.Kind == "snat" && !r.snat.DesiredEnabled) {
 		result.deviceRequired = true
-		b, err := p.platformBinding(ctx, "device", r.deviceID)
-		if err != nil {
-			return result, err
+		if r.virtualSwitch != nil {
+			configured, wired, proof, err := p.virtualSwitchDeviceState(ctx, *r.virtualSwitch, r.switchDevice)
+			if err != nil {
+				return result, err
+			}
+			result.switchConfigured, result.switchWired = configured, wired
+			result.deviceReady = wired
+			// A VLAN is what causes physical takeover. Its POST gate requires
+			// the owned group, while its Ready gate still requires real wiring.
+			if r.target.Kind == "vlan" {
+				result.deviceReady = configured
+			}
+			if proof.CollectedAt.Before(result.proof.CollectedAt) {
+				result.proof.CollectedAt = proof.CollectedAt
+			}
+			result.proof.Hash = contentHash([]string{result.proof.Hash, proof.Hash})
+		} else {
+			b, err := p.platformBinding(ctx, "device", r.deviceID)
+			if err != nil {
+				return result, err
+			}
+			device, err := p.observeDeviceFromView(ctx, biz.ProviderTarget{Kind: "device", ResourceID: r.deviceID, BindingID: b.BindingID, KnownIdentity: b.ProviderUid, Direct: critical, Requirement: biz.ObservationRequirement{RequestedGeneration: r.target.Requirement.RequestedGeneration}}, result.view)
+			if err != nil {
+				return result, err
+			}
+			result.deviceReady = device.Ready
+			if device.Proof.CollectedAt.Before(result.proof.CollectedAt) {
+				result.proof.CollectedAt = device.Proof.CollectedAt
+			}
+			result.proof.Hash = contentHash([]string{result.proof.Hash, device.Proof.Hash})
 		}
-		device, err := p.observeDeviceFromView(ctx, biz.ProviderTarget{Kind: "device", ResourceID: r.deviceID, BindingID: b.BindingID, KnownIdentity: b.ProviderUid, Direct: critical, Requirement: biz.ObservationRequirement{RequestedGeneration: r.target.Requirement.RequestedGeneration}}, result.view)
-		if err != nil {
-			return result, err
-		}
-		result.deviceReady = device.Ready
-		if device.Proof.CollectedAt.Before(result.proof.CollectedAt) {
-			result.proof.CollectedAt = device.Proof.CollectedAt
-		}
-		result.proof.Hash = contentHash([]string{result.proof.Hash, device.Proof.Hash})
 	}
 	if result.view != nil && !p.observation.valid(result.view, result.keys) {
 		return result, errEgressAuditInvalid
@@ -684,7 +732,10 @@ func inspectEgressSet(r egressResolved, set egressReadSet) (biz.ProviderObservat
 		}
 	case "vlan":
 		missing, _, _ := unstructured.NestedSlice(objectMap(o), "status", "notReadyNodes")
-		value.Ready = goodConditions(o, "Valid", "Ready") && len(missing) == 0
+		value.Ready = vlanControlReady(o) && len(missing) == 0
+		if r.virtualSwitch != nil {
+			value.Ready = value.Ready && set.switchWired
+		}
 		value.HasDependencies = crString(o, "status", "subnet") != ""
 		for _, child := range set.all[kcSubnets] {
 			if crString(&child, "spec", "underlayConfig", "vlanNetwork") == r.binding.ProviderName {
@@ -768,7 +819,14 @@ func publicPoolReady(r egressResolved, pool, gw, vlan *unstructured.Unstructured
 	}
 	missing, _, _ := unstructured.NestedSlice(objectMap(pool), "status", "underlayState", "notReadyNodes")
 	vlanMissing, _, _ := unstructured.NestedSlice(objectMap(vlan), "status", "notReadyNodes")
-	return goodConditions(vlan, "Valid", "Ready") && len(vlanMissing) == 0 && crString(vlan, "status", "subnet") == pool.GetNamespace()+"/"+pool.GetName() && crBool(pool, "status", "underlayState", "ready") && len(missing) == 0 && crString(pool, "status", "underlayState", "chassisNode") != ""
+	v09Observed := crString(vlan, "spec", "vClusterName") == "" || (crInt(pool, "status", "observedGeneration") == pool.GetGeneration() && crString(pool, "status", "underlayState", "vlanNetwork") == vlan.GetName())
+	return vlanControlReady(vlan) && len(vlanMissing) == 0 && crString(vlan, "status", "subnet") == pool.GetNamespace()+"/"+pool.GetName() && v09Observed && crBool(pool, "status", "underlayState", "ready") && len(missing) == 0 && crString(pool, "status", "underlayState", "chassisNode") != ""
+}
+func vlanControlReady(vlan *unstructured.Unstructured) bool {
+	if crString(vlan, "spec", "vClusterName") != "" {
+		return goodConditions(vlan, "Valid", "Initialized")
+	}
+	return goodConditions(vlan, "Valid", "Ready")
 }
 func eipAllocated(r egressResolved, eip, pool, gw, vlan *unstructured.Unstructured) (bool, string) {
 	address := crString(eip, "spec", "ipAddress")
@@ -962,6 +1020,13 @@ func (p *KCProvider) deleteEgress(ctx context.Context, t biz.ProviderTarget) err
 	if err != nil {
 		return err
 	}
+	// Removing our exact provider object must remain possible after hardware or
+	// group degradation. UID, owner, references and finalizers still fence the
+	// delete; a positive physical readiness proof only gates creation/activation.
+	if r.virtualSwitch != nil {
+		r.deviceID = ""
+		r.virtualSwitch = nil
+	}
 	set, err := p.readEgressSet(ctx, r, true)
 	if err != nil {
 		return err
@@ -997,6 +1062,10 @@ func egressPrerequisites(r egressResolved, set egressReadSet) bool {
 	gw := set.objects["gateway"]
 	vlan := set.objects["vlan"]
 	switch r.target.Kind {
+	case "vlan":
+		if r.virtualSwitch != nil {
+			return set.switchConfigured
+		}
 	case "public_pool":
 		if r.pool.Scope == "intranet" {
 			return intranetInfrastructureReady(r.pool, set.objects["default_vpc"], set.objects["intranet_config"], set.all[kcServiceCIDRs], set.all[pods])
@@ -1006,7 +1075,7 @@ func egressPrerequisites(r egressResolved, set egressReadSet) bool {
 		}
 		if r.pool.Mode == "underlay" {
 			missing, _, _ := unstructured.NestedSlice(objectMap(vlan), "status", "notReadyNodes")
-			return goodConditions(vlan, "Valid", "Ready") && len(missing) == 0 && crString(vlan, "status", "subnet") == ""
+			return vlanControlReady(vlan) && len(missing) == 0 && crString(vlan, "status", "subnet") == ""
 		}
 		return true
 	case "eip":

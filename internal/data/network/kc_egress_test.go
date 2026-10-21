@@ -211,6 +211,8 @@ func TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication(t *testi
 			return []byte(`[]`), nil
 		case "ovs-vsctl --timeout=3 --format=json --columns=name list Interface":
 			return []byte(`{"headings":["name"],"data":[["veth0"]]}`), nil
+		case "ovs-vsctl --timeout=3 --format=json --columns=external_ids list Open_vSwitch .":
+			return []byte(`{"headings":["external_ids"],"data":[[["map",[]]]]}`), nil
 		default:
 			return nil, fmt.Errorf("unexpected command %s", cmd)
 		}
@@ -220,7 +222,7 @@ func TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication(t *testi
 		t.Fatal(err)
 	}
 	filtered := biz.FilterNodeInterfaces(doc.Interfaces, now, time.Minute)
-	if len(commands) != 5 || len(filtered) != 3 || filtered[0].Selectable || !filtered[1].Selectable || filtered[2].Selectable {
+	if len(commands) != 6 || !doc.OVSBridgeMappingsObserved || len(filtered) != 3 || filtered[0].Selectable || !filtered[1].Selectable || filtered[2].Selectable {
 		t.Fatal("unsafe link inventory", filtered, commands)
 	}
 	if err = c.Publish(context.Background(), doc); err != nil {

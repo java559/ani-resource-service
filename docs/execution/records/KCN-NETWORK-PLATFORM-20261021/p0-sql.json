@@ -1,0 +1,66 @@
+{
+  "execution_host": "fedora",
+  "mode": "BEGIN REPEATABLE READ READ ONLY",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "postgres_pod": "ani-platform/postgresql-0",
+  "snapshots": {
+    "ani_resource_network": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime/ani_resource_network-p0-snapshot.json",
+      "sha256": "5093d2c13cfd50cfcbb201c8356768dac6a4ea512a68b73e7302feca48c01870",
+      "captured_at": "2026-10-21T05:37:11.718801+00:00"
+    },
+    "ani_governance": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime/ani_governance-p0-snapshot.json",
+      "sha256": "13db67f96eb924b7e53c1fbeb590abb983aa0141da6c7b52d26daa76f6619dcc",
+      "captured_at": "2026-10-21T05:37:11.989991+00:00"
+    }
+  },
+  "legacy_resources": [
+    {
+      "resource_id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+      "kind": "device",
+      "state": "provisioning",
+      "reason": "PROVIDER_NOT_READY",
+      "version": 1313,
+      "provider_uid": "b4be2ccc-1f81-466b-8a66-84f7a2c99115",
+      "binding_id": "f287c389-ce47-4880-9949-8d8dd02ac7e5",
+      "pending_action": "",
+      "pending_since": null
+    },
+    {
+      "resource_id": "egw_d6d865fccf9946bb90a8a171975be566",
+      "kind": "egress_gateway",
+      "state": "available",
+      "reason": "",
+      "version": 5315,
+      "provider_uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243",
+      "binding_id": "1e66d8ad-eb9f-4c5d-9518-846517f08e80",
+      "pending_action": "",
+      "pending_since": null
+    }
+  ],
+  "legacy_workers": [
+    {
+      "resource_id": "egw_d6d865fccf9946bb90a8a171975be566",
+      "lease_owner": null,
+      "lease_until": null,
+      "lease_epoch": 5315,
+      "next_run_at": "2026-10-21T05:37:09.33418+00:00",
+      "requested_generation": 2757,
+      "processed_generation": 2757
+    },
+    {
+      "resource_id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+      "lease_owner": null,
+      "lease_until": null,
+      "lease_epoch": 1315,
+      "next_run_at": "2026-10-21T05:37:28.070676+00:00",
+      "requested_generation": 10899,
+      "processed_generation": 10897
+    }
+  ],
+  "legacy_product_vlans": 0,
+  "default_public_pools": [],
+  "default_intranet_pools": [],
+  "rollout": []
+}

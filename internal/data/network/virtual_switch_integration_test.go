@@ -1,0 +1,245 @@
+package data_test
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"sync"
+	"testing"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
+)
+
+// Only the Kubernetes/NIC boundary is replaced. Authorization, acceptance,
+// transactions, operations, replay, leases and both workers are production code.
+type switchBoundary struct {
+	testEgressInfrastructure
+	mu          sync.Mutex
+	applied     map[string]bool
+	lose        bool
+	unavailable bool
+}
+
+func (b *switchBoundary) VirtualSwitchInventory(_ context.Context, cluster string, sw biz.VirtualSwitch, device string) (biz.VirtualSwitchInventory, error) {
+	if b.unavailable {
+		return biz.VirtualSwitchInventory{}, biz.Fail(biz.DependencyUnavailable, "facts unavailable")
+	}
+	now := time.Now()
+	members := []biz.VirtualSwitchNode{{NodeName: "n1", NodeUID: "uid1", MAC: "02:00:00:00:00:01", Priority: 100, Allocated: true}, {NodeName: "n2", NodeUID: "uid2", MAC: "02:00:00:00:00:02", Priority: 100, Allocated: true}}
+	items := []biz.NodeInterface{}
+	for _, n := range members {
+		items = append(items, biz.NodeInterface{NodeName: n.NodeName, NodeUID: n.NodeUID, Name: device, MAC: n.MAC, Kind: "device", Selectable: true, ObservedAt: now})
+	}
+	return biz.VirtualSwitchInventory{Members: members, Fingerprint: strings.Repeat("a", 64), Inventory: biz.InterfaceInventory{Items: items, Fingerprint: strings.Repeat("b", 64), CollectedAt: now}}, nil
+}
+func (b *switchBoundary) InspectVirtualSwitchNode(_ context.Context, sw biz.VirtualSwitch, n biz.VirtualSwitchNode) (biz.VirtualSwitchNode, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	n.ResourceVersion = "rv1"
+	if b.applied[n.NodeUID] {
+		n.Applied = true
+		n.Unknown = false
+		n.State = "applied"
+	} else if sw.State == biz.Deleting {
+		n.Applied = false
+		n.Unknown = false
+		n.State = "cleaned"
+	}
+	return n, nil
+}
+func (b *switchBoundary) PatchVirtualSwitchNode(_ context.Context, sw biz.VirtualSwitch, n biz.VirtualSwitchNode, deleting bool) (biz.VirtualSwitchNode, error) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	if !n.Prepared {
+		return n, errors.New("missing durable prepare")
+	}
+	if b.applied == nil {
+		b.applied = map[string]bool{}
+	}
+	b.applied[n.NodeUID] = !deleting
+	if b.lose {
+		b.lose = false
+		return n, &biz.ProviderError{Kind: biz.ProviderUncertain}
+	}
+	n.Unknown = false
+	n.Applied = !deleting
+	n.State = "applied"
+	if deleting {
+		n.State = "cleaned"
+	}
+	return n, nil
+}
+func switchEgress(t *testing.T) (*egressFixture, *switchBoundary) {
+	t.Helper()
+	p, owner := database(t)
+	boundary := &switchBoundary{}
+	p.UseEgressInfrastructure(boundary)
+	e, err := biz.NewEgress(p, boundary, biz.ContextEgressAuthorization{}, []byte(strings.Repeat("s", 32)), time.Minute, time.Now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx := biz.WithEgressCaller(context.Background(), biz.EgressCaller{PlatformAdministrator: true, Attribution: biz.Attribution{Actor: "platform-user", DirectCaller: "gov", CorrelationID: "switch-test"}})
+	provider := &egressProvider{}
+	return &egressFixture{p: p, owner: owner, e: e, ctx: ctx, provider: provider, w: egressWorker(t, p, provider)}, boundary
+}
+
+func TestVirtualSwitchDurableTwoStepAcceptanceAndRecovery(t *testing.T) {
+	f, boundary := switchEgress(t)
+	sw, err := f.e.CreateVirtualSwitch(f.ctx, biz.VirtualSwitchIntent{Name: "test-group", IdempotencyKey: "switch-create"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if sw.ClusterID != "" || sw.BindingID != "" || sw.BindingState != "unbound" || sw.State != biz.Available || len(sw.Nodes) != 0 {
+		t.Fatalf("invalid unbound switch: %+v", sw)
+	}
+	op, err := f.e.GetPlatformOperation(f.ctx, sw.LastOperationID)
+	if err != nil || op.State != biz.Succeeded || op.ResourceID != sw.ID {
+		t.Fatal(op, err)
+	}
+	input := biz.PlatformIntent{Kind: "create_vlan", Name: "first", IdempotencyKey: "vlan-first", Vlan: &biz.VlanConfig{VlanID: 0, ClusterID: "test-cluster", VirtualSwitchID: sw.ID, DeviceName: "ens35"}}
+	vlan, err := f.e.CreatePlatform(f.ctx, input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if vlan.Vlan.DeviceID == "" || vlan.Vlan.VirtualSwitchID != sw.ID || len(vlan.Vlan.Nodes) != 2 {
+		t.Fatal(vlan)
+	}
+	// Replay precedes a now-unavailable external inventory; it returns the exact
+	// acceptance snapshot, without a second registration or operation.
+	boundary.unavailable = true
+	replayed, err := f.e.CreatePlatform(f.ctx, input)
+	if err != nil || replayed.ID != vlan.ID || replayed.LastOperationID != vlan.LastOperationID {
+		t.Fatal(replayed, err)
+	}
+	boundary.unavailable = false
+	changed := input
+	copyVlan := *input.Vlan
+	copyVlan.VlanID = 1
+	changed.Vlan = &copyVlan
+	if _, err = f.e.CreatePlatform(f.ctx, changed); err == nil {
+		t.Fatal("v2 conflicting replay admitted")
+	}
+	if _, err = f.e.DeleteVirtualSwitch(f.ctx, sw.ID); err == nil {
+		t.Fatal("referenced switch deleted")
+	}
+	if _, err = f.w.Step(f.ctx); err != nil {
+		t.Fatal(err)
+	}
+	if f.provider.creates != 0 {
+		t.Fatal("VLAN created before group configuration")
+	}
+	policy := biz.DefaultWorkerPolicy()
+	policy.ObserveEvery = 10 * time.Millisecond
+	policy.RetryMin = time.Millisecond
+	boundary.lose = true
+	worker, err := biz.NewVirtualSwitchWorker(f.p, boundary, uuid.NewString(), policy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err = worker.Step(f.ctx); err != nil {
+		t.Fatal(err)
+	}
+	progress, err := f.e.GetVirtualSwitch(f.ctx, sw.ID)
+	if err != nil || !progress.Nodes[0].Unknown || !progress.Nodes[0].Prepared {
+		t.Fatal(progress, err)
+	}
+	worker, err = biz.NewVirtualSwitchWorker(f.p, boundary, uuid.NewString(), policy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	driveSwitch := func(want string) {
+		t.Helper()
+		deadline := time.Now().Add(3 * time.Second)
+		for time.Now().Before(deadline) {
+			if _, err := worker.Step(f.ctx); err != nil {
+				t.Fatal(err)
+			}
+			got, err := f.e.GetVirtualSwitch(f.ctx, sw.ID)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if got.BindingState == want {
+				return
+			}
+			time.Sleep(2 * time.Millisecond)
+		}
+		t.Fatal("switch did not converge to " + want)
+	}
+	driveSwitch("configured")
+	f.drive(t, func() bool {
+		v, err := f.e.GetPlatform(f.ctx, "vlan", vlan.ID)
+		return err == nil && v.State == biz.Available
+	})
+	if _, err = f.e.DeletePlatform(f.ctx, "vlan", vlan.ID); err != nil {
+		t.Fatal(err)
+	}
+	f.drive(t, func() bool {
+		v, err := f.e.GetPlatform(f.ctx, "vlan", vlan.ID)
+		return err == nil && v.State == biz.Deleted
+	})
+	if _, err = f.e.DeleteVirtualSwitch(f.ctx, sw.ID); err != nil {
+		t.Fatal(err)
+	}
+	driveSwitch("cleaned")
+	var active int
+	if err = f.owner.QueryRow(f.ctx, "SELECT count(*) FROM network_device_adoptions WHERE virtual_switch_id=$1 AND NOT retired", sw.ID).Scan(&active); err != nil || active != 0 {
+		t.Fatal(active, err)
+	}
+	// A deleted group's name can be reused only after its label cleanup completed.
+	newSwitch, err := f.e.CreateVirtualSwitch(f.ctx, biz.VirtualSwitchIntent{Name: sw.Name, IdempotencyKey: "switch-recreate"})
+	if err != nil || newSwitch.ID == sw.ID {
+		t.Fatal(newSwitch, err)
+	}
+}
+
+func TestVirtualSwitchScopePagingAndAtomicConcurrentVlan(t *testing.T) {
+	f, _ := switchEgress(t)
+	if _, err := f.e.CreateVirtualSwitch(context.Background(), biz.VirtualSwitchIntent{Name: "denied", IdempotencyKey: "denied"}); err == nil {
+		t.Fatal("unauthenticated platform create allowed")
+	}
+	for _, name := range []string{"has.dot", "-bad", strings.Repeat("a", 64)} {
+		if _, err := f.e.CreateVirtualSwitch(f.ctx, biz.VirtualSwitchIntent{Name: name, IdempotencyKey: name}); err == nil {
+			t.Fatal("invalid group name allowed", name)
+		}
+	}
+	var sw biz.VirtualSwitch
+	for j := 0; j < 5; j++ {
+		var err error
+		sw, err = f.e.CreateVirtualSwitch(f.ctx, biz.VirtualSwitchIntent{Name: fmt.Sprintf("group-%d", j), IdempotencyKey: fmt.Sprintf("key-%d", j)})
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	items, total, err := f.e.ListVirtualSwitches(f.ctx, biz.VirtualSwitchFilter{Page: 3, PageSize: 2})
+	if err != nil || total != 5 || len(items) != 1 {
+		t.Fatal(items, total, err)
+	}
+	start := make(chan struct{})
+	results := make(chan error, 2)
+	for j := 0; j < 2; j++ {
+		go func(index int) {
+			<-start
+			_, err := f.e.CreatePlatform(f.ctx, biz.PlatformIntent{Kind: "create_vlan", Name: "same-slot", IdempotencyKey: fmt.Sprintf("concurrent-%d", index), Vlan: &biz.VlanConfig{VlanID: 5, ClusterID: "test-cluster", VirtualSwitchID: sw.ID, DeviceName: "ens35"}})
+			results <- err
+		}(j)
+	}
+	close(start)
+	success := 0
+	for j := 0; j < 2; j++ {
+		if <-results == nil {
+			success++
+		}
+	}
+	if success != 1 {
+		t.Fatal("concurrent VLAN successes", success)
+	}
+	for table, want := range map[string]int{"network_device_adoptions": 1, "network_vlan_networks": 1, "network_platform_idempotency": 1} {
+		var count int
+		if err = f.owner.QueryRow(f.ctx, "SELECT count(*) FROM "+table).Scan(&count); err != nil || count != want {
+			t.Fatal(table, count, err)
+		}
+	}
+}

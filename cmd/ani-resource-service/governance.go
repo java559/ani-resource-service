@@ -105,7 +105,23 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	execution := server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration(), attachmentWorker)
+	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy)
+	if err != nil {
+		return err
+	}
+	retirementWorker, err := biz.NewLegacyDeviceRetirementStepper(repository, provider, uuid.NewString(), policy)
+	if err != nil {
+		return err
+	}
+	defaultService, defaultWorker, err := wireDefaultVPCEgress(repository, provider, bc.Network, policy)
+	if err != nil {
+		return err
+	}
+	additional := []server.Stepper{attachmentWorker, switchWorker, retirementWorker}
+	if defaultWorker != nil {
+		additional = append(additional, defaultWorker)
+	}
+	execution := server.NewWorkerServer(worker, repository, logger, w.PollInterval.AsDuration(), additional...)
 	readiness := server.NewReadiness(func() bool { return execution.Ready() })
 	observability, err := server.NewObservability(Name, Version, readiness)
 	if err != nil {
@@ -124,6 +140,10 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	networkv1.RegisterNetworkServiceServer(gs, networkService.NewNetworkService(networkUC, attachments))
 	networkv1.RegisterTenantEgressServiceServer(gs, networkService.NewTenantEgressService(egress))
 	networkv1.RegisterPlatformNetworkServiceServer(gs, networkService.NewPlatformNetworkService(egress))
+	networkv1.RegisterPlatformDeviceRetirementServiceServer(gs, networkService.NewPlatformDeviceRetirementService(egress))
+	if defaultService != nil {
+		networkv1.RegisterPlatformDefaultEgressServiceServer(gs, defaultService)
+	}
 	networkv1.RegisterTenantLoadBalancerServiceServer(gs, networkService.NewTenantLoadBalancerService(lbs))
 	if images != nil {
 		imagev1.RegisterTenantImageServiceServer(gs, images.tenant)
