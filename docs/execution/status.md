@@ -2,7 +2,9 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
-状态 `in_progress`，2026-10-22 继续。**软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。Kubernetes/控制器位于隔离外部边界，不能据此宣称真实集群接管或流量验收通过。
+状态：2026-10-22 继续离线兼容修订，真实接管/公网维护仍受恢复门禁阻塞，未完成。**原固定版本的软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。Kubernetes/控制器位于隔离外部边界，不能据此宣称真实集群接管或流量验收通过。
+
+用户本轮授权的[只读 API 与三节点 SSH 核查](records/KCN-NETWORK-PLATFORM-20261021/cluster-readonly-20261022.json)已完成：集群/默认 VPC/节点身份匹配；严格 known_hosts、machineID/bootID 和 ens34 回程均 `PASS`，OVS socket 实际为 `65534:65534/0750`。原公网五对象与默认 VPC/Subnet 身份仍在，默认 Subnet `natOutgoing=true`；未开维护、未做 DNS/HTTPS/流量或真实恢复。三份 NodeFacts 虽新鲜但缺新版精确桥映射证明，Res 实际 SA 的 RBAC 仅 nodes get/list/watch、无 patch。现网 Gov 已是正式 `756f5a2`/ModelDev v2.1，旧 `3dcc1df` 候选会回退其生产功能，**不得直接部署**；正在独立工作树保留现网增量、补全生成及验证，并准备同源含 ip/ovs-vsctl 的 NodeFacts 镜像。此次确认只覆盖上述只读用途，未覆盖发布内部镜像、改配置/权限/迁移、部署或公网维护。
 
 Gov `3dcc1df2efc2e0b156e95cf1f605633928e43b55` 已 SSH 推送并独立核对 remote head，2390 项源码字节与 Git 执行位均匹配通过门禁的清单，附加 [draft PR #37](https://github.com/zhangzhe-ctrl/ani-governance/pull/37)。Res 真实 PG 确定性交错证明原 20 秒租约自然排空、旧提交始终被拒绝；新用例、完整 `make verify` 及 653 项源码守卫全部 `PASS`。Gov 只校正两个具体异步删除等待预算并修正本 run 补偿夹具，默认等待与 LB 首建就绪断言不变；Gov 正式 Resource API 依赖及 Res 生产源码仍固定 267，Res 274 项生产输入未改。
 
@@ -12,7 +14,7 @@ Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持�
 
 正式 API `v0.0.0-20261021072547-267c2d29c611` 的 Origin/双 checksum 已由标准 Go 验证，见[发布回执](records/KCN-NETWORK-PLATFORM-20261021/formal-api-publication.json)。Gov 已固定该正式依赖，完整生成、认证与 data/service 定向测试通过，server/cmd 编译通过（相关 selector 无测试）。原始 OOM、tmpfs 超时、外部夹具 422、缺失 v0.9 引用、Attachment 观察过期及后续业务失败均保留；后续修复保持生产/API 字节不变，不能把替身边界通过当成 KCN 真实能力。
 
-批准输入 hash 匹配，Res/Gov/installer 已通过 SSH 固定；KCN GitLab 最新仍未核实。用户明确禁止修改 KCN 源码，原任务候选已全部撤回、缓存工作树 clean，未提交/推送/部署；已撤回候选不能解除现有受支持恢复协议门禁。用户随后明确“需要使用集群就找我确认”：任何后续 10–12 只读 API、节点 SSH、部署、验收或恢复都必须先取得具体用途确认，当前没有集群阶段许可。仅继续 Fedora 软件和完全隔离 loopback 测试，未打开公网维护窗口。所有当前证据集中在[本 run 索引](records/KCN-NETWORK-PLATFORM-20261021/README.md)，真实部署及 P4–P6 验收保持 `NOT_RUN`。
+批准输入 hash 匹配，Res/Gov/installer 已通过 SSH 固定；KCN GitLab 本轮重核仍关闭连接，最新源码及既有重驱/恢复协议未证实。用户明确禁止修改 KCN 源码，原任务候选已全部撤回、缓存工作树 clean，未提交/推送/部署；用户本轮补充“碰到 kcn 问题，记录并报告即可”，据此记录限制，不再追索其源码或协议。已撤回候选和未证实协议不能解除公网恢复门禁。用户“需要使用集群就找我确认”的要求继续有效，本轮只读许可不向部署、流量或维护扩展。所有当前证据集中在[本 run 索引](records/KCN-NETWORK-PLATFORM-20261021/README.md)，真实部署及 P4–P6 验收保持 `NOT_RUN`。
 
 更新日期：2026-10-20。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
 

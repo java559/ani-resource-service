@@ -13,6 +13,14 @@ binaries and three locally built candidate images, source/module identities,
 nonroot executable permissions, extracted bytes and exact temporary cleanup.
 Local image IDs do not establish target-registry publication or deployment.
 
+[Approved read-only cluster and SSH inspection](cluster-readonly-20261022.json)
+fixes current identities/images, ens34 recovery-channel evidence and numeric OVS
+socket ownership. It records the old NodeFacts/RBAC gaps and the deployed Gov
+756f5a2 provenance: old candidate 3dcc must not replace these ModelDev changes.
+The original outlet remains present; no traffic or restoration pass is claimed.
+The user directed that KCN issues be recorded/reported without source changes;
+unverified recovery semantics remain a maintenance gate.
+
 [Formal API publication](formal-api-publication.json) fixes the published source,
 canonical Go version, Origin and both checksum-database authenticated sums. It
 also records the official module transfer, exact Gov dependency delta and
@@ -31,9 +39,10 @@ failure is not claimed fixed. The Res software receipt also includes the real
 
 [Recovery boundary validation](recovery-isolated-validation.json) records the
 Fedora r2 candidate's 17 passing tests, fixed hashes and observed cleanup. These
-tests use loopback external boundaries; promotion, cluster use, maintenance and
-actual restoration remain `NOT_RUN`. The current user confirmation and supported
-KCN recovery protocol gates remain closed.
+tests use loopback external boundaries; promotion, maintenance and actual
+restoration remain `NOT_RUN`. Later user-approved read-only cluster/SSH evidence
+is separate. Deployment/maintenance confirmation and supported KCN recovery
+protocol gates remain closed.
 
 Approved inputs were read from `/home/chabking/workspace/ani-resource-service`
 before being copied unchanged into this isolated worktree:

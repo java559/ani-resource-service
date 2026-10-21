@@ -1,0 +1,1892 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-21T21:30:58.461382+00:00",
+  "recorded_at": "2026-10-21T21:37:08.356794+00:00",
+  "execution_host": "fedora",
+  "scope": "User-approved read-only API and three ens34 SSH inspections; no cluster mutation, deployment, registry query, application login or packet probe",
+  "authorization": {
+    "human_reply": "允许本次只读 API 与三节点 SSH 核查",
+    "deployment_and_maintenance": "NOT_AUTHORIZED_BY_THIS_REPLY"
+  },
+  "identity": {
+    "context": "kubernetes-admin@ani-lab",
+    "kube_system_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "default_vpc_uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+    "nodes": [
+      {
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "resourceVersion": "52032351",
+        "internalIP": "172.16.101.10",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "0e21596a-ebbb-433a-a67d-6d9865b015bd",
+          "networking.kubercloud.com/service_ip": "100.64.0.2",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T21:26:33Z",
+          "lastTransitionTime": "2026-10-10T05:53:29Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      },
+      {
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "resourceVersion": "52031135",
+        "internalIP": "172.16.101.11",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "e1d4f47f-b347-46fd-9a21-08e824e2aff8",
+          "networking.kubercloud.com/service_ip": "100.64.0.6",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T21:28:12Z",
+          "lastTransitionTime": "2026-10-21T09:50:42Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      },
+      {
+        "name": "ani-03",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "resourceVersion": "52031526",
+        "internalIP": "172.16.101.12",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "a73a0b19-e738-49cc-aab1-cd0722e36e48",
+          "networking.kubercloud.com/service_ip": "100.64.0.4",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T21:25:38Z",
+          "lastTransitionTime": "2026-10-21T10:10:20Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      }
+    ]
+  },
+  "components": [
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "ani-system",
+        "name": "ani-governance",
+        "uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+        "resourceVersion": "51942093",
+        "generation": 123
+      },
+      "service_account": "governance-runtime",
+      "images": [
+        {
+          "container": "server",
+          "image": "172.16.101.10:5000/ani/modeldev-governance-v21@sha256:148e9fbc4961797e7126de1e766d3e7ee50622f061fbb4951dbf745a22c54fe1"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 123,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "ani-system",
+        "name": "ani-model-service",
+        "uid": "f358e30f-842d-419a-9b25-4178caabda0f",
+        "resourceVersion": "51957108",
+        "generation": 20
+      },
+      "service_account": "ani-model-service",
+      "images": [
+        {
+          "container": "model",
+          "image": "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:8407a5027b379268c8a96c6991af61d85cb4845536554f2470e69466d9f5593f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 20,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "ani-system",
+        "name": "ani-resource-service",
+        "uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+        "resourceVersion": "50149270",
+        "generation": 29
+      },
+      "service_account": "ani-resource-service",
+      "images": [
+        {
+          "container": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/resource@sha256:52874d9a10a2238c20d6950387497a79bd831314d47a189e704c420e76c3f55d"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 29,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-16394552231564376ef22f49",
+        "uid": "f2efa8b8-157b-4a5d-b023-ab7a213ef5dd",
+        "resourceVersion": "8036290",
+        "generation": 1
+      },
+      "service_account": "ani-node-facts-16394552231564376ef22f49",
+      "images": [
+        {
+          "container": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-3031656f3bb1a90adadca726",
+        "uid": "d0ac1b93-7672-4f08-8c5b-8c320bcdfb94",
+        "resourceVersion": "50043788",
+        "generation": 1
+      },
+      "service_account": "ani-node-facts-3031656f3bb1a90adadca726",
+      "images": [
+        {
+          "container": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+        "uid": "602900fd-655a-4721-a7e7-d0ae53510b98",
+        "resourceVersion": "50094879",
+        "generation": 1
+      },
+      "service_account": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "images": [
+        {
+          "container": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 1,
+        "observedGeneration": 1,
+        "readyReplicas": 1,
+        "replicas": 1
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "kcn-controller",
+        "uid": "17646e4a-d2c5-42e0-8c03-1da213dab028",
+        "resourceVersion": "50094779",
+        "generation": 2
+      },
+      "service_account": "kcn-controller",
+      "images": [
+        {
+          "container": "kcn-controller",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 3,
+        "observedGeneration": 2,
+        "readyReplicas": 3,
+        "replicas": 3
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "kcn-ovn-central",
+        "uid": "534ba35a-7e72-47fb-a716-9c6105832f4f",
+        "resourceVersion": "50094966",
+        "generation": 1
+      },
+      "service_account": "kcn-controller",
+      "images": [
+        {
+          "container": "ovn-central",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ],
+      "status": {
+        "availableReplicas": 3,
+        "observedGeneration": 1,
+        "readyReplicas": 3,
+        "replicas": 3
+      }
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kube-system",
+        "name": "coredns",
+        "uid": "614411d0-c3ec-48c8-9b8b-1a6f19f10976",
+        "resourceVersion": "50043986",
+        "generation": 4
+      },
+      "service_account": "coredns",
+      "images": [
+        {
+          "container": "coredns",
+          "image": "172.16.101.10:5000/coredns/coredns:v1.13.1"
+        }
+      ],
+      "status": {
+        "availableReplicas": 2,
+        "observedGeneration": 4,
+        "readyReplicas": 2,
+        "replicas": 2
+      }
+    },
+    {
+      "kind": "DaemonSet",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "kcn-cni-ds",
+        "uid": "fdb3a4ae-d358-4a1a-8768-9a0a688b6bdf",
+        "resourceVersion": "50094866",
+        "generation": 1
+      },
+      "service_account": "kcn-controller",
+      "images": [
+        {
+          "container": "kcn-cni-server",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ],
+      "status": {
+        "desiredNumberScheduled": 3,
+        "numberReady": 3,
+        "observedGeneration": 1
+      }
+    },
+    {
+      "kind": "DaemonSet",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "kcn-ovs-ds",
+        "uid": "9a90b9f8-f8ab-4484-aaa4-4244bad4ae28",
+        "resourceVersion": "50094893",
+        "generation": 1
+      },
+      "service_account": "kcn-controller",
+      "images": [
+        {
+          "container": "openvswitch",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ],
+      "status": {
+        "desiredNumberScheduled": 3,
+        "numberReady": 3,
+        "observedGeneration": 1
+      }
+    }
+  ],
+  "node_management_ssh": {
+    "captured_at": "2026-10-21T21:31:22.330027+00:00",
+    "execution_host": "fedora",
+    "scope": "read-only three-node SSH; no sudo; no configuration or KCN changes",
+    "target_identity_guard": "PASS",
+    "management_ssh_gate": "PASS",
+    "private_evidence_sha256": "7cd060617440231f7e8b17f2889c96688bf0a37e7686e098b7d3e740c5704035",
+    "public_receipt_sha256": "d8ff43c5be7138d20e61ee68b19e4c51dd2bc59f6201c1227a7764d47a428b2a",
+    "script_sha256": "f3036d0c321c34280e0cb660daccd2f23a5dffdec9a1a9a92ee48d27225071af",
+    "nodes": [
+      {
+        "node": "ani-01",
+        "management_ip": "172.16.101.10",
+        "checks": {
+          "known_hosts_strict": true,
+          "machine_id_matches_node_info": true,
+          "boot_id_matches_node_info": true,
+          "ens34_has_expected_ip": true,
+          "ssh_server_ip_matches_management_ip": true,
+          "return_route_uses_ens34": true,
+          "return_route_source_matches_management_ip": true
+        },
+        "machine_id_match": true,
+        "boot_id_match": true,
+        "machine_id_sha256": "46598892124494555e291082be5ee87e9c52e0c8da19855426e659768b39a63a",
+        "boot_id_sha256": "55658d5ae2df2df487136e142255879d4c4e83ebe8c3fb58661d77e722c4a412",
+        "interfaces": [
+          {
+            "name": "ens34",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": null,
+            "addresses": [
+              {
+                "family": "inet",
+                "local": "172.16.101.10",
+                "prefixlen": 24
+              },
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fee2:f021",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens35",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": "ovs-system",
+            "addresses": [
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fee2:f02b",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens36",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST"
+            ],
+            "operstate": "DOWN",
+            "master": null,
+            "addresses": []
+          }
+        ],
+        "ovs_socket": {
+          "uid": 65534,
+          "gid": 65534,
+          "mode": "0o750",
+          "path": "/var/run/openvswitch/db.sock"
+        },
+        "return_route": [
+          {
+            "dev": "ens34",
+            "prefsrc": "172.16.101.10"
+          }
+        ]
+      },
+      {
+        "node": "ani-02",
+        "management_ip": "172.16.101.11",
+        "checks": {
+          "known_hosts_strict": true,
+          "machine_id_matches_node_info": true,
+          "boot_id_matches_node_info": true,
+          "ens34_has_expected_ip": true,
+          "ssh_server_ip_matches_management_ip": true,
+          "return_route_uses_ens34": true,
+          "return_route_source_matches_management_ip": true
+        },
+        "machine_id_match": true,
+        "boot_id_match": true,
+        "machine_id_sha256": "e97da28cd637616f9bde089e8440762974f1d066afaf1e8c1a6a4db68e82632e",
+        "boot_id_sha256": "5718e0623f5e4e7e5d2037a8249dac0a8a2adc9fe0d8bc9a0d03fe25ec65e750",
+        "interfaces": [
+          {
+            "name": "ens34",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": null,
+            "addresses": [
+              {
+                "family": "inet",
+                "local": "172.16.101.11",
+                "prefixlen": 24
+              },
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fe1a:5a0f",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens35",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": "ovs-system",
+            "addresses": [
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fe1a:5a19",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens36",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST"
+            ],
+            "operstate": "DOWN",
+            "master": null,
+            "addresses": []
+          }
+        ],
+        "ovs_socket": {
+          "uid": 65534,
+          "gid": 65534,
+          "mode": "0o750",
+          "path": "/var/run/openvswitch/db.sock"
+        },
+        "return_route": [
+          {
+            "dev": "ens34",
+            "prefsrc": "172.16.101.11"
+          }
+        ]
+      },
+      {
+        "node": "ani-03",
+        "management_ip": "172.16.101.12",
+        "checks": {
+          "known_hosts_strict": true,
+          "machine_id_matches_node_info": true,
+          "boot_id_matches_node_info": true,
+          "ens34_has_expected_ip": true,
+          "ssh_server_ip_matches_management_ip": true,
+          "return_route_uses_ens34": true,
+          "return_route_source_matches_management_ip": true
+        },
+        "machine_id_match": true,
+        "boot_id_match": true,
+        "machine_id_sha256": "f38b0a7df29d341e3397d72c9796b214cae961ec05ff1f75a4f8d31d44db6c1a",
+        "boot_id_sha256": "b9f980ff1209dedff134cbfdc5ffbc3e2c25dba3748abd418217f15563ad7d0d",
+        "interfaces": [
+          {
+            "name": "ens34",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": null,
+            "addresses": [
+              {
+                "family": "inet",
+                "local": "172.16.101.12",
+                "prefixlen": 24
+              },
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fee9:3245",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens35",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST",
+              "UP",
+              "LOWER_UP"
+            ],
+            "operstate": "UP",
+            "master": "ovs-system",
+            "addresses": [
+              {
+                "family": "inet6",
+                "local": "fe80::20c:29ff:fee9:324f",
+                "prefixlen": 64
+              }
+            ]
+          },
+          {
+            "name": "ens36",
+            "flags": [
+              "BROADCAST",
+              "MULTICAST"
+            ],
+            "operstate": "DOWN",
+            "master": null,
+            "addresses": []
+          }
+        ],
+        "ovs_socket": {
+          "uid": 65534,
+          "gid": 65534,
+          "mode": "0o750",
+          "path": "/var/run/openvswitch/db.sock"
+        },
+        "return_route": [
+          {
+            "dev": "ens34",
+            "prefsrc": "172.16.101.12"
+          }
+        ]
+      }
+    ]
+  },
+  "nodefacts": {
+    "documents": [
+      {
+        "configmap_namespace": "kcn-system",
+        "configmap_name": "ani-node-facts-16394552231564376ef22f49",
+        "configmap_uid": "4753ca03-a7b2-4726-a670-f3da6cdd856a",
+        "resource_version": "52032636",
+        "document_version": 1,
+        "node_name": "ani-01",
+        "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "collected_at": "2026-10-21T21:30:39.615381784Z",
+        "document_node_matches_snapshot": true,
+        "source_count_for_node_uid": 1,
+        "age_seconds_at_capture_file_mtime": 17.988,
+        "ovs_bridge_mappings_observed_present": false,
+        "ovs_bridge_mappings_present": false
+      },
+      {
+        "configmap_namespace": "kcn-system",
+        "configmap_name": "ani-node-facts-3031656f3bb1a90adadca726",
+        "configmap_uid": "c829d893-a9e7-4751-894f-f404b3b4de61",
+        "resource_version": "52033006",
+        "document_version": 1,
+        "node_name": "ani-02",
+        "node_uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "collected_at": "2026-10-21T21:30:47.543542765Z",
+        "document_node_matches_snapshot": true,
+        "source_count_for_node_uid": 1,
+        "age_seconds_at_capture_file_mtime": 10.06,
+        "ovs_bridge_mappings_observed_present": false,
+        "ovs_bridge_mappings_present": false
+      },
+      {
+        "configmap_namespace": "kcn-system",
+        "configmap_name": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+        "configmap_uid": "6659bcee-a9ba-476a-a662-01e5f2d1069f",
+        "resource_version": "52032461",
+        "document_version": 1,
+        "node_name": "ani-03",
+        "node_uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "collected_at": "2026-10-21T21:30:36.383358029Z",
+        "document_node_matches_snapshot": true,
+        "source_count_for_node_uid": 1,
+        "age_seconds_at_capture_file_mtime": 21.22,
+        "ovs_bridge_mappings_observed_present": false,
+        "ovs_bridge_mappings_present": false
+      }
+    ],
+    "observation_gate": "BLOCKED: all three current documents lack explicit ovs_bridge_mappings_observed and exact ens35 KCBridgeNetworks; missing data cannot prove an empty mapping",
+    "future_freshness": "NOT_VERIFIED; ages refer only to completed snapshot"
+  },
+  "resource_node_rbac": {
+    "subject": "system:serviceaccount:ani-system:ani-resource-service",
+    "standard_groups_used": [
+      "system:serviceaccounts",
+      "system:serviceaccounts:ani-system",
+      "system:authenticated"
+    ],
+    "snapshot_kind_counts": {
+      "ClusterRole": 199,
+      "ClusterRoleBinding": 156,
+      "Role": 99,
+      "RoleBinding": 102
+    },
+    "matched_bindings": [
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "ani-network-egress-ani-system",
+        "uid": "57c2ad17-11fa-4fed-a1ee-899381ba092d",
+        "resource_version": "3075202",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "ani-network-egress"
+        },
+        "matching_subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "ani-resource-service",
+            "namespace": "ani-system"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "533fb2b0-9ab2-4770-9a04-dfb3cb27efca",
+        "role_resource_version": "3075196",
+        "node_rules": [
+          {
+            "apiGroups": [
+              ""
+            ],
+            "resources": [
+              "nodes",
+              "pods",
+              "services",
+              "configmaps"
+            ],
+            "verbs": [
+              "get",
+              "list",
+              "watch"
+            ]
+          }
+        ],
+        "cluster_scoped_nodes_granted": true
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "ani-network-load-balancer-ani-system",
+        "uid": "95fa9bab-3f02-4d67-8321-4df29b990d13",
+        "resource_version": "3075207",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "ani-network-load-balancer"
+        },
+        "matching_subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "ani-resource-service",
+            "namespace": "ani-system"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "5c22bfd9-5b2d-46a7-99fa-17d4d85ae855",
+        "role_resource_version": "15467982",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "ani-resource-instance",
+        "uid": "46234a62-7813-4bd2-abc3-83cb17ef45e9",
+        "resource_version": "38192472",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "ani-resource-instance"
+        },
+        "matching_subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "ani-resource-service",
+            "namespace": "ani-system"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "cc9564ae-1967-408e-b0de-d2c010badbd9",
+        "role_resource_version": "38200376",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "cdi.kubevirt.io:config-reader",
+        "uid": "1bee2fbf-c795-412e-a4fe-9ffcb60b79a6",
+        "resource_version": "10219",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "cdi.kubevirt.io:config-reader"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "6c5148d0-7dbc-4dbf-995d-df0c5e3883c1",
+        "role_resource_version": "10218",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "instancetype.kubevirt.io:view",
+        "uid": "83aee6bb-c27e-4d18-93a2-d05fd18f305e",
+        "resource_version": "8937",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "instancetype.kubevirt.io:view"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "fe0f3ccb-790a-46d9-95ef-73e944ababbf",
+        "role_resource_version": "8924",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "kubevirt.io:default",
+        "uid": "504efd5e-81f0-4357-b3dd-e435d419520a",
+        "resource_version": "8936",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "kubevirt.io:default"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "4495727c-b91c-4422-910a-57ec64b4dc74",
+        "role_resource_version": "8905",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "system:basic-user",
+        "uid": "f55bcffd-b010-4efd-9085-796126ad933b",
+        "resource_version": "142",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "system:basic-user"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "64530c77-4cdc-4fd6-84eb-3b2da4feeff2",
+        "role_resource_version": "74",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "system:discovery",
+        "uid": "b11d3a9e-4429-4268-b74f-b56398b27f73",
+        "resource_version": "141",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "system:discovery"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "4574cdad-e4c0-47b6-a0d8-63dcd6fa81f5",
+        "role_resource_version": "72",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "system:public-info-viewer",
+        "uid": "bcc814b7-d481-43c6-9913-756d510c0a10",
+        "resource_version": "143",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "system:public-info-viewer"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:authenticated"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "2beac5ef-19d6-4499-9fd1-be4e9b51f551",
+        "role_resource_version": "75",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "ClusterRoleBinding",
+        "namespace": null,
+        "name": "system:service-account-issuer-discovery",
+        "uid": "1e7ae2c5-9000-4e38-9261-d534cd00000e",
+        "resource_version": "150",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "ClusterRole",
+          "name": "system:service-account-issuer-discovery"
+        },
+        "matching_subjects": [
+          {
+            "apiGroup": "rbac.authorization.k8s.io",
+            "kind": "Group",
+            "name": "system:serviceaccounts"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "d9c27307-fcef-421c-b4ca-4c269b8170a2",
+        "role_resource_version": "98",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "RoleBinding",
+        "namespace": "kcn-system",
+        "name": "ani-network-device-adoption",
+        "uid": "46803a89-b6a5-4a19-8939-2f55135dd2a7",
+        "resource_version": "3116897",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Role",
+          "name": "ani-network-device-adoption"
+        },
+        "matching_subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "ani-resource-service",
+            "namespace": "ani-system"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "c151dc83-34e9-41c9-a1ff-516e233cdc2b",
+        "role_resource_version": "3116896",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      },
+      {
+        "kind": "RoleBinding",
+        "namespace": "kcn-system",
+        "name": "icn-01a15337-res-nic-list",
+        "uid": "51c4f4f5-96de-4559-b3ec-1daa8bb9f28f",
+        "resource_version": "42536377",
+        "role_ref": {
+          "apiGroup": "rbac.authorization.k8s.io",
+          "kind": "Role",
+          "name": "icn-01a15337-res-nic-list"
+        },
+        "matching_subjects": [
+          {
+            "kind": "ServiceAccount",
+            "name": "ani-resource-service",
+            "namespace": "ani-system"
+          }
+        ],
+        "role_found": true,
+        "role_uid": "a4105b07-5e00-460d-8e4f-af18214d9fad",
+        "role_resource_version": "42536372",
+        "node_rules": [],
+        "cluster_scoped_nodes_granted": false
+      }
+    ],
+    "nodes_verbs": {
+      "get": {
+        "rbac_granted_unrestricted": true,
+        "granting_rules": [
+          {
+            "binding": "ani-network-egress-ani-system",
+            "rule": {
+              "apiGroups": [
+                ""
+              ],
+              "resources": [
+                "nodes",
+                "pods",
+                "services",
+                "configmaps"
+              ],
+              "verbs": [
+                "get",
+                "list",
+                "watch"
+              ]
+            }
+          }
+        ]
+      },
+      "list": {
+        "rbac_granted_unrestricted": true,
+        "granting_rules": [
+          {
+            "binding": "ani-network-egress-ani-system",
+            "rule": {
+              "apiGroups": [
+                ""
+              ],
+              "resources": [
+                "nodes",
+                "pods",
+                "services",
+                "configmaps"
+              ],
+              "verbs": [
+                "get",
+                "list",
+                "watch"
+              ]
+            }
+          }
+        ]
+      },
+      "watch": {
+        "rbac_granted_unrestricted": true,
+        "granting_rules": [
+          {
+            "binding": "ani-network-egress-ani-system",
+            "rule": {
+              "apiGroups": [
+                ""
+              ],
+              "resources": [
+                "nodes",
+                "pods",
+                "services",
+                "configmaps"
+              ],
+              "verbs": [
+                "get",
+                "list",
+                "watch"
+              ]
+            }
+          }
+        ]
+      },
+      "patch": {
+        "rbac_granted_unrestricted": false,
+        "granting_rules": []
+      }
+    },
+    "evidence_kind": "Derived from captured complete Roles/ClusterRoles/RoleBindings/ClusterRoleBindings; no direct SA request or SubjectAccessReview performed.",
+    "limits": "Only RBAC grants under this identity are inferred. Actual client credential/config precedence, external authorizers and admission are not proven; RoleBinding cannot grant cluster-scoped Node operations."
+  },
+  "original_egress": {
+    "protected_objects": [
+      {
+        "kind": "VlanNetwork",
+        "metadata": {
+          "generation": 1,
+          "name": "cluster-public-ens35-20261020",
+          "ownerReferences": [],
+          "resourceVersion": "44956341",
+          "uid": "184ccbf5-3f3e-4c47-8cc7-ac3e7406fca8"
+        },
+        "spec": {
+          "devName": "ens35",
+          "vClusterName": "ani-public",
+          "vlanID": 0
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:53:54Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:53:54Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            }
+          ],
+          "subnet": "kcn-system/cluster-public-102-20261020",
+          "topoVersion": "b31739576e95e1f55b670501009f5ac6"
+        }
+      },
+      {
+        "kind": "EIPGateway",
+        "metadata": {
+          "generation": 1,
+          "name": "cluster-public-egress-20261020",
+          "ownerReferences": [],
+          "resourceVersion": "44956342",
+          "uid": "8ec82f40-185d-4a85-b922-cfd5e51fb3f4"
+        },
+        "spec": {
+          "egressType": "Host",
+          "scope": "Public"
+        },
+        "status": {
+          "boundResources": {
+            "router": "gw.cluster-public-egress-20261020"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:53:56Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:53:56Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:53:56Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "localIP": "100.64.0.9",
+          "subnets": {
+            "kcn-system/cluster-public-102-20261020": "172.16.102.0/24"
+          }
+        }
+      },
+      {
+        "kind": "Subnet",
+        "metadata": {
+          "generation": 1,
+          "name": "cluster-public-102-20261020",
+          "namespace": "kcn-system",
+          "ownerReferences": [],
+          "resourceVersion": "44957233",
+          "uid": "88303f1c-7817-41d2-b15f-37a30e62f2b6"
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "cidrBlock": "172.16.102.0/24",
+          "enableDHCP": false,
+          "excludeIPs": [
+            "172.16.102.1..172.16.102.191",
+            "172.16.102.208..172.16.102.254"
+          ],
+          "gateway": "cluster-public-egress-20261020",
+          "gatewayIP": "172.16.102.2",
+          "ipVersion": "IPv4",
+          "natOutgoing": false,
+          "type": "Public",
+          "underlayConfig": {
+            "gatewayIP": "172.16.102.1",
+            "vlanNetwork": "cluster-public-ens35-20261020"
+          }
+        },
+        "status": {
+          "boundResources": {
+            "gatewayPort": "gw.cluster-public-egress-20261020-kcn-system.cluster-public-102-20261020",
+            "switch": "kcn-system.cluster-public-102-20261020"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:54:22Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:54:22Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:54:22Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "gatewayMac": "fa:00:a5:60:bb:3e",
+          "observedGeneration": 1,
+          "underlayState": {
+            "chassisNode": "ani-03,ani-01",
+            "ready": true,
+            "vlanNetwork": "cluster-public-ens35-20261020"
+          },
+          "v4availableIPrange": "172.16.102.193-172.16.102.207",
+          "v4availableIPs": 15,
+          "v4usingIPrange": "172.16.102.192",
+          "v4usingIPs": 1
+        }
+      },
+      {
+        "kind": "EIP",
+        "metadata": {
+          "generation": 2,
+          "name": "cluster-public-egress-20261020",
+          "namespace": "kcn-system",
+          "ownerReferences": [],
+          "resourceVersion": "44957722",
+          "uid": "fe37d635-31b2-4c24-9e21-6e284f51153a"
+        },
+        "spec": {
+          "ipAddress": "172.16.102.192",
+          "ipVersion": "IPv4",
+          "subnet": "kcn-system/cluster-public-102-20261020"
+        },
+        "status": {
+          "boundResource": {
+            "disabled": false,
+            "nodeName": "ani-01",
+            "observedGeneration": 1,
+            "resource": "cluster-public-egress-20261020",
+            "resourceType": "Snat",
+            "vpc": "kcn-system/kcn-cluster"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:54:41Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:54:41Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "gateway": "cluster-public-egress-20261020",
+          "phase": "Bound"
+        }
+      },
+      {
+        "kind": "Snat",
+        "metadata": {
+          "generation": 1,
+          "name": "cluster-public-egress-20261020",
+          "namespace": "kcn-system",
+          "ownerReferences": [],
+          "resourceVersion": "44957723",
+          "uid": "02948377-5798-4004-b3c8-e3adf5ab7d5b"
+        },
+        "spec": {
+          "disable": false,
+          "eip": "cluster-public-egress-20261020",
+          "vpc": "kcn-cluster"
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:54:51Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "eipAddress": "172.16.102.192",
+          "phase": "Bound"
+        }
+      },
+      {
+        "kind": "VPC",
+        "metadata": {
+          "generation": 1,
+          "name": "kcn-cluster",
+          "namespace": "kcn-system",
+          "ownerReferences": [],
+          "resourceVersion": "44957724",
+          "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f"
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "ipVersion": "IPv4"
+        },
+        "status": {
+          "boundResources": {
+            "chassisNode": "ani-01",
+            "router": "vpc.kcn-system.kcn-cluster"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "default": true,
+          "eips": {
+            "kcn-system/cluster-public-egress-20261020": "172.16.102.192"
+          },
+          "observedGeneration": 1,
+          "subnets": {
+            "kcn-system/kcn-default": "10.16.0.0/16"
+          }
+        }
+      },
+      {
+        "kind": "Subnet",
+        "metadata": {
+          "generation": 2,
+          "name": "kcn-default",
+          "namespace": "kcn-system",
+          "ownerReferences": [],
+          "resourceVersion": "52030447",
+          "uid": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0"
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "cidrBlock": "10.16.0.0/16",
+          "excludeIPs": [
+            "10.16.0.1"
+          ],
+          "gateway": "kcn-cluster",
+          "gatewayIP": "10.16.0.1",
+          "ipVersion": "IPv4",
+          "natOutgoing": true,
+          "type": "VPC"
+        },
+        "status": {
+          "boundResources": {
+            "gatewayPort": "vpc.kcn-system.kcn-cluster-kcn-system.kcn-default",
+            "switch": "kcn-system.kcn-default"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "gatewayMac": "fa:00:4b:fe:fa:e1",
+          "observedGeneration": 2,
+          "v4availableIPrange": "10.16.0.2,10.16.0.4,10.16.0.61,10.16.0.63,10.16.0.76-10.16.0.77,10.16.0.98,10.16.0.114,10.16.0.116-10.16.0.117,10.16.0.130,10.16.0.134-10.16.0.135,10.16.0.147,10.16.0.164,10.16.0.180-10.16.0.181,10.16.0.187,10.16.0.217-10.16.0.218,10.16.0.220,10.16.0.246,10.16.1.7-10.16.1.8,10.16.1.12-10.16.1.14,10.16.1.19,10.16.1.23,10.16.1.26-10.16.1.32,10.16.1.34,10.16.1.36,10.16.1.39-10.16.1.42,10.16.1.52,10.16.1.55-10.16.1.60,10.16.1.62-10.16.1.64,10.16.1.66-10.16.1.67,10.16.1.70,10.16.1.76,10.16.1.79,10.16.1.83,10.16.1.87,10.16.1.102,10.16.1.104-10.16.1.107,10.16.1.110-10.16.1.125,10.16.1.127-10.16.1.158,10.16.1.161-10.16.1.205,10.16.1.208-10.16.1.213,10.16.1.215-10.16.1.227,10.16.1.231-10.16.2.117,10.16.2.119-10.16.255.254",
+          "v4availableIPs": 65223,
+          "v4usingIPrange": "10.16.0.3,10.16.0.5-10.16.0.60,10.16.0.62,10.16.0.64-10.16.0.75,10.16.0.78-10.16.0.97,10.16.0.99-10.16.0.113,10.16.0.115,10.16.0.118-10.16.0.129,10.16.0.131-10.16.0.133,10.16.0.136-10.16.0.146,10.16.0.148-10.16.0.163,10.16.0.165-10.16.0.179,10.16.0.182-10.16.0.186,10.16.0.188-10.16.0.216,10.16.0.219,10.16.0.221-10.16.0.245,10.16.0.247-10.16.1.6,10.16.1.9-10.16.1.11,10.16.1.15-10.16.1.18,10.16.1.20-10.16.1.22,10.16.1.24-10.16.1.25,10.16.1.33,10.16.1.35,10.16.1.37-10.16.1.38,10.16.1.43-10.16.1.51,10.16.1.53-10.16.1.54,10.16.1.61,10.16.1.65,10.16.1.68-10.16.1.69,10.16.1.71-10.16.1.75,10.16.1.77-10.16.1.78,10.16.1.80-10.16.1.82,10.16.1.84-10.16.1.86,10.16.1.88-10.16.1.101,10.16.1.103,10.16.1.108-10.16.1.109,10.16.1.126,10.16.1.159-10.16.1.160,10.16.1.206-10.16.1.207,10.16.1.214,10.16.1.228-10.16.1.230,10.16.2.118",
+          "v4usingIPs": 310
+        }
+      }
+    ],
+    "core_reference_edges": [
+      {
+        "field": "status.subnets",
+        "from": "EIPGateway/_cluster/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "88303f1c-7817-41d2-b15f-37a30e62f2b6",
+        "to": "Subnet/kcn-system/cluster-public-102-20261020"
+      },
+      {
+        "field": "spec.subnet",
+        "from": "EIP/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "88303f1c-7817-41d2-b15f-37a30e62f2b6",
+        "to": "Subnet/kcn-system/cluster-public-102-20261020"
+      },
+      {
+        "field": "status.gateway",
+        "from": "EIP/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "8ec82f40-185d-4a85-b922-cfd5e51fb3f4",
+        "to": "EIPGateway/_cluster/cluster-public-egress-20261020"
+      },
+      {
+        "field": "status.boundResource.vpc",
+        "from": "EIP/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "to": "VPC/kcn-system/kcn-cluster"
+      },
+      {
+        "field": "status.boundResource.resource",
+        "from": "EIP/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "02948377-5798-4004-b3c8-e3adf5ab7d5b",
+        "to": "Snat/kcn-system/cluster-public-egress-20261020"
+      },
+      {
+        "field": "spec.eip",
+        "from": "Snat/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "fe37d635-31b2-4c24-9e21-6e284f51153a",
+        "to": "EIP/kcn-system/cluster-public-egress-20261020"
+      },
+      {
+        "field": "spec.vpc",
+        "from": "Snat/kcn-system/cluster-public-egress-20261020",
+        "targetPresent": true,
+        "targetUID": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "to": "VPC/kcn-system/kcn-cluster"
+      },
+      {
+        "field": "spec.gateway",
+        "from": "Subnet/kcn-system/cluster-public-102-20261020",
+        "targetPresent": true,
+        "targetUID": "8ec82f40-185d-4a85-b922-cfd5e51fb3f4",
+        "to": "EIPGateway/_cluster/cluster-public-egress-20261020"
+      },
+      {
+        "field": "spec.underlayConfig.vlanNetwork",
+        "from": "Subnet/kcn-system/cluster-public-102-20261020",
+        "targetPresent": true,
+        "targetUID": "184ccbf5-3f3e-4c47-8cc7-ac3e7406fca8",
+        "to": "VlanNetwork/_cluster/cluster-public-ens35-20261020"
+      },
+      {
+        "field": "spec.gateway",
+        "from": "Subnet/kcn-system/kcn-default",
+        "targetPresent": true,
+        "targetUID": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "to": "VPC/kcn-system/kcn-cluster"
+      },
+      {
+        "field": "status.subnet",
+        "from": "VlanNetwork/_cluster/cluster-public-ens35-20261020",
+        "targetPresent": true,
+        "targetUID": "88303f1c-7817-41d2-b15f-37a30e62f2b6",
+        "to": "Subnet/kcn-system/cluster-public-102-20261020"
+      },
+      {
+        "field": "status.subnets",
+        "from": "VPC/kcn-system/kcn-cluster",
+        "targetPresent": true,
+        "targetUID": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0",
+        "to": "Subnet/kcn-system/kcn-default"
+      },
+      {
+        "field": "status.eips",
+        "from": "VPC/kcn-system/kcn-cluster",
+        "targetPresent": true,
+        "targetUID": "fe37d635-31b2-4c24-9e21-6e284f51153a",
+        "to": "EIP/kcn-system/cluster-public-egress-20261020"
+      }
+    ],
+    "default_vpc_guard": {
+      "defaultSubnetNatOutgoing": true,
+      "defaultSubnetUID": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0",
+      "separateDefaultVPCJSONEqualsKcnAllSnapshot": true,
+      "statusDefault": true,
+      "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f"
+    },
+    "node_membership": [
+      {
+        "allocatedLabel": "true",
+        "aniPublicPriorityLabel": "100",
+        "aniPublicTakeoverAnnotation": "ens35",
+        "chassisAnnotation": "0e21596a-ebbb-433a-a67d-6d9865b015bd",
+        "name": "ani-01",
+        "resourceVersion": "52032351",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+      },
+      {
+        "allocatedLabel": "true",
+        "aniPublicPriorityLabel": "100",
+        "aniPublicTakeoverAnnotation": "ens35",
+        "chassisAnnotation": "e1d4f47f-b347-46fd-9a21-08e824e2aff8",
+        "name": "ani-02",
+        "resourceVersion": "52031135",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+      },
+      {
+        "allocatedLabel": "true",
+        "aniPublicPriorityLabel": "100",
+        "aniPublicTakeoverAnnotation": "ens35",
+        "chassisAnnotation": "a73a0b19-e738-49cc-aab1-cd0722e36e48",
+        "name": "ani-03",
+        "resourceVersion": "52031526",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+      }
+    ],
+    "pool": {
+      "EIPObjectsInRange": [
+        {
+          "id": "EIP/kcn-system/cluster-public-egress-20261020",
+          "ipAddress": "172.16.102.192",
+          "uid": "fe37d635-31b2-4c24-9e21-6e284f51153a"
+        }
+      ],
+      "VNicIPObjectsInRange": [],
+      "inferredAllocatableRangeFromCIDRAndExclusions": "172.16.102.192-172.16.102.207",
+      "snapshotStatusAvailable": "172.16.102.193-172.16.102.207",
+      "snapshotStatusUsed": "172.16.102.192",
+      "subnet": "kcn-system/cluster-public-102-20261020",
+      "warning": "Only captured group API consumers and declared Service/Pod references were examined; not shared SQL or data-plane allocations."
+    },
+    "default_subnet_consumers": {
+      "byNamespace": {
+        "acc-gpu-live-20261017": 1,
+        "ani-accelerator-lab": 1,
+        "ani-ft-core-system-20261014": 4,
+        "ani-harbor": 8,
+        "ani-kf-stage2-a": 2,
+        "ani-kfp-manual-a": 101,
+        "ani-kfp-manual-b": 1,
+        "ani-node-system": 1,
+        "ani-observability": 8,
+        "ani-platform": 6,
+        "ani-system": 20,
+        "cdi": 4,
+        "cert-manager": 4,
+        "envoy-gateway-system": 1,
+        "higress-system": 3,
+        "kserve": 2,
+        "kube-system": 6,
+        "kubeflow": 9,
+        "kubeflow-system": 2,
+        "kubevirt": 11,
+        "lws-system": 1,
+        "notebook-controller-system": 1,
+        "rook-ceph": 26,
+        "volcano-system": 3
+      },
+      "byPhase": {
+        "Failed": 9,
+        "Running": 114,
+        "Succeeded": 103
+      },
+      "defaultLinkedPodCount": 226,
+      "podInventoryDigest": "81f68c932232db05dc9a290cc02dc75b9905ce76da93da687e04dc143ba77738",
+      "readyCount": 110,
+      "viaCurrentPodIPCount": 118,
+      "viaVNicAnnotationCount": 226,
+      "vnicAndVNicIPIdentityDigest": "94b7340cdeb5f0eb90e9fb5a0a3faca5e7ced2ca743c9fc05084ea24d533c596",
+      "vnicCount": 310,
+      "vnicIPCount": 310,
+      "vnicOwnerUIDCoverage": {
+        "Pod:UIDAbsentFromSnapshot": 84,
+        "Pod:UIDPresentInSnapshot": 226
+      },
+      "warning": "Default Subnet is shared by many workloads. Pod Ready, IP declarations, SNAT Bound and CR Ready are snapshot claims, not current egress availability or packet-path proof."
+    },
+    "other_public_gateways": [
+      {
+        "apiVersion": "networking.kubercloud.com/v1",
+        "kind": "EIPGateway",
+        "metadata": {
+          "creationTimestamp": "2026-10-20T03:52:53Z",
+          "finalizers": [
+            "networking.kubercloud.com/finalizer"
+          ],
+          "generation": 1,
+          "labels": {
+            "network.ani.io/binding-id": "1e66d8ad-eb9f-4c5d-9518-846517f08e80",
+            "network.ani.io/managed-by": "ani-network-service",
+            "network.ani.io/resource-id": "egw_d6d865fccf9946bb90a8a171975be566"
+          },
+          "name": "egw-d6d865fccf9946bb90a8a171975be566",
+          "ownerReferences": [],
+          "resourceVersion": "44951859",
+          "uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243"
+        },
+        "spec": {
+          "egressType": "Host",
+          "scope": "Public"
+        },
+        "status": {
+          "boundResources": {
+            "router": "gw.egw-d6d865fccf9946bb90a8a171975be566"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-20T03:52:53Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:52:53Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-20T03:52:53Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "localIP": "100.64.0.8"
+        }
+      }
+    ],
+    "coverage": {
+      "coverageProvenance": "Parent reports snapshot.py used api-resources --api-group=networking.kubercloud.com -o name then one kubectl get of all discovered resources -A -o json, rc=0. Discovery stdout was not saved. Empty-kind inference is conditional on that recorded successful command, not an independent second API call.",
+      "emptyKindsInSuccessfulAllDiscoveredGroupList": [
+        "BasicNetworkIsolation",
+        "LearnedRoute",
+        "Nat",
+        "NetworkACL",
+        "RouteTable",
+        "SecurityGroup",
+        "TransitRouter",
+        "VPCAttachment"
+      ],
+      "kcnObjectCount": 848,
+      "kindCounts": {
+        "EIP": 1,
+        "EIPGateway": 2,
+        "Nic": 199,
+        "Snat": 1,
+        "Subnet": 5,
+        "VNic": 314,
+        "VNicIP": 321,
+        "VPC": 4,
+        "VlanNetwork": 1
+      },
+      "networkingGroupCRDCount": 17,
+      "networkingGroupCRDs": [
+        {
+          "kind": "BasicNetworkIsolation",
+          "plural": "basicnetworkisolations",
+          "scope": "Cluster"
+        },
+        {
+          "kind": "EIPGateway",
+          "plural": "eipgateways",
+          "scope": "Cluster"
+        },
+        {
+          "kind": "EIP",
+          "plural": "eips",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "LearnedRoute",
+          "plural": "learnedroutes",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "Nat",
+          "plural": "nats",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "NetworkACL",
+          "plural": "networkacls",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "Nic",
+          "plural": "nics",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "RouteTable",
+          "plural": "routetables",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "SecurityGroup",
+          "plural": "securitygroups",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "Snat",
+          "plural": "snats",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "Subnet",
+          "plural": "subnets",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "TransitRouter",
+          "plural": "transitrouters",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "VlanNetwork",
+          "plural": "vlannetworks",
+          "scope": "Cluster"
+        },
+        {
+          "kind": "VNicIP",
+          "plural": "vnicips",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "VNic",
+          "plural": "vnics",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "VPCAttachment",
+          "plural": "vpcattachments",
+          "scope": "Namespaced"
+        },
+        {
+          "kind": "VPC",
+          "plural": "vpcs",
+          "scope": "Namespaced"
+        }
+      ],
+      "noDedicatedLoadBalancerCRDInThisGroup": true,
+      "podCount": 269,
+      "serviceEndpointKindCounts": {
+        "Endpoints": 110,
+        "Service": 111
+      }
+    },
+    "limits": [
+      "No OVN NB/SB DB, route/policy/logical-port state was read. Empty Kubernetes LearnedRoute/RouteTable CRs cannot prove absence of generated OVN routes or ports.",
+      "No shared Resource/Gov SQL rows, pending operations, active business references or authenticated API ownership were read; native object labels alone cannot prove platform ownership or deletability.",
+      "No internal registry query/push, deployed image provenance authentication, model invocation, DNS request or egress packet test was performed.",
+      "Original public outlet is still represented by the protected native objects. Restore success and original outlet current health remain NOT_RUN/NOT_VERIFIED.",
+      "Default Subnet UID and natOutgoing=true must be preserved. No deletion of default VPC/Subnet, no changes to ens34/ens36, and no collateral deletion of the second Public EIPGateway are authorized by this snapshot.",
+      "Maintenance/deployment/traffic verification and the unsupported KCN re-drive/recovery protocol remain separate confirmation and technical gates; this graph does not authorize mutation."
+    ],
+    "original_outlet_removed_by_task": false,
+    "current_packet_health": "NOT_RUN",
+    "restoration": "NOT_RUN; no maintenance window opened"
+  },
+  "gov_deployment_compatibility": {
+    "deployed_image": "172.16.101.10:5000/ani/modeldev-governance-v21@sha256:148e9fbc4961797e7126de1e766d3e7ee50622f061fbb4951dbf745a22c54fe1",
+    "deployed_source": {
+      "commit": "756f5a2aa1d3a0b4b3cdbfa8db0a559816d43440",
+      "tree": "0e70fe6be6d57062146b07b2b981d890f6d26001",
+      "manifest_sha256": "a73ec3240d5b8bcb82c501d42f291146623f1b7c7d362df58b1b513d095e6f1d",
+      "exact_local_and_existing_remote_tracking_refs": [
+        "refs/heads/codex/modeldev-cpu-query-v21",
+        "refs/heads/codex/modeldev-gpu-integration-v21",
+        "refs/heads/codex/modeldev-postcpu-v21",
+        "refs/remotes/origin/codex/modeldev-postcpu-v21"
+      ],
+      "branch_note": "Existing refs point to this commit; no remote freshness claim"
+    },
+    "old_candidate": {
+      "commit": "3dcc1df2efc2e0b156e95cf1f605633928e43b55",
+      "tree": "4755a6b48f1de2d15c78c24cd9ea960da7e2b07c"
+    },
+    "merge_base": "323eb749b8a3d607b26687797b372919052895c7",
+    "deployed_is_old_candidate_ancestor": false,
+    "module_lines": {
+      "baseline": [
+        "go 1.26.9",
+        "github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261018033121-4f084c9f5f25",
+        "github.com/zhangzhe-ctrl/ani-modeldev-service v0.0.0-20261019114539-40a12484258c",
+        "github.com/zhangzhe-ctrl/ani-resource-service v0.0.0-20261019174951-733f625995f8"
+      ],
+      "deployed": [
+        "go 1.26.10",
+        "github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261021185941-10a73f7ef24e",
+        "github.com/zhangzhe-ctrl/ani-modeldev-service v0.0.0-20261021184454-44188466290f",
+        "github.com/zhangzhe-ctrl/ani-resource-service v0.0.0-20261019174951-733f625995f8"
+      ],
+      "candidate": [
+        "go 1.26.9",
+        "github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261018033121-4f084c9f5f25",
+        "github.com/zhangzhe-ctrl/ani-modeldev-service v0.0.0-20261019114539-40a12484258c",
+        "github.com/zhangzhe-ctrl/ani-resource-service v0.0.0-20261021072547-267c2d29c611"
+      ]
+    },
+    "overlapping_changed_paths": [
+      "app/admin/service/cmd/server/assets/openapi.yaml",
+      "docs/interface-integration-register.md",
+      "go.mod",
+      "go.sum"
+    ],
+    "conclusion": "Candidate 3dcc does not preserve the deployed ModelDev v2.1 production source changes. Deploying this existing candidate would replace deployed behavior with the old baseline on these ModelDev paths. Reconcile source with formal deployed 756f5a2 before presenting a deployment candidate.",
+    "existing_deployment_receipt": {
+      "path": "/home/chabking/workspace/modeldev-execution-v2.1-20261022-01a15f47/deployment/governance-formal-756f5a2/rollout-receipt.json",
+      "sha256": "5fa83789347c87d24f167dd65d6d8bb618689cd8ba953a284b0791dd90e0965a",
+      "facts": {
+        "observed_at": "2026-10-21T20:59:35.832232+00:00",
+        "formal_commit": "756f5a2aa1d3a0b4b3cdbfa8db0a559816d43440",
+        "formal_tree": "0e70fe6be6d57062146b07b2b981d890f6d26001",
+        "source_manifest_sha256": "a73ec3240d5b8bcb82c501d42f291146623f1b7c7d362df58b1b513d095e6f1d",
+        "image": "172.16.101.10:5000/ani/modeldev-governance-v21@sha256:148e9fbc4961797e7126de1e766d3e7ee50622f061fbb4951dbf745a22c54fe1",
+        "pod_imageID_exact_published_manifest_verified": true
+      },
+      "key_lines": {
+        "2": "\"observed_at\": \"2026-10-21T20:59:35.832232+00:00\",",
+        "7": "\"formal_commit\": \"756f5a2aa1d3a0b4b3cdbfa8db0a559816d43440\",",
+        "8": "\"formal_tree\": \"0e70fe6be6d57062146b07b2b981d890f6d26001\",",
+        "9": "\"source_manifest_sha256\": \"a73ec3240d5b8bcb82c501d42f291146623f1b7c7d362df58b1b513d095e6f1d\",",
+        "10": "\"image\": \"172.16.101.10:5000/ani/modeldev-governance-v21@sha256:148e9fbc4961797e7126de1e766d3e7ee50622f061fbb4951dbf745a22c54fe1\",",
+        "30": "\"pod_imageID_exact_published_manifest_verified\": true"
+      }
+    },
+    "new_registry_query": "NOT_RUN"
+  },
+  "kcn_source_and_recovery": {
+    "running_image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+    "gitlab_ssh_refresh": "FAIL: Connection closed by 192.168.20.144 port 22; cached source is not asserted current",
+    "source_changes": "PROHIBITED; none",
+    "supported_redrive_protocol": "NOT_VERIFIED; user directed recording/reporting KCN issues without further source/protocol requests",
+    "user_direction": "碰到kcn问题，记录并报告即可",
+    "crd_limit": "CRD schemas declare Valid/Initialized/Ready but do not require all types to be emitted, impose a type enum, prove current controller implementation, or establish Warning/re-drive semantics. Inspect actual resource conditions and generation/owner/dependency evidence; generic Ready=True cannot replace per-resource predicates."
+  },
+  "remaining_inputs": [
+    "Compatible Gov source/candidate preserving deployed756 plus task network changes, regenerated and verified; old3dcc image must not be deployed",
+    "Same-source NodeFacts image with ip/ovs-vsctl/CA and UID65534; current distroless server images cannot substitute",
+    "Read-only SQL/current authorization/operation/worker state and live packet validation remain outside this approved phase",
+    "Supported existing KCN recognition/redrive/recovery protocol remains unverified",
+    "Any registry publication, configuration/RBAC/migration/deployment or public maintenance needs separate purpose confirmation"
+  ],
+  "raw_snapshot_sources": {
+    "p0-runtime.json": "891ad242703c84f84a7b9b1f5f04ff4bab58053e8f96264f6929af580b4e7c5c",
+    "pods-all.json": "d68e523f6a6671890a269e31f2901cc416a3fe2f13caa046d31c6138fc61a35c",
+    "deployments-daemonsets.json": {
+      "sha256": "6ab51082a166ac00ed979e9b3ed2e4862bbc522b48b73ccb31449061a8479238",
+      "item_count": 104,
+      "capture_completed_mtime_utc": "2026-10-21T21:30:56.609843+00:00"
+    },
+    "crds.json": {
+      "sha256": "5f92d8c056f2142cebf3a9d15b75af20f9d1230afd93c1fde1aabaf783d7e18b",
+      "item_count": 159,
+      "capture_completed_mtime_utc": "2026-10-21T21:30:53.988839+00:00"
+    },
+    "configmaps.json": {
+      "sha256": "1bd47e4e5c0f5fc85c8847da409a381a82d0ff11ec0899c254471a875dda9692",
+      "item_count": 241,
+      "capture_completed_mtime_utc": "2026-10-21T21:30:57.603846+00:00"
+    },
+    "rbac.json": {
+      "sha256": "d6f942eab4d27a66f92d3c25fba1489b09c981d935c41715289a7ca5b616751c",
+      "item_count": 556,
+      "capture_completed_mtime_utc": "2026-10-21T21:30:58.166818+00:00"
+    },
+    "nodes.json": {
+      "sha256": "4af43633068ee3160f62a14eb5f2b1c0b0eff7e110cb6443c9107b17b38f94bb",
+      "item_count": 3,
+      "capture_completed_mtime_utc": "2026-10-21T21:30:47.798562+00:00"
+    }
+  },
+  "projection_sha256": {
+    "runtime-result.json": "4c6cf27ec1bb6aab8054fb418afb66dae1a32ad0613f4799202032117f3904af",
+    "node-ssh-result.json": "80695521348253571e959ae31465d3200752f6f58e5a128231fae9df2e66668a",
+    "facts-rbac-result.json": "15047a99acd3707bce78c8a0ca8dc04833a5efaeac801c55867a4bc5cb84ab2b",
+    "egress-graph-result.json": "80610725fbf4c458a4bcab7e5abff5ea96de85cb160c8606d14140d36ebf364e",
+    "gov-deployment-provenance.json": "5670f0d4cad93aa9df25c8891b9dee157b07f3ec4b9d964dcca533290cf103ce"
+  },
+  "private_snapshot_root": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime/cluster-readonly-20261022-r1"
+}
