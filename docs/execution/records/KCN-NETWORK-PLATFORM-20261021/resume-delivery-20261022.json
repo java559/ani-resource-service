@@ -1,14 +1,14 @@
 {
   "record_version": 1,
-  "recorded_at": "2026-10-22T09:50:14.869075+00:00",
-  "scope": "2026-10-22 safe receipt consolidation; no new execution.",
+  "recorded_at": "2026-10-22T11:25:25.022145+00:00",
+  "scope": "2026-10-22 consolidated software, scoped live managed public-egress rebuild, post-rebuild consumer traffic and final cleanup evidence.",
   "outcome": {
-    "delivered": "Formal Res SDK and merged Gov deployed; unbound switch CRUD, authorization, idempotency, pagination and cleanup accepted.",
-    "full_goal": "NOT_COMPLETE",
-    "full_P4": "NOT_RUN",
-    "full_P5": "NOT_RUN; unbound HTTP slice and original-outlet consumer baseline only",
-    "full_P6": "NOT_RUN",
-    "original_public_egress": "Never removed; restoration was not necessary or performed.",
+    "delivered": "Merged Gov/Res/SDK deployed; unbound CRUD accepted and cleaned; original native outlet normally deleted; old Device retired/deleted; real Gov->Res managed L2/pool/default-VPC egress rebuilt at the original .192 and post-rebuild consumer traffic passed.",
+    "full_goal": "NOT_COMPLETE for the original full matrix; current explicitly authorized equivalent outlet rebuild, traffic and cleanup slice PASS. Tenant/LB matrix remains deferred/not run.",
+    "full_P4": "NOT_FULLY_RUN; scoped manual recovery preparation and authorized native teardown executed; automatic executor/watchdog cancelled by user.",
+    "full_P5": "NOT_FULLY_RUN; managed platform L2/gateway/pool/default-egress and necessary physical validation PASS; tenant/LB matrix deferred/not run.",
+    "full_P6": "NOT_FULLY_RUN; this equivalent-parameter managed rebuild/restoration and post-rebuild consumer validation PASS; original full matrix not executed.",
+    "original_public_egress": "Original five native objects normally deleted under later explicit authorization; equivalent Res-managed outlet restored at 172.16.102.192 with new Provider UIDs.",
     "modeldev": "EXCLUDED by latest user instruction; known 503/field-30 observations are not a network acceptance gate."
   },
   "target": {
@@ -176,11 +176,12 @@
       "auth_file_absent": true,
       "contexts_absent": true,
       "heavy_lock": "AVAILABLE; acquired nonblocking and immediately released"
-    }
+    },
+    "scope": "Historical first-deployment cleanup; final rebuild authentication cleanup is recorded below."
   },
   "original_consumer_baseline": {
     "status": "PASS",
-    "scope": "Existing Pods original netns/config; no new objects or configuration changes.",
+    "scope": "Historical pre-teardown original-outlet baseline; latest current-outlet validation is the managed final-dve receipt below.",
     "dns": "PASS: two CoreDNS Pods and Model Pod; original netns, including CoreDNS service path.",
     "https": "Model 10.16.1.214 own mounted /etc/ssl/certs/ca-certificates.crt; hostname/CA verified; https://www.baidu.com/ 200.",
     "model_ca_sha256": "74124c6bd612544b868ce1107b74d30a9383f3c5bdb61b666d529fb7d85da9fa",
@@ -189,26 +190,30 @@
     "boundary": "Original-outlet continuity only; not new managed L2/default-egress or P6 after-restore acceptance."
   },
   "protected_state": {
-    "native_specs_and_identity_unchanged": true,
-    "node_labels_unchanged": true,
-    "ens34_ens36_physical_unchanged": true,
-    "kcn_deployment_templates_unchanged": true,
-    "network_rollout_unchanged": true,
-    "no_pool_allocation_or_legacy_device_retirement_dispatched": true,
-    "maintenance_open": false
+    "historical_before_teardown": {
+      "native_specs_and_identity_unchanged": true,
+      "node_labels_unchanged": true,
+      "ens34_ens36_physical_unchanged": true,
+      "kcn_deployment_templates_unchanged": true,
+      "network_rollout_unchanged": true,
+      "no_pool_allocation_or_legacy_device_retirement_dispatched": true,
+      "maintenance_open": false
+    },
+    "current_scope": "Original native five-object identities intentionally replaced; exact cluster/default-VPC/default-Subnet/node identities, current managed Provider binding/spec chain, fresh three-node ens35 ownership/wiring and strict ens34/ens36 management baseline verified by final cleanup.",
+    "final_independent_readback": "PASS; final-cleanup-public.json at 2026-10-22T11:22:08.630264+00:00"
   },
   "kcn_and_remaining_recovery_boundary": {
     "kcn_code_modified": false,
     "current_running_kcn_digest": "sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
-    "cached_static_source": "2b9467c66dc9024fbf321a4b3a98a9e5f3fef377; not verified as running-image source.",
+    "cached_static_source": "2b9467c66dc9024fbf321a4b3a98a9e5f3fef377 was the historical analysis cache. Actual binary short ca06a4e maps uniquely to ca06a4e06c902b9f9cdc6a6a6a1879792e390fd3 with the provenance limitation below.",
     "static_risks_only": [
       "Missing group + not Initialized VLAN: initialized-object index may omit event redrive.",
       "Daemon missing-device / IPConfigured paths return needRetry=false; subsequent physical correction is not proven to redrive the same object."
     ],
     "live_reproduction": "NOT_RUN on current 494 image; not confirmed live faults.",
     "res_owned_unfinished_work": "Historical recovery executor/watchdog item CANCELLED_BY_USER in later scope revision; no longer a required implementation or blocker.",
-    "full_live_managed_flow": "NOT_RUN: bound switch/L2/group adoption/gateway/pool/default-egress, public maintenance/traffic/restore and full P4-P6.",
-    "kcn_owned_confirmation": "Confirm running image/source mapping and supported group-recognition / stable-device-error recovery protocol; no live fault injection or confirmed current production defect."
+    "full_live_managed_flow": "Scoped platform VirtualSwitch/L2/group adoption/gateway reuse/pool/default-egress, necessary .207 witness and final .192 traffic PASS. Full original tenant/LB matrix NOT_RUN/deferred.",
+    "kcn_owned_confirmation": "Actual running binary provenance recorded below; no group-loss/device-error fault injection or recovery-protocol reproduction. Neither cached static risk is a confirmed live defect."
   },
   "evidence": {
     "local_base": "/home/chabking/.codex/tasks/kcn-network-platform-20261021",
@@ -256,13 +261,114 @@
       "builder_cleanup": {
         "path": "deploy-resume-20261022/builder-cleanup-receipt.json",
         "sha256": "f1694ffd80edf8809282cf78c08c17dfc42551c1e82befde4f533f7147721509"
+      },
+      "rebuild_1": {
+        "path": "device-cleanup-20261022/native-teardown-r1/1-execution-public.json",
+        "sha256": "d873dca9d41cbc5c94509cfecd52c68fd706e0916b7dc83a6e0375e1e944c07a"
+      },
+      "rebuild_2": {
+        "path": "device-cleanup-20261022/native-teardown-r1/2-execution-public.json",
+        "sha256": "bac895cb0a22d9df41babfe1a8f47301ea963838538ea709f350ee0eb37b5df8"
+      },
+      "rebuild_3": {
+        "path": "device-cleanup-20261022/native-teardown-r1/3-execution-public.json",
+        "sha256": "dfee3f40a6ed108a2b7269369ca8a47631a889e62a2781c8719fb1c9603dbc48"
+      },
+      "rebuild_4": {
+        "path": "device-cleanup-20261022/native-teardown-r1/4-execution-public.json",
+        "sha256": "61453e18cfd525c8ca8d182e386a48cb8f4ecd79a8bbf5e0500b146403ec0313"
+      },
+      "rebuild_5": {
+        "path": "device-cleanup-20261022/native-teardown-r1/5-execution-public.json",
+        "sha256": "b4e03e7e699560c924973484ea5b768b21683811d11fa0f85513fdcb5a001f78"
+      },
+      "rebuild_6": {
+        "path": "device-cleanup-20261022/native-teardown-r1/retired-final-public.json",
+        "sha256": "b62fe7293e623dd7311ba13c5f129800bd2c5011489fefe65b2ef0082eb68411"
+      },
+      "rebuild_7": {
+        "path": "res-public-rebuild-20261022/create-switch/public.json",
+        "sha256": "7db33397612b5dbf50f919ee960c8b7da8869b72effcf17949a7a43033014624"
+      },
+      "rebuild_8": {
+        "path": "res-public-rebuild-20261022/observe-vlan-qps/public.json",
+        "sha256": "34bcd680cdc1a277c254b74aed59b6219054d112fc883fc55432d10fd57581b0"
+      },
+      "rebuild_9": {
+        "path": "res-public-rebuild-20261022/preflight-gateway/public.json",
+        "sha256": "f83ac7c469e2ff8e8ac8aa1fcdb0ffb949939eef9e0aaa2e2ae25d7444bb8515"
+      },
+      "rebuild_10": {
+        "path": "res-public-rebuild-20261022/observe-pool-qps-prefix/public.json",
+        "sha256": "b7499968a5d6e635662e8c4d33748fe5939eebfb22963307b435673398f1403e"
+      },
+      "rebuild_11": {
+        "path": "res-public-rebuild-20261022/verify-pool-r1/public.json",
+        "sha256": "429d816cacd7c5ac2043fc1b2d8d72eb7b1b9dfffc34c521b911c8d1ab442462"
+      },
+      "rebuild_12": {
+        "path": "res-public-rebuild-20261022/create-dve/public.json",
+        "sha256": "f1e8a3d882eb7cf4f7dcd47a39f5607ff0fbeaed0e865cc7aee3329e961571ff"
+      },
+      "rebuild_13": {
+        "path": "res-public-rebuild-20261022/witness-public.json",
+        "sha256": "d8e7df36230a86e6ae0aa5c132d5b17545af4763de1d3260bc79e7023528305a"
+      },
+      "rebuild_14": {
+        "path": "res-public-rebuild-20261022/witness-cleanup-public.json",
+        "sha256": "568a0e427442cfae63dc230b238322dc123837fde5242f7352ccb8ad022adef6"
+      },
+      "rebuild_15": {
+        "path": "res-public-rebuild-20261022/res-qps-prefix-public.json",
+        "sha256": "e0dbb05789d64f9854aad452c57101c6d2375d916a974bc594fbe06d5bf3fcf5"
+      },
+      "rebuild_16": {
+        "path": "res-public-rebuild-20261022/res-memory-public.json",
+        "sha256": "cfdcec9b8ac1e1e7895a91ddeaba5453bbf115704273e587a121accf93605741"
+      },
+      "rebuild_17": {
+        "path": "res-public-rebuild-20261022/kcn-version-public.json",
+        "sha256": "9a86bc806c6787969ea3961a0aa907159bb795b77e7b907c6c0975e324df9d77"
+      },
+      "rebuild_18": {
+        "path": "res-public-rebuild-20261022/kcn-buildinfo-public.json",
+        "sha256": "cf432f70e4696c7a3db9683703972c71b5b7270b4cf428e6e2c6547c2f4dc748"
+      },
+      "rebuild_19": {
+        "path": "res-public-rebuild-20261022/model-search-final-public.json",
+        "sha256": "2fdf48a0fc6e433b94dfe47153a834b03c31efbb52718e9c4dda6253e182fe41"
+      },
+      "rebuild_20": {
+        "path": "res-public-rebuild-20261022/final-auth-cleanup-public.json",
+        "sha256": "5a35e6e70520401359f3649d26c4f70a58024f08cee5362ad010e6fb8c4fd9c4"
+      },
+      "rebuild_21": {
+        "path": "consumer-baseline-res-managed-20261022/final-dve-root-product-public.json",
+        "sha256": "f77969ff7d6f2777c234c364296353f7ba0d20bd47a1ce93dd508bb3d895fd26"
+      },
+      "rebuild_22": {
+        "path": "consumer-baseline-res-managed-20261022/runs/pool-witness-1910-r1/receipt.json",
+        "sha256": "61b0962d926ac852e0a4bf25d847129311f84e6014e753401ec6fa0ee1d9ad5f"
+      },
+      "rebuild_23": {
+        "path": "consumer-baseline-res-managed-20261022/runs/final-dve-1918-r1/receipt.json",
+        "sha256": "fc9ad50669a861212f662f4ea6486836c4deef510d0757f0a9305996622d463e"
+      },
+      "rebuild_final_cleanup": {
+        "path": "res-public-rebuild-20261022/final-cleanup-public.json",
+        "sha256": "c47d61fab8cb9f2789fba61b43520d603dd7339ef38ef01c38172daf112be402"
       }
     },
-    "handling": "Safe receipts only; raw HTTP, technical key/payload ledger, credentials, config, Secrets and DB backup excluded."
+    "handling": "Safe receipts only; raw HTTP, technical key/payload ledger, credentials, config, Secrets and DB backup excluded.",
+    "post_prefix_metrics": {
+      "fedora_path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-public-rebuild-20261022/after-prefix-r1.private.json",
+      "sha256": "36f63196ed4238b54dba14d87cc922093168e7f265e8e59fb421cc771637f295",
+      "scope": "Selected safe metrics already read; private full diagnostic retained on Fedora."
+    }
   },
   "later_user_scope_revision_20261022": {
     "automatic_recovery_executor_and_watchdog": "CANCELLED_BY_USER; no implementation/deployment required and not a blocker. Restore original outlet if actually changed.",
-    "gateway_and_address_pool_acceptance": "DEFERRED_BY_USER; no testing or allocation opening this turn.",
+    "gateway_and_address_pool_acceptance": "General gateway/pool matrix DEFERRED_BY_USER; later authorized equivalent outlet rebuild required and passed the necessary new-pool .207 physical witness, formal verification and .192 product outlet slice only.",
     "legacy_device_cleanup_authority": "Read actual use/references; delete if unused. Do not equate zero DB VLAN/pool refs with unused physical ens35.",
     "vpc_auto_base_connection_observation": {
       "at": "2026-10-22T10:07:12.824381+00:00",
@@ -310,7 +416,8 @@
       "evidence": {
         "path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/device-cleanup-20261022/public-summary.json",
         "sha256": "ac4b4c228ad593dfac2e40637fedc1a4921d040116ebbe0a31b4734043095975"
-      }
+      },
+      "scope": "Historical 18:08 observation before explicit retirement and later full native teardown; superseded by final retired/deleted evidence."
     }
   },
   "explicit_legacy_device_retirement_20261022": {
@@ -323,13 +430,12 @@
     "expected_version": "2659",
     "fence_version": "2660",
     "accepted_state": "closing",
-    "observed_state": "blocked",
-    "reason": "LEGACY_NATIVE_VLAN_IN_USE",
-    "final_delete_complete": false,
+    "observed_state": "retired",
+    "reason": "",
+    "final_delete_complete": true,
     "registration": {
       "closed": true,
-      "retired": false,
-      "registration_version": 2
+      "retired": true
     },
     "old_operation": {
       "state": "failed",
@@ -348,32 +454,12 @@
     ],
     "permission_update": "Formal role1 permissions-only PUT, current set preserved; normal role audit/template version updates retained. No SQL grant mutation or Gov restart.",
     "sessions_revoked_and_secret_files_removed": 2,
-    "original_five_native_specs_uids_nodes_and_kcn_config_unchanged": true,
-    "result_boundary": "Closure/fence accepted and old adoption operation ended; retirement is blocked by the extant native ens35 VLAN. Not deleted or retired. No direct SQL cleanup, native cascade, forced status/finalizer or KCN change.",
+    "result_boundary": "After normal deletion of the five exact native references, the already accepted retirement completed: resource deleted, retired true, registration closed, old marker absent. No raw SQL business deletion or forced finalizers.",
     "verification": {
-      "registration": {
-        "closed": true,
-        "retired": false,
-        "registration_version": 2
-      },
-      "old_worker": {
-        "lease_owner": null,
-        "lease_until": null,
-        "lease_epoch": 2663,
-        "next_run_at": "2026-10-22T10:24:58.546254+00:00"
-      },
-      "old_operation": {
-        "state": "failed",
-        "reason": "DEVICE_REGISTRATION_CLOSING",
-        "completed_at": "2026-10-22T10:24:34.652794+00:00"
-      },
-      "retirement": {
-        "operation_id": "3fc345af-eaea-4a74-9ee9-48e74a8a4f3d",
-        "state": "blocked",
-        "reason": "LEGACY_NATIVE_VLAN_IN_USE",
-        "pending_unknown": false
-      },
-      "at": "2026-10-22T10:26:24.014631+00:00"
+      "resource_state": "deleted",
+      "retired": true,
+      "registration_closed": true,
+      "old_marker_absent": true
     },
     "execution_observed_at": "2026-10-22T10:25:05.828771+00:00",
     "evidence": [
@@ -386,7 +472,16 @@
         "sha256": "bc9a80473f8f85ec9a11445f1dba83aae89a73590d7f4972d31cc29e387d5772"
       }
     ],
-    "next_scope_question": "Requested explicit scope decision: temporarily remove the original native ens35 public VLAN/EIP/Snat chain to permit retirement, then restore original parameters and .192. This interrupts public consumers; no native object changed while the question is pending. Gateway/pool acceptance remains deferred; no watchdog requirement is reintroduced."
+    "next_scope_question": "ANSWERED: user authorizes full deletion of original outlet, preserving parameters, and recreation through Res. Supersedes pending question.",
+    "initial_attempt_history": {
+      "observed_state": "blocked",
+      "reason": "LEGACY_NATIVE_VLAN_IN_USE",
+      "at": "2026-10-22T10:26:24.014631+00:00",
+      "scope": "Historical before later explicit authorization to remove and recreate the original native outlet."
+    },
+    "resource_state": "deleted",
+    "final_observed_at": "2026-10-22T10:52:20.185587+00:00",
+    "initial_retirement_attempt_native_unchanged": true
   },
   "flow_clarification_20261022": {
     "actual_order": [
@@ -399,5 +494,357 @@
     "group_gap": "Node label API success does not prove KCN controller group cache processed the event. Missing-group reentry risk is at this asynchronous handoff.",
     "device_error_gap": "Missing-device/IPConfigured redrive risk is inside daemon physical processing after an error; it is separate from the initial group-label ordering.",
     "evidence_boundary": "Both KCN risks are cached-source analysis, not a current-image fault injection reproduction."
+  },
+  "res_public_rebuild_20261022": {
+    "user_authorization": "你先完全删除，记下网段相关参数，然后再通过res创建一个一样的出来",
+    "stage": "SCOPED_PRODUCT_REBUILD_POST_REBUILD_TRAFFIC_AND_FINAL_CLEANUP_PASS",
+    "parameters": {
+      "device": "ens35",
+      "group": "ani-public",
+      "priority": 100,
+      "vlan_id": 0,
+      "cidr": "172.16.102.0/24",
+      "ovn_router_gateway": "172.16.102.2",
+      "upstream_gateway": "172.16.102.1",
+      "excludes": [
+        "172.16.102.1..172.16.102.191",
+        "172.16.102.208..172.16.102.254"
+      ],
+      "eip_range": "172.16.102.192..172.16.102.207",
+      "required_final_address": "172.16.102.192",
+      "default_vpc": "kcn-system/kcn-cluster"
+    },
+    "source_identity": {
+      "actual_image": "sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+      "read_only_version": "v0.9.0 / git-ca06a4e / 2026-09-30 build",
+      "actual_binary_sha256": "056ac7cd1c214e7303154f0c997e24113be2239d03d912bc08bb706866458b90",
+      "go_buildinfo_commit_ldflag": "git-ca06a4e",
+      "cached_unique_git_object": "ca06a4e06c902b9f9cdc6a6a6a1879792e390fd3",
+      "limit": "Binary declares a short build commit; Go metadata has no vcs full revision/dirty marker. Mapped to unique cached Git object, not claimed remote latest or cached2b runtime source."
+    },
+    "allocation_plan": "Executed: explicit temporary .207 witness left .192 in V4Free; witness deleted, formal Res DefaultEgress automatic allocation actually returned .192 and was strictly checked. No requested-address API, managed-CR patch or permanent native substitute.",
+    "manual_restore_manifest_sha256": "37c9439cb1d8f72db18e97f593492f78e16c133c7aa38ce38a6e09a3c8b3787a",
+    "scope_boundary": "Necessary real managed platform outlet rebuilt and validated; KCN code/image/restart unchanged; no permanent native replacement, watchdog cancelled, tenant/LB/full matrix deferred/not run, connectivity rollout not enabled, ModelDev excluded.",
+    "normal_native_deletion": {
+      "state": "All five DELETED_NOT_FOUND in dependency order; UID/RV guarded normal DELETE, no force/finalizer removal.",
+      "objects": [
+        {
+          "order": 1,
+          "kind": "snats",
+          "namespace": "kcn-system",
+          "name": "cluster-public-egress-20261020",
+          "old_uid": "02948377-5798-4004-b3c8-e3adf5ab7d5b",
+          "completed_at": "2026-10-22T10:50:53.862456+00:00"
+        },
+        {
+          "order": 2,
+          "kind": "eips",
+          "namespace": "kcn-system",
+          "name": "cluster-public-egress-20261020",
+          "old_uid": "fe37d635-31b2-4c24-9e21-6e284f51153a",
+          "completed_at": "2026-10-22T10:51:02.521675+00:00"
+        },
+        {
+          "order": 3,
+          "kind": "subnets",
+          "namespace": "kcn-system",
+          "name": "cluster-public-102-20261020",
+          "old_uid": "88303f1c-7817-41d2-b15f-37a30e62f2b6",
+          "completed_at": "2026-10-22T10:51:12.044968+00:00"
+        },
+        {
+          "order": 4,
+          "kind": "eipgateways",
+          "namespace": "",
+          "name": "cluster-public-egress-20261020",
+          "old_uid": "8ec82f40-185d-4a85-b922-cfd5e51fb3f4",
+          "completed_at": "2026-10-22T10:51:19.747866+00:00"
+        },
+        {
+          "order": 5,
+          "kind": "vlannetworks",
+          "namespace": "",
+          "name": "cluster-public-ens35-20261020",
+          "old_uid": "184ccbf5-3f3e-4c47-8cc7-ac3e7406fca8",
+          "completed_at": "2026-10-22T10:51:31.108784+00:00"
+        }
+      ]
+    },
+    "legacy_device": {
+      "id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+      "operation_id": "3fc345af-eaea-4a74-9ee9-48e74a8a4f3d",
+      "resource_state": "deleted",
+      "retired": true,
+      "registration_closed": true,
+      "old_marker_absent": true,
+      "observed_at": "2026-10-22T10:52:20.185587+00:00"
+    },
+    "product_ids": {
+      "virtual_switch_id": "vsw_0014e5b421284cbfbacb509cdb9cf470",
+      "vlan_network_id": "vlan_1027ace223cb4339a32121709654d1d4",
+      "egress_gateway_id": "egw_d6d865fccf9946bb90a8a171975be566",
+      "public_pool_id": "pool_bb811753b25a4fe598dff9cedf5afd1d",
+      "default_vpc_egress_id": "dve_36b8b4bcec3d4396ae3d5e03dea9466b"
+    },
+    "pool_provider_spec": {
+      "allowedNamespaces": {
+        "from": "All"
+      },
+      "cidrBlock": "172.16.102.0/24",
+      "enableDHCP": false,
+      "excludeIPs": [
+        "172.16.102.1",
+        "172.16.102.1..172.16.102.191",
+        "172.16.102.2",
+        "172.16.102.208..172.16.102.254"
+      ],
+      "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+      "gatewayIP": "172.16.102.2",
+      "ipVersion": "IPv4",
+      "natOutgoing": false,
+      "type": "Public",
+      "underlayConfig": {
+        "gatewayIP": "172.16.102.1",
+        "vlanNetwork": "vlan-1027ace223cb4339a32121709654d1d4"
+      }
+    },
+    "gateway_reuse": "Existing exact Res Gateway egw_d6d865fccf9946bb90a8a171975be566 reused after fresh available GET; it is distinct from the removed original native gateway.",
+    "formal_dve_result": {
+      "status": "PASS",
+      "id": "dve_36b8b4bcec3d4396ae3d5e03dea9466b",
+      "state": "available",
+      "reason": "",
+      "last_operation_id": "81d5f39d-7aac-4b44-8a29-272f321615c6",
+      "operation_state": "succeeded",
+      "phase": "ready",
+      "address": "172.16.102.192",
+      "pending_unknown": false,
+      "pending_action": "",
+      "observation_stale": false,
+      "applied_enabled": true,
+      "completed_at": "2026-10-22T11:18:05.091739+00:00",
+      "default_vpc_uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+      "identity_check": "Fixed cluster/default-VPC UID checked by the released product driver; no tenant/VPC identity supplied by the request."
+    },
+    "pool_verification": {
+      "status": "PASS",
+      "scope": "public",
+      "source_revision": "ca06a4e06c902b9f9cdc6a6a6a1879792e390fd3",
+      "provenance_limit": "Binary declares a short build commit; Go metadata has no vcs full revision/dirty marker. Mapped to unique cached Git object, not claimed remote latest or cached2b runtime source.",
+      "sequence": "Real new-pool .207 DNS/own-CA HTTPS/physical SNAT proof -> normal witness cleanup -> formal verification record on current topology -> product DefaultEgress at .192.",
+      "witness_eip_uid": "f49e53f7-27f0-4cbb-972e-77bda63a8dcc",
+      "witness_snat_uid": "a592a4b7-3940-48f0-a2b4-90f6ab6962e0",
+      "witness_cleanup": "REAL_PROOF_PASS_THEN_WITNESS_DELETED",
+      "tenant_allocation_enabled": false,
+      "tenant_default_pool_set": false
+    },
+    "consumer_validation": {
+      "pool-witness-1910-r1": {
+        "status": "PASS",
+        "started_utc": "2026-10-22T11:10:34.450797+00:00",
+        "finished_utc": "2026-10-22T11:10:47.197193+00:00",
+        "expected_snat": "172.16.102.207",
+        "dns": "PASS: two existing CoreDNS Pods and existing Model Pod in their original netns and DNS configuration.",
+        "https": {
+          "https": "PASS",
+          "url": "https://www.baidu.com/",
+          "http_status": 200,
+          "hostname_verified": true,
+          "public_ca_verified": true,
+          "tls_version": "TLSv1.2",
+          "peer_certificate_sha256": "ca5688c552685190e98b94c40e94f842ee7fda39b08846fbd4d7e2ed7211b4f2",
+          "local_ip": "10.16.1.214",
+          "local_port": 45638,
+          "peer_ip": "183.2.172.177",
+          "peer_port": 443,
+          "network_namespace": "net:[4026533736]",
+          "ca_path": "/etc/ssl/certs/ca-certificates.crt",
+          "ca_sha256": "74124c6bd612544b868ce1107b74d30a9383f3c5bdb61b666d529fb7d85da9fa"
+        },
+        "physical": {
+          "status": "PASS",
+          "interface": "ens35",
+          "egress_node": "ani-01",
+          "pod_source_ip": "10.16.1.214",
+          "snat_source_ip": "172.16.102.207",
+          "source_port": 45638,
+          "peer_ip": "183.2.172.177",
+          "peer_port": 443,
+          "SYN_outbound": true,
+          "SYN_ACK_return": true,
+          "capture_count": 2,
+          "capture_payload": "NONE; exactly bounded SYN/SYN-ACK text headers"
+        },
+        "temporary_capture_processes_closed": true,
+        "frozen_pods_unchanged": true,
+        "new_product_network_unchanged": true
+      },
+      "final-dve-1918-r1": {
+        "status": "PASS",
+        "started_utc": "2026-10-22T11:19:03.079987+00:00",
+        "finished_utc": "2026-10-22T11:19:14.394990+00:00",
+        "expected_snat": "172.16.102.192",
+        "dns": "PASS: two existing CoreDNS Pods and existing Model Pod in their original netns and DNS configuration.",
+        "https": {
+          "https": "PASS",
+          "url": "https://www.baidu.com/",
+          "http_status": 200,
+          "hostname_verified": true,
+          "public_ca_verified": true,
+          "tls_version": "TLSv1.2",
+          "peer_certificate_sha256": "ca5688c552685190e98b94c40e94f842ee7fda39b08846fbd4d7e2ed7211b4f2",
+          "local_ip": "10.16.1.214",
+          "local_port": 45639,
+          "peer_ip": "183.2.172.177",
+          "peer_port": 443,
+          "network_namespace": "net:[4026533736]",
+          "ca_path": "/etc/ssl/certs/ca-certificates.crt",
+          "ca_sha256": "74124c6bd612544b868ce1107b74d30a9383f3c5bdb61b666d529fb7d85da9fa"
+        },
+        "physical": {
+          "status": "PASS",
+          "interface": "ens35",
+          "egress_node": "ani-01",
+          "pod_source_ip": "10.16.1.214",
+          "snat_source_ip": "172.16.102.192",
+          "source_port": 45639,
+          "peer_ip": "183.2.172.177",
+          "peer_port": 443,
+          "SYN_outbound": true,
+          "SYN_ACK_return": true,
+          "capture_count": 2,
+          "capture_payload": "NONE; exactly bounded SYN/SYN-ACK text headers"
+        },
+        "temporary_capture_processes_closed": true,
+        "frozen_pods_unchanged": true,
+        "new_product_network_unchanged": true
+      }
+    },
+    "model_search_final": {
+      "status": "PASS",
+      "http_status": 200,
+      "item_count": 50,
+      "target_present": true,
+      "finished_at": "2026-10-22T11:20:01.799020+00:00"
+    },
+    "runtime_incidents_and_corrections": {
+      "initial_qps_environment": "Initial plain OBSERVATION_REQUEST_QPS/BURST were ignored by env.NewSource(\"ANI\"); no effective tuning until the correct ANI_ names were applied and plain variables removed.",
+      "effective_qps_environment": {
+        "ANI_OBSERVATION_REQUEST_QPS": "20",
+        "ANI_OBSERVATION_REQUEST_BURST": "40"
+      },
+      "effective_generation": 32,
+      "post_prefix_metrics": {
+        "audit_collection_max_seconds": 2.952301782,
+        "audit_failures_total": 0,
+        "audit_evidence_age_seconds": 1.971246318,
+        "source_synced": 1,
+        "at": "2026-10-22T11:09:30.582468+00:00"
+      },
+      "memory_failure": "Actual OOMKilled exit137 restartCount3 at512Mi during full live observation; preserve checks, bound Go heap below new cgroup limit",
+      "memory_correction": {
+        "memory_limit": "1Gi",
+        "memory_request": "256Mi",
+        "GOMEMLIMIT": "768MiB"
+      },
+      "res_generation": 33,
+      "ready_after_correction": 1,
+      "image_unchanged": true,
+      "final_stability_readback": {
+        "status": "PASS",
+        "at": "2026-10-22T11:22:54.760436+00:00",
+        "generation": 33,
+        "ready_replicas": 1,
+        "pod_uid": "83844c25-fda4-46d8-9970-d740047edb0b",
+        "restart_count": 0,
+        "last_state": {},
+        "started_at": "2026-10-22T11:12:12Z",
+        "observed_stable_seconds": 642.760436,
+        "imageID": "172.16.101.10:30003/icn-01a15337-release/kcn-resource-resume-20261022@sha256:a7a268acf3586b089cfaf6e67cca72cecc997b4e4da7c4e6ce627871d28909ca"
+      },
+      "clock_sampling": "Four facts-first/PG-clock-after samples had no future or >60s facts; no clock modification performed."
+    },
+    "authentication_cleanup": {
+      "status": "PASS",
+      "role_permission_ids_unchanged": true,
+      "permission_count": 74,
+      "journal_active_sessions": 0,
+      "temporary_session_files_remaining": 0,
+      "temporary_session_secrets_removed": true,
+      "finished_at": "2026-10-22T11:20:30.353552+00:00"
+    },
+    "final_cleanup": {
+      "status": "PASS",
+      "at": "2026-10-22T11:22:08.630264+00:00",
+      "runtime_observed_at": "2026-10-22T11:22:54.760436+00:00",
+      "checks": {
+        "exact_cluster_default_and_node_identities": true,
+        "network_database_schema18": true,
+        "old_device_terminal_no_leases": true,
+        "old_five_and_witness_two_absent": true,
+        "old_adoption_and_managedDevices_cleared": true,
+        "new_product_id_chain": true,
+        "provider_vlannetworks_uid_binding": true,
+        "provider_eipgateways_uid_binding": true,
+        "provider_subnets_uid_binding": true,
+        "provider_eips_uid_binding": true,
+        "provider_snats_uid_binding": true,
+        "provider_spec_chain": true,
+        "dve_available_ready_192_applied_no_pending": true,
+        "single_fact_source_ani-01": true,
+        "fresh_owned_ens35_ani-01": true,
+        "single_fact_source_ani-02": true,
+        "fresh_owned_ens35_ani-02": true,
+        "single_fact_source_ani-03": true,
+        "fresh_owned_ens35_ani-03": true,
+        "strict_management_ssh_and_ens34_ens36_unchanged": true,
+        "resource_current_pod_ready_no_restart_or_oom": true
+      },
+      "evidence_path": "res-public-rebuild-20261022/final-cleanup-public.json",
+      "evidence_sha256": "c47d61fab8cb9f2789fba61b43520d603dd7339ef38ef01c38172daf112be402",
+      "task_auth_cleanup": "PASS separately: original 74 permission IDs restored; journal active sessions 0 and temporary session files 0.",
+      "retained_resources": "Intended formal managed SID/VID/Pool/DVE and reused existing Gateway remain available; old native five and temporary witness two are NotFound.",
+      "management_protection": "Strict ens34 SSH and original ens34/ens36 baseline passed."
+    },
+    "provider_uids_current": {
+      "VlanNetwork": "d9ff64c7-882f-4241-962d-d4c3e5819100",
+      "EIPGateway": "bba756ac-4918-49ae-a0b8-8bdbe6fea243",
+      "Subnet": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc",
+      "EIP": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+      "Snat": "3a886f1d-03f3-4241-b739-aae2c88f8a62"
+    },
+    "provider_uid_boundary": "Four newly created Provider UIDs replace removed native VLAN/Subnet/EIP/Snat identities; the existing exact Res Gateway Provider UID is reused.",
+    "final_product_state": {
+      "switch": {
+        "state": "available",
+        "binding_state": "configured"
+      },
+      "platform_states": [
+        {
+          "id": "pool_bb811753b25a4fe598dff9cedf5afd1d",
+          "kind": "public_pool",
+          "state": "available",
+          "reason": "",
+          "pending_action": ""
+        },
+        {
+          "id": "vlan_1027ace223cb4339a32121709654d1d4",
+          "kind": "vlan",
+          "state": "available",
+          "reason": "",
+          "pending_action": ""
+        },
+        {
+          "id": "egw_d6d865fccf9946bb90a8a171975be566",
+          "kind": "egress_gateway",
+          "state": "available",
+          "reason": "",
+          "pending_action": ""
+        }
+      ],
+      "dve_state": "available",
+      "dve_operation_state": "succeeded",
+      "new_internal_device_id": "device_fa4f32ecc4ba49c0b5df2801e54882d7"
+    }
   }
 }
