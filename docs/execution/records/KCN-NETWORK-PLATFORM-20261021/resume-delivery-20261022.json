@@ -846,5 +846,15 @@
       "dve_operation_state": "succeeded",
       "new_internal_device_id": "device_fa4f32ecc4ba49c0b5df2801e54882d7"
     }
+  },
+  "main_publication_authorization_20261022": {
+    "user_request": "所有代码推送到main分支，走pr,然后bypass合并",
+    "scope": "All code from this Res/Gov network task; preserve unrelated workspaces and the KCN no-modification boundary.",
+    "method": "Immediate PR merge with expected-head guard; user authorizes bypass of review/CI waiting. No direct push to main.",
+    "pull_requests": {
+      "res": "https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10",
+      "gov": "https://github.com/zhangzhe-ctrl/ani-governance/pull/37"
+    },
+    "merge_result_authority": "GitHub PR merged state and merge commit SHA; production/source/runtime and deferred acceptance evidence above remain separate."
   }
 }
