@@ -206,7 +206,7 @@
       "Daemon missing-device / IPConfigured paths return needRetry=false; subsequent physical correction is not proven to redrive the same object."
     ],
     "live_reproduction": "NOT_RUN on current 494 image; not confirmed live faults.",
-    "res_owned_unfinished_work": "Res native-egress recovery executor and independent watchdog not promoted or accepted for real takeover, reverse product cleanup and restoration; isolated tests do not open P4.",
+    "res_owned_unfinished_work": "Historical recovery executor/watchdog item CANCELLED_BY_USER in later scope revision; no longer a required implementation or blocker.",
     "full_live_managed_flow": "NOT_RUN: bound switch/L2/group adoption/gateway/pool/default-egress, public maintenance/traffic/restore and full P4-P6.",
     "kcn_owned_confirmation": "Confirm running image/source mapping and supported group-recognition / stable-device-error recovery protocol; no live fault injection or confirmed current production defect."
   },
@@ -259,5 +259,58 @@
       }
     },
     "handling": "Safe receipts only; raw HTTP, technical key/payload ledger, credentials, config, Secrets and DB backup excluded."
+  },
+  "later_user_scope_revision_20261022": {
+    "automatic_recovery_executor_and_watchdog": "CANCELLED_BY_USER; no implementation/deployment required and not a blocker. Restore original outlet if actually changed.",
+    "gateway_and_address_pool_acceptance": "DEFERRED_BY_USER; no testing or allocation opening this turn.",
+    "legacy_device_cleanup_authority": "Read actual use/references; delete if unused. Do not equate zero DB VLAN/pool refs with unused physical ens35.",
+    "vpc_auto_base_connection_observation": {
+      "at": "2026-10-22T10:07:12.824381+00:00",
+      "timezone_display": "2026-10-22 18:07 Asia/Shanghai",
+      "mode": "READ ONLY, ani_resource_network_runtime",
+      "rollout_rows": 0,
+      "vpcs_with_base_required": 0,
+      "base_connectivity_rows": 0,
+      "new_vpcs_enabled": false,
+      "mutation": false,
+      "fedora_public_receipt": "resume-gov-20261022/scope-revision-rollout-readonly-20261022.json"
+    },
+    "new_l2_switch_field": {
+      "existing_backend": "New v2 requests require cluster_id, virtual_switch_id and device_name; legacy device_id mutually exclusive, exact old replay preserved.",
+      "frontend": "Business page source is not in these repositories; no page change claimed.",
+      "effect": "Makes virtual-switch ownership explicit; does not prove KCN group-cache recognition or stable-device-error redrive.",
+      "code_refs": [
+        "Res internal/biz/network/egress.go:487",
+        "Res internal/data/network/platform.go:198",
+        "Gov pkg/middleware/auth/platform_network_policy.go:191",
+        "Gov api/protos/catalog/service/v1/platform_network.proto:240"
+      ]
+    },
+    "legacy_device_cleanup_observation": {
+      "read_at": "2026-10-22T10:08:01.327596+00:00",
+      "device_id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+      "version_at_read": 2645,
+      "db_product_vlan_refs": 0,
+      "db_product_pool_refs": 0,
+      "physical_native_vlan": {
+        "name": "cluster-public-ens35-20261020",
+        "uid": "184ccbf5-3f3e-4c47-8cc7-ac3e7406fca8",
+        "device": "ens35",
+        "group": "ani-public"
+      },
+      "three_node_mapping": "ani-public.ens35 -> br-ens35; current KCN annotations and fresh NodeFacts confirm physical use",
+      "adoption_marker_matches_binding": true,
+      "accepted_pre_managed": false,
+      "managedDevices": "ens35",
+      "registration_closed": false,
+      "retired": false,
+      "adoption_operation": "running with a valid worker lease at observation",
+      "decision": "NOT_DELETED: zero product refs do not prove unused; supported retirement would close/fence first and then block on native VLAN/group/OVS references. Removing its owned managedDevices/marker was not authorized as unused cleanup.",
+      "writes": "NONE; no retirement API dispatched, no direct SQL cleanup, no native/physical/KCN changes",
+      "evidence": {
+        "path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/device-cleanup-20261022/public-summary.json",
+        "sha256": "ac4b4c228ad593dfac2e40637fedc1a4921d040116ebbe0a31b4734043095975"
+      }
+    }
   }
 }

@@ -2,13 +2,15 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
+最新用户调整（2026-10-22）：取消自动出口恢复执行器/独立 watchdog，不再开发部署，也不再作为阻塞；原出口若后续被实际修改，恢复义务保留。网关和地址池验收开放 `deferred_by_user`，不再列为当前必过项。已获授权先查旧 Device，无使用时直接清理。18:08（Asia/Shanghai）实际核查：旧登记产品 VLAN/Pool 引用为0，但 ens35 仍有原生公网 VLAN、三节点组注解和 OVS 映射；本登记在 kcn-config 中的 adoption marker 匹配 binding，旧 operation/worker 仍在执行。现有退役接口会先关闭/fence，再因这些原生引用阻塞，尚不能视为无用；未调用退役接口、未直接改库，也未修改原公网。18:07（Asia/Shanghai）只读查询当前10–12 Network库：`network_connectivity_rollout` 为0行、基础连接记录为0、新VPC基础连接required为0，当前新建租户VPC**没有启用自动基础内网连接**，没有变更开关。新建二层网络协议已要求 `cluster_id + virtual_switch_id + device_name`；这能明确归属，不能单靠该字段保证 KCN 组已识别或错误修复后重新执行。下面“恢复执行器/watchdog”限制是修订前结论，已撤销；其他执行事实按原时点保留。
+
 2026-10-22 续跑：用户已恢复 10–12 集群使用授权，要求合入最新 Gov 并部署后继续本 Goal，取代下面历史暂停记录中的集群禁用限制；禁止修改 KCN 的要求保持。主流程已到**真实平台登录 → Gov → Res/mTLS/PostgreSQL → 未绑定虚拟交换机创建、查询、幂等重放、分页及产品删除清理**，以上均 `PASS`；租户越权拒绝通过。三条测试交换机仅保留 deleted/cleaned 墓碑、幂等及审计，未留活动引用或未完成 operation。真实二层接管、租户 VPC/SNAT/LB 和平台默认出口完整验收仍未运行，Goal **未完成**。固定版本与分层结果见[本轮交付回执](records/KCN-NETWORK-PLATFORM-20261021/resume-delivery-20261022.json)。
 
 Res 已合入 `origin/main=64db955`，生产提交 `13fa2b4` 的完整 `make verify` 通过，正式 SDK `v0.0.0-20261022081320-13fa2b465960` 已由标准 Go/官方 HTTPS proxy/sumdb 验证。Gov 已合入 `origin/main=cc72cf4`，生产提交 `bb4164c`；完整生成、相关认证/data/service/server 检查和六个 Network 联合场景通过（KCN/其他 owner 使用明确外部边界夹具），最终源码无漂移。两仓只更新任务分支和既有 draft PR，未合并 main。10–12 当前 Gov `321b8973…`、Res `a7a268ac…`、三节点 NodeFacts `0bd6f616…` 均已就绪且实际 imageID 匹配；Gov 现有超时配置由 `3600s` 调至新版允许的 `45s`。真实 schema15 备份经同一生产二进制两次迁移、43 张表/12470 行原值和身份及旧 VPC mTLS 读取保全预验收通过，再完成 live **15→18**；全部 18 项 checksum 匹配。保留私有备份，旧15二进制不能直接回退18，恢复须保持18语义并向前修复，禁止覆盖共享库。三节点新事实均显式确认 `ovs_bridge_mappings_observed=true` 和 `ani-public.ens35 → br-ens35`；Res 实际 SA 对指定三节点 UID-only JSON Patch 的 server dry-run 通过且 RV 不变，范围外 Node patch 拒绝。
 
 Gov 正式目录同步保留既有 API ID/状态、角色关系及五个 Inference 占位符路径的身份；未启用原 OFF 动作或自动向角色授予新权限。验收临时增加的五条平台权限关系已精确撤销；最终平台/租户越权拒绝、配额、旧网络读取和 ModelScope 搜索 pageSize=50 通过，任务会话为零，三个 admin Job/Pod、构建临时目录和独占验证设施已清理。原 Gov 镜像实际包含 ModelDev ea047 消费合同，早先仅依据 756f 版本标识推断源码的前提不足；新候选441合同对该响应的503差异独立保留。用户明确使用当前已提交版本、不测本批 ModelDev，因此未合入 c0bd/ea047，不再以此阻塞本轮网络验收。
 
-原公网五对象及默认 VPC/Subnet UID/spec 保持，默认 Subnet `natOutgoing=true`；**维护窗口未打开，原公网出口未拆除，无需执行拆后恢复**。两 CoreDNS Pod 实际 netns DNS、实际 Model Pod DNS/自身 CA 验证 HTTPS 200 和物理 ens35 上 `172.16.102.192` 的 SYN/回程均通过。这只是现有消费者基线，不能标为 P6 恢复后验收。P4 仍因当前 KCN 的组暂缺/稳定网卡错误修复后重入协议未证实，以及 Res 侧恢复执行器/watchdog 未完成真实接管、反向清理和恢复演练而关闭；KCN 问题按用户要求记录报告，不修改、升级或重启 KCN。完整 P4–P6 保持 `NOT_RUN`。
+原公网五对象及默认 VPC/Subnet UID/spec 保持，默认 Subnet `natOutgoing=true`；**维护窗口未打开，原公网出口未拆除，无需执行拆后恢复**。两 CoreDNS Pod 实际 netns DNS、实际 Model Pod DNS/自身 CA 验证 HTTPS 200 和物理 ens35 上 `172.16.102.192` 的 SYN/回程均通过。这只是现有消费者基线，不能标为 P6 恢复后验收。当前 KCN 的组暂缺/稳定网卡错误修复后重入协议仍未证实；按用户要求记录报告，不修改、升级或重启 KCN。自动恢复执行器/watchdog 要求已由最新用户调整取消。完整 P4–P6 没有实际执行，其中网关/地址池验收现按用户要求延后，不能再以该延期项阻塞当前工作。
 
 ### 恢复前历史记录
 

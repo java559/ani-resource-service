@@ -13,6 +13,13 @@ committed Gov remains deployed. No KCN change/restart or native-outlet teardown
 occurred. Full P4–P6 remain NOT_RUN; a working original outlet is not an
 after-restoration acceptance result.
 
+The subsequent user scope revision cancels the automatic recovery executor and
+independent watchdog requirement: they are no longer implementation tasks or
+blockers. Gateway/address-pool acceptance is deferred by the user. Current VPC
+automatic-base-connectivity and conditional old-Device cleanup observations
+are appended to the same resumed receipt; original records below keep their
+historical meaning.
+
 The following receipts are historical snapshots. Their paused/not-deployed,
 old NodeFacts/RBAC and version-label-derived Gov provenance statements are
 superseded where the resumed receipt supplies later evidence. The old Gov
@@ -93,8 +100,10 @@ All original dirty files and other worktrees are preserved. Runtime and heavy
 commands execute only via Fedora, under task-owned directories and the existing
 shared heavy-work lock. Private runtime snapshots stay on Fedora (0700/0600).
 
-No public-egress maintenance may begin until the approved P4 guards,
-restoration rehearsal, independent recovery channel and watchdog all pass.
+The original P4 required an executable recovery driver and independent
+watchdog. The user's later scope revision above cancels those tool requirements;
+their absence must not be retained as a maintenance blocker. Actual changes to
+the original outlet still require restoration; none has been made.
 
 The user's later explicit instruction prohibits all KCN source changes. It
 supersedes the original Goal's narrow P1 implementation allowance. The three
