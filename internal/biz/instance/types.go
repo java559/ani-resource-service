@@ -88,7 +88,8 @@ func ResolveNamespace(tenant, trusted, prefix string) (string, error) {
 	return ns, nil
 }
 
-// GPU is the sole frozen execution authority. Values are already absolute MiB.
+// GPU is the sole frozen execution authority. Limits retain provider units,
+// with memory-block metadata frozen in Annotations.
 type GPU struct {
 	Scheduler, Queue, RuntimeClass, Digest string
 	NodeLabels, Annotations, Limits        map[string]string

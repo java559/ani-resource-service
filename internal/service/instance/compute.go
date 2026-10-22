@@ -2,6 +2,7 @@ package instance
 
 import (
 	acc "github.com/zhangzhe-ctrl/ani-accelerator-service/api/gen/go/accelerator/v1"
+	"github.com/zhangzhe-ctrl/ani-accelerator-service/pkg/gpuprotocol"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	compute "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance"
@@ -19,7 +20,10 @@ func wireSummary(g *biz.GPUSummary, execution biz.GPU) *pb.GpuSummary {
 		return nil
 	}
 	n, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-number"], 10, 32)
-	m, _ := strconv.ParseInt(execution.Limits["volcano.sh/vgpu-memory"], 10, 64)
+	m, err := gpuprotocol.GpuMemoryMiBPerDevice(&acc.GpuExecution{SchedulerName: execution.Scheduler, QueueName: execution.Queue, RuntimeClassName: execution.RuntimeClass, NodeSelector: execution.NodeLabels, PodAnnotations: execution.Annotations, Resources: execution.Limits, ExecutionDigest: execution.Digest})
+	if err != nil {
+		return nil
+	}
 	c, _ := strconv.ParseUint(execution.Limits["volcano.sh/vgpu-cores"], 10, 32)
 	return &pb.GpuSummary{ProfileId: g.ProfileID, ProfileVersion: g.ProfileVersion, Mode: acc.SupplyMode(acc.SupplyMode_value[g.Mode]), ModelKey: g.ModelKey, DevicesPerInstance: uint32(n), MemoryMibPerDevice: m, MemoryMibTotal: m * int64(n), CoreLimitPercent: uint32(c)}
 }

@@ -2,6 +2,8 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
+2026-10-22 续跑：用户已恢复 10–12 集群使用授权，要求合入最新 Gov 并部署后继续本 Goal，取代下面历史暂停记录中的集群禁用限制；禁止修改 KCN 的要求保持。已从 Fedora 复验集群、三节点及默认 VPC 身份，原公网五对象仍在，尚未打开维护窗口。最新 Gov `origin/main=cc72cf4` 与 Res `origin/main=64db955` 已进入任务工作树合并，正验证整合 SDK 与 Gov；新合并版本尚未部署、业务验收及恢复仍未完成。以下暂停及既往验证结果保留其原时点，不作为新合并版本的 PASS。
+
 状态：2026-10-22 **按用户要求暂停，未完成**。用户明确集群正在使用、禁止部署、必须使用集群时暂停；本轮已结束只读核查，仅收尾一个已启动的 Fedora 离线验证任务及清理，没有继续连接集群或部署。**原固定版本的软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。这些历史结果不证明新的 Gov 合并源码已通过联合验证，也不能证明真实集群接管或流量。
 
 用户本轮授权的[只读 API 与三节点 SSH 核查](records/KCN-NETWORK-PLATFORM-20261021/cluster-readonly-20261022.json)已完成：集群/默认 VPC/节点身份匹配；严格 known_hosts、machineID/bootID 和 ens34 回程均 `PASS`，OVS socket 实际为 `65534:65534/0750`。快照中原公网五对象与默认 VPC/Subnet 身份仍在，默认 Subnet `natOutgoing=true`；未开维护、未做 DNS/HTTPS/流量或真实恢复。三份旧 NodeFacts 缺新版精确桥映射证明，Res 实际 SA 的 RBAC 仅 nodes get/list/watch、无 patch。快照 Gov 对应正式 `756f5a2`/ModelDev v2.1，旧 `3dcc1df` 候选会回退其生产功能，**不得直接部署**。该只读许可已执行完毕，不扩展到后续集群操作。

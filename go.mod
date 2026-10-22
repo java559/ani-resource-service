@@ -1,6 +1,6 @@
 module github.com/zhangzhe-ctrl/ani-resource-service
 
-go 1.26.9
+go 1.26.10
 
 require (
 	github.com/go-kratos/kratos/contrib/otel/v3 v3.0.0-20260515082355-1ddb58e407c5
@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/prometheus/client_golang v1.24.1
-	github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261017194326-24820240a6b0
+	github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261022031933-4a682ac73da1
 	github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261017184327-1c605c793b88
 	github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal v0.0.0-20261013075021-0937f5aa9c6c
 	go.opentelemetry.io/otel v1.45.0
