@@ -172,9 +172,9 @@ Res 负责正确消费唯一执行快照，不重复开发调度逻辑，也不�
 | scheduler／Queue | 按固定适配写入正确对象位置，不根据字段名称猜测层级 |
 | 节点限制、受管标签与注解 | 准确映射，不被镜像或普通业务配置覆盖 |
 | 主容器身份与 GPU 数量 | 与冻结请求一致，不增加额外 GPU 容器或副本 |
-| 启停重放 | 保留原 execution、MiB 资源值和主容器名称 |
+| 启停重放 | 保留原 execution、Provider 资源值、冻结单位元数据和主容器名称 |
 
-供给统一 F=1；`volcano.sh/vgpu-memory` 数值即 MiB。共享和整卡均使用正整数具体显存，整卡使用全部可用显存及 100 核心；不再生成或接受显存百分比键。Res 不计算 F，不渲染 Profile。
+GPU 执行的显存单位由冻结元数据解释：旧 F=1 执行不携带单位注解，`volcano.sh/vgpu-memory` 数值按 MiB；F=10 执行由 ACC 在 `execution.pod_annotations` 冻结 `accelerator.ani.io/memory-block-mib=10`，资源数值为显存块数。Res 始终原样渲染资源和注解，仅展示层使用 ACC 正式协议 helper 将冻结执行投影为绝对 MiB，不重新查询当前 Profile、基线或重编码旧执行摘要。共享和整卡均使用正整数显存块，整卡使用全部可用显存及 100 核心；不生成或接受显存百分比键。Res 不重新计算 F，不渲染 Profile。
 
 ### 5.2 验收只做应有的测试
 
