@@ -1,0 +1,1613 @@
+{
+  "captured_at": "2026-10-21T05:09:06.722891+00:00",
+  "execution_host": "fedora",
+  "mode": "read-only",
+  "identity": {
+    "context": "kubernetes-admin@ani-lab",
+    "kube_system_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "default_vpc_uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+    "nodes": [
+      {
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "resourceVersion": "49467291",
+        "internalIP": "172.16.101.10",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "0e21596a-ebbb-433a-a67d-6d9865b015bd",
+          "networking.kubercloud.com/service_ip": "100.64.0.2",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T05:04:03Z",
+          "lastTransitionTime": "2026-10-10T05:53:29Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      },
+      {
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "resourceVersion": "49468082",
+        "internalIP": "172.16.101.11",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "e1d4f47f-b347-46fd-9a21-08e824e2aff8",
+          "networking.kubercloud.com/service_ip": "100.64.0.6",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T05:03:39Z",
+          "lastTransitionTime": "2026-10-16T07:14:16Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      },
+      {
+        "name": "ani-03",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "resourceVersion": "49468592",
+        "internalIP": "172.16.101.12",
+        "labels": {
+          "networking.kubercloud.com/allocated": "true",
+          "networking.kubercloud.com/role": "master",
+          "vcluster.networking.kubercloud.com/ani-public": "100"
+        },
+        "annotations": {
+          "networking.kubercloud.com/chassis": "a73a0b19-e738-49cc-aab1-cd0722e36e48",
+          "networking.kubercloud.com/service_ip": "100.64.0.4",
+          "vcluster.networking.kubercloud.com/ani-public": "ens35"
+        },
+        "ready": {
+          "lastHeartbeatTime": "2026-10-21T05:03:40Z",
+          "lastTransitionTime": "2026-10-17T10:43:24Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      }
+    ]
+  },
+  "images": [
+    {
+      "pod": "ani-system/ani-governance-99f8b9c9-rnccz",
+      "uid": "d191f837-aaf6-4bb8-bc0b-88729716b205",
+      "node": "ani-01",
+      "serviceAccount": "governance-runtime",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/ani-platform-images/ani-governance:1bd9b7536f5c-20261020@sha256:ea957e84601370a81221985ae60fa3347b5b3ff438adbfbd4b120cc000dce574",
+          "imageID": "172.16.101.10:30003/ani-platform-images/ani-governance@sha256:ea957e84601370a81221985ae60fa3347b5b3ff438adbfbd4b120cc000dce574"
+        }
+      ]
+    },
+    {
+      "pod": "ani-system/ani-inference-service-68869846f-7kp6q",
+      "uid": "562d15c6-a978-4f3d-a8d5-7be69829b9d3",
+      "node": "ani-03",
+      "serviceAccount": "ani-inference",
+      "containers": [
+        {
+          "name": "inference",
+          "image": "172.16.101.10:30003/ani-platform-images/ani-inference-service:7dd76ec9f197-20261020@sha256:8a0bf0df5e1ed2dea9c8da9f3f7625a6a8090326b5cc6c609f7820f4fed14419",
+          "imageID": "172.16.101.10:30003/ani-platform-images/ani-inference-service@sha256:8a0bf0df5e1ed2dea9c8da9f3f7625a6a8090326b5cc6c609f7820f4fed14419"
+        }
+      ]
+    },
+    {
+      "pod": "ani-system/ani-model-service-c4b48b8d7-hhs5k",
+      "uid": "83de237b-743a-4ac1-bfdd-b70830bc0680",
+      "node": "ani-03",
+      "serviceAccount": "ani-model-service",
+      "containers": [
+        {
+          "name": "model",
+          "image": "localhost/ani-model:nonroot-upload-retry-20261020@sha256:600901e59debf01d2506c620d22b7d040574f29065ec2cfd3f28a7a5e4eafcf1",
+          "imageID": "localhost/ani-model:nonroot-upload-retry-20261020@sha256:600901e59debf01d2506c620d22b7d040574f29065ec2cfd3f28a7a5e4eafcf1"
+        }
+      ]
+    },
+    {
+      "pod": "ani-system/ani-resource-service-79f8f68bcd-7lgz5",
+      "uid": "c41af07e-38f8-4b83-bc41-3c2fb7892591",
+      "node": "ani-01",
+      "serviceAccount": "ani-resource-service",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/resource@sha256:52874d9a10a2238c20d6950387497a79bd831314d47a189e704c420e76c3f55d",
+          "imageID": "172.16.101.10:30003/icn-01a15337-release/resource@sha256:52874d9a10a2238c20d6950387497a79bd831314d47a189e704c420e76c3f55d"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-cni-ds-2zzt2",
+      "uid": "febcc918-bf39-4c67-a32c-5a4b44d3cdca",
+      "node": "ani-01",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-cni-server",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-cni-ds-4dznv",
+      "uid": "0abfc011-447d-412c-896c-1c4e970c9b3b",
+      "node": "ani-03",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-cni-server",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-cni-ds-zzsb6",
+      "uid": "6bc18ff6-06fd-4eae-bf23-0da1c54d557c",
+      "node": "ani-02",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-cni-server",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-controller-77cf4dfdbc-c4kwl",
+      "uid": "92fb0d38-ef01-4f6b-a869-254d4fba740f",
+      "node": "ani-01",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-controller",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-controller-77cf4dfdbc-mwk72",
+      "uid": "b90706a4-1b1a-453f-8154-acff78926a24",
+      "node": "ani-03",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-controller",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kcn-system/kcn-controller-77cf4dfdbc-p9n6s",
+      "uid": "66525e20-2011-4af3-942f-3ccb2b67b644",
+      "node": "ani-02",
+      "serviceAccount": "kcn-controller",
+      "containers": [
+        {
+          "name": "kcn-controller",
+          "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f",
+          "imageID": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+        }
+      ]
+    },
+    {
+      "pod": "kube-system/coredns-fd8678c86-llxz9",
+      "uid": "9952dd3f-33f3-4a73-a865-e34a491801fb",
+      "node": "ani-01",
+      "serviceAccount": "coredns",
+      "containers": [
+        {
+          "name": "coredns",
+          "image": "172.16.101.10:5000/coredns/coredns:v1.13.1",
+          "imageID": "172.16.101.10:5000/coredns/coredns@sha256:a0f0a739ccd102b7ea7ecf9b0c2bd0af9520a3b2e16d6718065660e954924ea6"
+        }
+      ]
+    },
+    {
+      "pod": "kube-system/coredns-fd8678c86-rwqdd",
+      "uid": "8bb58401-ee63-4295-9cfb-a746c89792cf",
+      "node": "ani-02",
+      "serviceAccount": "coredns",
+      "containers": [
+        {
+          "name": "coredns",
+          "image": "172.16.101.10:5000/coredns/coredns:v1.13.1",
+          "imageID": "172.16.101.10:5000/coredns/coredns@sha256:a0f0a739ccd102b7ea7ecf9b0c2bd0af9520a3b2e16d6718065660e954924ea6"
+        }
+      ]
+    }
+  ],
+  "configuration_sources": [
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "ani-system",
+        "name": "ani-governance",
+        "uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+        "resourceVersion": "49208555",
+        "generation": 117,
+        "ownerReferences": null,
+        "labels": {
+          "app": "ani-governance",
+          "app.kubernetes.io/name": "ani-governance",
+          "app.kubernetes.io/part-of": "ani"
+        }
+      },
+      "serviceAccount": "governance-runtime",
+      "volumes": [
+        {
+          "name": "observability-mtls",
+          "secret": {
+            "defaultMode": 292,
+            "secretName": "ani-observability-governance-client-tls"
+          }
+        },
+        {
+          "name": "configs",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-configs"
+          }
+        },
+        {
+          "name": "ake",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-runtime-keys"
+          }
+        },
+        {
+          "name": "modeldev-mtls",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-modeldev-client-tls"
+          }
+        },
+        {
+          "name": "resource-mtls",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-resource-mtls"
+          }
+        },
+        {
+          "name": "model-inference-mtls",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-model-inference-tls"
+          }
+        },
+        {
+          "name": "accelerator-lab-mtls",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "governance-accelerator-lab-client"
+          }
+        },
+        {
+          "name": "session-mtls",
+          "secret": {
+            "defaultMode": 292,
+            "secretName": "governance-session-mtls"
+          }
+        }
+      ],
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/ani-platform-images/ani-governance:1bd9b7536f5c-20261020@sha256:ea957e84601370a81221985ae60fa3347b5b3ff438adbfbd4b120cc000dce574",
+          "env_names": [
+            "ANI_OBSERVABILITY_GRPC_ADDR",
+            "ANI_OBSERVABILITY_CA_FILE",
+            "ANI_OBSERVABILITY_CLIENT_CERT_FILE",
+            "ANI_OBSERVABILITY_CLIENT_KEY_FILE",
+            "ANI_INSTANCE_ADDR",
+            "ANI_INSTANCE_CA",
+            "ANI_INSTANCE_CERT",
+            "ANI_INSTANCE_KEY",
+            "ANI_ACCESS_KEY_ENCRYPTION_KEY_FILE",
+            "ANI_MODELDEV_ADDR",
+            "ANI_MODELDEV_CA",
+            "ANI_MODELDEV_CERT",
+            "ANI_MODELDEV_KEY",
+            "ANI_MODELDEV_TIMEOUT",
+            "ANI_NETWORK_ADDR",
+            "ANI_NETWORK_CA",
+            "ANI_NETWORK_CERT",
+            "ANI_NETWORK_KEY",
+            "ANI_IMAGE_ADDR",
+            "ANI_IMAGE_CA",
+            "ANI_IMAGE_CERT",
+            "ANI_IMAGE_KEY",
+            "ANI_MODEL_ADDR",
+            "ANI_MODEL_CA",
+            "ANI_MODEL_CERT",
+            "ANI_MODEL_KEY",
+            "ANI_MODEL_SERVER_NAME",
+            "ANI_QUOTA_ENABLED",
+            "ANI_QUOTA_INTERNAL_ADDR",
+            "ANI_QUOTA_CA_FILE",
+            "ANI_QUOTA_CERT_FILE",
+            "ANI_QUOTA_KEY_FILE",
+            "ANI_ACCELERATOR_ADDR",
+            "ANI_ACCELERATOR_SERVER_NAME",
+            "ANI_QUOTA_RESOURCE_DNS_SAN",
+            "ANI_INSTANCE_CLUSTER_ID",
+            "ANI_ACCELERATOR_CA",
+            "ANI_ACCELERATOR_CERT",
+            "ANI_ACCELERATOR_KEY",
+            "ANI_ACCELERATOR_TIMEOUT",
+            "GWA_AUTH_REFRESH_COOKIE_INSECURE",
+            "ANI_INSTANCE_SG_ADDR",
+            "ANI_INSTANCE_SG_SERVER_NAME",
+            "ANI_INSTANCE_SG_CA_FILE",
+            "ANI_INSTANCE_SG_CERT_FILE",
+            "ANI_INSTANCE_SG_KEY_FILE",
+            "ANI_INSTANCE_CONFIG_V2_WRITES",
+            "ANI_INFERENCE_ADDR",
+            "ANI_INFERENCE_CA_FILE",
+            "ANI_INFERENCE_CERT_FILE",
+            "ANI_INFERENCE_KEY_FILE",
+            "ANI_INFERENCE_SERVER_NAME",
+            "ANI_NETWORK_TIMEOUT"
+          ],
+          "envFrom": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/run/secrets/observability-mtls",
+              "name": "observability-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/configs",
+              "name": "configs",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/ake",
+              "name": "ake",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/modeldev-mtls",
+              "name": "modeldev-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/resource-mtls",
+              "name": "resource-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/model-inference-mtls",
+              "name": "model-inference-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/accelerator-lab-mtls",
+              "name": "accelerator-lab-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/session-mtls",
+              "name": "session-mtls",
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "ani-system",
+        "name": "ani-resource-service",
+        "uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+        "resourceVersion": "44141273",
+        "generation": 28,
+        "ownerReferences": null,
+        "labels": null
+      },
+      "serviceAccount": "ani-resource-service",
+      "volumes": [
+        {
+          "name": "configs",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "resource-configs"
+          }
+        },
+        {
+          "name": "tls",
+          "secret": {
+            "defaultMode": 420,
+            "secretName": "resource-server-mtls"
+          }
+        },
+        {
+          "name": "private-source",
+          "secret": {
+            "defaultMode": 288,
+            "secretName": "resource-runtime-private"
+          }
+        },
+        {
+          "emptyDir": {
+            "medium": "Memory",
+            "sizeLimit": "1Mi"
+          },
+          "name": "private"
+        },
+        {
+          "name": "instance-source",
+          "secret": {
+            "defaultMode": 288,
+            "secretName": "resource-instance-private"
+          }
+        },
+        {
+          "name": "quota-tls",
+          "secret": {
+            "defaultMode": 288,
+            "secretName": "resource-quota-mtls"
+          }
+        },
+        {
+          "name": "accelerator-tls",
+          "secret": {
+            "defaultMode": 288,
+            "secretName": "resource-accelerator-mtls"
+          }
+        }
+      ],
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/resource@sha256:52874d9a10a2238c20d6950387497a79bd831314d47a189e704c420e76c3f55d",
+          "env_names": [
+            "ANI_NETWORK_MODE",
+            "ANI_NETWORK_DATABASE_DSN",
+            "ANI_NETWORK_CURSOR_SIGNING_KEY",
+            "ANI_NETWORK_CLIENT_CA",
+            "ANI_NETWORK_TLS_CERT",
+            "ANI_NETWORK_TLS_KEY",
+            "ANI_INSTANCE_CONFIG_FILE",
+            "ANI_COMPUTE_CONFIG_FILE"
+          ],
+          "envFrom": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/run/configs",
+              "name": "configs",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-mtls",
+              "name": "tls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-private",
+              "name": "private",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-quota-mtls",
+              "name": "quota-tls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-accelerator-mtls",
+              "name": "accelerator-tls",
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-16394552231564376ef22f49",
+        "uid": "f2efa8b8-157b-4a5d-b023-ab7a213ef5dd",
+        "resourceVersion": "8036290",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "network.ani.io/deploy-run": "01a12425-20261010",
+          "network.ani.io/managed-by": "ani-network-node-facts",
+          "network.ani.io/node-uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+        }
+      },
+      "serviceAccount": "ani-node-facts-16394552231564376ef22f49",
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ],
+      "containers": [
+        {
+          "name": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+          "env_names": [
+            "NETWORK_FACTS_NODE_NAME",
+            "NETWORK_FACTS_NODE_UID"
+          ],
+          "envFrom": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/sys",
+              "name": "sys",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/var/run/openvswitch",
+              "name": "ovs",
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-3031656f3bb1a90adadca726",
+        "uid": "d0ac1b93-7672-4f08-8c5b-8c320bcdfb94",
+        "resourceVersion": "16437117",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "network.ani.io/deploy-run": "01a12425-20261010",
+          "network.ani.io/managed-by": "ani-network-node-facts",
+          "network.ani.io/node-uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+        }
+      },
+      "serviceAccount": "ani-node-facts-3031656f3bb1a90adadca726",
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ],
+      "containers": [
+        {
+          "name": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+          "env_names": [
+            "NETWORK_FACTS_NODE_NAME",
+            "NETWORK_FACTS_NODE_UID"
+          ],
+          "envFrom": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/sys",
+              "name": "sys",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/var/run/openvswitch",
+              "name": "ovs",
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+        "uid": "602900fd-655a-4721-a7e7-d0ae53510b98",
+        "resourceVersion": "37562458",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "network.ani.io/deploy-run": "01a12425-20261010",
+          "network.ani.io/managed-by": "ani-network-node-facts",
+          "network.ani.io/node-uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+        }
+      },
+      "serviceAccount": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "volumes": [
+        {
+          "hostPath": {
+            "path": "/sys",
+            "type": "Directory"
+          },
+          "name": "sys"
+        },
+        {
+          "hostPath": {
+            "path": "/var/run/openvswitch",
+            "type": "Directory"
+          },
+          "name": "ovs"
+        }
+      ],
+      "containers": [
+        {
+          "name": "facts",
+          "image": "172.16.101.10:5000/ani/ani-resource-node-facts@sha256:6589f5ced4db60504c9679470a0869f2209d1af6db1031b1615f10a1b89b780f",
+          "env_names": [
+            "NETWORK_FACTS_NODE_NAME",
+            "NETWORK_FACTS_NODE_UID"
+          ],
+          "envFrom": null,
+          "volumeMounts": [
+            {
+              "mountPath": "/sys",
+              "name": "sys",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/var/run/openvswitch",
+              "name": "ovs",
+              "readOnly": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "protected_objects": [
+    {
+      "kind": "EIPGateway",
+      "metadata": {
+        "namespace": null,
+        "name": "cluster-public-egress-20261020",
+        "uid": "8ec82f40-185d-4a85-b922-cfd5e51fb3f4",
+        "resourceVersion": "44956342",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "ani.io/operation": "kcn-cluster-public-eip-20261020"
+        }
+      },
+      "spec": {
+        "egressType": "Host",
+        "scope": "Public"
+      },
+      "status": {
+        "boundResources": {
+          "router": "gw.cluster-public-egress-20261020"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-20T03:53:56Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:53:56Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:53:56Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "localIP": "100.64.0.9",
+        "subnets": {
+          "kcn-system/cluster-public-102-20261020": "172.16.102.0/24"
+        }
+      }
+    },
+    {
+      "kind": "EIP",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "cluster-public-egress-20261020",
+        "uid": "fe37d635-31b2-4c24-9e21-6e284f51153a",
+        "resourceVersion": "44957722",
+        "generation": 2,
+        "ownerReferences": null,
+        "labels": {
+          "ani.io/operation": "kcn-cluster-public-eip-20261020"
+        }
+      },
+      "spec": {
+        "ipAddress": "172.16.102.192",
+        "ipVersion": "IPv4",
+        "subnet": "kcn-system/cluster-public-102-20261020"
+      },
+      "status": {
+        "boundResource": {
+          "disabled": false,
+          "nodeName": "ani-01",
+          "observedGeneration": 1,
+          "resource": "cluster-public-egress-20261020",
+          "resourceType": "Snat",
+          "vpc": "kcn-system/kcn-cluster"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-20T03:54:41Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:54:41Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "gateway": "cluster-public-egress-20261020",
+        "phase": "Bound"
+      }
+    },
+    {
+      "kind": "Snat",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "cluster-public-egress-20261020",
+        "uid": "02948377-5798-4004-b3c8-e3adf5ab7d5b",
+        "resourceVersion": "44957723",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "ani.io/operation": "kcn-cluster-public-eip-20261020"
+        }
+      },
+      "spec": {
+        "disable": false,
+        "eip": "cluster-public-egress-20261020",
+        "vpc": "kcn-cluster"
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-20T03:54:51Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "eipAddress": "172.16.102.192",
+        "phase": "Bound"
+      }
+    },
+    {
+      "kind": "Subnet",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "cluster-public-102-20261020",
+        "uid": "88303f1c-7817-41d2-b15f-37a30e62f2b6",
+        "resourceVersion": "44957233",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "ani.io/operation": "kcn-cluster-public-eip-20261020",
+          "networking.kubercloud.com/gateway": "kcn-system.cluster-public-102-20261020"
+        }
+      },
+      "spec": {
+        "allowedNamespaces": {
+          "from": "All"
+        },
+        "cidrBlock": "172.16.102.0/24",
+        "enableDHCP": false,
+        "excludeIPs": [
+          "172.16.102.1..172.16.102.191",
+          "172.16.102.208..172.16.102.254"
+        ],
+        "gateway": "cluster-public-egress-20261020",
+        "gatewayIP": "172.16.102.2",
+        "ipVersion": "IPv4",
+        "natOutgoing": false,
+        "type": "Public",
+        "underlayConfig": {
+          "gatewayIP": "172.16.102.1",
+          "vlanNetwork": "cluster-public-ens35-20261020"
+        }
+      },
+      "status": {
+        "boundResources": {
+          "gatewayPort": "gw.cluster-public-egress-20261020-kcn-system.cluster-public-102-20261020",
+          "switch": "kcn-system.cluster-public-102-20261020"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-20T03:54:22Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:54:22Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:54:22Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "gatewayMac": "fa:00:a5:60:bb:3e",
+        "observedGeneration": 1,
+        "underlayState": {
+          "chassisNode": "ani-03,ani-01",
+          "ready": true,
+          "vlanNetwork": "cluster-public-ens35-20261020"
+        },
+        "v4availableIPrange": "172.16.102.193-172.16.102.207",
+        "v4availableIPs": 15,
+        "v4usingIPrange": "172.16.102.192",
+        "v4usingIPs": 1
+      }
+    },
+    {
+      "kind": "VlanNetwork",
+      "metadata": {
+        "namespace": null,
+        "name": "cluster-public-ens35-20261020",
+        "uid": "184ccbf5-3f3e-4c47-8cc7-ac3e7406fca8",
+        "resourceVersion": "44956341",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": {
+          "ani.io/operation": "kcn-cluster-public-eip-20261020"
+        }
+      },
+      "spec": {
+        "devName": "ens35",
+        "vClusterName": "ani-public",
+        "vlanID": 0
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-20T03:53:54Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-20T03:53:54Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          }
+        ],
+        "subnet": "kcn-system/cluster-public-102-20261020",
+        "topoVersion": "b31739576e95e1f55b670501009f5ac6"
+      }
+    },
+    {
+      "kind": "VPC",
+      "metadata": {
+        "namespace": "kcn-system",
+        "name": "kcn-cluster",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "resourceVersion": "44957724",
+        "generation": 1,
+        "ownerReferences": null,
+        "labels": null
+      },
+      "spec": {
+        "allowedNamespaces": {
+          "from": "All"
+        },
+        "ipVersion": "IPv4"
+      },
+      "status": {
+        "boundResources": {
+          "chassisNode": "ani-01",
+          "router": "vpc.kcn-system.kcn-cluster"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "default": true,
+        "eips": {
+          "kcn-system/cluster-public-egress-20261020": "172.16.102.192"
+        },
+        "observedGeneration": 1,
+        "subnets": {
+          "kcn-system/kcn-default": "10.16.0.0/16"
+        }
+      }
+    },
+    {
+      "kind": "Subnet",
+      "metadata": {
+        "creationTimestamp": "2026-10-09T04:39:04Z",
+        "finalizers": [
+          "networking.kubercloud.com/finalizer"
+        ],
+        "generation": 2,
+        "labels": {
+          "networking.kubercloud.com/gateway": "kcn-system.kcn-default"
+        },
+        "name": "kcn-default",
+        "namespace": "kcn-system",
+        "resourceVersion": "49207918",
+        "uid": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0"
+      },
+      "spec": {
+        "allowedNamespaces": {
+          "from": "All"
+        },
+        "cidrBlock": "10.16.0.0/16",
+        "excludeIPs": [
+          "10.16.0.1"
+        ],
+        "gateway": "kcn-cluster",
+        "gatewayIP": "10.16.0.1",
+        "ipVersion": "IPv4",
+        "natOutgoing": true,
+        "type": "VPC"
+      },
+      "status": {
+        "boundResources": {
+          "gatewayPort": "vpc.kcn-system.kcn-cluster-kcn-system.kcn-default",
+          "switch": "kcn-system.kcn-default"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "gatewayMac": "fa:00:4b:fe:fa:e1",
+        "observedGeneration": 2,
+        "v4availableIPrange": "10.16.0.2,10.16.0.4,10.16.0.61,10.16.0.63,10.16.0.76-10.16.0.77,10.16.0.114,10.16.0.116-10.16.0.117,10.16.0.130,10.16.0.180-10.16.0.181,10.16.0.187,10.16.0.190,10.16.0.216,10.16.0.224,10.16.0.234,10.16.0.237,10.16.0.246,10.16.1.3,10.16.1.6-10.16.1.8,10.16.1.10-10.16.1.14,10.16.1.19,10.16.1.23,10.16.1.26-10.16.1.32,10.16.1.34,10.16.1.36-10.16.1.42,10.16.1.52,10.16.1.55-10.16.1.79,10.16.1.81-10.16.1.82,10.16.1.84-10.16.1.90,10.16.1.92-10.16.1.101,10.16.1.103,10.16.1.108-10.16.1.145,10.16.1.155,10.16.1.158-10.16.2.117,10.16.2.119-10.16.255.254",
+        "v4availableIPs": 65250,
+        "v4usingIPrange": "10.16.0.3,10.16.0.5-10.16.0.60,10.16.0.62,10.16.0.64-10.16.0.75,10.16.0.78-10.16.0.113,10.16.0.115,10.16.0.118-10.16.0.129,10.16.0.131-10.16.0.179,10.16.0.182-10.16.0.186,10.16.0.188-10.16.0.189,10.16.0.191-10.16.0.215,10.16.0.217-10.16.0.223,10.16.0.225-10.16.0.233,10.16.0.235-10.16.0.236,10.16.0.238-10.16.0.245,10.16.0.247-10.16.1.2,10.16.1.4-10.16.1.5,10.16.1.9,10.16.1.15-10.16.1.18,10.16.1.20-10.16.1.22,10.16.1.24-10.16.1.25,10.16.1.33,10.16.1.35,10.16.1.43-10.16.1.51,10.16.1.53-10.16.1.54,10.16.1.80,10.16.1.83,10.16.1.91,10.16.1.102,10.16.1.104-10.16.1.107,10.16.1.146-10.16.1.154,10.16.1.156-10.16.1.157,10.16.2.118",
+        "v4usingIPs": 283
+      }
+    }
+  ],
+  "crds": [
+    {
+      "name": "basicnetworkisolations.networking.kubercloud.com",
+      "uid": "c67a1472-c152-428b-aa98-7b8ab4102f82",
+      "resourceVersion": "3104241",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "947a1622a74fe1afc185366c623d36f034ed0c6b53dbde833e5ffe7b5f6eb691"
+    },
+    {
+      "name": "eipgateways.networking.kubercloud.com",
+      "uid": "e56c46a9-6072-4ddd-ab8a-ab87679cc75a",
+      "resourceVersion": "3104245",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "8e6d855d14376824b72a935949c6b45861029aaca9da8673b6a4682c90deed24"
+    },
+    {
+      "name": "eips.networking.kubercloud.com",
+      "uid": "f238d3ac-f165-45ca-a86f-63d1f499935e",
+      "resourceVersion": "3104247",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "666ac44330a1686d1a57d1e4aef055490cad1faf6a97f078af623971829fa258"
+    },
+    {
+      "name": "learnedroutes.networking.kubercloud.com",
+      "uid": "e64b969e-d070-41ba-bcbc-41dd879ee077",
+      "resourceVersion": "3104250",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "c3b6289ed01f6ba764dc556d72bca9332b41dc6dd2b9dcdbcc84af259209f697"
+    },
+    {
+      "name": "nats.networking.kubercloud.com",
+      "uid": "47cacaac-69e2-4f3a-8230-354d0c51a37c",
+      "resourceVersion": "3104253",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "d5ad0145c4755e742e56bdebc21320d5fcebb54b333653b925a53dee6876afa1"
+    },
+    {
+      "name": "networkacls.networking.kubercloud.com",
+      "uid": "527a75d0-bd58-45d3-8ed6-c7a2563d6947",
+      "resourceVersion": "3104256",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "e33d7fabf055b8104c7f06d73ae70bbd7328cbcd8c428331e6718d5f49bb7889"
+    },
+    {
+      "name": "nics.networking.kubercloud.com",
+      "uid": "0a470bcb-a81b-4595-9149-5c43b3379c5c",
+      "resourceVersion": "3104260",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "a344f0997e9401fc24751609229aabb74c8ce4dbcc0752f766a91d806df22655"
+    },
+    {
+      "name": "routetables.networking.kubercloud.com",
+      "uid": "9876a955-bc83-468f-b578-e6154f8987d4",
+      "resourceVersion": "3104263",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "fa99db0aa9980567ba00d121a8fa59bff7848943556ca26aa2cc7fb6fecb10a2"
+    },
+    {
+      "name": "securitygroups.networking.kubercloud.com",
+      "uid": "7e3b39b8-c027-4dfa-b453-800308b552c7",
+      "resourceVersion": "3104265",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "04aa360ab891402fc3b768130c819cd41f923bab389fe8759494ead0084b8d1a"
+    },
+    {
+      "name": "snats.networking.kubercloud.com",
+      "uid": "a3f336d1-572d-4592-9230-e582a54904b1",
+      "resourceVersion": "3104268",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "79310d249488c2a63f996649de5755cddeddcabc062a8936f153bc1162b2fa33"
+    },
+    {
+      "name": "subnets.networking.kubercloud.com",
+      "uid": "23b93c77-3697-4011-aef2-0cd0bf26f8c2",
+      "resourceVersion": "3104273",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "cf7705f1a54ebd2288015e3bf9b370c3f97e9c82ad0350b7fceaeb45a2f71c47"
+    },
+    {
+      "name": "transitrouters.networking.kubercloud.com",
+      "uid": "af7724f0-355b-40ce-859d-d678b0dbca81",
+      "resourceVersion": "3104275",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "14797cf924a647989e5f73105abaef02c9745796b1dcf44c597257768cd93858"
+    },
+    {
+      "name": "vlannetworks.networking.kubercloud.com",
+      "uid": "677b45c4-588f-4a52-98f6-b71925dd53b9",
+      "resourceVersion": "3104279",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "cf626cafc34e7a68078f001d793a99bca11cdd3e2d421fdfb9d59713364e7d17"
+    },
+    {
+      "name": "vnicips.networking.kubercloud.com",
+      "uid": "2fc5aa0f-f851-4057-9fc1-2c2c821243dc",
+      "resourceVersion": "3104281",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "30bc9ecc74e8bb1a0ab20f69f78257644fa5beca5057a3f3d0764d36cc742075"
+    },
+    {
+      "name": "vnics.networking.kubercloud.com",
+      "uid": "236941ca-17d8-4e63-b259-0c843bdc9015",
+      "resourceVersion": "3104284",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "41213d5f0e763f7d596a2abe64b7e960b332f94a12987466f6347dc6665897cc"
+    },
+    {
+      "name": "vpcattachments.networking.kubercloud.com",
+      "uid": "5e41255f-536c-413d-98f3-a8a8428cb0d0",
+      "resourceVersion": "3104288",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "28ac6de00fc7c40058d8145cbe4ebd1569ce8a61e6d2198bdb485a8b81bbc933"
+    },
+    {
+      "name": "vpcs.networking.kubercloud.com",
+      "uid": "d1d07722-d346-4668-91cd-caecee930cdc",
+      "resourceVersion": "3104290",
+      "versions": [
+        {
+          "name": "v1",
+          "served": true,
+          "storage": true
+        }
+      ],
+      "spec_sha256": "aa71ced849d0ebc8cefeff8d6694c1830ca9523b67bfcbc43d1ce149e096762e"
+    }
+  ],
+  "not_run": [
+    "SQL pending/worker/adoption state; authenticated login; live Model/CoreDNS packet probes; restoration dry-run; management SSH channel probe"
+  ],
+  "private_snapshot_root": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime",
+  "kcn_config": {
+    "metadata": {
+      "namespace": "kcn-system",
+      "name": "kcn-config",
+      "uid": "b4be2ccc-1f81-466b-8a66-84f7a2c99115",
+      "resourceVersion": "44948825",
+      "generation": null,
+      "ownerReferences": null,
+      "labels": null
+    },
+    "data": {
+      "enablePortSecurity": "true",
+      "encapNetworks": "172.16.101.0/24",
+      "hasMultusCNI": "true",
+      "intranetNetworks": "- 172.16.101.0/24\n- 10.96.0.0/16\n- 10.16.0.0/16\n",
+      "isDefaultCNI": "true",
+      "managedDevices": "ens35",
+      "nadDefaultNamespace": "kube-system",
+      "securityGroupMaxPortRanges": "10",
+      "securityGroupMaxRemoteAddresses": "10",
+      "securityGroupMaxRules": "100"
+    }
+  },
+  "nodefacts": [
+    {
+      "configmap": "ani-node-facts-16394552231564376ef22f49",
+      "uid": "4753ca03-a7b2-4726-a670-f3da6cdd856a",
+      "node_name": "ani-01",
+      "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "collected_at": "2026-10-21T05:08:15.95842073Z",
+      "interfaces": [
+        {
+          "NodeName": "ani-01",
+          "NodeUID": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+          "Name": "ens34",
+          "Kind": "device",
+          "MAC": "00:0c:29:e2:f0:21",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "172.16.101.10/24",
+            "fe80::20c:29ff:fee2:f021/64"
+          ],
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": true,
+          "Management": true,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.95842073Z"
+        },
+        {
+          "NodeName": "ani-01",
+          "NodeUID": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+          "Name": "ens35",
+          "Kind": "device",
+          "MAC": "00:0c:29:e2:f0:2b",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "fe80::20c:29ff:fee2:f02b/64"
+          ],
+          "Master": "ovs-system",
+          "OVSManaged": true,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.95842073Z"
+        },
+        {
+          "NodeName": "ani-01",
+          "NodeUID": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+          "Name": "ens36",
+          "Kind": "device",
+          "MAC": "00:0c:29:e2:f0:35",
+          "MTU": 1500,
+          "LinkUp": false,
+          "Carrier": false,
+          "Addresses": null,
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.95842073Z"
+        }
+      ]
+    },
+    {
+      "configmap": "ani-node-facts-3031656f3bb1a90adadca726",
+      "uid": "c829d893-a9e7-4751-894f-f404b3b4de61",
+      "node_name": "ani-02",
+      "node_uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "collected_at": "2026-10-21T05:08:16.285492689Z",
+      "interfaces": [
+        {
+          "NodeName": "ani-02",
+          "NodeUID": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+          "Name": "ens34",
+          "Kind": "device",
+          "MAC": "00:0c:29:1a:5a:0f",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "172.16.101.11/24",
+            "fe80::20c:29ff:fe1a:5a0f/64"
+          ],
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": true,
+          "Management": true,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:16.285492689Z"
+        },
+        {
+          "NodeName": "ani-02",
+          "NodeUID": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+          "Name": "ens35",
+          "Kind": "device",
+          "MAC": "00:0c:29:1a:5a:19",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "fe80::20c:29ff:fe1a:5a19/64"
+          ],
+          "Master": "ovs-system",
+          "OVSManaged": true,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:16.285492689Z"
+        },
+        {
+          "NodeName": "ani-02",
+          "NodeUID": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+          "Name": "ens36",
+          "Kind": "device",
+          "MAC": "00:0c:29:1a:5a:23",
+          "MTU": 1500,
+          "LinkUp": false,
+          "Carrier": false,
+          "Addresses": null,
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:16.285492689Z"
+        }
+      ]
+    },
+    {
+      "configmap": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7",
+      "uid": "6659bcee-a9ba-476a-a662-01e5f2d1069f",
+      "node_name": "ani-03",
+      "node_uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "collected_at": "2026-10-21T05:08:15.711914027Z",
+      "interfaces": [
+        {
+          "NodeName": "ani-03",
+          "NodeUID": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+          "Name": "ens34",
+          "Kind": "device",
+          "MAC": "00:0c:29:e9:32:45",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "172.16.101.12/24",
+            "fe80::20c:29ff:fee9:3245/64"
+          ],
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": true,
+          "Management": true,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.711914027Z"
+        },
+        {
+          "NodeName": "ani-03",
+          "NodeUID": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+          "Name": "ens35",
+          "Kind": "device",
+          "MAC": "00:0c:29:e9:32:4f",
+          "MTU": 1500,
+          "LinkUp": true,
+          "Carrier": true,
+          "Addresses": [
+            "fe80::20c:29ff:fee9:324f/64"
+          ],
+          "Master": "ovs-system",
+          "OVSManaged": true,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.711914027Z"
+        },
+        {
+          "NodeName": "ani-03",
+          "NodeUID": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+          "Name": "ens36",
+          "Kind": "device",
+          "MAC": "00:0c:29:e9:32:59",
+          "MTU": 1500,
+          "LinkUp": false,
+          "Carrier": false,
+          "Addresses": null,
+          "Master": "",
+          "OVSManaged": false,
+          "KCManaged": false,
+          "DefaultRoute": false,
+          "Management": false,
+          "KCBridgeReady": false,
+          "KCConfigured": false,
+          "KCConfigUID": "",
+          "KCDeviceOwner": "",
+          "Selectable": false,
+          "UnavailableReasons": null,
+          "VlanNetworkIDs": null,
+          "ObservedAt": "2026-10-21T05:08:15.711914027Z"
+        }
+      ]
+    }
+  ],
+  "rbac_check": {
+    "subject": "system:serviceaccount:ani-system:ani-resource-service",
+    "verb": "patch",
+    "resource": "nodes",
+    "allowed": false,
+    "provider_credential_subject": "NOT_VERIFIED"
+  },
+  "known_legacy_records": {
+    "device_id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+    "gateway_id": "egw_d6d865fccf9946bb90a8a171975be566",
+    "current_database_pending_worker_state": "NOT_RUN"
+  },
+  "restore_gates": {
+    "maintenance_started": false,
+    "live_identity": "PASS",
+    "complete_snapshot_private": "PASS",
+    "restoration_dry_run": "NOT_RUN",
+    "object_level_fence": "NOT_IMPLEMENTED",
+    "unattended_product_cleanup_and_restore": "NOT_IMPLEMENTED",
+    "management_api_channel": "PASS",
+    "management_ssh_channel": "NOT_RUN",
+    "login_credentials": "NOT_VERIFIED",
+    "fresh_login": "NOT_RUN",
+    "current_traffic": "NOT_RUN"
+  },
+  "snapshot_manifest": {
+    "configmaps.json": "e6dbf9d95dc1b719a4ddbc60dfb143abeefd4c988d5450678af21fc49780a616",
+    "crds.json": "5f92d8c056f2142cebf3a9d15b75af20f9d1230afd93c1fde1aabaf783d7e18b",
+    "default-vpc.json": "2c13e196ebb14212d75da4c00efe6b8ef0287945fca7eda5d64a63fc1e17fdb5",
+    "deployments-daemonsets.json": "19fc552f5547f66db06c400edeced79b399b4747c6ba154783bfc75dcbf83797",
+    "identity-kube-system.json": "43f388884782ec12a921d54b9edcaf7f4c4b8ee09f77aae951cb6c46c3b73d4f",
+    "kcn-all.json": "2c087d85283d37269d3d177ca3cb008d748720e0622d461fc77fae111d56aebb",
+    "nodes.json": "a0972ef3c4f47c912f9e0ca09b48c73b4ac1a2fdbd3ff28a4a42e8fe3cd8c17b",
+    "p0-runtime.json": "4d4b7451d86c63da9c4bfb8490b2b8a87b58409c0bad1a8c5c5e3b0afaa9121c",
+    "pods-all.json": "99f48995ce2e506e7933423b3d8ce7af065896ed507a0438e00c85f844b3cfd4",
+    "rbac.json": "abab7c756186fa8431d81e4dd46b4e2d64fba03386068b51cdc8e8e50b079a5e",
+    "services-endpoints.json": "ac781296bf68ed0e8fff989c5f0f1c06549f98d1746fb6366c76156b81847436"
+  }
+}

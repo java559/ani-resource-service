@@ -136,8 +136,13 @@ type DeviceConfig struct {
 	Nodes                            []NodeInterface
 }
 type VlanConfig struct {
-	DeviceID string
-	VlanID   int32
+	DeviceID        string
+	VlanID          int32
+	VirtualSwitchID string              `json:",omitempty"`
+	ClusterID       string              `json:",omitempty"`
+	DeviceName      string              `json:",omitempty"`
+	GroupName       string              `json:",omitempty"`
+	Nodes           []VirtualSwitchNode `json:",omitempty"`
 }
 type PlatformResource struct {
 	EgressMetadata
@@ -165,6 +170,7 @@ type NodeInterface struct {
 	// Config identity/ownership are supplied by the provider, never the caller.
 	KCBridgeReady, KCConfigured        bool
 	KCConfigUID, KCDeviceOwner         string
+	KCBridgeNetworks                   []string `json:",omitempty"`
 	Selectable                         bool
 	UnavailableReasons, VlanNetworkIDs []string
 	ObservedAt                         time.Time
@@ -206,6 +212,26 @@ func (i PlatformIntent) Fingerprint() string {
 		i.Device = &d
 	}
 	return egressFingerprint(i)
+}
+
+// FingerprintVersion retains the exact v1 struct encoding above. New fields
+// are omitempty and v2 never includes server-generated registration/binding facts.
+func (i PlatformIntent) FingerprintVersion() int32 {
+	if i.Vlan != nil && i.Vlan.VirtualSwitchID != "" {
+		return 2
+	}
+	return 1
+}
+
+func (i PlatformIntent) VersionedFingerprint() string {
+	if i.FingerprintVersion() == 1 {
+		return i.Fingerprint()
+	}
+	return egressFingerprint(struct {
+		Version                                                         int
+		Kind, Name, Description, ClusterID, VirtualSwitchID, DeviceName string
+		VlanID                                                          int32
+	}{2, i.Kind, i.Name, i.Description, i.Vlan.ClusterID, i.Vlan.VirtualSwitchID, i.Vlan.DeviceName, i.Vlan.VlanID})
 }
 func egressFingerprint(v any) string {
 	b, _ := json.Marshal(v)
@@ -454,9 +480,18 @@ func (e *Egress) CreatePlatform(ctx context.Context, i PlatformIntent) (Platform
 		// Inventory is collected/revalidated by the repository admission collaborator
 		// after replay lookup, and again at the provider mutation boundary.
 	case "create_vlan":
-		if i.Vlan == nil || i.Device != nil || i.Pool != nil || !validEgressID(i.Vlan.DeviceID, "device") || i.Vlan.VlanID < 0 || i.Vlan.VlanID > 4094 {
+		if i.Vlan == nil || i.Device != nil || i.Pool != nil || i.Vlan.VlanID < 0 || i.Vlan.VlanID > 4094 {
 			return PlatformResource{}, Fail(InvalidArgument, "device_id and vlan_id 0..4094 are required")
 		}
+		v := i.Vlan
+		if v.VirtualSwitchID != "" || v.ClusterID != "" || v.DeviceName != "" {
+			if v.DeviceID != "" || !validEgressID(v.VirtualSwitchID, "vsw") || v.ClusterID == "" || !regexp.MustCompile(`^[a-zA-Z0-9_.:-]{1,15}$`).MatchString(v.DeviceName) {
+				return PlatformResource{}, Fail(InvalidArgument, "v2 requires cluster_id, virtual_switch_id and device_name, mutually exclusive with device_id")
+			}
+		} else if !validEgressID(v.DeviceID, "device") {
+			return PlatformResource{}, Fail(InvalidArgument, "device_id is required for legacy replay")
+		}
+		i.Vlan = &VlanConfig{DeviceID: v.DeviceID, VlanID: v.VlanID, VirtualSwitchID: v.VirtualSwitchID, ClusterID: v.ClusterID, DeviceName: v.DeviceName}
 	case "create_egress_gateway":
 		if i.Device != nil || i.Vlan != nil || i.Pool != nil {
 			return PlatformResource{}, Fail(InvalidArgument, "gateway has no mode or device configuration")

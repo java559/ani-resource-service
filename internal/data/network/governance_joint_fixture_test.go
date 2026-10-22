@@ -44,7 +44,11 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 		t.Fatal("task-private fixture directory and isolated PostgreSQL required")
 	}
 	controller := &lbControllerFixture{}
+	switchBoundary := &networkJointSwitchBoundary{}
 	f := newLBAdmissionFixture(t, func(w http.ResponseWriter, r *http.Request, api *controlled.Server) bool {
+		if switchBoundary.http(w, r, api) {
+			return true
+		}
 		if r.Method == http.MethodGet && r.URL.Path == "/network-joint/lb-requests" {
 			// Read-only observation of the external protocol boundary. Admission,
 			// persistence and lifecycle execution still use production code.
@@ -124,6 +128,8 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 		t.Fatal(err)
 	}
 	f.f.w = worker
+	attachmentWorker := networkJointBackendObserver(t, f, provider, policy)
+	aggregates := wireNetworkJointAggregates(t, f, provider, policy)
 	ca, cert, key, clientCert, clientKey := networkJointCertificates(t, dir)
 	tlsConfig, err := runtime.GovernanceTLS(ca, cert, key)
 	if err != nil {
@@ -137,6 +143,8 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	networkv1.RegisterNetworkServiceServer(server, service.NewNetworkService(f.f.n))
 	networkv1.RegisterTenantEgressServiceServer(server, service.NewTenantEgressService(f.f.e))
 	networkv1.RegisterPlatformNetworkServiceServer(server, service.NewPlatformNetworkService(f.f.e))
+	networkv1.RegisterPlatformDeviceRetirementServiceServer(server, service.NewPlatformDeviceRetirementService(f.f.e))
+	networkv1.RegisterPlatformDefaultEgressServiceServer(server, aggregates.defaultService)
 	networkv1.RegisterTenantLoadBalancerServiceServer(server, service.NewTenantLoadBalancerService(f.lbs))
 	serving := make(chan error, 1)
 	go func() { serving <- server.Serve(listener) }()
@@ -158,14 +166,20 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 				stepping <- nil
 				return
 			case <-ticker.C:
-				if _, err := worker.Step(workerCtx); err != nil && workerCtx.Err() == nil {
-					stepping <- err
-					return
+				switchBoundary.refresh(f.api)
+				for _, stepper := range append([]runtime.Stepper{worker, attachmentWorker}, aggregates.steppers...) {
+					if _, err := stepper.Step(workerCtx); err != nil && workerCtx.Err() == nil {
+						stepping <- err
+						return
+					}
 				}
 			}
 		}
 	}()
 	info := map[string]string{"ProviderURL": cfg.Host, "CertificateName": "tenant-tls", "Namespace": boundNamespace, "Address": listener.Addr().String(), "CAFile": ca, "CertFile": clientCert, "KeyFile": clientKey, "RuntimeDSN": f.runtimeDSN, "TenantID": f.f.tenant, "ParentVPC": f.vpc.ID, "EntrySubnet": f.subnet.ID, "BackendSubnet": f.backendSubnet.ID, "BackendAddress": "10.42.2.2", "SecondBackendAddress": "10.42.2.3"}
+	info["ClusterID"], info["ClusterUID"] = aggregates.identity.ClusterID, aggregates.identity.ClusterUID
+	info["DefaultVPCNamespace"], info["DefaultVPCName"], info["DefaultVPCUID"] = aggregates.identity.Namespace, aggregates.identity.Name, aggregates.identity.UID
+	info["LegacyDeviceID"], info["QualifiedPublicPoolID"], info["GatewayID"] = aggregates.legacyDeviceID, f.f.pool.ID, f.f.pool.Pool.GatewayID
 	raw, err := json.Marshal(info)
 	if err != nil {
 		t.Fatal(err)
@@ -180,6 +194,12 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	scan := bufio.NewScanner(os.Stdin)
 	if !scan.Scan() || scan.Text() != "stop" {
 		t.Error("fixture stopped without explicit product cleanup completion")
+	}
+	// Serving observes the live backend owners continuously. Cleanup switches to
+	// the finalized owner protocol and drives the same production workers serially.
+	stopWorker()
+	if err := <-stepping; err != nil {
+		t.Fatal(err)
 	}
 	// The HTTP suite deletes its tenant resources first. Internal instance-owner
 	// fixture resources follow the production Attachment release protocol.
@@ -240,10 +260,6 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	// Continue the same production worker serially for platform retirement, so
 	// continuous observations cannot invalidate the version between GET and
 	// SetPool. Shared provider observation remains running through deletion.
-	stopWorker()
-	if err := <-stepping; err != nil {
-		t.Fatal(err)
-	}
 	for _, kind := range []string{"public_pool", "intranet_pool", "egress_gateway"} {
 		resources, next, _, err := f.f.e.ListPlatform(f.f.ctx, kind, biz.ListVPCs{Limit: 100})
 		if err != nil {
@@ -291,17 +307,17 @@ func TestNetworkGovernanceFixture(t *testing.T) {
 	// references to deleted pool history; it closes allocation and retires the
 	// pool slot. Do not erase those records outside the production contract.
 	var active int
-	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT (SELECT count(*) FROM network_vpcs WHERE state<>'deleted')+(SELECT count(*) FROM network_subnets WHERE state<>'deleted')+(SELECT count(*) FROM network_eips WHERE state<>'deleted')+(SELECT count(*) FROM network_snat_bindings WHERE state<>'deleted')+(SELECT count(*) FROM network_load_balancers WHERE state<>'deleted')+(SELECT count(*) FROM network_attachments WHERE state<>'released')+(SELECT count(*) FROM network_platform_resources WHERE kind<>'device' AND state<>'deleted')`).Scan(&active); err != nil {
+	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT (SELECT count(*) FROM network_vpcs WHERE state<>'deleted')+(SELECT count(*) FROM network_subnets WHERE state<>'deleted')+(SELECT count(*) FROM network_eips WHERE state<>'deleted')+(SELECT count(*) FROM network_snat_bindings WHERE state<>'deleted')+(SELECT count(*) FROM network_load_balancers WHERE state<>'deleted')+(SELECT count(*) FROM network_attachments WHERE state<>'released')+(SELECT count(*) FROM network_platform_resources WHERE kind<>'device' AND state<>'deleted')+(SELECT count(*) FROM network_virtual_switches WHERE state<>'deleted')+(SELECT count(*) FROM network_default_vpc_egresses WHERE state<>'deleted')+(SELECT count(*) FROM network_legacy_device_retirements WHERE state<>'retired')`).Scan(&active); err != nil {
 		t.Fatal(err)
 	}
 	if active != 0 {
 		t.Fatalf("product cleanup left %d active tenant/platform resources", active)
 	}
 	var pendingDevice int
-	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_platform_resources r JOIN network_platform_operations o ON o.operation_id=r.last_operation_id WHERE r.kind='device' AND (r.state<>'available' OR o.state<>'succeeded')`).Scan(&pendingDevice); err != nil || pendingDevice != 0 {
+	if err = f.f.owner.QueryRow(f.f.ctx, `SELECT count(*) FROM network_platform_resources r JOIN network_platform_operations o ON o.operation_id=r.last_operation_id JOIN network_device_adoptions d ON d.resource_id=r.resource_id WHERE r.kind='device' AND NOT d.retired AND (r.state<>'available' OR o.state<>'succeeded')`).Scan(&pendingDevice); err != nil || pendingDevice != 0 {
 		t.Fatalf("permanent adoption must be fully applied before isolated fixture teardown: %d %v", pendingDevice, err)
 	}
-	t.Log("Resource product cleanup pass: no active runtime resources; permanent ready device adoption retained by contract until isolated database teardown (no device deletion API)")
+	t.Log("Resource product cleanup pass: no active runtime resources or aggregates; device registration history retained")
 	cancel()
 }
 
@@ -453,12 +469,19 @@ func networkJointPlatformFacts(t *testing.T, api *controlled.Server) {
 		t.Fatal("existing external NodeFacts and CNI configuration required")
 	}
 	uid := node["metadata"].(map[string]any)["uid"].(string)
-	node["metadata"].(map[string]any)["annotations"] = map[string]any{"networking.kubercloud.com/managed_netdevs": `{"phys0":true}`}
+	node["metadata"].(map[string]any)["annotations"] = map[string]any{"networking.kubercloud.com/managed_netdevs": `{"phys0":true}`, "networking.kubercloud.com/chassis": "joint-chassis-1"}
+	node["metadata"].(map[string]any)["labels"] = map[string]any{"networking.kubercloud.com/allocated": "true"}
+	node["status"].(map[string]any)["conditions"] = []any{map[string]any{"type": "Ready", "status": "True"}}
 	var doc data.NodeFactsDocument
 	if err := json.Unmarshal([]byte(facts["data"].(map[string]any)["facts.json"].(string)), &doc); err != nil {
 		t.Fatal(err)
 	}
 	doc.Interfaces = append(doc.Interfaces, biz.NodeInterface{NodeName: "node-1", NodeUID: uid, Name: "phys0", Kind: "device", MAC: "02:00:00:00:00:02", MTU: 1500, LinkUp: true, Carrier: true, Master: "ovs-system", OVSManaged: true, KCBridgeReady: true})
+	for index, name := range []string{"phys1", "legacy0"} {
+		doc.Interfaces = append(doc.Interfaces, biz.NodeInterface{NodeName: "node-1", NodeUID: uid, Name: name, Kind: "device", MAC: fmt.Sprintf("02:00:00:00:00:%02x", index+3), MTU: 1500, LinkUp: true, Carrier: true})
+	}
+	doc.OVSBridgeMappingsObserved = true
+	doc.OVSBridgeMappings = map[string]string{}
 	doc.CollectedAt = time.Now()
 	raw, err := json.Marshal(doc)
 	if err != nil {
@@ -469,4 +492,11 @@ func networkJointPlatformFacts(t *testing.T, api *controlled.Server) {
 	api.Change("nodes", node, false)
 	api.Change("configmaps", facts, false)
 	api.Change("configmaps", config, false)
+	daemon := api.Object("pods", "kcn-system", "cni-ds")
+	if daemon == nil {
+		t.Fatal("existing CNI daemon boundary required")
+	}
+	daemon["spec"].(map[string]any)["nodeName"] = "node-1"
+	daemon["status"].(map[string]any)["conditions"] = []any{map[string]any{"type": "Ready", "status": "True"}}
+	api.Change("pods", daemon, false)
 }

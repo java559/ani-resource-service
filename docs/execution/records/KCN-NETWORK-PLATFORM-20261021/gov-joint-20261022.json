@@ -1,0 +1,48 @@
+{
+  "status": "FAIL",
+  "exit_code": 1,
+  "attempts": 1,
+  "host": "fedora",
+  "as_run_Gov_effective_source_tree_sha256": "810dc88790fd1df82f88c91d308a8699e28377b21a4abe4f5767ae31fef08ee1",
+  "as_run_Gov_manifest_sha256": "281cb40780210c8d28f7d78e7d207cb2678f11166cbfe3b38409ebaab9ea79ac",
+  "Resource_binary_sha256": "96a222bed2cea34961cdb267bd00f518d9cedb2a27bdadd5cfb1c01c74fe8e07",
+  "Resource_source_manifest_sha256": "0440e0ac0279b65f29c77e9c768811f31cb3a863b19bbd958a73ba44ef097286",
+  "formal_Resource_API_origin": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+  "selector": "^TestNetworkJointHTTP$/^(platform_network|deferred_load_balancer|vpc_presets|jwt|ak|authentication_and_plan)$",
+  "main_flow": {
+    "first_break": "JWT LB did not converge from provisioning: PROVIDER_NOT_READY desired=1 applied=0",
+    "first_break_log_line": 2819,
+    "lb_id": "lb_071c8f9cf3bc4342a809e5a020a8b273",
+    "helper_source_line": 411,
+    "last_observed_fields": {
+      "state": "provisioning",
+      "reason": "PROVIDER_NOT_READY",
+      "desired_version": "1",
+      "applied_version": "0"
+    },
+    "last_full_LB_response": "NOT_CAPTURED: existing helper logs status and selected terminal fields only",
+    "operation_response": "NOT_CAPTURED: no operation read reached after failed LB readiness poll",
+    "provider_object_state": "NOT_AVAILABLE: original product/Go cleanup removed fixture metadata before read-only capture; no interruption or resurrection",
+    "secondary_break": "AK attempted same private VIP while JWT LB remained provisioning; HTTP 412 VIP_IN_USE",
+    "verbatim_first_break": "network_joint_http_test.go:411: asynchronous Resource worker must converge: /api/v1/networks/load-balancers/lb_071c8f9cf3bc4342a809e5a020a8b273 state=provisioning reason=PROVIDER_NOT_READY desired=1 applied=0"
+  },
+  "subtests": {
+    "deferred_load_balancer": "PASS",
+    "platform_network": "PASS",
+    "vpc_presets": "PASS",
+    "jwt": "FAIL",
+    "ak": "FAIL",
+    "authentication_and_plan": "NOT_RUN: original parent failure guard returned"
+  },
+  "product_cleanup": {
+    "HTTP": "FAIL: EIP and VPC compensation did not finish",
+    "Resource": "FAIL: RESOURCE_IN_USE platform dependencies must be released; fixture exit1"
+  },
+  "infrastructure_cleanup": "PASS: original script removed only task PG/Redis; owned processes and unit cgroup absent; exact TMPDIR removed",
+  "network_boundary": "loopback external-system substitutes; real cluster/API/node SSH/internal registry/KCN mutations NOT_RUN",
+  "raw_log_sha256": "f58c513606b93caccf046989847b64d5eae0919e03928c336efb5aeffe67186a",
+  "raw_log_lines": 4031,
+  "observed_unix": 1792605797.5117526,
+  "local_original_log": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/gov-joint-20261022/run/network-joint-six.log",
+  "scope": "Frozen isolated joint result; current progress is only docs/execution/status.md"
+}

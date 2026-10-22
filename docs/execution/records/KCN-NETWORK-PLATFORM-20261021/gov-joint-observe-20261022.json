@@ -1,0 +1,346 @@
+{
+  "scope": "Fedora isolated Gov HTTP/current authorization/mTLS/real Resource/PostgreSQL/worker; external Kubernetes and controllers controlled at boundary",
+  "original_failure_receipt": "gov-joint-20261022.json",
+  "production_API_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+  "cluster_access": "NOT_RUN; requires specific user confirmation",
+  "run_r2": {
+    "status": "FAIL",
+    "rc": 1,
+    "complete_go_test_terminal": {
+      "parent": {
+        "status": "FAIL",
+        "duration": "258.51s",
+        "raw_log_line": 4934
+      },
+      "deferred_load_balancer": {
+        "status": "PASS",
+        "duration": "14.00s",
+        "raw_log_line": 4935
+      },
+      "platform_network": {
+        "status": "PASS",
+        "duration": "32.41s",
+        "raw_log_line": 4938
+      },
+      "vpc_presets": {
+        "status": "PASS",
+        "duration": "19.64s",
+        "raw_log_line": 4961
+      },
+      "jwt": {
+        "status": "PASS",
+        "duration": "69.25s",
+        "raw_log_line": 4964
+      },
+      "ak": {
+        "status": "PASS",
+        "duration": "96.81s",
+        "raw_log_line": 4965
+      },
+      "authentication_and_plan": {
+        "status": "PASS",
+        "duration": "0.11s",
+        "raw_log_line": 4966
+      }
+    },
+    "primary_failure": {
+      "phase": "parent_HTTP_compensation",
+      "raw_log_lines": [
+        4931,
+        4932
+      ],
+      "status": 403,
+      "business_error_JSON": "NOT_CAPTURED: helper discarded DELETE response body; natural cleanup completed before request; cannot reconstruct",
+      "IDs": [
+        "lb_c9ce794e8fea43a4b497936585a4ed9e",
+        "lb_f1fad96bf30f47a5878f9da4a5df3c18"
+      ],
+      "owner_evidence": "Both admitted by deferred scenarios under publisher identities, tenant=peer.TenantID/tenants[0]. compensation bearer=publisherToken per source lines284-290; no live persisted owner snapshot retained",
+      "source_findings": [
+        {
+          "source_lines": [
+            236,
+            242,
+            290,
+            630,
+            757
+          ],
+          "finding": "Completed deletion removed admitted ID, then original non-deleted acceptance receipt replay re-enrolled same deleted ID"
+        },
+        {
+          "source_lines": [
+            1762,
+            1767
+          ],
+          "finding": "PlanModule row deleted for denial checks, no restoration before parent compensation; tenant/AK/RolePermission toggles restored"
+        }
+      ],
+      "causal_limit": "403 body not retained, so exact backend reason is unobserved; source shows removed plan module at cleanup"
+    },
+    "original_LB_failure": "NOT_REPRODUCED; no timeout diagnostic emitted; no production fix claim",
+    "HTTP_business_scenarios": "6 PASS including normal DELETE/deleted polls and release SQL assertions",
+    "HTTP_compensation": "FAIL",
+    "Resource_product_cleanup": "PASS: raw log line4933 Resource fixture exit0",
+    "private_infrastructure_cleanup": "PASS",
+    "raw_log_sha256": "717ef23ac57a01af3659befd77c2a59ff331880b9c1d04357c094b1260970c5a"
+  },
+  "latest_outcome": "PASS: final parent and six scenarios; normal product deletion/release, HTTP no active task resources, Resource product cleanup and private infrastructure cleanup all PASS; live cluster acceptance NOT_RUN",
+  "runtime": {
+    "Gov_binary_sha256": "51dcf0c01b65332a32c6afb3586044c1c33a5a0c8f438680a2684fd194996366",
+    "Gov_build_source_manifest_sha256": "96c8ee8499936c94f6242f08f08ecd7d22afd46455b5336825d8eb9e7571af52",
+    "Gov_run_source_manifest_sha256": "09fe6284e3e264a689ac89268c692385ea0eb0c0d76860e11bb62025b51d908c",
+    "Go_build_inputs_unchanged_between_build_and_run": true,
+    "only_script_delta": "native test binary now runs in package directory, matching go test",
+    "Resource_binary_sha256": "96a222bed2cea34961cdb267bd00f518d9cedb2a27bdadd5cfb1c01c74fe8e07"
+  },
+  "limits": "No production readiness/permission guards weakened. Original LB readiness failure not reproduced or claimed fixed. HTTP 403 business body was not captured. Product and infrastructure cleanup outcomes remain separate.",
+  "run_r3": {
+    "status": "FAIL",
+    "rc": 1,
+    "complete_go_test_terminal": {
+      "parent": {
+        "status": "FAIL",
+        "duration": "298.41s",
+        "raw_log_line": 4691
+      },
+      "deferred_load_balancer": {
+        "status": "PASS",
+        "duration": "13.63s",
+        "raw_log_line": 4692
+      },
+      "platform_network": {
+        "status": "FAIL",
+        "duration": "44.53s",
+        "raw_log_line": 4695
+      },
+      "vpc_presets": {
+        "status": "PASS",
+        "duration": "23.57s",
+        "raw_log_line": 4718
+      },
+      "jwt": {
+        "status": "PASS",
+        "duration": "79.14s",
+        "raw_log_line": 4721
+      },
+      "ak": {
+        "status": "FAIL",
+        "duration": "69.56s",
+        "raw_log_line": 4722
+      },
+      "authentication_and_plan": {
+        "status": "NOT_RUN"
+      }
+    },
+    "primary_failure": {
+      "kind": "virtual_switch_delete_poll_timeout",
+      "resource_id": "vsw_de9610ce85d74d2889f5ffcb410a71b7",
+      "last_business_state": "deleting/cleaning",
+      "last_operation_state": "queued",
+      "late_snapshot": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/gov-joint-20261022/persistent-run-r3/vsw-live-snapshot.json",
+      "observed_terminal_operation_duration_seconds": 20.156943,
+      "snapshot_was_later_than_timeout": true,
+      "lease_at_timeout": "NOT_CAPTURED"
+    },
+    "secondary_failure": {
+      "kind": "AK_load_balancer_delete_poll_timeout",
+      "resource_id": "lb_915dab55918245319bc568ed8e352aea",
+      "facts_path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/gov-joint-20261022/persistent-run-r3/ak-lb-deletion-facts.json"
+    },
+    "original_LB_create_failure": "NOT_REPRODUCED: JWT PASS; AK create/update passed before delete wait failed",
+    "test_fixture_fix_validation": {
+      "deleted_replay_tombstone": "PASS: both existing deferred branches and assertions passed",
+      "PlanModule_restore": "NOT_RUN: authentication_and_plan not entered due prior parent failure"
+    },
+    "HTTP_product_cleanup": "PASS: explicit compensation for all six remaining tracked resources in raw lines4684-4689",
+    "Resource_product_cleanup": "PASS: Resource fixture pid560280 exit0 rawline4690; fixture exact active-resource SQL checks passed",
+    "private_infrastructure_cleanup": "PASS",
+    "stepping_channel": "Resource fixture exit0; source checks nonnil stepping at cleanup and t.Fatal, so no observed fatal stepper exit",
+    "raw_log_sha256": "fa4ecdc81c1c045fe346b479503f0eb5fba23a9b41ed1f02b3986b7589859b15",
+    "source_manifest_sha256": "96f956593dd84d0bc869d7a58507a936694421fde523f6d9f7a2166c0788b636",
+    "effective_source_tree_sha256": "dceda2bee55b156884d554c9af8ffa41277b9ae4e40ead74eb6ff98ad421fa69",
+    "Gov_binary_sha256": "200b02f9516decd6802db5bf5b8e9b9b4dd650b76e526727c6dad7ea466f9be5",
+    "LB_delete_snapshot_summary": {
+      "operation_state": "retrying",
+      "observed_seconds_after_delete": 15.082,
+      "lease_owner": null,
+      "lease_until": null,
+      "requested_generation": 17,
+      "processed_generation": 16,
+      "route_and_policy": "deleted",
+      "backend": "pending delete; native Backend/Gateway already404",
+      "generated_references": "released",
+      "actual_operation_completed_at": "NOT_CAPTURED",
+      "later_product_compensation": "PASS",
+      "interpretation_limit": "No proof LB waited for old lease; staged cleanup was advancing"
+    }
+  },
+  "specific_delete_budget_change": {
+    "virtual_switch_seconds": 35,
+    "configured_JWT_AK_LB_seconds": 60,
+    "default_poll_seconds": 15,
+    "LB_initial_readiness_assertion": "UNCHANGED",
+    "production_lease_or_readiness_guards": "UNCHANGED",
+    "original_LB_create_cause": "NOT_REPRODUCED; not claimed fixed"
+  },
+  "run_r4": {
+    "status": "PASS",
+    "rc": 0,
+    "acceptance_scope": "Real Governance auth, persistence and Resource workers with task-owned loopback PG/Redis and controlled Kubernetes external boundary",
+    "real_cluster_acceptance": "NOT_RUN_NO_AUTHORIZATION",
+    "complete_go_test_terminal": {
+      "parent": {
+        "status": "PASS",
+        "duration": "234.09s",
+        "raw_log_line": 4660
+      },
+      "deferred_load_balancer": {
+        "status": "PASS",
+        "duration": "13.21s",
+        "raw_log_line": 4661
+      },
+      "platform_network": {
+        "status": "PASS",
+        "duration": "37.59s",
+        "raw_log_line": 4664
+      },
+      "vpc_presets": {
+        "status": "PASS",
+        "duration": "17.28s",
+        "raw_log_line": 4687
+      },
+      "jwt": {
+        "status": "PASS",
+        "duration": "61.72s",
+        "raw_log_line": 4690
+      },
+      "ak": {
+        "status": "PASS",
+        "duration": "81.46s",
+        "raw_log_line": 4691
+      },
+      "authentication_and_plan": {
+        "status": "PASS",
+        "duration": "0.10s",
+        "raw_log_line": 4692
+      }
+    },
+    "selector": "^TestNetworkJointHTTP$/^(platform_network|deferred_load_balancer|vpc_presets|jwt|ak|authentication_and_plan)$",
+    "source_manifest_sha256": "c2a7490a30f563f3b62f6e52e568aa83a14224075436e37b9fe5310a52871880",
+    "effective_source_tree_sha256": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+    "local_and_remote_files_verified": 2390,
+    "Gov_binary": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov/joint-observe-binary-20261022-r3/network-service.test",
+      "sha256": "a7096fa86e72e5b3c40d5a25b5fea58c0dd72b9657ab4e7ebf84bed872cfabf7",
+      "source_manifest_sha256": "c2a7490a30f563f3b62f6e52e568aa83a14224075436e37b9fe5310a52871880",
+      "effective_source_tree_sha256": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+      "build_environment": {
+        "GOWORK": "off",
+        "GOTOOLCHAIN": "local",
+        "CGO_ENABLED": "0",
+        "GOFLAGS": "-p=1 -mod=readonly -gcflags=go-wind-admin/app/admin/service/internal/data/ent=-l",
+        "GOMAXPROCS": "1",
+        "GOMEMLIMIT": "768MiB",
+        "GOGC": "40"
+      },
+      "build_stage_path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov/joint-observe-20261022-build-r3/stages.json"
+    },
+    "Resource_binary": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/resource-network.test",
+      "sha256": "96a222bed2cea34961cdb267bd00f518d9cedb2a27bdadd5cfb1c01c74fe8e07",
+      "test_overlay_manifest_path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/source-manifest.json",
+      "test_overlay_manifest_sha256": "0440e0ac0279b65f29c77e9c768811f31cb3a863b19bbd958a73ba44ef097286",
+      "production_API_module_origin": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a"
+    },
+    "HTTP_product_cleanup": "PASS: normal product deletion/deleted polls and SQL release assertions passed; compensation observed no active task resources",
+    "Resource_product_cleanup": "PASS: Resource fixture exit0 after exact active-resource cleanup SQL checks",
+    "private_infrastructure_cleanup": "PASS",
+    "cleanup_raw_evidence": [
+      {
+        "line": 4658,
+        "text": "network_joint_http_test.go:300: HTTP compensation: no active task resources"
+      },
+      {
+        "line": 4659,
+        "text": "network_joint_fixture_test.go:92: Resource fixture pid=632041 exit=0; product and infrastructure cleanup pass"
+      }
+    ],
+    "terminal_verification": {
+      "status": "PASS",
+      "complete_go_test_terminal": {
+        "parent": {
+          "status": "PASS",
+          "duration": "234.09s",
+          "raw_log_line": 4660
+        },
+        "deferred_load_balancer": {
+          "status": "PASS",
+          "duration": "13.21s",
+          "raw_log_line": 4661
+        },
+        "platform_network": {
+          "status": "PASS",
+          "duration": "37.59s",
+          "raw_log_line": 4664
+        },
+        "vpc_presets": {
+          "status": "PASS",
+          "duration": "17.28s",
+          "raw_log_line": 4687
+        },
+        "jwt": {
+          "status": "PASS",
+          "duration": "61.72s",
+          "raw_log_line": 4690
+        },
+        "ak": {
+          "status": "PASS",
+          "duration": "81.46s",
+          "raw_log_line": 4691
+        },
+        "authentication_and_plan": {
+          "status": "PASS",
+          "duration": "0.10s",
+          "raw_log_line": 4692
+        }
+      },
+      "source_manifest_sha256": "c2a7490a30f563f3b62f6e52e568aa83a14224075436e37b9fe5310a52871880",
+      "effective_source_tree_sha256": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+      "files_verified_after_run": 2390,
+      "Gov_binary_sha256": "a7096fa86e72e5b3c40d5a25b5fea58c0dd72b9657ab4e7ebf84bed872cfabf7",
+      "unit": {
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "MainPID": "0",
+        "ControlGroup": ""
+      },
+      "cgroup_exists": false,
+      "tmpdir_exists": false,
+      "remaining_task_processes": [],
+      "containers": [
+        {
+          "id": "1a7c8d30eae2245b8e2270709a2e9acc58b3463592ff9b8f7b184e847290b0de",
+          "exists": false
+        },
+        {
+          "id": "36d8b9a5c93f3c92453305e1ff2990f7f3b617841d465eaf6877411890ca04ac",
+          "exists": false
+        }
+      ],
+      "heavy_lock_free": true,
+      "observed_unix": 1792610600.2218463
+    },
+    "test_fixture_fix_validation": {
+      "deleted_receipt_replay_tombstones": "PASS in both deferred scenarios",
+      "original_PlanModule_row_restore": "PASS in authentication_and_plan child cleanup, full original row JSON equality",
+      "specific_async_delete_budgets": "PASS with boundVS35s/configuredJWT_AK_LB60s, all default and first-create15s assertions unchanged"
+    },
+    "original_LB_first_create_failure": "NOT_REPRODUCED in final replay; no production/root-cause fix claim",
+    "raw_log_sha256": "9fcd7e4f04fc78bfe6c8dbe16e8ecc1fad6ed7a49dccc3dbcfb906ebe9648233",
+    "raw_log_lines": 4695,
+    "Gov_commit": "3dcc1df2efc2e0b156e95cf1f605633928e43b55",
+    "Gov_draft_PR": "https://github.com/zhangzhe-ctrl/ani-governance/pull/37",
+    "committed_source_verification": "PASS: all2390 bytes and normalized Git executable modes match tested manifest; SSH remote head independently verified"
+  }
+}

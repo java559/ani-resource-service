@@ -1,0 +1,379 @@
+{
+  "execution_host": "fedora",
+  "source_base": "6bff99f1747a495fe4b278844c20ee72b1ce2ffc",
+  "go": "go1.26.9",
+  "buf": "1.60.0",
+  "sqlc": "1.31.1",
+  "resource_limits": {
+    "CPUQuota": "200%",
+    "MemoryMax": "2300M",
+    "MemorySwapMax": 0,
+    "GOMAXPROCS": 1,
+    "GOFLAGS": "-p=1",
+    "GOMEMLIMIT": "768MiB",
+    "GOGC": 40
+  },
+  "unit": {
+    "result": "PASS",
+    "command": "go test -count=1 -timeout=5m ./internal/biz/network ./internal/service/network ./internal/server",
+    "log_sha256": "c223b15303a06e4933b177412e2edd953dd31c9d425b69767da8b43f7ead677d"
+  },
+  "production_build": {
+    "result": "PASS",
+    "command": "go build -o /home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-vertical-r2/logs-r3-overlay1/ani-resource-service ./cmd/ani-resource-service",
+    "log_sha256": "b5b3a442ccb64b7228a13aa02b12f9d0c2d9c7f211b400512a4ad307031b98dd"
+  },
+  "related_slice": {
+    "result": "PASS_AFTER_TEST_FIXTURE_REPAIRS",
+    "passed_top_level_tests": [
+      "TestDefaultVPCEgressKCExactIdentityAndStaleLease",
+      "TestDefaultVPCEgressKCLostCreateResponseRecoversSameIdentity",
+      "TestDefaultVPCEgressKCRealBusinessLifecycle",
+      "TestDefaultVPCEgressKCUnknownUndeliveredCreateRetainsReservation",
+      "TestEgressBindingRequiresExactNamespaceGenerationAndAppliedState",
+      "TestEgressConcurrentBindingAndAcceptanceRollback",
+      "TestEgressFinishesFreshAuditAfterConsecutiveWatchBoundaries",
+      "TestEgressGRPCContractAuthorizationAndNullableAppliedState",
+      "TestEgressKCAdapterSharedObservationLifecycleAndDrift",
+      "TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan",
+      "TestEgressKCDeviceFactsCompletedDuringReadAreFresh",
+      "TestEgressKCManagedVlanProgressesWhileFactsAreRenewed",
+      "TestEgressKCManagedVlanWithAuditLongerThanRefreshInterval",
+      "TestEgressKCPreManagedDeviceRegistrationAndUntaggedVlan",
+      "TestEgressKCPreManagedRegistrationFencesConfigurationChanges",
+      "TestEgressListTotalsAndInventoryAuthorization",
+      "TestEgressOverlayUnderlayProviderFieldsAndAddressEvidence",
+      "TestEgressPostgresLifecycleIsolationAndPermanentReplay",
+      "TestEgressProviderImagesUseRunningDigests",
+      "TestEgressRefreshesInvalidAuditWithoutLosingAppliedFacts",
+      "TestEgressServiceProcessesRecoverLostCreateDeleteAndTombstone",
+      "TestEgressUIDConflictsAndNatServiceDependencyIndex",
+      "TestEgressUnderlayPlatformOccupancyAndRetirement",
+      "TestEgressUnknownCreateRecoveryAndFencing",
+      "TestEgressUnknownUpdateKeepsOccupancyAndRecoversExactDesiredState",
+      "TestInspectSwitchUnknownRequiresBindingOwner",
+      "TestKCBridgeFactsRetainV09GroupNetwork",
+      "TestKCBridgeProofRequiresActualOwnershipAndMapping",
+      "TestLBDeferredRetiredProductDeletionIgnoresSubsequentExternalVIPAllocation",
+      "TestLBDeferredSchemaProviderTargetAndImmutableRetirement",
+      "TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays",
+      "TestLegacyDeviceRetirementRejectsActiveProductVlan",
+      "TestLegacyRetirementConfigCASOnlyRemovesItsOwnEffect",
+      "TestNET05ANodeFactsRenewalsKeepAuditWhileChangesInvalidate",
+      "TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication",
+      "TestSwitchDeletionWaitsForExplicitPhysicalCleanup",
+      "TestV09VlanCreationPrecedesWiringButReadinessDoesNot",
+      "TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate",
+      "TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch",
+      "TestVirtualSwitchDurableTwoStepAcceptanceAndRecovery",
+      "TestVirtualSwitchInventoryRequiresEveryAllocatedNode",
+      "TestVirtualSwitchScopePagingAndAtomicConcurrentVlan",
+      "TestVirtualSwitchWiringRequiresOwnGroupMapping"
+    ],
+    "runs": [
+      {
+        "run": "r3-overlay1/postgres",
+        "exit_code": 1,
+        "log_sha256": "a237c6518acc0a9470a12e5ff865d35079da66dbd9082d56587f5e0299d8495d",
+        "source_manifest_sha256": "f49ccebd1dc1fb8d4d10db135df0b5198aefc03ee2cdfcd70231b521d738bd63",
+        "source_drift": {},
+        "passed_top_level_tests": [],
+        "command": "scripts/integration -timeout=10m -run VirtualSwitch\\|SwitchDeletion\\|InspectSwitch\\|V09Vlan\\|KCBridge\\|NodeFacts\\|Egress\\|LegacyDevice\\|Retire\\|DefaultVPCEgress ./internal/data/network"
+      },
+      {
+        "run": "r3-overlay2/postgres",
+        "exit_code": 1,
+        "log_sha256": "e2ee4bfbf68fc918c8cf8372022b39f9c9a12dd7b1254084ba3936b1d16f0dbd",
+        "source_manifest_sha256": "76c6b889fc5f302f6ca5038e64530ff0aae80b73143d44f88d216c193052c07f",
+        "source_drift": {},
+        "passed_top_level_tests": [
+          "TestLegacyRetirementConfigCASOnlyRemovesItsOwnEffect",
+          "TestEgressOverlayUnderlayProviderFieldsAndAddressEvidence",
+          "TestEgressBindingRequiresExactNamespaceGenerationAndAppliedState",
+          "TestEgressUIDConflictsAndNatServiceDependencyIndex",
+          "TestEgressProviderImagesUseRunningDigests",
+          "TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication",
+          "TestNET05ANodeFactsRenewalsKeepAuditWhileChangesInvalidate",
+          "TestSwitchDeletionWaitsForExplicitPhysicalCleanup",
+          "TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch"
+        ],
+        "command": "scripts/integration -timeout=10m -failfast -v -run VirtualSwitch\\|SwitchDeletion\\|InspectSwitch\\|V09Vlan\\|KCBridge\\|NodeFacts\\|Egress\\|LegacyDevice\\|Retire\\|DefaultVPCEgress ./internal/data/network"
+      },
+      {
+        "run": "r3-overlay3/fixture",
+        "exit_code": 0,
+        "log_sha256": "54c2fd57aa76b66fc54359564c2291a32c07e70368243189245b5d06429d333b",
+        "source_manifest_sha256": "2edc7ad49efe32c2d60f086585ca1dd6d27f780977d6bcd33990e530ca1cd7b6",
+        "source_drift": {},
+        "passed_top_level_tests": [
+          "TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate"
+        ],
+        "command": "go test -count=1 -timeout=2m -failfast -v -run \\^TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate\\$ ./internal/data/network"
+      },
+      {
+        "run": "r3-overlay3/postgres",
+        "exit_code": 1,
+        "log_sha256": "a46ce039b50e44105a9e9ef641cbbd50578af2a0271bddf38f35832789fc9fce",
+        "source_manifest_sha256": "2edc7ad49efe32c2d60f086585ca1dd6d27f780977d6bcd33990e530ca1cd7b6",
+        "source_drift": {},
+        "passed_top_level_tests": [
+          "TestVirtualSwitchInventoryRequiresEveryAllocatedNode",
+          "TestVirtualSwitchWiringRequiresOwnGroupMapping",
+          "TestInspectSwitchUnknownRequiresBindingOwner",
+          "TestV09VlanCreationPrecedesWiringButReadinessDoesNot",
+          "TestKCBridgeFactsRetainV09GroupNetwork",
+          "TestKCBridgeProofRequiresActualOwnershipAndMapping",
+          "TestEgressRefreshesInvalidAuditWithoutLosingAppliedFacts",
+          "TestDefaultVPCEgressKCRealBusinessLifecycle",
+          "TestDefaultVPCEgressKCLostCreateResponseRecoversSameIdentity",
+          "TestDefaultVPCEgressKCUnknownUndeliveredCreateRetainsReservation",
+          "TestDefaultVPCEgressKCExactIdentityAndStaleLease",
+          "TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays"
+        ],
+        "command": "scripts/integration -timeout=10m -failfast -v -run VirtualSwitch\\|SwitchDeletion\\|InspectSwitch\\|V09Vlan\\|KCBridge\\|NodeFacts\\|Egress\\|LegacyDevice\\|Retire\\|DefaultVPCEgress -skip \\^\\(TestLegacyRetirementConfigCASOnlyRemovesItsOwnEffect\\|TestEgressOverlayUnderlayProviderFieldsAndAddressEvidence\\|TestEgressBindingRequiresExactNamespaceGenerationAndAppliedState\\|TestEgressUIDConflictsAndNatServiceDependencyIndex\\|TestEgressProviderImagesUseRunningDigests\\|TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication\\|TestNET05ANodeFactsRenewalsKeepAuditWhileChangesInvalidate\\|TestSwitchDeletionWaitsForExplicitPhysicalCleanup\\|TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch\\|TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate\\)\\$ ./internal/data/network"
+      },
+      {
+        "run": "r3-overlay4/postgres",
+        "exit_code": 1,
+        "log_sha256": "d15111cef7e24f24dec876ec797cabb4765e87df36ff66185be43e7b7a5b6184",
+        "source_manifest_sha256": "fda14bfcf192bbefb8e89ca3a2038428421fbec0ec26406631d80a0e316d0f89",
+        "source_drift": {},
+        "passed_top_level_tests": [
+          "TestLegacyDeviceRetirementRejectsActiveProductVlan",
+          "TestEgressFinishesFreshAuditAfterConsecutiveWatchBoundaries"
+        ],
+        "command": "scripts/integration -timeout=10m -failfast -v -run VirtualSwitch\\|SwitchDeletion\\|InspectSwitch\\|V09Vlan\\|KCBridge\\|NodeFacts\\|Egress\\|LegacyDevice\\|Retire\\|DefaultVPCEgress -skip \\^\\(TestDefaultVPCEgressKCExactIdentityAndStaleLease\\|TestDefaultVPCEgressKCLostCreateResponseRecoversSameIdentity\\|TestDefaultVPCEgressKCRealBusinessLifecycle\\|TestDefaultVPCEgressKCUnknownUndeliveredCreateRetainsReservation\\|TestEgressBindingRequiresExactNamespaceGenerationAndAppliedState\\|TestEgressOverlayUnderlayProviderFieldsAndAddressEvidence\\|TestEgressProviderImagesUseRunningDigests\\|TestEgressRefreshesInvalidAuditWithoutLosingAppliedFacts\\|TestEgressUIDConflictsAndNatServiceDependencyIndex\\|TestInspectSwitchUnknownRequiresBindingOwner\\|TestKCBridgeFactsRetainV09GroupNetwork\\|TestKCBridgeProofRequiresActualOwnershipAndMapping\\|TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays\\|TestLegacyRetirementConfigCASOnlyRemovesItsOwnEffect\\|TestNET05ANodeFactsRenewalsKeepAuditWhileChangesInvalidate\\|TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication\\|TestSwitchDeletionWaitsForExplicitPhysicalCleanup\\|TestV09VlanCreationPrecedesWiringButReadinessDoesNot\\|TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate\\|TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch\\|TestVirtualSwitchInventoryRequiresEveryAllocatedNode\\|TestVirtualSwitchWiringRequiresOwnGroupMapping\\)\\$ ./internal/data/network"
+      },
+      {
+        "run": "r3-overlay5/postgres",
+        "exit_code": 0,
+        "log_sha256": "b3358197c8293c8a3e18a86322d4f37caee7a281a079c691f6a991b0edce7e9d",
+        "source_manifest_sha256": "32156a13b1d8f9e2d5f4813d9bc1cf8259d4451fd5a36cb9e2e63fc708c7eaae",
+        "source_drift": {},
+        "passed_top_level_tests": [
+          "TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan",
+          "TestEgressKCPreManagedDeviceRegistrationAndUntaggedVlan",
+          "TestEgressKCPreManagedRegistrationFencesConfigurationChanges",
+          "TestEgressKCManagedVlanWithAuditLongerThanRefreshInterval",
+          "TestEgressKCManagedVlanProgressesWhileFactsAreRenewed",
+          "TestEgressKCDeviceFactsCompletedDuringReadAreFresh",
+          "TestEgressGRPCContractAuthorizationAndNullableAppliedState",
+          "TestEgressPostgresLifecycleIsolationAndPermanentReplay",
+          "TestEgressConcurrentBindingAndAcceptanceRollback",
+          "TestEgressUnknownCreateRecoveryAndFencing",
+          "TestEgressUnderlayPlatformOccupancyAndRetirement",
+          "TestEgressUnknownUpdateKeepsOccupancyAndRecoversExactDesiredState",
+          "TestEgressKCAdapterSharedObservationLifecycleAndDrift",
+          "TestEgressServiceProcessesRecoverLostCreateDeleteAndTombstone",
+          "TestEgressListTotalsAndInventoryAuthorization",
+          "TestLBDeferredSchemaProviderTargetAndImmutableRetirement",
+          "TestLBDeferredRetiredProductDeletionIgnoresSubsequentExternalVIPAllocation",
+          "TestVirtualSwitchDurableTwoStepAcceptanceAndRecovery",
+          "TestVirtualSwitchScopePagingAndAtomicConcurrentVlan"
+        ],
+        "command": "scripts/integration -timeout=10m -failfast -v -run VirtualSwitch\\|SwitchDeletion\\|InspectSwitch\\|V09Vlan\\|KCBridge\\|NodeFacts\\|Egress\\|LegacyDevice\\|Retire\\|DefaultVPCEgress -skip \\^\\(TestDefaultVPCEgressKCExactIdentityAndStaleLease\\|TestDefaultVPCEgressKCLostCreateResponseRecoversSameIdentity\\|TestDefaultVPCEgressKCRealBusinessLifecycle\\|TestDefaultVPCEgressKCUnknownUndeliveredCreateRetainsReservation\\|TestEgressBindingRequiresExactNamespaceGenerationAndAppliedState\\|TestEgressFinishesFreshAuditAfterConsecutiveWatchBoundaries\\|TestEgressOverlayUnderlayProviderFieldsAndAddressEvidence\\|TestEgressProviderImagesUseRunningDigests\\|TestEgressRefreshesInvalidAuditWithoutLosingAppliedFacts\\|TestEgressUIDConflictsAndNatServiceDependencyIndex\\|TestInspectSwitchUnknownRequiresBindingOwner\\|TestKCBridgeFactsRetainV09GroupNetwork\\|TestKCBridgeProofRequiresActualOwnershipAndMapping\\|TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays\\|TestLegacyDeviceRetirementRejectsActiveProductVlan\\|TestLegacyRetirementConfigCASOnlyRemovesItsOwnEffect\\|TestNET05ANodeFactsRenewalsKeepAuditWhileChangesInvalidate\\|TestNodeFactsCollectorUsesOnlyReadonlyCommandsAndFencesPublication\\|TestSwitchDeletionWaitsForExplicitPhysicalCleanup\\|TestV09VlanCreationPrecedesWiringButReadinessDoesNot\\|TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate\\|TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch\\|TestVirtualSwitchInventoryRequiresEveryAllocatedNode\\|TestVirtualSwitchWiringRequiresOwnGroupMapping\\)\\$ ./internal/data/network"
+      }
+    ],
+    "boundary": "PostgreSQL, business authorization, acceptance, workers and process recovery are real. Kubernetes/KCN/Envoy are external HTTP/port fixtures. Adapter-only tests do not require PostgreSQL.",
+    "skip_policy": "Only exact named tests already passed without relevant subsequent changes were skipped; modified fixture file cases were rerun. No production guard was relaxed."
+  },
+  "make_verify": {
+    "result": "PASS",
+    "exit_code": 0,
+    "source_manifest_sha256": "4dd34f9c20042d0b8a012c5bd9074196d7fbd48637588bc848da71a412cbc0f8",
+    "log_sha256": "14512bbcaa23729110eb750c65dd1de39b0d835879f7ae707f7b8c9484e11e4e",
+    "command": "make verify",
+    "environment_retry": "Only TMPDIR changed to a real task-owned 0700 short directory after reproducing AF_UNIX path too long; exact original socket test and complete make verify passed. Temporary directory removed.",
+    "source_drift": {}
+  },
+  "gov_joint_http": "SEPARATE_GATE; actual current result is recorded only in docs/execution/status.md",
+  "target_deployment": "NOT_RUN",
+  "live_business_acceptance": "NOT_RUN",
+  "maintenance_open": false,
+  "kcn_source_changes": "PROHIBITED_WITHDRAWN",
+  "note": "This receipt proves the isolated software slice, not existing KCN recovery protocol, physical wiring, public traffic, cleanup or restoration.",
+  "joint_test_binary": {
+    "result": "HISTORICAL_INITIAL_BINARY; later joint fixture failures retained in task artifacts, not the final continuation input",
+    "sha256": "172f2360254fa4d1468b11c967a12157d74d056cefd6b42340149f8a059ece68",
+    "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-vertical-r2/logs-final-verify-r2/resource-network.test",
+    "build_tag": "networkintegration",
+    "note": "Input matches the verified source manifest; deployment and Gov joint execution are separate gates."
+  },
+  "joint_fixture_validation_20261022": {
+    "frozen_production_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+    "build_rc": 0,
+    "narrow_regressions": [
+      "TestNetworkJointBoundaryPublishesV09UnderlayReference",
+      "TestNetworkJointBackendWorkerRefreshesAttachmentObservation"
+    ],
+    "narrow_regressions_rc": 0,
+    "make_verify_rc": 0,
+    "original_runner_rc": 1,
+    "runner_rc_reason": "post-verify source guard found only generated Python bytecode; make verify itself passed",
+    "cleanup": {
+      "generated_file": "scripts/__pycache__/net05a-adapt.cpython-314.pyc",
+      "sha256": "e9ae24bb45f577d4b2a069514fdae704f4304835a033b8619780c2d428dc14ce",
+      "hash_guarded_delete": true,
+      "empty_parent_rmdir": true,
+      "tmpdir_absent": true,
+      "container_absent": true,
+      "heavy_lock_released": true
+    },
+    "source_guard_after_cleanup": "PASS; original manifest restored without rerunning verification",
+    "source_files": 651,
+    "production_files_compared_with_formal_module_zip": 274,
+    "production_unchanged": true,
+    "binary_sha256": "96a222bed2cea34961cdb267bd00f518d9cedb2a27bdadd5cfb1c01c74fe8e07",
+    "source_manifest_sha256": "0440e0ac0279b65f29c77e9c768811f31cb3a863b19bbd958a73ba44ef097286",
+    "remote_binary": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/resource-network.test",
+    "local_binary": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-final-20261022/r2/logs/resource-network.test",
+    "remote_manifest": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-final-20261022-r1/logs/source-manifest.json",
+    "local_manifest": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-final-20261022/r2/logs/source-manifest.json",
+    "systemd_unit": "kcn-res-final-20261022-r2.service",
+    "memory_peak_bytes": 2339287040,
+    "swap_peak_bytes": 0,
+    "no_real_cluster_node_registry_access": true,
+    "no_commit_push_status_edits": true,
+    "execution_host": "fedora",
+    "command": "Two named networkintegration regressions, followed by make verify",
+    "source_guard_boundary": "No production source, migration or module bytes changed; three test-only overlays. The exact source manifest was restored after hash-guarded removal of one generated Python bytecode file."
+  },
+  "static_runtime_artifact_20261022": {
+    "result": "PASS",
+    "execution_host": "fedora",
+    "source_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+    "module_version": "v0.0.0-20261021072547-267c2d29c611",
+    "production_inputs": 274,
+    "production_input_manifest_sha256": "1845e1009372a9bfa3640202d99002f58937aae9996c88f84419d17b98005618",
+    "production_inputs_before_after": "PASS; exact official module zip inputs unchanged",
+    "binary_sha256": "c1cfd6fa7a750c9ebdbeb91130ac091f88cb23e527ce1bdc3ab0e3fd58f9b75a",
+    "binary_bytes": 54288546,
+    "binary_modes": [
+      "server",
+      "-node-facts"
+    ],
+    "go": "go1.26.9",
+    "CGO_ENABLED": "0",
+    "GOOS": "linux",
+    "GOARCH": "amd64",
+    "GOAMD64": "v1",
+    "GOWORK": "off",
+    "GOFLAGS": "-p=1 -mod=readonly",
+    "ldflags": "-ldflags=-s -w -X main.Version=v0.0.0-20261021072547-267c2d29c611",
+    "checks": "PASS: static ELF, no INTERP or dynamic section, buildinfo and help-only before runtime configuration",
+    "runtime_behavior": "NOT_RUN",
+    "image": "NOT_RUN",
+    "cluster": "NOT_RUN",
+    "cleanup": {
+      "observed_utc": "2026-10-21T18:51:31.132891+00:00",
+      "unit": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n",
+      "unit_query_rc": 0,
+      "cgroup_exists": false,
+      "known_main_pid_545053_exists": false,
+      "owned_build_or_binary_processes": [],
+      "TMPDIR": "/var/tmp/kr.iPL0sd",
+      "TMPDIR_exists": false,
+      "tmp_cleanup_log": "short_tmp_removed=true",
+      "runner_rc": 0,
+      "build_rc": 0,
+      "heavy_lock_free": true,
+      "source_before_after_equal": true,
+      "source_after_status": "PASS"
+    },
+    "raw_logs_archive_sha256": "5ac15c27862d134fa6d97de8eb0345dd0712173e0ea58e802e13ed8b4597df19"
+  },
+  "switch_delete_lease_drain_20261022": {
+    "purpose": "Deterministic PG regression of configured VirtualSwitch old-claim lease drain; no production fix",
+    "unit": "kcn-res-switch-lease-20261022-r1.service",
+    "execution_host": "fedora",
+    "source": {
+      "head": "5c458c2102e4093ba23be24db001171f0d1b13ac",
+      "production_api_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+      "archive_sha256": "31e8aa1f10d701b2ee9b1308c0f7a16d6e1abca8a1f9ae17c5ef4c7a1acb61a9",
+      "manifest_path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/artifacts/res-switch-lease-20261022/logs/source-manifest.json",
+      "manifest_sha256": "75b6a3bb09b5af7d707a755cdc6bedb27edc2a85348abaa02896dd5ae86ae3e8",
+      "source_files": 653,
+      "all_frozen_files_match_local_after_fedora_gofmt": true,
+      "target_file": "internal/data/network/virtual_switch_integration_test.go",
+      "target_sha256": "5aecf300e171437e12e85f9f68fa3d36affd7cf08feb62df2299eca562ce9365",
+      "production_files_unchanged": 274,
+      "comparison": "byte-for-byte with formal cached module ZIP at 267c2d29c611",
+      "source_unchanged_after_gates": true
+    },
+    "gates": {
+      "ast_rc": 0,
+      "target_pg_rc": 0,
+      "target_pg_command": "scripts/integration -timeout=60s -failfast -v -run ^TestVirtualSwitchDeleteWaitsForOldClaimLeaseExpiry$ ./internal/data/network",
+      "target_test_seconds": 20.81,
+      "make_verify_rc": 0,
+      "make_verify_command": "make verify",
+      "runner_rc": 0
+    },
+    "observations": {
+      "configured_lease_seconds": 20,
+      "after_delete": {
+        "state": "deleting",
+        "binding": "cleaning",
+        "operation": "queued",
+        "old_epoch": 4,
+        "lease_remaining_seconds": 19.987649,
+        "next_run_due": true
+      },
+      "at_15s": {
+        "state": "deleting",
+        "binding": "cleaning",
+        "operation": "queued",
+        "old_epoch": 4,
+        "lease_remaining_seconds": 4.995713,
+        "next_run_due": true
+      },
+      "natural_expiry": {
+        "same_object": true,
+        "version": 3,
+        "old_epoch": 4,
+        "final_epoch": 7,
+        "delete_elapsed_seconds": 20.038114,
+        "state": "deleted",
+        "binding": "cleaned",
+        "operation": "succeeded"
+      },
+      "old_finish_and_save_rejected_before_and_after_expiry": true,
+      "lease_not_cleared_or_shortened": true,
+      "historical_gov_old_lease_snapshot": "NOT_AVAILABLE; this regression proves the configured mechanism"
+    },
+    "resources": {
+      "memory.peak": "1528324096",
+      "memory.swap.peak": "0",
+      "cpu.stat": "usage_usec 190194938\nuser_usec 163432377\nsystem_usec 26762561\nnice_usec 0\ncore_sched.force_idle_usec 0\nnr_periods 3386\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0"
+    },
+    "cleanup": {
+      "unit": {
+        "LoadState": "not-found",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "ControlGroup": ""
+      },
+      "unit_show_rc": 0,
+      "task_cgroup_exists": false,
+      "tmpdir": "/var/tmp/kr.1JppaV",
+      "tmpdir_exists": false,
+      "container": "f78fd89c9ec71436c17b9880a6a9868d34a13def82bb12fa7cd499f128fc2160",
+      "container_inspect_rc": 1,
+      "container_absent": true,
+      "lock_release": "bounded unit exited successfully; flock handle terminated with unit",
+      "candidate_retained": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/res-switch-lease-r1/candidate",
+      "shared_cache_untouched": true
+    },
+    "scope": {
+      "real_cluster_or_api_or_node_or_registry_access": false,
+      "kcn_source_access": false,
+      "production_query_lease_changes": false,
+      "gov_fixture_binary_rebuilt": false,
+      "extra_pg_or_gov_runs": false
+    },
+    "raw_logs_sha256": {
+      "target_pg": "8b3585449b4d60e746f52ebca45b22d01e54cdf3da0fd242ef148808a3c3770a",
+      "make_verify": "d02f122cec739b119351789156f0aeb80a06c51deda3e5a218ea7599c3ecc49a"
+    }
+  }
+}

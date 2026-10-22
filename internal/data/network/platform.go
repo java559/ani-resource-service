@@ -53,6 +53,23 @@ func platformSnapshot(ctx context.Context, q *sqlcgen.Queries, r sqlcgen.Network
 			return v, databaseFailure(err)
 		}
 		v.Vlan = &biz.VlanConfig{DeviceID: d.DeviceID, VlanID: d.VlanID}
+		if d.VirtualSwitchID != nil {
+			s, err := q.GetVirtualSwitch(ctx, sqlcgen.GetVirtualSwitchParams{ResourceID: *d.VirtualSwitchID})
+			if err != nil {
+				return v, databaseFailure(err)
+			}
+			device, err := q.GetDeviceAdoption(ctx, sqlcgen.GetDeviceAdoptionParams{ClusterID: r.ClusterID, ResourceID: d.DeviceID})
+			if err != nil {
+				return v, databaseFailure(err)
+			}
+			v.Vlan.VirtualSwitchID = s.ResourceID
+			v.Vlan.ClusterID = r.ClusterID
+			v.Vlan.GroupName = s.Name
+			v.Vlan.DeviceName = device.DeviceName
+			if err = json.Unmarshal(s.Nodes, &v.Vlan.Nodes); err != nil {
+				return v, databaseFailure(err)
+			}
+		}
 	case "public_pool":
 		d, err := q.GetPublicPool(ctx, sqlcgen.GetPublicPoolParams{ClusterID: r.ClusterID, ResourceID: r.ResourceID})
 		if err != nil {
@@ -65,7 +82,10 @@ func platformSnapshot(ctx context.Context, q *sqlcgen.Queries, r sqlcgen.Network
 		if err != nil {
 			return v, databaseFailure(err)
 		}
-		v.TopologyFingerprint = addressPoolTopologyHash(d, topology)
+		v.TopologyFingerprint, err = addressPoolTopologyFor(ctx, q, d, topology)
+		if err != nil {
+			return v, err
+		}
 		v.ObservedProviderImages = r.ProviderImages
 		v.AllocationEnabled = d.AllocationEnabled
 		if len(d.Verification) > 0 {
@@ -146,6 +166,13 @@ func (p *Postgres) ListPlatform(ctx context.Context, kind string, f biz.VPCFilte
 }
 func (p *Postgres) GetPlatformOperation(ctx context.Context, id string) (biz.Operation, error) {
 	r, err := p.queries.GetPlatformOperation(ctx, sqlcgen.GetPlatformOperationParams{ClusterID: p.placement.ClusterID, OperationID: id})
+	if errors.Is(err, pgx.ErrNoRows) {
+		s, e := p.queries.GetVirtualSwitchOperation(ctx, sqlcgen.GetVirtualSwitchOperationParams{OperationID: id})
+		if e != nil {
+			return biz.Operation{}, databaseFailure(e)
+		}
+		return biz.Operation{ID: s.OperationID, ResourceID: s.ResourceID, ResourceType: "virtual_switch", Kind: s.Kind, State: biz.OperationState(s.State), Reason: biz.Reason(s.Reason), CreatedAt: s.CreatedAt, UpdatedAt: s.UpdatedAt, CompletedAt: s.CompletedAt}, nil
+	}
 	return biz.Operation{ID: r.OperationID, ResourceID: r.ResourceID, ResourceType: platformOperationResourceKind(r.Kind), Kind: r.Kind, State: biz.OperationState(r.State), Reason: biz.Reason(r.Reason), CreatedAt: r.CreatedAt, UpdatedAt: r.UpdatedAt, CompletedAt: r.CompletedAt, NextAttemptAt: r.NextAttemptAt}, databaseFailure(err)
 }
 func platformReplay(ctx context.Context, q *sqlcgen.Queries, cluster string, i biz.PlatformIntent) (biz.PlatformResource, bool, error) {
@@ -156,7 +183,7 @@ func platformReplay(ctx context.Context, q *sqlcgen.Queries, cluster string, i b
 	if err != nil {
 		return biz.PlatformResource{}, false, databaseFailure(err)
 	}
-	if prior.FingerprintVersion != 1 || prior.Fingerprint != i.Fingerprint() {
+	if prior.FingerprintVersion != i.FingerprintVersion() || prior.Fingerprint != i.VersionedFingerprint() {
 		return biz.PlatformResource{}, false, biz.Fail(biz.IdempotencyConflict, "key already accepted another platform intent")
 	}
 	var v biz.PlatformResource
@@ -173,6 +200,14 @@ func (p *Postgres) AcceptPlatform(ctx context.Context, i biz.PlatformIntent, a b
 	// before the write transaction, then admission rechecks the key and parents.
 	if v, found, err := platformReplay(ctx, p.queries, p.placement.ClusterID, i); found || err != nil {
 		return v, err
+	}
+	if i.Kind == "create_vlan" && i.FingerprintVersion() == 2 {
+		return p.acceptSwitchVlan(ctx, i, a, freshness)
+	}
+	if i.Kind == "create_vlan" {
+		if _, v09 := p.egressInfrastructure.(biz.VirtualSwitchInfrastructure); v09 {
+			return biz.PlatformResource{}, biz.Fail(biz.InvalidArgument, "new VLAN creation requires a virtual switch; legacy exact replay remains supported")
+		}
 	}
 	if i.Kind == "adopt_device" || i.Kind == "create_public_pool" || i.Kind == "create_intranet_pool" {
 		if p.egressInfrastructure == nil {
@@ -353,7 +388,7 @@ func savePlatformAcceptance(ctx context.Context, q *sqlcgen.Queries, i biz.Platf
 	if err != nil {
 		return err
 	}
-	if err = q.InsertPlatformIdempotency(ctx, sqlcgen.InsertPlatformIdempotencyParams{ClusterID: v.ClusterID, OperationKind: i.Kind, IdempotencyKey: i.IdempotencyKey, Fingerprint: i.Fingerprint(), ResourceID: v.ID, OperationID: v.LastOperationID, Response: body, CreatedAt: now}); err != nil {
+	if err = q.InsertPlatformIdempotency(ctx, sqlcgen.InsertPlatformIdempotencyParams{ClusterID: v.ClusterID, OperationKind: i.Kind, IdempotencyKey: i.IdempotencyKey, Fingerprint: i.VersionedFingerprint(), FingerprintVersion: i.FingerprintVersion(), ResourceID: v.ID, OperationID: v.LastOperationID, Response: body, CreatedAt: now}); err != nil {
 		return databaseFailure(err)
 	}
 	return databaseFailure(q.InsertPlatformHistory(ctx, sqlcgen.InsertPlatformHistoryParams{HistoryID: uuid.NewString(), ResourceID: v.ID, OperationID: &v.LastOperationID, Event: i.Kind + "_accepted", ResourceState: string(v.State), OperationState: state, ActorRef: a.Actor, CallerRef: a.DirectCaller, CreatedAt: now}))
@@ -387,9 +422,13 @@ func (p *Postgres) acceptPoolChange(ctx context.Context, tx pgx.Tx, q *sqlcgen.Q
 	if err != nil {
 		return biz.PlatformResource{}, databaseFailure(err)
 	}
+	topologyHash, err := addressPoolTopologyFor(ctx, q, pool, topology)
+	if err != nil {
+		return biz.PlatformResource{}, err
+	}
 	switch i.Kind {
 	case "verify_public_pool", "verify_intranet_pool":
-		if !freshResource(row.State, row.ObservedAt, now, freshness) || i.Verification == nil || i.Verification.TopologyFingerprint != addressPoolTopologyHash(pool, topology) || !sameProviderImages(i.Verification.ProviderImageDigests, row.ProviderImages) {
+		if !freshResource(row.State, row.ObservedAt, now, freshness) || i.Verification == nil || i.Verification.TopologyFingerprint != topologyHash || !sameProviderImages(i.Verification.ProviderImageDigests, row.ProviderImages) {
 			return biz.PlatformResource{}, biz.Fail(poolUnavailableReason(pool.Scope), "verification does not match ready pool topology")
 		}
 		if err = biz.ValidatePoolVerificationForScope(*i.Verification, pool.Scope, now); err != nil {
@@ -465,7 +504,11 @@ func (p *Postgres) poolReady(ctx context.Context, q *sqlcgen.Queries, pool sqlcg
 		return databaseFailure(err)
 	}
 	var evidence biz.PublicPoolVerification
-	if json.Unmarshal(pool.Verification, &evidence) != nil || evidence.TopologyFingerprint != addressPoolTopologyHash(pool, topology) || !sameProviderImages(evidence.ProviderImageDigests, topology.ProviderImages) || biz.ValidatePoolVerificationForScope(evidence, pool.Scope, now) != nil {
+	topologyHash, err := addressPoolTopologyFor(ctx, q, pool, topology)
+	if err != nil {
+		return err
+	}
+	if json.Unmarshal(pool.Verification, &evidence) != nil || evidence.TopologyFingerprint != topologyHash || !sameProviderImages(evidence.ProviderImageDigests, topology.ProviderImages) || biz.ValidatePoolVerificationForScope(evidence, pool.Scope, now) != nil {
 		return unavailable()
 	}
 	refs := [][2]string{{"public_pool", pool.ResourceID}}
@@ -481,6 +524,22 @@ func (p *Postgres) poolReady(ctx context.Context, q *sqlcgen.Queries, pool sqlcg
 		refs = append(refs, [2]string{"device", vlan.DeviceID})
 	}
 	for _, ref := range refs {
+		if ref[0] == "device" {
+			d, err := q.GetDeviceAdoption(ctx, sqlcgen.GetDeviceAdoptionParams{ClusterID: pool.ClusterID, ResourceID: ref[1]})
+			if err != nil {
+				return databaseFailure(err)
+			}
+			if d.VirtualSwitchID != nil {
+				s, err := q.GetVirtualSwitch(ctx, sqlcgen.GetVirtualSwitchParams{ResourceID: *d.VirtualSwitchID})
+				if err != nil {
+					return databaseFailure(err)
+				}
+				if d.Retired || s.State != "available" || s.BindingState != "configured" || s.UpdatedAt.After(now) || now.Sub(s.UpdatedAt) > freshness || textValue(d.SwitchBindingID) != textValue(s.BindingID) {
+					return unavailable()
+				}
+				continue // The fresh VLAN observation above proves actual wiring.
+			}
+		}
 		r, err := q.GetPlatform(ctx, sqlcgen.GetPlatformParams{ClusterID: pool.ClusterID, Kind: ref[0], ResourceID: ref[1]})
 		if err != nil {
 			return databaseFailure(err)
@@ -533,6 +592,9 @@ func (p *Postgres) DeletePlatform(ctx context.Context, kind, id string, a biz.At
 			return biz.PlatformResource{}, biz.Fail(biz.ResourceInUse, "close allocation before retiring a pool")
 		}
 		count, err = q.CountPoolEIPs(ctx, sqlcgen.CountPoolEIPsParams{ClusterID: p.placement.ClusterID, PoolID: id})
+		if err == nil && count == 0 {
+			count, err = q.CountDefaultEgressPoolReferences(ctx, sqlcgen.CountDefaultEgressPoolReferencesParams{ClusterID: p.placement.ClusterID, PoolID: id})
+		}
 	case "egress_gateway":
 		count, err = q.CountGatewayPools(ctx, sqlcgen.CountGatewayPoolsParams{ClusterID: p.placement.ClusterID, GatewayID: &id})
 	case "vlan":
@@ -614,4 +676,21 @@ func addressPoolTopologyHash(pool sqlcgen.NetworkPublicPool, topology sqlcgen.Pu
 		Scope, DefaultVPCName, DefaultVPCUID string
 		IntranetNetworks                     []string
 	}{topology, pool.Scope, pool.DefaultVpcName, pool.DefaultVpcUid, pool.IntranetNetworks})
+}
+
+func addressPoolTopologyFor(ctx context.Context, q *sqlcgen.Queries, pool sqlcgen.NetworkPublicPool, topology sqlcgen.PublicPoolTopologyRow) (string, error) {
+	legacy := addressPoolTopologyHash(pool, topology)
+	s, err := q.PublicPoolVirtualSwitchTopology(ctx, sqlcgen.PublicPoolVirtualSwitchTopologyParams{ClusterID: pool.ClusterID, ResourceID: pool.ResourceID})
+	if errors.Is(err, pgx.ErrNoRows) {
+		return legacy, nil
+	}
+	if err != nil {
+		return "", databaseFailure(err)
+	}
+	// Dynamic patch/RV progress is deliberately absent from this identity proof.
+	// It binds the immutable switch/device membership and actual v0.9 mapping.
+	return contentHash(struct {
+		LegacyFingerprint, ProviderProfile, SwitchID, BindingID, GroupName, MembershipFingerprint, DeviceFingerprint string
+		BindingVersion                                                                                               int64
+	}{legacy, "kcn-v0.9-vcluster.device:br-device", s.SwitchID, textValue(s.BindingID), s.GroupName, s.MembershipFingerprint, s.DeviceFingerprint, s.BindingVersion}), nil
 }

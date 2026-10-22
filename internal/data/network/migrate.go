@@ -102,7 +102,7 @@ func Migrate(ctx context.Context, owner *pgxpool.Pool, runtimeRole string) error
 	for _, table := range networkTables {
 		name := pgx.Identifier{"public", table}.Sanitize()
 		permissions := "SELECT, INSERT, UPDATE"
-		if table == "network_lb_retired_bindings" || table == "network_idempotency" || table == "network_resource_history" || table == "network_platform_idempotency" || table == "network_platform_history" {
+		if table == "network_lb_retired_bindings" || table == "network_idempotency" || table == "network_resource_history" || table == "network_platform_idempotency" || table == "network_platform_history" || table == "network_virtual_switch_idempotency" || table == "network_virtual_switch_history" || table == "network_legacy_device_retirement_idempotency" || table == "network_legacy_device_retirement_history" || table == "network_default_vpc_egress_idempotency" || table == "network_default_vpc_egress_history" {
 			permissions = "SELECT, INSERT"
 		}
 		if _, err := tx.Exec(ctx, "REVOKE ALL ON "+name+" FROM PUBLIC; REVOKE ALL ON "+name+" FROM "+role+"; GRANT "+permissions+" ON "+name+" TO "+role); err != nil {
@@ -116,6 +116,9 @@ func Migrate(ctx context.Context, owner *pgxpool.Pool, runtimeRole string) error
 }
 
 var networkTables = []string{
+	"network_default_vpc_egresses", "network_default_vpc_egress_operations", "network_default_vpc_egress_idempotency", "network_default_vpc_egress_history",
+	"network_legacy_device_retirements", "network_legacy_device_retirement_idempotency", "network_legacy_device_retirement_history",
+	"network_virtual_switches", "network_virtual_switch_operations", "network_virtual_switch_idempotency", "network_virtual_switch_reconciliations", "network_virtual_switch_history",
 	"network_lb_retired_bindings", "network_lb_configuration_listeners", "network_lb_listener_members",
 	"network_lb_listeners", "network_lb_configurations", "network_lb_members", "network_lb_configuration_members", "network_lb_subnet_refs", "network_lb_components", "network_lb_generated_resources", "network_lb_capabilities",
 	"network_default_intranet_pools", "network_load_balancers", "network_eip_claims", "network_lb_vip_intents", "network_vpc_base_connectivity", "network_connectivity_rollout", "network_base_backfill_runs", "network_base_backfill_candidates",

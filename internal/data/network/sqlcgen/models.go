@@ -115,6 +115,78 @@ type NetworkDefaultPublicPool struct {
 	Scope     string
 }
 
+type NetworkDefaultVpcEgress struct {
+	ResourceID          string
+	ClusterID           string
+	ClusterUid          string
+	DefaultVpcNamespace string
+	DefaultVpcName      string
+	DefaultVpcUid       string
+	Name                string
+	PoolID              string
+	PoolRevision        int64
+	PoolProviderUid     string
+	AdmissionHash       string
+	AdmittedAt          time.Time
+	State               string
+	Phase               string
+	Reason              string
+	Version             int64
+	LastOperationID     string
+	EipProviderName     string
+	EipProviderUid      string
+	EipBindingID        string
+	SnatProviderName    string
+	SnatProviderUid     string
+	SnatBindingID       string
+	Address             string
+	AppliedEnabled      pgtype.Bool
+	TargetGeneration    int64
+	PendingAction       string
+	PendingUnknown      bool
+	PendingSince        *time.Time
+	LeaseOwner          *string
+	LeaseUntil          *time.Time
+	LeaseEpoch          int64
+	NextRunAt           time.Time
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+	ObservedAt          *time.Time
+	RetiredAt           *time.Time
+}
+
+type NetworkDefaultVpcEgressHistory struct {
+	HistoryID   string
+	ResourceID  string
+	OperationID string
+	Event       string
+	ActorRef    string
+	CallerRef   string
+	Detail      []byte
+	CreatedAt   time.Time
+}
+
+type NetworkDefaultVpcEgressIdempotency struct {
+	ClusterID      string
+	IdempotencyKey string
+	Fingerprint    string
+	ResourceID     string
+	OperationID    string
+	Response       []byte
+	CreatedAt      time.Time
+}
+
+type NetworkDefaultVpcEgressOperation struct {
+	OperationID string
+	ResourceID  string
+	Kind        string
+	State       string
+	Reason      string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	CompletedAt *time.Time
+}
+
 type NetworkDeviceAdoption struct {
 	ResourceID           string
 	ClusterID            string
@@ -123,6 +195,11 @@ type NetworkDeviceAdoption struct {
 	InventoryFingerprint string
 	NodeInventory        []byte
 	NodeProgress         []byte
+	VirtualSwitchID      *string
+	SwitchBindingID      *string
+	RegistrationVersion  int64
+	Retired              bool
+	RegistrationClosed   bool
 }
 
 type NetworkEgressGateway struct {
@@ -347,6 +424,60 @@ type NetworkLbVipIntent struct {
 	SubnetID   string
 	Address    string
 	ReleasedAt *time.Time
+}
+
+type NetworkLegacyDeviceRetirement struct {
+	ResourceID          string
+	ClusterID           string
+	OperationID         string
+	ExpectedVersion     int64
+	FenceVersion        int64
+	BindingID           string
+	DeviceName          string
+	NodeInventory       []byte
+	PreManaged          bool
+	ConfigUid           string
+	State               string
+	Reason              string
+	Version             int64
+	PendingUnknown      bool
+	LegacyPendingAction string
+	ExecutorEpoch       int64
+	DrainAfter          time.Time
+	Prepared            bool
+	ConfigRv            string
+	ConfigManagedRaw    string
+	DesiredManagedRaw   string
+	MarkerPresent       bool
+	MarkerValue         string
+	LeaseOwner          *string
+	LeaseUntil          *time.Time
+	LeaseEpoch          int64
+	NextRunAt           time.Time
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+	CompletedAt         *time.Time
+}
+
+type NetworkLegacyDeviceRetirementHistory struct {
+	HistoryID   string
+	ResourceID  string
+	OperationID string
+	Event       string
+	ActorRef    string
+	CallerRef   string
+	Detail      []byte
+	CreatedAt   time.Time
+}
+
+type NetworkLegacyDeviceRetirementIdempotency struct {
+	ClusterID      string
+	IdempotencyKey string
+	Fingerprint    string
+	ResourceID     string
+	OperationID    string
+	Response       []byte
+	CreatedAt      time.Time
 }
 
 type NetworkLoadBalancer struct {
@@ -604,13 +735,71 @@ type NetworkTenantNamespace struct {
 	Namespace string
 }
 
-type NetworkVlanNetwork struct {
+type NetworkVirtualSwitch struct {
+	ResourceID            string
+	Name                  string
+	State                 string
+	Reason                string
+	Version               int64
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+	LastOperationID       string
+	ClusterID             string
+	BindingID             *string
+	BindingVersion        int64
+	BindingState          string
+	MembershipFingerprint string
+	Nodes                 []byte
+}
+
+type NetworkVirtualSwitchHistory struct {
+	HistoryID   string
+	ResourceID  string
+	OperationID *string
+	Event       string
+	ActorRef    string
+	CallerRef   string
+	Detail      []byte
+	CreatedAt   time.Time
+}
+
+type NetworkVirtualSwitchIdempotency struct {
+	OperationKind  string
+	IdempotencyKey string
+	Fingerprint    string
+	ResourceID     string
+	OperationID    string
+	Response       []byte
+	CreatedAt      time.Time
+}
+
+type NetworkVirtualSwitchOperation struct {
+	OperationID string
+	ResourceID  string
+	Kind        string
+	State       string
+	Reason      string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	CompletedAt *time.Time
+}
+
+type NetworkVirtualSwitchReconciliation struct {
 	ResourceID string
-	ClusterID  string
-	Kind       string
-	DeviceID   string
-	VlanID     int32
-	Retired    bool
+	NextRunAt  time.Time
+	LeaseOwner *string
+	LeaseUntil *time.Time
+	LeaseEpoch int64
+}
+
+type NetworkVlanNetwork struct {
+	ResourceID      string
+	ClusterID       string
+	Kind            string
+	DeviceID        string
+	VlanID          int32
+	Retired         bool
+	VirtualSwitchID *string
 }
 
 type NetworkVpc struct {

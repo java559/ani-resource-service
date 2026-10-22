@@ -28,7 +28,7 @@ func (r *platformOperationRepositoryStub) GetPlatformOperation(_ context.Context
 
 type unusedOperationInfrastructure struct{ biz.EgressInfrastructure }
 
-func TestGetPlatformOperationPreservesIntranetKinds(t *testing.T) {
+func TestGetPlatformOperationPreservesPlatformKinds(t *testing.T) {
 	for _, tc := range []struct {
 		kind string
 		want networkv1.OperationKind
@@ -38,6 +38,8 @@ func TestGetPlatformOperationPreservesIntranetKinds(t *testing.T) {
 		{"set_intranet_pool_allocation", networkv1.OperationKind_OPERATION_KIND_SET_INTRANET_POOL_ALLOCATION},
 		{"set_default_intranet_pool", networkv1.OperationKind_OPERATION_KIND_SET_DEFAULT_INTRANET_POOL},
 		{"verify_intranet_pool", networkv1.OperationKind_OPERATION_KIND_VERIFY_INTRANET_POOL},
+		{"create_virtual_switch", networkv1.OperationKind_OPERATION_KIND_CREATE_VIRTUAL_SWITCH},
+		{"delete_virtual_switch", networkv1.OperationKind_OPERATION_KIND_DELETE_VIRTUAL_SWITCH},
 	} {
 		t.Run(tc.kind, func(t *testing.T) {
 			now := time.Date(2026, time.September, 14, 12, 0, 0, 0, time.UTC)

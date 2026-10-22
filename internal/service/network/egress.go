@@ -56,7 +56,7 @@ func wirePlatform(v biz.PlatformResource) *networkv1.PlatformResource {
 		r.Configuration = &networkv1.PlatformResource_Device{Device: d}
 	}
 	if v.Vlan != nil {
-		r.Configuration = &networkv1.PlatformResource_Vlan{Vlan: &networkv1.VlanNetwork{DeviceId: v.Vlan.DeviceID, VlanId: v.Vlan.VlanID}}
+		r.Configuration = &networkv1.PlatformResource_Vlan{Vlan: &networkv1.VlanNetwork{DeviceId: v.Vlan.DeviceID, VlanId: v.Vlan.VlanID, VirtualSwitchId: v.Vlan.VirtualSwitchID, DeviceName: v.Vlan.DeviceName, GroupName: v.Vlan.GroupName, Nodes: wireSwitchNodes(v.Vlan.Nodes)}}
 	}
 	if v.Kind == "egress_gateway" {
 		r.Configuration = &networkv1.PlatformResource_Gateway{Gateway: &networkv1.EgressGateway{}}
@@ -156,7 +156,13 @@ func (s *TenantEgressService) ListEIPs(ctx context.Context, r *networkv1.ListEIP
 	return reply, nil
 }
 func (s *PlatformNetworkService) ListNodeInterfaces(ctx context.Context, r *networkv1.ListNodeInterfacesRequest) (*networkv1.ListNodeInterfacesResponse, error) {
-	v, err := s.egress.ListNodeInterfaces(ctx, r.GetNodeName())
+	var v biz.InterfaceInventory
+	var err error
+	if r.GetClusterId() != "" || r.GetVirtualSwitchId() != "" {
+		v, err = s.egress.ListVirtualSwitchInterfaces(ctx, r.GetNodeName(), r.GetClusterId(), r.GetVirtualSwitchId())
+	} else {
+		v, err = s.egress.ListNodeInterfaces(ctx, r.GetNodeName())
+	}
 	if err != nil {
 		return nil, rpcError(err)
 	}
@@ -174,7 +180,7 @@ func (s *PlatformNetworkService) AdoptNetworkDevice(ctx context.Context, r *netw
 	return &networkv1.AdoptNetworkDeviceResponse{Resource: wirePlatform(v)}, nil
 }
 func (s *PlatformNetworkService) CreateVlanNetwork(ctx context.Context, r *networkv1.CreateVlanNetworkRequest) (*networkv1.CreateVlanNetworkResponse, error) {
-	v, err := s.egress.CreatePlatform(ctx, biz.PlatformIntent{Kind: "create_vlan", Name: r.GetName(), Description: r.GetDescription(), IdempotencyKey: r.GetIdempotencyKey(), Vlan: &biz.VlanConfig{DeviceID: r.GetDeviceId(), VlanID: r.GetVlanId()}})
+	v, err := s.egress.CreatePlatform(ctx, biz.PlatformIntent{Kind: "create_vlan", Name: r.GetName(), Description: r.GetDescription(), IdempotencyKey: r.GetIdempotencyKey(), Vlan: &biz.VlanConfig{DeviceID: r.GetDeviceId(), VlanID: r.GetVlanId(), ClusterID: r.GetClusterId(), VirtualSwitchID: r.GetVirtualSwitchId(), DeviceName: r.GetDeviceName()}})
 	if err != nil {
 		return nil, rpcError(err)
 	}

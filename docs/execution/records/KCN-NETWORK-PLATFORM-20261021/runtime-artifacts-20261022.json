@@ -1,0 +1,253 @@
+{
+  "status": "PASS",
+  "execution_host": "fedora",
+  "scope": "Static binaries and local candidate images only; not shared deployment or real cluster/business/data-plane acceptance",
+  "Res": {
+    "source_commit": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+    "module_version": "v0.0.0-20261021072547-267c2d29c611",
+    "argv": [
+      "go",
+      "build",
+      "-trimpath",
+      "-buildvcs=false",
+      "-ldflags=-s -w -X main.Version=v0.0.0-20261021072547-267c2d29c611",
+      "-o",
+      "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime-artifacts-20261022/bin/ani-resource-service-linux-amd64",
+      "./cmd/ani-resource-service"
+    ],
+    "binary_sha256": "c1cfd6fa7a750c9ebdbeb91130ac091f88cb23e527ce1bdc3ab0e3fd58f9b75a",
+    "binary_bytes": 54288546,
+    "modes": [
+      "server",
+      "-node-facts"
+    ],
+    "source_proof": "274 production inputs match official267 module zip"
+  },
+  "Gov": {
+    "equivalent_committed_source": "3dcc1df2efc2e0b156e95cf1f605633928e43b55",
+    "source_tree_sha256": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+    "source_manifest_sha256": "c2a7490a30f563f3b62f6e52e568aa83a14224075436e37b9fe5310a52871880",
+    "source_proof": "2390 source bytes and normalized Git executable modes independently matched committed source; builder consumes filesystem snapshot",
+    "embedded_server_version": "snapshot-7e35df35eaa3d46e",
+    "version_limit": "snapshot marker is not asserted to be a Git commit; admin has no linker version",
+    "environment": {
+      "CGO_ENABLED": "0",
+      "GOOS": "linux",
+      "GOARCH": "amd64",
+      "GOAMD64": "v1",
+      "GOWORK": "off",
+      "GOTOOLCHAIN": "local",
+      "GOFLAGS": "-p=1 -mod=readonly -gcflags=go-wind-admin/app/admin/service/internal/data/ent=-l",
+      "GOMAXPROCS": "1",
+      "GOMEMLIMIT": "768MiB",
+      "GOGC": "40",
+      "GOPROXY": "off",
+      "GOSUMDB": "off",
+      "GOVCS": "*:off"
+    },
+    "stages": [
+      {
+        "name": "server",
+        "argv": [
+          "go",
+          "build",
+          "-trimpath",
+          "-buildvcs=false",
+          "-ldflags=-s -w -X main.version=snapshot-7e35df35eaa3d46e",
+          "-o",
+          "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov-runtime-artifacts-20261022/bin/ani-governance-server-linux-amd64",
+          "./app/admin/service/cmd/server"
+        ],
+        "started_unix": 1792610649.0459769,
+        "timeout_seconds": 1800,
+        "status": "PASS",
+        "build_rc": 0,
+        "finished_unix": 1792611008.188637,
+        "help": "NOT_RUN; no server main or bootstrap invoked by this build",
+        "binary": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov-runtime-artifacts-20261022/bin/ani-governance-server-linux-amd64",
+        "binary_sha256": "d8cb40e84f6ced9f2c2c975a0737e9e87bfa58553d16332779610cc8e019e29b",
+        "binary_bytes": 134553762
+      },
+      {
+        "name": "admin",
+        "argv": [
+          "go",
+          "build",
+          "-trimpath",
+          "-buildvcs=false",
+          "-ldflags=-s -w",
+          "-o",
+          "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov-runtime-artifacts-20261022/bin/ani-governance-admin-linux-amd64",
+          "./app/admin/service/cmd/admin"
+        ],
+        "started_unix": 1792611009.2990098,
+        "timeout_seconds": 1800,
+        "status": "PASS",
+        "build_rc": 0,
+        "finished_unix": 1792611049.3475842,
+        "help": "PASS; sync-apis -h exits before configuration or database access",
+        "binary": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/gov-runtime-artifacts-20261022/bin/ani-governance-admin-linux-amd64",
+        "binary_sha256": "bbadd5952af389dcca508bde4c4a1c3cb5c2baca55384b119e28a7f4b2749bdb",
+        "binary_bytes": 100823202
+      }
+    ],
+    "source_before_after_equal": true,
+    "Resource_dependency": {
+      "Resource_origin": {
+        "VCS": "git",
+        "URL": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+        "Hash": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a"
+      },
+      "Resource_version": "v0.0.0-20261021072547-267c2d29c611",
+      "Resource_sum": "h1:A+KsTZqcKFvXP9a05ySgSySCdvZKNDVXn+w12Jr0yzc=",
+      "Resource_go_mod_sum": "h1:prLQ/iOP10ojhngZh07ZEF/mFlmI3Ftm7MRsJvM41Z8="
+    },
+    "ELF_and_buildinfo": "PASS",
+    "server_runtime": "NOT_RUN; admin help parser only"
+  },
+  "local_images": {
+    "status": "PASS",
+    "base": "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "endpoint": "unix:///var/run/docker.sock",
+    "started_unix": 1792611106.518759,
+    "pull_attempts": 1,
+    "images": [
+      {
+        "name": "res",
+        "tag": "kcn-goal-20261021/res:c1cfd6fa7a75",
+        "local_image_config_id": "sha256:3d5543c33950686da11938f40bb4090d10d4aab5f5eb3730741980136844618c",
+        "source": "267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a",
+        "binary_sha256": "c1cfd6fa7a750c9ebdbeb91130ac091f88cb23e527ce1bdc3ab0e3fd58f9b75a",
+        "original_binary_mode": "0o700",
+        "context_binary_mode": "0o555",
+        "extracted_binary_mode": "0o555",
+        "nonroot_read_execute": "PASS",
+        "notice_sha256": "3b44929bdd575a570c42165d4fd4eac57a5055745d2ecf3f121aa6a084cf9230",
+        "user": "65532:65532",
+        "entrypoint": [
+          "/app/bin/server"
+        ],
+        "cmd": null,
+        "extracted_bytes": "PASS",
+        "server_start": "NOT_RUN"
+      },
+      {
+        "name": "gov-server",
+        "tag": "kcn-goal-20261021/gov-server:d8cb40e84f6c",
+        "local_image_config_id": "sha256:396ec4e9847c04f15db9ab0dff6a41be8848261be70cd25f35fe73f82007b218",
+        "source": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+        "binary_sha256": "d8cb40e84f6ced9f2c2c975a0737e9e87bfa58553d16332779610cc8e019e29b",
+        "original_binary_mode": "0o700",
+        "context_binary_mode": "0o555",
+        "extracted_binary_mode": "0o555",
+        "nonroot_read_execute": "PASS",
+        "notice_sha256": "034427cc6d4a30a6a3ce980340b50ada31570de7b1ff54eae1e83620401a1028",
+        "user": "65532",
+        "entrypoint": null,
+        "cmd": [
+          "/app/bin/server",
+          "-c",
+          "/app/configs"
+        ],
+        "extracted_bytes": "PASS",
+        "server_start": "NOT_RUN"
+      },
+      {
+        "name": "gov-admin",
+        "tag": "kcn-goal-20261021/gov-admin:bbadd5952af3",
+        "local_image_config_id": "sha256:0624b80bf976288a8c31b190574de4eae3f5f8aac91260a4aa230082fc5426c5",
+        "source": "7e35df35eaa3d46e7d0de0bc3a2897fa175a1fb0d348263bcd27927bd2a09966",
+        "binary_sha256": "bbadd5952af389dcca508bde4c4a1c3cb5c2baca55384b119e28a7f4b2749bdb",
+        "original_binary_mode": "0o700",
+        "context_binary_mode": "0o555",
+        "extracted_binary_mode": "0o555",
+        "nonroot_read_execute": "PASS",
+        "notice_sha256": "034427cc6d4a30a6a3ce980340b50ada31570de7b1ff54eae1e83620401a1028",
+        "user": "65532",
+        "entrypoint": null,
+        "cmd": [
+          "/app/bin/admin"
+        ],
+        "extracted_bytes": "PASS",
+        "server_start": "NOT_RUN"
+      }
+    ],
+    "server_start": "NOT_RUN",
+    "push": "NOT_RUN",
+    "cluster": "NOT_RUN",
+    "resource_limits": "client systemd cgroup CPU200/2300MiB/Swap0; identical Docker build limits, shared daemon unchanged",
+    "base_local_image_config_id": "sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "base_user": "65532",
+    "finished_unix": 1792611175.8634868,
+    "cleanup": {
+      "removed_task_containers": [
+        "82a19ac32d80bbe3212eb070f2444efb1c0e931401fddfda12de5269b9bbec57",
+        "01d3df537698c012fb50dbe3e1648817e3ddf70cae0b709041a68991e041b8b2",
+        "921ce25ffc76517816bde4f4c32d2261e620820128367121c1690199b389ce15"
+      ],
+      "temporary_context_removed": true,
+      "images_and_official_base_retained": true,
+      "errors": []
+    }
+  },
+  "image_identity_limit": "Docker image inspect Id as reported; local candidates only, no target registry publication or pullable target digest claimed",
+  "cleanup": {
+    "Res": {
+      "observed_utc": "2026-10-21T18:51:31.132891+00:00",
+      "unit": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n",
+      "unit_query_rc": 0,
+      "cgroup_exists": false,
+      "known_main_pid_545053_exists": false,
+      "owned_build_or_binary_processes": [],
+      "TMPDIR": "/var/tmp/kr.iPL0sd",
+      "TMPDIR_exists": false,
+      "tmp_cleanup_log": "short_tmp_removed=true",
+      "runner_rc": 0,
+      "build_rc": 0,
+      "heavy_lock_free": true,
+      "source_before_after_equal": true,
+      "source_after_status": "PASS"
+    },
+    "Gov": {
+      "observed_utc": "2026-10-21T19:31:08.687822+00:00",
+      "unit": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n",
+      "unit_query_rc": 0,
+      "cgroup_exists": false,
+      "known_main_pid_642262_exists": false,
+      "owned_build_or_binary_processes": [],
+      "TMPDIR": "/var/tmp/kg.qvH5Ap",
+      "TMPDIR_exists": false,
+      "tmp_cleanup_log": "short_tmp_removed=true",
+      "runner_rc": 0,
+      "server_build_rc": 0,
+      "admin_build_rc": 0,
+      "heavy_lock_free": true,
+      "source_before_after_equal": true,
+      "source_after_status": "PASS"
+    },
+    "images": {
+      "observed_utc": "2026-10-21T19:33:23.354096+00:00",
+      "unit": "LoadState=not-found\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n",
+      "unit_query_rc": 0,
+      "cgroup_exists": false,
+      "known_main_pid_654707_exists": false,
+      "owned_script_or_container_client_processes": [],
+      "removed_container_ids_confirmed_absent": [
+        "82a19ac32d80bbe3212eb070f2444efb1c0e931401fddfda12de5269b9bbec57",
+        "01d3df537698c012fb50dbe3e1648817e3ddf70cae0b709041a68991e041b8b2",
+        "921ce25ffc76517816bde4f4c32d2261e620820128367121c1690199b389ce15"
+      ],
+      "task_label_container_list_empty": true,
+      "context_cleanup_confirmed_by_as_run_receipt": true,
+      "heavy_lock_free": true
+    }
+  },
+  "raw_receipts_sha256": {
+    "runtime-artifacts-20261022": "6f476a4e749ebc87342a5c4e323946aa72ab7fd08adedd2a49603e6c4dd16196",
+    "gov-runtime-artifacts-20261022": "ee107bab263aca0109baa83d099c1d3c5e0b10dd4c9936a5b96c566954be3774",
+    "image-artifacts-20261022": "77cd2ea01c0e6bc105de4601857feec2c87af9b67919e9c42d278a0d80c72e8b"
+  },
+  "push": "NOT_RUN",
+  "shared_deployment": "NOT_RUN",
+  "real_cluster_use_this_artifact_phase": "NOT_RUN; specific user confirmation required"
+}

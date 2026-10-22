@@ -435,6 +435,10 @@ var TenantEgressService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
+	PlatformNetworkService_CreateVirtualSwitch_FullMethodName              = "/network.v1.PlatformNetworkService/CreateVirtualSwitch"
+	PlatformNetworkService_GetVirtualSwitch_FullMethodName                 = "/network.v1.PlatformNetworkService/GetVirtualSwitch"
+	PlatformNetworkService_ListVirtualSwitches_FullMethodName              = "/network.v1.PlatformNetworkService/ListVirtualSwitches"
+	PlatformNetworkService_DeleteVirtualSwitch_FullMethodName              = "/network.v1.PlatformNetworkService/DeleteVirtualSwitch"
 	PlatformNetworkService_ListNodeInterfaces_FullMethodName               = "/network.v1.PlatformNetworkService/ListNodeInterfaces"
 	PlatformNetworkService_AdoptNetworkDevice_FullMethodName               = "/network.v1.PlatformNetworkService/AdoptNetworkDevice"
 	PlatformNetworkService_GetNetworkDevice_FullMethodName                 = "/network.v1.PlatformNetworkService/GetNetworkDevice"
@@ -471,6 +475,10 @@ const (
 // Separate platform scope, with no fictitious tenant. Management authorization
 // does not automatically grant permission to act for a tenant.
 type PlatformNetworkServiceClient interface {
+	CreateVirtualSwitch(ctx context.Context, in *CreateVirtualSwitchRequest, opts ...grpc.CallOption) (*CreateVirtualSwitchResponse, error)
+	GetVirtualSwitch(ctx context.Context, in *GetVirtualSwitchRequest, opts ...grpc.CallOption) (*GetVirtualSwitchResponse, error)
+	ListVirtualSwitches(ctx context.Context, in *ListVirtualSwitchesRequest, opts ...grpc.CallOption) (*ListVirtualSwitchesResponse, error)
+	DeleteVirtualSwitch(ctx context.Context, in *DeleteVirtualSwitchRequest, opts ...grpc.CallOption) (*DeleteVirtualSwitchResponse, error)
 	ListNodeInterfaces(ctx context.Context, in *ListNodeInterfacesRequest, opts ...grpc.CallOption) (*ListNodeInterfacesResponse, error)
 	AdoptNetworkDevice(ctx context.Context, in *AdoptNetworkDeviceRequest, opts ...grpc.CallOption) (*AdoptNetworkDeviceResponse, error)
 	GetNetworkDevice(ctx context.Context, in *GetNetworkDeviceRequest, opts ...grpc.CallOption) (*GetNetworkDeviceResponse, error)
@@ -506,6 +514,46 @@ type platformNetworkServiceClient struct {
 
 func NewPlatformNetworkServiceClient(cc grpc.ClientConnInterface) PlatformNetworkServiceClient {
 	return &platformNetworkServiceClient{cc}
+}
+
+func (c *platformNetworkServiceClient) CreateVirtualSwitch(ctx context.Context, in *CreateVirtualSwitchRequest, opts ...grpc.CallOption) (*CreateVirtualSwitchResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateVirtualSwitchResponse)
+	err := c.cc.Invoke(ctx, PlatformNetworkService_CreateVirtualSwitch_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *platformNetworkServiceClient) GetVirtualSwitch(ctx context.Context, in *GetVirtualSwitchRequest, opts ...grpc.CallOption) (*GetVirtualSwitchResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetVirtualSwitchResponse)
+	err := c.cc.Invoke(ctx, PlatformNetworkService_GetVirtualSwitch_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *platformNetworkServiceClient) ListVirtualSwitches(ctx context.Context, in *ListVirtualSwitchesRequest, opts ...grpc.CallOption) (*ListVirtualSwitchesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListVirtualSwitchesResponse)
+	err := c.cc.Invoke(ctx, PlatformNetworkService_ListVirtualSwitches_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *platformNetworkServiceClient) DeleteVirtualSwitch(ctx context.Context, in *DeleteVirtualSwitchRequest, opts ...grpc.CallOption) (*DeleteVirtualSwitchResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteVirtualSwitchResponse)
+	err := c.cc.Invoke(ctx, PlatformNetworkService_DeleteVirtualSwitch_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *platformNetworkServiceClient) ListNodeInterfaces(ctx context.Context, in *ListNodeInterfacesRequest, opts ...grpc.CallOption) (*ListNodeInterfacesResponse, error) {
@@ -785,6 +833,10 @@ func (c *platformNetworkServiceClient) GetPlatformOperation(ctx context.Context,
 // Separate platform scope, with no fictitious tenant. Management authorization
 // does not automatically grant permission to act for a tenant.
 type PlatformNetworkServiceServer interface {
+	CreateVirtualSwitch(context.Context, *CreateVirtualSwitchRequest) (*CreateVirtualSwitchResponse, error)
+	GetVirtualSwitch(context.Context, *GetVirtualSwitchRequest) (*GetVirtualSwitchResponse, error)
+	ListVirtualSwitches(context.Context, *ListVirtualSwitchesRequest) (*ListVirtualSwitchesResponse, error)
+	DeleteVirtualSwitch(context.Context, *DeleteVirtualSwitchRequest) (*DeleteVirtualSwitchResponse, error)
 	ListNodeInterfaces(context.Context, *ListNodeInterfacesRequest) (*ListNodeInterfacesResponse, error)
 	AdoptNetworkDevice(context.Context, *AdoptNetworkDeviceRequest) (*AdoptNetworkDeviceResponse, error)
 	GetNetworkDevice(context.Context, *GetNetworkDeviceRequest) (*GetNetworkDeviceResponse, error)
@@ -822,6 +874,18 @@ type PlatformNetworkServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedPlatformNetworkServiceServer struct{}
 
+func (UnimplementedPlatformNetworkServiceServer) CreateVirtualSwitch(context.Context, *CreateVirtualSwitchRequest) (*CreateVirtualSwitchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateVirtualSwitch not implemented")
+}
+func (UnimplementedPlatformNetworkServiceServer) GetVirtualSwitch(context.Context, *GetVirtualSwitchRequest) (*GetVirtualSwitchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVirtualSwitch not implemented")
+}
+func (UnimplementedPlatformNetworkServiceServer) ListVirtualSwitches(context.Context, *ListVirtualSwitchesRequest) (*ListVirtualSwitchesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListVirtualSwitches not implemented")
+}
+func (UnimplementedPlatformNetworkServiceServer) DeleteVirtualSwitch(context.Context, *DeleteVirtualSwitchRequest) (*DeleteVirtualSwitchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteVirtualSwitch not implemented")
+}
 func (UnimplementedPlatformNetworkServiceServer) ListNodeInterfaces(context.Context, *ListNodeInterfacesRequest) (*ListNodeInterfacesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListNodeInterfaces not implemented")
 }
@@ -923,6 +987,78 @@ func RegisterPlatformNetworkServiceServer(s grpc.ServiceRegistrar, srv PlatformN
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&PlatformNetworkService_ServiceDesc, srv)
+}
+
+func _PlatformNetworkService_CreateVirtualSwitch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateVirtualSwitchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlatformNetworkServiceServer).CreateVirtualSwitch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlatformNetworkService_CreateVirtualSwitch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlatformNetworkServiceServer).CreateVirtualSwitch(ctx, req.(*CreateVirtualSwitchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlatformNetworkService_GetVirtualSwitch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetVirtualSwitchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlatformNetworkServiceServer).GetVirtualSwitch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlatformNetworkService_GetVirtualSwitch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlatformNetworkServiceServer).GetVirtualSwitch(ctx, req.(*GetVirtualSwitchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlatformNetworkService_ListVirtualSwitches_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListVirtualSwitchesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlatformNetworkServiceServer).ListVirtualSwitches(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlatformNetworkService_ListVirtualSwitches_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlatformNetworkServiceServer).ListVirtualSwitches(ctx, req.(*ListVirtualSwitchesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlatformNetworkService_DeleteVirtualSwitch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteVirtualSwitchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlatformNetworkServiceServer).DeleteVirtualSwitch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlatformNetworkService_DeleteVirtualSwitch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlatformNetworkServiceServer).DeleteVirtualSwitch(ctx, req.(*DeleteVirtualSwitchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _PlatformNetworkService_ListNodeInterfaces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -1418,6 +1554,22 @@ var PlatformNetworkService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "network.v1.PlatformNetworkService",
 	HandlerType: (*PlatformNetworkServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CreateVirtualSwitch",
+			Handler:    _PlatformNetworkService_CreateVirtualSwitch_Handler,
+		},
+		{
+			MethodName: "GetVirtualSwitch",
+			Handler:    _PlatformNetworkService_GetVirtualSwitch_Handler,
+		},
+		{
+			MethodName: "ListVirtualSwitches",
+			Handler:    _PlatformNetworkService_ListVirtualSwitches_Handler,
+		},
+		{
+			MethodName: "DeleteVirtualSwitch",
+			Handler:    _PlatformNetworkService_DeleteVirtualSwitch_Handler,
+		},
 		{
 			MethodName: "ListNodeInterfaces",
 			Handler:    _PlatformNetworkService_ListNodeInterfaces_Handler,

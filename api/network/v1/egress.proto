@@ -24,6 +24,10 @@ service TenantEgressService {
 // Separate platform scope, with no fictitious tenant. Management authorization
 // does not automatically grant permission to act for a tenant.
 service PlatformNetworkService {
+  rpc CreateVirtualSwitch(CreateVirtualSwitchRequest) returns (CreateVirtualSwitchResponse);
+  rpc GetVirtualSwitch(GetVirtualSwitchRequest) returns (GetVirtualSwitchResponse);
+  rpc ListVirtualSwitches(ListVirtualSwitchesRequest) returns (ListVirtualSwitchesResponse);
+  rpc DeleteVirtualSwitch(DeleteVirtualSwitchRequest) returns (DeleteVirtualSwitchResponse);
   rpc ListNodeInterfaces(ListNodeInterfacesRequest) returns (ListNodeInterfacesResponse);
   rpc AdoptNetworkDevice(AdoptNetworkDeviceRequest) returns (AdoptNetworkDeviceResponse);
   rpc GetNetworkDevice(GetNetworkDeviceRequest) returns (GetNetworkDeviceResponse);
@@ -153,7 +157,39 @@ message NodeInterface {
   repeated string vlan_network_ids = 18;
 }
 message NetworkDevice { string device_name = 1; string inventory_fingerprint = 2; repeated NodeInterface nodes = 3; }
-message VlanNetwork { string device_id = 1; int32 vlan_id = 2; }
+message VlanNetwork {
+  string device_id = 1; int32 vlan_id = 2;
+  string virtual_switch_id = 3; string device_name = 4; string group_name = 5;
+  repeated VirtualSwitchNode nodes = 6;
+}
+
+// Platform metadata and binding facts are separate. An unbound switch has no
+// cluster, provider UID or node membership; its name is immutable.
+message VirtualSwitch {
+  string id = 1; string name = 2; ResourceState state = 3;
+  string reason = 4; string reason_message = 5; int64 version = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  string last_operation_id = 9;
+  string cluster_id = 10; string group_name = 11;
+  string binding_state = 12; int64 binding_version = 13;
+  string membership_fingerprint = 14;
+  repeated VirtualSwitchNode nodes = 15;
+}
+message VirtualSwitchNode {
+  string node_name = 1; string node_uid = 2; string mac = 3;
+  int32 priority = 4; string state = 5; string reason = 6;
+}
+message CreateVirtualSwitchRequest { string name = 1; string idempotency_key = 2; }
+message CreateVirtualSwitchResponse { VirtualSwitch resource = 1; }
+message GetVirtualSwitchRequest { string virtual_switch_id = 1; }
+message GetVirtualSwitchResponse { VirtualSwitch resource = 1; }
+message ListVirtualSwitchesRequest {
+  string name = 1; ResourceState state = 2; int32 page = 3; int32 page_size = 4;
+}
+message ListVirtualSwitchesResponse { repeated VirtualSwitch items = 1; int64 total = 2; }
+message DeleteVirtualSwitchRequest { string virtual_switch_id = 1; }
+message DeleteVirtualSwitchResponse { VirtualSwitch resource = 1; }
 // Both Public pool modes use the provider's Public/Host gateway contract.
 message EgressGateway {}
 enum PublicPoolMode { PUBLIC_POOL_MODE_UNSPECIFIED = 0; PUBLIC_POOL_MODE_OVERLAY = 1; PUBLIC_POOL_MODE_UNDERLAY = 2; }
@@ -223,13 +259,20 @@ message PublicPoolVerification {
   google.protobuf.Timestamp verified_at = 6;
   google.protobuf.Timestamp expires_at = 7;
 }
-message ListNodeInterfacesRequest { string node_name = 1; }
+message ListNodeInterfacesRequest {
+  string node_name = 1; string cluster_id = 2; string virtual_switch_id = 3;
+}
 message ListNodeInterfacesResponse { repeated NodeInterface items = 1; string inventory_fingerprint = 2; int64 total = 3; }
 message AdoptNetworkDeviceRequest { string name = 1; string device_name = 2; string inventory_fingerprint = 3; string idempotency_key = 4; }
 message AdoptNetworkDeviceResponse { PlatformResource resource = 1; }
 message GetNetworkDeviceRequest { string device_id = 1; }
 message GetNetworkDeviceResponse { PlatformResource resource = 1; }
-message CreateVlanNetworkRequest { string name = 1; string description = 2; string device_id = 3; int32 vlan_id = 4; string idempotency_key = 5; }
+message CreateVlanNetworkRequest {
+  string name = 1; string description = 2; string device_id = 3;
+  int32 vlan_id = 4; string idempotency_key = 5;
+  // v2: these three fields replace device_id as user input, never its tag.
+  string cluster_id = 6; string virtual_switch_id = 7; string device_name = 8;
+}
 message CreateVlanNetworkResponse { PlatformResource resource = 1; }
 message GetVlanNetworkRequest { string vlan_network_id = 1; }
 message GetVlanNetworkResponse { PlatformResource resource = 1; }

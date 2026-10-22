@@ -1,0 +1,49 @@
+syntax = "proto3";
+package network.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1;networkv1";
+
+import "google/protobuf/timestamp.proto";
+
+// Only trusted platform scope may operate this resource. The default VPC and
+// cluster identities are fixed by deployment configuration, never request data.
+service PlatformDefaultEgressService {
+  rpc CreateDefaultVPCEgress(CreateDefaultVPCEgressRequest) returns (CreateDefaultVPCEgressResponse);
+  rpc GetDefaultVPCEgress(GetDefaultVPCEgressRequest) returns (GetDefaultVPCEgressResponse);
+  rpc DeleteDefaultVPCEgress(DeleteDefaultVPCEgressRequest) returns (DeleteDefaultVPCEgressResponse);
+}
+message CreateDefaultVPCEgressRequest { string name = 1; string pool_id = 2; string idempotency_key = 3; }
+message GetDefaultVPCEgressRequest { string egress_id = 1; }
+message DeleteDefaultVPCEgressRequest { string egress_id = 1; }
+message CreateDefaultVPCEgressResponse { DefaultVPCEgress egress = 1; }
+message GetDefaultVPCEgressResponse { DefaultVPCEgress egress = 1; }
+message DeleteDefaultVPCEgressResponse { DefaultVPCEgress egress = 1; }
+message DefaultVPCEgress {
+  string id = 1;
+  string name = 2;
+  string pool_id = 3;
+  string state = 4;
+  string reason = 5;
+  int64 version = 6;
+  string last_operation_id = 7;
+  string operation_state = 8;
+  string phase = 9;
+  bool pending_unknown = 10;
+  string address = 11;
+  string eip_provider_name = 12;
+  string eip_provider_uid = 13;
+  string snat_provider_name = 14;
+  string snat_provider_uid = 15;
+  bool desired_enabled = 16;
+  optional bool applied_enabled = 17;
+  string cluster_id = 18;
+  string cluster_uid = 19;
+  string default_vpc_namespace = 20;
+  string default_vpc_name = 21;
+  string default_vpc_uid = 22;
+  google.protobuf.Timestamp created_at = 23;
+  google.protobuf.Timestamp updated_at = 24;
+  google.protobuf.Timestamp observed_at = 25;
+  int64 target_generation = 26;
+  string pending_action = 27;
+  bool observation_stale = 28;
+}

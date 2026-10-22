@@ -1,0 +1,34 @@
+{
+  "input": {
+    "tree": "0a16deb07252b2036a1712b0ca214907ad0c79ac",
+    "head": "98622b55fbd151ce1bb8d2047d1bf39f0a74725f",
+    "archive_sha256": "f4644e2b2713bcda89f64713ff2bff65b5d2e4fe97d66b62f76effa032d56be5"
+  },
+  "host": "fedora",
+  "started": 1792656150.112938,
+  "stages": [
+    {
+      "name": "verify",
+      "cmd": [
+        "make",
+        "verify"
+      ],
+      "started": 1792656150.1134765,
+      "exit_code": 0,
+      "finished": 1792656755.5302272
+    }
+  ],
+  "status": "PASS",
+  "finished": 1792656755.5311391,
+  "exit_code": 0,
+  "tmp_removed": true,
+  "scope": "Merged Res98622b5 + main64db955 make verify on Fedora; no cluster deployment or runtime acceptance",
+  "source_delta_after_validation": "Only status.md resume authorization paragraph; production/API inputs unchanged",
+  "prior_attempts": {
+    "setup_r1": "failed before source arrived",
+    "setup_r2": "detached user unit disappeared without a receipt; association with SSH logout was suspected but the cause was not established",
+    "r3": "verify-source plugin dependency proxy EOF",
+    "r4": "archive-vs-git-index guard mismatch; no gate ran",
+    "r5": "validated archive bytes and file-backed cache fallback; make verify PASS"
+  }
+}

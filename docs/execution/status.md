@@ -1,6 +1,20 @@
 # Network 执行状态
 
-更新日期：2026-10-20。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+## 2026-10-21：KCN 网络平台化 Goal
+
+2026-10-22 当前主链已到 **真实平台登录 → Gov → Res/mTLS/PostgreSQL/worker → 新虚拟交换机、ens35/VLAN 0、Underlay 公网池 → kcn-cluster 独立平台默认出口 → 原消费者 DNS/自身 CA HTTPS 与物理 SNAT `172.16.102.192` 回程**，本次必要重建切片 `PASS`。用户后续明确授权“完全删除，记下网段相关参数，然后再通过res创建一个一样的出来”：旧五个原生对象按 Snat→EIP→Subnet→Gateway→VLAN 正常删除并逐项确认 NotFound；旧 Device `device_94d6…055d` 已 `deleted/retired=true/registration_closed=true`。18:25 的 `blocked/LEGACY_NATIVE_VLAN_IN_USE` 是拆除前历史状态，已由最终退役结果取代。本次没有强删 finalizer、直接 SQL 业务删行或用永久原生对象代替产品链。唯一综合记录见[本轮交付回执](records/KCN-NETWORK-PLATFORM-20261021/resume-delivery-20261022.json)。
+
+新产品链为 `vsw_0014e5…f470` → `vlan_1027ac…d1d4` → `pool_bb8117…afd1d` → `dve_36b8b4…466b`，复用原有正式 Res Gateway `egw_d6d865fccf9946bb90a8a171975be566`。参数保持 `ani-public`、全部三个节点、ens35/VLAN 0、`172.16.102.0/24`、上游 `.1`、OVN 路由器 `.2`、可用 `.192–.207`；VLAN/Pool/EIP/Snat 使用新 Provider UID，Gateway 保留原正式身份。先用明确临时运维 EIP `.207`/Snat 验证新池的真实 DNS、Model Pod 自身挂载 CA 的 HTTPS 200、ens35 上 `.207` SYN/回程，再正常清理见证对象、正式登记新池验证；随后通过 Gov→Res DefaultEgress 自动实际分得 `.192`。最终 DVE 为 `available/succeeded/ready`、`applied_enabled=true`、无 pending/unknown/stale，固定默认 VPC UID 未变；两 CoreDNS Pod 与 Model Pod 原 netns DNS、Model 自身 CA HTTPS 200、物理 ens35 `.192` SYN/回程再次通过。Gov ModelScope 搜索返回 200、50 项且命中 Qwen/Qwen3-0.6B。
+
+运行中保留并修正了两个真实问题：初次无前缀 `OBSERVATION_*` 环境变量被 Kratos `env.NewSource("ANI")` 忽略，改成 `ANI_OBSERVATION_REQUEST_QPS=20`/`ANI_OBSERVATION_REQUEST_BURST=40` 后，审计最长约 2.95s、失败 0、source_synced=1；没有放宽新鲜度或修改时钟。Res 曾在 512Mi 限制下 OOMKilled 三次，随后仅配置调整为 limit=1Gi/request=256Mi、`GOMEMLIMIT=768MiB`，generation 33 Ready1 后完成上述产品和物理验收；生产源码/镜像未变。19:22（Asia/Shanghai，11:22 UTC）最终只读清理核查 `PASS`：旧五对象和临时 `.207` 两对象全 NotFound，旧 Device 无租约/迟到登记标记，新产品/Provider UID、绑定与 spec 链一致，三节点新鲜 ens35 owner/feedback/桥映射一致，ens34 严格 SSH 与 ens34/36 保护基线保持。Res generation 33 当前 Pod 已运行约 10 分钟，restartCount=0、lastState 为空，实际 imageID 未变。已确认角色权限恢复为原有完整 74 个 ID，任务活动会话 0、临时会话文件 0，两个消费者采集阶段的临时捕获进程均关闭。
+
+KCN 保持原镜像 `494432d2…`，未修改源码、升级镜像或重启。实际二进制版本/buildinfo 自报 `git-ca06a4e`，二进制 SHA 与缓存中唯一完整 Git 对象 `ca06a4e06c902b9f9cdc6a6a6a1879792e390fd3` 的映射已记录；buildinfo 无完整 vcs revision/dirty 标记，不能称为远端 latest 的独立证明。组暂缺时漏重驱、daemon 缺设备/IPConfigured 后重入两类风险仍是固定源码静态边界，未在现网注入复现，不能称为已证实线上故障。
+
+用户取消自动出口恢复执行器/独立 watchdog，保持取消；本次按后续授权完成等价参数的 Res 重建与恢复后消费者验收，不能沿用早期“公网未拆、无需恢复”的历史结论。**原完整 Goal 不标完成，完整 P4/P5/P6 矩阵未全部执行**：本次必要网关/池/默认出口与恢复切片已通过，额外租户 VPC/SNAT/LB 矩阵仍 `NOT_RUN/deferred_by_user`，ModelDev 按用户要求排除。`network_connectivity_rollout` 未开启；18:07 只读观察为 0 行、基础连接记录 0，本轮没有启用租户 VPC 自动基础内网连接。
+
+软件与先前清理证据继续有效：Res 合入 `origin/main=64db955`，生产提交 `13fa2b4` 完整 `make verify` 通过，正式 SDK `v0.0.0-20261022081320-13fa2b465960` 经标准 Go/官方 proxy/sumdb 验证；Gov 合入 `origin/main=cc72cf4`，提交 `bb4164c` 的生成、相关认证/data/service/server 与六个 Network 联合场景通过。Gov `321b8973…`、Res `a7a268ac…`、三节点 NodeFacts `0bd6f616…` 已部署；四个正式镜像、schema15→18 隔离预演及 live 迁移、备份/18项 checksum、运行 SA 三节点 UID-only server dry-run，均见同一交付回执。schema18 不能仅回退旧15二进制。未绑定交换机的真实 HTTP 幂等、分页、租户拒绝和产品 DELETE/SQL 历史保留清理已通过，三条测试资源仅留墓碑和历史。用户后续明确授权本任务全部代码经 PR bypass 合入 main，不等待 CI/人工评审；发布状态及合并 SHA 以 [Res PR #10](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/10) / [Gov PR #37](https://github.com/zhangzhe-ctrl/ani-governance/pull/37) 的 GitHub 回执为准。已通过的固定源码验收继续有效，合并不把延期业务矩阵标为 PASS。
+
+历史暂停/只读核查及候选失败记录保留为时点证据：[只读核查](records/KCN-NETWORK-PLATFORM-20261021/cluster-readonly-20261022.json)、[旧 Gov 整合](records/KCN-NETWORK-PLATFORM-20261021/gov-deployed-compatible-20261022.json)、[隔离联合观测](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)和[原软件验证](records/KCN-NETWORK-PLATFORM-20261021/res-software-validation.json)。这些早期暂停授权、未部署/未拆出口、旧候选超时和替身边界不再代表上述当前部署与真实业务结果，也不被最终成功擦除；完整证据入口仍为[本 run 索引](records/KCN-NETWORK-PLATFORM-20261021/README.md)。
 
 ## Compute Preset Resolution
 

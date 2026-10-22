@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-21T05:46:20.985443+00:00",
+  "execution_host": "fedora",
+  "mode": "preparation/read-only/server dry-run; no maintenance opened",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "maintenance_open": false,
+  "native_teardown_started": false,
+  "original_native_objects_preserved": true,
+  "gates": {
+    "cluster_and_default_identity": "PASS",
+    "target_private_snapshots": "PASS",
+    "read_only_legacy_SQL_freeze": "PASS",
+    "native_restore_manifest_server_dry_run": "PASS",
+    "single_operator_process_lock": "PASS",
+    "legal_login_read_refresh_logout": "PASS",
+    "uncertain_refresh_sid_revocation": "PASS",
+    "independent_cluster_API": "PASS",
+    "independent_ens34_SSH": "FAIL",
+    "shared_database_recovery_point": "NOT_RUN",
+    "product_object_maintenance_fence": "NOT_RUN",
+    "product_reverse_cleanup_and_unknown_resolution": "NOT_IMPLEMENTED",
+    "unattended_recovery_watchdog": "NOT_IMPLEMENTED",
+    "supported_KCN_group_and_stable_error_reentry": "FAIL",
+    "native_restore_execution": "NOT_RUN"
+  },
+  "blocked_reasons": [
+    "Fedora current legal SSH identities cannot authenticate to ubuntu@172.16.101.10-12; no credential was copied",
+    "Current KCN supported reentry proof is missing and user forbids KCN source changes; maintenance cannot open",
+    "Product candidate lifecycle/unknown-result APIs are not yet deployed and exercised; watchdog cannot safely clean candidates",
+    "restore-egress implements guarded manifests/dry-run only; mutation driver deliberately remains closed until product cleanup and KCN recovery gates are proven"
+  ],
+  "task_preflight_sessions_active": 0,
+  "provided_credentials_retained_for_goal": true,
+  "private_runtime_root": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/runtime",
+  "artifacts": {
+    "restore-egress": "dd3aea6ab37bc593ed9920f4faaf2f565a191c31f25c19bc4752002b26116e78",
+    "recovery-watchdog.py": "b892abf877e28383d4a52f15f572c5e2296c7cf0fc310da936c3f962643a5174",
+    "session-driver.py": "306f70a8ef5e25a700f5d89fe75d56c2033dbaaa5205d414fca014bf94d21e36",
+    "restore-manifests.json": "960bdba26507903d9b2b3b2841d9b4f2cab1a0f671532c9cd3bd42d87aab88df",
+    "restore-inputs-live.json": "747c9eb6d8b80c48fd72ef61c84eaf0fdc25882e562c74c7f8f36b9911690c0e",
+    "p0-sql-public.json": "4aad2ab9659a98812db72399985a20ab6436c23b163f1db6eba948a70967908c",
+    "restore-preparation-public.json": "7dc698a79f2a9e0731f57257b3a371e7c6f4f0a9e0f468926f35e5fb437df15a",
+    "management-channel-public.json": "ab0ce94d81830e9625a77f1706322bdd51a70a49313637652e020eb56e3eb155",
+    "session-preflight-platform-public.json": "e7534d5a011e493f1265978184cbd423d337ea01d310ae424949f6fbf57c34a1",
+    "session-preflight-platform-lost-refresh-public.json": "4efd260a74c1cf01c778588f5acb3b7cefe99212c6e14dc7c159e321e20fa9b2",
+    "session-revocation-recovery-public.json": "6ad01d005bc178aa44367481cb1df22eb456f86aac9870b58074a2ceead57cd1",
+    "recovery-watchdog-selftest-public.json": "8bb94f3c8f776ff21f2caf1da5bf34b4f1bcdb009c4f410999444d2fb4e14554"
+  }
+}

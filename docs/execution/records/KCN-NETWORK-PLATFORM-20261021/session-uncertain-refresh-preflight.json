@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-21T05:43:44.397407+00:00",
+  "kind": "platform",
+  "execution_host": "fedora",
+  "origin": "http://172.16.101.10:30085",
+  "identity_source": "protected new credentials; no old session reuse",
+  "discarded_actual_refresh_response": true,
+  "login_http_status": 200,
+  "authenticated_read_http_status": 200,
+  "refresh_http_status": 200,
+  "confirmed_rt_covers_draft_maintenance_window": true,
+  "logout_http_status": 200,
+  "session_revoked": true,
+  "session_inactive_confirmed": true,
+  "temporary_session_secrets_removed": true
+}
