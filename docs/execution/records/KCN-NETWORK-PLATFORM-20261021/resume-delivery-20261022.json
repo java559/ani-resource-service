@@ -312,5 +312,92 @@
         "sha256": "ac4b4c228ad593dfac2e40637fedc1a4921d040116ebbe0a31b4734043095975"
       }
     }
+  },
+  "explicit_legacy_device_retirement_20261022": {
+    "authorization": "Latest user: 那你删吧，管理网络不会断的. Authorizes formal retirement of the named old Device despite native ens35 use; no native-object cascade or KCN changes.",
+    "runner_sha256": "e92a4baf9a7eb57054f4e1bf2bb2219a0ef16a5a2fb17b397205c483f18ac094",
+    "device_id": "device_94d6ebc1e5bb466d9effad72e9fb055d",
+    "operation_id": "3fc345af-eaea-4a74-9ee9-48e74a8a4f3d",
+    "post_http_status": 200,
+    "post_count": 1,
+    "expected_version": "2659",
+    "fence_version": "2660",
+    "accepted_state": "closing",
+    "observed_state": "blocked",
+    "reason": "LEGACY_NATIVE_VLAN_IN_USE",
+    "final_delete_complete": false,
+    "registration": {
+      "closed": true,
+      "retired": false,
+      "registration_version": 2
+    },
+    "old_operation": {
+      "state": "failed",
+      "reason": "DEVICE_REGISTRATION_CLOSING",
+      "completed_at": "2026-10-22T10:24:34.652794+00:00"
+    },
+    "old_worker": {
+      "lease_owner": null,
+      "lease_until": null,
+      "lease_epoch": 2663,
+      "next_run_at": "2026-10-22T10:24:58.546254+00:00"
+    },
+    "temporary_permission_ids_added_then_removed": [
+      542,
+      543
+    ],
+    "permission_update": "Formal role1 permissions-only PUT, current set preserved; normal role audit/template version updates retained. No SQL grant mutation or Gov restart.",
+    "sessions_revoked_and_secret_files_removed": 2,
+    "original_five_native_specs_uids_nodes_and_kcn_config_unchanged": true,
+    "result_boundary": "Closure/fence accepted and old adoption operation ended; retirement is blocked by the extant native ens35 VLAN. Not deleted or retired. No direct SQL cleanup, native cascade, forced status/finalizer or KCN change.",
+    "verification": {
+      "registration": {
+        "closed": true,
+        "retired": false,
+        "registration_version": 2
+      },
+      "old_worker": {
+        "lease_owner": null,
+        "lease_until": null,
+        "lease_epoch": 2663,
+        "next_run_at": "2026-10-22T10:24:58.546254+00:00"
+      },
+      "old_operation": {
+        "state": "failed",
+        "reason": "DEVICE_REGISTRATION_CLOSING",
+        "completed_at": "2026-10-22T10:24:34.652794+00:00"
+      },
+      "retirement": {
+        "operation_id": "3fc345af-eaea-4a74-9ee9-48e74a8a4f3d",
+        "state": "blocked",
+        "reason": "LEGACY_NATIVE_VLAN_IN_USE",
+        "pending_unknown": false
+      },
+      "at": "2026-10-22T10:26:24.014631+00:00"
+    },
+    "execution_observed_at": "2026-10-22T10:25:05.828771+00:00",
+    "evidence": [
+      {
+        "path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/device-cleanup-20261022/retirement-execution-public.json",
+        "sha256": "be1705ad6c29ffae5c895cf09aa0e2b8b55022c45c23568d3d6b15b9c0855276"
+      },
+      {
+        "path": "/home/chabking/.codex/tasks/kcn-network-platform-20261021/device-cleanup-20261022/postclosure-public.json",
+        "sha256": "bc9a80473f8f85ec9a11445f1dba83aae89a73590d7f4972d31cc29e387d5772"
+      }
+    ],
+    "next_scope_question": "Requested explicit scope decision: temporarily remove the original native ens35 public VLAN/EIP/Snat chain to permit retirement, then restore original parameters and .192. This interrupts public consumers; no native object changed while the question is pending. Gateway/pool acceptance remains deferred; no watchdog requirement is reintroduced."
+  },
+  "flow_clarification_20261022": {
+    "actual_order": [
+      "Create platform VirtualSwitch DB record (unbound)",
+      "Accept product L2 record / binding / inventory / operations atomically",
+      "Apply Node group labels with the VirtualSwitch worker",
+      "Create actual KCN VlanNetwork after configured binding",
+      "KCN handles group/VLAN and physical wiring"
+    ],
+    "group_gap": "Node label API success does not prove KCN controller group cache processed the event. Missing-group reentry risk is at this asynchronous handoff.",
+    "device_error_gap": "Missing-device/IPConfigured redrive risk is inside daemon physical processing after an error; it is separate from the initial group-label ordering.",
+    "evidence_boundary": "Both KCN risks are cached-source analysis, not a current-image fault injection reproduction."
   }
 }

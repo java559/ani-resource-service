@@ -20,6 +20,12 @@ automatic-base-connectivity and conditional old-Device cleanup observations
 are appended to the same resumed receipt; original records below keep their
 historical meaning.
 
+The resumed receipt also records the later explicitly authorized Device
+retirement POST: closure/fence accepted, old adoption operation ended, final
+state blocked/LEGACY_NATIVE_VLAN_IN_USE rather than deleted. Temporary grants
+and both sessions were withdrawn; original outlet, Node labels and KCN config
+were preserved. It clarifies product L2 acceptance versus actual KCN creation.
+
 The following receipts are historical snapshots. Their paused/not-deployed,
 old NodeFacts/RBAC and version-label-derived Gov provenance statements are
 superseded where the resumed receipt supplies later evidence. The old Gov
