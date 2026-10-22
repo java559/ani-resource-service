@@ -18,8 +18,13 @@ import (
 )
 
 func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
-	for _, mode := range []acc.SupplyMode{acc.SupplyMode_SHARED_FIXED, acc.SupplyMode_WHOLE_EXCLUSIVE} {
-		t.Run(mode.String(), func(t *testing.T) {
+	for _, testcase := range []struct {
+		name   string
+		mode   acc.SupplyMode
+		factor string
+	}{{"shared_f1", acc.SupplyMode_SHARED_FIXED, ""}, {"whole_f1", acc.SupplyMode_WHOLE_EXCLUSIVE, ""}, {"shared_f10", acc.SupplyMode_SHARED_FIXED, "10"}} {
+		t.Run(testcase.name, func(t *testing.T) {
+			mode := testcase.mode
 			f := database(t)
 			admin := platformContext()
 			tenant, id, operation, cluster := uuid.NewString(), uuid.NewString(), uuid.NewString(), uuid.NewString()
@@ -27,6 +32,9 @@ func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
 			memory, cores := int64(8192), uint32(25)
 			if mode == acc.SupplyMode_WHOLE_EXCLUSIVE {
 				memory, cores = 15360, 100
+			}
+			if testcase.factor != "" {
+				memory = 3840
 			}
 			ref := &compute.GPUReference{ProfileID: uuid.NewString(), ProfileVersion: 1, SpecDigest: strings.Repeat("c", 64), DevicesPerInstance: 1, ClusterID: cluster, PoolID: uuid.NewString(), Mode: mode.String(), ModelKey: "t4", MemoryMiBPerDevice: memory, CoreLimitPercent: cores}
 			preset, e := f.presets.CreatePreset(admin, compute.Preset{Code: "gpu", Name: "GPU", ComputeType: biz.TypeGPU, CPUMillis: 4000, MemoryMiB: 8192, Enabled: true, GPU: ref})
@@ -45,6 +53,10 @@ func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
 			if mode == acc.SupplyMode_WHOLE_EXCLUSIVE {
 				g.Resources["volcano.sh/vgpu-memory"] = "15360"
 				g.Resources["volcano.sh/vgpu-cores"] = "100"
+			}
+			if testcase.factor != "" {
+				g.Resources["volcano.sh/vgpu-memory"] = "384"
+				g.PodAnnotations["accelerator.ani.io/memory-block-mib"] = testcase.factor
 			}
 			g.ExecutionDigest, _ = pb.ExecutionDigest(g)
 			spec.GpuSelection = nil
@@ -95,6 +107,13 @@ func TestGpuExecutionPersistenceAndDeletedCatalogReplay(t *testing.T) {
 				if limits[key] != value {
 					t.Fatal("frozen execution render", key, limits)
 				}
+			}
+			if notebook.GetAnnotations()["accelerator.ani.io/memory-block-mib"] != testcase.factor {
+				t.Fatal("frozen memory factor changed in rendered metadata")
+			}
+			view, e := handler.GetInstance(ctx, &pb.GetInstanceRequest{TenantId: tenant, InstanceId: id})
+			if e != nil || view.GetGpuSummary().GetMemoryMibPerDevice() != memory || view.GetGpuSummary().GetMemoryMibTotal() != memory {
+				t.Fatal("historical display after catalog deletion changed absolute MiB", view, e)
 			}
 			del := &pb.AcceptDeleteRequest{Context: &pb.CommandContext{TenantId: tenant, ResourceId: id, OperationId: uuid.NewString()}, CreateOperationId: operation, InstanceKind: biz.KindContainer, ComputeType: biz.TypeGPU, ExpectedVersion: record.Version}
 			del.Context.RequestDigest, _ = pb.DeleteCommandDigest(del)
