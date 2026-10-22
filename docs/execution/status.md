@@ -2,9 +2,19 @@
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
-2026-10-22 续跑：用户已恢复 10–12 集群使用授权，要求合入最新 Gov 并部署后继续本 Goal，取代下面历史暂停记录中的集群禁用限制；禁止修改 KCN 的要求保持。已从 Fedora 复验集群、三节点及默认 VPC 身份，原公网五对象仍在，尚未打开维护窗口。最新 Gov `origin/main=cc72cf4` 与 Res `origin/main=64db955` 已进入任务工作树合并，正验证整合 SDK 与 Gov；新合并版本尚未部署、业务验收及恢复仍未完成。以下暂停及既往验证结果保留其原时点，不作为新合并版本的 PASS。
+2026-10-22 续跑：用户已恢复 10–12 集群使用授权，要求合入最新 Gov 并部署后继续本 Goal，取代下面历史暂停记录中的集群禁用限制；禁止修改 KCN 的要求保持。主流程已到**真实平台登录 → Gov → Res/mTLS/PostgreSQL → 未绑定虚拟交换机创建、查询、幂等重放、分页及产品删除清理**，以上均 `PASS`；租户越权拒绝通过。三条测试交换机仅保留 deleted/cleaned 墓碑、幂等及审计，未留活动引用或未完成 operation。真实二层接管、租户 VPC/SNAT/LB 和平台默认出口完整验收仍未运行，Goal **未完成**。固定版本与分层结果见[本轮交付回执](records/KCN-NETWORK-PLATFORM-20261021/resume-delivery-20261022.json)。
 
-状态：2026-10-22 **按用户要求暂停，未完成**。用户明确集群正在使用、禁止部署、必须使用集群时暂停；本轮已结束只读核查，仅收尾一个已启动的 Fedora 离线验证任务及清理，没有继续连接集群或部署。**原固定版本的软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。这些历史结果不证明新的 Gov 合并源码已通过联合验证，也不能证明真实集群接管或流量。
+Res 已合入 `origin/main=64db955`，生产提交 `13fa2b4` 的完整 `make verify` 通过，正式 SDK `v0.0.0-20261022081320-13fa2b465960` 已由标准 Go/官方 HTTPS proxy/sumdb 验证。Gov 已合入 `origin/main=cc72cf4`，生产提交 `bb4164c`；完整生成、相关认证/data/service/server 检查和六个 Network 联合场景通过（KCN/其他 owner 使用明确外部边界夹具），最终源码无漂移。两仓只更新任务分支和既有 draft PR，未合并 main。10–12 当前 Gov `321b8973…`、Res `a7a268ac…`、三节点 NodeFacts `0bd6f616…` 均已就绪且实际 imageID 匹配；Gov 现有超时配置由 `3600s` 调至新版允许的 `45s`。真实 schema15 备份经同一生产二进制两次迁移、43 张表/12470 行原值和身份及旧 VPC mTLS 读取保全预验收通过，再完成 live **15→18**；全部 18 项 checksum 匹配。保留私有备份，旧15二进制不能直接回退18，恢复须保持18语义并向前修复，禁止覆盖共享库。三节点新事实均显式确认 `ovs_bridge_mappings_observed=true` 和 `ani-public.ens35 → br-ens35`；Res 实际 SA 对指定三节点 UID-only JSON Patch 的 server dry-run 通过且 RV 不变，范围外 Node patch 拒绝。
+
+Gov 正式目录同步保留既有 API ID/状态、角色关系及五个 Inference 占位符路径的身份；未启用原 OFF 动作或自动向角色授予新权限。验收临时增加的五条平台权限关系已精确撤销；最终平台/租户越权拒绝、配额、旧网络读取和 ModelScope 搜索 pageSize=50 通过，任务会话为零，三个 admin Job/Pod、构建临时目录和独占验证设施已清理。原 Gov 镜像实际包含 ModelDev ea047 消费合同，早先仅依据 756f 版本标识推断源码的前提不足；新候选441合同对该响应的503差异独立保留。用户明确使用当前已提交版本、不测本批 ModelDev，因此未合入 c0bd/ea047，不再以此阻塞本轮网络验收。
+
+原公网五对象及默认 VPC/Subnet UID/spec 保持，默认 Subnet `natOutgoing=true`；**维护窗口未打开，原公网出口未拆除，无需执行拆后恢复**。两 CoreDNS Pod 实际 netns DNS、实际 Model Pod DNS/自身 CA 验证 HTTPS 200 和物理 ens35 上 `172.16.102.192` 的 SYN/回程均通过。这只是现有消费者基线，不能标为 P6 恢复后验收。P4 仍因当前 KCN 的组暂缺/稳定网卡错误修复后重入协议未证实，以及 Res 侧恢复执行器/watchdog 未完成真实接管、反向清理和恢复演练而关闭；KCN 问题按用户要求记录报告，不修改、升级或重启 KCN。完整 P4–P6 保持 `NOT_RUN`。
+
+### 恢复前历史记录
+
+以下记录保留当时来源、失败和授权边界；其中暂停、未部署、旧 NodeFacts/RBAC 及 Gov 来源推断已由上述续跑证据取代，不能作为当前运行状态。
+
+历史暂停状态（已被上述续跑授权取代）：2026-10-22 **按用户要求暂停，未完成**。用户明确集群正在使用、禁止部署、必须使用集群时暂停；本轮已结束只读核查，仅收尾一个已启动的 Fedora 离线验证任务及清理，没有继续连接集群或部署。**原固定版本的软件隔离纵向闭环及清理已通过**：[最终观测重放](records/KCN-NETWORK-PLATFORM-20261021/gov-joint-observe-20261022.json)的父测试和 deferred LB、platform network、VPC presets、JWT、AK、authentication/plan 六场景全部 `PASS`。真实 Gov HTTP/当前授权 → mTLS → Res/PostgreSQL/worker、正常删除及 SQL 引用释放均通过；HTTP 无活动补偿资源，Res 产品清理及独占 PG/Redis、进程、TMPDIR 清理分别 `PASS`。这些历史结果不证明新的 Gov 合并源码已通过联合验证，也不能证明真实集群接管或流量。
 
 用户本轮授权的[只读 API 与三节点 SSH 核查](records/KCN-NETWORK-PLATFORM-20261021/cluster-readonly-20261022.json)已完成：集群/默认 VPC/节点身份匹配；严格 known_hosts、machineID/bootID 和 ens34 回程均 `PASS`，OVS socket 实际为 `65534:65534/0750`。快照中原公网五对象与默认 VPC/Subnet 身份仍在，默认 Subnet `natOutgoing=true`；未开维护、未做 DNS/HTTPS/流量或真实恢复。三份旧 NodeFacts 缺新版精确桥映射证明，Res 实际 SA 的 RBAC 仅 nodes get/list/watch、无 patch。快照 Gov 对应正式 `756f5a2`/ModelDev v2.1，旧 `3dcc1df` 候选会回退其生产功能，**不得直接部署**。该只读许可已执行完毕，不扩展到后续集群操作。
 
@@ -22,7 +32,7 @@ Res `267c2d29c6119f03a4ea9c90303a2a9ac7af9a0a` 已实现交换机/VLAN v2、持�
 
 批准输入 hash 匹配，Res/Gov/installer 已通过 SSH 固定；KCN GitLab 本轮重核仍关闭连接，最新源码及既有重驱/恢复协议未证实。用户明确禁止修改 KCN 源码，原任务候选已全部撤回、缓存工作树 clean，未提交/推送/部署；用户本轮补充“碰到 kcn 问题，记录并报告即可”，据此记录限制，不再追索其源码或协议。已撤回候选和未证实协议不能解除公网恢复门禁。用户“需要使用集群就找我确认”的要求继续有效，本轮只读许可不向部署、流量或维护扩展。所有当前证据集中在[本 run 索引](records/KCN-NETWORK-PLATFORM-20261021/README.md)，真实部署及 P4–P6 验收保持 `NOT_RUN`。
 
-更新日期：2026-10-20。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
+更新日期：2026-10-22。本文件是唯一当前进度入口；[规格](../specs/vpc-subnet.md)描述目标，[计划](../plans/vpc-subnet.md)描述工作包。
 
 ## Compute Preset Resolution
 

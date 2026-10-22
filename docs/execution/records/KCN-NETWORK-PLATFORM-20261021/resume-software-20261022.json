@@ -26,7 +26,7 @@
   "source_delta_after_validation": "Only status.md resume authorization paragraph; production/API inputs unchanged",
   "prior_attempts": {
     "setup_r1": "failed before source arrived",
-    "setup_r2": "detached user scope lost at SSH logout; no receipt",
+    "setup_r2": "detached user unit disappeared without a receipt; association with SSH logout was suspected but the cause was not established",
     "r3": "verify-source plugin dependency proxy EOF",
     "r4": "archive-vs-git-index guard mismatch; no gate ran",
     "r5": "validated archive bytes and file-backed cache fallback; make verify PASS"

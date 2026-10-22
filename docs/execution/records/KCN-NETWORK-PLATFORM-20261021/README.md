@@ -3,6 +3,22 @@
 Authoritative scope: [approved Goal](../../../plans/kcn-network-platform-goal-20261021.md).
 Current progress is maintained only in [status](../../status.md).
 
+[2026-10-22 resumed delivery](resume-delivery-20261022.json) binds the current
+Res `13fa2b4` / Gov `bb4164c` sources, published SDK/images, schema15→18
+preservation and live migration, three collectors, actual unbound-switch HTTP
+and SQL cleanup, temporary-grant/session/Job cleanup, and native-consumer
+baseline evidence. The user restored 10–12 use/deployment authority. ModelDev
+compatibility work is excluded by the user's later direction; the current
+committed Gov remains deployed. No KCN change/restart or native-outlet teardown
+occurred. Full P4–P6 remain NOT_RUN; a working original outlet is not an
+after-restoration acceptance result.
+
+The following receipts are historical snapshots. Their paused/not-deployed,
+old NodeFacts/RBAC and version-label-derived Gov provenance statements are
+superseded where the resumed receipt supplies later evidence. The old Gov
+image's actual binary dependencies, rather than its version label alone,
+establish its ModelDev consumption contract. Historical failures are retained.
+
 [Res software validation](res-software-validation.json) records the fixed source
 manifests, commands, original test-fixture failures, successful related slice,
 and remaining verification boundaries. Runtime prerequisites are described in
@@ -77,7 +93,7 @@ All original dirty files and other worktrees are preserved. Runtime and heavy
 commands execute only via Fedora, under task-owned directories and the existing
 shared heavy-work lock. Private runtime snapshots stay on Fedora (0700/0600).
 
-No public-egress maintenance is authorized to begin until the approved P4 guards,
+No public-egress maintenance may begin until the approved P4 guards,
 restoration rehearsal, independent recovery channel and watchdog all pass.
 
 The user's later explicit instruction prohibits all KCN source changes. It
@@ -89,8 +105,11 @@ tests are historical diagnosis only and cannot qualify the existing KCN runtime.
 Res/Gov work continues within the revised boundary; no egress maintenance may
 begin without a supported recovery protocol in the unchanged KCN deployment.
 
-The user's subsequent instruction also requires confirmation before each
+Historical authorization boundary before the resumed delivery: the user's
+instruction required confirmation before each
 explicitly scoped phase of cluster use, including read-only API checks and Node
 SSH. The original cluster preauthorization is superseded. Current independent
 Fedora software/module work and isolated loopback tests may continue; no cluster
-phase is currently approved.
+phase was approved at that historical point. The later explicit 10–12
+use/deployment authorization supersedes this restriction; the KCN change ban
+and unproven P4 recovery gates remain in force.
