@@ -14,6 +14,7 @@ import (
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
+	storagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/storage/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network"
@@ -160,6 +161,11 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	if err != nil {
 		return nil, err
 	}
+	storageComponents, err := openStorage(ctx, bc)
+	if err != nil {
+		return nil, err
+	}
+	storagev1.RegisterStorageServiceServer(grpcServer, storageComponents.service)
 	networkv1.RegisterNetworkServiceServer(grpcServer, service.NewNetworkService(network, attachments))
 	repository.UseEgressInfrastructure(provider)
 	egress, err := biz.NewEgress(repository, provider, biz.ContextEgressAuthorization{}, key, policy.StaleAfter, time.Now)
