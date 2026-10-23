@@ -5,3 +5,4 @@ modules:
     excludes:
       - api/instance
       - api/compute
+      - api/vm
