@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-24T12:21:57.556308+00:00",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+  "commit": "319bdb760bbaeecfaed6386b1c11443d6150a04c",
+  "send_count": 1,
+  "result": "PASS_EXACT_TASK_BRANCH_FAST_FORWARD",
+  "at_completed": "2026-10-24T12:22:14.524198+00:00",
+  "push_exit": 0,
+  "remote_oid": "319bdb760bbaeecfaed6386b1c11443d6150a04c",
+  "original_head_index_preserved": true,
+  "runtime_and_acceptance_drivers_unchanged": true,
+  "only_docs_changed": true,
+  "main_merge_tag_release_deploy": false
+}
