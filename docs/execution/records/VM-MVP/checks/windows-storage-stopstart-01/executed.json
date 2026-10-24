@@ -1,0 +1,150 @@
+{
+  "phase": "NORMAL_STOP_START_API_NATIVE_PASS_GUEST_READBACK_PENDING",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "current_version": "13",
+  "stop": {
+    "id": "9277f2b7-0d5c-4a1c-a56e-8c3c8a925156",
+    "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "action": "stop",
+    "intentVersion": "12",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T14:27:57.578849539Z"
+  },
+  "start": {
+    "id": "c9520a8a-7b60-4347-9f56-b7f4b35846e0",
+    "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "action": "start",
+    "intentVersion": "13",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T14:31:31.386863728Z"
+  },
+  "stop_send_attempts": 1,
+  "start_send_attempts": 1,
+  "stopped": {
+    "addresses": [],
+    "vmi": null,
+    "launcher": null,
+    "attachment": {
+      "id": "att_fe8601440e004fe0a57427e8f00536c2",
+      "state": "reserved",
+      "blocked": false,
+      "pod_uid": "",
+      "confirmed_pod_uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+    }
+  },
+  "running": {
+    "addresses": [
+      {
+        "nicName": "default",
+        "address": "10.83.1.2",
+        "observedAt": "2026-10-24T14:31:26.359706511Z"
+      }
+    ],
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+    },
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "2099b12a-dc9f-4523-bf7d-574ab17065c3",
+      "phase": "Running",
+      "node": "ani-01"
+    },
+    "launcher": {
+      "kind": "Pod",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-qlw5c",
+      "uid": "30635904-d25f-409c-9184-7c843ed78433"
+    },
+    "attachment": {
+      "id": "att_fe8601440e004fe0a57427e8f00536c2",
+      "state": "attached",
+      "blocked": false,
+      "pod_uid": "30635904-d25f-409c-9184-7c843ed78433",
+      "confirmed_pod_uid": "30635904-d25f-409c-9184-7c843ed78433"
+    },
+    "disks": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+        "role": "data",
+        "name": "vm-mvp-windows-data3-01a168ce",
+        "sizeGb": "3",
+        "requestedBytes": "3000000000",
+        "observedCapacityBytes": "3221225472",
+        "volumeName": "disk-89317f205600510abc65e40402c83abb",
+        "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "role": "data",
+        "name": "vm-mvp-windows-data4-01a168ce",
+        "sizeGb": "4",
+        "requestedBytes": "4000000000",
+        "observedCapacityBytes": "4294967296",
+        "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+        "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ]
+  },
+  "original_storage_template_equal": true,
+  "other_vms_sources_nad_equal": true,
+  "root_guest_precondition": {
+    "evidence": "$task/evidence/windows-three-a-before-stop.png",
+    "command": "windows-write-markers-command.txt",
+    "root_handoff": "Root observed full three A contents/SHA and CreateNew/Flush(true)/Dispose complete before normal Stop"
+  },
+  "guest_commands": 0,
+  "force_commands": 0,
+  "service_restarts": 0,
+  "post_start_three_A": "NOT_RUN_AGENT; Root BROWSER readback pending",
+  "historical_errors_retained": [
+    "prepare-attempt01.json",
+    "stop-observed-01.json",
+    "start-observed-01.json"
+  ],
+  "evidence": {
+    "driver.py": "6ada827bd06c01812ea041f14468b5089deec753308758f7611df95bb65de591",
+    "stop-prepared.json": "120c5552f3421b3f26324a94c88399dd77f59bd2e2b6596f1fcc643771107a5d",
+    "start-prepared.json": "2f530289e6068cda34e3c4fe7b7d792315a4dd3819fac8234e91edd683e1a215",
+    "storage-stopstart-01-stop.json": "57000f0d844d8f05e8ef6703437819d3315b0312d7f1e6a32283b8ebb5c2dde6",
+    "storage-stopstart-01-start.json": "6803f17aca73ecf493841d615f208472903ada845db7011902b3da3744c582cc",
+    "verified-stop.json": "0701f55e5704de58328e03bfe6ff68ae3eb49affbd8014454bc79071ec47b993",
+    "verified-start.json": "3848a8e4486f19357cb521e64a72a23fdd0c52899684b6b50f595f82f062c916"
+  },
+  "first_start_window_captured_projection": {
+    "source": "original tool stdout from read-only projection of storage-stopstart-01-start.json before subsequent original-operation observation",
+    "operation_id": "c9520a8a-7b60-4347-9f56-b7f4b35846e0",
+    "state": "running",
+    "reason": "VM_EXTERNAL_RESULT_UNKNOWN",
+    "observedAt": "2026-10-24T14:30:16.374677384Z",
+    "product_version": "13",
+    "product_observed_state": "Scheduling",
+    "product_addresses": [],
+    "send_attempts": 1
+  }
+}

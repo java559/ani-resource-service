@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-24T17:22:44.567675+00:00",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "ref": "refs/heads/codex/vm-mvp-resource-start-recovery-20261025",
+  "commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31",
+  "remote_expected_before": "ABSENT",
+  "send_count": 1,
+  "state": "PASS_EXACT_NEW_TASK_BRANCH_SSH_PUSH",
+  "completed_at": "2026-10-24T17:22:56.972598+00:00",
+  "remote_oid": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "push_exit": 0,
+  "original_head_index_preserved": true,
+  "hooks_not_bypassed": true,
+  "exact_new_ref_hook_sha256": "44bc8e9a46fb0bc6d7cd837893be75174ec2085c1bf49e1f64de7a5fd3b195f6",
+  "only_candidate22_five_files": true,
+  "main_merge_pr_tag_release_oci_service_cluster_changes": false,
+  "current_full_make_verify": "NOT_RUN; reused parent full gate plus actual targeted Fedora PG/List/build results"
+}

@@ -1,0 +1,68 @@
+{
+  "state": "COMMITTED_NOT_PUSHED",
+  "at": "2026-10-24T17:21:48.650258+00:00",
+  "ref": "refs/heads/codex/vm-mvp-resource-start-recovery-20261025",
+  "commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31",
+  "parent": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "files": [
+    {
+      "path": "internal/biz/vm/types.go",
+      "sha256": "8e6c892b2e6a25d399119d1d18f7bcf95f2f6465da3e179c8b3533b3d238a7e5",
+      "blob": "1a3dcf4e31fff284d7779b66e01fd2be84f39e3d",
+      "mode": "100644",
+      "bytes": 8538
+    },
+    {
+      "path": "internal/biz/vm/worker.go",
+      "sha256": "5fd85d492a2b57c379b234f933d2205b408600bffbabd7fce2bcf222d8fdd8bf",
+      "blob": "e25936b32ee658c0b2399a5c57819baecc01de4a",
+      "mode": "100644",
+      "bytes": 9974
+    },
+    {
+      "path": "internal/data/vm/power_worker_integration_test.go",
+      "sha256": "d23624d96677bb94ba53482226d4356a2e4b542b87ff720333d3512c42d778ed",
+      "blob": "4b425aba9967bae75a6780a32ea4ed2509bfcee1",
+      "mode": "100644",
+      "bytes": 11120
+    },
+    {
+      "path": "internal/service/vm/snapshots.go",
+      "sha256": "6dce02320071f0cde9293d3c61dccada35dccfbc35e36a2bba6cc04f0d75e132",
+      "blob": "83a85863d12c4a04b664bdce171356caf25d2cd4",
+      "mode": "100644",
+      "bytes": 6925
+    },
+    {
+      "path": "internal/service/vm/snapshots_test.go",
+      "sha256": "ff283be178c212706fc606b541b41993de45631c7412ea5cd4ede49fcaa10127",
+      "blob": "946af6ddd0a9d3a7bf27114f49c72e423a81d5d9",
+      "mode": "100644",
+      "bytes": 9688
+    }
+  ],
+  "candidate22_source_sha256": "e9fe67d412dceca45f114e68f186ff7fee0924b768b5658d51a48901553838b1",
+  "candidate22_manifest_sha256": "203a1aa2b78b8bae2557bc240b0e32db799ca8f010cca7e230bb4f04a2a7dc19",
+  "candidate22_build_receipt_sha256": "6b85e260cbdf0345d8773c8db5c03764ff2a47a398ce3caac524b4f211937b71",
+  "candidate22_green_receipt_sha256": "474df2f40738f1bd0a0ccf454c477fc42adc7717ce5f3ee30c14d56e806161f1",
+  "reused_list_green_receipt_sha256": "37641e3eaaab28437a436ae3e606fafed51160b16c41c97d1f610093c04822fc",
+  "fixed_commit_diff_sha256": "43483c891e6fa1cbc670021d95ad81cdd7f188ae4cc292a850cd90046a14106d",
+  "original_before": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76"
+  },
+  "original_after": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76"
+  },
+  "hooks": {
+    "core_hooks_path_configured": false,
+    "enabled_default_hooks": []
+  },
+  "private_key_jwt_scan": "PASS_NO_EXEMPTIONS",
+  "current_full_make_verify": "NOT_RUN; reused parent full gate plus actual targeted Fedora PG/List/build results",
+  "only_candidate22_five_files": true,
+  "docs_private_evidence_staged": false,
+  "main_merge_pr_tag_release_oci_service_cluster_changes": false
+}

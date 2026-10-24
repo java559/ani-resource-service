@@ -1,0 +1,72 @@
+{
+  "window": "Root authorized a credential refresh before the long ISO acceptance window with active-session/lease0 and unchanged same-SA/two-exact-namespace/seven-RBAC scope; not an EROFS workaround",
+  "old_pid": 3837060,
+  "new_pid": 3925313,
+  "readyz_200": true,
+  "new_token_expires_at": "2026-10-24T18:47:35Z",
+  "active_sessions_before": 0,
+  "active_leases_before": 0,
+  "permission_checks": 22,
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "same_service_account": true,
+  "same_permissions": true,
+  "same_runtime_env": true,
+  "same_ticket_key": true,
+  "same_pki": true,
+  "normal_term_only": true,
+  "redis_db": 1,
+  "kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig",
+  "previous_kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig.previous-3837060",
+  "process_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/process.json",
+  "temporary_page_and_relay_changed": false,
+  "state": "PASS",
+  "old_startticks": 72573112,
+  "new_startticks": 72938159,
+  "requested_ttl_seconds": 3600,
+  "full_environment_sha256": "5157ebbef0d7254de47f5ece862cb8455e0307cef40c396c10fd2af53ba83ea1",
+  "full_environment_preserved": true,
+  "rbac_scope_fingerprint_sha256": "87266d55cca9eb216a1a5e007af32fd2edd4309affc3dcb7e1329999603d0db2",
+  "protected_gov_resource_unchanged": [
+    {
+      "pid": 3465703,
+      "start_ticks": 70973412,
+      "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+      "environment_sha256": "85be61b1b75f5c98addfe27755dbde8b9b748064231526501a7932315ccfe79e"
+    },
+    {
+      "pid": 3881653,
+      "start_ticks": 72749000,
+      "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+      "environment_sha256": "20fc70f015afc782892e0d7cecaae2f238eb3712b4e41feeb44419698cd2c1bb"
+    }
+  ],
+  "staged_receipt_sha256": "55f7cc0bb144827fbcbd0dd62324435eabe2b02c449e45b0e51179ed530436ea",
+  "exact_listener_ownership": [
+    39182,
+    39185
+  ],
+  "driver_sha256": "88a7754a8fd66547d58ea66dc3c7e89282076095adb643f740cfae37c680e3dd",
+  "source_helper_sha256": "4cc8177e7ecd69c65e6aa22893daabf66178a144d8fb205f059adf1044179d2d",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "empty_active_guard": {
+    "metrics_source_sha256": "2527b4a066f501baf809b700748620851f133772053e9dee940876fe51ffc583",
+    "active_series_count": 0,
+    "connected_series_count": 0,
+    "only_other_request_metric": "ani_session_create_total{mode=\"vnc\",result=\"error\"} 1",
+    "redis_db1_lease_count": 0,
+    "source_basis": "Active GaugeVec materializes only on Connected/Closed and is never deleted. Failed creation counter does not represent a stream."
+  },
+  "final_after_root_normal_disconnect": {
+    "checked_at": "2026-10-24T17:50:46.486995+00:00",
+    "pid": 3925313,
+    "start_ticks": 72938159,
+    "active_samples": [
+      "ani_session_active{mode=\"vnc\"} 0"
+    ],
+    "active_sum": 0,
+    "redis_db": 1,
+    "leases": 0,
+    "result": "PASS"
+  },
+  "scope_of_result": "Same-scope credential renewal and process activation only; console recovery separately verified by Root browser."
+}

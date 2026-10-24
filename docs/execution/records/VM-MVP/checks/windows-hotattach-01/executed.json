@@ -1,0 +1,254 @@
+{
+  "phase": "BOTH_EXISTING_WINDOWS_DISKS_HOTATTACHED_VERIFIED",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "11",
+  "observed_state": "Running",
+  "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+    "phase": "Running",
+    "node": "ani-01"
+  },
+  "launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-p7spx",
+    "uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+  },
+  "disks": [
+    {
+      "role": "system",
+      "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+      "logical_disk_id": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+      "requested_bytes": "80000000000",
+      "observed_capacity_bytes": "80530636800",
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+        "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "uid": "3589a026-a717-4dc2-91bb-6d3439ce644f"
+      },
+      "volume_handle": "0001-0009-rook-ceph-0000000000000004-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97",
+      "volume_status": {
+        "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "75Gi"
+          },
+          "claimName": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "filesystemOverhead": "0",
+          "requests": {
+            "storage": "80G"
+          },
+          "volumeMode": "Block"
+        },
+        "target": "sda"
+      }
+    },
+    {
+      "role": "data",
+      "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+      "logical_disk_id": "89317f20-5600-510a-bc65-e40402c83abb",
+      "requested_bytes": "3000000000",
+      "observed_capacity_bytes": "3221225472",
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+        "uid": "771d2a7a-5c05-4ea6-8443-e9d818fcc4d6"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-184cf5be-3de0-4a70-bfdf-db3d9f2d0030",
+        "uid": "b15ca31b-1a33-4c65-bdaa-28f6b5e48951"
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+        "uid": "77168825-ab4a-405a-b88a-602775787a50"
+      },
+      "volume_handle": "0001-0009-rook-ceph-0000000000000004-51298c93-c1c4-43e3-bfae-06fe4d1fc3d6",
+      "volume_status": {
+        "hotplugVolume": {
+          "attachPodName": "hp-volume-8hbt8",
+          "attachPodUID": "acc4cd8a-afc9-47c2-bf40-b6500d13d38c"
+        },
+        "message": "Successfully attach hotplugged volume disk-89317f205600510abc65e40402c83abb to VM",
+        "name": "disk-89317f205600510abc65e40402c83abb",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "3Gi"
+          },
+          "claimName": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+          "filesystemOverhead": "0",
+          "requests": {
+            "storage": "3G"
+          },
+          "volumeMode": "Block"
+        },
+        "phase": "Ready",
+        "reason": "VolumeReady",
+        "target": "sdc"
+      }
+    },
+    {
+      "role": "data",
+      "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+      "logical_disk_id": "cca2005b-d936-5327-a5de-d8236385b9ba",
+      "requested_bytes": "4000000000",
+      "observed_capacity_bytes": "4294967296",
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+        "uid": "4f0405d6-7c19-43c5-b270-e4767891921a"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-f3d5361c-0069-469e-8292-4c05c3f6c818",
+        "uid": "ae053171-463a-41d9-b1c6-6a424fda4160"
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+        "uid": "ac35c75f-74e4-4007-8850-80f68133be02"
+      },
+      "volume_handle": "0001-0009-rook-ceph-0000000000000004-efe292d3-850c-426c-aaf9-20490dbbd698",
+      "volume_status": {
+        "hotplugVolume": {
+          "attachPodName": "hp-volume-8hbt8",
+          "attachPodUID": "acc4cd8a-afc9-47c2-bf40-b6500d13d38c"
+        },
+        "message": "Successfully attach hotplugged volume disk-cca2005bd9365327a5ded8236385b9ba to VM",
+        "name": "disk-cca2005bd9365327a5ded8236385b9ba",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "4Gi"
+          },
+          "claimName": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+          "filesystemOverhead": "0",
+          "requests": {
+            "storage": "4G"
+          },
+          "volumeMode": "Block"
+        },
+        "phase": "Ready",
+        "reason": "VolumeReady",
+        "target": "sdd"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "intent": "hotattach-data3-01",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/disks/89317f20-5600-510a-bc65-e40402c83abb/attach",
+      "body": {
+        "data": {
+          "expectedVersion": "9",
+          "idempotencyKey": "f506d639-a4c4-53bb-99f8-3736076d4a17",
+          "diskId": "89317f20-5600-510a-bc65-e40402c83abb"
+        }
+      },
+      "body_sha256": "e08e3fec0a4879effe6e18f46e6ed3ddce3cce2109fc5cc8cc12187151dd3970",
+      "send_attempts": 1,
+      "operation": {
+        "id": "ae920994-b256-4b08-aa44-d72f65d8f9f1",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "attach-disk",
+        "intentVersion": "10",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T13:29:55.198570344Z"
+      }
+    },
+    {
+      "intent": "hotattach-data4-01",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/disks/cca2005b-d936-5327-a5de-d8236385b9ba/attach",
+      "body": {
+        "data": {
+          "expectedVersion": "10",
+          "idempotencyKey": "4a72eab5-b108-51d4-af3e-10c904161dec",
+          "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba"
+        }
+      },
+      "body_sha256": "09bc881298249a22504235ca092e203fe12c1885f6f7eff4ff94f7ed67941532",
+      "send_attempts": 1,
+      "operation": {
+        "id": "f7a40115-9a18-4dff-82f2-43b4e78ed813",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "attach-disk",
+        "intentVersion": "11",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T13:31:49.599758449Z"
+      }
+    }
+  ],
+  "protection": {
+    "other_vms_sources_nad_equal": true,
+    "original_physical_storage_equal": true,
+    "non_data_template_equal": true
+  },
+  "guest_commands": 0,
+  "guest_mount_format_write": "NOT_RUN",
+  "service_restart": 0,
+  "power_commands": 0,
+  "automatic_rollback": 0,
+  "history_retained": [
+    {
+      "step": "first D4 prepare",
+      "result": "GUARD_STOP_SEND0",
+      "cause": "D3 independent GET was succeeded but original persistent command still running; original observe refreshed it before D4 prepare"
+    },
+    {
+      "step": "first D4 native-ready checkpoint",
+      "result": "NOT_YET_TERMINAL",
+      "cause": "original operation not yet succeeded; GET original operation then final native checkpoint passed"
+    }
+  ],
+  "sources": {
+    "followup.py": "91582caf25ba41c8ccc10b649af70075c9499857d8d51fcf56414c73bd81c4c2",
+    "verify.py": "6278ded58d5f3249b0826000fb4d2d0a88345c77730347f8af95eab268c2c6ef"
+  },
+  "evidence": {
+    "hotattach-data3-01.prepared.json": "debaf154e8a6f1a8ffdc1aa0e88e9d2af49d908d448b6396cc2c794ef3c5246e",
+    "hotattach-data3-01.json": "459c2e406f7d4571bb2b7a3140b1213a2bb842ea3aa8ec6e537c7b7e402789c2",
+    "hotattach-data4-01.prepared.json": "530c21111d1551e93ac200a2e984f2f6a12c5d9ad0d141dc0aab77bcebef1322",
+    "hotattach-data4-01.json": "cc5403db31b4d8954a2d7a7563a62f091408f81fa6565fec2f9a598ed3e34fd6",
+    "verified-before.json": "466b8e942485686f05ebf0a2754142e2ec59910e1649b4c50cfc9af029cc71bc",
+    "verified-data3.json": "d1af93f85ebff1865232f06219acb9b20ca36544b8108c5cfc0b5d0e8f1971b3",
+    "verified-data4.json": "d67d50dae15360d80bda801ac306fcd8b3195ba138501f5ca67da9eb92b6a412"
+  },
+  "rollback": "No rollback executed. Only after Root confirms this exact Guest disk offline/flushed, prepare normal detach with fresh version; do not force, restart, delete disks or patch native resources.",
+  "unknown_ack": "Observe recorded original operation only. If operation ID is absent, stop for original-key admission lookup; never blindly execute another request."
+}

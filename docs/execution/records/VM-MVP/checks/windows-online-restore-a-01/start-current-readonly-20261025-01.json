@@ -1,0 +1,409 @@
+{
+  "at": "2026-10-24T16:23:22.347330+00:00",
+  "source_sha256": "5ee5f4e0e878b1672218de92a2c4ca11a65cde1b3193d55281f57c3c43de392c",
+  "scope": "Original Start only; fixed existing VMI and launcher; no business POST, Guest or cluster change",
+  "operation": {
+    "id": "8ec49269-6ee4-490c-afe3-3cdea8300640",
+    "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "action": "start",
+    "intentVersion": "18",
+    "state": "running",
+    "reason": "VM_EXTERNAL_RESULT_UNKNOWN",
+    "observedAt": "2026-10-24T16:23:18.024736723Z"
+  },
+  "operation_terminal": false,
+  "start_send_attempts": 1,
+  "current": {
+    "vmId": null,
+    "version": "18",
+    "desiredState": "Running",
+    "observedState": "Failed",
+    "lastOperationId": "8ec49269-6ee4-490c-afe3-3cdea8300640",
+    "closing": false,
+    "canOperate": null,
+    "reason": "",
+    "addresses": []
+  },
+  "vm": {
+    "ref": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "resourceVersion": "63254461"
+    },
+    "status": {
+      "created": true,
+      "ready": null,
+      "stateChangeRequests": null,
+      "snapshotInProgress": null,
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-24T15:59:30Z",
+          "lastTransitionTime": "2026-10-24T15:59:30Z",
+          "message": "virt-launcher pod is terminating",
+          "reason": "PodTerminating",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "cannot migrate VMI: PVC restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+          "reason": "DisksNotLiveMigratable",
+          "status": "False",
+          "type": "LiveMigratable"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "status": "True",
+          "type": "StorageLiveMigratable"
+        }
+      ]
+    }
+  },
+  "vmi": {
+    "ref": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "ada85d99-9d6d-4086-8bce-dffedc257f64",
+      "resourceVersion": "63254466"
+    },
+    "status": {
+      "phase": "Failed",
+      "nodeName": "ani-01",
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-24T15:59:30Z",
+          "lastTransitionTime": "2026-10-24T15:59:30Z",
+          "message": "virt-launcher pod is terminating",
+          "reason": "PodTerminating",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "cannot migrate VMI: PVC restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+          "reason": "DisksNotLiveMigratable",
+          "status": "False",
+          "type": "LiveMigratable"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "status": "True",
+          "type": "StorageLiveMigratable"
+        }
+      ],
+      "phaseTransitionTimestamps": [
+        {
+          "phase": "Pending",
+          "phaseTransitionTimestamp": "2026-10-24T15:44:22Z"
+        },
+        {
+          "phase": "Scheduling",
+          "phaseTransitionTimestamp": "2026-10-24T15:44:23Z"
+        },
+        {
+          "phase": "Scheduled",
+          "phaseTransitionTimestamp": "2026-10-24T15:54:02Z"
+        },
+        {
+          "phase": "Failed",
+          "phaseTransitionTimestamp": "2026-10-24T15:59:33Z"
+        }
+      ],
+      "volumeStatus": [
+        {
+          "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "75Gi"
+            },
+            "claimName": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "75Gi"
+            },
+            "volumeMode": "Block"
+          },
+          "target": ""
+        },
+        {
+          "hotplugVolume": {
+            "attachPodName": "hp-volume-cgg9q"
+          },
+          "message": "Created hotplug attachment pod hp-volume-cgg9q, for volume disk-89317f205600510abc65e40402c83abb",
+          "name": "disk-89317f205600510abc65e40402c83abb",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "3Gi"
+            },
+            "claimName": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-89317f205600510abc65e40402c83abb",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "3Gi"
+            },
+            "volumeMode": "Block"
+          },
+          "phase": "AttachedToNode",
+          "reason": "SuccessfulCreate",
+          "target": ""
+        },
+        {
+          "hotplugVolume": {
+            "attachPodName": "hp-volume-cgg9q"
+          },
+          "message": "Created hotplug attachment pod hp-volume-cgg9q, for volume disk-cca2005bd9365327a5ded8236385b9ba",
+          "name": "disk-cca2005bd9365327a5ded8236385b9ba",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "4Gi"
+            },
+            "claimName": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-cca2005bd9365327a5ded8236385b9ba",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "4Gi"
+            },
+            "volumeMode": "Block"
+          },
+          "phase": "AttachedToNode",
+          "reason": "SuccessfulCreate",
+          "target": ""
+        },
+        {
+          "name": "media-driver",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "2Gi"
+            },
+            "claimName": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-media-driver",
+            "filesystemOverhead": "0.06",
+            "requests": {
+              "storage": "2Gi"
+            },
+            "volumeMode": "Filesystem"
+          },
+          "target": ""
+        }
+      ]
+    }
+  },
+  "launcher": {
+    "ref": {
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-lsdhc",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "c1e6573f-85fb-45fa-897c-6c4358c9f23a",
+      "resourceVersion": "63254480"
+    },
+    "phase": "Failed",
+    "node": "ani-01",
+    "conditions": [
+      {
+        "lastProbeTime": "2026-10-24T15:44:23Z",
+        "lastTransitionTime": "2026-10-24T15:44:23Z",
+        "message": "the virtual machine is not paused",
+        "reason": "NotPaused",
+        "status": "True",
+        "type": "kubevirt.io/virtual-machine-unpaused"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T15:59:31Z",
+        "observedGeneration": 1,
+        "status": "False",
+        "type": "PodReadyToStartContainers"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T15:54:01Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "Initialized"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T15:59:30Z",
+        "observedGeneration": 1,
+        "reason": "PodFailed",
+        "status": "False",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T15:59:30Z",
+        "observedGeneration": 1,
+        "reason": "PodFailed",
+        "status": "False",
+        "type": "ContainersReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T15:44:23Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "PodScheduled"
+      }
+    ],
+    "containers": [
+      {
+        "name": "compute",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "terminated": {
+            "containerID": "containerd://7b01ff5a46fe3676bbfb61e4ff2030fa3a1af2ef1cd4d7ae976318a506cdebf6",
+            "exitCode": 2,
+            "finishedAt": "2026-10-24T15:59:25Z",
+            "message": "2026-10-24T15:58:49.455808Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:58:52.707562Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:58:55.957091Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:58:59.207764Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:59:02.458775Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:59:05.709918Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:59:09.004631Z\"}\n{\"component\":\"virt-launcher\",\"level\":\"error\",\"msg\":\"Error updating cache: empty DomainStats\",\"pos\":\"time-defined-cache.go:104\",\"timestamp\":\"2026-10-24T15:59:12.255444Z\"}\npanic: timed out waiting for domain to be defined\n{\"component\":\"virt-launcher-monitor\",\"level\":\"info\",\"msg\":\"Reaped Launcher main pid\",\"pos\":\"virt-launcher-monitor.go:137\",\"timestamp\":\"2026-10-24T15:59:14.837637Z\"}\n{\"component\":\"virt-launcher-monitor\",\"level\":\"error\",\"msg\":\"dirty virt-launcher shutdown: exit-code 2\",\"pos\":\"virt-launcher-monitor.go:156\",\"timestamp\":\"2026-10-24T15:59:14.837851Z\"}\n{\"component\":\"virt-launcher-monitor\",\"level\":\"error\",\"msg\":\"failed to read qemu log directory\",\"pos\":\"virt-launcher-monitor.go:162\",\"reason\":\"open /run/kubevirt-private/libvirt/qemu/log: no such file or directory\",\"timestamp\":\"2026-10-24T15:59:14.837926Z\"}\n{\"component\":\"virt-launcher-monitor\",\"level\":\"info\",\"msg\":\"virt-launcher-monitor: Exiting...\",\"pos\":\"virt-launcher-monitor.go:91\",\"timestamp\":\"2026-10-24T15:59:22.655424Z\"}\n",
+            "reason": "Error",
+            "startedAt": "2026-10-24T15:54:02Z"
+          }
+        }
+      }
+    ],
+    "init_containers": [
+      {
+        "name": "guest-console-log",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "terminated": {
+            "containerID": "containerd://403eda1dedb8673cbec5fc2a1c189ed20bb08be67ef01d7cecd17c7008641bef",
+            "exitCode": 0,
+            "finishedAt": "2026-10-24T15:59:30Z",
+            "reason": "Completed",
+            "startedAt": "2026-10-24T15:54:01Z"
+          }
+        }
+      }
+    ]
+  },
+  "events": [
+    {
+      "type": "Normal",
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-24T15:54:00Z",
+      "lastTimestamp": "2026-10-24T15:54:00Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-24T15:54:01Z",
+      "lastTimestamp": "2026-10-24T15:54:01Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Pulled",
+      "message": "Container image \"172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-24T15:54:01Z",
+      "lastTimestamp": "2026-10-24T15:54:01Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-24T15:54:01Z",
+      "lastTimestamp": "2026-10-24T15:54:01Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created attachment pod hp-volume-cgg9q",
+      "firstTimestamp": "2026-10-24T15:54:02Z",
+      "lastTimestamp": "2026-10-24T15:54:02Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created hotplug attachment pod hp-volume-cgg9q, for volume disk-89317f205600510abc65e40402c83abb",
+      "firstTimestamp": "2026-10-24T15:54:02Z",
+      "lastTimestamp": "2026-10-24T15:54:02Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created hotplug attachment pod hp-volume-cgg9q, for volume disk-cca2005bd9365327a5ded8236385b9ba",
+      "firstTimestamp": "2026-10-24T15:54:02Z",
+      "lastTimestamp": "2026-10-24T15:54:02Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-24T15:54:02Z",
+      "lastTimestamp": "2026-10-24T15:54:02Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Killing",
+      "message": "Stopping container guest-console-log",
+      "firstTimestamp": "2026-10-24T15:59:30Z",
+      "lastTimestamp": "2026-10-24T15:59:30Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Warning",
+      "reason": "SyncFailed",
+      "message": "cannot detect vm \"vm-fc154879-8a40-4b18-967c-215f5cf5992d\", err: Could not get owner Pid of socket /pods/c1e6573f-85fb-45fa-897c-6c4358c9f23a/volumes/kubernetes.io~empty-dir/sockets/launcher-sock: dial unix /proc/self/fd/27: connect: connection refused",
+      "firstTimestamp": "2026-10-24T15:59:15Z",
+      "lastTimestamp": "2026-10-24T15:59:32Z",
+      "eventTime": null,
+      "count": 16
+    },
+    {
+      "type": "Warning",
+      "reason": "Stopped",
+      "message": "The VirtualMachineInstance crashed.",
+      "firstTimestamp": "2026-10-24T15:59:33Z",
+      "lastTimestamp": "2026-10-24T15:59:33Z",
+      "eventTime": null,
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulDelete",
+      "message": "Deleted attachment pod hp-volume-cgg9q",
+      "firstTimestamp": "2026-10-24T15:59:33Z",
+      "lastTimestamp": "2026-10-24T15:59:33Z",
+      "eventTime": null,
+      "count": 1
+    }
+  ],
+  "vnc_three_a_readback_eligible": false,
+  "business_mutations": 0,
+  "guest_commands": 0,
+  "cluster_mutations": 0
+}

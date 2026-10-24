@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-24T17:58:59.380748+00:00",
+  "phase": "run",
+  "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+  "protected_before": {
+    "windows_version": 18,
+    "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "pods": [
+      "844effd9-c968-4aa5-9227-28dea46f1ace",
+      "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+    ],
+    "restored_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "all_root_storage_uid_rbd_spec_checks": "PASS",
+    "online_snapshot": {
+      "kind": "VirtualMachineSnapshot",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-snap-15e53288-6b6a-5278-83ad-5703e15303e1",
+      "uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57"
+    },
+    "source_nad_vpc_checks": "PASS"
+  },
+  "backend_writes": 0,
+  "native_writes": 0,
+  "command": {
+    "phase": "DELETE_SINGLE_CANONICAL_ACK",
+    "operation_id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+    "send_attempts": 1,
+    "resource_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761"
+  },
+  "protected_after": {
+    "windows_version": 18,
+    "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "pods": [
+      "844effd9-c968-4aa5-9227-28dea46f1ace",
+      "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+    ],
+    "restored_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "all_root_storage_uid_rbd_spec_checks": "PASS",
+    "online_snapshot": {
+      "kind": "VirtualMachineSnapshot",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-snap-15e53288-6b6a-5278-83ad-5703e15303e1",
+      "uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57"
+    },
+    "source_nad_vpc_checks": "PASS"
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "state": "TWO_CANONICAL_DELETE_ACKS_PRODUCT_AND_PHYSICAL_CLEANUP_PENDING",
+  "runner_sha256": "b7c7f44c291b1784f113ed6bfca887818805d53683abe593e7d8f999733ad4cd",
+  "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
+  "vms": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "canonical_ack": {
+        "operationId": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+        "resourceId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "replayed": false,
+        "result": "QUEUED_FOR_OWNER"
+      },
+      "send_attempts": 1,
+      "operation": {
+        "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "intentVersion": "48",
+        "state": "running",
+        "reason": "",
+        "observedAt": "2026-10-24T18:02:16.708753309Z"
+      },
+      "current_observed_state": "Running",
+      "closing": true,
+      "remaining_vm_owned_kind_counts": {
+        "DataVolume": 1,
+        "PersistentVolume": 4,
+        "PersistentVolumeClaim": 4,
+        "Pod": 1,
+        "VirtualMachine": 1,
+        "VirtualMachineInstance": 1,
+        "VirtualMachineSnapshot": 2,
+        "VirtualMachineSnapshotContent": 2,
+        "VolumeSnapshot": 7,
+        "VolumeSnapshotContent": 7
+      },
+      "remaining_vm_owned_refs": [
+        {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-dd773137-07f9-5b7a-9511-fda3dcf09001",
+          "uid": "199635fa-df68-4e2f-b114-32fe071a680e",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/DV"
+        },
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-198d300b-8af1-4093-aa4a-5af45e50f95a",
+          "uid": "cd111ccf-bba4-45dc-8409-2ae0079ad13d",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/0/pv"
+        },
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-5820ae72-de2a-41e1-87a4-bc5a2edce3f2",
+          "uid": "79121165-7547-472a-9939-ee0bd4273c41",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/observed_pv"
+        },
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-8beddace-a96e-4630-a976-a2557d0ad1ba",
+          "uid": "3922eb1f-ea52-499d-9df8-cabf96b5ccd9",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/1/pv"
+        },
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-cc14cc58-b0d5-48bb-ab27-444ee02de318",
+          "uid": "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/2/pv"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "uid": "cc14cc58-b0d5-48bb-ab27-444ee02de318",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/2/pvc"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "uid": "198d300b-8af1-4093-aa4a-5af45e50f95a",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/0/pvc"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "uid": "8beddace-a96e-4630-a976-a2557d0ad1ba",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/1/pvc"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-dd773137-07f9-5b7a-9511-fda3dcf09001",
+          "uid": "fd2d0a93-58a1-4045-802a-0e39d9045c15",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/observed_pvc"
+        },
+        {
+          "kind": "Pod",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-76dcq",
+          "uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646",
+          "basis": "latest protected native identity"
+        },
+        {
+          "kind": "VirtualMachine",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/vm"
+        },
+        {
+          "kind": "VirtualMachineInstance",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+          "basis": "latest protected native identity"
+        },
+        {
+          "kind": "VirtualMachineSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-snap-3d068268-d8d0-5583-810f-9f187e0b05d1",
+          "uid": "b7685143-956b-4ce8-9994-7f3b7edb9a06",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/snapshot"
+        },
+        {
+          "kind": "VirtualMachineSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-snap-cb8710d2-76a0-5ac8-ab99-f959075594b2",
+          "uid": "8706d234-5ab0-4114-b72e-95102d057017",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/snapshot"
+        },
+        {
+          "kind": "VirtualMachineSnapshotContent",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-content-8706d234-5ab0-4114-b72e-95102d057017",
+          "uid": "049e4a37-8750-461b-8e0f-4d7f80273b77",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/content"
+        },
+        {
+          "kind": "VirtualMachineSnapshotContent",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-content-b7685143-956b-4ce8-9994-7f3b7edb9a06",
+          "uid": "9a560416-b04e-4dba-9a65-b0d16c870080",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/content"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-41652e30-6c88-4da8-936c-d07730935420-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "uid": "e6d7d54f-559f-4d8e-be3d-e2156b63d260",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-online-a-native.json/volumes/0/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "uid": "e823fe1b-d35a-4704-8335-89f6b214aaa1",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/0/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "uid": "de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/1/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/2/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "uid": "0f98ac51-2971-40b2-9161-72ffc13a0d06",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/0/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "uid": "df765f1a-2038-46cf-b6df-c11df699980d",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/1/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "uid": "e08c5773-d300-45ee-b9b2-e80ffabeae38",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/2/volume_snapshot"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-0f98ac51-2971-40b2-9161-72ffc13a0d06",
+          "uid": "be57a98a-b928-42ff-9fa1-0dfbf211cc3e",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/0/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+          "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/2/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+          "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/1/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-df765f1a-2038-46cf-b6df-c11df699980d",
+          "uid": "f43dd8f0-2bd7-4ee6-a9e2-893bd3b15e06",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/1/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-e08c5773-d300-45ee-b9b2-e80ffabeae38",
+          "uid": "9b61937c-3d14-41bf-8fc9-255c720be7f1",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/2/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-e6d7d54f-559f-4d8e-be3d-e2156b63d260",
+          "uid": "85bbe315-f51c-4b24-9ca4-f314fee432d8",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-online-a-native.json/volumes/0/volume_snapshot_content"
+        },
+        {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
+          "uid": "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad",
+          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/0/volume_snapshot_content"
+        }
+      ],
+      "retained_shared_evidence_excluded_from_delete_acceptance": [
+        "Namespace",
+        "VolumeSnapshotClass"
+      ]
+    },
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "canonical_ack": {
+        "operationId": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+        "resourceId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "replayed": false,
+        "result": "QUEUED_FOR_OWNER"
+      },
+      "send_attempts": 1,
+      "operation": {
+        "id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "intentVersion": "8",
+        "state": "running",
+        "reason": "",
+        "observedAt": "2026-10-24T18:02:25.967661638Z"
+      },
+      "current_observed_state": "Running",
+      "closing": true,
+      "remaining_vm_owned_kind_counts": {
+        "PersistentVolume": 2
+      },
+      "remaining_vm_owned_refs": [
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-0fa38872-656c-4932-ada6-0ff05cd67620",
+          "uid": "04032b72-35ba-410e-8aca-51f26cda67a0",
+          "basis": "latest-protected-native/068d56dd-d4fc-4ca8-8430-16c36bad0761/storage/1/pv"
+        },
+        {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+          "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92",
+          "basis": "latest-protected-native/068d56dd-d4fc-4ca8-8430-16c36bad0761/storage/0/pv"
+        }
+      ],
+      "retained_shared_evidence_excluded_from_delete_acceptance": [
+        "Namespace",
+        "VolumeSnapshotClass"
+      ]
+    }
+  ],
+  "windows_shared_preserved": true,
+  "v3_backend": {
+    "result": "UNKNOWN_NO_ABSENCE_CLAIM",
+    "error_type": "TimeoutExpired"
+  },
+  "fedora_backend": {
+    "result": "UNKNOWN_NO_ABSENCE_CLAIM",
+    "error_type": "TimeoutExpired",
+    "error": "Command '['/home/chabking/ani-four-service-deploy-20261012/tools/kubectl', '--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', '--request-timeout=8s', 'exec', '-n', 'rook-ceph', 'rook-ceph-tools-68d6bc7cc7-2z8",
+    "backend_writes": 0
+  },
+  "business_delete_sends": 2,
+  "new_business_posts_after_two_deletes": 0,
+  "native_writes": 0,
+  "backend_writes": 0,
+  "historical_v22_source_gap": "NOT_MEASURED_UNCHANGED_NO_ACTION",
+  "receipts": {
+    "run-v3-ack-01.json": "587afaa07a6303f45571b8f020bdda4486983645b3dbefb3b47aedbb612c7fe6",
+    "run-fedora-ack-01.json": "c8474cf1e15379a4fbe14a5191633fe5d9afe60d7a00efbb9b06298869bf6d52",
+    "physical-fedora-physical-01.json": "2592c49ab48564a4bafe3bad5720b92d45be691fb2a80e2e51d5675c40df42a0",
+    "original-operations-native-01.json": "f328a872b3590785fe5c31a6f8471fd3e6fed73f2248afe733bbad553893314a"
+  }
+}

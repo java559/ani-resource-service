@@ -1,0 +1,39 @@
+{
+  "state": "PREPARED_NOT_EXECUTED",
+  "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
+  "runner_sha256": "b7c7f44c291b1784f113ed6bfca887818805d53683abe593e7d8f999733ad4cd",
+  "syntax": "PASS",
+  "business_tests": "NOT_RUN",
+  "business_posts": 0,
+  "native_reads": 0,
+  "native_writes": 0,
+  "backend_writes": 0,
+  "source_file_hash_reads_only_on_fedora": true,
+  "release": [
+    {
+      "step": "delete-vm-v3",
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "body": {
+        "data": {
+          "idempotencyKey": "56cd8e7d-bd4e-4b0f-a895-07b72e0a862a",
+          "expectedVersion": "47"
+        }
+      },
+      "body_sha256": "41fc9d6b9b2dd38f25660a2962060c77a1daea0a3299f381db6c3d568ed15816",
+      "release_template": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/linux-final-cleanup-01/delete-vm-v3-release.template.json"
+    },
+    {
+      "step": "delete-vm-fedora44-v2",
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "body": {
+        "data": {
+          "idempotencyKey": "6835eae6-924a-4d96-92de-d6454ffef5c1",
+          "expectedVersion": "7"
+        }
+      },
+      "body_sha256": "e229fb208ea957ab18d219b93a9c1348df1c97b73929fe0b115f1ecbd18d65ef",
+      "release_template": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/linux-final-cleanup-01/delete-vm-fedora44-v2-release.template.json"
+    }
+  ],
+  "physical_observation": "continue original op after accepted DELETE; normal GC only; oldV22 attribution remains NOT_MEASURED"
+}
