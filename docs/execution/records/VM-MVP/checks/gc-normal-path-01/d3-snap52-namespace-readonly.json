@@ -1,0 +1,81 @@
+{
+  "child_image_opens": 0,
+  "children_count_boundary": {
+    "current_namespace_getter_exposes_children_count": false,
+    "current_read_count": "NOT_EXPOSED_BY_INSTALLED_PYTHON_GETTER",
+    "interpretation": "Previous same-snap one-level children count0 is retained with its earlier timestamp; it is not relabeled as a fresh count from this namespace-only read.",
+    "prior_same_image_same_snap": {
+      "bound_exceeded": false,
+      "children_count": 0,
+      "observed_at": "2026-10-24T18:58:11.660319+00:00",
+      "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/gc-normal-path-01/three-snap-readonly.json",
+      "sha256": "18f88e92c3e08e9fb936a59709423a688496e68d488030a5bf3336589acddafb"
+    }
+  },
+  "existing_identity_reference": "original tools client.admin /etc/ceph/ceph.conf + /etc/ceph/keyring",
+  "existing_reader_pod_uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+  "extra_cluster_or_version_or_trash_or_task_or_schedule_reads": 0,
+  "kubectl_exit": 0,
+  "local_frozen_vsc_match": {
+    "frozen_handle_count": 9,
+    "inventory_reference": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/linux-final-cleanup-01/inventory.json",
+    "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
+    "match_count": 1,
+    "matches": [
+      {
+        "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-c61438a1-c2a1-4867-985e-e982365349f3",
+        "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "snapshot_id": "cb8710d2-76a0-5ac8-ab99-f959075594b2",
+        "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "volume_snapshot": {
+          "kind": "VolumeSnapshot",
+          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb"
+        },
+        "volume_snapshot_content": {
+          "kind": "VolumeSnapshotContent",
+          "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+          "namespace": "",
+          "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997"
+        }
+      }
+    ],
+    "matching_rule": "exact original_name equals csi-snap- plus the frozen CSI snapshot handle final UUID"
+  },
+  "object_budget_seconds": 15,
+  "original_conclusion_sha256": "1a0a5ddb43fef7fa71eb4cfc79666855b31482bd6a976994617dac6e5ff4ce8f",
+  "outer_elapsed_seconds": 1.262,
+  "owner_result": "EXACT_FROZEN_V08_D3_SNAPSHOT_MATCH",
+  "read": {
+    "binding_methods": {
+      "snap_get_namespace_type": true,
+      "snap_get_trash_namespace": true
+    },
+    "child_image_opens": 0,
+    "doc_introspection_used": false,
+    "elapsed_seconds_to_read": 0.567,
+    "image_id": "20cc87b511820b",
+    "namespace_kind": "TRASH",
+    "namespace_type": 2,
+    "read_only": true,
+    "result": "READONLY_NAMESPACE_COMPLETE",
+    "snap_id": 52,
+    "trash_namespace": {
+      "original_name": "csi-snap-c61438a1-c2a1-4867-985e-e982365349f3",
+      "original_namespace_type": 0
+    },
+    "trash_namespace_constant": 2,
+    "writes": 0
+  },
+  "root_D4_retries": 0,
+  "source_provenance": {
+    "confirmed_primary_raw_source": true,
+    "namespace_getter_line": 4903,
+    "trash_getter_line": 4949,
+    "url": "https://github.com/ceph/ceph/blob/v20.2.4/src/pybind/rbd/rbd.pyx"
+  },
+  "source_sha256": "5a3917da0fbfca8bf3abf633a35073cbd66dcfb7e1e4249f65ed89bc5900505a",
+  "started_at": "2026-10-24T19:05:41.856392+00:00",
+  "writes": 0
+}

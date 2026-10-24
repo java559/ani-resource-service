@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-24T19:11:41.798930+00:00",
+  "scope": "one terminal query of original nine frozen trash IDs after snapshot-release evidence",
+  "cluster_writes": 0,
+  "backend_writes": 0,
+  "windows_api_reads": 0,
+  "pg_reads": 0,
+  "schedule_task_reads": 0,
+  "pool_lists": 0,
+  "original_ids": [
+    "20cc871b8dd7ad",
+    "20cc878795a82b",
+    "20cc878c626cb3",
+    "20cc8795a861a0",
+    "20cc87987d1f99",
+    "20cc87b511820b",
+    "20cc87c1cde11d",
+    "20cc87eb4a360b",
+    "20cc87fb4134b9"
+  ],
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "internal_ips": [
+        "172.16.101.10"
+      ]
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "internal_ips": [
+        "172.16.101.11"
+      ]
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "internal_ips": [
+        "172.16.101.12"
+      ]
+    }
+  ],
+  "reader": {
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+    "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+    "container": "mgr",
+    "owner_uid": "88d60d2a-b0c1-4c62-959a-02c844737931",
+    "ready": true,
+    "identity": "mgr.a"
+  },
+  "original_tools_baseline": {
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+    "used_for_backend_read": false
+  },
+  "budgets": {
+    "physical_python_process_seconds": 40,
+    "connection_io_seconds": 5
+  },
+  "trash_get": {
+    "at": "2026-10-24T19:11:23.532336+00:00",
+    "rows": [
+      {
+        "id": "20cc871b8dd7ad",
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "result": "NOT_FOUND_IN_TRASH"
+      },
+      {
+        "id": "20cc878795a82b",
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "result": "NOT_FOUND_IN_TRASH"
+      },
+      {
+        "id": "20cc878c626cb3",
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "result": "NOT_FOUND_IN_TRASH"
+      },
+      {
+        "id": "20cc8795a861a0",
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "result": "NOT_FOUND_IN_TRASH"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87987d1f99",
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:20+00:00",
+        "deferment_end_time": "2026-10-24T07:22:20+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87b511820b",
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:48+00:00",
+        "deferment_end_time": "2026-10-24T07:22:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87c1cde11d",
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:36+00:00",
+        "deferment_end_time": "2026-10-24T07:22:36+00:00"
+      },
+      {
+        "id": "20cc87eb4a360b",
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "result": "NOT_FOUND_IN_TRASH"
+      },
+      {
+        "id": "20cc87fb4134b9",
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "result": "NOT_FOUND_IN_TRASH"
+      }
+    ],
+    "backend_writes": 0,
+    "result": "COMPLETE",
+    "elapsed_seconds": 3.742
+  },
+  "remaining_exact_ids": [
+    "20cc87987d1f99",
+    "20cc87b511820b",
+    "20cc87c1cde11d"
+  ],
+  "finished_at": "2026-10-24T19:11:47.480522+00:00"
+}

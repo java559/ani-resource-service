@@ -1,5 +1,5 @@
 {
-  "state": "TWO_CANONICAL_DELETE_ACKS_PRODUCT_AND_PHYSICAL_CLEANUP_PENDING",
+  "state": "BOTH_NORMAL_GOV_DELETES_SUCCEEDED_ALL_ORIGINAL_OWNED_NATIVE_GONE_NETWORK_RELEASED_KNOWN_RBD_TRASH_PENDING_GC_TIME_NOT_VERIFIED",
   "runner_sha256": "b7c7f44c291b1784f113ed6bfca887818805d53683abe593e7d8f999733ad4cd",
   "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
   "vms": [
@@ -12,245 +12,21 @@
         "result": "QUEUED_FOR_OWNER"
       },
       "send_attempts": 1,
-      "operation": {
+      "final_operation": {
         "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
         "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
         "action": "/vm.v1.VMService/AcceptDelete",
         "intentVersion": "48",
-        "state": "running",
+        "state": "succeeded",
         "reason": "",
-        "observedAt": "2026-10-24T18:02:16.708753309Z"
+        "observedAt": "2026-10-24T18:18:39.087721663Z"
       },
-      "current_observed_state": "Running",
-      "closing": true,
-      "remaining_vm_owned_kind_counts": {
-        "DataVolume": 1,
-        "PersistentVolume": 4,
-        "PersistentVolumeClaim": 4,
-        "Pod": 1,
-        "VirtualMachine": 1,
-        "VirtualMachineInstance": 1,
-        "VirtualMachineSnapshot": 2,
-        "VirtualMachineSnapshotContent": 2,
-        "VolumeSnapshot": 7,
-        "VolumeSnapshotContent": 7
-      },
-      "remaining_vm_owned_refs": [
-        {
-          "kind": "DataVolume",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vd-dd773137-07f9-5b7a-9511-fda3dcf09001",
-          "uid": "199635fa-df68-4e2f-b114-32fe071a680e",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/DV"
-        },
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-198d300b-8af1-4093-aa4a-5af45e50f95a",
-          "uid": "cd111ccf-bba4-45dc-8409-2ae0079ad13d",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/0/pv"
-        },
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-5820ae72-de2a-41e1-87a4-bc5a2edce3f2",
-          "uid": "79121165-7547-472a-9939-ee0bd4273c41",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/observed_pv"
-        },
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-8beddace-a96e-4630-a976-a2557d0ad1ba",
-          "uid": "3922eb1f-ea52-499d-9df8-cabf96b5ccd9",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/1/pv"
-        },
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-cc14cc58-b0d5-48bb-ab27-444ee02de318",
-          "uid": "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/2/pv"
-        },
-        {
-          "kind": "PersistentVolumeClaim",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dbc2c93986554f98413f198f5e9c1a6",
-          "uid": "cc14cc58-b0d5-48bb-ab27-444ee02de318",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/2/pvc"
-        },
-        {
-          "kind": "PersistentVolumeClaim",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
-          "uid": "198d300b-8af1-4093-aa4a-5af45e50f95a",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/0/pvc"
-        },
-        {
-          "kind": "PersistentVolumeClaim",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
-          "uid": "8beddace-a96e-4630-a976-a2557d0ad1ba",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/disks/1/pvc"
-        },
-        {
-          "kind": "PersistentVolumeClaim",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vd-dd773137-07f9-5b7a-9511-fda3dcf09001",
-          "uid": "fd2d0a93-58a1-4045-802a-0e39d9045c15",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/d6_current/observed_pvc"
-        },
-        {
-          "kind": "Pod",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-76dcq",
-          "uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646",
-          "basis": "latest protected native identity"
-        },
-        {
-          "kind": "VirtualMachine",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
-          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-restored-physical.json/native/vm"
-        },
-        {
-          "kind": "VirtualMachineInstance",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
-          "uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
-          "basis": "latest protected native identity"
-        },
-        {
-          "kind": "VirtualMachineSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vm-snap-3d068268-d8d0-5583-810f-9f187e0b05d1",
-          "uid": "b7685143-956b-4ce8-9994-7f3b7edb9a06",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/snapshot"
-        },
-        {
-          "kind": "VirtualMachineSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vm-snap-cb8710d2-76a0-5ac8-ab99-f959075594b2",
-          "uid": "8706d234-5ab0-4114-b72e-95102d057017",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/snapshot"
-        },
-        {
-          "kind": "VirtualMachineSnapshotContent",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-content-8706d234-5ab0-4114-b72e-95102d057017",
-          "uid": "049e4a37-8750-461b-8e0f-4d7f80273b77",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/content"
-        },
-        {
-          "kind": "VirtualMachineSnapshotContent",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-content-b7685143-956b-4ce8-9994-7f3b7edb9a06",
-          "uid": "9a560416-b04e-4dba-9a65-b0d16c870080",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/content"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-41652e30-6c88-4da8-936c-d07730935420-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
-          "uid": "e6d7d54f-559f-4d8e-be3d-e2156b63d260",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-online-a-native.json/volumes/0/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
-          "uid": "e823fe1b-d35a-4704-8335-89f6b214aaa1",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/0/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
-          "uid": "de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/1/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
-          "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/2/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
-          "uid": "0f98ac51-2971-40b2-9161-72ffc13a0d06",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/0/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
-          "uid": "df765f1a-2038-46cf-b6df-c11df699980d",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/1/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshot",
-          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
-          "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
-          "uid": "e08c5773-d300-45ee-b9b2-e80ffabeae38",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/2/volume_snapshot"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-0f98ac51-2971-40b2-9161-72ffc13a0d06",
-          "uid": "be57a98a-b928-42ff-9fa1-0dfbf211cc3e",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/0/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
-          "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/2/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
-          "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/1/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-df765f1a-2038-46cf-b6df-c11df699980d",
-          "uid": "f43dd8f0-2bd7-4ee6-a9e2-893bd3b15e06",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/1/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-e08c5773-d300-45ee-b9b2-e80ffabeae38",
-          "uid": "9b61937c-3d14-41bf-8fc9-255c720be7f1",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-offline-a-native.json/volumes/2/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-e6d7d54f-559f-4d8e-be3d-e2156b63d260",
-          "uid": "85bbe315-f51c-4b24-9ca4-f314fee432d8",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/gov-linux-snapshot-v3-online-a-native.json/volumes/0/volume_snapshot_content"
-        },
-        {
-          "kind": "VolumeSnapshotContent",
-          "namespace": "",
-          "name": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
-          "uid": "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad",
-          "basis": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v08-account/gov-linux-account-v3-offline-a-native.json/volumes/0/volume_snapshot_content"
-        }
-      ],
-      "retained_shared_evidence_excluded_from_delete_acceptance": [
-        "Namespace",
-        "VolumeSnapshotClass"
-      ]
+      "observed_state": "Deleted",
+      "native_final": {
+        "at": "2026-10-24T18:19:41.370125+00:00",
+        "all_original_owned_native_gone": true,
+        "remaining": []
+      }
     },
     {
       "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
@@ -261,62 +37,825 @@
         "result": "QUEUED_FOR_OWNER"
       },
       "send_attempts": 1,
-      "operation": {
+      "final_operation": {
         "id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
         "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
         "action": "/vm.v1.VMService/AcceptDelete",
         "intentVersion": "8",
-        "state": "running",
+        "state": "succeeded",
         "reason": "",
-        "observedAt": "2026-10-24T18:02:25.967661638Z"
+        "observedAt": "2026-10-24T18:07:31.748941117Z"
       },
-      "current_observed_state": "Running",
-      "closing": true,
-      "remaining_vm_owned_kind_counts": {
-        "PersistentVolume": 2
-      },
-      "remaining_vm_owned_refs": [
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-0fa38872-656c-4932-ada6-0ff05cd67620",
-          "uid": "04032b72-35ba-410e-8aca-51f26cda67a0",
-          "basis": "latest-protected-native/068d56dd-d4fc-4ca8-8430-16c36bad0761/storage/1/pv"
-        },
-        {
-          "kind": "PersistentVolume",
-          "namespace": "",
-          "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
-          "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92",
-          "basis": "latest-protected-native/068d56dd-d4fc-4ca8-8430-16c36bad0761/storage/0/pv"
-        }
-      ],
-      "retained_shared_evidence_excluded_from_delete_acceptance": [
-        "Namespace",
-        "VolumeSnapshotClass"
-      ]
+      "observed_state": "Deleted",
+      "native_final": {
+        "at": "2026-10-24T18:11:17.862141+00:00",
+        "all_original_owned_native_gone": true,
+        "remaining": []
+      }
     }
   ],
-  "windows_shared_preserved": true,
-  "v3_backend": {
-    "result": "UNKNOWN_NO_ABSENCE_CLAIM",
-    "error_type": "TimeoutExpired"
+  "final_windows_source_nad_vpc_protection": {
+    "windows_version": 18,
+    "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "pods": [
+      "844effd9-c968-4aa5-9227-28dea46f1ace",
+      "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+    ],
+    "restored_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "all_root_storage_uid_rbd_spec_checks": "PASS",
+    "online_snapshot": {
+      "kind": "VirtualMachineSnapshot",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-snap-15e53288-6b6a-5278-83ad-5703e15303e1",
+      "uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57"
+    },
+    "source_nad_vpc_checks": "PASS"
   },
-  "fedora_backend": {
-    "result": "UNKNOWN_NO_ABSENCE_CLAIM",
+  "fedora_physical": {
+    "result": "PENDING_NORMAL_GC_TRASH_PRESENT",
+    "tools_reader_images": [
+      {
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "result": "ABSENT"
+      }
+    ],
+    "single_alternate_reader": [
+      {
+        "kind": "Pod",
+        "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+        "uid": "a55b16b7-fb00-465e-b084-320fceb2c663"
+      },
+      {
+        "kind": "ReplicaSet",
+        "name": "rook-ceph-mgr-a-67c776d466",
+        "uid": "88d60d2a-b0c1-4c62-959a-02c844737931"
+      },
+      {
+        "kind": "Deployment",
+        "name": "rook-ceph-mgr-a",
+        "uid": "c6b73549-848d-4731-a783-0c47fd161d21"
+      },
+      {
+        "kind": "CephCluster",
+        "name": "rook-ceph",
+        "uid": "a0812e65-e735-4872-a806-57fa3327fc20"
+      }
+    ],
+    "alternate_images": [
+      {
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "result": "ABSENT"
+      }
+    ],
+    "matching_trash": [
+      {
+        "result": "PRESENT",
+        "id": "20cc871b8dd7ad",
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:01:48+00:00",
+        "deferment_end_time": "2026-10-24T18:01:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87fb4134b9",
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:02:44+00:00",
+        "deferment_end_time": "2026-10-24T18:02:44+00:00"
+      }
+    ],
     "error_type": "TimeoutExpired",
-    "error": "Command '['/home/chabking/ani-four-service-deploy-20261012/tools/kubectl', '--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', '--request-timeout=8s', 'exec', '-n', 'rook-ceph', 'rook-ceph-tools-68d6bc7cc7-2z8",
-    "backend_writes": 0
+    "no_more_reader_attempts": true,
+    "previous_readside_result": "NOT_VERIFIED",
+    "trash_read_result": "COMPLETE",
+    "final_sampling_receipt": "remaining-rbd-and-network-batch-01.json",
+    "all_matching_deferment_end_times_elapsed": true
+  },
+  "v3_physical": {
+    "result": "PENDING_NORMAL_GC_TRASH_PRESENT",
+    "images": [
+      {
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "result": "ABSENT"
+      }
+    ],
+    "unmeasured_image_names": [],
+    "matching_trash": [
+      {
+        "result": "PRESENT",
+        "id": "20cc878795a82b",
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:12:44+00:00",
+        "deferment_end_time": "2026-10-24T18:12:44+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878c626cb3",
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:04+00:00",
+        "deferment_end_time": "2026-10-24T18:14:04+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc8795a861a0",
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:35+00:00",
+        "deferment_end_time": "2026-10-24T18:14:35+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87987d1f99",
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:20+00:00",
+        "deferment_end_time": "2026-10-24T07:22:20+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87b511820b",
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:48+00:00",
+        "deferment_end_time": "2026-10-24T07:22:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87c1cde11d",
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:36+00:00",
+        "deferment_end_time": "2026-10-24T07:22:36+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87eb4a360b",
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:43+00:00",
+        "deferment_end_time": "2026-10-24T18:14:43+00:00"
+      }
+    ],
+    "error_type": "TimeoutExpired",
+    "absolute_backend_budget_seconds": 15,
+    "previous_readside_result": "NOT_VERIFIED",
+    "trash_read_result": "COMPLETE",
+    "final_sampling_receipt": "remaining-rbd-and-network-batch-01.json",
+    "previous_unmeasured_image_names": [
+      "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+      "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153",
+      "csi-vol-adf22929-9670-4870-a4c3-42addd2afc79",
+      "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c",
+      "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45",
+      "csi-vol-cb07b3bc-f29e-4cab-8c15-484cac941939",
+      "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+      "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+      "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+      "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+      "csi-vol-f7658b37-e5cb-4b67-b0a3-5651bb4e2210"
+    ],
+    "final_batch_images": [
+      {
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "result": "TIMEOUT"
+      },
+      {
+        "name": "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153",
+        "result": "TIMEOUT"
+      },
+      {
+        "name": "csi-vol-adf22929-9670-4870-a4c3-42addd2afc79",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-cb07b3bc-f29e-4cab-8c15-484cac941939",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-f7658b37-e5cb-4b67-b0a3-5651bb4e2210",
+        "result": "ABSENT"
+      }
+    ],
+    "active_image_absence_result": "NOT_VERIFIED",
+    "info_absent_count": 14,
+    "info_timeout_names": [
+      "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+      "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153"
+    ],
+    "final_single_unknown_image_info": {
+      "name": "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153",
+      "result": "ERROR",
+      "exit_code": 2,
+      "stderr": "rbd: error opening image csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153: (2) No such file or directory\n",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 4.481,
+      "interpreted_result": "ABSENT"
+    },
+    "unresolved_active_info_names": [
+      "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead"
+    ],
+    "unresolved_active_info_reason": "Earlier info timeout retained; exact same frozen name and ID positively present in trash, so no retry authorized or needed to establish remaining object.",
+    "remaining_identity_coverage": "All 15 frozen V3 names have ABSENT info or exact trash PRESENT evidence; physical removal remains incomplete.",
+    "all_matching_deferment_end_times_elapsed": true
   },
   "business_delete_sends": 2,
-  "new_business_posts_after_two_deletes": 0,
   "native_writes": 0,
   "backend_writes": 0,
-  "historical_v22_source_gap": "NOT_MEASURED_UNCHANGED_NO_ACTION",
-  "receipts": {
-    "run-v3-ack-01.json": "587afaa07a6303f45571b8f020bdda4486983645b3dbefb3b47aedbb612c7fe6",
-    "run-fedora-ack-01.json": "c8474cf1e15379a4fbe14a5191633fe5d9afe60d7a00efbb9b06298869bf6d52",
-    "physical-fedora-physical-01.json": "2592c49ab48564a4bafe3bad5720b92d45be691fb2a80e2e51d5675c40df42a0",
-    "original-operations-native-01.json": "f328a872b3590785fe5c31a6f8471fd3e6fed73f2248afe733bbad553893314a"
+  "force_or_finalizer_changes": 0,
+  "historical_v22_source_gap": "NOT_MEASURED_UNCHANGED_NO_NAME_BASED_ACTION",
+  "read_monitor_state": "BOTH_ORIGINAL_OPERATIONS_TERMINAL",
+  "read_monitor_exited": true,
+  "receipt_sha256": {
+    "cleanup-followup-progress.json": "174cc8b1c0c10df0c874b89f1fecb48e849c914766779e0ae54415a69dd19fc7",
+    "v3-owned-volume-followup.json": "5c457f0cb24edc967b77980c56822f48dc033cc38497ee2149810b9d79e7934c",
+    "fedora-terminal-backend-15s-01.json": "d01d7dea1e45be0e3eebb92d53c1ec9803b870407cac013f0e3dd7972e89d7b8",
+    "fedora-alternate-reader-01.json": "f4a6dc6beb6168f558c65df618c0cd1dc94025d4bb2e146111c3c6b2c7328d79",
+    "v3-terminal-backend-15s-01.json": "4fa9e98d31aafe1f5a2932892c53a4e067e5f55acfefea78f5f239522ec7da9e",
+    "remaining-rbd-and-network-batch-01.json": "9c3a08eb381df95c5b0f583f8d808ebbd11ebf945815daf0a056b41073807153",
+    "final-cleanup-wait-facts-01.json": "eb1e94223e9ddb9eb8cc5b917fad70c4c91a83ddc5d010251494e9ba3a1a8766",
+    "exact-trash-get-wait-facts-01.json": "1beb5c6e8031b630227a2fbd7265827ba78e3c795452887707d1458ec95fed32"
+  },
+  "final_readonly_batch": {
+    "at": "2026-10-24T18:28:49.164099+00:00",
+    "finished_at": "2026-10-24T18:29:10.144485+00:00",
+    "reader": {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+      "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+      "container": "mgr",
+      "identity": "mgr.a"
+    },
+    "budgets": {
+      "batch_info_inner_total_seconds": 40,
+      "per_info_seconds": 5,
+      "batch_info_outer_seconds": 45,
+      "trash_outer_seconds": 30,
+      "trash_stdout_limit_bytes": 2097152
+    },
+    "remaining_info": {
+      "images": [
+        {
+          "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+          "result": "TIMEOUT"
+        },
+        {
+          "name": "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153",
+          "result": "TIMEOUT"
+        },
+        {
+          "name": "csi-vol-adf22929-9670-4870-a4c3-42addd2afc79",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-cb07b3bc-f29e-4cab-8c15-484cac941939",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+          "result": "ABSENT"
+        },
+        {
+          "name": "csi-vol-f7658b37-e5cb-4b67-b0a3-5651bb4e2210",
+          "result": "ABSENT"
+        }
+      ],
+      "elapsed_seconds": 18.773
+    },
+    "trash": {
+      "result": "COMPLETE",
+      "matching_entries": [
+        {
+          "id": "20cc871b8dd7ad",
+          "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78"
+        },
+        {
+          "id": "20cc878795a82b",
+          "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a"
+        },
+        {
+          "id": "20cc878c626cb3",
+          "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead"
+        },
+        {
+          "id": "20cc8795a861a0",
+          "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1"
+        },
+        {
+          "id": "20cc87987d1f99",
+          "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5"
+        },
+        {
+          "id": "20cc87b511820b",
+          "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac"
+        },
+        {
+          "id": "20cc87c1cde11d",
+          "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00"
+        },
+        {
+          "id": "20cc87eb4a360b",
+          "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943"
+        },
+        {
+          "id": "20cc87fb4134b9",
+          "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1"
+        }
+      ],
+      "stdout_bytes": 2207,
+      "full_list_persisted": false,
+      "elapsed_seconds": 1.002
+    },
+    "no_further_sampling_per_final_authorization": true
+  },
+  "network_cleanup": {
+    "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+      "result": "PASS_RELEASED_PROTOCOL_UNBLOCKED_PERSISTED_VNICS_GONE",
+      "row": {
+        "id": "att_6781cbb15303438f86108d349f3ddfae",
+        "state": "released",
+        "released_at": "2026-10-24T18:14:06.07896+00:00",
+        "protocol_blocked": false
+      },
+      "authoritative_identity_source": "tenant-qualified network_attachments.provider_relations",
+      "original_vnic_count": 11,
+      "vnic_gone": [
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-9bxqb",
+            "uid": "a795cbfb-a2b7-4656-83a3-a031085eadbf",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-c4sb8",
+            "uid": "6f86d067-2948-4dd5-8131-c8aab2e5b564",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+            "uid": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-f4cd4",
+            "uid": "ee6bbc5a-f080-406a-b027-9b853d9e8cd7",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-fqjgh",
+            "uid": "512dd093-1e8c-46e6-b3e8-bd98f575ac0d",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-qdk5p",
+            "uid": "0084945c-d68e-4e9c-96e9-a6f946cd3ac0",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-svdhd",
+            "uid": "0fe52ecd-26dc-4bb6-8f6b-5b080c813fe4",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-wlc86",
+            "uid": "1f4ef3ca-5ad9-4237-9712-02b61b85d91a",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-xv85m",
+            "uid": "2352aa8b-da97-4e1e-9f17-9760d8cc49c9",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-z9kml",
+            "uid": "fbc20fe2-3756-4ea9-a92e-4aa23ad8809b",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-zt69h",
+            "uid": "3fe75633-7f57-4ff2-b0e7-ad34f1c9ce4a",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        }
+      ],
+      "receipt": "final-cleanup-wait-facts-01.json"
+    },
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+      "result": "PASS_RELEASED_PROTOCOL_UNBLOCKED_PERSISTED_VNICS_GONE",
+      "row": {
+        "id": "att_a79e10732ff0417eb82fc4dfdb98a153",
+        "state": "released",
+        "released_at": "2026-10-24T18:00:58.759097+00:00",
+        "protocol_blocked": false
+      },
+      "authoritative_identity_source": "tenant-qualified network_attachments.provider_relations",
+      "original_vnic_count": 3,
+      "vnic_gone": [
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-c7b5q",
+            "uid": "d91b1612-d9f6-47ca-8ba5-435637cd1544",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-jx59h",
+            "uid": "83cf04c2-c5da-4da2-a492-4e692bf6475b",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-rvvtb",
+            "uid": "50e5915f-a6f8-4954-80a1-b96d08c9560f",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        }
+      ],
+      "receipt": "final-cleanup-wait-facts-01.json"
+    }
+  },
+  "previous_readside_timeout_evidence_preserved": true,
+  "network_cleanup_previous_helper_result": {
+    "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+      "result": "NOT_VERIFIED_HELPER_ATTACHMENT_ID_FORMAT_MISMATCH",
+      "AttachmentID": "att_6781cbb15303438f86108d349f3ddfae",
+      "SubmissionID": "7d5460cf-744d-5507-ae4d-c0bb312686aa",
+      "Consumer.State": "closed",
+      "Consumer.ClosedAt": "2026-10-24T18:13:19.17354839Z",
+      "Consumer.DesiredRunState": "deleted",
+      "Consumer.FinalizationID": "33f04276-8f48-5022-9e5f-db7501766880",
+      "attachments": [],
+      "released": false,
+      "missing_identity": "NOT_MEASURED",
+      "explanation": "Approved helper accepts UUID-only attachment strings; actual original AttachmentID is att_ form. Raw fields preserved; no bypass or helper change.",
+      "frozen_vnic_uid": null,
+      "kcn_vnic_gone_result": "NOT_MEASURED_NO_FROZEN_UID"
+    },
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+      "result": "NOT_VERIFIED_HELPER_ATTACHMENT_ID_FORMAT_MISMATCH",
+      "AttachmentID": "att_a79e10732ff0417eb82fc4dfdb98a153",
+      "SubmissionID": "5df0e7fc-8f1b-5bd4-9f01-aa9615678b55",
+      "Consumer.State": "closed",
+      "Consumer.ClosedAt": "2026-10-24T18:00:06.486654942Z",
+      "Consumer.DesiredRunState": "deleted",
+      "Consumer.FinalizationID": "a4d66aed-ac02-500d-bda8-134a7d9187b1",
+      "attachments": [],
+      "released": false,
+      "missing_identity": "NOT_MEASURED",
+      "explanation": "Approved helper accepts UUID-only attachment strings; actual original AttachmentID is att_ form. Raw fields preserved; no bypass or helper change.",
+      "frozen_vnic_uid": null,
+      "kcn_vnic_gone_result": "NOT_MEASURED_NO_FROZEN_UID"
+    }
+  },
+  "final_wait_facts": {
+    "at": "2026-10-24T18:32:45.431473+00:00",
+    "finished_at": "2026-10-24T18:33:51.614107+00:00",
+    "reader": {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+      "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+      "container": "mgr",
+      "identity": "mgr.a"
+    },
+    "trash_long": {
+      "result": "TIMEOUT",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 28.009
+    },
+    "purge_schedule": {
+      "result": "ERROR",
+      "exit_code": 13,
+      "stderr": "rbd: rbd trash purge schedule list failed: (13) Permission denied: access denied: does your client key have mgr caps? See http://docs.ceph.com/en/latest/mgr/administrator/#client-authentication\n",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 0.103
+    },
+    "one_unknown_image_info": {
+      "result": "ERROR",
+      "exit_code": 2,
+      "stderr": "rbd: error opening image csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153: (2) No such file or directory\n",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 4.481
+    },
+    "normal_gc_earliest_time": "Deferral gate already elapsed by 2026-10-24T18:14:43+00:00; actual purge schedule/time NOT_VERIFIED",
+    "normal_wait_duration": "NO_FUTURE_DEFERMENT_PROVEN; actual purge time NOT_VERIFIED",
+    "remaining_objects": [
+      {
+        "result": "PRESENT",
+        "id": "20cc871b8dd7ad",
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:01:48+00:00",
+        "deferment_end_time": "2026-10-24T18:01:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878795a82b",
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:12:44+00:00",
+        "deferment_end_time": "2026-10-24T18:12:44+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878c626cb3",
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:04+00:00",
+        "deferment_end_time": "2026-10-24T18:14:04+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc8795a861a0",
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:35+00:00",
+        "deferment_end_time": "2026-10-24T18:14:35+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87987d1f99",
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:20+00:00",
+        "deferment_end_time": "2026-10-24T07:22:20+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87b511820b",
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:48+00:00",
+        "deferment_end_time": "2026-10-24T07:22:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87c1cde11d",
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:36+00:00",
+        "deferment_end_time": "2026-10-24T07:22:36+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87eb4a360b",
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:43+00:00",
+        "deferment_end_time": "2026-10-24T18:14:43+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87fb4134b9",
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:02:44+00:00",
+        "deferment_end_time": "2026-10-24T18:02:44+00:00"
+      }
+    ],
+    "remaining_object_count": 9,
+    "next_evidence_if_authorized": "Operational decision on nine still-present USER trash objects; no future deferment remains. Schedule was not obtained from either existing identity, and no purge time can be inferred.",
+    "no_mutation_or_new_reader_performed": true,
+    "sampling_stopped": true,
+    "all_deferment_end_times_elapsed": true,
+    "latest_deferment_end_time": "2026-10-24T18:14:43+00:00",
+    "future_deferral_wait_lower_bound_seconds": 0
+  },
+  "exact_trash_get_wait_facts": {
+    "receipt": "exact-trash-get-wait-facts-01.json",
+    "api": "rbd.RBD.trash_get(self, ioctx, image_id)",
+    "installed_signature_confirmed": "(self, ioctx, image_id)",
+    "reader": {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+      "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+      "container": "mgr",
+      "identity": "mgr.a"
+    },
+    "at": "2026-10-24T18:37:03.981445+00:00",
+    "elapsed_seconds": 0.722,
+    "rows": [
+      {
+        "result": "PRESENT",
+        "id": "20cc871b8dd7ad",
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:01:48+00:00",
+        "deferment_end_time": "2026-10-24T18:01:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878795a82b",
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:12:44+00:00",
+        "deferment_end_time": "2026-10-24T18:12:44+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878c626cb3",
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:04+00:00",
+        "deferment_end_time": "2026-10-24T18:14:04+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc8795a861a0",
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:35+00:00",
+        "deferment_end_time": "2026-10-24T18:14:35+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87987d1f99",
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:20+00:00",
+        "deferment_end_time": "2026-10-24T07:22:20+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87b511820b",
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:48+00:00",
+        "deferment_end_time": "2026-10-24T07:22:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87c1cde11d",
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:36+00:00",
+        "deferment_end_time": "2026-10-24T07:22:36+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87eb4a360b",
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:43+00:00",
+        "deferment_end_time": "2026-10-24T18:14:43+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87fb4134b9",
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:02:44+00:00",
+        "deferment_end_time": "2026-10-24T18:02:44+00:00"
+      }
+    ],
+    "source_values": [
+      "USER"
+    ],
+    "all_deferment_end_times_elapsed": true,
+    "latest_deferment_end_time": "2026-10-24T18:14:43+00:00",
+    "future_deferral_wait_lower_bound_seconds": 0,
+    "purge_schedule_original_tools": {
+      "reader_uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+      "exit_code": 2,
+      "result": "ERROR",
+      "stderr": "command terminated with exit code 2\n"
+    },
+    "normal_purge_time": "NOT_VERIFIED",
+    "sampling_stopped": true
   }
 }
