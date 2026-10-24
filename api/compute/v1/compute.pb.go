@@ -32,6 +32,7 @@ const (
 	Usage_CONTAINER_INSTANCE Usage = 1
 	Usage_TRAINING           Usage = 2
 	Usage_INFERENCE          Usage = 3
+	Usage_VIRTUAL_MACHINE    Usage = 4
 )
 
 // Enum value maps for Usage.
@@ -41,12 +42,14 @@ var (
 		1: "CONTAINER_INSTANCE",
 		2: "TRAINING",
 		3: "INFERENCE",
+		4: "VIRTUAL_MACHINE",
 	}
 	Usage_value = map[string]int32{
 		"USAGE_UNSPECIFIED":  0,
 		"CONTAINER_INSTANCE": 1,
 		"TRAINING":           2,
 		"INFERENCE":          3,
+		"VIRTUAL_MACHINE":    4,
 	}
 )
 
@@ -1359,12 +1362,13 @@ const file_compute_v1_compute_proto_rawDesc = "" +
 	"\tmodel_key\x18\b \x01(\tR\tmodel_key\x124\n" +
 	"\x15memory_mib_per_device\x18\t \x01(\x03R\x15memory_mib_per_device\x12.\n" +
 	"\x12core_limit_percent\x18\n" +
-	" \x01(\rR\x12core_limit_percent*S\n" +
+	" \x01(\rR\x12core_limit_percent*h\n" +
 	"\x05Usage\x12\x15\n" +
 	"\x11USAGE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12CONTAINER_INSTANCE\x10\x01\x12\f\n" +
 	"\bTRAINING\x10\x02\x12\r\n" +
-	"\tINFERENCE\x10\x032\xb0\x05\n" +
+	"\tINFERENCE\x10\x03\x12\x13\n" +
+	"\x0fVIRTUAL_MACHINE\x10\x042\xb0\x05\n" +
 	"\x14ComputePresetService\x12X\n" +
 	"\x10AdminListPresets\x12#.compute.v1.AdminListPresetsRequest\x1a\x1f.compute.v1.ListPresetsResponse\x12G\n" +
 	"\x0eAdminGetPreset\x12!.compute.v1.AdminGetPresetRequest\x1a\x12.compute.v1.Preset\x12M\n" +
