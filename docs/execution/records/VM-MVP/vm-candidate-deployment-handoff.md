@@ -38,6 +38,12 @@ Gov目录经[dry-run](checks/service-release-20261025/gov-dry-run.json)后按相
 
 Installer的[五文件普通SSH任务分支发布](checks/service-release-20261025/installer-delete-published.json)已固定提交 `660fdcd2a20d76591465cd69fe36ea476aca9b8b`，远端 `refs/heads/codex/vm-mvp-installer-snapshot-delete-20261025` OID一致。第六个untracked部署基线 `deployment/ani-replica/templates/foundation/snapshot-controller/classes.json` 未提交；没有main/PR/tag/release或部署基线变更。
 
+## 2026-10-25 V10 私网补验
+
+同租户/同VPC的两台真实Ubuntu新VM已完成普通账户双向跨节点HTTP，唯一marker完整SHA匹配、boot保持且临时进程/目录/登录均正常收尾，见[实际回执](checks/v10-network-positive-02/guest-http-placed-v6.json)。原自然scheduler同节点结果保留；b仅经本任务原生模板selector及正常Gov Restart受控放到ani-01，与a/ani-02组成[严格身份对](checks/v10-network-positive-02/native-inventory-placed.json)。不计自动分散/迁移，不以私网HTTP替代公网/DNS/跨租户完整矩阵。准备失败全部在同目录保留；最终普通用户driver取消非必要sudo，并以bind ACK及无反向解析的临时HTTPServer独立验证。
+
+仅复现该必要用例的实际源为[lifecycle driver](checks/v10-network-positive-02/driver-v3.py)、[受控放置](checks/v10-network-positive-02/placement.py)、[最终Guest HTTP driver](checks/v10-network-positive-02/guest-http-placed-v6.py)；执行必须从原Fedora隔离路径、冻结input及Root release出发，不能直接从记录目录绕过身份/源码/阶段守卫。正常Delete各send1，[最终正常回收](checks/v10-network-positive-02/final-cleanup.json)确认两Delete succeeded、16冻结原生对象Gone、四root base/temp ABSENT且匹配trash空、Attachment Released/unblocked，用户session均正常撤销；首轮PENDING原件保留，无手动backend删除。Windows及其支持资源仍保持原暂缓状态；CODE/PG证据未失效，未重跑全量，Goal ACTIVE，一期未完成。
+
 ## 当前可追溯产物与可获取依赖
 
 以下 `$run` 固定指 `/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce`。二进制 SHA 是已有构建/启动回执中的实际值；PID 是交接时点记录，不是以后重启的身份授权。

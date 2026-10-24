@@ -1,0 +1,89 @@
+{
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "result": "STOPPED_RETAIN_ORIGINAL_ATTEMPT_NO_RETRY",
+  "runner_sha256": "10454df1248ed926c6cfb3dba3f614ed2fe918df5107e1c5af6f856f185ee054",
+  "inventory_sha256": "bf1390674a4af76a5dc9a85524bedd4fcdfe767be11db1dab01fc32d6b7f4b29",
+  "root_release_sha256": "2ddfbf7ddaa154434b9c19c3f81a22d7899dabcacc566a9556e855d116f7a564",
+  "started_at": "2026-10-24T23:47:06.539250+00:00",
+  "api_calls": 0,
+  "cluster_writes": 0,
+  "privileged_guest_programs": 0,
+  "public_dns_office_requests": 0,
+  "server_lifetime_seconds": 180,
+  "secret_values_or_value_hashes_public": false,
+  "stage": "b:normal-logout",
+  "guests": {
+    "a": {
+      "instance_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+      "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+      "boot_id": "2e0e29c8-6e7e-40e1-b554-a683c0f0fcac",
+      "uid": 1000,
+      "username_matches_credential": true,
+      "address": "10.83.1.2",
+      "guest_dmi_readback": false
+    },
+    "b": {
+      "instance_id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+      "boot_id": "e23a9b10-3830-4d9b-b112-f492949ceea2",
+      "uid": 1000,
+      "username_matches_credential": true,
+      "address": "10.83.1.5",
+      "guest_dmi_readback": false
+    }
+  },
+  "servers": {
+    "a": {
+      "uid": 1000,
+      "pid": 1558,
+      "start_ticks": "222849",
+      "self_status": null,
+      "self_marker_equal": false,
+      "expected_body_sha256": "69a64ba7182245e74dbdfaadc7722fdce62d06ae09d21b83bb81817561fbdfcd",
+      "actual_body_sha256": null,
+      "error_class": "URLError",
+      "message": "<urlopen error [Errno 111] Connection refused>"
+    }
+  },
+  "requests": {},
+  "cleanup": {
+    "a": {
+      "process_gone": true,
+      "directory_gone": true,
+      "term_sent": true
+    },
+    "b": {
+      "process_gone": true,
+      "directory_gone": true,
+      "server_not_attempted": true
+    }
+  },
+  "logout": {
+    "a": {
+      "login_attempts": 1,
+      "inherited_sudo_password_sends": 0,
+      "confirmed": true,
+      "failure_stage": null,
+      "error_class": null
+    },
+    "b": {
+      "login_attempts": 1,
+      "inherited_sudo_password_sends": 0,
+      "confirmed": true,
+      "failure_stage": null,
+      "error_class": null
+    }
+  },
+  "inherited_sudo_password_sends": {
+    "a": 0,
+    "b": 0
+  },
+  "failure_stage": "start-server-a",
+  "error_class": "RuntimeError",
+  "message": "one server self-GET failed",
+  "prompt_diagnostics": {},
+  "cleanup_confirmed": true,
+  "logout_confirmed": true,
+  "finished_at": "2026-10-24T23:47:26.740636+00:00",
+  "heavy_lock_released": true
+}

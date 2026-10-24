@@ -1,0 +1,91 @@
+{
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "cpu_millis": 2000,
+  "execute_authority": "Root must separately choose --execute-authorized --phase and --member, exact plan/runner SHA. This preparation sends no business POST.",
+  "firmware": "bios",
+  "guest_credential_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials-v3.json",
+  "inventory_sha256": "7a3af5683325fa950b5162ad78f6c6a040a374f0357691a999b786396c48cf46",
+  "members": {
+    "a": {
+      "body_without_guest_credentials": {
+        "dataDisks": [],
+        "idempotencyKey": "5c254c95-d609-5730-9c0c-d108fe5e955a",
+        "mediaKey": "ubuntu-24.04",
+        "name": "vm-mvp-v10-positive-02-a-01a168ce",
+        "network": {
+          "subnetId": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "vpcId": "vpc_e413becb1f4a46468f058e32f33a6305"
+        },
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "sourceKind": "DISK_IMAGE",
+        "startAfterCreate": true,
+        "systemDiskSizeGb": "12"
+      },
+      "idempotency_key": "5c254c95-d609-5730-9c0c-d108fe5e955a",
+      "name": "vm-mvp-v10-positive-02-a-01a168ce"
+    },
+    "b": {
+      "body_without_guest_credentials": {
+        "dataDisks": [],
+        "idempotencyKey": "40b95223-d0b2-5975-a3b5-8012c25168f2",
+        "mediaKey": "ubuntu-24.04",
+        "name": "vm-mvp-v10-positive-02-b-01a168ce",
+        "network": {
+          "subnetId": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "vpcId": "vpc_e413becb1f4a46468f058e32f33a6305"
+        },
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "sourceKind": "DISK_IMAGE",
+        "startAfterCreate": true,
+        "systemDiskSizeGb": "12"
+      },
+      "idempotency_key": "40b95223-d0b2-5975-a3b5-8012c25168f2",
+      "name": "vm-mvp-v10-positive-02-b-01a168ce"
+    }
+  },
+  "memory_mib": 4096,
+  "namespace": {
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "network": {
+    "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "KCNSubnetRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+    "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "NADName": "vm-mvp-main-v2",
+    "NADUID": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "NamespaceUID": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "SubnetID": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+    "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "VPCID": "vpc_e413becb1f4a46468f058e32f33a6305"
+  },
+  "normal_auth": "Fresh own tenant CookieJar login and session_revoked logout every phase; never old token-only q.tenant",
+  "original_helpers": {
+    "vm-product-cloudinit-ssh.py": "e071866126d6e30ee2c2ccbee7b7ea8ff5919906f60e70d7d7839cc13020ed3f",
+    "vm-product-network-v3.py": "024584529f86787dd9eee8ba9d8feac132db5ee9c6d72eda64708e631de6a0cd",
+    "vm-product-second-tenant-vm.py": "821a8ab88a8a14d9f13fc2b1a194623645123097a7d164e8671f5d2469b2308f"
+  },
+  "phases": [
+    "create",
+    "observe",
+    "native",
+    "freeze-root-csi",
+    "delete",
+    "cleanup"
+  ],
+  "placement": "Root creates a, observes original operation, captures Running native first; then b. Ordinary scheduler only. Same node => NOT_RUN crossnode and normal cleanup, no re-create/evict/native scheduling patch.",
+  "preset_id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+  "public_native_inventory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v10-network-positive-02/native-inventory.json",
+  "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "source": {
+    "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+    "media_key": "ubuntu-24.04",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "pvc_name": "vm-mvp-ubuntu-2404-source",
+    "pvc_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "ssh_public_key_fingerprint": "SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w",
+  "ssh_public_key_reference": "/home/chabking/.ssh/id_ed25519.pub",
+  "task_name": "vm-mvp-v10-positive-02-01a168ce"
+}

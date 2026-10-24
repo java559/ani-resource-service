@@ -1,0 +1,59 @@
+{
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "result": "STOPPED_RETAIN_ORIGINAL_ATTEMPT_NO_RETRY",
+  "runner_sha256": "873ba16ec96b3c899bd8dbc72f2e4240192337cec932623ce55c168acd46f756",
+  "inventory_sha256": "bf1390674a4af76a5dc9a85524bedd4fcdfe767be11db1dab01fc32d6b7f4b29",
+  "root_release_sha256": "7ff0d1d6bbb1d7b6f3dc571aacff83692f5d25d3f5e1780ee17a16a2d2ba3b49",
+  "started_at": "2026-10-24T23:42:42.965902+00:00",
+  "api_calls": 0,
+  "cluster_writes": 0,
+  "public_dns_office_requests": 0,
+  "server_lifetime_seconds": 180,
+  "secret_values_or_value_hashes_public": false,
+  "stage": "a:original-sudo-ready-line",
+  "guests": {},
+  "servers": {},
+  "requests": {},
+  "cleanup": {
+    "a": {
+      "process_gone": true,
+      "directory_gone": true,
+      "server_not_attempted": true
+    }
+  },
+  "logout": {
+    "a": {
+      "login_attempts": 1,
+      "inherited_sudo_password_sends": 1,
+      "confirmed": false,
+      "failure_stage": "a:original-sudo-ready-line",
+      "error_class": null
+    }
+  },
+  "inherited_sudo_password_sends": {
+    "a": 1
+  },
+  "failure_stage": "a:original-sudo-ready-line",
+  "error_class": "TIMEOUT",
+  "message": "bounded stage raised TIMEOUT",
+  "prompt_diagnostics": {
+    "a": [
+      {
+        "stage": "a:original-sudo-ready-line",
+        "ansi_csi_count": 1,
+        "ansi_osc_count": 0,
+        "login_suffix": false,
+        "finite_hostname_before_login": false,
+        "password_prompt_suffix": false,
+        "fixed_sudo_prompt_suffix": false,
+        "user_shell_suffix": false,
+        "generic_dollar_suffix": false,
+        "raw_text_or_hash_exported": false
+      }
+    ]
+  },
+  "cleanup_confirmed": false,
+  "logout_confirmed": false,
+  "finished_at": "2026-10-24T23:43:21.603704+00:00",
+  "heavy_lock_released": true
+}
