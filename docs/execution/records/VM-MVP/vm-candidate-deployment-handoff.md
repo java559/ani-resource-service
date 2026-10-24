@@ -48,7 +48,7 @@ provider-only 产物 Resource `0a53b99c8d9f126fd02e6cdde2841c8fbea9046b` 新增�
 4. Gov require 新 Resource 根 SDK 和新 SG API 精确版本。正式目标为 Resource `v0.0.0-20261024051201-01c079f1787f`、SG API `v0.1.1-0.20261024051540-811cc3839244`。Model API保持 `v0.0.0-20261021113912-a21befaaa5e5`；新依赖图严格tidy已移除不再使用的同提交Model根indirect；最终四mod/sum已落地并通过受影响build/tests。
 5. 三仓必须在干净检出、`GOWORK=off`、无本地 replace 下取得这些版本，再按各仓既有门禁构建/校验并记录实际镜像 digest。运行中候选历史 `$run/gov-dev.work` 使用 Gov、Resource stage05、console 子模块及 SG API，并有 console `v0.0.0` 的版本限定 replace；它仅解释运行中历史候选/隔离验证来源，不进入正式提交树。[正式消费者闭包](checks/formal-provider-02/consumer-landed.json)已使用GOWORKoff、无本地replace并落地；SG验证workspace同理区分。传输专用SSH relay已关闭，不能将临时relay写成部署前提。
 
-最新可恢复的[完整任务分支checkpoint](checks/resource-delivery-checkpoint-03/published.json)为 `7f0614ef7117ce06c7bd43f7083989e2747ce9c3`（`codex/vm-mvp-resource-acceptance-01a168ce`，普通SSH443快进/远端OID一致）；538个runtime源与4cc字节/模式完全相同，59个代码/交付证据文件入树，原WT HEAD/index保持。该提交冻结时Linux清理仍pending；之后实际清理进度继续以本地[唯一状态](../../status.md#vm-mvp)及原operation ID为准，不把该快照当更新后的清理结果。
+此前可恢复的[完整任务分支checkpoint03](checks/resource-delivery-checkpoint-03/published.json)为 `7f0614ef7117ce06c7bd43f7083989e2747ce9c3`（`codex/vm-mvp-resource-acceptance-01a168ce`，普通SSH443快进/远端OID一致）；538个runtime源与4cc字节/模式完全相同，59个代码/交付证据文件入树，原WT HEAD/index保持。该提交冻结时Linux清理仍pending；之后实际清理进度继续以本地[唯一状态](../../status.md#vm-mvp)及原operation ID为准，不把该快照当更新后的清理结果。
 
 ## 迁移、权限与持久密钥
 
@@ -73,7 +73,7 @@ V24旧Instance回归已在同两任务候选进程接入独立Image/Instance与�
 
 Resource验收driver后续[独立发布](checks/resource-acceptance-followup-01/published.json)为 `356473726ef4192b0b1220be3fc532d1e9fab71f`（父8589，分支 `codex/vm-mvp-resource-acceptance-01a168ce`）：仅账户持久性、snapshot collector、tenant2 cleanup、Windows disks/lifecycle共5个脚本；535个runtime/API/cmd/migration/module文件与8589字节/模式相同，因此运行候选和已发布OCI仍精确使用8589，不重复构建。原WT HEAD/index保持，Windows未验项不由脚本替代。
 
-本轮[Linux最终正常删除](checks/linux-final-cleanup-01/executed-summary.json)已完成两个原operation及全部原native/PVC/PV/快照链、两Attachment和14个持久VNic回收。[19:11前6项终态](checks/linux-final-cleanup-01/trash-terminal-after-snapshot-release-01.json)及[19:15最终3项](checks/linux-final-cleanup-01/three-original-trash-terminal-02.json)均NOT_FOUND_IN_TRASH，原9个残留正常GC已核验收口，KNOWN_LINUX_BACKEND_CLEANUP_PASS；不把这一范围扩大为整个VM-05A或旧v1归属缺口通过。原GC路径、retry/timeout及namespace归属样本保留，0手工purge/删snap/共享变更，不再轮询。当前剩余推进依赖用户恢复Windows验收和完整Goal第4节要求的最终Resource镜像发布批准；窗口未恢复前不续期空闲SG。Windows VM/恢复盘/在线快照、共享VPC/NAD、四source和仍被任务候选引用的DB/配置/SG RBAC/转发继续保留。永久Block runtime与Delete快照策略不回退；原用户介质文件及已发布三镜像保留。
+本轮[Linux最终正常删除](checks/linux-final-cleanup-01/executed-summary.json)已完成两个原operation及全部原native/PVC/PV/快照链、两Attachment和14个持久VNic回收。[19:11前6项终态](checks/linux-final-cleanup-01/trash-terminal-after-snapshot-release-01.json)及[19:15最终3项](checks/linux-final-cleanup-01/three-original-trash-terminal-02.json)均NOT_FOUND_IN_TRASH，原9个残留正常GC已核验收口，KNOWN_LINUX_BACKEND_CLEANUP_PASS；不把这一范围扩大为整个VM-05A或旧v1归属缺口通过。原GC路径、retry/timeout及namespace归属样本保留，0手工purge/删snap/共享变更，不再轮询。当前剩余推进依赖用户恢复Windows验收和完整Goal第4节要求的最终Resource镜像发布批准；窗口未恢复前不续期空闲SG。Windows VM/恢复盘/在线快照、共享VPC/NAD、四source和仍被任务候选引用的DB/配置/SG RBAC/转发继续保留。永久Block runtime与Delete快照策略不回退；原用户介质文件及已发布三镜像保留。 另[19:29九个固定CSI snapshot handle](checks/linux-final-cleanup-01/nine-owned-csi-snapshot-backends-01.json)在完整active/trash名称列表中均无匹配，含任意前缀及-temp派生名，补齐原常规盘collector范围。当前Goal为BLOCKED_WAITING_USER。[checkpoint04](checks/resource-delivery-checkpoint-04/published.json)已普通SSH快进至 `8cee5522451f9c8cc960108cf8cedc0f2c1e3ec2`，538runtime继承7f/等于4cc，原HEAD/index保持；本条当前阻塞记录与CSI补充回执晚于8cee，作为独立后续证据增量固定，不宣称已在8cee内。
 
 ## 实际入口与部署顺序
 

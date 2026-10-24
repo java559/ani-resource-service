@@ -1,0 +1,277 @@
+{
+  "at": "2026-10-24T19:29:52.507827+00:00",
+  "scope": "nine frozen CSI snapshot UUIDs only; one active-name metadata list and one trash metadata list, filtering in existing Pod before output",
+  "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
+  "targets": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-5dc9f7da-4ac6-455d-926b-f8b57fca9113",
+      "uuid": "5dc9f7da-4ac6-455d-926b-f8b57fca9113",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-41652e30-6c88-4da8-936c-d07730935420-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "uid": "e6d7d54f-559f-4d8e-be3d-e2156b63d260"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-e6d7d54f-559f-4d8e-be3d-e2156b63d260",
+        "uid": "85bbe315-f51c-4b24-9ca4-f314fee432d8"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-a86b4fa7-3c4f-4497-b072-6dca96f3092f",
+      "uuid": "a86b4fa7-3c4f-4497-b072-6dca96f3092f",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-41652e30-6c88-4da8-936c-d07730935420-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "uid": "515ee4c3-1fe3-451c-a452-f4e5ee834839"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-515ee4c3-1fe3-451c-a452-f4e5ee834839",
+        "uid": "a8a409cf-319b-4645-a11b-b49e1f9cda51"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-7e449a77-b4ee-450c-a137-670cd73d0ce9",
+      "uuid": "7e449a77-b4ee-450c-a137-670cd73d0ce9",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-41652e30-6c88-4da8-936c-d07730935420-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "uid": "c06d6819-afa7-4b05-b056-191d16428e64"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-c06d6819-afa7-4b05-b056-191d16428e64",
+        "uid": "524deaa5-6d07-482f-87c3-522ac66e9dc8"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-24e4fe7a-f32b-4920-b5a0-c85a59cfd413",
+      "uuid": "24e4fe7a-f32b-4920-b5a0-c85a59cfd413",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "uid": "0f98ac51-2971-40b2-9161-72ffc13a0d06"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-0f98ac51-2971-40b2-9161-72ffc13a0d06",
+        "uid": "be57a98a-b928-42ff-9fa1-0dfbf211cc3e"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-9449963a-101a-4e6b-86c3-908cb8b511dc",
+      "uuid": "9449963a-101a-4e6b-86c3-908cb8b511dc",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "uid": "df765f1a-2038-46cf-b6df-c11df699980d"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-df765f1a-2038-46cf-b6df-c11df699980d",
+        "uid": "f43dd8f0-2bd7-4ee6-a9e2-893bd3b15e06"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-0dabd5b9-59e3-4c80-932e-50b1003b9a38",
+      "uuid": "0dabd5b9-59e3-4c80-932e-50b1003b9a38",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "uid": "e08c5773-d300-45ee-b9b2-e80ffabeae38"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-e08c5773-d300-45ee-b9b2-e80ffabeae38",
+        "uid": "9b61937c-3d14-41bf-8fc9-255c720be7f1"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-0dbc55f0-6e9c-4e09-9dae-2eb64ee5859d",
+      "uuid": "0dbc55f0-6e9c-4e09-9dae-2eb64ee5859d",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "uid": "e823fe1b-d35a-4704-8335-89f6b214aaa1"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
+        "uid": "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-d0403f2f-e729-4685-881a-da4f14db41a2",
+      "uuid": "d0403f2f-e729-4685-881a-da4f14db41a2",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "uid": "de2ed829-d2f9-4c6c-84a6-1c320899aa2f"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+        "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda"
+      }
+    },
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "csi_snapshot_handle": "0001-0009-rook-ceph-0000000000000004-c61438a1-c2a1-4867-985e-e982365349f3",
+      "uuid": "c61438a1-c2a1-4867-985e-e982365349f3",
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb"
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+        "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997"
+      }
+    }
+  ],
+  "writes": 0,
+  "image_opens": 0,
+  "snapshot_content_reads": 0,
+  "task_reads": 0,
+  "unmatched_pool_records_persisted": false,
+  "backend_image_csi_vol_rechecks": 0,
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "internal_ips": [
+        "172.16.101.10"
+      ]
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "internal_ips": [
+        "172.16.101.11"
+      ]
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "internal_ips": [
+        "172.16.101.12"
+      ]
+    }
+  ],
+  "reader": {
+    "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+    "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+    "owner_uid": "88d60d2a-b0c1-4c62-959a-02c844737931",
+    "ready": true,
+    "identity": "mgr.a"
+  },
+  "tools_baseline_uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+  "snapshot_backend_metadata": {
+    "at": "2026-10-24T19:29:33.042733+00:00",
+    "targets": {
+      "5dc9f7da-4ac6-455d-926b-f8b57fca9113": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "a86b4fa7-3c4f-4497-b072-6dca96f3092f": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "7e449a77-b4ee-450c-a137-670cd73d0ce9": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "24e4fe7a-f32b-4920-b5a0-c85a59cfd413": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "9449963a-101a-4e6b-86c3-908cb8b511dc": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "0dabd5b9-59e3-4c80-932e-50b1003b9a38": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "0dbc55f0-6e9c-4e09-9dae-2eb64ee5859d": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "d0403f2f-e729-4685-881a-da4f14db41a2": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      },
+      "c61438a1-c2a1-4867-985e-e982365349f3": {
+        "active_matches": [],
+        "trash_matches": [],
+        "result": "ABSENT_IN_COMPLETE_METADATA_LISTS"
+      }
+    },
+    "active_list_status": "COMPLETE",
+    "trash_list_status": "COMPLETE",
+    "active_list_calls": 1,
+    "trash_list_calls": 1,
+    "writes": 0,
+    "installed_api": {
+      "active": {
+        "method": "rbd.RBD.list",
+        "signature": "(self, ioctx)",
+        "doc": "RBD.list(self, ioctx)\n\n        List image names.\n\n        :param ioctx: determines which RADOS pool is read\n        :type ioctx: :class:`rados.Ioctx`\n        :returns: list -- a list of image names\n        "
+      },
+      "trash": {
+        "method": "rbd.RBD.trash_list",
+        "signature": "(self, ioctx)",
+        "doc": "RBD.trash_list(self, ioctx)\n\n        List all entries from trash.\n\n        :param ioctx: determines which RADOS pool the image is in\n        :type ioctx: :class:`rados.Ioctx`\n        :returns: :class:`TrashIterator`\n        "
+      }
+    },
+    "result": "COMPLETE",
+    "elapsed_seconds": 0.069
+  },
+  "finished_at": "2026-10-24T19:29:53.357653+00:00"
+}
