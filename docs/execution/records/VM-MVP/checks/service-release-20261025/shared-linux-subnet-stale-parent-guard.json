@@ -1,0 +1,45 @@
+{
+  "host": "fedora",
+  "started_at": "2026-10-24T21:40:55.369839+00:00",
+  "task": "vm-mvp-shared-01a168ce",
+  "gov_tenant_id": 14,
+  "phase": "create-subnet",
+  "calls": [
+    {
+      "label": "login",
+      "method": "POST",
+      "route": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "elapsed_seconds": 7.735
+    },
+    {
+      "label": "original-vpc",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "elapsed_seconds": 0.849,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "available",
+      "reason": "",
+      "version": "3",
+      "last_operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+      "observation_stale": true
+    },
+    {
+      "label": "logout",
+      "method": "POST",
+      "route": "/api/v1/auth/logout",
+      "http_status": 200,
+      "elapsed_seconds": 0.146
+    }
+  ],
+  "business_post_attempts": 0,
+  "vm_mutations": 0,
+  "egress_probes": 0,
+  "kcn_config_changes": 0,
+  "result": "STOPPED_RETAIN_ORIGINAL_INTENT_AND_OUTCOME",
+  "error_type": "AssertionError",
+  "reason": "",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T21:41:04.286645+00:00"
+}

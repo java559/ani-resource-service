@@ -1,0 +1,32 @@
+{
+  "task_name": "vm-mvp-shared-01a168ce",
+  "phase": "guest-write",
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "resource_tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+  "inventory_sha256": "9be05ebc3b6657a27b6af71025fbf2691bc1b85de9cbd6455b6491a34fb7b857",
+  "runner_sha256": "77bcfb1d53b8c732f9ccbc46da9bbff773d2e733efa54ecc1d3d49abe4d67c8c",
+  "root_release_sha256": "3d84b32b0e6e9f95a6fe87f9f11feb1f20194e1082fb97eef65c6e9b3dc39dd4",
+  "credential_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials-v3.json",
+  "credential_values_or_hashes_public": false,
+  "marker_path": "/root/vm-mvp-shared-01a168ce.marker",
+  "marker_expected": {
+    "task_name": "vm-mvp-shared-01a168ce",
+    "business_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "resource_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "purpose": "shared-linux-root-persistence"
+  },
+  "guest_login_attempts": 1,
+  "api_calls": 0,
+  "lifecycle_calls": 0,
+  "guest_network_calls": 0,
+  "new_pods_or_proxy": 0,
+  "started_at": "2026-10-24T22:12:48.279696+00:00",
+  "result": "STOPPED_ORIGINAL_GUEST_ATTEMPT_RETAINED_NO_AUTOMATIC_RETRY",
+  "stage": "single-root-marker-write",
+  "native_vm_uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+  "vmi_uid": "8ab05b07-69fa-4bc5-9ed1-92aea234b351",
+  "error_type": "TIMEOUT",
+  "guest_logout_confirmed": false,
+  "heavy_lock_released": true,
+  "finished_at": "2026-10-24T22:14:38.741472+00:00"
+}

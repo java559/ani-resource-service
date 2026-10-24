@@ -1,0 +1,297 @@
+{
+  "original_private_inventory_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/storage-inventory.json",
+  "original_sha256": "9be05ebc3b6657a27b6af71025fbf2691bc1b85de9cbd6455b6491a34fb7b857",
+  "projection": "only unnecessary create-digest labels omitted; original retained unchanged",
+  "inventory": {
+    "schema_version": 1,
+    "captured_at": "2026-10-24T22:11:29.313665+00:00",
+    "business_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "resource_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "resource_tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "namespace": {
+      "name": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca"
+    },
+    "namespace_metadata": {
+      "kind": "Namespace",
+      "name": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "namespace": "",
+      "uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+      "resource_version": "64060882",
+      "labels": {
+        "network.ani.io/managed-by": "ani-network-service",
+        "network.ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f"
+      },
+      "owner_references": [],
+      "deletion_timestamp": null
+    },
+    "vm": {
+      "kind": "VirtualMachine",
+      "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+      "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+      "resource_version": "64124602",
+      "labels": {
+        "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+        "network.ani.io/attachment-id": "att_2db04f4ce5cc416ea2dcfbebb79b252a",
+        "network.ani.io/generation": "1",
+        "network.ani.io/instance-id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+        "network.ani.io/submission-id": "cdf62473-3291-58eb-a3be-025f828a753f",
+        "network.ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+        "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+      },
+      "owner_references": [],
+      "deletion_timestamp": null
+    },
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+      "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "uid": "8ab05b07-69fa-4bc5-9ed1-92aea234b351",
+      "resource_version": "64124607",
+      "labels": {
+        "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+        "network.ani.io/attachment-id": "att_2db04f4ce5cc416ea2dcfbebb79b252a",
+        "network.ani.io/generation": "1",
+        "network.ani.io/instance-id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+        "network.ani.io/submission-id": "cdf62473-3291-58eb-a3be-025f828a753f",
+        "network.ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+        "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+      },
+      "owner_references": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+          "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+        }
+      ],
+      "deletion_timestamp": null
+    },
+    "firmware_uuid": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "root_disk": {
+      "serial": "69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "volume_name": "disk-69bfe3b4cbf75a14942377e5171cdd3b",
+      "boot_order": 1,
+      "bus": "virtio",
+      "dv_name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "dv": {
+        "kind": "DataVolume",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "0facf83a-f4ac-4c13-8934-80ff613bdbf5",
+        "resource_version": "64123880",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "VirtualMachine",
+            "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+            "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+          }
+        ],
+        "deletion_timestamp": null
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "ebee0a8b-d0bc-4a88-b867-a5b5708185a9",
+        "resource_version": "64123856",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [
+          {
+            "apiVersion": "cdi.kubevirt.io/v1beta1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "DataVolume",
+            "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+            "uid": "0facf83a-f4ac-4c13-8934-80ff613bdbf5"
+          }
+        ],
+        "deletion_timestamp": null
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "name": "pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+        "namespace": "",
+        "uid": "7a56bbb7-9d79-4d92-aec8-d1a826549553",
+        "resource_version": "64123826",
+        "labels": {},
+        "owner_references": [],
+        "deletion_timestamp": null
+      },
+      "pvc_phase": "Bound",
+      "dv_phase": "Succeeded",
+      "requested_storage": "20G",
+      "observed_capacity": "19Gi",
+      "storage_class": "ani-block",
+      "reclaim_policy": "Delete",
+      "csi": {
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-ecfc0114-9d06-423a-b470-34cb7717e985",
+        "volume_attributes": {
+          "clusterID": "rook-ceph",
+          "imageFeatures": "layering",
+          "imageName": "csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985",
+          "journalPool": "ani-block-pool",
+          "pool": "ani-block-pool"
+        }
+      },
+      "clone_source_reference_only_not_delete_target": {
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-ubuntu-2404-source"
+      }
+    },
+    "post_delete_original_refs": [
+      {
+        "kind": "VirtualMachine",
+        "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+        "resource_version": "64124602",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "network.ani.io/attachment-id": "att_2db04f4ce5cc416ea2dcfbebb79b252a",
+          "network.ani.io/generation": "1",
+          "network.ani.io/instance-id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+          "network.ani.io/submission-id": "cdf62473-3291-58eb-a3be-025f828a753f",
+          "network.ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [],
+        "deletion_timestamp": null
+      },
+      {
+        "kind": "VirtualMachineInstance",
+        "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "8ab05b07-69fa-4bc5-9ed1-92aea234b351",
+        "resource_version": "64124607",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "network.ani.io/attachment-id": "att_2db04f4ce5cc416ea2dcfbebb79b252a",
+          "network.ani.io/generation": "1",
+          "network.ani.io/instance-id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+          "network.ani.io/submission-id": "cdf62473-3291-58eb-a3be-025f828a753f",
+          "network.ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "VirtualMachine",
+            "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+            "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+          }
+        ],
+        "deletion_timestamp": null
+      },
+      {
+        "kind": "DataVolume",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "0facf83a-f4ac-4c13-8934-80ff613bdbf5",
+        "resource_version": "64123880",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "VirtualMachine",
+            "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+            "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+          }
+        ],
+        "deletion_timestamp": null
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "uid": "ebee0a8b-d0bc-4a88-b867-a5b5708185a9",
+        "resource_version": "64123856",
+        "labels": {
+          "ani.io/tenant-id": "a893c319-d6d8-4609-a340-3f222964d00f",
+          "vm.ani.io/vm-id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+        },
+        "owner_references": [
+          {
+            "apiVersion": "cdi.kubevirt.io/v1beta1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "DataVolume",
+            "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+            "uid": "0facf83a-f4ac-4c13-8934-80ff613bdbf5"
+          }
+        ],
+        "deletion_timestamp": null
+      },
+      {
+        "kind": "PersistentVolume",
+        "name": "pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+        "namespace": "",
+        "uid": "7a56bbb7-9d79-4d92-aec8-d1a826549553",
+        "resource_version": "64123826",
+        "labels": {},
+        "owner_references": [],
+        "deletion_timestamp": null
+      }
+    ],
+    "namespace_deletion_expected": false,
+    "source_provenance": {
+      "resource": {
+        "commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+        "tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31",
+        "verified_via": "local fixed Git object; no source execution",
+        "contracts": [
+          {
+            "path": "internal/data/vm/native.go",
+            "sha256": "3c32f7c2ddc7093927cfede3bfb240fcbde191f1466d92439b15c1516c263cff",
+            "lines": "66 business labels; 85 controller owner; 143-158 root volume/serial/bootOrder; 175-178 firmware VM ID; 237-239 DV label/owner; 264-281 PVC owner and Block; 303-313 PV binding/Delete policy"
+          },
+          {
+            "path": "internal/biz/vm/worker.go",
+            "sha256": "5fd85d492a2b57c379b234f933d2205b408600bffbabd7fce2bcf222d8fdd8bf",
+            "lines": "376 initial disk serial, volume name and DV identity"
+          }
+        ]
+      },
+      "gov_id_mapping": {
+        "commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+        "verification_owner": "Parent agent supplied fixed mapping evidence; no duplicate investigation",
+        "chain": [
+          "Gov vm_binding.go:189 ResourceID -> CommandContext.ResourceId; :221 Create; :236 ACK equality",
+          "Resource internal/service/vm/service.go:201 Context.ResourceId -> Acceptance.VMID",
+          "Resource internal/data/vm/postgres.go:233 native name vm-VMID; native.go:175-178 firmware UUID = VM.ID"
+        ],
+        "conclusion": "Gov business VM ID and Resource VM ID are both a704da75-2520-4df2-beaf-f163709ae4ad; a893c319-d6d8-4609-a340-3f222964d00f is solely the Resource tenant UUID."
+      }
+    },
+    "network_selection_sha256": "69be6a996f61726508adc0bab6e8d5a7da93057ede81a78cf62c9be2502d0b0d",
+    "prepared_sha256": "8091d02135189c338fb3f18a002d24ae268c15501869e9e452cc29455e83a63a",
+    "runner_sha256": "2a0121c65eabe8e872214289a0665536a24824ccde0dff4ce951292b605a163c",
+    "backend_reclamation": {
+      "result": "NOT_RUN",
+      "reason": "No reader or backend window added; CSI identity is recorded only. PV disappearance is not physical backend reclamation evidence."
+    },
+    "result": "CAPTURED_EXACT_VM_ROOT_UID_CHAIN_BACKEND_NOT_RUN"
+  }
+}

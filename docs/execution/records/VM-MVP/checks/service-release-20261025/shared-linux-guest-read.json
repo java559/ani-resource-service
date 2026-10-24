@@ -1,0 +1,75 @@
+{
+  "task_name": "vm-mvp-shared-01a168ce",
+  "phase": "guest-read-v2",
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "resource_tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+  "inventory_sha256": "9be05ebc3b6657a27b6af71025fbf2691bc1b85de9cbd6455b6491a34fb7b857",
+  "runner_sha256": "4f51a8b339808385f16c2d83444917db6454cdf36bdbd3cae3ec06789d25aa3d",
+  "root_release_sha256": "76f1a158720d964c78126aba6d584e06100d993232c13c3686221f254452cf5a",
+  "credential_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials-v3.json",
+  "credential_values_or_hashes_public": false,
+  "marker_path": "/root/vm-mvp-shared-01a168ce.marker",
+  "marker_expected": {
+    "task_name": "vm-mvp-shared-01a168ce",
+    "business_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "resource_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "purpose": "shared-linux-root-persistence"
+  },
+  "guest_login_attempts": 1,
+  "diagnosis_sha256": "f0e4e336b9d4547479909abcbb2a9572c178643f92e8f43a44f8b644c2edbd6a",
+  "source_correction": "frozen virtio root only: exact observed native serial first20 + unique root device/filesystem chain; chunk ACK + exception envelope",
+  "api_calls": 0,
+  "lifecycle_calls": 0,
+  "guest_network_calls": 0,
+  "new_pods_or_proxy": 0,
+  "started_at": "2026-10-24T22:27:00.038277+00:00",
+  "result": "STOPPED_GUEST_LOGOUT_UNCONFIRMED",
+  "stage": "single-root-marker-read",
+  "native_vm_uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+  "vmi_uid": "2a227bc4-029b-4838-8456-e699eb113b7c",
+  "guest": {
+    "firmware_uuid": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "instance_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "boot_id": "76209ec8-a8e0-472c-bed1-fb17c21fa95d",
+    "root_source": "/dev/vda1",
+    "root_fs_uuid": "59134bd0-a76f-4ea0-8e4a-770b2e1eafc2",
+    "root_serials": [
+      "69bfe3b4-cbf7-5a14-9"
+    ],
+    "root_device_chain": [
+      {
+        "name": "/dev/vda1",
+        "type": "part",
+        "serial": null,
+        "pkname": "/dev/vda",
+        "uuid": "59134bd0-a76f-4ea0-8e4a-770b2e1eafc2",
+        "children": [
+          {
+            "name": "/dev/vda",
+            "type": "disk",
+            "serial": "69bfe3b4-cbf7-5a14-9",
+            "pkname": "/dev/vda1",
+            "uuid": null
+          }
+        ]
+      },
+      {
+        "name": "/dev/vda",
+        "type": "disk",
+        "serial": "69bfe3b4-cbf7-5a14-9",
+        "pkname": "/dev/vda1",
+        "uuid": null
+      }
+    ],
+    "marker_exact_match": true,
+    "marker_owner_uid": 0,
+    "marker_mode": "0600",
+    "marker_size": 200
+  },
+  "first_receipt_sha256": "652e55ab6727c43914cd080c4fdc0c41218a59069747bd825dc2658ce2641b1f",
+  "marker_rewritten": false,
+  "guest_logout_confirmed": false,
+  "heavy_lock_released": true,
+  "finished_at": "2026-10-24T22:28:15.717528+00:00"
+}

@@ -1,0 +1,73 @@
+{
+  "phase": "media",
+  "label": "media",
+  "result": "SHARED_VERIFIED_NOCLOUD_MEDIA_DIRECTORY_MATCH",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "started_at": "2026-10-24T21:53:23.748406+00:00",
+  "plan_sha256": "4ac179676437e6de39b22e4e9461169b57f4dcf55dbb76f64413edd2f3ea3cb4",
+  "runner_sha256": "72fc487d06441fab4cda98ffd3edaf6f57d2bed86635478d843b72942b382301",
+  "root_release_sha256": "4e0ecd848c5485b78cabc2544f727e6ec0ceb076c1424fe411a44397a1e4f010",
+  "gov_tenant_id": 14,
+  "calls": [
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/media/login.request.json",
+      "seconds": 1.094,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/media/login.response.json"
+    },
+    {
+      "name": "media-directory",
+      "method": "GET",
+      "path": "/api/v1/virtual-machine-media",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 1.046,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/media/media-directory.response.json"
+    },
+    {
+      "name": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/media/logout.request.json",
+      "seconds": 0.187,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/media/logout.response.json"
+    }
+  ],
+  "guest_actions": 0,
+  "cluster_or_database_calls": 0,
+  "lifecycle_posts": 0,
+  "secret_values_or_hashes_public": false,
+  "auto_retry": false,
+  "media": {
+    "media_key": "ubuntu-24.04",
+    "kind": "DISK_IMAGE",
+    "os_family": "linux",
+    "architecture": "amd64",
+    "firmware": "bios",
+    "root_bus": "virtio",
+    "data_bus": "scsi",
+    "nic_model": "virtio",
+    "virtual_capacity_bytes": 3758096384,
+    "initialization_capability": "CLOUD_INIT_NOCLOUD",
+    "initialization_verified": true
+  },
+  "original_media_source": {
+    "namespace": "vm-mvp-probe-01a168ce",
+    "pvc_name": "vm-mvp-ubuntu-2404-source",
+    "pvc_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "content_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+    "evidence_reference": "service-release-20261025/resource-sg-plan.json:359-383,493-502; cloudinit-ssh-result/product-cloudinit-ssh.json:130-154,221,247",
+    "limit": "Normal public media GET does not expose source UID/SHA/Ready. Original successful NoCloud proof and released Resource configuration pin the source; Root must affirm unchanged shared source before CREATE."
+  },
+  "source_identity_limit": "UID/SHA pinned by existing proof/config; public directory has no UID/SHA/Ready fields",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T21:53:26.083886+00:00",
+  "heavy_lock_released": true
+}

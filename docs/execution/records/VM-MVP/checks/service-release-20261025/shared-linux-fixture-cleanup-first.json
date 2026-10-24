@@ -1,0 +1,115 @@
+{
+  "result": "STOPPED_RETAIN_ORIGINAL_OUTCOMES_NO_RESEND",
+  "phase": "normal-user-delete-or-disable",
+  "started_at": "2026-10-24T22:44:21.938914+00:00",
+  "runner_sha256": "71441ebeec3407b02e8762f4311e0c8b0d7e332e10e0622a985dd211bc37139e",
+  "root_release_sha256": "8801eb22587a11a04eff7adedb9e856b75af46898810a5d93c5e13739503fb43",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "tenant_id": 14,
+  "user_id": 21,
+  "role_ids": [
+    20,
+    19
+  ],
+  "plan_id": 27,
+  "module_ids": [
+    57,
+    58
+  ],
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.525
+    },
+    {
+      "label": "fresh-tenant14",
+      "method": "GET",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.362
+    },
+    {
+      "label": "fresh-plan27",
+      "method": "GET",
+      "path": "/api/v1/admin/plans/27",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.556
+    },
+    {
+      "label": "fresh-user21",
+      "method": "GET",
+      "path": "/api/v1/admin/users/21",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.333
+    },
+    {
+      "label": "fresh-role20",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/20",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.524
+    },
+    {
+      "label": "fresh-role19",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/19",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.372
+    },
+    {
+      "label": "delete-task-user21",
+      "method": "DELETE",
+      "path": "/api/v1/admin/users/21",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 1.011
+    },
+    {
+      "label": "readback-task-user21",
+      "method": "GET",
+      "path": "/api/v1/admin/users/21",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 500,
+      "seconds": 0.183,
+      "reason_code": ""
+    },
+    {
+      "label": "platform-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.105
+    }
+  ],
+  "sql_or_cluster_calls": 0,
+  "vm_network_writes": 0,
+  "ledger_replay_writes": 0,
+  "plan_module_writes": 0,
+  "tenant_login_posts": 0,
+  "credentials_or_value_hashes_public": false,
+  "error_type": "RuntimeError",
+  "reason": "readback-task-user21 readback unknown; no follow-up mutation",
+  "platform_session_revoked": true,
+  "finished_at": "2026-10-24T22:44:25.938816+00:00",
+  "heavy_lock_released": true
+}

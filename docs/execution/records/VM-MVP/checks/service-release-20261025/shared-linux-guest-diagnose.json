@@ -1,0 +1,62 @@
+{
+  "task_name": "vm-mvp-shared-01a168ce",
+  "phase": "guest-diagnose-01",
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "result": "READONLY_FACTS_CAPTURED_NO_MARKER_MUTATION",
+  "runner_sha256": "61808fcafed3f2bb33c7f63c2a3f990ceeecd90d729623d37d2609c159d4537e",
+  "original_runner_sha256": "77bcfb1d53b8c732f9ccbc46da9bbff773d2e733efa54ecc1d3d49abe4d67c8c",
+  "inventory_sha256": "9be05ebc3b6657a27b6af71025fbf2691bc1b85de9cbd6455b6491a34fb7b857",
+  "root_authorization": "Root explicit one read-only serial recovery GO; no repeat write",
+  "guest_login_attempts": 1,
+  "marker_writes": 0,
+  "fsync_calls": 0,
+  "api_calls": 0,
+  "credential_values_or_hashes_public": false,
+  "started_at": "2026-10-24T22:18:20.707555+00:00",
+  "stage": "short-chunked-read-only-json-envelope",
+  "program_chunks_sent": 8,
+  "facts": {
+    "commands": {
+      "findmnt_source": {
+        "rc": 0,
+        "stdout": "/dev/vda1",
+        "stderr": ""
+      },
+      "findmnt_uuid": {
+        "rc": 0,
+        "stdout": "59134bd0-a76f-4ea0-8e4a-770b2e1eafc2",
+        "stderr": ""
+      },
+      "root_serial": {
+        "rc": 0,
+        "stdout": "69bfe3b4-cbf7-5a14-9",
+        "stderr": ""
+      }
+    },
+    "firmware_uuid": {
+      "value": "a704da75-2520-4df2-beaf-f163709ae4ad"
+    },
+    "instance_id": {
+      "value": "a704da75-2520-4df2-beaf-f163709ae4ad"
+    },
+    "datasource": {
+      "value": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]"
+    },
+    "boot_id": {
+      "value": "0828cfd3-207b-45f0-b856-c31df9f6f01b"
+    },
+    "marker": {
+      "exists": false,
+      "expected_path": "/root/vm-mvp-shared-01a168ce.marker"
+    },
+    "original_read_only_program": {
+      "completed": false,
+      "error_class": "AssertionError",
+      "message": "",
+      "traceback": "Traceback (most recent call last):\n  File \"<string>\", line 22, in <module>\n  File \"<string>\", line 10, in <module>\nAssertionError\n"
+    }
+  },
+  "guest_logout_confirmed": true,
+  "finished_at": "2026-10-24T22:19:17.452487+00:00",
+  "heavy_lock_released": true
+}

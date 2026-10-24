@@ -1,0 +1,89 @@
+{
+  "phase": "observe",
+  "label": "observe-deleted",
+  "result": "ORIGINAL_OPERATION_AND_VM_OBSERVED_NOT_GUEST_OR_PHYSICAL_ACCEPTANCE",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "started_at": "2026-10-24T22:31:59.040055+00:00",
+  "plan_sha256": "4ac179676437e6de39b22e4e9461169b57f4dcf55dbb76f64413edd2f3ea3cb4",
+  "runner_sha256": "72fc487d06441fab4cda98ffd3edaf6f57d2bed86635478d843b72942b382301",
+  "root_release_sha256": "5e9604856c50937f069f2d45d1969c809b31097b78d401356b892c76c78e1af1",
+  "gov_tenant_id": 14,
+  "calls": [
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/login.request.json",
+      "seconds": 2.246,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/login.response.json"
+    },
+    {
+      "name": "original-operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad/operations/cf6dd416-b815-4003-846b-e40f4587cf33",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 1.866,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/original-operation.response.json"
+    },
+    {
+      "name": "original-vm",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 1.323,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/original-vm.response.json"
+    },
+    {
+      "name": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/logout.request.json",
+      "seconds": 0.181,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-deleted/logout.response.json"
+    }
+  ],
+  "guest_actions": 0,
+  "cluster_or_database_calls": 0,
+  "lifecycle_posts": 0,
+  "secret_values_or_hashes_public": false,
+  "auto_retry": false,
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "basis_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/delete.json",
+  "basis_sha256": "ee05746283ff088c218471da96f4adf8c0ca8377273e086972eed7dfe0811d92",
+  "operation_id": "cf6dd416-b815-4003-846b-e40f4587cf33",
+  "operation": {
+    "id": "cf6dd416-b815-4003-846b-e40f4587cf33",
+    "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "action": "/vm.v1.VMService/AcceptDelete",
+    "intent_version": "4",
+    "state": "running",
+    "reason": "",
+    "observed_at": "2026-10-24T22:31:40.408464047Z"
+  },
+  "vm": {
+    "id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "name": "vm-mvp-shared-01a168ce-linux-01",
+    "version": "4",
+    "desired_state": "Deleted",
+    "observed_state": "Running",
+    "reason": "",
+    "last_operation_id": "cf6dd416-b815-4003-846b-e40f4587cf33",
+    "preset_id": "61b5207d-8cbb-40b8-adfa-14977373e7f4",
+    "system_disk_size_gb": "20",
+    "source_kind": "DISK_IMAGE",
+    "media_key": "ubuntu-24.04",
+    "closing": true
+  },
+  "disk_observation": [],
+  "session_revoked": true,
+  "finished_at": "2026-10-24T22:32:04.665322+00:00",
+  "heavy_lock_released": true
+}
