@@ -411,50 +411,69 @@ print(json.dumps({'result':'PASS','read_only':read_a,'d3_absent':absent_d3,'root
         assert result['result'] == 'PASS', result.get('error')
         return receipt
 
-    def recover_guest_c(self):
+    def recover_guest_c(self, restored_a=False, absent_d3=False, prepare_d3=False):
         import base64, pexpect, zlib
-        prior = self.state['guest_offline_c']
-        assert prior['authentication_sent'] and prior['guest_program_sent']
-        assert prior['stage'] == 'WAIT_GUEST_PROGRAM_RESULT' and prior['result'] == 'FAIL'
+        assert not prepare_d3 or (restored_a and not absent_d3)
         current, disks = self.get(), self.get('/disks').get('items', [])
-        assert current['observedState'] == 'Running' and int(current['version']) == 35
+        assert current['observedState'] == 'Running'
         native = self.native(disks)
-        assert native['vmi']['uid'] == prior['native']['vmi']['uid']
         assert native['vmi']['phase'] == 'Running'
-        frozen = lambda value: {d['disk_id']: (d['serial'], d['pvc']['uid'], d['pv']['uid'], d['csi']) for d in value['disks']}
-        assert frozen(native) == frozen(prior['native'])
+        if restored_a:
+            restore = self.state['commands']['offline-a-restore']
+            assert restore['operation']['state'] == 'succeeded'
+            assert all(restore['owner_checkpoints']['snapshot'][key] is True for key in
+                       ('NativeRestoreCompleted', 'MappingCommitted', 'CleanupCompleted'))
+            assert native['vmi']['uid'] != self.state['guest_c_recovery']['native']['vmi']['uid']
+            assert not next(d for d in disks if d['diskId'] == 'dd773137-07f9-5b7a-9511-fda3dcf09001')['attached']
+            assert next(d for d in disks if d['diskId'] == 'd296c9f6-2e76-5756-bb4c-def2d0f8f2f9')['attached'] is (not absent_d3)
+            expected_marker = 'A'
+        else:
+            assert not absent_d3
+            prior = self.state['guest_offline_c']
+            assert prior['authentication_sent'] and prior['guest_program_sent']
+            assert prior['stage'] == 'WAIT_GUEST_PROGRAM_RESULT' and prior['result'] == 'FAIL'
+            assert int(current['version']) == 35 and native['vmi']['uid'] == prior['native']['vmi']['uid']
+            frozen = lambda value: {d['disk_id']: (d['serial'], d['pvc']['uid'], d['pv']['uid'], d['csi']) for d in value['disks']}
+            assert frozen(native) == frozen(prior['native'])
+            expected_marker = 'C'
         observer = runpy.run_path(str(RUN / 'vm-product-guest-observe.py'))
         virtctl = observer['VIRTCTL']
         assert hashlib.sha256(virtctl.read_bytes()).hexdigest() == observer['VIRTCTL_SHA']
         credentials = json.loads((self.private / 'linux-guest-credentials-v3.json').read_text())
+        assert credentials['username'] == 'aniuser'
         password = credentials['password']
         # Original writes used a 512-byte marker padded with zeroes. All later
         # authorized snapshot writes changed only its first 27 bytes.
         guest = r'''import hashlib,json,pathlib,stat,subprocess
+expected_marker = EXPECTED_MARKER
+absent_d3 = ABSENT_D3
+prepare_d3 = PREPARE_D3
 r=lambda p:pathlib.Path(p).read_text().strip()
 assert r('/sys/class/dmi/id/product_uuid')=='55099440-c47b-4f81-afc5-7d8e740d14dc'
 assert r('/var/lib/cloud/data/instance-id')=='55099440-c47b-4f81-afc5-7d8e740d14dc'
 all_disks=json.loads(subprocess.check_output(['lsblk','-b','-J','-o','NAME,PATH,SERIAL,TYPE,SIZE,FSTYPE,MOUNTPOINTS']))['blockdevices']
+if absent_d3:assert not any(d.get('serial')=='d296c9f6-2e76-5756-bb4c-def2d0f8f2f9' for d in all_disks)
 values=[]
-for serial,label in [('d296c9f6-2e76-5756-bb4c-def2d0f8f2f9','DATA3'),('5dbc2c93-9865-54f9-8413-f198f5e9c1a6','DATA4')]:
+for serial,label in ([('5dbc2c93-9865-54f9-8413-f198f5e9c1a6','DATA4')] if absent_d3 else [('d296c9f6-2e76-5756-bb4c-def2d0f8f2f9','DATA3'),('5dbc2c93-9865-54f9-8413-f198f5e9c1a6','DATA4')]):
  found=[d for d in all_disks if d.get('serial')==serial and d['type']=='disk'];assert len(found)==1
  d=found[0];p=d['path'];assert p=='/dev/'+d['name'] and stat.S_ISBLK(pathlib.Path(p).stat().st_mode)
  assert not d.get('children') and not d.get('fstype') and not any(d.get('mountpoints') or [])
  assert not list(pathlib.Path('/sys/class/block',d['name'],'holders').iterdir())
+ if prepare_d3 and label=='DATA3':subprocess.run(['blockdev','--flushbufs',p],check=True)
  with open(p,'rb',buffering=0) as f:actual=f.read(512)
  markers={('VM_MVP_V3_'+label+'_'+tag+'_01a168ce\n').encode():tag for tag in 'ABC'}
- values.append({'disk_id':serial,'serial':serial,'device':p,'marker_state':markers.get(actual[:27],'UNKNOWN'),'tail_sha256':hashlib.sha256(actual[27:]).hexdigest(),'original_485_byte_tail_equal':actual[27:]==bytes(485),'bytes_written':0})
+ values.append({'disk_id':serial,'serial':serial,'device':p,'marker_state':markers.get(actual[:27],'UNKNOWN'),'tail_sha256':hashlib.sha256(actual[27:]).hexdigest(),'original_485_byte_tail_equal':actual[27:]==bytes(485),'flushed':prepare_d3 and label=='DATA3','offline_or_unmounted':True,'guest_prepared_confirmation':prepare_d3 and label=='DATA3','bytes_written':0})
 root=pathlib.Path('/home/aniuser/vm-mvp-snapshot-root');assert root.is_file() and not root.is_symlink() and root.stat().st_size<128
 known={'VM_MVP_SNAPSHOT_'+tag+'_ROOT_01a168ce':tag for tag in 'ABC'}
 root_state=known.get(root.read_text().strip(),'UNKNOWN')
-ok=root_state=='C' and all(d['marker_state']=='C' and d['original_485_byte_tail_equal'] for d in values)
-print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_marker_state':root_state,'boot_id':r('/proc/sys/kernel/random/boot_id'),'disks':values,'guest_bytes_written':0}))
-'''
-        compile(guest, '<read-only-c-recovery>', 'exec')
-        result = {'result': 'UNKNOWN', 'method': 'AUTHENTICATED_EXISTING_NATIVE_SERIAL', 'native': native,
+ok=root_state==expected_marker and all(d['marker_state']==expected_marker and d['original_485_byte_tail_equal'] for d in values)
+print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':not prepare_d3,'d3_absent':absent_d3,'root_marker_state':root_state,'boot_id':r('/proc/sys/kernel/random/boot_id'),'disks':values,'guest_bytes_written':0}))
+'''.replace('EXPECTED_MARKER', repr(expected_marker)).replace('ABSENT_D3', repr(absent_d3)).replace('PREPARE_D3', repr(prepare_d3))
+        compile(guest, '<read-only-snapshot-marker>', 'exec')
+        result = {'result': 'UNKNOWN', 'method': 'AUTHENTICATED_NATIVE_SERIAL' if restored_a else 'AUTHENTICATED_EXISTING_NATIVE_SERIAL', 'native': native,
                   'read_only': True, 'ctrl_c_sent': False, 'logout_sent': False, 'guest_bytes_written': 0,
                   'tail_basis': 'Initial product guest write padded each marker to 512 bytes with zeroes; subsequent writes changed only bytes 0-26.',
-                  'stage': 'WAIT_ORIGINAL_PROGRAM_OR_SHELL'}
+                  'expected_marker': expected_marker, 'stage': 'WAIT_ORIGINAL_PROGRAM_OR_SHELL'}
         child = pexpect.spawn(str(virtctl), ['console', 'vm-' + VM, '--namespace', NAMESPACE,
                               '--kubeconfig', KUBECONFIG, '--timeout=20'], encoding='utf-8', timeout=120)
         deadline = time.monotonic() + 180
@@ -465,12 +484,16 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
         try:
             wait(r'Successfully connected to .* console\. Press Ctrl\+\] or Ctrl\+5 to exit console\.', 20)
             try:
-                wait(r'\$ ', 10)
+                prompt = wait([r'\$ ', r'login:'] if restored_a else r'\$ ', 10)
             except pexpect.TIMEOUT:
                 # A blank line queues a shell prompt after a still-running
                 # program. It sends no signal and cannot interrupt os.sync().
                 child.sendline(''); result['blank_line_sent'] = True
-                wait(r'\$ ', 120)
+                prompt = wait([r'\$ ', r'login:'] if restored_a else r'\$ ', 120)
+            if restored_a and prompt == 1:
+                child.sendline(credentials['username']); wait(r'[Pp]assword:', 35)
+                child.sendline(password); result['authentication_sent'] = True
+                wait(r'\$ ', 90)
             result['original_shell_returned'] = True
             child.sendline("sudo -v -p 'ANI_SUDO_PASSWORD: '")
             if wait([r'(?:^|[\r\n])ANI_SUDO_PASSWORD: ', r'\$ '], 90) == 0:
@@ -478,7 +501,7 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
             line = 'import base64,zlib;exec(zlib.decompress(base64.b64decode(' + repr(base64.b64encode(zlib.compress(guest.encode())).decode()) + ')))'
             command = 'sudo -n python3 -c ' + shlex.quote(line)
             assert len(command.encode()) < 4000
-            result['stage'] = 'WAIT_READ_ONLY_C_RESULT'
+            result['stage'] = 'WAIT_READ_ONLY_' + expected_marker + '_RESULT'
             child.sendline(command); wait(r'\$ ', 120)
             values = []
             for line in child.before.splitlines():
@@ -488,14 +511,23 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
                         values.append(value)
                 except json.JSONDecodeError:
                     pass
-            assert len(values) == 1, 'read-only C result not complete'
-            result.update(values[0]); result['stage'] = 'READ_ONLY_C_CONFIRMED'
+            assert len(values) == 1, 'read-only marker result not complete'
+            result.update(values[0]); result['stage'] = 'D3_GUEST_PREPARED' if prepare_d3 else 'READ_ONLY_' + expected_marker + '_CONFIRMED'
         except Exception as error:
             result['error'] = str(error).replace(password, '[REDACTED]')[-1000:]
         finally:
             child.close(force=True)
-        self.state['guest_c_recovery'] = result
-        return self.persist('guest-offline-c-recovery', {'phase': 'GUEST_C_READ_ONLY_RECOVERY', 'guest': result})
+        key = 'guest-offline-d3-prepared' if prepare_d3 else ('guest-offline-d3-absent' if absent_d3 else ('guest-offline-a-readback' if restored_a else 'guest-offline-c-recovery'))
+        self.state[key.replace('-', '_') if restored_a else 'guest_c_recovery'] = result
+        if prepare_d3 and result['result'] == 'PASS':
+            disk = next(d for d in result['disks'] if d['disk_id'] == 'd296c9f6-2e76-5756-bb4c-def2d0f8f2f9')
+            assert disk['flushed'] and disk['guest_prepared_confirmation']
+            self.save(RUN / ('evidence/gov-linux-snapshot-v3-' + key + '-proof.json'),
+                      {**disk, 'result': 'PASS', 'vm_id': VM, 'method': 'NATIVE_SERIAL',
+                       'supporting_evidence': {'native': native, 'root_marker_state': result['root_marker_state'],
+                                               'boot_id': result['boot_id']}})
+        return self.persist(key,
+                            {'phase': 'GUEST_D3_PREPARED' if prepare_d3 else ('GUEST_A_READ_ONLY_READBACK' if restored_a else 'GUEST_C_READ_ONLY_RECOVERY'), 'guest': result})
 
     def disk(self, args):
         assert args.execute_authorized and args.disk_action and args.disk_label and args.intent
@@ -509,6 +541,19 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
         if args.disk_action == 'detach':
             disk_id = existing['plans'][args.disk_label]['disk_id']
             proof = args.guest_prepared_evidence or str(RUN / ('evidence/gov-linux-snapshot-v3-guest-b-' + disk_id + '.json'))
+        if args.intent == 'offline-a-restored-reattach-data3' and args.intent not in existing['commands']:
+            assert args.disk_action == 'attach' and args.disk_label == 'data3'
+            absent = self.state['guest_offline_d3_absent']
+            initial = self.state['guest_offline_a_readback']
+            assert absent['result'] == 'PASS' and absent['d3_absent'] and absent['root_marker_state'] == 'A'
+            assert absent['boot_id'] == initial['boot_id'] and absent['native']['vmi']['uid'] == initial['native']['vmi']['uid']
+            before = json.loads((RUN / 'evidence/gov-linux-snapshot-v3-offline-disks-after-restore.json').read_text())['disks']
+            current = self.storage('offline-a-detached-storage')['disks']
+            physical = lambda rows: {d['ID']: (d['Serial'], d['observed_pvc'], d['observed_pv'], d['csi'])
+                                     for d in rows if not d['Tombstone']}
+            assert physical(before) == physical(current), 'reattach must preserve all four existing physical volumes'
+            assert all(not d['Attached'] for d in current if d['ID'] in
+                       ('d296c9f6-2e76-5756-bb4c-def2d0f8f2f9', 'dd773137-07f9-5b7a-9511-fda3dcf09001'))
         with contextlib.redirect_stdout(io.StringIO()):
             helper['run'](argparse.Namespace(action=args.disk_action, label=args.disk_label,
                           intent=args.intent, guest_prepared_evidence=proof, wait_seconds=args.wait_seconds))
@@ -550,20 +595,27 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
         return self.persist(intent, {'phase': 'READ_ONLY_ALL_DISK_STORAGE', 'disks': result,
                                      'current': self.get(), 'business_mutations': 0})
 
-    def cleanup(self):
-        command = self.state['commands']['online-a-restore']
+    def cleanup(self, mode='online'):
+        command = self.state['commands'][mode + '-a-restore']
         assert command['operation']['state'] == 'succeeded'
         checkpoints = command['owner_checkpoints']['snapshot']
         assert all(checkpoints[key] is True for key in ('NativeRestoreCompleted', 'MappingCommitted', 'CleanupCompleted'))
-        initial = self.state['baseline']['native']['disks']
-        before = json.loads((RUN / 'evidence/gov-linux-snapshot-v3-five-sets-before-restore.json').read_text())['disks']
-        d5 = next(disk for disk in before if disk['ID'] == '45d5a224-42b7-526d-90eb-239577d2262a')
-        retired = list(initial) + [{'disk_id': d5['ID'], 'dv': {key.lower(): value for key, value in d5['DV'].items()},
-                                  'pvc': d5['observed_pvc'], 'pv': d5['observed_pv'], 'csi': d5['csi']}]
+        if mode == 'online':
+            initial = self.state['baseline']['native']['disks']
+            before = json.loads((RUN / 'evidence/gov-linux-snapshot-v3-five-sets-before-restore.json').read_text())['disks']
+            d5 = next(disk for disk in before if disk['ID'] == '45d5a224-42b7-526d-90eb-239577d2262a')
+            retired = list(initial) + [{'disk_id': d5['ID'], 'dv': {key.lower(): value for key, value in d5['DV'].items()},
+                                      'pvc': d5['observed_pvc'], 'pv': d5['observed_pv'], 'csi': d5['csi']}]
+        else:
+            initial = json.loads((RUN / 'evidence/gov-linux-snapshot-v3-offline-c-stopped.json').read_text())['native']['disks']
+            before = json.loads((RUN / 'evidence/gov-linux-snapshot-v3-offline-c-storage-before-restore.json').read_text())['disks']
+            retired = list(initial)
         remaining, native = [], []
         for disk in retired:
             for kind, resource in (('dv', 'datavolumes.cdi.kubevirt.io'), ('pvc', 'pvc'), ('pv', 'pv')):
                 old = disk[kind]
+                if old is None:
+                    continue
                 obj = self.kubectl(resource, old['name'], '' if kind == 'pv' else NAMESPACE)
                 item = {'disk_id': disk['disk_id'], 'old': old, 'gone': obj is None}
                 if obj:
@@ -574,14 +626,15 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
                    'native': lambda kind, name, namespace: self.kubectl(kind, name, namespace)}
         names = [disk['csi']['image_name'] for disk in retired]
         root_name = next(disk['csi']['image_name'] for disk in retired if disk['disk_id'] == '5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21')
-        names.append(root_name + '-temp')  # Already identified old V3 root CSI family.
+        if mode == 'online':
+            names.append(root_name + '-temp')  # Already identified old V3 root CSI family.
         images = [backend['image_info'](adapter, name) for name in names]
         raw = backend['ceph'](adapter, ['rbd', 'trash', 'ls', 'ani-block-pool', '--format=json'])
         assert raw is not None
         trash = [item for item in json.loads(raw) if item.get('name') in names]
         remaining += [item['name'] for item in images if item['result'] != 'ABSENT']
         remaining += ['trash:' + item['id'] for item in trash]
-        current_storage = self.storage('five-sets-after-restore')['disks']
+        current_storage = self.storage('five-sets-after-restore' if mode == 'online' else 'offline-disks-after-restore')['disks']
         d6old = next(disk for disk in before if disk['ID'] == 'dd773137-07f9-5b7a-9511-fda3dcf09001')
         d6 = next(disk for disk in current_storage if disk['ID'] == d6old['ID'])
         assert not d6['Attached'] and not d6['Tombstone']
@@ -590,12 +643,13 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
             restored = next(item for item in current_storage if item['ID'] == disk['disk_id'])
             assert restored['Attached'] and not restored['Tombstone'] and restored['Serial'] == disk['serial']
             assert restored['observed_pvc']['uid'] != disk['pvc']['uid']
-        self.state['restore_cleanup'] = {'result': 'PASS' if not remaining else 'PENDING_NORMAL_GC',
+        key = 'restore_cleanup' if mode == 'online' else 'offline_restore_cleanup'
+        self.state[key] = {'result': 'PASS' if not remaining else 'PENDING_NORMAL_GC',
             'native': native, 'backend_images': images, 'matching_trash': trash, 'remaining': remaining,
             'd6_detached_original_volume_preserved': True, 'three_original_logical_ids_restored_to_new_pvcs': True,
             'force_or_manual_backend_delete': False}
-        return self.persist('online-a-cleanup', {'phase': 'RESTORE_PHYSICAL_CLEANUP',
-                            'cleanup': self.state['restore_cleanup'], 'business_mutations': 0})
+        return self.persist(mode + '-a-cleanup', {'phase': 'RESTORE_PHYSICAL_CLEANUP',
+                            'cleanup': self.state[key], 'business_mutations': 0})
 
     def command(self, args):
         assert args.execute_authorized, 'business mutation requires the separately approved execution window'
@@ -691,7 +745,7 @@ print(json.dumps({'result':'PASS' if ok else 'PARTIAL','read_only':True,'root_ma
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=('prepare', 'capture', 'storage', 'cleanup', 'preview', 'snapshot-native', 'command', 'observe', 'guest-b', 'guest-read-a', 'guest-d3-absent', 'guest-offline-c', 'guest-recover-c', 'disk', 'self-test'))
+    parser.add_argument('phase', choices=('prepare', 'capture', 'storage', 'cleanup', 'preview', 'snapshot-native', 'command', 'observe', 'guest-b', 'guest-read-a', 'guest-d3-absent', 'guest-offline-c', 'guest-recover-c', 'guest-read-offline-a', 'guest-offline-d3-absent', 'guest-offline-d3-prepare', 'disk', 'self-test'))
     parser.add_argument('--mode', choices=('online', 'offline'), default='online')
     parser.add_argument('--action', choices=('snapshot', 'stop', 'restore', 'start', 'delete-snapshot'))
     parser.add_argument('--intent')
@@ -724,12 +778,19 @@ def main():
                                     args.phase == 'guest-d3-absent', args.phase == 'guest-offline-c')
         elif args.phase == 'guest-recover-c':
             result = driver.recover_guest_c()
+        elif args.phase == 'guest-read-offline-a':
+            result = driver.recover_guest_c(restored_a=True)
+        elif args.phase == 'guest-offline-d3-absent':
+            result = driver.recover_guest_c(restored_a=True, absent_d3=True)
+        elif args.phase == 'guest-offline-d3-prepare':
+            assert args.execute_authorized
+            result = driver.recover_guest_c(restored_a=True, prepare_d3=True)
         elif args.phase == 'disk':
             result = driver.disk(args)
         elif args.phase == 'storage':
             assert args.intent; result = driver.storage(args.intent)
         elif args.phase == 'cleanup':
-            result = driver.cleanup()
+            result = driver.cleanup(args.mode)
         else:
             assert args.intent; result = driver.observe(args.intent, args.wait_seconds)
         # Full, non-secret evidence is on disk; stdout stays concise.
