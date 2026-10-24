@@ -1,0 +1,233 @@
+{
+  "at": "2026-10-23T15:41:53.893127+00:00",
+  "scope": "native probe cleanup only; source retained for product acceptance",
+  "namespace": {
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "namespace": "",
+    "name": "vm-mvp-probe-01a168ce",
+    "uid": "92ab28f6-ec74-47a0-a08e-88c599a85189"
+  },
+  "remaining_objects": [
+    {
+      "kind": "DataVolume",
+      "name": "vm-mvp-ubuntu-2404-source",
+      "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "name": "vm-mvp-ubuntu-2404-source",
+      "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+    }
+  ],
+  "probe_transients_absent": true,
+  "source": {
+    "datavolume": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ubuntu-2404-source",
+      "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+    },
+    "phase": "Succeeded",
+    "pvc": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ubuntu-2404-source",
+      "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+    },
+    "volume_mode": "Block",
+    "requested": "8G",
+    "capacity": {
+      "storage": "8Gi"
+    },
+    "raw_block_sha256_annotation": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4"
+  },
+  "backend_reclaim": {
+    "reader": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "rook-ceph",
+      "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+      "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+    },
+    "volumes": [
+      {
+        "pvc": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ani-02-data",
+          "uid": "6214c9e0-42ad-45fd-b1b0-9f24c9057553"
+        },
+        "pv": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-27c0cdab-7a8b-422b-b607-609a21a36b14",
+          "uid": "8fef1da5-5c27-4ff5-9c95-e39166d7c15d"
+        },
+        "backend_pool": "ani-block-pool",
+        "backend_image": "csi-vol-96ab33c2-1654-483c-855b-a4a43cbd3277",
+        "reclaim_policy": "Delete",
+        "backend_before": {
+          "result": "PRESENT",
+          "image_id": "20cc87b9e4ce58",
+          "name": "csi-vol-96ab33c2-1654-483c-855b-a4a43cbd3277",
+          "size": 2147483648,
+          "block_name_prefix": "rbd_data.20cc87b9e4ce58"
+        },
+        "native_original_UIDs_absent": true,
+        "backend_after": {
+          "result": "ABSENT",
+          "exit_code": 2,
+          "stderr": "rbd: error opening image csi-vol-96ab33c2-1654-483c-855b-a4a43cbd3277: (2) No such file or directory\ncommand terminated with exit code 2\n"
+        },
+        "matching_trash": [],
+        "result": "PASS"
+      },
+      {
+        "pvc": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ani-02-root",
+          "uid": "eca3facd-3a1e-4762-8704-dc58b5100261"
+        },
+        "pv": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-f5cca4a5-e2f8-4c73-b0aa-8cb0d65a8094",
+          "uid": "88874f46-24d9-4791-9720-785b704bcb70"
+        },
+        "backend_pool": "ani-block-pool",
+        "backend_image": "csi-vol-97c4911b-1b67-4657-8004-4eb49d878ca2",
+        "reclaim_policy": "Delete",
+        "backend_before": {
+          "result": "PRESENT",
+          "image_id": "20cc874c06082f",
+          "name": "csi-vol-97c4911b-1b67-4657-8004-4eb49d878ca2",
+          "size": 8589934592,
+          "block_name_prefix": "rbd_data.20cc874c06082f"
+        },
+        "native_original_UIDs_absent": true,
+        "backend_after": {
+          "result": "ABSENT",
+          "exit_code": 2,
+          "stderr": "rbd: error opening image csi-vol-97c4911b-1b67-4657-8004-4eb49d878ca2: (2) No such file or directory\ncommand terminated with exit code 2\n"
+        },
+        "matching_trash": [],
+        "result": "PASS"
+      },
+      {
+        "pvc": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ani-03-data",
+          "uid": "d8ee82b8-784f-4533-b392-a1d82edee468"
+        },
+        "pv": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-ef8a0a58-a1a5-4871-8253-a2077f40d115",
+          "uid": "8548fd8f-1d95-41bb-ba25-2665b76f2c37"
+        },
+        "backend_pool": "ani-block-pool",
+        "backend_image": "csi-vol-39f0c824-ac1b-48da-8094-fa060c786ed8",
+        "reclaim_policy": "Delete",
+        "backend_before": {
+          "result": "PRESENT",
+          "image_id": "20cc87616f3946",
+          "name": "csi-vol-39f0c824-ac1b-48da-8094-fa060c786ed8",
+          "size": 2147483648,
+          "block_name_prefix": "rbd_data.20cc87616f3946"
+        },
+        "native_original_UIDs_absent": true,
+        "backend_after": {
+          "result": "ABSENT",
+          "exit_code": 2,
+          "stderr": "rbd: error opening image csi-vol-39f0c824-ac1b-48da-8094-fa060c786ed8: (2) No such file or directory\ncommand terminated with exit code 2\n"
+        },
+        "matching_trash": [],
+        "result": "PASS"
+      },
+      {
+        "pvc": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ani-03-root",
+          "uid": "1959211f-cb86-4a42-8c5d-375548741b59"
+        },
+        "pv": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-fc9864bf-0fd7-4c58-9418-f03f2e40c554",
+          "uid": "7e7c130f-569a-4257-9f04-d12249f69020"
+        },
+        "backend_pool": "ani-block-pool",
+        "backend_image": "csi-vol-d95f1930-7bda-4b4b-adef-4d430d92c673",
+        "reclaim_policy": "Delete",
+        "backend_before": {
+          "result": "PRESENT",
+          "image_id": "20cc874e343d9c",
+          "name": "csi-vol-d95f1930-7bda-4b4b-adef-4d430d92c673",
+          "size": 8589934592,
+          "block_name_prefix": "rbd_data.20cc874e343d9c"
+        },
+        "native_original_UIDs_absent": true,
+        "backend_after": {
+          "result": "ABSENT",
+          "exit_code": 2,
+          "stderr": "rbd: error opening image csi-vol-d95f1930-7bda-4b4b-adef-4d430d92c673: (2) No such file or directory\ncommand terminated with exit code 2\n"
+        },
+        "matching_trash": [],
+        "result": "PASS"
+      },
+      {
+        "pvc": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-blank-probe",
+          "uid": "22c5ca41-101c-4c68-be88-7f10c6f7fa3f"
+        },
+        "pv": {
+          "apiVersion": "v1",
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-88d308da-6ec7-4d73-b27a-a8e9995577d5",
+          "uid": "b2ae406f-5ce8-4257-a5ae-8e096975e3df"
+        },
+        "backend_pool": "ani-block-pool",
+        "backend_image": "csi-vol-292a4101-6751-4bcf-ac03-086b4a82f79a",
+        "reclaim_policy": "Delete",
+        "backend_before": {
+          "result": "PRESENT",
+          "image_id": "20cc8747e55a9d",
+          "name": "csi-vol-292a4101-6751-4bcf-ac03-086b4a82f79a",
+          "size": 2147483648,
+          "block_name_prefix": "rbd_data.20cc8747e55a9d"
+        },
+        "native_original_UIDs_absent": true,
+        "backend_after": {
+          "result": "ABSENT",
+          "exit_code": 2,
+          "stderr": "rbd: error opening image csi-vol-292a4101-6751-4bcf-ac03-086b4a82f79a: (2) No such file or directory\ncommand terminated with exit code 2\n"
+        },
+        "matching_trash": [],
+        "result": "PASS"
+      }
+    ],
+    "retained": [
+      "vm-mvp-probe-01a168ce",
+      "vm-mvp-ubuntu-2404-source"
+    ],
+    "scope": "exact task PVC/PV UIDs and RBD image identity; read-only backend verification"
+  }
+}

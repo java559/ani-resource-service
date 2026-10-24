@@ -1,0 +1,368 @@
+{
+  "state": "PREPARED_PRODUCER_HANDOFF_SUPPORT_ACTIVE_PROTECTED",
+  "prepared_at": "2026-10-24T11:15:47.160206+00:00",
+  "cleanup_executed_by_this_handoff": false,
+  "scope": "V24 task-isolated Image/Instance support only; no additional LIVE action",
+  "actual_cpu_result": {
+    "case02": {
+      "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+      "create_operation": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "delete_operation": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+      "state": "NORMAL_CREATE_REPLAY_RUNNING_REAL_TERMINAL_DELETE_AND_PHYSICAL_CLEANUP_PASS"
+    },
+    "case01": {
+      "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+      "state": "ORIGINAL_IMAGE_CRASHLOOP_RETAINED_NORMAL_DELETE_AND_PHYSICAL_CLEANUP_PASS"
+    },
+    "terminal": {
+      "close_code": 1000,
+      "marker_observed": true,
+      "runtime_exit_code": 0,
+      "session_id": "2844d15a-f279-40c3-b46e-98cb39d45b5b",
+      "state": "PASS_REAL_TERMINAL_MARKER_AND_NORMAL_EXIT",
+      "stderr_bytes": 0,
+      "stdin_bytes": 75,
+      "stdout_bytes": 224,
+      "subprotocol": "ani.terminal.v1"
+    },
+    "temporary_roles": "BOTH_GONE_ORIGINAL_22_CHECKS_RESTORED_PLUS_EXACT_EXEC_AND_LIST_DENY",
+    "cpu_quota_contract": "Real instance-cpu-v1 ledger/outbox; zero charge rows and no GPU release outbox are existing CPU contract, not GPU billing acceptance"
+  },
+  "active_support": {
+    "registered_image": {
+      "ID": "img_d238746701ee4e9aa149a3beba8a3e49",
+      "TenantID": "",
+      "SpaceID": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+      "Repository": "workspace-candidate-02",
+      "SourceReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate-02@sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+      "Digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+      "ResolvedReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate-02@sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+      "MediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "Scope": "platform",
+      "Metadata": {
+        "DisplayName": "V24 CPU default long-running workspace",
+        "Description": "Existing fixed CPU artifact; default entrypoint plus bash UID1000 compatibility probe passed",
+        "Purposes": [
+          "container"
+        ],
+        "Accelerator": "undeclared"
+      },
+      "Platforms": [
+        {
+          "OS": "linux",
+          "Architecture": "amd64",
+          "Variant": ""
+        }
+      ],
+      "Version": 1,
+      "CreatedBy": "operator:vm-mvp-v24-01a168ce",
+      "UpdatedBy": "operator:vm-mvp-v24-01a168ce",
+      "CreatedAt": "2026-10-24T18:53:38.2516+08:00",
+      "UpdatedAt": "2026-10-24T18:53:38.2516+08:00",
+      "UnregisteredAt": null
+    },
+    "artifact": {
+      "id": 67,
+      "project_id": 18,
+      "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488"
+    },
+    "image_spaces": [
+      {
+        "space_id": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+        "owner_scope": "platform",
+        "tenant_id": null,
+        "installation_id": "01a168ce-29f8-77b2-aa8e-b980545b6113",
+        "registry_authority": "172.16.101.10:30003",
+        "project_name": "vm-mvp-v24-platform-01a168ce",
+        "harbor_project_id": 18,
+        "state": "available",
+        "version": 3,
+        "credentials": []
+      },
+      {
+        "space_id": "f457f793-1139-47b2-b442-db905e48f0ad",
+        "owner_scope": "tenant",
+        "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "installation_id": "01a168ce-29f8-77b2-aa8e-b980545b6113",
+        "registry_authority": "172.16.101.10:30003",
+        "project_name": "t-vm-mvp-v24-01a168ce",
+        "harbor_project_id": 19,
+        "state": "available",
+        "version": 3,
+        "credentials": [
+          {
+            "purpose": "pull",
+            "state": "active",
+            "generation": 1,
+            "robot_id": 18
+          }
+        ]
+      }
+    ],
+    "task_pull_secret": {
+      "name": "ani-instance-image-pull",
+      "uid": "6055f5ee-2cb4-4ff0-aa5c-1b15c77aa3b9",
+      "space_id": "f457f793-1139-47b2-b442-db905e48f0ad",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "read_data": false
+    },
+    "workload_service_account": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-mvp-v24-workload-01a168ce",
+      "uid": "87f057ca-f536-4710-b596-37ba6781b7c1",
+      "automount": false,
+      "roles": []
+    },
+    "database": {
+      "database": "vm_image_v24_01a168ce",
+      "oid": "108794",
+      "owner": "vm_image_v24_owner_01a168ce",
+      "runtime": {
+        "role": "vm_image_v24_runtime_01a168ce",
+        "oid": "108793",
+        "login": true,
+        "superuser": false,
+        "createdb": false,
+        "createrole": false,
+        "replication": false,
+        "inherit": false,
+        "bypassrls": false
+      },
+      "runtime_membership_count": 0,
+      "database_create": false,
+      "database_temp": false,
+      "image_schema_create": false,
+      "image_schema_usage": true,
+      "public_schema_create": false,
+      "versions": [
+        {
+          "version": 1,
+          "checksum": "f0d4ee3b6a368166c2821da159dddc75fc57b2b67b456be09605af309efa68f5"
+        }
+      ],
+      "tables": [
+        {
+          "name": "commands",
+          "owner": "vm_image_v24_owner_01a168ce",
+          "select": true,
+          "insert": true,
+          "update": true,
+          "delete": false,
+          "truncate": false
+        },
+        {
+          "name": "credentials",
+          "owner": "vm_image_v24_owner_01a168ce",
+          "select": true,
+          "insert": true,
+          "update": true,
+          "delete": false,
+          "truncate": false
+        },
+        {
+          "name": "registrations",
+          "owner": "vm_image_v24_owner_01a168ce",
+          "select": true,
+          "insert": true,
+          "update": true,
+          "delete": false,
+          "truncate": false
+        },
+        {
+          "name": "schema_version",
+          "owner": "vm_image_v24_owner_01a168ce",
+          "select": true,
+          "insert": false,
+          "update": false,
+          "delete": false,
+          "truncate": false
+        },
+        {
+          "name": "spaces",
+          "owner": "vm_image_v24_owner_01a168ce",
+          "select": true,
+          "insert": true,
+          "update": true,
+          "delete": false,
+          "truncate": false
+        }
+      ]
+    },
+    "database_roles": [
+      {
+        "name": "vm_image_v24_owner_01a168ce",
+        "oid": "108792"
+      },
+      {
+        "name": "vm_image_v24_runtime_01a168ce",
+        "oid": "108793"
+      }
+    ],
+    "resource_owner_process": {
+      "last_producer": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-candidates-maintained-02.json",
+      "pid": 3305039,
+      "start_ticks": 70294373,
+      "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.input19",
+      "binary_sha256": "9e5f6b0ed545757ca53957bf8d5a530f1220ce472f6f501097ecca353d4acc49",
+      "config": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs-v2",
+      "env_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/resource-runtime-env.json"
+    },
+    "gov_owner_process_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/process.json",
+    "gov_process_current_owner": "vm_gov performs independent approved client maintenance; use its latest producer, do not pin the superseded 3305121",
+    "sg_process_current_owner": "Root routine renewal only; last Root-reported3369384/start70563663 expires12:12:36Z; use current private/sg-candidate/process.json",
+    "private_material_references": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/image-owner.dsn",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/image-runtime.dsn",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/encryption-keys.json",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/image-cursor-key",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/instance-signing.raw64",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/instance.json",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/gov-runtime-env.json",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/resource-runtime-env.json",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-image/harbor-ca.pem",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-image/harbor-username",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-image/harbor-password",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/ca.crt",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/tls.crt",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/tls.key",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/gov-quota-server.crt",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/gov-quota-server.key",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/resource-quota.crt",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/resource-quota.key"
+    ]
+  },
+  "already_retired": {
+    "failed_image_registration": {
+      "image_id": "img_e1a98d0e9eb5495dac77cb86483dc053",
+      "space_id": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+      "version": 2,
+      "unregistered_at": "2026-10-24T11:13:55.332962+00:00",
+      "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "repository": "workspace-candidate"
+    },
+    "failed_artifact_id": 66,
+    "failed_artifact_status": "NOT_FOUND_404",
+    "all_two_case_native_backend_network_cleanup": "PASS_BOTH_CPU_CASES_NORMAL_PRODUCT_AND_PHYSICAL_CLEANUP",
+    "remaining_known_nic": [
+      {
+        "original": {
+          "UID": "c1f1c7c9-eff1-4dfa-b408-91f95c368bac",
+          "Kind": "Nic",
+          "Name": "nic-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c-instance--mv8sd",
+          "OwnerUID": "830cb104-343d-4c90-be18-18b502d0fa19",
+          "Namespace": "kcn-system"
+        },
+        "gone": true
+      }
+    ],
+    "exec_role_and_binding": {
+      "objects": [
+        {
+          "kind": "Role",
+          "name": "vm-mvp-v24-sg-exec-01a168ce",
+          "uid": "f7a1af74-658f-4788-a02e-94cbb5086226",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "RoleBinding",
+          "name": "vm-mvp-v24-sg-exec-01a168ce",
+          "uid": "dbde7d59-ef7d-4102-be66-5db7fdf5c100",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        }
+      ],
+      "status": "NORMAL_UID_RV_DELETE_GONE"
+    }
+  },
+  "normal_cleanup_order_not_executed": [
+    {
+      "step": 1,
+      "guard": "Root dependency release: no CPU/GPU/Inference active consumer of either ImageSpace/new image/workloadSA; protected3GuestVMs and formal published artifacts remain excluded",
+      "operation": "Normal Gov DELETE each actual Instance, original op/key only; ledger/native/storage/network cleanup first"
+    },
+    {
+      "step": 2,
+      "guard": "Fresh actual registration version and consumers0",
+      "operation": "Existing operator unregister-platform for img_d238746701ee4e9aa149a3beba8a3e49 with new durable key/current expected_version; retain registration history"
+    },
+    {
+      "step": 3,
+      "guard": "Root explicit final owner release; candidate still references Image DSN/keys and Instance signer until then",
+      "operation": "Normal TERM exact current owned Gov/Resource processes, or approved exact config withdrawal, with original config restore guard; no DB/key deletion while owner is running"
+    },
+    {
+      "step": 4,
+      "guard": "Fresh SA/Secret exact UIDs and all owned Pod consumersGone; no unrelated Pod references",
+      "operation": "Normal Kubernetes UID/RV DELETE only vm-mvp-v24-workload-01a168ce and ani-instance-image-pull in this namespace; no original7SG RBAC deletion here"
+    },
+    {
+      "step": 5,
+      "guard": "Fresh Harbor project IDs18/19, names/installation binding; robot18 belongs only project19; artifact67 exact digest; normal registrations inactive and no owner can reconcile it",
+      "operation": "Normal Harbor DELETE artifact67 under project18, exact pull robot18, then empty task projects19 and18. Retain source project5 and ani-kf-manual-20261009. No blob purge/globalGC/force"
+    },
+    {
+      "step": 6,
+      "guard": "Exact DB108794/owner108792/runtime108793 and no active connections after all task owners stopped",
+      "operation": "Normal DROP DATABASE vm_image_v24_01a168ce and its two isolated roles; do not alter Compute/VM/Network/Gov DBs as part of this support cleanup"
+    },
+    {
+      "step": 7,
+      "guard": "No live service or operator references private files; use this producer file list",
+      "operation": "Remove only task-private projected/generated copies and intents when Root final cleanup allows; never delete source shared Secrets/taskCA or user keys"
+    }
+  ],
+  "protected_keep": {
+    "three_published_service_oci_receipts": [
+      "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/resource-published.json",
+      "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/session-published.json",
+      "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/governance-published.json"
+    ],
+    "source_project_5": {
+      "repository": "ani-platform-images/cpr-20261020-cpu-longrun",
+      "artifact_id": 44,
+      "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+      "writes": 0
+    },
+    "failed_source_origin": "ani-kf-manual-20261009/ani/kubeflow-jupyter@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "protected_guest_vm_ids": [
+      "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "fc154879-8a40-4b18-967c-215f5cf5992d"
+    ],
+    "permanent_storage_delete_policy": "KEEP; outside Goal task cleanup"
+  },
+  "evidence": {
+    "b-private-pg-prepared.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-private-pg-prepared.json",
+      "sha256": "3598235bdae2552e32b087bbad0fce451eb2840af359ed3da73ba7af19a55e75"
+    },
+    "b-compatible-image-registered.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-compatible-image-registered.json",
+      "sha256": "cc2dae92f908909605a0cfb62193303e57438fe35addd18043f2834944a4c498"
+    },
+    "b-cpu-compatible-probe.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-cpu-compatible-probe.json",
+      "sha256": "2fbd91f8fd1929b646f0d25666a231778bd6dcf390f9ac48372ceaa4a20cfaf3"
+    },
+    "b-instance-02-create.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-instance-02-create.json",
+      "sha256": "b3cfdfd5d423fb24e509cc8a43269533a9c9d6e1b9a66d64cf510eb75a4cf2bb"
+    },
+    "b-instance-02-exec.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-instance-02-exec.json",
+      "sha256": "0ac379e23529a6a41cc0e8efa3b3e4e12c3a5ec46b8cde94220af425a32d0566"
+    },
+    "b-cpu-cleanup-01.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-cpu-cleanup-01.json",
+      "sha256": "ad5a64f767f4efb1d9dbaca9e296fc612b00c8f7be17c4dd5cc79158b7d85501"
+    },
+    "b-failed-image-cleanup.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-failed-image-cleanup.json",
+      "sha256": "06c94996a34e7cff0e03c528497d7a5691a97d0edf6acd30dcaa9f81a4c11a50"
+    },
+    "b-qualification-catalog.json": {
+      "canonical": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01/b-qualification-catalog.json",
+      "sha256": "54ca5a73ea08d08cba227594c1dc1050a5f0682284cd0b35ce925473da1047c5"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "execution_host": "ssh fedora / 172.16.101.31",
+  "source_sha256": "42dcba15d213d5a27152dc17a21faba3dcef47de572f7f93ed9e179bec84060c",
+  "py_compile": "PASS",
+  "self_test": {
+    "result": "PASS",
+    "pure_guards": 6,
+    "helper_imports": 0,
+    "api_calls": 0,
+    "native_calls": 0
+  },
+  "exit_code": 0,
+  "record_kind": "existing actual pure-check result, not rerun during transfer"
+}

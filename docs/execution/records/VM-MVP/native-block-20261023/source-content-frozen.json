@@ -1,0 +1,36 @@
+{
+  "pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "datavolume": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "DataVolume",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+  },
+  "pod": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-source-hash",
+    "uid": "74bc0237-45ac-42e8-a79b-d9602b04936a"
+  },
+  "input_qcow2_sha256": "04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94",
+  "requested_storage": "8G",
+  "capacity": {
+    "storage": "8Gi"
+  },
+  "scope": "hash entire native raw Block device read-only exactly once",
+  "raw_block_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+  "input_virtual_bytes": 3758096384,
+  "content_type": "kubevirt",
+  "volume_mode": "Block",
+  "source_annotation": "vm.ani.io/source-sha256",
+  "logs": "uid=107 gid=107 groups=107\n61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4  /dev/source-block\n",
+  "semantics": "input SHA is immutable qcow2 file; raw SHA covers the entire converted capacity-sized Block device including padding; distinct content identities"
+}

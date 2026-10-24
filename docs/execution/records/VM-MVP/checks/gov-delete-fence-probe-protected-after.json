@@ -1,0 +1,36 @@
+{
+  "result": "PASS",
+  "observed_at": "2026-10-24T00:39:59.877564+00:00",
+  "vm_id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+  "cleanup_receipt": "evidence/gov-delete-fence-probe.json",
+  "source_namespace": {
+    "kind": "Namespace",
+    "namespace": "",
+    "name": "vm-mvp-probe-01a168ce",
+    "uid": "92ab28f6-ec74-47a0-a08e-88c599a85189"
+  },
+  "source_pvc": {
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "source_pvc_phase": "Bound",
+  "source_checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+  "tenant_namespace": {
+    "kind": "Namespace",
+    "namespace": "",
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "nad": {
+    "kind": "NetworkAttachmentDefinition",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-mvp-main-v2",
+    "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f"
+  },
+  "nad_config_digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+  "disk_content_reread": false,
+  "mutations": 0,
+  "old_v22": "UNCHANGED_NOT_MEASURED"
+}

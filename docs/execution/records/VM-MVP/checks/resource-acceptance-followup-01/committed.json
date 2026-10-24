@@ -1,0 +1,96 @@
+{
+  "at": "2026-10-24T10:59:43.220802+00:00",
+  "result": "COMMITTED_NOT_PUSHED",
+  "commit": "356473726ef4192b0b1220be3fc532d1e9fab71f",
+  "parent": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "tree": "e69fe8ae623f5b22e31a9790584a23b164431958",
+  "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+  "files": [
+    {
+      "path": "scripts/vm-product-account-persistence.py",
+      "group": "scripts",
+      "change": "added",
+      "base": null,
+      "current": {
+        "exists": true,
+        "mode": "100644",
+        "bytes": 26895,
+        "git_blob": "1eb381545ad8ec3d42cee0dcd6f2490974eded9a",
+        "sha256": "895dea6b6efa6e85a2826dc6526a15f9da2a4c8e36e5f5c3a4de5ff3f214afa4",
+        "changed_while_reading": false
+      }
+    },
+    {
+      "path": "scripts/vm-product-snapshot-linux.py",
+      "group": "scripts",
+      "change": "changed",
+      "base": {
+        "mode": "100644",
+        "kind": "blob",
+        "git_blob": "2e268c5cc86cb9a0cd62505da6f05db6a126e2bf",
+        "bytes": 49041
+      },
+      "current": {
+        "exists": true,
+        "mode": "100644",
+        "bytes": 54430,
+        "git_blob": "68019f5610afd29e834c609544792c4838f890a8",
+        "sha256": "2faf4a60c7ec44cccb9663172167debc5dce9c1799385ac4c1b9bd38e3289b7b",
+        "changed_while_reading": false
+      }
+    },
+    {
+      "path": "scripts/vm-product-tenant2-cleanup-delete.py",
+      "group": "scripts",
+      "change": "added",
+      "base": null,
+      "current": {
+        "exists": true,
+        "mode": "100644",
+        "bytes": 65901,
+        "git_blob": "dd940ae7114e0da02291e6112ede4214714e951c",
+        "sha256": "926b83d7995f17e3929fde05f7f38ba192f1deb9818893a8c0addeb17921c7ba",
+        "changed_while_reading": false
+      }
+    },
+    {
+      "path": "scripts/vm-product-windows-disks.py",
+      "group": "scripts",
+      "change": "added",
+      "base": null,
+      "current": {
+        "exists": true,
+        "mode": "100644",
+        "bytes": 21711,
+        "git_blob": "c4dca0628700cd2877004e28010269bc4f6ee8c2",
+        "sha256": "55f72f31f8cf1938c23c05355a17f9514e69bcc524c4b9859fa930bd6aa2f2ab",
+        "changed_while_reading": false
+      }
+    },
+    {
+      "path": "scripts/vm-product-windows-lifecycle.py",
+      "group": "scripts",
+      "change": "added",
+      "base": null,
+      "current": {
+        "exists": true,
+        "mode": "100644",
+        "bytes": 31410,
+        "git_blob": "75c9e3d9ba238bb8fb65c87b78eb53b21a19c84f",
+        "sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+        "changed_while_reading": false
+      }
+    }
+  ],
+  "runtime_unchanged_files": 535,
+  "original_before": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76"
+  },
+  "original_after": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76"
+  },
+  "validation": "Reuse unchanged runtime make verify and actual Fedora driver-specific pure/live receipts; no new implementation change or test rerun.",
+  "remote_mutation": false
+}

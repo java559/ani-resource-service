@@ -1,0 +1,146 @@
+{
+  "phase": "PREPARED_NO_PROXY_CREATE",
+  "proposal": {
+    "scope": "one temporary ordinary nonroot task Pod on the existing tenant2 VPC; actual SSH stays key-only on Fedora",
+    "vm_id": "4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-4ac86e32-0f5c-4dc1-9005-859d840962f2",
+      "uid": "93268ba2-7920-4f7f-abec-ae1923d33d8b"
+    },
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-4ac86e32-0f5c-4dc1-9005-859d840962f2",
+      "uid": "294e3cbf-4928-4595-9a7b-4bbb1a02970c"
+    },
+    "guest_ip": "10.84.1.3",
+    "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+    "nad_uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+    "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "manifest": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "vm-mvp-ssh-proxy-01a168ce",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "labels": {
+          "ani.io/task": "vm-mvp-01a168ce",
+          "ani.io/purpose": "ssh-publickey-proof-proxy"
+        },
+        "annotations": {
+          "v1.multus-cni.io/default-network": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce",
+          "networking.kubercloud.com/subnet": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+        }
+      },
+      "spec": {
+        "automountServiceAccountToken": false,
+        "restartPolicy": "Never",
+        "activeDeadlineSeconds": 1800,
+        "nodeSelector": {
+          "kubernetes.io/hostname": "ani-02"
+        },
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 107,
+          "runAsGroup": 107,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "containers": [
+          {
+            "name": "proxy",
+            "image": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+            "imagePullPolicy": "Never",
+            "command": [
+              "/bin/sh",
+              "-ec",
+              "test -x /bin/bash; command -v cat >/dev/null; exec sleep 1800"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "25m",
+                "memory": "32Mi"
+              },
+              "limits": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "manifest_sha256": "502dc6df9f611a9c8d027a1ec340b8b6ead6a6c7098c92adecf3584f11bafc47",
+    "cached_image": {
+      "node": "ani-02",
+      "node_uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "node_internal_ip": "172.16.101.11",
+      "names": [
+        "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+        "172.16.101.10:5000/kubevirt/cdi-importer:v1.66.1"
+      ],
+      "sizeBytes": 231262654
+    },
+    "existing_same_namespace_pods": [
+      {
+        "kind": "Pod",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "virt-launcher-vm-4ac86e32-0f5c-4dc1-9005-859d840962f2-c6l64",
+        "uid": "42db8246-31df-4752-889b-be1fa7def8b9"
+      },
+      {
+        "kind": "Pod",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "virt-launcher-vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc-6t5rc",
+        "uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+      }
+    ],
+    "proxy_command": [
+      "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+      "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+      "--request-timeout=8s",
+      "exec",
+      "-i",
+      "-n",
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "vm-mvp-ssh-proxy-01a168ce",
+      "--",
+      "/bin/bash",
+      "-ec",
+      "exec 3<>/dev/tcp/10.84.1.3/22; cat <&3 & reader=$!; cat >&3; kill \"$reader\" 2>/dev/null || true; wait \"$reader\" 2>/dev/null || true"
+    ],
+    "host_key_fingerprint": "SHA256:mLoxcPimOKd53HDPxK8m3cF+24SHF6csIaRtaiwewvU",
+    "user_key_fingerprint": "SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w",
+    "cleanup": "stop the task-owned exec; normal UID/RV guarded Pod DELETE and observe Pod/VNic gone; normal Gov DELETE of only the new proof VM, exact root family reclamation",
+    "forbidden": [
+      "new RBAC or Service",
+      "image pull/build/tool installation",
+      "shared routes or KCN changes",
+      "privileged or nsenter",
+      "private-key copy",
+      "Guest sshd/account/network changes",
+      "four existing VM mutation"
+    ],
+    "ordinary_pod_source": "same proven launcher NAD/subnet annotations; direct Pod has no kubevirt or managed-VM identity labels",
+    "source_sha256": "ffe1699d7de5a0a4cd997fd4ee644156d9ffd9a9bf4cc7cdd96219412149c232"
+  },
+  "proposal_sha256": "0124346063d83d48c111af2f0a1af87f5e084520758730a7484b678794a3e139",
+  "create_send_attempts": 0,
+  "original_create_plan_sha256": "4e3dace8a295bab8f3551f169bccbda7af70f7204c5172ca53834ed06db967c1",
+  "root_authorized_correction": "approved proposal 7f082f6b5542c1012c5f5c374701b4dc5c46b68c6c2339cbdf0db6387006d61b; Root explicitly required cached ani-02 nodeSelector with fresh UID/address before CREATE",
+  "original_portforward": "INCONCLUSIVE_BANNER_TIMEOUT_BEFORE_KEY_AUTH",
+  "official_portforward_transport": "https://github.com/kubevirt/kubevirt/blob/v1.9.0/pkg/virt-api/rest/dialers.go#L70-L96"
+}

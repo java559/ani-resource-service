@@ -1,0 +1,14 @@
+{
+  "event": "CLOSE_REQUESTED",
+  "identity": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "node_internal_ip": "172.16.101.10",
+    "node_machine_id": "cd933c2ed43e460986560541fa038e54",
+    "node_name": "ani-01",
+    "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+    "task_owner": "modeldev-execution-v2.1-20261022-01a15f47"
+  },
+  "observed_at": "2026-10-22T20:03:06.689861+00:00",
+  "original_unit_sha256": "599642ae7fb4b9628fec2ade787df7d7f553b6aac34580834bc0bbe54084d06b",
+  "window": "21"
+}

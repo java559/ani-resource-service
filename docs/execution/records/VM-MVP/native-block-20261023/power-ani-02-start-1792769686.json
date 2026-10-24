@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-23T15:34:46.172534+00:00",
+  "requested": "start",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+  },
+  "vmi_before": null,
+  "request_before": []
+}

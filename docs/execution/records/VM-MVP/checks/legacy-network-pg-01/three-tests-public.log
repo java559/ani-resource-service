@@ -1,0 +1,26 @@
+PUBLIC PROJECTION: named run/pass and exact fixture identity/normal-drop output only; full JSON log retained private.
+=== RUN   TestAttachmentPermanentIdentityTenantScopeAndParentDeletion
+attachment_integration_test.go:110: PG_FIXTURE_ROLE created name=network_owner_81bd28f90e184e42810477cbaf0a169f oid=109992
+attachment_integration_test.go:110: PG_FIXTURE_ROLE created name=network_runtime_81bd28f90e184e42810477cbaf0a169f oid=109993
+attachment_integration_test.go:110: PG_FIXTURE_DATABASE created name=network_test_81bd28f90e184e42810477cbaf0a169f oid=109994 owner=network_owner_81bd28f90e184e42810477cbaf0a169f owner_oid=109992
+postgres.go:101: PG_FIXTURE_DATABASE dropped name=network_test_81bd28f90e184e42810477cbaf0a169f oid=109994
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_runtime_81bd28f90e184e42810477cbaf0a169f oid=109993
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_owner_81bd28f90e184e42810477cbaf0a169f oid=109992
+--- PASS: TestAttachmentPermanentIdentityTenantScopeAndParentDeletion (0.78s)
+=== RUN   TestAttachmentConfirmRecoveryReleaseAndResidualUIDs
+attachment_integration_test.go:180: PG_FIXTURE_ROLE created name=network_owner_26ca671a0dbb4eb8ba610129c65b8a1b oid=112407
+attachment_integration_test.go:180: PG_FIXTURE_ROLE created name=network_runtime_26ca671a0dbb4eb8ba610129c65b8a1b oid=112408
+attachment_integration_test.go:180: PG_FIXTURE_DATABASE created name=network_test_26ca671a0dbb4eb8ba610129c65b8a1b oid=112409 owner=network_owner_26ca671a0dbb4eb8ba610129c65b8a1b owner_oid=112407
+postgres.go:101: PG_FIXTURE_DATABASE dropped name=network_test_26ca671a0dbb4eb8ba610129c65b8a1b oid=112409
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_runtime_26ca671a0dbb4eb8ba610129c65b8a1b oid=112408
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_owner_26ca671a0dbb4eb8ba610129c65b8a1b oid=112407
+--- PASS: TestAttachmentConfirmRecoveryReleaseAndResidualUIDs (0.86s)
+=== RUN   TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite
+attachment_integration_test.go:269: PG_FIXTURE_ROLE created name=network_owner_dc6a88545840499aa8a3ccc38ac70cab oid=114822
+attachment_integration_test.go:269: PG_FIXTURE_ROLE created name=network_runtime_dc6a88545840499aa8a3ccc38ac70cab oid=114823
+attachment_integration_test.go:269: PG_FIXTURE_DATABASE created name=network_test_dc6a88545840499aa8a3ccc38ac70cab oid=114824 owner=network_owner_dc6a88545840499aa8a3ccc38ac70cab owner_oid=114822
+postgres.go:101: PG_FIXTURE_DATABASE dropped name=network_test_dc6a88545840499aa8a3ccc38ac70cab oid=114824
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_runtime_dc6a88545840499aa8a3ccc38ac70cab oid=114823
+postgres.go:70: PG_FIXTURE_ROLE dropped name=network_owner_dc6a88545840499aa8a3ccc38ac70cab oid=114822
+--- PASS: TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite (0.76s)
+PASS

@@ -1,0 +1,29 @@
+{
+  "pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "datavolume": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "DataVolume",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+  },
+  "pod": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-source-hash",
+    "uid": "74bc0237-45ac-42e8-a79b-d9602b04936a"
+  },
+  "input_qcow2_sha256": "04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94",
+  "requested_storage": "8G",
+  "capacity": {
+    "storage": "8Gi"
+  },
+  "scope": "hash entire native raw Block device read-only exactly once"
+}

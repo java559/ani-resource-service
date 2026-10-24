@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-10-24T04:23:31.905605+00:00",
+  "module": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+  "version": "v0.0.0-20261023185414-0a53b99c8d9f",
+  "expected_commit": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+  "host": "ssh fedora",
+  "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-module-resolution-01",
+  "gowork": "off",
+  "go_toolchain": "go1.26.10",
+  "git_transport": "task-process URL rewrites to SSH443; strict host key; no key copy",
+  "source_or_global_git_config_changed": false,
+  "tests_builds_or_api_drivers_run": false,
+  "command": [
+    "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+    "mod",
+    "download",
+    "-json",
+    "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f"
+  ],
+  "exit_code": 1,
+  "stderr": "",
+  "state": "FORMAL_MODULE_RESOLUTION_FAILED",
+  "error": "module download failed; inspect retained stdout/stderr",
+  "global_git_config_hash_unchanged": true,
+  "finished_at": "2026-10-24T04:23:35.249599+00:00"
+}

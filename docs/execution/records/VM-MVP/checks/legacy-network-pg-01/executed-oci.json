@@ -1,0 +1,291 @@
+{
+  "started_at": "2026-10-24T11:42:16.644258+00:00",
+  "plan_sha256": "b59104df0e2d0baf81ed5adc50b49d027dd1daf90d1d8ed529a5a507acde137c",
+  "runner_sha256": "40bf3c1229d524681398385815cd6f702e03ae60e99049a793cfafa58ff63e3b",
+  "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "source_tree": "e51622e689476c524ddd29776d1b217738822a21",
+  "application_calls": 0,
+  "candidate_changes": 0,
+  "cluster_writes": 0,
+  "force_or_connection_termination": false,
+  "named_results": [
+    {
+      "Package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+      "Test": "TestAttachmentPermanentIdentityTenantScopeAndParentDeletion",
+      "Action": "pass",
+      "Elapsed": 0.78
+    },
+    {
+      "Package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+      "Test": "TestAttachmentConfirmRecoveryReleaseAndResidualUIDs",
+      "Action": "pass",
+      "Elapsed": 0.86
+    },
+    {
+      "Package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+      "Test": "TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite",
+      "Action": "pass",
+      "Elapsed": 0.76
+    }
+  ],
+  "fixtures": [
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109992,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109993,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109994,
+      "owner": "network_owner_81bd28f90e184e42810477cbaf0a169f",
+      "owner_oid": 109992,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112407,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112408,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112409,
+      "owner": "network_owner_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "owner_oid": 112407,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114822,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114823,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114824,
+      "owner": "network_owner_dc6a88545840499aa8a3ccc38ac70cab",
+      "owner_oid": 114822,
+      "normal_drop_logged": true,
+      "current_name_and_oid_absent": true
+    }
+  ],
+  "postgres": {
+    "container_id": "5e88155a11a945128b524ad669657ad6d1e2d12296b1bb4f34ca566dce7c463c",
+    "label": "ani.vm.fixture=vm-mvp-20261023-01a168ce",
+    "admin_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/pg/admin.dsn",
+    "host": "127.0.0.1",
+    "port": 33075
+  },
+  "overlay": {
+    "path": "tests/testenv/postgres.go",
+    "original_sha256": "77b50da6238945e1d91a2b92fb695cc17e7858480608023aa8b6e7f515b9918e",
+    "input_sha256": "f08f3d6ad1c92ed0336f2a8fec8eb1302ecc6966a9ad5a3ec1d4b546bec22369",
+    "delta": "record exact random3DB/6roles OIDs; identity+owner+0connections guards; normalDROP only/absence; no business/test assertion/migration changes",
+    "formatted_sha256": "f08f3d6ad1c92ed0336f2a8fec8eb1302ecc6966a9ad5a3ec1d4b546bec22369"
+  },
+  "source": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/legacy-network-pg-01/source-oci",
+    "files": 558,
+    "only_helper_overlay_changed": true
+  },
+  "input_check": {
+    "command": [
+      "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+      "list",
+      "-e",
+      "-test",
+      "-deps",
+      "-json",
+      "./internal/data/network"
+    ],
+    "exit_code": 0,
+    "packages": 685,
+    "errors": [],
+    "business_or_pg_calls": 0
+  },
+  "command": [
+    "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+    "test",
+    "-v",
+    "-json",
+    "./internal/data/network",
+    "-count=1",
+    "-timeout=180s",
+    "-run",
+    "^(TestAttachmentPermanentIdentityTenantScopeAndParentDeletion|TestAttachmentConfirmRecoveryReleaseAndResidualUIDs|TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite)$"
+  ],
+  "environment": {
+    "LANG": "zh_CN.UTF-8",
+    "PATH": "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin:/usr/bin:/bin",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "GOMAXPROCS": "2",
+    "GOFLAGS": "-p=2 -mod=readonly",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOPROXY": "off",
+    "GOTMPDIR": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/legacy-network-pg-01/go-tmp-oci"
+  },
+  "owned_process_pid": 3411114,
+  "exit_code": 0,
+  "fixture_events": [
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109992
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109993
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109994,
+      "owner": "network_owner_81bd28f90e184e42810477cbaf0a169f",
+      "owner_oid": 109992
+    },
+    {
+      "kind": "DATABASE",
+      "action": "dropped",
+      "name": "network_test_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109994
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_runtime_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109993
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_owner_81bd28f90e184e42810477cbaf0a169f",
+      "oid": 109992
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112407
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112408
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112409,
+      "owner": "network_owner_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "owner_oid": 112407
+    },
+    {
+      "kind": "DATABASE",
+      "action": "dropped",
+      "name": "network_test_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112409
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_runtime_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112408
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_owner_26ca671a0dbb4eb8ba610129c65b8a1b",
+      "oid": 112407
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_owner_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114822
+    },
+    {
+      "kind": "ROLE",
+      "action": "created",
+      "name": "network_runtime_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114823
+    },
+    {
+      "kind": "DATABASE",
+      "action": "created",
+      "name": "network_test_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114824,
+      "owner": "network_owner_dc6a88545840499aa8a3ccc38ac70cab",
+      "owner_oid": 114822
+    },
+    {
+      "kind": "DATABASE",
+      "action": "dropped",
+      "name": "network_test_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114824
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_runtime_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114823
+    },
+    {
+      "kind": "ROLE",
+      "action": "dropped",
+      "name": "network_owner_dc6a88545840499aa8a3ccc38ac70cab",
+      "oid": 114822
+    }
+  ],
+  "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/legacy-network-pg-oci/tests.jsonl",
+  "result": "PASS_THREE_REAL_PG_ZERO_SKIP_NORMAL_EXACT_OID_CLEANUP",
+  "seconds": 34.628,
+  "finished_at": "2026-10-24T11:42:51.271879+00:00"
+}

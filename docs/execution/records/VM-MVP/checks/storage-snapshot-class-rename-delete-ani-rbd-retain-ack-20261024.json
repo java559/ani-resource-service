@@ -1,0 +1,12 @@
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Success",
+  "details": {
+    "name": "ani-rbd-retain",
+    "group": "snapshot.storage.k8s.io",
+    "kind": "volumesnapshotclasses",
+    "uid": "a1568367-0da2-4ede-86c0-f32ea790772d"
+  }
+}

@@ -1,0 +1,1012 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "at": "2026-10-23T18:45:02.597578+00:00",
+  "steps": [
+    {
+      "intent": "cold-detach-data3",
+      "operation": {
+        "id": "382efa5c-cca3-4165-aba2-c8c03285448d",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "detach-disk",
+        "intentVersion": "13",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T18:45:41.78104104Z"
+      },
+      "expected_version": 12,
+      "current": {
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "name": "vm-mvp-linux-main-v3",
+        "version": "13",
+        "osFamily": "linux",
+        "osVersion": "24.04.5 LTS (Noble Numbat)",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-23T18:36:28.242877741Z",
+        "addresses": [],
+        "lastOperationId": "382efa5c-cca3-4165-aba2-c8c03285448d",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "cpuMillis": "1500",
+        "memoryMib": "2048",
+        "systemDiskSizeGb": "12",
+        "sourceKind": "DISK_IMAGE",
+        "mediaKey": "ubuntu-24.04"
+      },
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "first_observation": {
+        "intent": "cold-detach-data3",
+        "operation": {
+          "id": "382efa5c-cca3-4165-aba2-c8c03285448d",
+          "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "action": "detach-disk",
+          "intentVersion": "13",
+          "state": "running",
+          "reason": "",
+          "observedAt": "2026-10-23T18:45:22.044077961Z"
+        },
+        "expected_version": 12,
+        "current": {
+          "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "name": "vm-mvp-linux-main-v3",
+          "version": "13",
+          "osFamily": "linux",
+          "osVersion": "24.04.5 LTS (Noble Numbat)",
+          "desiredState": "Stopped",
+          "observedState": "Stopped",
+          "reason": "",
+          "observedAt": "2026-10-23T18:36:28.242877741Z",
+          "addresses": [],
+          "lastOperationId": "382efa5c-cca3-4165-aba2-c8c03285448d",
+          "closing": false,
+          "disks": [
+            {
+              "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "role": "system",
+              "name": "system",
+              "sizeGb": "12",
+              "requestedBytes": "12000000000",
+              "observedCapacityBytes": "12884901888",
+              "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "role": "data",
+              "name": "vm-mvp-data3-v3",
+              "sizeGb": "3",
+              "requestedBytes": "3000000000",
+              "observedCapacityBytes": "3221225472",
+              "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+              "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "role": "data",
+              "name": "vm-mvp-data4-v3",
+              "sizeGb": "4",
+              "requestedBytes": "4000000000",
+              "observedCapacityBytes": "4294967296",
+              "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            }
+          ],
+          "media": [
+            {
+              "slot": "INSTALL",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            },
+            {
+              "slot": "DRIVER",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            }
+          ],
+          "bootDevice": "SYSTEM_DISK",
+          "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+          "cpuMillis": "1500",
+          "memoryMib": "2048",
+          "systemDiskSizeGb": "12",
+          "sourceKind": "DISK_IMAGE",
+          "mediaKey": "ubuntu-24.04"
+        },
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ]
+      },
+      "native": {
+        "vm": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "kind": "VirtualMachine"
+        },
+        "vmi_absent": true,
+        "volume": [],
+        "device": [],
+        "no_implicit_start": true
+      }
+    },
+    {
+      "intent": "cold-detach-data4",
+      "operation": {
+        "id": "7d7d7d68-d201-4d08-ba28-09936bcd9e92",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "detach-disk",
+        "intentVersion": "14",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T18:52:24.436419997Z"
+      },
+      "expected_version": 13,
+      "current": {
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "name": "vm-mvp-linux-main-v3",
+        "version": "14",
+        "osFamily": "linux",
+        "osVersion": "24.04.5 LTS (Noble Numbat)",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-23T18:36:28.242877741Z",
+        "addresses": [],
+        "lastOperationId": "7d7d7d68-d201-4d08-ba28-09936bcd9e92",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "cpuMillis": "1500",
+        "memoryMib": "2048",
+        "systemDiskSizeGb": "12",
+        "sourceKind": "DISK_IMAGE",
+        "mediaKey": "ubuntu-24.04"
+      },
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "first_observation": {
+        "intent": "cold-detach-data4",
+        "operation": {
+          "id": "7d7d7d68-d201-4d08-ba28-09936bcd9e92",
+          "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "action": "detach-disk",
+          "intentVersion": "14",
+          "state": "running",
+          "reason": "",
+          "observedAt": "2026-10-23T18:52:14.693892367Z"
+        },
+        "expected_version": 13,
+        "current": {
+          "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "name": "vm-mvp-linux-main-v3",
+          "version": "14",
+          "osFamily": "linux",
+          "osVersion": "24.04.5 LTS (Noble Numbat)",
+          "desiredState": "Stopped",
+          "observedState": "Stopped",
+          "reason": "",
+          "observedAt": "2026-10-23T18:36:28.242877741Z",
+          "addresses": [],
+          "lastOperationId": "7d7d7d68-d201-4d08-ba28-09936bcd9e92",
+          "closing": false,
+          "disks": [
+            {
+              "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "role": "system",
+              "name": "system",
+              "sizeGb": "12",
+              "requestedBytes": "12000000000",
+              "observedCapacityBytes": "12884901888",
+              "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "role": "data",
+              "name": "vm-mvp-data3-v3",
+              "sizeGb": "3",
+              "requestedBytes": "3000000000",
+              "observedCapacityBytes": "3221225472",
+              "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+              "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "attached": false,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "role": "data",
+              "name": "vm-mvp-data4-v3",
+              "sizeGb": "4",
+              "requestedBytes": "4000000000",
+              "observedCapacityBytes": "4294967296",
+              "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            }
+          ],
+          "media": [
+            {
+              "slot": "INSTALL",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            },
+            {
+              "slot": "DRIVER",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            }
+          ],
+          "bootDevice": "SYSTEM_DISK",
+          "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+          "cpuMillis": "1500",
+          "memoryMib": "2048",
+          "systemDiskSizeGb": "12",
+          "sourceKind": "DISK_IMAGE",
+          "mediaKey": "ubuntu-24.04"
+        },
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ]
+      },
+      "native": {
+        "vm": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "kind": "VirtualMachine"
+        },
+        "vmi_absent": true,
+        "volume": [],
+        "device": [],
+        "no_implicit_start": true
+      }
+    },
+    {
+      "intent": "cold-attach-data3",
+      "operation": {
+        "id": "65ca81b8-4fb1-4648-9f0c-b5b8ef7a163a",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "attach-disk",
+        "intentVersion": "15",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T18:57:14.542149637Z"
+      },
+      "expected_version": 14,
+      "current": {
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "name": "vm-mvp-linux-main-v3",
+        "version": "15",
+        "osFamily": "linux",
+        "osVersion": "24.04.5 LTS (Noble Numbat)",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-23T18:36:28.242877741Z",
+        "addresses": [],
+        "lastOperationId": "65ca81b8-4fb1-4648-9f0c-b5b8ef7a163a",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "cpuMillis": "1500",
+        "memoryMib": "2048",
+        "systemDiskSizeGb": "12",
+        "sourceKind": "DISK_IMAGE",
+        "mediaKey": "ubuntu-24.04"
+      },
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "first_observation": {
+        "intent": "cold-attach-data3",
+        "operation": {
+          "id": "65ca81b8-4fb1-4648-9f0c-b5b8ef7a163a",
+          "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "action": "attach-disk",
+          "intentVersion": "15",
+          "state": "running",
+          "reason": "",
+          "observedAt": "2026-10-23T18:57:04.758724168Z"
+        },
+        "expected_version": 14,
+        "current": {
+          "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "name": "vm-mvp-linux-main-v3",
+          "version": "15",
+          "osFamily": "linux",
+          "osVersion": "24.04.5 LTS (Noble Numbat)",
+          "desiredState": "Stopped",
+          "observedState": "Stopped",
+          "reason": "",
+          "observedAt": "2026-10-23T18:36:28.242877741Z",
+          "addresses": [],
+          "lastOperationId": "65ca81b8-4fb1-4648-9f0c-b5b8ef7a163a",
+          "closing": false,
+          "disks": [
+            {
+              "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "role": "system",
+              "name": "system",
+              "sizeGb": "12",
+              "requestedBytes": "12000000000",
+              "observedCapacityBytes": "12884901888",
+              "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+              "attached": true,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "role": "data",
+              "name": "vm-mvp-data3-v3",
+              "sizeGb": "3",
+              "requestedBytes": "3000000000",
+              "observedCapacityBytes": "3221225472",
+              "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+              "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+              "attached": false,
+              "preparationState": "Bound",
+              "reason": ""
+            },
+            {
+              "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "role": "data",
+              "name": "vm-mvp-data4-v3",
+              "sizeGb": "4",
+              "requestedBytes": "4000000000",
+              "observedCapacityBytes": "4294967296",
+              "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+              "attached": false,
+              "preparationState": "Bound",
+              "reason": ""
+            }
+          ],
+          "media": [
+            {
+              "slot": "INSTALL",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            },
+            {
+              "slot": "DRIVER",
+              "desiredMedia": "",
+              "observedMedia": "",
+              "effectiveNow": true,
+              "pendingRestart": false
+            }
+          ],
+          "bootDevice": "SYSTEM_DISK",
+          "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+          "cpuMillis": "1500",
+          "memoryMib": "2048",
+          "systemDiskSizeGb": "12",
+          "sourceKind": "DISK_IMAGE",
+          "mediaKey": "ubuntu-24.04"
+        },
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": false,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ]
+      },
+      "native": {
+        "vm": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "kind": "VirtualMachine"
+        },
+        "vmi_absent": true,
+        "volume": [
+          {
+            "dataVolume": {
+              "hotpluggable": true,
+              "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+            },
+            "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+          }
+        ],
+        "device": [
+          {
+            "disk": {
+              "bus": "scsi"
+            },
+            "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+          }
+        ],
+        "no_implicit_start": true
+      }
+    },
+    {
+      "intent": "cold-attach-data4",
+      "operation": {
+        "id": "0c92929f-2b85-44bf-beac-4e36ac24a27c",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "attach-disk",
+        "intentVersion": "16",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T18:59:51.545143388Z"
+      },
+      "expected_version": 15,
+      "current": {
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "name": "vm-mvp-linux-main-v3",
+        "version": "16",
+        "osFamily": "linux",
+        "osVersion": "24.04.5 LTS (Noble Numbat)",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-23T18:36:28.242877741Z",
+        "addresses": [],
+        "lastOperationId": "0c92929f-2b85-44bf-beac-4e36ac24a27c",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "12",
+            "requestedBytes": "12000000000",
+            "observedCapacityBytes": "12884901888",
+            "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "role": "data",
+            "name": "vm-mvp-data3-v3",
+            "sizeGb": "3",
+            "requestedBytes": "3000000000",
+            "observedCapacityBytes": "3221225472",
+            "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          },
+          {
+            "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "role": "data",
+            "name": "vm-mvp-data4-v3",
+            "sizeGb": "4",
+            "requestedBytes": "4000000000",
+            "observedCapacityBytes": "4294967296",
+            "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "cpuMillis": "1500",
+        "memoryMib": "2048",
+        "systemDiskSizeGb": "12",
+        "sourceKind": "DISK_IMAGE",
+        "mediaKey": "ubuntu-24.04"
+      },
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "native": {
+        "vm": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "kind": "VirtualMachine"
+        },
+        "vmi_absent": true,
+        "volume": [
+          {
+            "dataVolume": {
+              "hotpluggable": true,
+              "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+            },
+            "name": "disk-5dbc2c93986554f98413f198f5e9c1a6"
+          }
+        ],
+        "device": [
+          {
+            "disk": {
+              "bus": "scsi"
+            },
+            "name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+          }
+        ],
+        "no_implicit_start": true
+      }
+    }
+  ],
+  "result": "PASS",
+  "continued_at": "2026-10-23T18:59:10.763962+00:00"
+}

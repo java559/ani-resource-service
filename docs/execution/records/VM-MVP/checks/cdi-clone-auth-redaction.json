@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-23T20:40:27.263443+00:00",
+  "purpose": "one narrow exact-key scan and redaction for this VM-MVP batch public JSON only",
+  "annotation_key_names": [
+    "cdi.kubevirt.io/storage.clone.token",
+    "cdi.kubevirt.io/storage.extended.clone.token"
+  ],
+  "prior_sanitization": {
+    "file": "product-tenant2-linux-pending.json",
+    "paths": [
+      "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+      "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token",
+      "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+      "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token"
+    ],
+    "raw_before_first_value_redaction_sha256": "NOT_CAPTURED_BEFORE_REDACTION",
+    "note": "Initial raw values were replaced before their original SHA was captured. The before SHA below identifies that already value-redacted version, before exact dictionary keys were removed; no historical raw SHA is reconstructed. UID/spec/status preserved. No raw credential copy retained."
+  },
+  "local": {
+    "scope": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP",
+    "scanned_json_files": 129,
+    "changes": [
+      {
+        "path": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/product-linux-v2-stopped.json",
+        "removed_dictionary_key_paths": [
+          "/root_pvc/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/root_pvc/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token"
+        ],
+        "before_sha256": "7da07e68d962d9d8105df7c2cd769b6b145c970f75f7665f76a9a174b594ff7e",
+        "after_sha256": "7871f4d3c8ab899f0026940c01739db7366cb6460848ffe9c5504064378bcfb6",
+        "uid_spec_status_and_all_other_json_values_unchanged": true,
+        "private_raw_copy_created": false
+      },
+      {
+        "path": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/product-tenant2-linux-pending.json",
+        "removed_dictionary_key_paths": [
+          "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token",
+          "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token"
+        ],
+        "before_sha256": "b330256cdb0c37306e205529661b010c0c7a1a75f942d6aca51b5b1beb5feb24",
+        "after_sha256": "19a4fffd298b7cbb0d6b56ff362a2b17fc55ccf4a66fe9a9fde93ae1df5b18f4",
+        "uid_spec_status_and_all_other_json_values_unchanged": true,
+        "private_raw_copy_created": false
+      }
+    ],
+    "parse_errors": []
+  },
+  "fedora": {
+    "scope": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence",
+    "scanned_json_files": 272,
+    "changes": [
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-linux-v2-stopped.json",
+        "removed_dictionary_key_paths": [
+          "/root_pvc/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/root_pvc/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token"
+        ],
+        "before_sha256": "7da07e68d962d9d8105df7c2cd769b6b145c970f75f7665f76a9a174b594ff7e",
+        "after_sha256": "7871f4d3c8ab899f0026940c01739db7366cb6460848ffe9c5504064378bcfb6",
+        "uid_spec_status_and_all_other_json_values_unchanged": true,
+        "private_raw_copy_created": false
+      },
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-tenant2-linux-pending.json",
+        "removed_dictionary_key_paths": [
+          "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/objects/dv/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token",
+          "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.clone.token",
+          "/objects/pvc/0/metadata/annotations/cdi.kubevirt.io/storage.extended.clone.token"
+        ],
+        "before_sha256": "b330256cdb0c37306e205529661b010c0c7a1a75f942d6aca51b5b1beb5feb24",
+        "after_sha256": "19a4fffd298b7cbb0d6b56ff362a2b17fc55ccf4a66fe9a9fde93ae1df5b18f4",
+        "uid_spec_status_and_all_other_json_values_unchanged": true,
+        "private_raw_copy_created": false
+      }
+    ],
+    "parse_errors": []
+  },
+  "secret_values_in_this_receipt": false,
+  "no_other_project_or_private_directory_scanned": true
+}

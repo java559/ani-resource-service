@@ -1,0 +1,398 @@
+{
+  "base_cached_before_build": {
+    "id": "sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "repo_digests": [
+      "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+    ]
+  },
+  "binary_sha256": "15e04be571e4d44e52cfe878d8de7270e927a24fd4f704545a226af3a5136041",
+  "build_environment": {
+    "CGO_ENABLED": "0",
+    "GOARCH": "amd64",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": "2",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "SOURCE_DATE_EPOCH": "1792829794"
+  },
+  "business_api_calls": 0,
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.07,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/base-inspect.log",
+      "log_sha256": "bbd4f0ddbe88c70bc2ee38834d2074aa0d19e5c09597e8986be79726e35db11e",
+      "stage": "base-inspect",
+      "timeout_seconds": 239.999
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.021,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/tag-absence.log",
+      "log_sha256": "ca104fdac04d573ea7b39baad1fa6c03a339ec2a8ee7f892e9093073cfe02cca",
+      "stage": "tag-absence",
+      "timeout_seconds": 239.928
+    },
+    {
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "vm-mvp-session-oci-check-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.018,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/check-container-absence.log",
+      "log_sha256": "c25030a91faf51d01dbac61c7ad3715f92997c1e89b0c67dd03fed1f30d92c34",
+      "stage": "check-container-absence",
+      "timeout_seconds": 239.906
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.006,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/go-version.log",
+      "log_sha256": "4e0b213cba780f63b02f3ab9001ee61e4101d254e0af1a8205574c19dad0f93b",
+      "stage": "go-version",
+      "timeout_seconds": 239.847
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "edit",
+        "-json"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source",
+      "elapsed_seconds": 0.058,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/module-replacements.log",
+      "log_sha256": "0e2d00b3a2a71b44f09367c5f79cda3e8dcb03640e964f5bea657177cc42bca8",
+      "stage": "module-replacements",
+      "timeout_seconds": 239.839
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/context/session-gateway",
+        "./cmd/session-gateway"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source",
+      "elapsed_seconds": 90.553,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stage": "compile",
+      "timeout_seconds": 239.779
+    },
+    {
+      "argv": [
+        "file",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/context/session-gateway"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.075,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/binary-file.log",
+      "log_sha256": "d065f17002b136486d30148a13bc794858cb37bfd6faa07a35eaa98c30530594",
+      "stage": "binary-file",
+      "timeout_seconds": 148.919
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version",
+        "-m",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/context/session-gateway"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.176,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/binary-build-info.log",
+      "log_sha256": "dbff9ac14adead9b92daa0a2aac5e71b307d1d946b84ef5b5f182b0fa35aee28",
+      "stage": "binary-build-info",
+      "timeout_seconds": 148.842
+    },
+    {
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--iidfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/image.id",
+        "--tag",
+        "ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+        "--file",
+        "Dockerfile",
+        "."
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/context",
+      "elapsed_seconds": 12.969,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/docker-build.log",
+      "log_sha256": "5938a69e931a94afb72311edeea285ace7c49fdffb15fa39f6a424ecbcd97ddc",
+      "stage": "docker-build",
+      "timeout_seconds": 148.375
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vm-mvp-session-oci-check-01a168ce",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.756,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/missing-config-only.log",
+      "log_sha256": "b01d9234e25fd25ea818944c579a515d9531af0d32d657bc690eef6f8f8956c8",
+      "stage": "missing-config-only",
+      "timeout_seconds": 135.403
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 0.087,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/image-inspect.log",
+      "log_sha256": "0bd2981b4b6cdbc5134991910e63c4f641f21fcdbda0ee5eaba211c89da9c0a7",
+      "stage": "image-inspect",
+      "timeout_seconds": 134.645
+    },
+    {
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session",
+      "elapsed_seconds": 4.285,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/oci-export.log",
+      "log_sha256": "64117820e9eae90158e9a63d9eae63d9bd82c57896db867b66bfe1c002dbf911",
+      "stage": "oci-export",
+      "timeout_seconds": 134.555
+    }
+  ],
+  "context": {
+    ".dockerignore": {
+      "bytes": 46,
+      "sha256": "caf3fad61d04f43f6dd5d49514dbe2775a5106c649d5a9a9c053c5f87abd0d8d"
+    },
+    "Dockerfile": {
+      "bytes": 491,
+      "sha256": "1101b1ccca2dfa7102e33986b4c64305f6feb8c0c0d84dfbd00b8c6996a45357"
+    },
+    "session-gateway": {
+      "bytes": 77555168,
+      "sha256": "15e04be571e4d44e52cfe878d8de7270e927a24fd4f704545a226af3a5136041"
+    }
+  },
+  "deployments": 0,
+  "docker_image": {
+    "config": {
+      "Entrypoint": [
+        "/session-gateway"
+      ],
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+      ],
+      "Labels": {
+        "org.opencontainers.image.revision": "c485419ab879fed9a2fad3a064fd328d829a2671",
+        "org.opencontainers.image.source": "https://github.com/zhangzhe-ctrl/ani-session-gateway",
+        "org.opencontainers.image.version": "vm-mvp-c485419ab879-01a168ce"
+      },
+      "User": "65532:65532",
+      "WorkingDir": "/"
+    },
+    "id": "sha256:0429c33b3038734a77e750f485f08dcae53fa54ecb0e9a5efb047f44b808b67d",
+    "rootfs": {
+      "Layers": [
+        "sha256:7223ea1323e8c1159ec17f07d35acc27bdd1cc2bc3ed425b44ef21dac9915db0",
+        "sha256:8fa10c0194df9b7c054c90dbe482585f768a54428fc90a5b78a0066a123b1bba",
+        "sha256:35b5ba6e08cdd034b8d1920f9c7203e5d66f258e1915f164a01de0af14f34710",
+        "sha256:114dde0fefebbca13165d0da9c500a66190e497a82a53dcaabc3172d630be1e9",
+        "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368",
+        "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc",
+        "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4",
+        "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38",
+        "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b",
+        "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a",
+        "sha256:6e7fbcf090d09b73a4aa85f9dce690d0ace73877c150b7c56955487b6e7a822a",
+        "sha256:5904c32f457c96a16c8c68f5ccdf518c8138cd9e5971de9ce6d564fc481af222",
+        "sha256:ccd620dac8f6564c85d7336b24c2baeb57a6eca5a73f0d8d1cec524b87242f21"
+      ],
+      "Type": "layers"
+    },
+    "tag": "ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+  },
+  "elapsed_seconds": 110.022,
+  "finished_at": "2026-10-24T08:23:50.232217+00:00",
+  "host": "fedora/172.16.101.31",
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "oci": {
+    "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar",
+    "archive_sha256": "e59153de4d8f59bd50f82fae285d710cc0694ee0128e9a0427050a81bd116b69",
+    "bytes": 34860032,
+    "index": {
+      "manifests": [
+        {
+          "annotations": {
+            "org.opencontainers.image.ref.name": "vm-mvp-c485419ab879-01a168ce"
+          },
+          "digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+          "size": 2265
+        }
+      ],
+      "mediaType": "application/vnd.oci.image.index.v1+json",
+      "schemaVersion": 2
+    },
+    "manifest": {
+      "config": {
+        "digest": "sha256:921235c220ffdf9f83df074985652fb15bc093ef606f16483768576a293df9a6",
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "size": 3560
+      },
+      "layers": [
+        {
+          "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 88276
+        },
+        {
+          "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 12760
+        },
+        {
+          "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 475570
+        },
+        {
+          "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 29309
+        },
+        {
+          "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 75
+        },
+        {
+          "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 197
+        },
+        {
+          "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 132
+        },
+        {
+          "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 168
+        },
+        {
+          "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 91
+        },
+        {
+          "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 361
+        },
+        {
+          "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 320
+        },
+        {
+          "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 144572
+        },
+        {
+          "digest": "sha256:e0f064f9d8afb5dceb0509c007c1922652a95afa225963c02a901456009359c2",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 34086527
+        }
+      ],
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "schemaVersion": 2
+    },
+    "manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773"
+  },
+  "phase": "COMPLETE",
+  "prepared_sha256": "4234a975618a5c9afbf8da720b9d3f714156c7e4712637e30ce5b581a3f6027b",
+  "result": "PASS_LOCAL_OCI_BUILT_NOT_PUBLISHED",
+  "service": "session",
+  "service_restarts": 0,
+  "source": {
+    "archive": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source.tar.gz",
+    "archive_bytes": 60996,
+    "archive_sha256": "e7acc865179ff6b0fce8dad1b26122c4957f62999022941345691091d6adb171",
+    "commit": "c485419ab879fed9a2fad3a064fd328d829a2671",
+    "file_count": 29,
+    "manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source-manifest.json",
+    "manifest_sha256": "2c2510c8370d80cca292c129beaf4b4d4b08df00bf65b75523c873614ecd0d27",
+    "parent": "811cc383924460a99cae5b209ca5db97a83d42f4",
+    "repository": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway",
+    "runtime_embed_inputs": [],
+    "source_date_epoch": 1792829794,
+    "tree": "a793407819bc7eaea34348f0962175cbeecc3463"
+  },
+  "source_driver_sha256": "38fcb0b6987f5953be1661bf85e4865f48745cc82097a9764cbac0fe03e648b4",
+  "source_unchanged": true,
+  "started_at": "2026-10-24T08:22:00.210596+00:00",
+  "startup_check": "NEGATIVE_MISSING_CONFIG_ONLY_NOT_READINESS",
+  "vm_mutations": 0
+}

@@ -1,0 +1,8 @@
+To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git
+*	refs/heads/codex/vm-mvp-resource-runtime-20261023:refs/heads/codex/vm-mvp-resource-runtime-20261023	[new branch]
+Done
+TASK_PRE_PUSH_PASS exact one-ref/create-only/SSH443/SHA/tree/parent
+remote: 
+remote: Create a pull request for 'codex/vm-mvp-resource-runtime-20261023' on GitHub by visiting:        
+remote:      https://github.com/zhangzhe-ctrl/ani-resource-service/pull/new/codex/vm-mvp-resource-runtime-20261023        
+remote: 

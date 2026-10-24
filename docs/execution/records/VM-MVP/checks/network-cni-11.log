@@ -1,0 +1,18 @@
+--- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin (0.00s)
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/live-bad-conflist (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/plugins-with-top-level-fields (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/legacy-fake-type (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/missing-socket (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/empty-socket (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+    --- FAIL: TestVMManagedNADRequiresKCNControllerCompatibleSinglePlugin/socket-wrong-type (0.00s)
+        kc_attachment_vm_test.go:151: valid=false, resolve error=<nil>
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.019s
+FAIL
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.018s
+{"internal/data/network/attachment_vm.go": "598becd1ef608c0603a231a9768842ef793168a0ed62031542590915d81842ca", "internal/data/network/kc_attachment_vm_test.go": "b797a7e6b1d0edce266f58d39b4d5f562ac31df24662e2719aa054d0af428c97"}

@@ -1,0 +1,590 @@
+{
+  "at": "2026-10-23T20:59:20.502649+00:00",
+  "scope": "READ_ONLY_PRODUCT_ISO_NATIVE_IDENTITIES",
+  "vm_id": "cd8bfd49-de9b-4a68-8607-15638452d9d7",
+  "create_operation_id": "ed66ba77-7baa-40b0-8e1f-55ada1f965da",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-cd8bfd49-de9b-4a68-8607-15638452d9d7",
+    "uid": "11b0a8c9-956d-4a17-852f-a5026d3788c0"
+  },
+  "vm_status": {
+    "conditions": [
+      {
+        "lastProbeTime": "2026-10-23T20:56:18Z",
+        "lastTransitionTime": "2026-10-23T20:56:18Z",
+        "message": "Guest VM is not reported as running",
+        "reason": "GuestNotRunning",
+        "status": "False",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "All of the VMI's DVs are bound and ready",
+        "reason": "AllDVsReady",
+        "status": "True",
+        "type": "DataVolumesReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC vd-e62eeaee-e4a9-53a6-960e-15399ec82860 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T20:56:37Z",
+        "message": "Failed to change ownership of HostDisk dir media-install, chown /proc/self/fd/32: read-only file system",
+        "reason": "Synchronizing with the Domain failed.",
+        "status": "False",
+        "type": "Synchronized"
+      }
+    ],
+    "created": true,
+    "desiredGeneration": 1,
+    "observedGeneration": 1,
+    "printableStatus": "Starting",
+    "runStrategy": "Manual",
+    "volumeSnapshotStatuses": [
+      {
+        "enabled": true,
+        "name": "disk-e62eeaeee4a953a6960e15399ec82860"
+      },
+      {
+        "enabled": true,
+        "name": "media-install"
+      }
+    ]
+  },
+  "template": {
+    "cpu": {
+      "cores": 2,
+      "sockets": 1,
+      "threads": 1
+    },
+    "memory": {
+      "guest": "4Gi"
+    },
+    "volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860"
+        },
+        "name": "disk-e62eeaeee4a953a6960e15399ec82860"
+      },
+      {
+        "name": "media-install",
+        "persistentVolumeClaim": {
+          "claimName": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+          "readOnly": true
+        }
+      }
+    ],
+    "disks": [
+      {
+        "bootOrder": 2,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-e62eeaeee4a953a6960e15399ec82860",
+        "serial": "e62eeaee-e4a9-53a6-960e-15399ec82860"
+      },
+      {
+        "bootOrder": 1,
+        "cdrom": {
+          "bus": "sata",
+          "readonly": true,
+          "tray": "closed"
+        },
+        "name": "media-install"
+      }
+    ]
+  },
+  "datavolumes": [
+    {
+      "ref": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+        "uid": "e284f7d4-d65b-4e79-920c-bd4b8c4c730f"
+      },
+      "phase": "Succeeded",
+      "spec": {
+        "contentType": "kubevirt",
+        "source": {
+          "blank": {}
+        },
+        "storage": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "resources": {
+            "requests": {
+              "storage": "48G"
+            }
+          },
+          "storageClassName": "ani-block",
+          "volumeMode": "Block"
+        }
+      },
+      "owner_references": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-cd8bfd49-de9b-4a68-8607-15638452d9d7",
+          "uid": "11b0a8c9-956d-4a17-852f-a5026d3788c0"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+        "uid": "17adb660-fdb0-40a4-920a-dc365b20c7b2"
+      },
+      "phase": "Succeeded",
+      "spec": {
+        "contentType": "kubevirt",
+        "source": {
+          "pvc": {
+            "name": "vm-mvp-fedora44-http-source",
+            "namespace": "vm-mvp-probe-01a168ce"
+          }
+        },
+        "storage": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "resources": {
+            "requests": {
+              "storage": "5G"
+            }
+          },
+          "storageClassName": "ani-block",
+          "volumeMode": "Filesystem"
+        }
+      },
+      "owner_references": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-cd8bfd49-de9b-4a68-8607-15638452d9d7",
+          "uid": "11b0a8c9-956d-4a17-852f-a5026d3788c0"
+        }
+      ]
+    }
+  ],
+  "pvcs": [
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+        "uid": "c657d09f-f5d0-41f9-833d-47412699c72c"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "dataSource": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeImportSource",
+          "name": "volume-import-source-e284f7d4-d65b-4e79-920c-bd4b8c4c730f"
+        },
+        "dataSourceRef": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeImportSource",
+          "name": "volume-import-source-e284f7d4-d65b-4e79-920c-bd4b8c4c730f"
+        },
+        "resources": {
+          "requests": {
+            "storage": "48G"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block",
+        "volumeName": "pvc-12ebed59-b6e6-415c-9e52-f88ed8115369"
+      },
+      "status": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "45Gi"
+        },
+        "phase": "Bound"
+      },
+      "owner_references": [
+        {
+          "apiVersion": "cdi.kubevirt.io/v1beta1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "DataVolume",
+          "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+          "uid": "e284f7d4-d65b-4e79-920c-bd4b8c4c730f"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+        "uid": "0aa0c08e-539a-4b47-8346-b009f7496d8c"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "dataSource": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeCloneSource",
+          "name": "volume-clone-source-17adb660-fdb0-40a4-920a-dc365b20c7b2"
+        },
+        "dataSourceRef": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeCloneSource",
+          "name": "volume-clone-source-17adb660-fdb0-40a4-920a-dc365b20c7b2"
+        },
+        "resources": {
+          "requests": {
+            "storage": "5300698481"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Filesystem",
+        "volumeName": "pvc-84d33d3f-36c1-4e1a-8a16-a4400b830b23"
+      },
+      "status": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "5Gi"
+        },
+        "phase": "Bound"
+      },
+      "owner_references": [
+        {
+          "apiVersion": "cdi.kubevirt.io/v1beta1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "DataVolume",
+          "name": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+          "uid": "17adb660-fdb0-40a4-920a-dc365b20c7b2"
+        }
+      ]
+    }
+  ],
+  "pvs": [
+    {
+      "ref": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-12ebed59-b6e6-415c-9e52-f88ed8115369",
+        "uid": "2c29b86b-0dca-4351-802b-ce31f7bbe773"
+      },
+      "claim_ref": {
+        "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60212070",
+        "uid": "c657d09f-f5d0-41f9-833d-47412699c72c"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-10-23T20:56:01Z",
+        "phase": "Bound"
+      },
+      "csi": {
+        "controllerExpandSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "controllerPublishSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "nodeStageSecretRef": {
+          "name": "rook-csi-rbd-node",
+          "namespace": "rook-ceph"
+        },
+        "volumeAttributes": {
+          "clusterID": "rook-ceph",
+          "imageFeatures": "layering",
+          "imageFormat": "2",
+          "imageName": "csi-vol-80b4b186-a4c3-4162-80fe-2847103fcc8a",
+          "journalPool": "ani-block-pool",
+          "pool": "ani-block-pool",
+          "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+        },
+        "volumeHandle": "0001-0009-rook-ceph-0000000000000004-80b4b186-a4c3-4162-80fe-2847103fcc8a"
+      },
+      "capacity": {
+        "storage": "45Gi"
+      },
+      "reclaim_policy": "Delete"
+    },
+    {
+      "ref": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-84d33d3f-36c1-4e1a-8a16-a4400b830b23",
+        "uid": "9bb64a54-0843-48b5-9934-61bfb358a21b"
+      },
+      "claim_ref": {
+        "name": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60211431",
+        "uid": "0aa0c08e-539a-4b47-8346-b009f7496d8c"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-10-23T20:56:04Z",
+        "phase": "Bound"
+      },
+      "csi": {
+        "controllerExpandSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "controllerPublishSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "fsType": "ext4",
+        "nodeStageSecretRef": {
+          "name": "rook-csi-rbd-node",
+          "namespace": "rook-ceph"
+        },
+        "volumeAttributes": {
+          "clusterID": "rook-ceph",
+          "imageFeatures": "layering",
+          "imageFormat": "2",
+          "imageName": "csi-vol-4330cf87-796a-43b6-bbf3-af78bea855e7",
+          "journalPool": "ani-block-pool",
+          "pool": "ani-block-pool",
+          "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+        },
+        "volumeHandle": "0001-0009-rook-ceph-0000000000000004-4330cf87-796a-43b6-bbf3-af78bea855e7"
+      },
+      "capacity": {
+        "storage": "5Gi"
+      },
+      "reclaim_policy": "Delete"
+    }
+  ],
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-cd8bfd49-de9b-4a68-8607-15638452d9d7",
+    "uid": "a0af0035-0ebd-4da8-91ce-7bff2c798bbf"
+  },
+  "vmi_status": {
+    "activePods": {
+      "d8e1e904-b345-43c0-8b36-c848564eca58": "ani-02"
+    },
+    "conditions": [
+      {
+        "lastProbeTime": "2026-10-23T20:56:18Z",
+        "lastTransitionTime": "2026-10-23T20:56:18Z",
+        "message": "Guest VM is not reported as running",
+        "reason": "GuestNotRunning",
+        "status": "False",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "All of the VMI's DVs are bound and ready",
+        "reason": "AllDVsReady",
+        "status": "True",
+        "type": "DataVolumesReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC vd-e62eeaee-e4a9-53a6-960e-15399ec82860 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T20:56:37Z",
+        "message": "Failed to change ownership of HostDisk dir media-install, chown /proc/self/fd/32: read-only file system",
+        "reason": "Synchronizing with the Domain failed.",
+        "status": "False",
+        "type": "Synchronized"
+      }
+    ],
+    "currentCPUTopology": {
+      "cores": 2,
+      "sockets": 1,
+      "threads": 1
+    },
+    "guestOSInfo": {},
+    "interfaces": [
+      {
+        "name": "default",
+        "podInterfaceName": "eth0"
+      }
+    ],
+    "launcherContainerImageVersion": "172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0",
+    "memory": {
+      "guestAtBoot": "4Gi",
+      "guestCurrent": "4Gi",
+      "guestRequested": "4Gi",
+      "memoryOverhead": "297795585"
+    },
+    "migrationMethod": "BlockMigration",
+    "migrationTransport": "Unix",
+    "nodeName": "ani-02",
+    "phase": "Scheduled",
+    "phaseTransitionTimestamps": [
+      {
+        "phase": "Pending",
+        "phaseTransitionTimestamp": "2026-10-23T20:56:10Z"
+      },
+      {
+        "phase": "Scheduling",
+        "phaseTransitionTimestamp": "2026-10-23T20:56:18Z"
+      },
+      {
+        "phase": "Scheduled",
+        "phaseTransitionTimestamp": "2026-10-23T20:56:36Z"
+      }
+    ],
+    "qosClass": "Burstable",
+    "runtimeUser": 107,
+    "selinuxContext": "none",
+    "virtualMachineRevisionName": "revision-start-vm-11b0a8c9-956d-4a17-852f-a5026d3788c0-1",
+    "volumeStatus": [
+      {
+        "name": "disk-e62eeaeee4a953a6960e15399ec82860",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "45Gi"
+          },
+          "claimName": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+          "filesystemOverhead": "0",
+          "requests": {
+            "storage": "48G"
+          },
+          "volumeMode": "Block"
+        },
+        "target": ""
+      },
+      {
+        "name": "media-install",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "5Gi"
+          },
+          "claimName": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+          "filesystemOverhead": "0.06",
+          "requests": {
+            "storage": "5300698481"
+          },
+          "volumeMode": "Filesystem"
+        },
+        "target": ""
+      }
+    ]
+  },
+  "launchers": [
+    {
+      "ref": {
+        "kind": "Pod",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "virt-launcher-vm-cd8bfd49-de9b-4a68-8607-15638452d9d7-nb76t",
+        "uid": "d8e1e904-b345-43c0-8b36-c848564eca58"
+      },
+      "node_name": "ani-02",
+      "phase": "Running",
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-23T20:56:18Z",
+          "lastTransitionTime": "2026-10-23T20:56:18Z",
+          "message": "the virtual machine is not paused",
+          "reason": "NotPaused",
+          "status": "True",
+          "type": "kubevirt.io/virtual-machine-unpaused"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T20:56:35Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T20:56:35Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T20:56:36Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T20:56:36Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T20:56:18Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ]
+    }
+  ],
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-02",
+    "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+  },
+  "boot_device": "INSTALL_MEDIA",
+  "iso_read_only": true,
+  "guest_initialization_absent": true,
+  "native_mutations": 0,
+  "guest_installation": "NOT_RUN",
+  "source_sha256": "e1f8e8425e3c881b30cde95cc6897cb41d7f26922fe5beeaab43989885f9cbfd"
+}

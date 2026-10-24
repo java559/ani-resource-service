@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-24T07:35:27.719466+00:00",
+  "host": "fedora",
+  "gowork": "off",
+  "fresh_task_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "previous_cache_unchanged_by_this_step": true,
+  "transport": "command-scoped SSH443 with existing strict task known_hosts",
+  "modules": [
+    {
+      "expected": {
+        "name": "session",
+        "commit": "811cc383924460a99cae5b209ca5db97a83d42f4",
+        "module": "github.com/zhangzhe-ctrl/ani-session-gateway/api",
+        "version": "v0.1.1-0.20261024051540-811cc3839244",
+        "subdir": "api",
+        "gomod_sha256": "cb0da045b65e71091e42420447c742df4ac86bcd7129e7bf94edd81f9ad05d93",
+        "branch": "refs/heads/codex/vm-mvp-session-api-20261023"
+      },
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "download",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244"
+      ],
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-session-gateway/api\",\n\t\"Version\": \"v0.1.1-0.20261024051540-811cc3839244\",\n\t\"Error\": \"github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244: invalid pseudo-version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/vcs/15ad340152b271a55f972b6f53211277e95fb06cfef29e03ef14d04797937ef3: exit status 128:\\n\\t\u81f4\u547d\u9519\u8bef\uff1ashallow file has changed since we read it\",\n\t\"Origin\": {\n\t\t\"VCS\": \"git\",\n\t\t\"URL\": \"https://github.com/zhangzhe-ctrl/ani-session-gateway\",\n\t\t\"Subdir\": \"api\",\n\t\t\"Hash\": \"811cc383924460a99cae5b209ca5db97a83d42f4\",\n\t\t\"Ref\": \"refs/heads/codex/vm-mvp-session-api-20261023\"\n\t}\n}\n"
+    }
+  ],
+  "elapsed_seconds": 22.029
+}

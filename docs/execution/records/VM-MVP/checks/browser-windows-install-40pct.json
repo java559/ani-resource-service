@@ -1,0 +1,20 @@
+{
+  "status": "INSTALLING_NOT_COMPLETE",
+  "observed_at_utc": "2026-10-24T06:48:26.135966+00:00",
+  "layer": "BROWSER",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_version": 5,
+  "install_percent": 40,
+  "guest_input_count": 0,
+  "screenshot": "vm-windows-server2025-install-40pct.png",
+  "screenshot_sha256": "1b1b705dd2f9a0e063d59c28c52a9be553586f39879e54b9e8262f419c4fce91",
+  "source": "normal Gov login/read/console through temporary VNC page; screenshot observed 40 percent; normal disconnect confirmed",
+  "not_proved": [
+    "installation_complete",
+    "first_boot",
+    "Windows_account",
+    "NetKVM",
+    "QGA",
+    "data_disk_guest_matrix"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "host": "ssh fedora",
+  "hostname": "fedora",
+  "source_root": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/installer-snapshot-source-vm-docs-01/source",
+  "source_manifest_sha256": "9b31e1b36553fbfa78acaf961f58c44c4383d22a8fc8fdd064ce098cbeb44804",
+  "source_file_count": 1160,
+  "command": [
+    "go",
+    "test",
+    "./pkg/ani",
+    "-run",
+    "^TestB04SnapshotProductionSelectionAndRender$",
+    "-count=1"
+  ],
+  "external_timeout_seconds": 240,
+  "exit_code": 0,
+  "elapsed_seconds": 133,
+  "result": "PASS",
+  "source_changed_files": [],
+  "go_binary": "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+  "gomaxprocs": 2,
+  "gomemlimit": "1536MiB",
+  "cgo_enabled": false,
+  "generation_installer_cluster_calls": 0,
+  "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/installer-snapshot-source-vm-docs-01/b04-attempt02.log"
+}

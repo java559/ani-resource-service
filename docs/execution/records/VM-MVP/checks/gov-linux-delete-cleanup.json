@@ -1,0 +1,96 @@
+{
+  "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+  "create_operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+  "action": "delete",
+  "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+  "expected_version": 1,
+  "admission_send_attempts": 1,
+  "operation": {
+    "id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+    "vmId": "db174e19-7269-42ff-9c22-57190c66535b",
+    "action": "/vm.v1.VMService/AcceptDelete",
+    "intentVersion": "2",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T16:20:04.289010212Z"
+  },
+  "current": {
+    "id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "name": "vm-mvp-linux-main",
+    "version": "2",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Deleted",
+    "observedState": "Deleted",
+    "reason": "",
+    "observedAt": "2026-10-23T16:20:04.287150849Z",
+    "addresses": [],
+    "lastOperationId": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+    "closing": true,
+    "disks": [],
+    "media": [],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/operations/710f62ff-fe05-4da2-b044-8c769ff07e71",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b",
+      "status": 200
+    }
+  ],
+  "private_command_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-lifecycle.json",
+  "delete_association_verified": true,
+  "cleanup": {
+    "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "create_operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+    "delete_operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+    "system_and_data_disks": [
+      {
+        "diskId": "2688a35d-9a60-5be5-83ce-69f4b54d1494",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2688a35d9a605be583ce69f4b54d1494",
+        "serial": "2688a35d-9a60-5be5-83ce-69f4b54d1494",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "business_delete_succeeded": true,
+    "native_uid_guarded_absence": "PENDING_RESOURCE_OWNER_VERIFICATION",
+    "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+    "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+    "compute_preset_id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "frozen_network": {
+      "nad_config_digest": "0bcb0f9ea70ebbe2f3381fc9fc563b74698467a4138f6567d37108c653cb381e",
+      "nad_name": "vm-mvp-main",
+      "nad_uid": "ac77bddd-82a3-48b9-9916-fbef18f35610",
+      "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305"
+    },
+    "frozen_namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "storage_cleanup_evidence": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-linux-v1-storage-cleanup.json"
+  }
+}

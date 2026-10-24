@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-23T16:44:55.239761+00:00",
+  "pid": 1560132,
+  "start_ticks": "63915511",
+  "bind": "172.16.101.31",
+  "port": 39190,
+  "path": "/vm-mvp-01a168ce-linux-v2/5b2160d72615913154120a32",
+  "body": "ANI_VM_HTTP_v2_01a168ce_5b2160d72615913154120a32\n",
+  "body_sha256": "aa1f9602b53f0c7a8c6b4a2aaa7481e69bbcb3faa9677a4c6b53935145d2288a",
+  "script": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-network-probe.py",
+  "script_sha256": "ab7ecd0649db04752a9ae380dd7cb6b908d52bb460035219bab83f070c5ccdb4",
+  "access_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/http-access.jsonl",
+  "scope": "task-owned exact-path text response only; no filesystem serving"
+}

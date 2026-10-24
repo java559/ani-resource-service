@@ -1,0 +1,45 @@
+{
+  "at": "2026-10-23T20:15:53.672085+00:00",
+  "layer": "GUEST",
+  "scope": "fixed actual tenant2 account/NoCloud/DHCP, one fsynced marker and owned guest HTTP loopback",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+  },
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "interfaces": [
+    {
+      "infoSource": "domain",
+      "ipAddress": "10.84.1.2",
+      "ipAddresses": [
+        "10.84.1.2"
+      ],
+      "linkState": "up",
+      "mac": "fa:00:75:19:33:88",
+      "name": "default",
+      "podInterfaceName": "eth0",
+      "queueCount": 1
+    }
+  ],
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-credentials.json",
+  "private_plan_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-test.json",
+  "driver_sha256": "5cb96cd551ce68bdf8bb6970ce01224a8fe0a504562b90d8a4c3f2225bbec20d",
+  "browser": "NOT_RUN",
+  "cross_tenant_http": "NOT_RUN",
+  "result": "FAIL",
+  "error": "Timeout exceeded.\n<pexpect.pty_spawn.spawn object at 0x7f8f04b1fa10>\ncommand: /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64\nargs: [b'/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64', b'console', b'vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc', b'--namespace', b'tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316', b'--kubeconfig', b'/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', b'--timeout=20']\nbuffer (last 100 chars): ' \\r\\n'\nbefore (last 100 chars): ' \\r\\n'\nafter: <class 'pexpect.exceptions.TIMEOUT'>\nmatch: None\nmatch_index: None\nexitstatus: None\nflag_eof: False\npid: 2002616\nchild_fd: 7\nclosed: False\ntimeout: 35\ndelimiter: <class 'pexpect.exceptions.EOF'>\nlogfile: None\nlogfile_read: <_io.StringIO object at 0x7f8f04b67ac0>\nlogfile_send: None\nmaxread: 2000\nignorecase: False\nsearchwindowsize: None\ndelaybeforesend: 0.05\ndelayafterclose: 0.1\ndelayafterterminate: 0.1\nsearcher: searcher_re:\n    0: re.compile('\\\\$ ')"
+}

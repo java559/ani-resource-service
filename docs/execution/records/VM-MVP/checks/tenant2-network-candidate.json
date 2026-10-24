@@ -1,0 +1,76 @@
+{
+  "prepared_at": "2026-10-23T19:41:12.842581+00:00",
+  "state": "PREPARED_NOT_APPLIED",
+  "scope": "one task-owned NAD and append one trusted Networks policy for already accepted tenant2 VPC/Subnet; no shared KCN/default network/SQL/VM mutation",
+  "authorization": "await Root execution instruction; this preparation performs native GET only",
+  "identity_receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-tenant2-network-identity.json",
+  "guards": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+    "vpc_uid": "2f2e25c2-55e1-49bf-b284-4d7504b32f2b",
+    "subnet_uid": "29cdddaf-c09b-49df-9323-dd776d8ec929",
+    "candidate_nad_absent": true,
+    "protected_source_nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "protected_source_nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "current_networks_count": 1,
+    "current_networks_sha256": "e8055103a039810b7955f152ddba7034a21eef606d81aaa5d6a8166f83107337"
+  },
+  "nad_create_only": {
+    "apiVersion": "k8s.cni.cncf.io/v1",
+    "kind": "NetworkAttachmentDefinition",
+    "metadata": {
+      "name": "vm-mvp-tenant2-01a168ce",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "labels": {
+        "vm.ani.io/task": "vm-mvp-20261023-01a168ce"
+      }
+    },
+    "spec": {
+      "config": "{\"cniVersion\":\"0.3.1\",\"name\":\"kc-networking\",\"server_socket\":\"/run/openvswitch/kc-networking-daemon.sock\",\"type\":\"kc-networking\"}"
+    }
+  },
+  "candidate_config_diff": {
+    "path": "/Networks",
+    "operation": "append-preserve-existing",
+    "current": [
+      {
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "VPCID": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "SubnetID": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "NamespaceUID": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+        "NADName": "vm-mvp-main-v2",
+        "NADUID": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+        "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+        "KCNSubnetRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+      }
+    ],
+    "append_after_nad_ack": {
+      "TenantID": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "VPCID": "vpc_c44c262a220748aab0e4b20558849409",
+      "SubnetID": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "Namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "NamespaceUID": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+      "NADName": "vm-mvp-tenant2-01a168ce",
+      "NADUID": "<freeze exact UID from successful create ACK; never derive/adopt>",
+      "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "KCNSubnetRef": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+    }
+  },
+  "apply_order": [
+    "fresh GET fixed cluster/namespace/VPC/Subnet and protected source NAD; require UID/digest/tenant/binding and Ready guards unchanged",
+    "require candidate NAD name absent; create exact task NAD once and persist full successful ACK UID before proceeding; unknown ACK stops and only reconcile exact task source registry",
+    "replace placeholder NADUID only with successful create ACK UID; retain all existing Networks entries byte-for-byte; atomically save old field/hash then append exact policy",
+    "Root may separately authorize exact task Resource reload; preserve binary/other config/budgets/PKI and verify both tenant policies without touching V3 lifecycle"
+  ],
+  "rollback_cleanup_order": [
+    "before any policy/NAD removal require all task tenant2 VM/Attachment references released and native consumers absent",
+    "restore Networks only if current equals this plan original+one exact created UID policy; preserve unrelated concurrent entries or stop",
+    "delete only the registered created NAD name+UID with Kubernetes UID/resourceVersion preconditions; no force/finalizer",
+    "leave tenant2 VPC/Subnet to normal Gov product deletion after its own consumers cleared; do not directly delete KCN CRs or namespace"
+  ],
+  "applied": false,
+  "vm_created": false
+}

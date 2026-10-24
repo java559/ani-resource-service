@@ -1,0 +1,24 @@
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/running
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/not-running
+--- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/running (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/not-running (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.010s
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing
+--- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.008s

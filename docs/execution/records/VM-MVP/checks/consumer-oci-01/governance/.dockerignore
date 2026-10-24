@@ -1,0 +1,5 @@
+*
+!Dockerfile
+!.dockerignore
+!gov-server
+!THIRD_PARTY_NOTICES.md

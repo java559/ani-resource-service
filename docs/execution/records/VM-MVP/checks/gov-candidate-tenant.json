@@ -1,0 +1,59 @@
+{
+  "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "tenant_code": "vm-mvp-01a168ce",
+  "tenant_id": 1,
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+  "kcn_subnet_ref": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+  "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+  "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+  "compute_preset_id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_e413becb1f4a46468f058e32f33a6305",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/networks/subnets",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    }
+  ],
+  "kcn_subnet_uid": "c24a983c-f9f4-403d-9807-8164004000a3"
+}

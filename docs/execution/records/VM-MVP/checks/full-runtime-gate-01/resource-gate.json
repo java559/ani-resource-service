@@ -1,0 +1,52 @@
+{
+  "source_tree": null,
+  "parent": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b (working-source snapshot; not a commit tree)",
+  "source_files": 783,
+  "source_manifest_sha256": "8d69d1aed5e03dcba1b554006ee5a5398abca8c00f3811f2b5e6b3b3da7cfcb8",
+  "snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource",
+  "gowork": "off",
+  "pg_environment": "UNSET_NO_PG_TAGS_NO_BUSINESS_DB",
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource",
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.016
+    },
+    {
+      "argv": [
+        "make",
+        "verify",
+        "GO=/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "BUF=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf",
+        "SQLC=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource",
+      "timeout_seconds": 300,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 106.486
+    }
+  ],
+  "started_at": "2026-10-24T05:26:43.337383+00:00",
+  "tmpdir": {
+    "path": "/tmp/avp-jtov8fqg",
+    "uid": 1000,
+    "inode": 2011418,
+    "device": 38,
+    "mode": "0700",
+    "removed": true
+  },
+  "git_network_pushes": 0,
+  "business_api_calls": 0,
+  "runtime_changed": false,
+  "source_unchanged": true,
+  "result": "PASS",
+  "finished_at": "2026-10-24T05:28:30.186552+00:00",
+  "log_sha256": "7cc42efe7e5140855ae4a8aabc2f2008a9f44e7ec0388e8a0c8c4edc1a26c033"
+}

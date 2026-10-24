@@ -1,0 +1,31 @@
+{
+  "state": "STARTED",
+  "plan_sha256": "baecd36fb43b4ef0c7c6c27fa92d70c50dbd81c7914e4d80afdbfb3a8980b4a0",
+  "script_sha256": "7b6e0c4e5eac1adeaf17c447656ff7c31f32d997566c70524d3fb91dd6e3e459",
+  "resource_restarts": 0,
+  "sg_restarts": 0,
+  "vm_mutations": 0,
+  "shared_writes": 0,
+  "application_mutations": 0,
+  "rollback": {},
+  "new_private_cleanup_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01",
+  "phase": "sg-active-and-leases",
+  "cpu_checkpoint": {
+    "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/cpu-cleanup-checkpoint.json",
+    "sha256": "c85ee0b7ddcddc8b7e8220fd27430523f7b9582558923466e3ddbba9fc55e887"
+  },
+  "sg_guard": {
+    "pid": 3369384,
+    "start_ticks": 70563663,
+    "active": 0,
+    "leases": 0,
+    "unchanged": true
+  },
+  "failure": {
+    "phase": "six-resource-and-gov-pending",
+    "file": "b-candidates-maintain.py",
+    "line": 112,
+    "error_type": "AssertionError"
+  },
+  "stopped_without_automatic_retry": true
+}

@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-24T11:28:09.223892+00:00",
+  "layer": "BROWSER",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_product_version": "9",
+  "observed_product_state": "Running",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+  "launcher_uid": "557f6711-fc0f-44c3-925e-483973cee51d",
+  "native_recovery_receipt": "windows-firstboot-recovery-01/executed.json",
+  "page": "http://127.0.0.1:39188/login",
+  "result": "SYSTEM_DISK_FIRSTBOOT_ACCOUNT_SETUP_REACHED",
+  "observation": "Fresh Gov login/read/console for v9 shows Windows product-key firstboot after INSTALL ejection and sole root boot order1. Click on visible Do this later and Alt+L attempted; later Tab observation shows Custom settings with fixed Administrator username, blank password and blank confirmation. No new agreement or key was entered.",
+  "screenshot": "vm-windows-server2025-system-firstboot-account-handoff.png",
+  "guest_inputs": {
+    "skip_key_page_clicks": 1,
+    "visible_skip_shortcut_attempts": 1,
+    "tab": 1
+  },
+  "new_credentials_entered": false,
+  "product_key_entered": false,
+  "new_agreement_accepted": false,
+  "oobe_complete": false,
+  "guest_login_verified": false,
+  "account_setup_result": "NOT_RUN_USER_UNAVAILABLE",
+  "handoff_boundary": "Browser credential entry/confirmation/submission requires the human. User already reports no time; no repeated question and no credential bypass. Prepared private optional test credentials remain unapplied.",
+  "normal_vnc_disconnect_verified": true
+}

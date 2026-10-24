@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-24T08:09:19.431350+00:00",
+  "source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/green/vm-product-windows-lifecycle.py",
+  "source_sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+  "before_source_sha256": "65f9936912c878a64b0c6041afc413e01bdb5c2914c3d7acf7b5f1db9591648f",
+  "red_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red.json",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/green/vm-product-windows-lifecycle.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/green/vm-product-windows-lifecycle.py",
+        "self-test"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"result\": \"PASS\", \"pure_guards\": 25, \"live_helper_imports\": 0, \"http_requests\": 0, \"guest_commands\": 0}\n",
+      "stderr": ""
+    }
+  ],
+  "business_api_calls": 0,
+  "pg_calls": 0,
+  "native_api_calls": 0,
+  "guest_commands": 0,
+  "running_driver_replaced": false,
+  "source_after_sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+  "duration_seconds": 0.37133051292039454,
+  "result": "PASS",
+  "pure_guards": 25,
+  "collector_cases": [
+    "restored_detached_pvc_without_dv",
+    "legacy_dv_backed_detached_disk",
+    "restored_attached_matching_template",
+    "reject_pvc_uid_replacement",
+    "reject_dv_uid_replacement",
+    "reject_other_namespace",
+    "reject_serial_mismatch",
+    "reject_missing_durable_record",
+    "reject_stale_attached_template"
+  ]
+}

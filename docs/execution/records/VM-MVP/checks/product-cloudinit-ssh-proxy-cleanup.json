@@ -1,0 +1,36 @@
+{
+  "plan_sha256": "0124346063d83d48c111af2f0a1af87f5e084520758730a7484b678794a3e139",
+  "create_send_attempts": 1,
+  "outcome": "ACK_PERSISTED",
+  "pod": {
+    "kind": "Pod",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-mvp-ssh-proxy-01a168ce",
+    "uid": "ba3f345a-765e-42ca-9814-ea4960fb39fc"
+  },
+  "vnic": {
+    "kind": "VNic",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "auto-vm-mvp-ssh-proxy-01a168ce-vnic-x97tp",
+    "uid": "67701c18-b92a-42fa-a172-4070fc62972b"
+  },
+  "delete_send_attempts": 1,
+  "delete_request": {
+    "apiVersion": "v1",
+    "kind": "DeleteOptions",
+    "preconditions": {
+      "uid": "ba3f345a-765e-42ca-9814-ea4960fb39fc",
+      "resourceVersion": "61356425"
+    },
+    "propagationPolicy": "Background"
+  },
+  "delete_outcome": "ACK_PERSISTED",
+  "cleanup": {
+    "result": "PASS",
+    "pod_gone": true,
+    "vnic_gone": true,
+    "manual_vnic_delete": false,
+    "force_or_finalizer_patch": false,
+    "delete_send_attempts": 1
+  }
+}

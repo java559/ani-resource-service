@@ -1,0 +1,20 @@
+{
+  "kind": "BROWSER_REAL_GUEST_READBACK",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "version": 40,
+  "snapshot_path": "OFFLINE_STOPPED",
+  "after_restored_disk_hotplug": true,
+  "normal_original_password_login": true,
+  "whoami": "aniuser",
+  "root_marker": "VM_MVP_SNAPSHOT_A_ROOT_01a168ce",
+  "data3_device": "/dev/sdb",
+  "data3_marker": "VM_MVP_V3_DATA3_A_01a168ce",
+  "data4_device": "/dev/sda",
+  "data4_marker": "VM_MVP_V3_DATA4_A_01a168ce",
+  "guest_content_writes": 0,
+  "screenshot": "vm-linux-offline-restore-three-a.png",
+  "screenshot_sha256": "922bedee589113c3b85965bd1aadb1bd01ccdf16574011c9cec3c33cf0740f00",
+  "first_login": "UNCONFIRMED_RETURNED_TO_LOGIN_NO_CAUSE_PROVEN",
+  "first_login_screenshot": "vm-linux-offline-restore-first-login-unknown.png",
+  "subsequent_login": "SUCCESS_WITH_ORIGINAL_PASSWORD; MOTD wait then actual shell and read-only commands; no password or account change"
+}

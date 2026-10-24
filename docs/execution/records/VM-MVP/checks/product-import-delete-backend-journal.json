@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-23T20:38:22.085444+00:00",
+  "reader": {
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "namespace": "rook-ceph",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "journal": [
+    {
+      "object": "csi.volumes.default",
+      "key": "csi.volume.pvc-2f35960c-b9dc-46ed-918a-199101304bcc",
+      "exit": 1,
+      "result": "ABSENT",
+      "reservation_uuid": null,
+      "stdout_classification": "No such key"
+    },
+    {
+      "object": "csi.volumes.default",
+      "key": "csi.volume.pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+      "exit": 1,
+      "result": "ABSENT",
+      "reservation_uuid": null,
+      "stdout_classification": "No such key"
+    }
+  ],
+  "csi_source_matches": []
+}

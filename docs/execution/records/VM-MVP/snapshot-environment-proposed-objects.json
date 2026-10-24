@@ -1,0 +1,129 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "storage.k8s.io/v1",
+      "kind": "StorageClass",
+      "metadata": {
+        "name": "ani-vm-mvp-block-01a168ce",
+        "labels": {
+          "ani.vm.fixture": "vm-mvp-20261023-01a168ce"
+        }
+      },
+      "provisioner": "rook-ceph.rbd.csi.ceph.com",
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/controller-expand-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/controller-publish-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-publish-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/fstype": "ext4",
+        "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-rbd-node",
+        "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/provisioner-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "pool": "ani-block-pool"
+      },
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "Immediate",
+      "allowVolumeExpansion": true
+    },
+    {
+      "apiVersion": "snapshot.storage.k8s.io/v1",
+      "kind": "VolumeSnapshotClass",
+      "metadata": {
+        "name": "ani-vm-mvp-rbd-delete-01a168ce",
+        "labels": {
+          "ani.vm.fixture": "vm-mvp-20261023-01a168ce"
+        }
+      },
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "deletionPolicy": "Delete",
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+      }
+    },
+    {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "StorageProfile",
+      "metadata": {
+        "name": "ani-vm-mvp-block-01a168ce",
+        "labels": {
+          "ani.vm.fixture": "vm-mvp-20261023-01a168ce"
+        }
+      },
+      "spec": {
+        "snapshotClass": "ani-vm-mvp-rbd-delete-01a168ce",
+        "claimPropertySets": [
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Block"
+          },
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Filesystem"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "storage.k8s.io/v1",
+      "kind": "StorageClass",
+      "metadata": {
+        "name": "ani-vm-mvp-block-wffc-01a168ce",
+        "labels": {
+          "ani.vm.fixture": "vm-mvp-20261023-01a168ce"
+        }
+      },
+      "provisioner": "rook-ceph.rbd.csi.ceph.com",
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/controller-expand-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/controller-publish-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-publish-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/fstype": "ext4",
+        "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-rbd-node",
+        "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/provisioner-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "pool": "ani-block-pool"
+      },
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "WaitForFirstConsumer",
+      "allowVolumeExpansion": true
+    },
+    {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "StorageProfile",
+      "metadata": {
+        "name": "ani-vm-mvp-block-wffc-01a168ce",
+        "labels": {
+          "ani.vm.fixture": "vm-mvp-20261023-01a168ce"
+        }
+      },
+      "spec": {
+        "snapshotClass": "ani-vm-mvp-rbd-delete-01a168ce",
+        "claimPropertySets": [
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Block"
+          }
+        ]
+      }
+    }
+  ]
+}

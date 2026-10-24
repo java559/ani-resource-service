@@ -1,0 +1,358 @@
+{
+  "phase": "PREPARED_NO_LIVE_CALLS",
+  "plan": {
+    "scope": "one existing tenant2 VM; root plus exactly two new cold-attached blank Block data disks",
+    "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+    "original_create_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+    "initial_version": 1,
+    "historical_native_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-tenant2-linux-native.json",
+    "historical_native_receipt_sha256": "0e76b05578f41f860bc833e7226eea405288dbac65ee52199d035af173d91459",
+    "historical_is_fresh": false,
+    "root_before": {
+      "root_disk": {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae"
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+        "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+      },
+      "node": {
+        "kind": "Node",
+        "namespace": "",
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+      },
+      "csi": {
+        "controllerExpandSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "controllerPublishSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "nodeStageSecretRef": {
+          "name": "rook-csi-rbd-node",
+          "namespace": "rook-ceph"
+        },
+        "volumeAttributes": {
+          "clusterID": "rook-ceph",
+          "imageFeatures": "layering",
+          "imageFormat": "2",
+          "imageName": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9",
+          "journalPool": "ani-block-pool",
+          "pool": "ani-block-pool",
+          "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+        },
+        "volumeHandle": "0001-0009-rook-ceph-0000000000000004-016ddb5e-363a-4557-9b14-858beafe6fe9"
+      }
+    },
+    "requests": [
+      {
+        "phase": "stop",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/stop",
+        "body": {
+          "data": {
+            "expectedVersion": "1",
+            "idempotencyKey": "d5320d86-020b-5c59-a307-112c18711426"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "create-data-a",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks",
+        "body": {
+          "data": {
+            "expectedVersion": "2",
+            "idempotencyKey": "b2f523d7-d1c8-5352-8fb9-b2dd4dc247dc",
+            "name": "vm-mvp-cleanup-data-a-01a168ce",
+            "sizeGb": "2"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "attach-data-a",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks/{exact-data-a-disk-id}/attach",
+        "body": {
+          "data": {
+            "expectedVersion": "3",
+            "idempotencyKey": "f2bfafde-ac1e-5928-9142-632cb6332f43",
+            "diskId": "{exact-data-a-disk-id}"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "create-data-b",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks",
+        "body": {
+          "data": {
+            "expectedVersion": "4",
+            "idempotencyKey": "596654f4-b604-5603-8594-4145e7eaeb0e",
+            "name": "vm-mvp-cleanup-data-b-01a168ce",
+            "sizeGb": "2"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "attach-data-b",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks/{exact-data-b-disk-id}/attach",
+        "body": {
+          "data": {
+            "expectedVersion": "5",
+            "idempotencyKey": "ba145958-370c-5451-bce2-a851122a8c47",
+            "diskId": "{exact-data-b-disk-id}"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "offline-snapshot",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/snapshots",
+        "body": {
+          "data": {
+            "expectedVersion": "6",
+            "idempotencyKey": "f71d7fd3-052c-58f8-b663-b1071fdda09b",
+            "name": "vm-mvp-tenant2-cleanup-offline-01a168ce"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "restore",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/snapshots/{exact-snapshot-id}/restore",
+        "body": {
+          "data": {
+            "expectedVersion": "7",
+            "idempotencyKey": "2ab670aa-944e-5722-9295-c56fac5c0139",
+            "snapshotId": "{exact-snapshot-id}",
+            "previewDigest": "{Root-reviewed-fresh-preview-digest}",
+            "destructiveConfirmation": true
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "phase": "delete-during-cleanup",
+        "method": "DELETE",
+        "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "body": {
+          "data": {
+            "expectedVersion": "8",
+            "idempotencyKey": "4d1dcb8b-a6d1-5fa5-b9d1-11fab9a03490"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      }
+    ],
+    "helper_manifest": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "vm-mvp-cleanup-hold-root-01a168ce",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "labels": {
+          "ani.io/task": "vm-mvp-01a168ce",
+          "ani.io/purpose": "restore-cleanup-readonly-holder"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "kind": "VirtualMachine",
+            "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+            "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+            "controller": false,
+            "blockOwnerDeletion": false
+          }
+        ],
+        "annotations": {
+          "v1.multus-cni.io/default-network": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce",
+          "networking.kubercloud.com/subnet": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+        }
+      },
+      "spec": {
+        "restartPolicy": "Never",
+        "automountServiceAccountToken": false,
+        "activeDeadlineSeconds": 1800,
+        "terminationGracePeriodSeconds": 10,
+        "nodeSelector": {
+          "kubernetes.io/hostname": "ani-01"
+        },
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 107,
+          "runAsGroup": 107,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "held-old-root",
+            "persistentVolumeClaim": {
+              "claimName": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+              "readOnly": true
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "hold",
+            "image": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+            "imagePullPolicy": "Never",
+            "command": [
+              "/bin/sh",
+              "-ec",
+              "test -b /dev/held-root; exec sleep 1800"
+            ],
+            "volumeDevices": [
+              {
+                "name": "held-old-root",
+                "devicePath": "/dev/held-root"
+              }
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              },
+              "limits": {
+                "cpu": "50m",
+                "memory": "64Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "mapping_gate": {
+      "NativeRestoreCompleted": true,
+      "MappingCommitted": true,
+      "CleanupCompleted": false,
+      "old_root_pvc_same_uid": true,
+      "old_root_pvc_terminating": true,
+      "old_root_pvc_protection_finalizer": true,
+      "holder_same_uid_running": true
+    },
+    "writes": {
+      "new_vms": 0,
+      "new_disks_gb": [
+        2,
+        2
+      ],
+      "gov_stop": 1,
+      "gov_cold_attach": 2,
+      "gov_offline_snapshot": 1,
+      "gov_restore": 1,
+      "gov_final_delete": 1,
+      "temporary_pods": 1,
+      "possible_cni_owned_vnic": 1,
+      "guest_content_bytes": 0,
+      "business_sql": 0,
+      "backend_writes": 0,
+      "shared_config": 0,
+      "manual_finalizer_changes": 0
+    },
+    "fresh_prerequisites": [
+      "Root approves exact plan and irreversible deletion of this already-verified tenant2 VM",
+      "cluster kube-system UID5277649d-e28d-4a0a-ae76-8354365c63bc; original three node UIDs/IPs",
+      "normal tenant2 login/me and role; CREATE succeeded and VM Running version1 before Stop",
+      "same VM/NS/root DV-PVC-PV-CSI UIDs; all other VMs/source/NAD protected baseline captured after V08",
+      "Stop succeeded; no VMI/primary launcher or pending native power request; attachment same Reserved",
+      "each new 2GB disk is same logical serial and Block/RWO physical UID, cold Attach only; no implicit Start",
+      "offline Snapshot ready COMPLETE includes exactly root+data-a+data-b; exact VS/VSC/CSI identities frozen",
+      "ani-01 same node UID/internalIP; exact helper image digest already cached, no pull/install/build",
+      "only old root Bound PVC claimed readOnly; helper name absent; Root approves exact manifest before one CREATE",
+      "holder Running same UID, RO CSI attachment and Block mode observed; Root reviews fresh restore preview"
+    ],
+    "phase_boundaries": [
+      "normal Stop => create/attach a => create/attach b => SnapshotReady => holder Ready",
+      "read-only Preview => Root approves digest => normal Restore; never Start this disposable case",
+      "read-only PG exact VM/op checkpoint plus old-root PVC/holder UID proves mapping_gate; otherwise NO Delete",
+      "normal Gov Delete once, tied to original CREATE, fresh version8 and original immutable key/body",
+      "normal exact holder UID/RV DELETE if still present; already Gone by same-VM owner GC means no second DELETE",
+      "only original Delete GET; collect all old/new PVC/PV/CSI, snapshot/restore artifacts and source-root temp family"
+    ],
+    "cleanup": [
+      "preserve old and restored current/retired PVC/PV/CSI refs before Delete, including new data disks",
+      "normal UID/RV Pod deletion, background GC only; no grace0/force/finalizer patch",
+      "Pod/VNic/VM/VMI/launcher/DV/PVC/PV/VolumeAttachment/VS/VSC/Restore gone under original UIDs",
+      "same Network attachment Released/unblocked and task address withdrawn",
+      "exact owned RBD base/temp and snapshot handles absent plus matching trash empty; wait normal GC",
+      "Ubuntu original source/NAD/NS/other tenant resources unchanged; no manual RBD/SQL cleanup"
+    ],
+    "failure_recovery": [
+      "unknown CREATE/DELETE ACK: durable pre-send journal then exact name/UID/intent observation; no blind second send",
+      "all Gov mutation intents freeze body/version before send; operation ID pinned before any next phase",
+      "helper timeout before Restore: normal exact UID/RV holder cleanup, no automatic VM final Delete",
+      "Restore complete but cleanup gate absent: retain observed state and report MISS; never fake checkpoints",
+      "if case interrupted after holder creation, release only this holder normally; preserve original operations/refs"
+    ],
+    "native_timing_basis": {
+      "source": "https://github.com/kubevirt/kubevirt/blob/v1.9.0/pkg/storage/snapshot/restore.go",
+      "restore_complete": "267-286 calls deleteObsoleteVolumes, then sets complete",
+      "obsolete_dv": "1202-1223 only sends DV Delete; does not wait for PVC/PV disappearance",
+      "target_ready": "600-614 requires no VMI, not no ordinary Pods"
+    },
+    "driver_sha256": "011caee08dd15fb34d56d401ce0e70ec5b2b1f9ccc10b49b561bfb50c907e9e4",
+    "execution_allowed": false,
+    "live_read_calls": 0,
+    "business_mutations": 0
+  },
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f"
+}

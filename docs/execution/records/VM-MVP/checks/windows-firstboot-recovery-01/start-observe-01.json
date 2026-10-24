@@ -1,0 +1,635 @@
+{
+  "at": "2026-10-24T11:20:14.749217+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "intent": "firstboot-recovery-01-start",
+  "source_sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/windows-lifecycle.json",
+  "guest_commands": 0,
+  "phase": "ORIGINAL_OPERATION_OBSERVED",
+  "command": {
+    "action": "start",
+    "method": "POST",
+    "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/start",
+    "body": {
+      "data": {
+        "expectedVersion": "8",
+        "idempotencyKey": "22c33a39-a6d9-4597-bd57-8d5058c06e15"
+      }
+    },
+    "body_sha256": "33d1cde2dc4c8ae347db213d67e4f02d808919dd6a6a182abe92d382c67566c2",
+    "before": {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "name": "vm-mvp-windows2025-iso",
+      "version": "8",
+      "osFamily": "windows",
+      "osVersion": "2025",
+      "desiredState": "Stopped",
+      "observedState": "Stopped",
+      "reason": "",
+      "observedAt": "2026-10-24T11:18:30.129889901Z",
+      "addresses": [],
+      "lastOperationId": "885ab3b3-9e4c-4fae-8d15-1bfe53b18ac8",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "80",
+          "requestedBytes": "80000000000",
+          "observedCapacityBytes": "80530636800",
+          "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+          "role": "data",
+          "name": "vm-mvp-windows-data3-01a168ce",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-89317f205600510abc65e40402c83abb",
+          "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+          "role": "data",
+          "name": "vm-mvp-windows-data4-01a168ce",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+          "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "virtio-win-0.1.271",
+          "observedMedia": "",
+          "effectiveNow": false,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "systemDiskSizeGb": "80",
+      "sourceKind": "INSTALL_ISO",
+      "mediaKey": "windows-server-2025-iso"
+    },
+    "disks_before": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+        "role": "data",
+        "name": "vm-mvp-windows-data3-01a168ce",
+        "sizeGb": "3",
+        "requestedBytes": "3000000000",
+        "observedCapacityBytes": "3221225472",
+        "volumeName": "disk-89317f205600510abc65e40402c83abb",
+        "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+        "attached": false,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "role": "data",
+        "name": "vm-mvp-windows-data4-01a168ce",
+        "sizeGb": "4",
+        "requestedBytes": "4000000000",
+        "observedCapacityBytes": "4294967296",
+        "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+        "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "attached": false,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "root_handoff": "Root approves firstboot-recovery-01-start; base install reached firstboot product-key page; OOBE/account/login incomplete",
+    "root_evidence": "browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json",
+    "disk_mode": null,
+    "send_attempts": 1,
+    "ack_unknown": false,
+    "prepared_at": "2026-10-24T11:19:16.441846+00:00",
+    "native_before": {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+      },
+      "vmi": null,
+      "launcher": null,
+      "template": {
+        "architecture": "amd64",
+        "domain": {
+          "cpu": {
+            "cores": 2,
+            "sockets": 1,
+            "threads": 1
+          },
+          "devices": {
+            "disks": [
+              {
+                "bootOrder": 1,
+                "disk": {
+                  "bus": "scsi"
+                },
+                "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+                "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5"
+              },
+              {
+                "cdrom": {
+                  "bus": "sata",
+                  "readonly": true,
+                  "tray": "closed"
+                },
+                "name": "media-driver"
+              }
+            ],
+            "inputs": [
+              {
+                "bus": "usb",
+                "name": "console-tablet",
+                "type": "tablet"
+              }
+            ],
+            "interfaces": [
+              {
+                "bridge": {},
+                "model": "virtio",
+                "name": "default"
+              }
+            ]
+          },
+          "firmware": {
+            "serial": "4f64f4f8-c4a7-4683-939d-3302f400065e",
+            "uuid": "fc154879-8a40-4b18-967c-215f5cf5992d"
+          },
+          "machine": {
+            "type": "q35"
+          },
+          "memory": {
+            "guest": "4Gi"
+          },
+          "resources": {
+            "limits": {
+              "cpu": "2"
+            },
+            "requests": {
+              "cpu": "2",
+              "memory": "4Gi"
+            }
+          }
+        },
+        "networks": [
+          {
+            "multus": {
+              "default": true,
+              "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+            },
+            "name": "default"
+          }
+        ],
+        "serviceAccountName": "default",
+        "volumes": [
+          {
+            "dataVolume": {
+              "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5"
+            },
+            "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5"
+          },
+          {
+            "name": "media-driver",
+            "persistentVolumeClaim": {
+              "claimName": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3"
+            }
+          }
+        ]
+      },
+      "template_sha256": "004e8ebdb92311652dd9a0046fa8d96c4a9a2c981be763bf03f6cb8a8093dbdf",
+      "storage": [
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+            "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+          },
+          "phase": "Bound",
+          "mode": "Block",
+          "dv": {
+            "kind": "DataVolume",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+            "uid": "3589a026-a717-4dc2-91bb-6d3439ce644f"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+            "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97"
+          },
+          "reclaim_policy": "Delete"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+            "uid": "771d2a7a-5c05-4ea6-8443-e9d818fcc4d6"
+          },
+          "phase": "Bound",
+          "mode": "Block",
+          "dv": {
+            "kind": "DataVolume",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+            "uid": "77168825-ab4a-405a-b88a-602775787a50"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-184cf5be-3de0-4a70-bfdf-db3d9f2d0030",
+            "uid": "b15ca31b-1a33-4c65-bdaa-28f6b5e48951"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-51298c93-c1c4-43e3-bfae-06fe4d1fc3d6",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-51298c93-c1c4-43e3-bfae-06fe4d1fc3d6"
+          },
+          "reclaim_policy": "Delete"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+            "uid": "4f0405d6-7c19-43c5-b270-e4767891921a"
+          },
+          "phase": "Bound",
+          "mode": "Block",
+          "dv": {
+            "kind": "DataVolume",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+            "uid": "ac35c75f-74e4-4007-8850-80f68133be02"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-f3d5361c-0069-469e-8292-4c05c3f6c818",
+            "uid": "ae053171-463a-41d9-b1c6-6a424fda4160"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-efe292d3-850c-426c-aaf9-20490dbbd698",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-efe292d3-850c-426c-aaf9-20490dbbd698"
+          },
+          "reclaim_policy": "Delete"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+            "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+          },
+          "phase": "Bound",
+          "mode": "Filesystem",
+          "dv": {
+            "kind": "DataVolume",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+            "uid": "770799a5-eefe-4607-990a-3ed6b452bc2e"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+            "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "fsType": "ext4",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-d3bfa10a-4061-4fff-90de-9cf135eb7857",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-d3bfa10a-4061-4fff-90de-9cf135eb7857"
+          },
+          "reclaim_policy": "Delete"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+            "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+          },
+          "phase": "Bound",
+          "mode": "Filesystem",
+          "dv": {
+            "kind": "DataVolume",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+            "uid": "cf75cf37-a1a1-4205-92ec-36e4efff1632"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-21096268-968f-4e03-9b24-d2f435ed448c",
+            "uid": "becd670c-c761-4b70-987c-236e6e336a8b"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "fsType": "ext4",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-26c451cf-6e28-4e1d-8684-bde96e3ea665",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-26c451cf-6e28-4e1d-8684-bde96e3ea665"
+          },
+          "reclaim_policy": "Delete"
+        }
+      ]
+    },
+    "snapshot_ids_before": [],
+    "accepted": {
+      "id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+      "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "action": "start",
+      "intentVersion": "9",
+      "state": "accepted",
+      "reason": "",
+      "observedAt": ""
+    },
+    "http_status": 202,
+    "operation_id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+    "operation": {
+      "id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+      "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "action": "start",
+      "intentVersion": "9",
+      "state": "running",
+      "reason": "VERSION_CONFLICT: attachment version changed",
+      "observedAt": "2026-10-24T11:20:10.623279179Z"
+    },
+    "current": {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "name": "vm-mvp-windows2025-iso",
+      "version": "9",
+      "osFamily": "windows",
+      "osVersion": "2025",
+      "desiredState": "Running",
+      "observedState": "Running",
+      "reason": "",
+      "observedAt": "2026-10-24T11:20:04.017728108Z",
+      "addresses": [
+        {
+          "nicName": "default",
+          "address": "10.83.1.12",
+          "observedAt": "2026-10-24T11:20:04.017728108Z"
+        }
+      ],
+      "lastOperationId": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "80",
+          "requestedBytes": "80000000000",
+          "observedCapacityBytes": "80530636800",
+          "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+          "role": "data",
+          "name": "vm-mvp-windows-data3-01a168ce",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-89317f205600510abc65e40402c83abb",
+          "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+          "role": "data",
+          "name": "vm-mvp-windows-data4-01a168ce",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+          "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+          "attached": false,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "virtio-win-0.1.271",
+          "observedMedia": "virtio-win-0.1.271",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "systemDiskSizeGb": "80",
+      "sourceKind": "INSTALL_ISO",
+      "mediaKey": "windows-server-2025-iso"
+    },
+    "disks": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+        "role": "data",
+        "name": "vm-mvp-windows-data3-01a168ce",
+        "sizeGb": "3",
+        "requestedBytes": "3000000000",
+        "observedCapacityBytes": "3221225472",
+        "volumeName": "disk-89317f205600510abc65e40402c83abb",
+        "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+        "attached": false,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "role": "data",
+        "name": "vm-mvp-windows-data4-01a168ce",
+        "sizeGb": "4",
+        "requestedBytes": "4000000000",
+        "observedCapacityBytes": "4294967296",
+        "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+        "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "attached": false,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ]
+  }
+}

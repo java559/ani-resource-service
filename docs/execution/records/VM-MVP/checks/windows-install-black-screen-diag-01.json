@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-24T09:59:18.305138+00:00",
+  "result": "READ_ONLY_DIAGNOSTIC",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+  "phase": "Running",
+  "conditions": [
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-23T22:26:04Z",
+      "status": "True",
+      "type": "Ready"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "message": "All of the VMI's DVs are bound and ready",
+      "reason": "AllDVsReady",
+      "status": "True",
+      "type": "DataVolumesReady"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "message": "cannot migrate VMI: PVC vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+      "reason": "DisksNotLiveMigratable",
+      "status": "False",
+      "type": "LiveMigratable"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "status": "True",
+      "type": "StorageLiveMigratable"
+    }
+  ],
+  "guest_os_info": {},
+  "launcher_uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1",
+  "container_statuses": [
+    {
+      "name": "compute",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-23T22:26:03Z"
+        }
+      }
+    }
+  ],
+  "read_only_virsh": {
+    "argv": [
+      "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+      "--kubeconfig",
+      "/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+      "--request-timeout=15s",
+      "exec",
+      "-n",
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+      "-c",
+      "compute",
+      "--",
+      "virsh",
+      "-r",
+      "domstats",
+      "--state",
+      "--cpu-total",
+      "--block",
+      "--balloon",
+      "--vcpu"
+    ],
+    "exit": 0,
+    "stdout": "Domain: 'tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d'\n  state.state=1\n  state.reason=1\n  cpu.time=22856470000000\n  cpu.user=17540490000000\n  cpu.system=5315980000000\n  cpu.cache.monitor.count=0\n  cpu.haltpoll.success.time=2565636784\n  cpu.haltpoll.fail.time=16790832441\n  balloon.current=4194304\n  balloon.maximum=4194304\n  balloon.last-update=0\n  balloon.rss=4260112\n  vcpu.current=2\n  vcpu.maximum=8\n  vcpu.0.state=1\n  vcpu.0.time=12169900000000\n  vcpu.0.wait=0\n  vcpu.0.delay=1014739351307\n  vcpu.0.directed_yield_attempted.sum=0\n  vcpu.0.guest_mode.cur=no\n  vcpu.0.pf_mmio_spte_created.sum=27700\n  vcpu.0.nmi_window_exits.sum=0\n  vcpu.0.hypercalls.sum=0\n  vcpu.0.fpu_reload.sum=302586469\n  vcpu.0.request_irq_exits.sum=0\n  vcpu.0.pf_taken.sum=14846174\n  vcpu.0.irq_window_exits.sum=902509\n  vcpu.0.halt_poll_fail_ns.sum=8472723387\n  vcpu.0.halt_poll_success_ns.sum=1186085348\n  vcpu.0.directed_yield_successful.sum=0\n  vcpu.0.io_exits.sum=299905146\n  vcpu.0.pf_fixed.sum=13185289\n  vcpu.0.halt_wait_ns.sum=29330792082351\n  vcpu.0.exits.sum=438869500\n  vcpu.0.halt_successful_poll.sum=18539\n  vcpu.0.invlpg.sum=0\n  vcpu.0.pf_emulate.sum=27700\n  vcpu.0.mmio_exits.sum=2696552\n  vcpu.0.preemption_reported.sum=419721\n  vcpu.0.irq_injections.sum=19871200\n  vcpu.0.l1d_flush.sum=0\n  vcpu.0.insn_emulation_fail.sum=0\n  vcpu.0.pf_guest.sum=0\n  vcpu.0.nmi_injections.sum=3\n  vcpu.0.tlb_flush.sum=8056794\n  vcpu.0.host_state_reload.sum=318984224\n  vcpu.0.req_event.sum=54671897\n  vcpu.0.pf_fast.sum=1391060\n  vcpu.0.irq_exits.sum=10446039\n  vcpu.0.notify_window_exits.sum=0\n  vcpu.0.signal_exits.sum=7\n  vcpu.0.nested_run.sum=0\n  vcpu.0.pf_spurious.sum=453226\n  vcpu.0.blocking.cur=yes\n  vcpu.0.halt_wakeup.sum=15749261\n  vcpu.0.halt_exits.sum=15853896\n  vcpu.0.halt_poll_invalid.sum=0\n  vcpu.0.halt_attempted_poll.sum=615239\n  vcpu.0.preemption_other.sum=264602\n  vcpu.0.insn_emulation.sum=90431875\n  vcpu.1.state=1\n  vcpu.1.time=10409330000000\n  vcpu.1.wait=0\n  vcpu.1.delay=1044632461712\n  vcpu.1.directed_yield_attempted.sum=0\n  vcpu.1.guest_mode.cur=no\n  vcpu.1.pf_mmio_spte_created.sum=1153\n  vcpu.1.nmi_window_exits.sum=0\n  vcpu.1.hypercalls.sum=0\n  vcpu.1.fpu_reload.sum=228383099\n  vcpu.1.request_irq_exits.sum=0\n  vcpu.1.pf_taken.sum=13454604\n  vcpu.1.irq_window_exits.sum=1316421\n  vcpu.1.halt_poll_fail_ns.sum=8318109054\n  vcpu.1.halt_poll_success_ns.sum=1379551436\n  vcpu.1.directed_yield_successful.sum=0\n  vcpu.1.io_exits.sum=228274577\n  vcpu.1.pf_fixed.sum=11895024\n  vcpu.1.halt_wait_ns.sum=31520683871970\n  vcpu.1.exits.sum=352682346\n  vcpu.1.halt_successful_poll.sum=16369\n  vcpu.1.invlpg.sum=0\n  vcpu.1.pf_emulate.sum=1153\n  vcpu.1.mmio_exits.sum=108423\n  vcpu.1.preemption_reported.sum=385423\n  vcpu.1.irq_injections.sum=20541971\n  vcpu.1.l1d_flush.sum=0\n  vcpu.1.insn_emulation_fail.sum=0\n  vcpu.1.pf_guest.sum=0\n  vcpu.1.nmi_injections.sum=2\n  vcpu.1.tlb_flush.sum=3549105\n  vcpu.1.host_state_reload.sum=245316254\n  vcpu.1.req_event.sum=43868721\n  vcpu.1.pf_fast.sum=280699\n  vcpu.1.irq_exits.sum=8704156\n  vcpu.1.notify_window_exits.sum=0\n  vcpu.1.signal_exits.sum=172\n  vcpu.1.nested_run.sum=0\n  vcpu.1.pf_spurious.sum=463743\n  vcpu.1.blocking.cur=yes\n  vcpu.1.halt_wakeup.sum=16319020\n  vcpu.1.halt_exits.sum=16425564\n  vcpu.1.halt_poll_invalid.sum=0\n  vcpu.1.halt_attempted_poll.sum=616408\n  vcpu.1.preemption_other.sum=271867\n  vcpu.1.insn_emulation.sum=81107996\n  block.count=3\n  block.0.name=sda\n  block.0.path=/dev/disk-76c43f30e8b85b1bb19ffbb7c04459b5\n  block.0.backingIndex=3\n  block.0.rd.reqs=128241\n  block.0.rd.bytes=6354385920\n  block.0.rd.times=23672241719758\n  block.0.wr.reqs=456011\n  block.0.wr.bytes=24456499200\n  block.0.wr.times=71485422237853\n  block.0.fl.reqs=10650\n  block.0.fl.times=1317531528\n  block.0.allocation=0\n  block.0.capacity=80530636800\n  block.0.physical=80530636800\n  block.0.limits.request_alignment=512\n  block.0.limits.discard_alignment=65536\n  block.0.limits.transfer_hw_max=4194304\n  block.0.limits.iov_max=1024\n  block.0.limits.iov_hw_max=65535\n  block.0.limits.memory_alignment_minimal=512\n  block.0.limits.memory_alignment_optimal=4096\n  block.1.name=sdb\n  block.1.path=/var/run/kubevirt-private/vmi-disks/media-install/disk.img\n  block.1.backingIndex=2\n  block.1.rd.reqs=79461\n  block.1.rd.bytes=9291802624\n  block.1.rd.times=8338440907784\n  block.1.wr.reqs=0\n  block.1.wr.bytes=0\n  block.1.wr.times=0\n  block.1.fl.reqs=0\n  block.1.fl.times=0\n  block.1.allocation=0\n  block.1.capacity=11845763072\n  block.1.physical=8722776064\n  block.1.limits.request_alignment=512\n  block.1.limits.iov_max=1024\n  block.1.limits.memory_alignment_minimal=512\n  block.1.limits.memory_alignment_optimal=4096\n  block.2.name=sdc\n  block.2.path=/var/run/kubevirt-private/vmi-disks/media-driver/disk.img\n  block.2.backingIndex=1\n  block.2.rd.reqs=87\n  block.2.rd.bytes=1370112\n  block.2.rd.times=12388665938\n  block.2.wr.reqs=0\n  block.2.wr.bytes=0\n  block.2.wr.times=0\n  block.2.fl.reqs=0\n  block.2.fl.times=0\n  block.2.allocation=0\n  block.2.capacity=1908408320\n  block.2.physical=725622784\n  block.2.limits.request_alignment=512\n  block.2.limits.iov_max=1024\n  block.2.limits.memory_alignment_minimal=512\n  block.2.limits.memory_alignment_optimal=4096\n\n",
+    "stderr": ""
+  },
+  "writes": 0,
+  "guest_commands": 0
+}

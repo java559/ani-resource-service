@@ -1,0 +1,15 @@
+{
+  "pid": 1733899,
+  "previous_pid": 1708395,
+  "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.console17",
+  "binary_sha256": "e94b31f6b714b173c7d49c9fea849ec5bd350f5e8b51333ef06585f75fcf395a",
+  "source": "isolated resource-stage-17 copied from 16d + console17 overlay; console observes runtime identity without storage dependency",
+  "code": "targeted console RED/GREEN PASS",
+  "postgres": "unchanged persistence; Source16d evidence reused",
+  "build": "PASS",
+  "snapshot_live": "NOT_RUN",
+  "console_live": "NOT_RUN",
+  "shared_configuration_changed": false,
+  "catalog_changed": false,
+  "status": "task candidate listeners ready; business and VNC validation follows"
+}

@@ -1,0 +1,25 @@
+{
+  "result": "PASS",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "checks": {
+    "both_guest_readonly": true,
+    "boot_unchanged": true,
+    "vmi_unchanged": true,
+    "vm_unchanged": true,
+    "root_marker_A": true,
+    "same_three_logical_disks": true,
+    "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21_same_physical": true,
+    "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9_same_physical": true,
+    "5dbc2c93-9865-54f9-8413-f198f5e9c1a6_same_physical": true,
+    "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9_native_hotplug_ready": true,
+    "5dbc2c93-9865-54f9-8413-f198f5e9c1a6_native_hotplug_ready": true
+  },
+  "source_receipts": [
+    "gov-linux-snapshot-v3-online-a-guest-readback.json",
+    "gov-linux-snapshot-v3-guest-d3-absent.json",
+    "gov-linux-snapshot-v3-guest-read-a.json",
+    "gov-linux-disk-v3-online-a-restored-detach-data3.json",
+    "gov-linux-disk-v3-online-a-restored-reattach-data3.json"
+  ],
+  "guest_bytes_written": 0
+}

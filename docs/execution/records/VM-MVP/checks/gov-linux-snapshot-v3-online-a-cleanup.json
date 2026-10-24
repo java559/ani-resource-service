@@ -1,0 +1,206 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "intent": "online-a-cleanup",
+  "driver_sha256": "33111b43a148b29264067cd9366da2c5d6421b912c4b96759586aac115076253",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-snapshots-v3.json",
+  "phase": "RESTORE_PHYSICAL_CLEANUP",
+  "cleanup": {
+    "result": "PENDING_NORMAL_GC",
+    "native": [
+      {
+        "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "old": {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9",
+          "phase": "Succeeded"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "old": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "old": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+          "uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "old": {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "3ae1521e-ca25-468c-94e4-0e621c68f5c6",
+          "phase": "Succeeded"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "old": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "old": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+          "uid": "7d05469e-ea85-46ab-b534-c94408f34663"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "old": {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "cfb1a6a6-ff1c-4ea5-88a2-2a6c101e40c8",
+          "phase": "Succeeded"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "old": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "old": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+          "uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "45d5a224-42b7-526d-90eb-239577d2262a",
+        "old": {
+          "uid": "c85accfe-ad72-495c-8b98-877905e8ff9d",
+          "kind": "DataVolume",
+          "name": "vd-45d5a224-42b7-526d-90eb-239577d2262a",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "45d5a224-42b7-526d-90eb-239577d2262a",
+        "old": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-45d5a224-42b7-526d-90eb-239577d2262a",
+          "uid": "4c615104-32a3-4c11-ae0c-146eaec863ff",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "gone": true
+      },
+      {
+        "disk_id": "45d5a224-42b7-526d-90eb-239577d2262a",
+        "old": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-cadd9f69-ef8f-4581-b921-ec4996a35b2c",
+          "uid": "bb6da25b-0402-455f-b30c-49e7e8cf488c"
+        },
+        "gone": true
+      }
+    ],
+    "backend_images": [
+      {
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-cb07b3bc-f29e-4cab-8c15-484cac941939",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+        "result": "ABSENT"
+      }
+    ],
+    "matching_trash": [
+      {
+        "id": "20cc87722fb94d",
+        "name": "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c"
+      },
+      {
+        "id": "20cc87aee0c1a2",
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp"
+      },
+      {
+        "id": "20cc87b6ad580d",
+        "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b"
+      },
+      {
+        "id": "20cc87eb1f1684",
+        "name": "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45"
+      }
+    ],
+    "remaining": [
+      "trash:20cc87722fb94d",
+      "trash:20cc87aee0c1a2",
+      "trash:20cc87b6ad580d",
+      "trash:20cc87eb1f1684"
+    ],
+    "d6_detached_original_volume_preserved": true,
+    "three_original_logical_ids_restored_to_new_pvcs": true,
+    "force_or_manual_backend_delete": false
+  },
+  "business_mutations": 0
+}

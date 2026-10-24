@@ -1,0 +1,25 @@
+{
+  "state": "METADATA_ONLY_DEFAULT_ENTRYPOINT_RECORDED_PROBE_PENDING",
+  "observed_at": "2026-10-24T10:48:36.458859+00:00",
+  "source_ref": "172.16.101.10:30003/ani-platform-images/cpr-20261020-cpu-longrun@sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+  "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+  "artifact_id": 44,
+  "project_id": 5,
+  "os": "linux",
+  "architecture": "amd64",
+  "entrypoint": null,
+  "cmd": [
+    "sh",
+    "-c",
+    "exec tail -f /dev/null"
+  ],
+  "working_directory": null,
+  "user": "1000:1000",
+  "environment_names": [
+    "PATH"
+  ],
+  "source_layer_downloads": 0,
+  "registry_writes": 0,
+  "skopeo_exit": 0,
+  "private_config_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-source-config.json"
+}

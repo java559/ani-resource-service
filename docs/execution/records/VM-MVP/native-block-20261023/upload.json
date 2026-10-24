@@ -1,0 +1,10 @@
+{
+  "returncode": 0,
+  "http_status": "200",
+  "tls_verified": true,
+  "tls_hostname": "cdi-uploadproxy",
+  "ca_sha256": "0e6316515adff5db2edfcc6754ba1e60f0a23e0c4deea5a9e2330325e3b58dea",
+  "source_file_sha256": "04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94",
+  "source_dv_uid": "36f658cd-0663-4fed-8aba-cb0116f5f561",
+  "stderr": ""
+}

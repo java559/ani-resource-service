@@ -1,0 +1,40 @@
+{
+  "scope": "PREFLIGHT_ATTEMPT01_NO_CONFIGURATION_OR_PROCESS_MUTATION",
+  "source_sha256": "12517d3dec817af2eec1f7207b7809784c7746e8b45667f6d9d09f3ef3c6e5de",
+  "plan_sha256": "baecd36fb43b4ef0c7c6c27fa92d70c50dbd81c7914e4d80afdbfb3a8980b4a0",
+  "result": "ASSERTION_FAILED_BEFORE_PRIVATE_ROOT_CREATION",
+  "original_failing_traceback": "NOT_CAPTURED",
+  "business_mutations": 0,
+  "secret_projections": 0,
+  "normal_term_calls": 0,
+  "new_processes": 0,
+  "private_root_exists_after": false,
+  "applied_receipt_exists_after": false,
+  "original_gov_pid": 3305121,
+  "original_gov_startticks": "70294688",
+  "original_gov_unchanged_verified": true,
+  "source_plan_helper_checkpoint_hashes_verified": true,
+  "pin_budget_listeners_client_keys_preconditions_verified": true,
+  "later_precise_condition": {
+    "source_file": "apply-owner-clients-attempt01.py",
+    "line": 27,
+    "assertion": "ServiceDNS must resolve to guarded same Service ClusterIP",
+    "first_guarded_host": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+    "actual_lookup": [
+      "28.0.0.4"
+    ],
+    "guarded_service_ip": "10.96.58.69",
+    "also_model_lookup": [
+      "28.0.0.5"
+    ],
+    "model_service_ip": "10.96.44.130",
+    "also_inference_lookup": [
+      "28.0.0.6"
+    ],
+    "inference_service_ip": "10.96.166.234",
+    "business_rpc_or_public_test_performed": false,
+    "original_traceback_not_reconstructed": true
+  },
+  "handoff": "Root-directed VM main-flow first; Docs Windows4phase safe to proceed against unchanged Gov. Future maintenance uses its new actual baseline.",
+  "at": "2026-10-24T11:16:45.395039+00:00"
+}

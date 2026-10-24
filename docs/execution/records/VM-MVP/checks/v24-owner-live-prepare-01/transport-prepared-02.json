@@ -1,0 +1,88 @@
+{
+  "scope": "TASK_GOV_THREE_EXACT_CLUSTERIP_CLIENTS_PREPARED_NOT_APPLIED",
+  "execution_allowed": false,
+  "original_plan_sha256": "baecd36fb43b4ef0c7c6c27fa92d70c50dbd81c7914e4d80afdbfb3a8980b4a0",
+  "original_attempt_preserved": "apply-owner-clients-attempt01.py",
+  "failure_preserved": "preflight-failed-01.json",
+  "original_gov_pid": 3305121,
+  "original_gov_start_ticks": 70294688,
+  "original_gov_binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "mode": "DIRECT_GUARDED_SERVICE_CLUSTERIP_ONLY",
+  "targets": [
+    {
+      "environment_name": "ANI_ACCELERATOR_ADDR",
+      "namespace": "ani-system",
+      "service": "ani-accelerator-service",
+      "service_uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+      "cluster_ip": "10.96.58.69",
+      "port": 19090,
+      "task_address": "10.96.58.69:19090",
+      "server_name": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+      "deployment_uid": "b47a695d-50d8-4231-a786-6cb6c6b01804",
+      "selector": {
+        "app.kubernetes.io/name": "ani-accelerator-service"
+      },
+      "fallback_loopback_address": "127.0.0.1:43941"
+    },
+    {
+      "environment_name": "ANI_MODEL_ADDR",
+      "namespace": "ani-system",
+      "service": "ani-model-grpc",
+      "service_uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+      "cluster_ip": "10.96.44.130",
+      "port": 19090,
+      "task_address": "10.96.44.130:19090",
+      "server_name": "ani-model.ani.internal",
+      "deployment_uid": "f358e30f-842d-419a-9b25-4178caabda0f",
+      "selector": {
+        "app.kubernetes.io/name": "ani-model-service"
+      },
+      "fallback_loopback_address": "127.0.0.1:43942"
+    },
+    {
+      "environment_name": "ANI_INFERENCE_ADDR",
+      "namespace": "ani-system",
+      "service": "ani-inference-grpc",
+      "service_uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+      "cluster_ip": "10.96.166.234",
+      "port": 19090,
+      "task_address": "10.96.166.234:19090",
+      "server_name": "ani-inference.ani.internal",
+      "deployment_uid": "9efe7f65-4ccb-4bb9-b841-874851b78b21",
+      "selector": {
+        "app.kubernetes.io/instance": "ani-inference",
+        "app.kubernetes.io/name": "ani-inference"
+      },
+      "fallback_loopback_address": "127.0.0.1:43943"
+    }
+  ],
+  "preconditions": [
+    "Docs Windows4phase completes and releases actual new version/VMI identities; no Gov TERM before handoff",
+    "exact clusterUID + Service UID/ClusterIP/19090 and original formal SAN rechecked",
+    "one 2s TCP connect per guarded ClusterIP before any projection/TERM; this is route availability only, not business or mTLS PASS",
+    "all original CPU checkpoint/pending0/SGactive0+lease0/Gov process/budget/config/VM/source/NAD guards retained",
+    "client unique ani-governance DNS SAN/keypair/expiry and production mTLS validation retained"
+  ],
+  "changes_only": "three TaskGov ANI_*_ADDR values; same original client projection, SAN, timeouts, binary/config/budget; no Resource ReleaseAddress change",
+  "prohibited": [
+    "connecting any 28.* alias",
+    "hosts/DNS edits",
+    "Service or cluster object creation",
+    "GPU allocation or Inference Create",
+    "shared Resource/client changes"
+  ],
+  "failure": "any pre-projection guard or direct TCP failure stops0projection/0TERM; no automatic fallback or retry",
+  "rollback": "same original exact normalTERM-only Gov rollback; private projection retained for reviewed cleanup; no Resource/SG/VM writes",
+  "fallback_port_forward": {
+    "state": "PREPARED_INCOMPLETE_NOT_AUTHORIZED_TO_START",
+    "trigger": "direct guarded ClusterIP TCP unavailable, after preserving actual failure",
+    "source": "same current10-12 kubeconfig; exactServiceUID+selector+ReadyPod->RS->DeploymentUID guard",
+    "pod_uid_status": "NOT_CAPTURED; fresh exact selected Pod/RS UID required before Root approves actual PF start",
+    "ports_status": "PROPOSED_NOT_YET_VERIFIED_FREE",
+    "bind": "127.0.0.1 only",
+    "command": "kubectl --kubeconfig=<existing-ref> -n ani-system port-forward --address=127.0.0.1 pod/<fresh-owner-guarded-pod-name> <listed-port>:19090",
+    "record": "each owned PID/startticks/exe/fullargv/cwd/listener-inode ownership/PodUID/ServiceUID in task private process ref; public references only",
+    "cleanup": "after Gov returns original env or no client references: TERM only exact own PF identity, waitGone+listenerGone; noKILL; unknown process identity stops dependent cleanup"
+  }
+}

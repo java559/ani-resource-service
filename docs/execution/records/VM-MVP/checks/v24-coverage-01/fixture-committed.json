@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-24T09:34:19.472161+00:00",
+  "result": "ONE_TEST_FILE_CHILD_COMMITTED_NOT_PUSHED",
+  "repo": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+  "commit_worktree": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-coverage-01/fixture-commit-worktree",
+  "parent": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "commit": "b7112f7962e1aa23d903db5d557afdd5bb75af4d",
+  "tree": "ff251fb116e0ad78c81a17c49b1ddf378dffb74a",
+  "path": "app/admin/service/internal/service/inference_gpu_pg_test.go",
+  "old_blob": "8612be4f16c8afecac25312a6fb7186584ec7ed8",
+  "new_blob": "389143bf644f941d9f99202a63a2212c5a849c90",
+  "file_sha256": "2e2b57d4b7461a2a3fbddd0a4b2b3f08cfa482d832a73a585d69e0fe4668c518",
+  "diff_numstat": "15\t5\tapp/admin/service/internal/service/inference_gpu_pg_test.go",
+  "normal_git_commit": true,
+  "commit_no_verify": false,
+  "effective_normal_hooks": {
+    "path": "/home/chabking/workspace/ani-governance/.git/hooks",
+    "active_hooks": [],
+    "overridden": false
+  },
+  "alternate_index": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-coverage-01/fixture-commit.index",
+  "original_worktree_before": {
+    "head": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "index": "/home/chabking/workspace/ani-governance/.git/worktrees/ani-governance19/index",
+    "index_sha256": "a34ea61646ba7364e8a7bd3dbc93c45a0242941c2aee4f3944eff5c36fd71629",
+    "status_sha256": "a10eefdb0810bfd435f96c0b1a4b2535e4b3deacef0eb5085a4f55f994355ade",
+    "tracked_dirty_bytes_sha256": "cf3c0eea1aa58ecb415d395523f3319514ec5dfbfc6e7627691015123a53a0d0"
+  },
+  "original_worktree_after": {
+    "head": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "index": "/home/chabking/workspace/ani-governance/.git/worktrees/ani-governance19/index",
+    "index_sha256": "a34ea61646ba7364e8a7bd3dbc93c45a0242941c2aee4f3944eff5c36fd71629",
+    "status_sha256": "a10eefdb0810bfd435f96c0b1a4b2535e4b3deacef0eb5085a4f55f994355ade",
+    "tracked_dirty_bytes_sha256": "cf3c0eea1aa58ecb415d395523f3319514ec5dfbfc6e7627691015123a53a0d0"
+  },
+  "runtime_api_cmd_migration_and_dependency_blobs_unchanged": true,
+  "runtime_image_source_remains": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "gate_receipt": "pg-attempt04-executed.json",
+  "gate_receipt_sha256": "d9e9c0c15f2939f7fb14ddaea53bb494ce4225a73ef0cdb88609b4cd3f973bc5",
+  "commit_stdout": "[detached HEAD b7112f7] test(inference): use preset-backed PostgreSQL fixture\n 1 file changed, 15 insertions(+), 5 deletions(-)\n",
+  "commit_stderr": "",
+  "pushes": 0
+}

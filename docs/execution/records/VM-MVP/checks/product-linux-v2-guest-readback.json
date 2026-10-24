@@ -1,0 +1,401 @@
+{
+  "at": "2026-10-23T16:40:05.301270+00:00",
+  "layer": "GUEST",
+  "scope": "real product VM serial observation; BROWSER is separate",
+  "product_receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-linux-product-v2.json",
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials-v2.json",
+  "vm_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+  "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "namespace": {
+    "namespace": "",
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "kind": "Namespace"
+  },
+  "vm": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "uid": "fe9272cb-858e-4290-9c31-94876b259028",
+    "kind": "VirtualMachine"
+  },
+  "vmi": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "uid": "f4587484-ad34-4822-9342-eee625d2e772",
+    "kind": "VirtualMachineInstance"
+  },
+  "launcher": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-e1b3403b-178c-40c2-a4d5-53a37756039c-dmjv4",
+    "uid": "1f109392-bafd-4656-9290-2aca7bad1fd9",
+    "kind": "Pod"
+  },
+  "node": "ani-02",
+  "native_uid": 107,
+  "volumes": [
+    {
+      "volume": "disk-b18440e088c35bd492c6b667f2e69a1e",
+      "dv": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "uid": "c974d98f-0782-4017-9a3d-23919c4d4373",
+        "kind": "DataVolume"
+      },
+      "pvc": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "uid": "66503212-9339-45ba-9c72-efa0484c076d",
+        "kind": "PersistentVolumeClaim"
+      },
+      "volume_mode": "Block",
+      "requested": "12G",
+      "capacity": {
+        "storage": "12Gi"
+      }
+    }
+  ],
+  "vmi_interfaces": [
+    {
+      "infoSource": "domain",
+      "ipAddress": "10.83.1.2",
+      "ipAddresses": [
+        "10.83.1.2"
+      ],
+      "linkState": "up",
+      "mac": "fa:00:a4:e5:82:c7",
+      "name": "default",
+      "podInterfaceName": "eth0",
+      "queueCount": 1
+    }
+  ],
+  "vm_networks": [
+    {
+      "multus": {
+        "default": true,
+        "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+      },
+      "name": "default"
+    }
+  ],
+  "launcher_network_status": "[{\n    \"name\": \"tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.83.1.2\"\n    ],\n    \"mac\": \"fa:00:a4:e5:82:c7\",\n    \"default\": true,\n    \"dns\": {},\n    \"gateway\": [\n        \"10.83.1.1\"\n    ]\n}]",
+  "virtctl_sha256": "40ede2ee37c98a1aeed71c9c219616a05247ce2be109e1edddf0477572e8b978",
+  "driver_sha256": "1d8fdb98ccbe22da2f8ef6299adbaf3337cd5c0d616e8662a9696b7263059cb7",
+  "observed": {
+    "username": "aniuser",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "nocloud_instance_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "firmware_uuid": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "boot_id": "f2cd2600-11ca-4248-b3fd-291c1b13e78e",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:a4:e5:82:c7",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.83.1.2",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.83.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86312705,
+            "preferred_life_time": 86312705
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:a4ff:fee5:82c7",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.83.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.83.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "type": "local",
+        "dst": "10.83.1.2",
+        "dev": "enp1s0",
+        "table": "local",
+        "protocol": "kernel",
+        "scope": "host",
+        "prefsrc": "10.83.1.2",
+        "flags": []
+      },
+      {
+        "type": "broadcast",
+        "dst": "10.83.1.255",
+        "dev": "enp1s0",
+        "table": "local",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.83.1.2",
+        "flags": []
+      },
+      {
+        "type": "local",
+        "dst": "127.0.0.0/8",
+        "dev": "lo",
+        "table": "local",
+        "protocol": "kernel",
+        "scope": "host",
+        "prefsrc": "127.0.0.1",
+        "flags": []
+      },
+      {
+        "type": "local",
+        "dst": "127.0.0.1",
+        "dev": "lo",
+        "table": "local",
+        "protocol": "kernel",
+        "scope": "host",
+        "prefsrc": "127.0.0.1",
+        "flags": []
+      },
+      {
+        "type": "broadcast",
+        "dst": "127.255.255.255",
+        "dev": "lo",
+        "table": "local",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "127.0.0.1",
+        "flags": []
+      },
+      {
+        "dst": "fe80::/64",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "metric": 256,
+        "flags": [],
+        "pref": "medium"
+      },
+      {
+        "type": "local",
+        "dst": "::1",
+        "dev": "lo",
+        "table": "local",
+        "protocol": "kernel",
+        "metric": 0,
+        "flags": [],
+        "pref": "medium"
+      },
+      {
+        "type": "local",
+        "dst": "fe80::f800:a4ff:fee5:82c7",
+        "dev": "enp1s0",
+        "table": "local",
+        "protocol": "kernel",
+        "metric": 0,
+        "flags": [],
+        "pref": "medium"
+      },
+      {
+        "type": "multicast",
+        "dst": "ff00::/8",
+        "dev": "enp1s0",
+        "table": "local",
+        "protocol": "kernel",
+        "metric": 256,
+        "flags": [],
+        "pref": "medium"
+      }
+    ],
+    "disks": {
+      "blockdevices": [
+        {
+          "name": "vda",
+          "serial": "b18440e0-88c3-5bd4-9",
+          "type": "disk",
+          "size": 12884901888,
+          "fstype": null,
+          "mountpoints": [
+            null
+          ],
+          "children": [
+            {
+              "name": "vda1",
+              "serial": null,
+              "type": "part",
+              "size": 11810094592,
+              "fstype": "ext4",
+              "mountpoints": [
+                "/"
+              ]
+            },
+            {
+              "name": "vda14",
+              "serial": null,
+              "type": "part",
+              "size": 4194304,
+              "fstype": null,
+              "mountpoints": [
+                null
+              ]
+            },
+            {
+              "name": "vda15",
+              "serial": null,
+              "type": "part",
+              "size": 111149056,
+              "fstype": "vfat",
+              "mountpoints": [
+                "/boot/efi"
+              ]
+            },
+            {
+              "name": "vda16",
+              "serial": null,
+              "type": "part",
+              "size": 957350400,
+              "fstype": "ext4",
+              "mountpoints": [
+                "/boot"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "vdb",
+          "serial": null,
+          "type": "disk",
+          "size": 1048576,
+          "fstype": "iso9660",
+          "mountpoints": [
+            null
+          ]
+        }
+      ]
+    },
+    "resolv_conf": "# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8).\n# Do not edit.\n#\n# This file might be symlinked as /etc/resolv.conf. If you're looking at\n# /etc/resolv.conf and seeing this text, you have followed the symlink.\n#\n# This is a dynamic resolv.conf file for connecting local clients to the\n# internal DNS stub resolver of systemd-resolved. This file lists all\n# configured search domains.\n#\n# Run \"resolvectl status\" to see details about the uplink DNS servers\n# currently in use.\n#\n# Third party programs should typically not access this file directly, but only\n# through the symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a\n# different way, replace this symlink by a static file or a different symlink.\n#\n# See man:systemd-resolved.service(8) for details about the supported modes of\n# operation for /etc/resolv.conf.\n\nnameserver 127.0.0.53\noptions edns0 trust-ad\nsearch tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.svc.cluster.local svc.cluster.local cluster.local",
+    "sshd_effective": {
+      "passwordauthentication": null,
+      "pubkeyauthentication": null,
+      "permitrootlogin": null
+    },
+    "sshd_config_test": {
+      "returncode": 255,
+      "stderr": "Missing privilege separation directory: /run/sshd\n"
+    },
+    "sshd_directives": [
+      {
+        "file": "/etc/ssh/sshd_config",
+        "line": 12,
+        "directive": "Include /etc/ssh/sshd_config.d/*.conf"
+      },
+      {
+        "file": "/etc/ssh/sshd_config",
+        "line": 71,
+        "directive": "KbdInteractiveAuthentication no"
+      },
+      {
+        "file": "/etc/ssh/sshd_config.d/50-cloud-init.conf",
+        "line": 1,
+        "directive": "PasswordAuthentication no"
+      },
+      {
+        "file": "/etc/ssh/sshd_config.d/60-cloudimg-settings.conf",
+        "line": 1,
+        "directive": "PasswordAuthentication no"
+      }
+    ],
+    "marker_path": "/home/aniuser/vm-mvp-marker",
+    "marker": "vm-mvp-01a168ce-linux-v2-browser"
+  },
+  "authentication_and_initialization": "PASS",
+  "ssh_password_authentication_disabled": "NOT_VERIFIED",
+  "network": "OBSERVED; no connectivity assertion",
+  "marker": "NOT_RUN",
+  "result": "PASS"
+}

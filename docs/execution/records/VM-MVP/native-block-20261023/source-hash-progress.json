@@ -1,0 +1,14 @@
+{
+  "pod": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-source-hash",
+    "uid": "74bc0237-45ac-42e8-a79b-d9602b04936a"
+  },
+  "at": "2026-10-23T14:43:07.002583+00:00",
+  "exit": 0,
+  "progress": "uid=107 gid=107 groups=107\n/proc/1\nrchar: 1176895654\nwchar: 10390\nsyscr: 36043\nsyscw: 8\nread_bytes: 1176489984\nwrite_bytes: 0\ncancelled_write_bytes: 0\n",
+  "stderr": "",
+  "scope": "read only existing hash process I/O counters; no second content read"
+}

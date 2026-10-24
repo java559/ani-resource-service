@@ -1,0 +1,28 @@
+{
+  "record_kind": "facility failure and saved-ACK-only recovery; no new business request",
+  "initial_harness_source_sha256": "e5124579d5e7b6ae133dca70332d50b4577ea0dec77fb9a27038cd81581a5aed",
+  "initial_driver_exit": 1,
+  "exception_type": "KeyError",
+  "exception_key": "vmId",
+  "stage": "after actual HTTP202 was persisted; before operation pin and holder cleanup",
+  "cause": "Delete uses the durable Gov operationId/resourceId/result wire contract. The initial harness incorrectly read the ordinary Command id/vmId fields.",
+  "original_ack": {
+    "file": "tenant2-cleanup-delete-delete-during-cleanup-ack.json",
+    "sha256": "3da7efe0a80a3771f9b56267c84386a0d9c001b4aba6f641f98ee4a927e84dae",
+    "http_status": 202,
+    "accepted": {
+      "operationId": "f4d5fcfc-b938-457d-82a7-79bd4002436e",
+      "resourceId": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "replayed": false,
+      "result": "QUEUED_FOR_OWNER"
+    }
+  },
+  "recovery_source_sha256": "ae43b550930537ebc38a0133b6c85fb7c6996d8e9c87bfbebf0582639d052e86",
+  "recovery": "pin original operationId from the saved successful canonical ACK; no HTTP resend",
+  "delete_send_attempts_before": 1,
+  "delete_send_attempts_after": 1,
+  "operation_id": "f4d5fcfc-b938-457d-82a7-79bd4002436e",
+  "holder": "same-VM owner GC had already removed the original holder; zero manual Pod DELETE requests",
+  "product_result": "original Delete succeeded; native/backend cleanup receipts record actual measurements",
+  "historical_import_delete_cases": "unchanged; this case used the existing verified tenant2 VM"
+}

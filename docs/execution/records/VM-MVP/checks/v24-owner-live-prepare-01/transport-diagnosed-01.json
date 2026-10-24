@@ -1,0 +1,388 @@
+{
+  "state": "BOUNDED_TLS_COMPARISON_COMPLETE",
+  "started_at": "2026-10-24T12:17:08.498417+00:00",
+  "logs": {
+    "source_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/gov-clients.log",
+    "bytes": 20407,
+    "sanitized_errors": [
+      {
+        "time_tokens": [
+          "time=2026-10-24T19:51:25.697+08:00",
+          "ts=2026-10-24T19:51:25+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=403",
+          "code = 403",
+          "reason=FORBIDDEN",
+          "reason = FORBIDDEN"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T19:51:25.714+08:00",
+          "ts=2026-10-24T19:51:25+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=403",
+          "code = 403",
+          "reason=FORBIDDEN",
+          "reason = FORBIDDEN"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T19:51:25.781+08:00",
+          "ts=2026-10-24T19:51:25+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=403",
+          "code = 403",
+          "reason=FORBIDDEN",
+          "reason = FORBIDDEN"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:04:22.044+08:00",
+          "ts=2026-10-24T20:04:22+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=403",
+          "code = 403",
+          "reason=FORBIDDEN",
+          "reason = FORBIDDEN"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:04:22.074+08:00",
+          "ts=2026-10-24T20:04:22+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=403",
+          "code = 403",
+          "reason=FORBIDDEN",
+          "reason = FORBIDDEN"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:29.888+08:00",
+          "ts=2026-10-24T20:07:29+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=504",
+          "code = 504",
+          "reason=ACCELERATOR_ERROR",
+          "reason = ACCELERATOR_ERROR"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.964+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.965+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "context deadline exceeded"
+        ]
+      },
+      {
+        "time_tokens": [
+          "time=2026-10-24T20:07:59.965+08:00",
+          "ts=2026-10-24T20:07:59+08:00"
+        ],
+        "paths": [],
+        "error_patterns": [
+          "code=503",
+          "code = 503",
+          "reason=MODEL_UNAVAILABLE",
+          "reason = MODEL_UNAVAILABLE"
+        ]
+      }
+    ],
+    "window_note": "UTC12:07:24-12:08:01; include log timezone representation where UTC prefix absent"
+  },
+  "targets": [
+    {
+      "name": "ACC",
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-accelerator-service",
+        "uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+        "cluster_ip": "10.96.58.69",
+        "port": 19090
+      },
+      "server_name": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+      "direct": {
+        "result": "HANDSHAKE_FAILED",
+        "elapsed_seconds": 4.013,
+        "error": {
+          "type": "TimeoutError",
+          "errno": null,
+          "error_name": "TimeoutError"
+        },
+        "application_bytes_sent": 0
+      },
+      "route": [
+        {
+          "dst": "10.96.58.69",
+          "gateway": "28.0.0.2",
+          "dev": "Meta",
+          "prefsrc": "28.0.0.1",
+          "table": "2022",
+          "flags": []
+        }
+      ],
+      "port_forward": {
+        "pid": 3459285,
+        "start_ticks": 70949283,
+        "local_address": "127.0.0.1",
+        "local_port": 43941,
+        "service_uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+        "remote_port": 19090,
+        "ready": true,
+        "stop": "NORMAL_TERM_GONE",
+        "exit_code": -15
+      },
+      "forwarded_tls": {
+        "result": "VERIFIED_TLS_HANDSHAKE",
+        "elapsed_seconds": 0.028,
+        "tls_version": "TLSv1.3",
+        "server_dns_sans": [
+          "ani-accelerator-service.ani-accelerator.svc.cluster.local"
+        ],
+        "chain_and_hostname_verified": true,
+        "client_keypair_loaded": true,
+        "application_bytes_sent": 0
+      }
+    },
+    {
+      "name": "MODEL",
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-model-grpc",
+        "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "cluster_ip": "10.96.44.130",
+        "port": 19090
+      },
+      "server_name": "ani-model.ani.internal",
+      "direct": {
+        "result": "HANDSHAKE_FAILED",
+        "elapsed_seconds": 4.007,
+        "error": {
+          "type": "TimeoutError",
+          "errno": null,
+          "error_name": "TimeoutError"
+        },
+        "application_bytes_sent": 0
+      },
+      "route": [
+        {
+          "dst": "10.96.44.130",
+          "gateway": "28.0.0.2",
+          "dev": "Meta",
+          "prefsrc": "28.0.0.1",
+          "table": "2022",
+          "flags": []
+        }
+      ],
+      "port_forward": {
+        "pid": 3459382,
+        "start_ticks": 70949742,
+        "local_address": "127.0.0.1",
+        "local_port": 43942,
+        "service_uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "remote_port": 19090,
+        "ready": true,
+        "stop": "NORMAL_TERM_GONE",
+        "exit_code": -15
+      },
+      "forwarded_tls": {
+        "result": "VERIFIED_TLS_HANDSHAKE",
+        "elapsed_seconds": 0.02,
+        "tls_version": "TLSv1.3",
+        "server_dns_sans": [
+          "ani-model.ani.internal"
+        ],
+        "chain_and_hostname_verified": true,
+        "client_keypair_loaded": true,
+        "application_bytes_sent": 0
+      }
+    },
+    {
+      "name": "INFERENCE",
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-inference-grpc",
+        "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "cluster_ip": "10.96.166.234",
+        "port": 19090
+      },
+      "server_name": "ani-inference.ani.internal",
+      "direct": {
+        "result": "HANDSHAKE_FAILED",
+        "elapsed_seconds": 4.006,
+        "error": {
+          "type": "TimeoutError",
+          "errno": null,
+          "error_name": "TimeoutError"
+        },
+        "application_bytes_sent": 0
+      },
+      "route": [
+        {
+          "dst": "10.96.166.234",
+          "gateway": "28.0.0.2",
+          "dev": "Meta",
+          "prefsrc": "28.0.0.1",
+          "table": "2022",
+          "flags": []
+        }
+      ],
+      "port_forward": {
+        "pid": 3459484,
+        "start_ticks": 70950194,
+        "local_address": "127.0.0.1",
+        "local_port": 43943,
+        "service_uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "remote_port": 19090,
+        "ready": true,
+        "stop": "NORMAL_TERM_GONE",
+        "exit_code": -15
+      },
+      "forwarded_tls": {
+        "result": "VERIFIED_TLS_HANDSHAKE",
+        "elapsed_seconds": 0.386,
+        "tls_version": "TLSv1.3",
+        "server_dns_sans": [
+          "ani-inference.ani.internal"
+        ],
+        "chain_and_hostname_verified": true,
+        "client_keypair_loaded": true,
+        "application_bytes_sent": 0
+      }
+    }
+  ],
+  "new_http_or_rpc_requests": 0,
+  "configuration_changes": 0,
+  "gov_terms": 0,
+  "shared_writes": 0,
+  "finished_at": "2026-10-24T12:17:22.684410+00:00"
+}

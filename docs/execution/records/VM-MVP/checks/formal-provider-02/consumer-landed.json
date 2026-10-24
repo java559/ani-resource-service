@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-24T08:11:58.191803+00:00",
+  "result": "PASS_FORMAL_CONSUMER_PINS_LANDED",
+  "files": {
+    "session": {
+      "root": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway",
+      "head_before": "fb354938978250506cb22409e6ce8545d779ab4f",
+      "index_before": "5dbab9014fa5d4e77c370a60304c034c4034fa4e7d05d33e60047217ddfd3132",
+      "files": [
+        {
+          "path": "go.mod",
+          "before": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+          "after": "3984133143b4e19868776da1630bb51f0472bcde52310a9487efb4b8e8af26c8"
+        },
+        {
+          "path": "go.sum",
+          "before": "97ab4e4c936eef493115db5949c35c2ded58f6f10ade6f501691216d31d3270c",
+          "after": "c111fd5b9881d15fe56895e92fd72046b7b4cce7aee3be58122973c41e804062"
+        }
+      ],
+      "head_and_index_unchanged": true
+    },
+    "governance": {
+      "root": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+      "head_before": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+      "index_before": "a34ea61646ba7364e8a7bd3dbc93c45a0242941c2aee4f3944eff5c36fd71629",
+      "files": [
+        {
+          "path": "go.mod",
+          "before": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+          "after": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671"
+        },
+        {
+          "path": "go.sum",
+          "before": "b98b4e39429250d0e27e3fdf3077654d99caf98de4c39a002435b81fa3a8ecb5",
+          "after": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a"
+        }
+      ],
+      "head_and_index_unchanged": true
+    }
+  },
+  "artifact_sha256": "45f826fb4da8b93c443b652bf7b8577eca346d91bcaf834c7ca47863b544907c",
+  "services_or_api_mutated": false,
+  "new_local_replace": false,
+  "model_root_unused_indirect_removed_by_strict_tidy": true
+}

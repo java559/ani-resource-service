@@ -1,0 +1,124 @@
+{
+  "scope": "Six fixed PG regressions; original capacity failure, compile-budget timeout and one final approved continuation preserved",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "source_manifest_sha256": "952b4024015936b63d15df0e343d1c0df8d677c6e0c394212049e7266398124e",
+  "result": "FIVE_TOP_LEVEL_PASS_ONE_FIXTURE_FAILURE_RETAINED",
+  "main_cases": [
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract",
+      "Action": "pass",
+      "Elapsed": 0.04
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestQuotaGpuProductionEntComposition",
+      "Action": "pass",
+      "Elapsed": 0.07
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestQuotaResourceReleasedOriginalLedgerAndEventFence",
+      "Action": "pass",
+      "Elapsed": 0.07
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestQuotaPostgresInstanceCPUCommands",
+      "Action": "pass",
+      "Elapsed": 0.07
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Action": "fail",
+      "Elapsed": 0.04
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceCPUActorsRemainTrusted",
+      "Action": "pass",
+      "Elapsed": 0.05
+    }
+  ],
+  "failed_source": "app/admin/service/internal/service/inference_gpu_pg_test.go:156",
+  "failed_fixture_input": "inference_gpu_pg_test.go:128-130 still populates retired Cpu/Memory/Gpu instead of preset_id",
+  "no_skip": true,
+  "new_isolated_database_roles_retained": [
+    {
+      "database": "vm_v24data01_01a168ce",
+      "database_oid": "105518",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "owner_oid": "105516",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "runtime_oid": "105517"
+    },
+    {
+      "database": "vm_v24svc01_01a168ce",
+      "database_oid": "107090",
+      "owner": "vm_v24svc01_owner_01a168ce",
+      "owner_oid": "107088",
+      "runtime": "vm_v24svc01_runtime_01a168ce",
+      "runtime_oid": "107089"
+    }
+  ],
+  "files": [
+    {
+      "path": "pg-prepared.json",
+      "sha256": "6eb1012640d607b0ba406c84c0750c447db05012d461222ad0dcde37a71cde91"
+    },
+    {
+      "path": "run-pg.py",
+      "sha256": "2e009bb904624edc26532f484678c4ae9922a636c027dabe904bd001c7c3b161"
+    },
+    {
+      "path": "pg-executed.json",
+      "sha256": "a5e444ec68bb32988fa4a76f5956e89e7d94bbf3105d50f8acac6bdb3ce8acef"
+    },
+    {
+      "path": "pg-build-failure.json",
+      "sha256": "a5de40e5e78491c78720bc2052c6221df563a93e63ba7e803aa316dd2f8d9d8b"
+    },
+    {
+      "path": "disk-readonly.json",
+      "sha256": "1410450a340b50de8d2ce801bbfc179445a8f5e224cfa02c8fe53787b84befa2"
+    },
+    {
+      "path": "pg-attempt02-prepared.json",
+      "sha256": "4618e743daa187127c0e45d1bc4a2373e3e3b779c474ac2a9749f247e89b224a"
+    },
+    {
+      "path": "run-pg-attempt02.py",
+      "sha256": "3512f7ecc2136f8d86f8178e27672875e397717e990e8bd992b4084251b1f2cd"
+    },
+    {
+      "path": "pg-attempt02-executed.json",
+      "sha256": "0bf8262b1db740bb4b5fbafc3c89f180bdc56d95b8c4e11af28d92bbcd31fd24"
+    },
+    {
+      "path": "pg-attempt02-timeout.json",
+      "sha256": "a3745b667a65846cb99ae33c5fbd5d56bd3211a2d07579adc396fdad11e9a8fc"
+    },
+    {
+      "path": "pg-attempt03-prepared.json",
+      "sha256": "749e7122bc97a8bc4ea55aab67578dc2575d1bdd1c59324698709784bf804302"
+    },
+    {
+      "path": "run-pg-attempt03.py",
+      "sha256": "a8fc8742f74fb6dc887412acc444c792292442e3b53d4809bc9f2940e63e1b7c"
+    },
+    {
+      "path": "pg-attempt03-executed.json",
+      "sha256": "7ab08be39b9dc58d9843d8781f38e8a134683cf3ae39daee14d4f609c06fe64a"
+    },
+    {
+      "path": "pg-attempt03-named-result.json",
+      "sha256": "d9eaf14b34999dc8476af80475910196ce0713870e5f5af4dbed920baec4c2b7"
+    }
+  ],
+  "private_raw_or_dsn_values_copied": false,
+  "new_tests_or_measurements_for_archiving": false,
+  "automatic_retry_after_failure": false,
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0
+}

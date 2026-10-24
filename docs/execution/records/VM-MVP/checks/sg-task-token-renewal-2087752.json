@@ -1,0 +1,22 @@
+{
+  "window": "Root authorized a credential refresh before the long ISO acceptance window with active-session/lease0 and unchanged same-SA/two-exact-namespace/seven-RBAC scope; not an EROFS workaround",
+  "old_pid": 2087752,
+  "new_pid": 2150135,
+  "readyz_200": true,
+  "new_token_expires_at": "2026-10-23T22:51:17Z",
+  "active_sessions_before": 0,
+  "active_leases_before": 0,
+  "permission_checks": 22,
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "same_service_account": true,
+  "same_permissions": true,
+  "same_runtime_env": true,
+  "same_ticket_key": true,
+  "same_pki": true,
+  "normal_term_only": true,
+  "redis_db": 1,
+  "kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig",
+  "previous_kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig.previous-2087752",
+  "process_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/process.json",
+  "temporary_page_and_relay_changed": false
+}

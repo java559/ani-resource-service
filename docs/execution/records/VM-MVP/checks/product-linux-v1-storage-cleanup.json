@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-23T16:02:58.931416+00:00",
+  "scope": "read-only native storage observation for original product Linux v1; no Gov operation state inferred",
+  "original": {
+    "pvc_uid": "cd1142e6-c0a3-44b3-922e-f970ece09445",
+    "pvc_name": "vd-2688a35d-9a60-5be5-83ce-69f4b54d1494",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "pv_name": "pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f",
+    "pv_uid": "ff33603c-60bc-455c-b076-1c3e9c176277",
+    "reclaim": "Delete",
+    "volume_handle": "0001-0009-rook-ceph-0000000000000004-4fc4bce5-2205-46f4-9cdd-840e60690330",
+    "volume_attributes": {
+      "clusterID": "rook-ceph",
+      "pool": "ani-block-pool",
+      "imageName": "csi-vol-4fc4bce5-2205-46f4-9cdd-840e60690330",
+      "imageFeatures": "layering",
+      "journalPool": "ani-block-pool"
+    }
+  },
+  "current_pvc": null,
+  "current_pv": null,
+  "original_pvc_pv_uids_absent": true,
+  "reader": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "rbd_info": {
+    "result": "ABSENT",
+    "exit_code": 2,
+    "stderr": "rbd: error opening image csi-vol-4fc4bce5-2205-46f4-9cdd-840e60690330: (2) No such file or directory\ncommand terminated with exit code 2\n"
+  },
+  "matching_trash": [],
+  "result": "PASS"
+}

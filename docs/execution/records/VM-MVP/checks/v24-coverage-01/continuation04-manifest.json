@@ -1,0 +1,123 @@
+{
+  "scope": "approved same two isolated DBs, one inherited fixture correction, original service2 cases only; data4 reuse original03",
+  "result": "PASS_SIX_REAL_PG_REGRESSIONS_DATA03_SERVICE04",
+  "original_01_to_03_manifest_sha256": "4b975984ef732a4f51e7d2340a2cf5fdcb4979e661a1e7c8f9da447bf6f56c78",
+  "source": {
+    "snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/source-attempt04",
+    "files": 2452,
+    "original_manifest_sha256": "952b4024015936b63d15df0e343d1c0df8d677c6e0c394212049e7266398124e",
+    "manifest_sha256": "9450a29b7830f1042a90acd6b7aa88ee4760b21c6927d48fe2a15944ba25f6e1",
+    "overlay": {
+      "path": "app/admin/service/internal/service/inference_gpu_pg_test.go",
+      "input_file": "inference_gpu_pg_test04.go",
+      "before_sha256": "ad61d144273363c1fd16f89df530ae520be38ccde121a6c620c2127da0b5118a",
+      "sha256": "2e2b57d4b7461a2a3fbddd0a4b2b3f08cfa482d832a73a585d69e0fe4668c518",
+      "reviewed_diff_sha256": "fc21bf266bfc620e1b15aeb77d9c561c51c26ecb2cde771f63fa0c1c2894bb9e"
+    }
+  },
+  "service_cases": [
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Action": "pass",
+      "Elapsed": 0.07
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceCPUActorsRemainTrusted",
+      "Action": "pass",
+      "Elapsed": 0.04
+    }
+  ],
+  "data_pass_reused": {
+    "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/pg-attempt03-executed.json",
+    "sha256": "7ab08be39b9dc58d9843d8781f38e8a134683cf3ae39daee14d4f609c06fe64a",
+    "named_results": [
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract",
+        "Action": "pass",
+        "Elapsed": 0.04
+      },
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaGpuProductionEntComposition/false",
+        "Action": "pass",
+        "Elapsed": 0.04
+      },
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaGpuProductionEntComposition/true",
+        "Action": "pass",
+        "Elapsed": 0.04
+      },
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaGpuProductionEntComposition",
+        "Action": "pass",
+        "Elapsed": 0.07
+      },
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaResourceReleasedOriginalLedgerAndEventFence",
+        "Action": "pass",
+        "Elapsed": 0.07
+      },
+      {
+        "Package": "go-wind-admin/app/admin/service/internal/data",
+        "Test": "TestQuotaPostgresInstanceCPUCommands",
+        "Action": "pass",
+        "Elapsed": 0.07
+      }
+    ]
+  },
+  "top_level_cases_pass": 6,
+  "skipped": 0,
+  "fixture_only_change": true,
+  "normal_database_role_cleanup": [
+    {
+      "database": "vm_v24data01_01a168ce",
+      "database_oid": "105518",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "owner_oid": "105516",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "runtime_oid": "105517",
+      "normal_cleanup": "DATABASE_AND_ROLES_DROPPED_NO_FORCE_VERIFIED_ABSENT"
+    },
+    {
+      "database": "vm_v24svc01_01a168ce",
+      "database_oid": "107090",
+      "owner": "vm_v24svc01_owner_01a168ce",
+      "owner_oid": "107088",
+      "runtime": "vm_v24svc01_runtime_01a168ce",
+      "runtime_oid": "107089",
+      "normal_cleanup": "DATABASE_AND_ROLES_DROPPED_NO_FORCE_VERIFIED_ABSENT"
+    }
+  ],
+  "private_raw_or_dsn_values_copied": false,
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "commit_push": false,
+  "files": [
+    {
+      "path": "pg-attempt04-prepared.json",
+      "sha256": "ee188d5eccec9e8b3070e3cb9c01f37b820c04c37879962b8a0c1319d54f69d1"
+    },
+    {
+      "path": "run-pg-attempt04.py",
+      "sha256": "24028ec76e029011764dcf7a5a18f14508bee9d4686b5bb3758a24273dcbd505"
+    },
+    {
+      "path": "pg-attempt04-executed.json",
+      "sha256": "d9e9c0c15f2939f7fb14ddaea53bb494ce4225a73ef0cdb88609b4cd3f973bc5"
+    },
+    {
+      "path": "inference_gpu_pg_test04.go",
+      "sha256": "2e2b57d4b7461a2a3fbddd0a4b2b3f08cfa482d832a73a585d69e0fe4668c518"
+    },
+    {
+      "path": "inference-preset-fixture.diff",
+      "sha256": "fc21bf266bfc620e1b15aeb77d9c561c51c26ecb2cde771f63fa0c1c2894bb9e"
+    }
+  ]
+}

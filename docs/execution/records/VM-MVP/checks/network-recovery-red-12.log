@@ -1,0 +1,13 @@
+--- FAIL: TestVMBlockedClosedConsumerRequiresAcceptedSnapshotAndFreshAbsence (0.00s)
+    --- FAIL: TestVMBlockedClosedConsumerRequiresAcceptedSnapshotAndFreshAbsence/valid (0.00s)
+        attachment_vm_test.go:139: fresh independently empty accepted VM closure stayed fenced {0x17ce91ca600 {2026-10-24 00:13:37.463145303 +0800 CST m=+0.001112251 absence 1} false releasing ATTACHMENT_PROTOCOL_VIOLATION   33333333-3333-4333-8333-333333333333 [91 93] true true false 10s}
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network	0.005s
+--- FAIL: TestVMPendingLauncherWaitsForCNIWithoutProtocolConflict (0.00s)
+    kc_attachment_vm_test.go:84: legitimate launcher before CNI feedback became a protocol conflict false false network provider: conflict
+--- FAIL: TestVMBlockedAttachmentPGClosesWithFrozenHistoricalNADAndFreshAbsence (0.71s)
+    attachment_vm_recovery_integration_test.go:118: accepted closed VM with unchanged historical NAD and fresh absence remained fenced {<nil> [] vm_managed 2 3f6c18e5e52b68ac693d5f28c39adca156646465ffef8a75131c9f71942d1786 0  {kubevirt.io/v1 VirtualMachine tenant-6ac77742-5798-4056-bfaa-7cb278729b8e vm vm-uid} 0x3bdcfac95680 att_236166e9563d411589c8f4987ad3e1f9 6ac77742-5798-4056-bfaa-7cb278729b8e vpc_92930ba77c774bb4a4a32fe23e174650 subnet_1209b0dc114e4454b980c8310971adde inst_93f8fb2f-d1f8-472f-bdc4-ba4037eb5dfb primary faee0d1b-9c82-45d5-b1de-f09aade07b62 1 test-cluster tenant-6ac77742-5798-4056-bfaa-7cb278729b8e 2090e3e1-1112-4eb2-af0f-3a1719aa4446:1681d1e2-8c76-4060-9473-32c421aa537b releasing ATTACHMENT_PROTOCOL_VIOLATION 7 <nil>    3707bab1-1fa3-4509-a25f-8768be1a65e4 2026-10-24 00:13:47.199216 +0800 CST 2026-10-24 00:13:47.300711 +0800 CST 2026-10-24 00:13:47.296484 +0800 CST <nil>}
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.720s
+FAIL
+

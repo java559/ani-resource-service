@@ -1,0 +1,182 @@
+{
+  "state": "OBSERVED_ORIGINAL_CPU_CREATE",
+  "step": "observe",
+  "started_at": "2026-10-24T10:45:59.885178+00:00",
+  "sql_writes": 0,
+  "protected_vm_mutations": 0,
+  "operation": {
+    "id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+    "instanceId": "64413d16-05df-4623-a545-0e2f226c6006",
+    "action": "delete",
+    "intentVersion": "2",
+    "state": "completed",
+    "reason": ""
+  },
+  "instance": {
+    "id": "64413d16-05df-4623-a545-0e2f226c6006",
+    "name": "vm-mvp-v24-cpu-01a168ce",
+    "version": "2",
+    "desiredState": "deleted",
+    "observedState": "deleted",
+    "reason": "",
+    "imageId": "img_e1a98d0e9eb5495dac77cb86483dc053",
+    "imageDigest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "createOperationId": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+    "lastOperationId": "586c42f4-f52e-4121-a993-71c2cf23e614",
+    "computeCleaned": true,
+    "workspaceCleaned": true,
+    "quotaReturned": true,
+    "instance_kind": "container",
+    "compute_type": "cpu",
+    "cpu": "1500m",
+    "memory": "2048Mi",
+    "createdAt": "2026-10-24T10:37:25.533268Z",
+    "workspaceSize": "1Gi",
+    "preset_name": "VM MVP 1500m 2048MiB",
+    "preset_code": "vm-mvp-01a168ce",
+    "gpu_summary": null,
+    "scheduling": {
+      "pod_placement": "NONE"
+    },
+    "networkState": "released",
+    "networkReason": "",
+    "networkCleaned": true,
+    "volumeReferencesReleased": true
+  },
+  "ledger": [
+    {
+      "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resource_id": "64413d16-05df-4623-a545-0e2f226c6006",
+      "create_operation_id": null,
+      "owner_service": "ani-resource-service",
+      "action": "/instance.v1.InstanceService/AcceptCreate",
+      "idempotency_key": "b4307cd0-f3ad-4932-83e0-bbc8fdce1476",
+      "request_hash": "de20cb9fd596a8f0560b28a616a8758e9d39bbc2866ab6fac3942d74479dc635",
+      "instance_contract_version": 2,
+      "canonical_schema": "instance-cpu-v1",
+      "dispatch_state": "ACKED",
+      "attempt_count": 1,
+      "charge_count": 0
+    }
+  ],
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/586c42f4-f52e-4121-a993-71c2cf23e614",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    }
+  ],
+  "finished_at": "2026-10-24T10:46:20.857414+00:00"
+}

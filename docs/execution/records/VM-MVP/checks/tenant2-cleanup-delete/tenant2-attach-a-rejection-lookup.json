@@ -1,0 +1,107 @@
+{
+  "at": "2026-10-24T08:04:49.566495+00:00",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+  "original_key_sha256": "9ceb2c60325a6c1be67b6e03ec780f0cc302ae596944d772d60d70165a8ceee8",
+  "business_mutations": 0,
+  "method": "read-only exact tenant/VM/key queries; no envelope/canonical payload output",
+  "resource_operations": [],
+  "gov_durable_operations": [],
+  "before_receipt_at": "2026-10-24T07:59:51.581718+00:00",
+  "after_receipt_at": "2026-10-24T07:59:52.359367+00:00",
+  "pre_and_post_fsync_receipt_interval_seconds": 0.777649,
+  "interval_is_exact_http_timing": false,
+  "current": {
+    "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "version": "3",
+    "observedState": "Stopped",
+    "lastOperationId": "e9d446a9-363f-4617-b1c1-d6099d30b1f1",
+    "closing": false
+  },
+  "physical": [
+    {
+      "disk": {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae"
+      },
+      "dv_phase": "Succeeded",
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+      },
+      "pvc_phase": "Bound",
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+        "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+      },
+      "csi_handle": "0001-0009-rook-ceph-0000000000000004-016ddb5e-363a-4557-9b14-858beafe6fe9"
+    },
+    {
+      "disk": {
+        "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "role": "data",
+        "name": "vm-mvp-cleanup-data-a-01a168ce",
+        "sizeGb": "2",
+        "requestedBytes": "2000000000",
+        "observedCapacityBytes": "0",
+        "volumeName": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+        "serial": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "attached": false,
+        "preparationState": "PendingPopulation",
+        "reason": ""
+      },
+      "dv": {
+        "kind": "DataVolume",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "uid": "abca4050-12c4-4ab2-9f6f-a9fc7fb74a2d"
+      },
+      "dv_phase": "Succeeded",
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "uid": "b2346dad-6e6d-48dc-a449-3788dd8ab024"
+      },
+      "pvc_phase": "Bound",
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-3ec357f0-441c-4470-960b-073d483f06f1",
+        "uid": "2c6e241f-9f16-40e3-9050-85f94e96a17e"
+      },
+      "csi_handle": "0001-0009-rook-ceph-0000000000000004-c2fcf9ba-a31e-4ecc-b9ee-3138693259fb"
+    }
+  ],
+  "readiness_owner_vs_native": "new disk remains owner PendingPopulation/0 observed capacity while exact native DV Succeeded/PVC Bound; not a native readiness failure proof",
+  "resource_log": {
+    "status": "NOT_MEASURED",
+    "error_type": "FileNotFoundError"
+  },
+  "source_landing": {
+    "gov": "vm_service.go:352-385 direct Lookup->canOperate->Change, no Gov durable Attach admission",
+    "resource": "service.go:374 ValidateDiskAttachment (native Observe) then service.go:377 second native Observe; repo.Command only later",
+    "native": "data/vm/disks.go:20 Observe; stopped/noVMI path27 returns nil after successful read",
+    "state_projection": "create-disk succeeds at declaration by disks.go:99; PendingPopulation owner projection alone does not imply native disk is unready"
+  },
+  "result": "NOT_ACCEPTED_EXACT_KEY"
+}

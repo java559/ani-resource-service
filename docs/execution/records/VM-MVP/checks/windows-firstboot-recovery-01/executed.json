@@ -1,0 +1,221 @@
+{
+  "at": "2026-10-24T11:21:49.025538+00:00",
+  "result": "PRODUCT_FIRSTBOOT_RECOVERY_COMPLETE_GUEST_NOT_MEASURED",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "version": "9",
+  "state": "Running",
+  "driver_source_sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+  "approved_plan_sha256": "e5a4032bcfa054df177802a51e91945a1587bf0b2ecf9731c9800ad749d3e154",
+  "commands": [
+    {
+      "intent": "firstboot-recovery-01-stop",
+      "action": "stop",
+      "expected_version": "5",
+      "operation_id": "59357938-9788-4570-9c8f-a9bf29d0d9e9",
+      "state": "succeeded",
+      "version": "6",
+      "send_attempts": 1,
+      "body_sha256": "792af793c2fac5b3ee8115fe4a32199c62b9a0b9c7e8f00e0ca5e4fa1e22bfac",
+      "accepted": {
+        "id": "59357938-9788-4570-9c8f-a9bf29d0d9e9",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "stop",
+        "intentVersion": "6",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "idempotency_key": "1f63e81c-f081-469f-b963-70830fe31746"
+    },
+    {
+      "intent": "firstboot-recovery-01-eject-install",
+      "action": "eject-install",
+      "expected_version": "6",
+      "operation_id": "2cc000ae-64e9-47f8-88bf-d341215a714e",
+      "state": "succeeded",
+      "version": "7",
+      "send_attempts": 1,
+      "body_sha256": "a7d23ce61a7d89d51b5b30adbc0707d345d8b5bd8b0142d3bb6e8954933a4367",
+      "accepted": {
+        "id": "2cc000ae-64e9-47f8-88bf-d341215a714e",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "eject-media",
+        "intentVersion": "7",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "idempotency_key": "2865aec7-8bd8-4aa3-9d34-8aaa9eb83ffb"
+    },
+    {
+      "intent": "firstboot-recovery-01-boot-system",
+      "action": "boot-system",
+      "expected_version": "7",
+      "operation_id": "885ab3b3-9e4c-4fae-8d15-1bfe53b18ac8",
+      "state": "succeeded",
+      "version": "8",
+      "send_attempts": 1,
+      "body_sha256": "d0c0964649f0be34eae58211e3d3598803d16d1a7550f69e945bb963d244ff0e",
+      "accepted": {
+        "id": "885ab3b3-9e4c-4fae-8d15-1bfe53b18ac8",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "set-boot",
+        "intentVersion": "8",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "idempotency_key": "6989b214-c888-4e6d-92e9-33ea12388e43"
+    },
+    {
+      "intent": "firstboot-recovery-01-start",
+      "action": "start",
+      "expected_version": "8",
+      "operation_id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+      "state": "succeeded",
+      "version": "9",
+      "send_attempts": 1,
+      "body_sha256": "33d1cde2dc4c8ae347db213d67e4f02d808919dd6a6a182abe92d382c67566c2",
+      "accepted": {
+        "id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "start",
+        "intentVersion": "9",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "idempotency_key": "22c33a39-a6d9-4597-bd57-8d5058c06e15"
+    }
+  ],
+  "old_vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+  "new_vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+    "phase": "Running",
+    "node": "ani-01",
+    "volume_status": [
+      {
+        "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "75Gi"
+          },
+          "claimName": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "filesystemOverhead": "0",
+          "requests": {
+            "storage": "80G"
+          },
+          "volumeMode": "Block"
+        },
+        "target": "sda"
+      },
+      {
+        "name": "media-driver",
+        "persistentVolumeClaimInfo": {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "capacity": {
+            "storage": "2Gi"
+          },
+          "claimName": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+          "filesystemOverhead": "0.06",
+          "requests": {
+            "storage": "2120723989"
+          },
+          "volumeMode": "Filesystem"
+        },
+        "target": "sdb"
+      }
+    ]
+  },
+  "old_launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+    "uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1"
+  },
+  "new_launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-p7spx",
+    "uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+  },
+  "root_storage": {
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+      "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+    },
+    "phase": "Bound",
+    "mode": "Block",
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+      "uid": "3589a026-a717-4dc2-91bb-6d3439ce644f"
+    },
+    "pv": {
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+      "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+    },
+    "csi": {
+      "controllerExpandSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "controllerPublishSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "nodeStageSecretRef": {
+        "name": "rook-csi-rbd-node",
+        "namespace": "rook-ceph"
+      },
+      "volumeAttributes": {
+        "clusterID": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "imageName": "csi-vol-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97",
+        "journalPool": "ani-block-pool",
+        "pool": "ani-block-pool",
+        "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+      },
+      "volumeHandle": "0001-0009-rook-ceph-0000000000000004-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97"
+    },
+    "reclaim_policy": "Delete"
+  },
+  "checks": {
+    "old_vmi_replaced": true,
+    "old_launcher_gone": true,
+    "same_vm_root_media_data_uids_and_csi": true,
+    "other_two_vms_template_vmi_root_storage_unchanged": true,
+    "only_expected_template_eject_and_boot_changes": true,
+    "persistent_and_runtime_root_boot_order_one": true,
+    "install_not_mounted": true,
+    "driver_retained": true,
+    "both_data_disks_unattached": true,
+    "all_four_original_ops_succeeded_send1": true
+  },
+  "guest_commands": 0,
+  "guest_input": 0,
+  "new_credentials": 0,
+  "new_eula": 0,
+  "shared_changes": 0,
+  "limits": [
+    "Normal product Stop does not prove graceful Guest shutdown.",
+    "Installation-complete handoff means base install reached actual firstboot product-key page only; OOBE/account/login remain unverified.",
+    "Root must continue actual browser observation."
+  ]
+}

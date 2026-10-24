@@ -95,7 +95,7 @@ NET-05A 的观察、时效、调度与增量验收统一见[持续观察规格](
 - [制包来源](references/vm-mvp-sources.md)、[设计复核历史](execution/records/VM-MVP/design-review-20261023.md)、[制包校验历史](execution/records/VM-MVP/package-validation-20261023.md)：固定输入与历史证据，不作当前环境或实施状态。
 - [首卡 Goal](plans/vm-mvp-goals/VM-00.md)、[维护窗口 Goal](plans/vm-mvp-goals/VM-00R.md)；其余16卡文件在同目录。单卡范围按完整Goal连续执行授权组合。
 - 空白模板：[环境输入](plans/vm-mvp-templates/environment-inputs.yaml)、[runtime变更准备单](plans/vm-mvp-templates/runtime-change-plan.md)、[任务报告](plans/vm-mvp-templates/task-report.md)。填写后的输入、变更单、报告统一放入docs/execution/records/VM-MVP/。
-- [VM候选部署交接](execution/records/VM-MVP/vm-candidate-deployment-handoff.md)：实际候选来源、依赖顺序、迁移/密钥和部署/回退边界；正式实现refs与镜像仍UNPUBLISHED，不复制验收矩阵。
+- [VM候选部署交接](execution/records/VM-MVP/vm-candidate-deployment-handoff.md)：实际候选来源、依赖顺序、迁移/密钥和部署/回退边界；Resource/Gov/SG实现任务ref及三个Harbor镜像已发布并核对digest，实际引用和未验/未部署边界以交接回执为准，不复制验收矩阵。
 - 当前结果仅见[唯一执行状态](execution/status.md#vm-mvp)。
 
 ### 文档接入与唯一状态

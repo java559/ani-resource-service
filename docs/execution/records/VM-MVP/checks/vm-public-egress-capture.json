@@ -1,0 +1,213 @@
+{
+  "result": "NOT_MEASURED_NO_SYNCHRONIZED_GUEST_TRIGGER",
+  "observed_at": "2026-10-24T03:00:56.543508+00:00",
+  "node": {
+    "namespace": "",
+    "name": "ani-02",
+    "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+    "resourceVersion": "61121880",
+    "deletionTimestamp": ""
+  },
+  "pod": {
+    "namespace": "kcn-system",
+    "name": "kcn-ovs-ds-k58xm",
+    "uid": "dd914acc-44cd-42b3-b2bd-0f7dc16e648b",
+    "resourceVersion": "50044105",
+    "deletionTimestamp": ""
+  },
+  "existing_exec_uid": 65534,
+  "interface_before": [
+    {
+      "ifindex": 3,
+      "ifname": "ens35",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "mq",
+      "master": "ovs-system",
+      "operstate": "UP",
+      "linkmode": "DEFAULT",
+      "group": "default",
+      "txqlen": 1000,
+      "link_type": "ether",
+      "address": "00:0c:29:1a:5a:19",
+      "broadcast": "ff:ff:ff:ff:ff:ff",
+      "altnames": [
+        "enp2s3"
+      ]
+    }
+  ],
+  "interface_unchanged": true,
+  "command": [
+    "timeout",
+    "25s",
+    "tcpdump",
+    "-p",
+    "-nn",
+    "-l",
+    "-c",
+    "20",
+    "-i",
+    "ens35",
+    "tcp and host 172.16.102.193 and host 1.1.1.1 and port 443"
+  ],
+  "capture_ready": false,
+  "exit_code": 124,
+  "elapsed_seconds": 26.661,
+  "packet_headers": [
+    ""
+  ],
+  "diagnostic_stderr": [
+    "tcpdump: verbose output suppressed, use -v[v]... for full protocol decode",
+    "0 packets captured",
+    "0 packets received by filter",
+    "0 packets dropped by kernel",
+    "command terminated with exit code 124"
+  ],
+  "payload_or_pcap_saved": false,
+  "promiscuous_requested": false,
+  "shared_default_eip": {
+    "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+    "address": "172.16.102.192",
+    "bound_node": "ani-01"
+  },
+  "task_eip": {
+    "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+    "address": "172.16.102.193",
+    "bound_node": "ani-02"
+  },
+  "shared_before": [
+    {
+      "ref": {
+        "namespace": "",
+        "name": "vlan-1027ace223cb4339a32121709654d1d4",
+        "uid": "d9ff64c7-882f-4241-962d-d4c3e5819100",
+        "resourceVersion": "54348687",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "7955286dbf8f7ea2859498d20744978dfa4c4975ca0ebcdbb67f541a552c04cd"
+    },
+    {
+      "ref": {
+        "namespace": "",
+        "name": "egw-d6d865fccf9946bb90a8a171975be566",
+        "uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243",
+        "resourceVersion": "54348690",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "7f81e057468fd668fedc75edd92eb044df57967b562e0a9b56beae4c45417cb7"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "pool-bb811753b25a4fe598dff9cedf5afd1d",
+        "uid": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc",
+        "resourceVersion": "61106139",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "3696cbf6b9c802b5790561057a04302de62559ff5c1ce5d674b73febfe108be9"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+        "resourceVersion": "54374155",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "db9691c84e8cc589431ffae6167654b0e13462d1224dd763b71c753cd96579ab"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+        "resourceVersion": "54374157",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "3d123e7e6299406ac77c81641cacc1e2e096ae20338eb21f6050bf9eb7f13b7a"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-cluster",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "resourceVersion": "54374158",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "bbaeaed58ce38731d9c6781f204b50435bc605abecfce03e2e7dc32d83661bc0"
+    }
+  ],
+  "shared_after": [
+    {
+      "ref": {
+        "namespace": "",
+        "name": "vlan-1027ace223cb4339a32121709654d1d4",
+        "uid": "d9ff64c7-882f-4241-962d-d4c3e5819100",
+        "resourceVersion": "54348687",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "7955286dbf8f7ea2859498d20744978dfa4c4975ca0ebcdbb67f541a552c04cd"
+    },
+    {
+      "ref": {
+        "namespace": "",
+        "name": "egw-d6d865fccf9946bb90a8a171975be566",
+        "uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243",
+        "resourceVersion": "54348690",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "7f81e057468fd668fedc75edd92eb044df57967b562e0a9b56beae4c45417cb7"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "pool-bb811753b25a4fe598dff9cedf5afd1d",
+        "uid": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc",
+        "resourceVersion": "61106139",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "3696cbf6b9c802b5790561057a04302de62559ff5c1ce5d674b73febfe108be9"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+        "resourceVersion": "54374155",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "db9691c84e8cc589431ffae6167654b0e13462d1224dd763b71c753cd96579ab"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+        "resourceVersion": "54374157",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "3d123e7e6299406ac77c81641cacc1e2e096ae20338eb21f6050bf9eb7f13b7a"
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-cluster",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "resourceVersion": "54374158",
+        "deletionTimestamp": ""
+      },
+      "spec_sha256": "bbaeaed58ce38731d9c6781f204b50435bc605abecfce03e2e7dc32d83661bc0"
+    }
+  ],
+  "shared_unchanged": true,
+  "mutations": 0,
+  "original_classification_sha256": "1be66bbb67b8f4f13ae5757ab61f1019c5d8af0735f1faa3ecbad250d258cc00",
+  "guest_trigger_count": 0,
+  "readiness_failure": "Harness consumed only the first stderr line (verbose hint); no ready acknowledgement was emitted. Zero captured packets cannot locate the guest SYN.",
+  "tools_and_existing_permissions_available": true
+}

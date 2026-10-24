@@ -1,0 +1,18 @@
+{
+  "source_sha256": "011caee08dd15fb34d56d401ce0e70ec5b2b1f9ccc10b49b561bfb50c907e9e4",
+  "py_compile": "PASS",
+  "fixture": {
+    "result": "PASS",
+    "pure_guards": 8,
+    "helper_imports": 0,
+    "api_calls": 0,
+    "guest_commands": 0
+  },
+  "prepare_exit_code": 0,
+  "prepare_stdout": "{\"phase\": \"PREPARED_NO_LIVE_CALLS\", \"plan_sha256\": \"fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f\", \"plan\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-prepared.json\", \"api_calls\": 0, \"business_mutations\": 0}\n",
+  "prepare_stderr": "",
+  "elapsed_seconds": 0.238,
+  "live_calls": 0,
+  "business_mutations": 0,
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f"
+}

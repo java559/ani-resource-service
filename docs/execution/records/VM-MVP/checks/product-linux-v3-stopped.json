@@ -1,0 +1,187 @@
+{
+  "at": "2026-10-23T17:28:26.823208+00:00",
+  "scope": "read-only identity freeze; no serial or lifecycle operation",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "namespace": {
+    "kind": "Namespace",
+    "namespace": "",
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "native": [
+    {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "owners": [],
+      "phase": null,
+      "node": null,
+      "firmware_uuid": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "labels": {
+        "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "network.ani.io/attachment-id": "att_6781cbb15303438f86108d349f3ddfae",
+        "network.ani.io/generation": "1",
+        "network.ani.io/instance-id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "network.ani.io/submission-id": "7d5460cf-744d-5507-ae4d-c0bb312686aa",
+        "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "vm.ani.io/create-digest": "GVAOFRNGMD4R43ZMDC3QL2SWHHRSWQAEPTXUDJLJEAGXLFHXNWUQ",
+        "vm.ani.io/vm-id": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12",
+      "owners": [
+        {
+          "apiVersion": "cdi.kubevirt.io/v1beta1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "DataVolume",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9"
+        }
+      ],
+      "phase": "Bound",
+      "node": null,
+      "mode": "Block",
+      "requested": "12G",
+      "capacity": {
+        "storage": "12Gi"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+        "uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+      },
+      "reclaim": "Delete",
+      "csi": {
+        "controllerExpandSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "controllerPublishSecretRef": {
+          "name": "rook-csi-rbd-provisioner",
+          "namespace": "rook-ceph"
+        },
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "nodeStageSecretRef": {
+          "name": "rook-csi-rbd-node",
+          "namespace": "rook-ceph"
+        },
+        "volumeAttributes": {
+          "clusterID": "rook-ceph",
+          "imageFeatures": "layering",
+          "imageFormat": "2",
+          "imageName": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+          "journalPool": "ani-block-pool",
+          "pool": "ani-block-pool",
+          "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+        },
+        "volumeHandle": "0001-0009-rook-ceph-0000000000000004-e83a62f0-4113-4320-aa79-1a1e36fb955b"
+      }
+    },
+    {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9",
+      "owners": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+        }
+      ],
+      "phase": "Succeeded",
+      "node": null
+    }
+  ],
+  "network": {
+    "consumer": {
+      "snapshot_hash": "18b90dfd33da2c5a5b3f73317437b7d23d3e1db3fc6b712681eb58acdfac30b2",
+      "root_controller": {
+        "UID": "7bca4671-89dd-4925-bad9-17e77401729d",
+        "Kind": "VirtualMachine",
+        "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "APIVersion": "kubevirt.io/v1"
+      },
+      "confirmed_pod_uid": "1f8a3c06-d793-4773-8413-90d9eafb98ce",
+      "snapshot_revision": 6,
+      "confirmed_snapshot_revision": 4
+    },
+    "attachment": {
+      "state": "reserved",
+      "reason": "",
+      "pod_uid": "",
+      "version": 166,
+      "pod_name": "",
+      "observed_at": "2026-10-23T17:28:24.619547+00:00",
+      "attachment_id": "att_6781cbb15303438f86108d349f3ddfae",
+      "finalization_id": null,
+      "protocol_blocked": false,
+      "provider_relations": [
+        {
+          "UID": "1f8a3c06-d793-4773-8413-90d9eafb98ce",
+          "Kind": "Pod",
+          "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-nxs58",
+          "OwnerUID": "06af5288-9d55-4ae6-96bf-9cba7e8d9d93",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "UID": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+          "Kind": "VNic",
+          "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+          "OwnerUID": "1f8a3c06-d793-4773-8413-90d9eafb98ce",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "UID": "be937f41-f70d-49fc-a708-6864ddc23e36",
+          "Kind": "VNicIP",
+          "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+          "Address": "10.83.1.5",
+          "OwnerUID": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "UID": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "Kind": "VirtualMachine",
+          "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "OwnerUID": "",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "UID": "06af5288-9d55-4ae6-96bf-9cba7e8d9d93",
+          "Kind": "VirtualMachineInstance",
+          "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        }
+      ],
+      "processed_generation": 1,
+      "requested_generation": 1
+    }
+  },
+  "checks": {
+    "same_vm_uid": true,
+    "same_root_pvc_uid": true,
+    "same_root_pv_uid": true,
+    "root_bound": true,
+    "old_vmi_gone": true,
+    "old_launcher_gone": true,
+    "no_current_vmi_launcher": true,
+    "same_attachment_reserved": true,
+    "no_active_pod": true,
+    "old_current_address_revoked": true,
+    "fresh_snapshot_unblocked": true
+  },
+  "result": "PASS",
+  "baseline_reference": "product-linux-v3-identity.json"
+}

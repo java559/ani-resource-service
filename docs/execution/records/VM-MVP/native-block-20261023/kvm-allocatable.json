@@ -1,0 +1,53 @@
+[
+  {
+    "node": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+    "capacity": {
+      "devices.kubevirt.io/kvm": "1k",
+      "devices.kubevirt.io/sev": "1k",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "allocatable": {
+      "devices.kubevirt.io/kvm": "1k",
+      "devices.kubevirt.io/sev": "0",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "kvm_schedulable_label": "true"
+  },
+  {
+    "node": "ani-02",
+    "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+    "capacity": {
+      "devices.kubevirt.io/kvm": "1k",
+      "devices.kubevirt.io/sev": "1k",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "allocatable": {
+      "devices.kubevirt.io/kvm": "1k",
+      "devices.kubevirt.io/sev": "0",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "kvm_schedulable_label": "true"
+  },
+  {
+    "node": "ani-03",
+    "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+    "capacity": {
+      "devices.kubevirt.io/kvm": "1k",
+      "devices.kubevirt.io/sev": "1k",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "allocatable": {
+      "devices.kubevirt.io/kvm": "0",
+      "devices.kubevirt.io/sev": "0",
+      "devices.kubevirt.io/tun": "1k",
+      "devices.kubevirt.io/vhost-net": "1k"
+    },
+    "kvm_schedulable_label": "true"
+  }
+]

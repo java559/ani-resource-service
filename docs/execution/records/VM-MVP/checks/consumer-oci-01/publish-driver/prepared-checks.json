@@ -1,0 +1,55 @@
+{
+  "result": "PASS",
+  "host": "fedora/172.16.101.31",
+  "driver_sha256": "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+  "plan_sha256": "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+  "elapsed_seconds": 0.834,
+  "registry_requests": 0,
+  "registry_writes": 0,
+  "registry_logins": 0,
+  "container_load_pull_build_run": 0,
+  "commands": [
+    {
+      "stage": "syntax",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/syntax.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "stage": "help",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/help.log",
+      "log_sha256": "e31e6ffbc28cd94bae350ca6961a1452229182af32c6b7c1b9b6eddc889d08f1"
+    },
+    {
+      "stage": "pure-guards",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/pure-guards.log",
+      "log_sha256": "1bd36de81b47ccc19203ba8591624de684b9b7c8b2e8fb905a78c04b197e6e96"
+    },
+    {
+      "stage": "resource-local-inputs",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/resource-local-inputs-attempt02.log",
+      "log_sha256": "99a8f5b0a618439ae0d156b1b48682b7b29d468f98fa1a566872bc65870c983a"
+    },
+    {
+      "stage": "session-local-inputs",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/session-local-inputs-attempt02.log",
+      "log_sha256": "668d30a26822ba051fb8d9bb098829c92655b0838c9ffef3688a0c4c91c783d2"
+    },
+    {
+      "stage": "governance-local-inputs",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/governance-local-inputs-attempt02.log",
+      "log_sha256": "3b9e437d625acf7cc3ef03e3460a4333a3d229d1ffe5456f9ab750b5964871e2"
+    }
+  ],
+  "retained_first_wrapper_result": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/prepared-checks-attempt01.json",
+    "sha256": "3c709d3771b78de76ec69bf5b53c403c6642b9597ecb1876841f2bc263bbbb9a",
+    "classification": "NESTED_HARNESS_LOCK_BUSY_NOT_SOURCE_OR_REGISTRY_FAILURE",
+    "fix": "local-check uses its own nonblocking heavy lock; no outer lock"
+  }
+}

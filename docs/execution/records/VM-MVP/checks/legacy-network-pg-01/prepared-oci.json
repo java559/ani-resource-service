@@ -1,0 +1,44 @@
+{
+  "scope": "ROOT_APPROVED_THREE_EXISTING_LEGACY_NETWORK_REAL_PG_ONLY",
+  "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "source_tree": "e51622e689476c524ddd29776d1b217738822a21",
+  "source_subset": "Root-approved official OCI build-source538 + complete original8589 top-level tests; exact combined per-file manifest; NOT full git tree",
+  "archive_sha256": "46b15a05e915427225c69f535b0f4933f2d110f5b8662ef20295c7f545b2d53e",
+  "source_manifest_sha256": "5c6c4077a87f69a3cad92e664386d1d740fc9770bce188763d713168a658d232",
+  "runner_sha256": "40bf3c1229d524681398385815cd6f702e03ae60e99049a793cfafa58ff63e3b",
+  "overlay": {
+    "path": "tests/testenv/postgres.go",
+    "original_sha256": "77b50da6238945e1d91a2b92fb695cc17e7858480608023aa8b6e7f515b9918e",
+    "input_sha256": "f08f3d6ad1c92ed0336f2a8fec8eb1302ecc6966a9ad5a3ec1d4b546bec22369",
+    "delta": "record exact random3DB/6roles OIDs; identity+owner+0connections guards; normalDROP only/absence; no business/test assertion/migration changes"
+  },
+  "tests": [
+    "TestAttachmentPermanentIdentityTenantScopeAndParentDeletion",
+    "TestAttachmentConfirmRecoveryReleaseAndResidualUIDs",
+    "TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite"
+  ],
+  "admin_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/pg/admin.dsn",
+  "container_reference": "private/pg/container-id + evidence/pg-fixture.json; exacttasklabel",
+  "process_budget_seconds": 240,
+  "test_timeout_seconds": 180,
+  "GOWORK": "off",
+  "GOMAXPROCS": 2,
+  "GOMEMLIMIT": "1536MiB",
+  "GOPROXY": "off",
+  "GOTMPDIR": "task-owned go-tmp-oci mode0700",
+  "product_databases": false,
+  "zero_skip_required": true,
+  "automatic_retry": false,
+  "force_or_terminate": false,
+  "output": "legacy-network-pg-01/executed-oci.json; private/legacy-network-pg-oci/tests.jsonl",
+  "previous_attempt_reference": "legacy-network-pg-01/executed-03.json",
+  "delta": "reuse proven official OCI build source plus entire formal tests directory; zeroDB go-list imports/embed input check before sole test invocation; same approved helper overlay/cache/budget/no network",
+  "producer_oci_archive": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/source.tar.gz",
+    "sha256": "137566539e6f536382f54563782f21de61c2a726be3d73aae88a95b051d27fc5",
+    "manifest_sha256": "5e5ab8ee29ab88213b8c8ce9aa318290d1a8dc24f825745ec9770ee48baed98f",
+    "commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+    "tree": "e51622e689476c524ddd29776d1b217738822a21"
+  },
+  "official_whole_tests_archive_sha256": "f48fa2a8fa26ac035b2517aa5c70108f25da779eabc6cbe130286e1feff06959"
+}

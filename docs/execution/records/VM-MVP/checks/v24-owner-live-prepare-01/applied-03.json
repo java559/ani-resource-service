@@ -1,0 +1,402 @@
+{
+  "state": "CONFIG_APPLIED_DIRECTORY_BLOCKED",
+  "plan_sha256": "baecd36fb43b4ef0c7c6c27fa92d70c50dbd81c7914e4d80afdbfb3a8980b4a0",
+  "script_sha256": "4a0a7608f2adcffc222c42f829a79db5432af2dc53295fdf4a73e28711417c8d",
+  "resource_restarts": 0,
+  "sg_restarts": 0,
+  "vm_mutations": 0,
+  "shared_writes": 0,
+  "application_mutations": 0,
+  "rollback": {},
+  "new_private_cleanup_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01",
+  "phase": "post-start-identity-and-protection",
+  "cpu_checkpoint": {
+    "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/cpu-cleanup-checkpoint.json",
+    "sha256": "c85ee0b7ddcddc8b7e8220fd27430523f7b9582558923466e3ddbba9fc55e887"
+  },
+  "sg_guard": {
+    "pid": 3369384,
+    "start_ticks": 70563663,
+    "active": 0,
+    "leases": 0,
+    "unchanged": true
+  },
+  "pending_before": {
+    "resource": {
+      "database": "vm_resource_candidate_01a168ce",
+      "pending_operation_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 0,
+        "vm.operations": 0
+      },
+      "assigned_cidrs": [
+        {
+          "kind": "vpc",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "cidr": "10.83.0.0/16",
+          "state": "available"
+        },
+        {
+          "kind": "subnet",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "cidr": "10.83.1.0/24",
+          "state": "available"
+        }
+      ],
+      "original_legacy_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 4,
+        "vm.operations": 0
+      },
+      "instance_exact_terminal_observation": {
+        "pending": 0,
+        "states": [
+          {
+            "state": "superseded",
+            "count": 1
+          },
+          {
+            "state": "completed",
+            "count": 3
+          }
+        ],
+        "known_operations": [
+          {
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "delete",
+            "state": "completed"
+          },
+          {
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "create",
+            "state": "superseded"
+          },
+          {
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "create",
+            "state": "completed"
+          },
+          {
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "delete",
+            "state": "completed"
+          }
+        ]
+      }
+    },
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    }
+  },
+  "protected_before": [
+    {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "47",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+      "launcher_uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646"
+    },
+    {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": "7",
+      "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+      "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+      "launcher_uid": "3af15e13-84bb-4ad6-87cc-accad5b9854b"
+    },
+    {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": "9",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+      "launcher_uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+    }
+  ],
+  "endpoint_selection": [
+    {
+      "environment_name": "ANI_ACCELERATOR_ADDR",
+      "service_namespace": "ani-system",
+      "service_name": "ani-accelerator-service",
+      "service_uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+      "service_port": 19090,
+      "selected_address": "10.96.58.69:19090",
+      "selection": "EXACT_GUARDED_SAME_SERVICE_CLUSTERIP",
+      "route_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-route-preflight-02/observed.json",
+      "route_receipt_sha256": "9a9dde6196653db06f3f1ff474db055bf4516fe317ab1c4461a615cf5c2ee9bf",
+      "tcp_probe_repeated": false,
+      "server_name_unchanged": true
+    },
+    {
+      "environment_name": "ANI_MODEL_ADDR",
+      "service_namespace": "ani-system",
+      "service_name": "ani-model-grpc",
+      "service_uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+      "service_port": 19090,
+      "selected_address": "10.96.44.130:19090",
+      "selection": "EXACT_GUARDED_SAME_SERVICE_CLUSTERIP",
+      "route_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-route-preflight-02/observed.json",
+      "route_receipt_sha256": "9a9dde6196653db06f3f1ff474db055bf4516fe317ab1c4461a615cf5c2ee9bf",
+      "tcp_probe_repeated": false,
+      "server_name_unchanged": true
+    },
+    {
+      "environment_name": "ANI_INFERENCE_ADDR",
+      "service_namespace": "ani-system",
+      "service_name": "ani-inference-grpc",
+      "service_uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+      "service_port": 19090,
+      "selected_address": "10.96.166.234:19090",
+      "selection": "EXACT_GUARDED_SAME_SERVICE_CLUSTERIP",
+      "route_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-route-preflight-02/observed.json",
+      "route_receipt_sha256": "9a9dde6196653db06f3f1ff474db055bf4516fe317ab1c4461a615cf5c2ee9bf",
+      "tcp_probe_repeated": false,
+      "server_name_unchanged": true
+    }
+  ],
+  "original_process": {
+    "pid": 3305121,
+    "start_ticks": 70294688,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "environment_delta_references": {
+    "ANI_ACCELERATOR_ADDR": "10.96.58.69:19090",
+    "ANI_ACCELERATOR_SERVER_NAME": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+    "ANI_ACCELERATOR_CA": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/ca.crt",
+    "ANI_ACCELERATOR_CERT": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.crt",
+    "ANI_ACCELERATOR_KEY": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.key",
+    "ANI_ACCELERATOR_TIMEOUT": "3s",
+    "ANI_MODEL_ADDR": "10.96.44.130:19090",
+    "ANI_MODEL_SERVER_NAME": "ani-model.ani.internal",
+    "ANI_MODEL_CA": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/ca.crt",
+    "ANI_MODEL_CERT": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.crt",
+    "ANI_MODEL_KEY": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.key",
+    "ANI_MODEL_TIMEOUT": "30s",
+    "ANI_INFERENCE_ADDR": "10.96.166.234:19090",
+    "ANI_INFERENCE_SERVER_NAME": "ani-inference.ani.internal",
+    "ANI_INFERENCE_CA_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/ca.crt",
+    "ANI_INFERENCE_CERT_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.crt",
+    "ANI_INFERENCE_KEY_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.key"
+  },
+  "client_certificates": [
+    {
+      "source_namespace": "ani-system",
+      "source_name": "governance-accelerator-node-agent-bc-client",
+      "source_uid": "db12e807-332e-4f92-942f-9cafc7338152",
+      "source_resource_version": "49687535",
+      "private_directory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc",
+      "dns_san": [
+        "ani-governance"
+      ],
+      "not_before": "Oct 21 06:20:13 2026 GMT",
+      "not_after": "Nov 20 06:20:13 2026 GMT",
+      "key_pair_loaded": true
+    },
+    {
+      "source_namespace": "ani-system",
+      "source_name": "governance-model-inference-tls",
+      "source_uid": "58a4f34d-ffa5-4d40-bfc1-9500acc852c4",
+      "source_resource_version": "26101903",
+      "private_directory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference",
+      "dns_san": [
+        "ani-governance"
+      ],
+      "not_before": "Oct 14 14:59:37 2026 GMT",
+      "not_after": "Jan 12 14:59:37 2027 GMT",
+      "key_pair_loaded": true
+    }
+  ],
+  "normal_term_old_gov": true,
+  "new_process": {
+    "pid": 3424470,
+    "start_ticks": 70793927,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "pending_after": {
+    "resource": {
+      "database": "vm_resource_candidate_01a168ce",
+      "pending_operation_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 0,
+        "vm.operations": 0
+      },
+      "assigned_cidrs": [
+        {
+          "kind": "vpc",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "cidr": "10.83.0.0/16",
+          "state": "available"
+        },
+        {
+          "kind": "subnet",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "cidr": "10.83.1.0/24",
+          "state": "available"
+        }
+      ],
+      "original_legacy_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 4,
+        "vm.operations": 0
+      },
+      "instance_exact_terminal_observation": {
+        "pending": 0,
+        "states": [
+          {
+            "state": "superseded",
+            "count": 1
+          },
+          {
+            "state": "completed",
+            "count": 3
+          }
+        ],
+        "known_operations": [
+          {
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "delete",
+            "state": "completed"
+          },
+          {
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "create",
+            "state": "superseded"
+          },
+          {
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "create",
+            "state": "completed"
+          },
+          {
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "delete",
+            "state": "completed"
+          }
+        ]
+      }
+    },
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    }
+  },
+  "protected_after": [
+    {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "47",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+      "launcher_uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646"
+    },
+    {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": "7",
+      "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+      "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+      "launcher_uid": "3af15e13-84bb-4ad6-87cc-accad5b9854b"
+    },
+    {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": "9",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+      "launcher_uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+    }
+  ],
+  "protected_unchanged": true,
+  "original_config_and_other_environment_unchanged": true,
+  "normal_directory_gets": {
+    "requests": [
+      {
+        "route": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&compute_type=GPU&page=1&pageSize=100",
+        "http": 400,
+        "reason": "INVALID_INSTANCE_REQUEST"
+      },
+      {
+        "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "http": 403,
+        "reason": "FORBIDDEN"
+      },
+      {
+        "route": "/api/v1/me/quota-accounts",
+        "http": 403,
+        "reason": "FORBIDDEN"
+      },
+      {
+        "route": "/api/v1/compute-presets?usage=INFERENCE&page=1&pageSize=100",
+        "http": 200
+      },
+      {
+        "route": "/api/v1/models",
+        "http": 403,
+        "reason": "FORBIDDEN"
+      }
+    ],
+    "gpu_presets": [],
+    "gpu_profiles": [],
+    "inference_presets": [
+      {
+        "id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "name": "VM MVP ISO 2vCPU 4096MiB",
+        "code": "vm-mvp-iso-01a168ce",
+        "compute_type": "cpu",
+        "enabled": true,
+        "cpu_millis": "2000",
+        "memory_mib": "4096",
+        "gpu": null
+      },
+      {
+        "id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "name": "VM MVP 1500m 2048MiB",
+        "code": "vm-mvp-01a168ce",
+        "compute_type": "cpu",
+        "enabled": true,
+        "cpu_millis": "1500",
+        "memory_mib": "2048",
+        "gpu": null
+      }
+    ],
+    "models": [],
+    "own_versions": [],
+    "ready_model_version": null,
+    "logical_cluster": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "inference_input_status": "READY_VERSION_NOT_PROVEN_NO_CREATE",
+    "gpu_input_status": "SAME527_GPU_PRESET_PROFILE_NOT_PROVEN_NO_CREATE"
+  },
+  "finished_at": "2026-10-24T11:51:25.783926+00:00"
+}

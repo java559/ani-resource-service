@@ -1,0 +1,108 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "vm": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+    "kind": "VirtualMachine"
+  },
+  "vmi": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "uid": "f926c761-5700-41c9-90e5-a204e16bc606",
+    "kind": "VirtualMachineInstance"
+  },
+  "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+  "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+  "mode": "write",
+  "marker": "VM_MVP_V3_DATA3_A_01a168ce",
+  "pvc": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+    "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+    "kind": "PersistentVolumeClaim"
+  },
+  "pv": {
+    "namespace": "",
+    "name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+    "uid": "7d05469e-ea85-46ab-b534-c94408f34663",
+    "kind": "PersistentVolume"
+  },
+  "method": "NATIVE_SERIAL",
+  "product_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-linux-disk-v3-attach-data3.json",
+  "product_receipt_sha256": "f871f062704acc3babec8602f6b6a30f9ac3e4c0b69a7fd643546da68c44cfdf",
+  "at": "2026-10-23T17:48:35.149246+00:00",
+  "result": "PASS",
+  "device": "/dev/sda",
+  "size_bytes": 3221225472,
+  "boot_id": "e2ba84b6-c4c5-446d-915a-2beee6a38e80",
+  "flushed": true,
+  "offline_or_unmounted": true,
+  "guest_prepared_confirmation": false,
+  "supporting_evidence": {
+    "vm": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "kind": "VirtualMachine"
+    },
+    "vmi": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "uid": "f926c761-5700-41c9-90e5-a204e16bc606",
+      "kind": "VirtualMachineInstance"
+    },
+    "pvc": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+      "kind": "PersistentVolumeClaim"
+    },
+    "pv": {
+      "namespace": "",
+      "name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+      "uid": "7d05469e-ea85-46ab-b534-c94408f34663",
+      "kind": "PersistentVolume"
+    },
+    "native_volume": {
+      "dataVolume": {
+        "hotpluggable": true,
+        "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+      },
+      "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+    },
+    "native_volume_status": {
+      "hotplugVolume": {
+        "attachPodName": "hp-volume-f6745",
+        "attachPodUID": "b104f384-30f9-43bc-a2e8-4dd18121d8e7"
+      },
+      "message": "Successfully attach hotplugged volume disk-d296c9f62e765756bb4cdef2d0f8f2f9 to VM",
+      "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+      "persistentVolumeClaimInfo": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "3Gi"
+        },
+        "claimName": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "filesystemOverhead": "0",
+        "requests": {
+          "storage": "3G"
+        },
+        "volumeMode": "Block"
+      },
+      "phase": "Ready",
+      "reason": "VolumeReady",
+      "target": "sda"
+    },
+    "native_device": {
+      "disk": {
+        "bus": "scsi"
+      },
+      "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+      "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+    },
+    "transcript": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792777715149274616.txt"
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "status": "PASS",
+  "stages": [
+    {
+      "name": "res-package",
+      "command": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "-t",
+        "172.16.101.10:5000/ani/network-release-res:20261023",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/res-image"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "res-push",
+      "command": [
+        "skopeo",
+        "copy",
+        "--dest-tls-verify=true",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-auth.private.json",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-certs",
+        "--digestfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/res.digest",
+        "docker-daemon:172.16.101.10:5000/ani/network-release-res:20261023",
+        "docker://172.16.101.10:30003/icn-01a15337-release/network-release-res:20261023"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gov-package",
+      "command": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "-t",
+        "172.16.101.10:5000/ani/network-release-gov:20261023",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/gov-image"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gov-push",
+      "command": [
+        "skopeo",
+        "copy",
+        "--dest-tls-verify=true",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-auth.private.json",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-certs",
+        "--digestfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/gov.digest",
+        "docker-daemon:172.16.101.10:5000/ani/network-release-gov:20261023",
+        "docker://172.16.101.10:30003/icn-01a15337-release/network-release-gov:20261023"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gov-admin-package",
+      "command": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "-t",
+        "172.16.101.10:5000/ani/network-release-gov-admin:20261023",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/gov-admin-image"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gov-admin-push",
+      "command": [
+        "skopeo",
+        "copy",
+        "--dest-tls-verify=true",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-auth.private.json",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-certs",
+        "--digestfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/gov-admin.digest",
+        "docker-daemon:172.16.101.10:5000/ani/network-release-gov-admin:20261023",
+        "docker://172.16.101.10:30003/icn-01a15337-release/network-release-gov-admin:20261023"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "atlas-package",
+      "command": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "-t",
+        "172.16.101.10:5000/ani/network-release-atlas:20261023",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/atlas-image"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "atlas-push",
+      "command": [
+        "skopeo",
+        "copy",
+        "--dest-tls-verify=true",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-auth.private.json",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-certs",
+        "--digestfile",
+        "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/atlas.digest",
+        "docker-daemon:172.16.101.10:5000/ani/network-release-atlas:20261023",
+        "docker://172.16.101.10:30003/icn-01a15337-release/network-release-atlas:20261023"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "images": {
+    "res": {
+      "image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+      "revision": "63e138174831ba7cf32452e6216143a147dadc82",
+      "binary_sha256": "c2390a50bf3b7070d5a450f0dd055a8527e824dff4803e5e34db68bcd4a0ad09"
+    },
+    "gov": {
+      "image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+      "revision": "a1dcdd5+md0715fbb-network-release-20261023",
+      "binary_sha256": "d7bf193f8f9a56cde77d70031174ff03983095ddceb90c91361c7b188996217c"
+    },
+    "gov-admin": {
+      "image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov-admin@sha256:c5834ef669038f8be48dbf79bdd904fab594419d55d6770a95302248a7a73311",
+      "revision": "a1dcdd5+md0715fbb-network-release-20261023",
+      "binary_sha256": "d6f1a5f36bb6631e2b5b66f73d9262ba84093a5a01681c0b46cc540c22be832e"
+    },
+    "atlas": {
+      "image": "172.16.101.10:30003/icn-01a15337-release/network-release-atlas@sha256:568987639f4d995d01de72fb2b982c2179cadbe2d67e8558155fcee7498ea849",
+      "binary_mode": "0555"
+    }
+  },
+  "started": 1792749509.9803379,
+  "finished": 1792749711.5870183
+}

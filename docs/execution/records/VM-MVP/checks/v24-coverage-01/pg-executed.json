@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-24T08:55:16.773256+00:00",
+  "plan_sha256": "6eb1012640d607b0ba406c84c0750c447db05012d461222ad0dcde37a71cde91",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "databases": [
+    {
+      "database": "vm_v24data01_01a168ce",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "dsn_references": {
+        "vm_v24data01_owner_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_owner_01a168ce.dsn",
+        "vm_v24data01_runtime_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_runtime_01a168ce.dsn"
+      },
+      "runtime_guards": {
+        "database": "vm_v24data01_01a168ce",
+        "user": "vm_v24data01_runtime_01a168ce",
+        "superuser": false,
+        "createdb": false,
+        "createrole": false,
+        "bypassrls": false,
+        "inherit": false,
+        "owner_membership": false,
+        "schema_create": false,
+        "temp": false,
+        "dml": true
+      },
+      "database_oid": "105518",
+      "owner_oid": "105516",
+      "runtime_oid": "105517"
+    }
+  ],
+  "tests": [
+    {
+      "group": "data",
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-tags",
+        "quota_pg",
+        "-count=1",
+        "-timeout=180s",
+        "./app/admin/service/internal/data",
+        "-run",
+        "^(TestQuotaPostgresInstanceCPUCommands|TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract|TestQuotaGpuProductionEntComposition|TestQuotaResourceReleasedOriginalLedgerAndEventFence)$"
+      ],
+      "exit_code": 1,
+      "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/data-tests.jsonl",
+      "named_results": []
+    }
+  ],
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "new_services_or_containers": 0,
+  "result": "INCOMPLETE_RETAIN_EXCLUSIVE_FIXTURE",
+  "error_type": "AssertionError",
+  "error": "private logs/fixture retained; no candidate database or service changed",
+  "seconds": 195.279
+}

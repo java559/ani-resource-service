@@ -1,0 +1,219 @@
+{
+  "scope": "LIVE_POST_OWNER_DISPATCH_CLOSING",
+  "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+  "version": 2,
+  "closing_observed": true,
+  "checked_at": "2026-10-23T16:18:15Z",
+  "new_intents": [
+    {
+      "action": "start",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/start",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "stop",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/stop",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "restart",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/restart",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "force-stop",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/force-stop",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "create-disk",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/disks",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "attach-disk",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/disks/2688a35d-9a60-5be5-83ce-69f4b54d1494/attach",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "detach-disk",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/disks/2688a35d-9a60-5be5-83ce-69f4b54d1494/detach",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "delete-disk",
+      "method": "DELETE",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/disks/2688a35d-9a60-5be5-83ce-69f4b54d1494",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "set-media",
+      "method": "PUT",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/media/INSTALL",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "eject-media",
+      "method": "DELETE",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/media/INSTALL",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "set-boot",
+      "method": "PUT",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/boot",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "create-snapshot",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/snapshots",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "delete-snapshot",
+      "method": "DELETE",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/snapshots/fe2ff4ea-0986-4e97-9f33-a5deb43a82e4",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "restore-snapshot",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/snapshots/fe2ff4ea-0986-4e97-9f33-a5deb43a82e4/restore",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    },
+    {
+      "action": "console",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/console-sessions",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT",
+      "gov_fence_denied": true
+    }
+  ],
+  "original_create_replay": {
+    "status": 202,
+    "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+    "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "replayed": true
+  },
+  "create_replay_input_source": "original Gov durable normalized intent plus unchanged original private credential",
+  "original_delete_replay": {
+    "status": 202,
+    "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+    "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "replayed": true,
+    "original_expected_version": 1
+  },
+  "original_queries": [
+    {
+      "status": 200,
+      "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+      "action": "/vm.v1.VMService/AcceptCreate",
+      "state": "running"
+    },
+    {
+      "status": 200,
+      "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+      "action": "/vm.v1.VMService/AcceptDelete",
+      "state": "running"
+    }
+  ],
+  "operation_identities_before": {
+    "gov": [
+      {
+        "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+        "action": "/vm.v1.VMService/AcceptDelete"
+      },
+      {
+        "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+        "action": "/vm.v1.VMService/AcceptCreate"
+      }
+    ],
+    "resource": [
+      {
+        "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+        "action": "/vm.v1.VMService/AcceptDelete"
+      },
+      {
+        "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+        "action": "/vm.v1.VMService/AcceptCreate"
+      }
+    ]
+  },
+  "operation_identities_after": {
+    "gov": [
+      {
+        "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+        "action": "/vm.v1.VMService/AcceptDelete"
+      },
+      {
+        "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+        "action": "/vm.v1.VMService/AcceptCreate"
+      }
+    ],
+    "resource": [
+      {
+        "operation_id": "710f62ff-fe05-4da2-b044-8c769ff07e71",
+        "action": "/vm.v1.VMService/AcceptDelete"
+      },
+      {
+        "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+        "action": "/vm.v1.VMService/AcceptCreate"
+      }
+    ]
+  },
+  "no_new_gov_or_owner_operations": true,
+  "sg_keys_before_count": 0,
+  "sg_keys_after_count": 0,
+  "sg_new_keys_count": 0,
+  "no_new_sg_store_keys": true,
+  "pre_dispatch_evidence": "PG_ONLY: gov-test-04b.log and gov-generate-04b.log",
+  "private_original_keys_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-delete-gate-valid.json",
+  "exact_known_original_operations_only": true,
+  "sg_vm_session_count_before": 0,
+  "sg_vm_session_count_after": 0,
+  "synthetic_reference_note": "Well-formed absent snapshot/media references and original deleted disk ID; durable Gov fence must deny before target existence lookup.",
+  "pass": true,
+  "driver_assertion_correction": {
+    "reason": "owner action uses exact contract /vm.v1.VMService/AcceptCreate and AcceptDelete, not short create/delete strings",
+    "original_result_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-delete-gate-live-original-driver-result.json",
+    "original_result_sha256": "b025ddb2d5839583202a22946e6acbafbb4de0dcc43b5186e5a1efddbfe88d6b",
+    "http_requests_repeated_for_correction": false
+  }
+}

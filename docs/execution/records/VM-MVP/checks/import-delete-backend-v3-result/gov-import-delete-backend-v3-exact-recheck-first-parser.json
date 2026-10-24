@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-24T05:31:51.653218+00:00",
+  "vm_id": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+  "original_target_pvc_uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+  "source_temp_pvc_uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+  "attribution": {
+    "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "pool": "ani-block-pool",
+    "image": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "directory": "csi.volumes.default",
+    "key": "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reverse_object": "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "reverse_request_verified": true,
+    "claim": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+    }
+  },
+  "source_receipt_sha256": "3d5a54a694cebf3de5cdcc9e81ad414c0c4b1cee2393f1d344c1ca20688a1245",
+  "pre_delete_actual_image_id_observed": false,
+  "no_writes": true,
+  "reads": [
+    {
+      "argv": [
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "--format=json"
+      ],
+      "status": "ABSENT",
+      "exit_code": 2,
+      "output": "rbd: error opening image csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc: (2) No such file or directory\n"
+    },
+    {
+      "argv": [
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp",
+        "--format=json"
+      ],
+      "status": "ABSENT",
+      "exit_code": 2,
+      "output": "rbd: error opening image csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp: (2) No such file or directory\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+        "-"
+      ],
+      "status": "ABSENT",
+      "exit_code": 1,
+      "output": "No such key: ani-block-pool/csi.volumes.default/csi.volume.pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+        "-"
+      ],
+      "status": "ABSENT",
+      "exit_code": 1,
+      "output": "No such key: ani-block-pool/csi.volumes.default/csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.volname",
+        "-"
+      ],
+      "status": "NOT_MEASURED",
+      "exit_code": 1,
+      "output": "error getting omap value ani-block-pool/csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc/csi.volname: (2) No such file or directory\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.imagename",
+        "-"
+      ],
+      "status": "NOT_MEASURED",
+      "exit_code": 1,
+      "output": "error getting omap value ani-block-pool/csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc/csi.imagename: (2) No such file or directory\n"
+    }
+  ],
+  "transport_exit": 0,
+  "transport_stderr": "",
+  "elapsed_seconds": 6.146,
+  "result": "NOT_MEASURED"
+}

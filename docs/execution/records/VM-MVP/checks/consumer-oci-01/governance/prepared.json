@@ -1,0 +1,124 @@
+{
+  "base": "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+  "build_environment": {
+    "CGO_ENABLED": "0",
+    "GOARCH": "amd64",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": "2",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "SOURCE_DATE_EPOCH": "1792829794"
+  },
+  "business_api_calls": 0,
+  "check_container_name": "vm-mvp-governance-oci-check-01a168ce",
+  "context_files": [
+    "Dockerfile",
+    ".dockerignore",
+    "gov-server",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "deployments": 0,
+  "gate_reuse": {
+    "bundle": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/formal-provider-02/consumer-validated.tar",
+    "bundle_sha256": "45f826fb4da8b93c443b652bf7b8577eca346d91bcaf834c7ca47863b544907c",
+    "receipt_names": [
+      "pin-governance.json",
+      "test-governance-03.json",
+      "build-governance-03.json"
+    ],
+    "source_owner": "vm_gov supplied exact implementation commit with formal consumer pins"
+  },
+  "image_pushes": 0,
+  "maximum_segment_seconds": 300,
+  "packaging_hashes": {
+    ".dockerignore": "dc56c6daa631889d0410ac9990afe623a7412bab3d7d9c65f363d7de6bfdde93",
+    "Dockerfile": "173ed6b98c19d6c17a60eae8b7bbb94aa748c7e38b3b5441d7882e4d090ce65c"
+  },
+  "result_boundary": "Local OCI only; SG missing-config negative check / Gov help are not readiness or business tests.",
+  "runner": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/build-once.py",
+    "sha256": "38fcb0b6987f5953be1661bf85e4865f48745cc82097a9764cbac0fe03e648b4"
+  },
+  "service": "governance",
+  "source": {
+    "archive": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source.tar.gz",
+    "archive_bytes": 3387197,
+    "archive_sha256": "bba9834610be2b376480f0ee75d9fb2e87e96bf2d3a8e4acaa5a636c56630ec8",
+    "commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+    "file_count": 1487,
+    "manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source-manifest.json",
+    "manifest_sha256": "90c7d09ea7e15ea6c0f1d379095924dcc58702a28541b74bd38a3f7361e0e6f4",
+    "parent": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "repository": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+    "runtime_embed_inputs": [
+      {
+        "go_source": "app/admin/service/cmd/server/assets/assets.go",
+        "pattern": "app/admin/service/cmd/server/assets/openapi.yaml",
+        "selected_inputs": [
+          "app/admin/service/cmd/server/assets/openapi.yaml"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf"
+        ]
+      },
+      {
+        "go_source": "sql/bootstrap/bootstrap.go",
+        "pattern": "sql/bootstrap/001_initial.sql",
+        "selected_inputs": [
+          "sql/bootstrap/001_initial.sql"
+        ]
+      }
+    ],
+    "source_date_epoch": 1792829794,
+    "tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+  },
+  "state": "PREPARED_EXACT_FINAL_SOURCE_WAIT_ROOT_BUILD_APPROVAL",
+  "tag": "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+  "third_party_notice_sha256": "034427cc6d4a30a6a3ce980340b50ada31570de7b1ff54eae1e83620401a1028",
+  "version": "vm-mvp-a64e0ab8ed6b-01a168ce"
+}

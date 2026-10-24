@@ -1,0 +1,41 @@
+{
+  "observed_at": "2026-10-23T22:01:08.282002+00:00",
+  "logical_vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "vmi_uid": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+  "launcher_uid": "fd02d255-a058-411b-a84f-93fdf3ee37d1",
+  "sole_launcher": true,
+  "node": "ani-01",
+  "vmi_input_projection": {
+    "inputs": null,
+    "autoattachInputDevice_present": false,
+    "autoattachInputDevice": null
+  },
+  "vm_template_input_projection": {
+    "inputs": null,
+    "autoattachInputDevice_present": false,
+    "autoattachInputDevice": null
+  },
+  "libvirt_input_devices": [
+    {
+      "type": "mouse",
+      "bus": "ps2"
+    },
+    {
+      "type": "keyboard",
+      "bus": "ps2"
+    }
+  ],
+  "libvirt_usb_controllers": [
+    {
+      "type": "usb",
+      "index": "0",
+      "model": "none"
+    }
+  ],
+  "libvirt_graphics_types": [
+    "vnc"
+  ],
+  "full_xml_retained_or_printed": false,
+  "runtime_modified": false
+}

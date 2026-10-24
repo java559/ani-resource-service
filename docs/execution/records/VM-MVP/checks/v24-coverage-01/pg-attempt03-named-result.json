@@ -1,0 +1,65 @@
+{
+  "result": "DATA_FOUR_PASS_SERVICE_NAMED_FAIL",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "original_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/pg-attempt03-executed.json",
+  "failed_tests": [
+    "TestInferenceGPUAdmissionAndPublicReplay"
+  ],
+  "failure_projection": [
+    {
+      "Action": "run",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "=== RUN   TestInferenceGPUAdmissionAndPublicReplay\n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "    inference_gpu_pg_test.go:156: \n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "        \tError Trace:\t/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/source/app/admin/service/internal/service/inference_gpu_pg_test.go:156\n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "        \tError:      \tReceived unexpected error:\n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "        \t            \trpc error: code = InvalidArgument desc = cpu, memory and gpu input are retired; use preset_id\n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "        \tTest:       \tTestInferenceGPUAdmissionAndPublicReplay\n"
+    },
+    {
+      "Action": "output",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Output": "--- FAIL: TestInferenceGPUAdmissionAndPublicReplay (0.04s)\n"
+    },
+    {
+      "Action": "fail",
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+      "Elapsed": 0.04
+    }
+  ],
+  "no_automatic_retry": true,
+  "fixture_retained": true
+}

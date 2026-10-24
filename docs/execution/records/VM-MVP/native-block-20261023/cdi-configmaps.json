@@ -1,0 +1,78 @@
+[
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "cdi-apiserver-signer-bundle",
+      "uid": "858264f2-8eef-4acf-9b36-b05836f573a1"
+    },
+    "keys": [
+      "ca-bundle.crt"
+    ],
+    "spec": null
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "cdi-config",
+      "uid": "d796a916-2b90-4212-ad00-49748e10907a"
+    },
+    "keys": [],
+    "spec": null
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "cdi-uploadproxy-signer-bundle",
+      "uid": "a0c9f2ed-b60c-4d1c-9d08-6587231a1ef9"
+    },
+    "keys": [
+      "ca-bundle.crt"
+    ],
+    "spec": null
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "cdi-uploadserver-client-signer-bundle",
+      "uid": "692b6dde-8958-4187-91f3-d6bb389dc26f"
+    },
+    "keys": [
+      "ca-bundle.crt"
+    ],
+    "spec": null
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "cdi-uploadserver-signer-bundle",
+      "uid": "3162811d-02d9-4f6f-aada-f8858c6c6d6e"
+    },
+    "keys": [
+      "ca-bundle.crt"
+    ],
+    "spec": null
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "cdi",
+      "name": "kube-root-ca.crt",
+      "uid": "ef493bcb-45ee-49cb-b1ea-f24f37eb612a"
+    },
+    "keys": [
+      "ca.crt"
+    ],
+    "spec": null
+  }
+]

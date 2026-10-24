@@ -1,0 +1,53 @@
+{
+  "observed_at": "2026-10-24T02:47:57.958283+00:00",
+  "resource_candidate_database": {
+    "database": "vm_resource_candidate_01a168ce",
+    "platform": [],
+    "public_eips": [],
+    "public_pools": [],
+    "public_snats": [],
+    "default_egresses": [],
+    "virtual_switches": [],
+    "default_public_pools": []
+  },
+  "platform_principal": {
+    "user_id": 1,
+    "tenant_id": 0,
+    "username": "vm_platform_01a168ce"
+  },
+  "platform_gets": {
+    "/api/v1/admin/networks/virtual-switches": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    },
+    "/api/v1/admin/networks/vlan-networks": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    },
+    "/api/v1/admin/networks/egress-gateways": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    },
+    "/api/v1/admin/networks/public-address-pools": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    },
+    "/api/v1/admin/networks/capabilities": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    }
+  },
+  "mutations": 0,
+  "login_refresh_only": 1,
+  "public_permissions": [],
+  "tenant_gets": {
+    "/api/v1/networks/eips": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    },
+    "/api/v1/networks/vpcs/vpc_e413becb1f4a46468f058e32f33a6305/snat": {
+      "status": 403,
+      "reason": "FORBIDDEN"
+    }
+  }
+}

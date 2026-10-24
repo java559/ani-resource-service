@@ -1,0 +1,167 @@
+{
+  "pod": {
+    "name": "virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf",
+    "uid": "df1cd6f6-3d29-4483-b4dc-168229bfc890",
+    "annotations": {
+      "descheduler.alpha.kubernetes.io/request-evict-only": "",
+      "kubectl.kubernetes.io/default-container": "compute",
+      "kubevirt.io/domain": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "kubevirt.io/memory-overhead-bytes": "293601280",
+      "kubevirt.io/migrationTransportUnix": "true",
+      "kubevirt.io/pci-topology-version": "v3",
+      "kubevirt.io/vm-generation": "1",
+      "networking.kubercloud.com/subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+      "post.hook.backup.velero.io/command": "[\"/usr/bin/virt-freezer\", \"--unfreeze\", \"--name\", \"vm-db174e19-7269-42ff-9c22-57190c66535b\", \"--namespace\", \"tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c\"]",
+      "post.hook.backup.velero.io/container": "compute",
+      "pre.hook.backup.velero.io/command": "[\"/usr/bin/virt-freezer\", \"--freeze\", \"--name\", \"vm-db174e19-7269-42ff-9c22-57190c66535b\", \"--namespace\", \"tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c\"]",
+      "pre.hook.backup.velero.io/container": "compute",
+      "pre.hook.backup.velero.io/timeout": "60s",
+      "v1.multus-cni.io/default-network": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main"
+    },
+    "labels": {
+      "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "kubevirt.io": "virt-launcher",
+      "kubevirt.io/created-by": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+      "network.ani.io/attachment-id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "network.ani.io/generation": "1",
+      "network.ani.io/instance-id": "db174e19-7269-42ff-9c22-57190c66535b",
+      "network.ani.io/submission-id": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+      "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "vm.ani.io/create-digest": "UXJSVLYER6NI4OFB6OVWTOPHSORXN43UX6S7KCFWFPA72C6PLQJA",
+      "vm.ani.io/vm-id": "db174e19-7269-42ff-9c22-57190c66535b",
+      "vm.kubevirt.io/name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "vmi.kubevirt.io/id": "vm-db174e19-7269-42ff-9c22-57190c66535b"
+    },
+    "node": "ani-02"
+  },
+  "events": [
+    {
+      "at": null,
+      "reason": "Scheduled",
+      "message": "Successfully assigned tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf to ani-02",
+      "count": null
+    },
+    {
+      "at": "2026-10-23T15:49:48Z",
+      "reason": "SuccessfulAttachVolume",
+      "message": "AttachVolume.Attach succeeded for volume \"pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f\" ",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:49:52Z",
+      "reason": "SuccessfulMountVolume",
+      "message": "MapVolume.MapPodDevice succeeded for volume \"pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f\" globalMapPath \"/var/lib/kubelet/plugins/kubernetes.io/csi/volumeDevices/pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f/dev\"",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:49:52Z",
+      "reason": "SuccessfulMountVolume",
+      "message": "MapVolume.MapPodDevice succeeded for volume \"pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f\" volumeMapPath \"/var/lib/kubelet/pods/df1cd6f6-3d29-4483-b4dc-168229bfc890/volumeDevices/kubernetes.io~csi\"",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:50:12Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"5f23ce3cc4e5e2be7074241baa0caaea3877b969b06e5ee61bd1df526dc937c9\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"5f23ce3cc4e5e2be7074241baa0caaea3877b969b06e5ee61bd1df526dc937c9\" Netns:\"/var/run/netns/cni-e37c22af-01ac-58f4-a9c2-746aedfdeb43\" IfName:\"eth0\" Args:\"K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1;K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=5f23ce3cc4e5e2be7074241baa0caaea3877b969b06e5ee61bd1df526dc937c9\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:50:35Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"c8dfd85e8e2be1ada5b15d61825d1cda269f27793a90bd8c114c182c99e7d7c9\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"c8dfd85e8e2be1ada5b15d61825d1cda269f27793a90bd8c114c182c99e7d7c9\" Netns:\"/var/run/netns/cni-6488a38c-93e4-c311-1586-e79193d8e7f7\" IfName:\"eth0\" Args:\"K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=c8dfd85e8e2be1ada5b15d61825d1cda269f27793a90bd8c114c182c99e7d7c9;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:50:56Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"a94c3631e7eaa0c43ab63dbd4225c7cb9b71c5cc814d6b6f3bd6bcdc58941103\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"a94c3631e7eaa0c43ab63dbd4225c7cb9b71c5cc814d6b6f3bd6bcdc58941103\" Netns:\"/var/run/netns/cni-2c56c314-262a-3dd8-65a9-d80e8f565de5\" IfName:\"eth0\" Args:\"K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=a94c3631e7eaa0c43ab63dbd4225c7cb9b71c5cc814d6b6f3bd6bcdc58941103;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:51:17Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"8c8a79df17254a62477d754fb6ee20ddcaaefb3477118a7b579c80263d910349\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"8c8a79df17254a62477d754fb6ee20ddcaaefb3477118a7b579c80263d910349\" Netns:\"/var/run/netns/cni-cd0fea54-9825-5d4c-f60f-c36942b4f112\" IfName:\"eth0\" Args:\"K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=8c8a79df17254a62477d754fb6ee20ddcaaefb3477118a7b579c80263d910349;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1;K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:51:39Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"f80298ee1fca130284968efb34bd8f7abfee7811996f8a55b4a0dda40807c41e\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"f80298ee1fca130284968efb34bd8f7abfee7811996f8a55b4a0dda40807c41e\" Netns:\"/var/run/netns/cni-3ed461e5-2ec2-78ea-dda7-8f76be0a41d6\" IfName:\"eth0\" Args:\"K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=f80298ee1fca130284968efb34bd8f7abfee7811996f8a55b4a0dda40807c41e;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:52:00Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"bbb2f8b3d6257e6f80b19f3497e9847c432e619c6285292704e0e05d6e74f66e\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"bbb2f8b3d6257e6f80b19f3497e9847c432e619c6285292704e0e05d6e74f66e\" Netns:\"/var/run/netns/cni-2fc36b59-bdeb-e503-0029-879e7f30e1f5\" IfName:\"eth0\" Args:\"K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1;K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=bbb2f8b3d6257e6f80b19f3497e9847c432e619c6285292704e0e05d6e74f66e\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:52:21Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"8166dd8cad59419d0696e2c3b75f9f18fc5c9c9751e3fb003579e3e79c2828c2\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"8166dd8cad59419d0696e2c3b75f9f18fc5c9c9751e3fb003579e3e79c2828c2\" Netns:\"/var/run/netns/cni-1c898bc6-34a7-85ba-ded0-fdc8f7e03aef\" IfName:\"eth0\" Args:\"IgnoreUnknown=1;K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c;K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=8166dd8cad59419d0696e2c3b75f9f18fc5c9c9751e3fb003579e3e79c2828c2;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    },
+    {
+      "at": "2026-10-23T15:52:42Z",
+      "reason": "FailedCreatePodSandBox",
+      "message": "Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox \"9ec63deebf672e499109d2cbccc7f09b233e8b16d2004691889abf8a617acf9c\": plugin type=\"multus-shim\" name=\"multus-cni-network\" failed (add): CmdAdd (shim): CNI request failed with status 400: 'ContainerID:\"9ec63deebf672e499109d2cbccc7f09b233e8b16d2004691889abf8a617acf9c\" Netns:\"/var/run/netns/cni-9b1711ea-deea-b0d1-b960-67092e0f390f\" IfName:\"eth0\" Args:\"K8S_POD_NAME=virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf;K8S_POD_INFRA_CONTAINER_ID=9ec63deebf672e499109d2cbccc7f09b233e8b16d2004691889abf8a617acf9c;K8S_POD_UID=df1cd6f6-3d29-4483-b4dc-168229bfc890;IgnoreUnknown=1;K8S_POD_NAMESPACE=tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c\" Path:\"\" ERRORED: error configuring pod [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf] networking: [tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf/df1cd6f6-3d29-4483-b4dc-168229bfc890:kc-networking]: error adding container to network \"kc-networking\": plugin type=\"kc-networking\" failed (add): RPC failed; request ip return 500 failed to get nic parameters Maximum attempts reached for getNicParametersForAdd\n': StdinData: {\"capabilities\":{\"portMappings\":true},\"clusterNetwork\":\"/host/etc/cni/net.d/01-kc-networking.conflist\",\"cniVersion\":\"0.3.1\",\"logLevel\":\"error\",\"logToStderr\":true,\"name\":\"multus-cni-network\",\"namespaceIsolation\":true,\"type\":\"multus-shim\"}",
+      "count": 1
+    }
+  ],
+  "nads": [
+    {
+      "metadata": {
+        "name": "vm-mvp-main",
+        "uid": "ac77bddd-82a3-48b9-9916-fbef18f35610",
+        "labels": {
+          "vm.ani.io/task": "vm-mvp-20261023-01a168ce"
+        },
+        "annotations": {}
+      },
+      "spec": {
+        "config": "{\"cniVersion\":\"0.3.1\",\"name\":\"kc-networking\",\"plugins\":[{\"server_socket\":\"/run/openvswitch/kc-networking-daemon.sock\",\"type\":\"kc-networking\"},{\"capabilities\":{\"portMappings\":true},\"type\":\"portmap\"}]}"
+      }
+    }
+  ],
+  "kcn_pods": [
+    {
+      "namespace": "kcn-system",
+      "name": "kcn-controller-77cf4dfdbc-b9rcj",
+      "uid": "672bc56b-a2de-4259-a00b-aad518667b0f",
+      "node": "ani-02",
+      "labels": {
+        "networking.kubercloud.com/app": "controller",
+        "pod-template-hash": "77cf4dfdbc"
+      },
+      "images": [
+        "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+      ]
+    },
+    {
+      "namespace": "kcn-system",
+      "name": "kcn-controller-77cf4dfdbc-bksfw",
+      "uid": "a42ec5d0-cc00-49e9-b21a-fae75f9c037f",
+      "node": "ani-03",
+      "labels": {
+        "networking.kubercloud.com/app": "controller",
+        "pod-template-hash": "77cf4dfdbc"
+      },
+      "images": [
+        "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+      ]
+    },
+    {
+      "namespace": "kcn-system",
+      "name": "kcn-controller-77cf4dfdbc-c4kwl",
+      "uid": "92fb0d38-ef01-4f6b-a869-254d4fba740f",
+      "node": "ani-01",
+      "labels": {
+        "networking.kubercloud.com/app": "controller",
+        "pod-template-hash": "77cf4dfdbc"
+      },
+      "images": [
+        "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+  "operation_id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+  "media_key": "ubuntu-24.04",
+  "operation": {
+    "id": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+    "vmId": "db174e19-7269-42ff-9c22-57190c66535b",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intentVersion": "1",
+    "state": "running",
+    "reason": "VM_EXTERNAL_RESULT_UNKNOWN",
+    "observedAt": "2026-10-23T15:33:13.680888394Z"
+  },
+  "current": {
+    "id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "name": "vm-mvp-linux-main",
+    "version": "1",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Running",
+    "observedState": "Stopped",
+    "reason": "",
+    "observedAt": "2026-10-23T15:33:13.678219933Z",
+    "addresses": [],
+    "lastOperationId": "7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "2688a35d-9a60-5be5-83ce-69f4b54d1494",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2688a35d9a605be583ce69f4b54d1494",
+        "serial": "2688a35d-9a60-5be5-83ce-69f4b54d1494",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=VIRTUAL_MACHINE",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machine-media",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/operations/7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b",
+      "status": 200
+    }
+  ],
+  "credential_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials.json"
+}

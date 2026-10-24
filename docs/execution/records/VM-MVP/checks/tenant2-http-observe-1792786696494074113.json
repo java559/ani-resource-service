@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-23T20:18:14.383936+00:00",
+  "scope": "same authorized Guest2 existing authenticated TTY; exact HTTP owned files/process and loopback read-only; no spawn/relogin/marker write",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+  "source_partial_receipt": "tenant2-1792786501478170454.json",
+  "native": {
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+    },
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+    },
+    "node": {
+      "kind": "Node",
+      "namespace": "",
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    },
+    "interfaces": [
+      {
+        "infoSource": "domain",
+        "ipAddress": "10.84.1.2",
+        "ipAddresses": [
+          "10.84.1.2"
+        ],
+        "linkState": "up",
+        "mac": "fa:00:75:19:33:88",
+        "name": "default",
+        "podInterfaceName": "eth0",
+        "queueCount": 1
+      }
+    ]
+  },
+  "observed": {
+    "user": "aniuser",
+    "boot_id": "fe087857-bd61-4d76-b892-dbd6b69ba601",
+    "script_exists": true,
+    "receipt_exists": true,
+    "log_tail": "",
+    "listen": "State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nLISTEN 0      5            0.0.0.0:39192      0.0.0.0:*          \n",
+    "script_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9",
+    "process": {
+      "task": "vm-mvp-20261023-01a168ce",
+      "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "port": 39192,
+      "path": "/vm-mvp-01a168ce-tenant2/ef51fbf518e815b1ec825a35",
+      "body": "ANI_VM_GUEST2_HTTP_01a168ce_ef51fbf518e815b1ec825a35\n",
+      "receipt": "/home/aniuser/.vm-mvp-01a168ce-http.json",
+      "pid": 1187,
+      "start_ticks": "51889",
+      "script": "/home/aniuser/vm-mvp-01a168ce-tenant2-http.py",
+      "script_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9"
+    },
+    "process_guard": true,
+    "loopback_status": 200,
+    "loopback_body_sha256": "da38569533185e14be28597b55e6309ccf3f8584504598335351d4f701939b2d",
+    "loopback_exact_body": true
+  },
+  "result": "PASS_HEALTHY_TARGET"
+}

@@ -1,0 +1,126 @@
+{
+  "at": "2026-10-24T07:48:03.013142+00:00",
+  "phase": "pin",
+  "repo": "governance",
+  "host": "fedora",
+  "gowork": "off",
+  "private_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "steps": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "edit",
+        "-require=github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f",
+        "-require=github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy"
+      ],
+      "exit_code": 0,
+      "output": "go: downloading github.com/google/gnostic v0.7.1\ngo: downloading github.com/envoyproxy/protoc-gen-validate v1.3.3\ngo: downloading github.com/go-kratos/kratos/v2 v2.9.2\ngo: downloading google.golang.org/genproto/googleapis/api v0.0.0-20260908043556-f8649ddbbfe6\ngo: downloading github.com/jackc/pgx/v5 v5.11.0\ngo: downloading google.golang.org/genproto v0.0.0-20260908043556-f8649ddbbfe6\ngo: downloading github.com/zhangzhe-ctrl/ani-modeldev-service v0.0.0-20261021184454-44188466290f\ngo: downloading entgo.io/ent v0.14.6\ngo: downloading github.com/liangzai006/ani-inference-service/api v0.1.2-0.20261021113945-1356085e3d92\ngo: downloading github.com/zhangzhe-ctrl/ani-accelerator-service v0.0.0-20261022031933-4a682ac73da1\ngo: downloading github.com/lib/pq v1.12.3\ngo: downloading github.com/go-sql-driver/mysql v1.10.1\ngo: downloading github.com/jinzhu/copier v0.4.0\ngo: downloading github.com/liangzai006/ani-model-service/api v0.0.0-20261021113912-a21befaaa5e5\ngo: downloading github.com/zhangzhe-ctrl/ani-observability-service/api v0.1.1\ngo: downloading github.com/liangzai006/ani-model-service v0.0.0-20261021113912-a21befaaa5e5\ngo: downloading k8s.io/apimachinery v0.36.3\ngo: downloading k8s.io/client-go v0.36.3\ngo: downloading golang.org/x/crypto v0.57.0\ngo: downloading google.golang.org/genproto/googleapis/rpc v0.0.0-20260908043556-f8649ddbbfe6\ngo: downloading k8s.io/api v0.36.3\ngo: downloading modernc.org/sqlite v1.58.0\ngo: downloading github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261017184327-1c605c793b88\ngo: downloading github.com/hibiken/asynq v0.26.0\ngo: downloading github.com/pquerna/otp v1.5.0\ngo: downloading github.com/getkin/kin-openapi v0.149.0\ngo: downloading github.com/golang-jwt/jwt/v5 v5.3.1\ngo: downloading golang.org/x/sync v0.23.0\ngo: downloading github.com/XSAM/otelsql v0.44.0\ngo: downloading github.com/xiaoqidun/entps v1.50.1\ngo: downloading go.einride.tech/aip v0.86.3\ngo: downloading github.com/graph-gophers/dataloader/v7 v7.1.3\ngo: downloading github.com/mojocn/base64Captcha v1.3.8\ngo: downloading github.com/wenlng/go-captcha/v2 v2.0.5\ngo: downloading github.com/tjfoc/gmsm v1.4.1\ngo: downloading github.com/bwmarrin/snowflake v0.3.0\ngo: downloading github.com/lithammer/shortuuid/v4 v4.3.0\ngo: downloading github.com/rs/xid v1.6.0\ngo: downloading github.com/segmentio/ksuid v1.0.4\ngo: downloading github.com/sony/sonyflake v1.3.0\ngo: downloading go.mongodb.org/mongo-driver/v2 v2.9.0\ngo: downloading golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa\ngo: downloading github.com/lyft/protoc-gen-star/v2 v2.0.4\ngo: downloading github.com/grpc-ecosystem/go-grpc-middleware v1.4.0\ngo: downloading github.com/casbin/casbin/v2 v2.135.0\ngo: downloading github.com/olekukonko/tablewriter v1.1.4\ngo: downloading github.com/google/subcommands v1.2.0\ngo: downloading github.com/spf13/cobra v1.10.2\ngo: downloading github.com/redis/go-redis/extra/redisotel/v9 v9.22.0\ngo: downloading github.com/go-kratos/aegis v0.2.0\ngo: downloading github.com/gorilla/handlers v1.5.2\ngo: downloading buf.build/go/protovalidate v1.4.0\ngo: downloading go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.46.0\ngo: downloading go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.46.0\ngo: downloading go.opentelemetry.io/otel/exporters/zipkin v1.45.0\ngo: downloading github.com/swaggest/swgui v1.8.5\ngo: downloading github.com/vearutop/statigz v1.5.0\ngo: downloading github.com/gorilla/mux v1.8.1\ngo: downloading gopkg.in/cenkalti/backoff.v1 v1.1.0\ngo: downloading github.com/mileusna/useragent v1.3.5\ngo: downloading github.com/jinzhu/inflection v1.0.0\ngo: downloading golang.org/x/mod v0.41.0\ngo: downloading github.com/fsnotify/fsnotify v1.10.1\ngo: downloading github.com/google/gnostic-models v0.7.1\ngo: downloading ariga.io/atlas v1.3.0\ngo: downloading github.com/DATA-DOG/go-sqlmock v1.5.0\ngo: downloading github.com/mattn/go-sqlite3 v1.14.52\ngo: downloading filippo.io/edwards25519 v1.2.0\ngo: downloading k8s.io/klog/v2 v2.140.0\ngo: downloading k8s.io/utils v0.0.0-20260210185600-b8788abfbbc2\ngo: downloading github.com/yuin/gopher-lua v1.1.2\ngo: downloading k8s.io/kube-openapi v0.0.0-20260317180543-43fb72c5454a\ngo: downloading sigs.k8s.io/structured-merge-diff/v6 v6.4.2\ngo: downloading gopkg.in/evanphx/json-patch.v4 v4.13.0\ngo: downloading github.com/jackc/puddle/v2 v2.2.2\ngo: downloading github.com/robfig/cron/v3 v3.0.1\ngo: downloading golang.org/x/time v0.15.0\ngo: downloading github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc\ngo: downloading github.com/oasdiff/yaml v0.1.1\ngo: downloading github.com/santhosh-tekuri/jsonschema/v6 v6.0.3\ngo: downloading github.com/oasdiff/yaml3 v0.0.14\ngo: downloading gotest.tools/v3 v3.5.2\ngo: downloading github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0\ngo: downloading golang.org/x/image v0.40.0\ngo: downloading modernc.org/libc v1.75.7\ngo: downloading github.com/google/pprof v0.0.0-20260802141513-ef3492d7dac3\ngo: downloading modernc.org/fileutil v1.4.0\ngo: downloading modernc.org/mathutil v1.7.1\ngo: downloading github.com/spf13/afero v1.15.0\ngo: downloading github.com/casbin/govaluate v1.10.0\ngo: downloading github.com/mattn/go-runewidth v0.0.28\ngo: downloading github.com/olekukonko/errors v1.3.0\ngo: downloading github.com/olekukonko/ll v0.1.8\ngo: downloading github.com/redis/go-redis/extra/rediscmd/v9 v9.22.0\ngo: downloading dario.cat/mergo v1.0.2\ngo: downloading github.com/inconshreveable/mousetrap v1.1.0\ngo: downloading github.com/felixge/httpsnoop v1.1.0\ngo: downloading buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.12-20260825204119-511051f7f437.2\ngo: downloading cel.dev/cel-go v0.32.0\ngo: downloading github.com/brianvoe/gofakeit/v6 v6.28.0\ngo: downloading github.com/rodaine/protogofakeit v0.1.1\ngo: downloading github.com/openzipkin/zipkin-go v0.4.3\ngo: downloading github.com/andybalholm/brotli v1.2.3\ngo: downloading github.com/bool64/dev v0.2.43\ngo: downloading github.com/klauspost/compress v1.20.0\ngo: downloading github.com/go-playground/form/v4 v4.3.1\ngo: downloading github.com/jackc/pgpassfile v1.0.0\ngo: downloading github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761\ngo: downloading github.com/hashicorp/hcl/v2 v2.24.0\ngo: downloading github.com/zclconf/go-cty v1.19.0\ngo: downloading go.yaml.in/yaml/v2 v2.4.4\ngo: downloading github.com/stretchr/objx v0.5.3\ngo: downloading github.com/spf13/cast v1.10.0\ngo: downloading github.com/dlclark/regexp2 v1.12.0\ngo: downloading github.com/dustin/go-humanize v1.0.1\ngo: downloading github.com/mattn/go-isatty v0.0.24\ngo: downloading github.com/ncruces/go-strftime v1.0.0\ngo: downloading modernc.org/memory v1.12.1\ngo: downloading modernc.org/cc/v4 v4.29.2\ngo: downloading modernc.org/ccgo/v4 v4.35.0\ngo: downloading modernc.org/goabi0 v0.2.0\ngo: downloading github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec\ngo: downloading github.com/golang/mock v1.4.4\ngo: downloading github.com/bmatcuk/doublestar/v4 v4.10.0\ngo: downloading github.com/bmatcuk/doublestar v1.3.4\ngo: downloading github.com/clipperhouse/uax29/v2 v2.7.0\ngo: downloading github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6\ngo: downloading github.com/goccy/go-json v0.10.6\ngo: downloading github.com/clipperhouse/displaywidth v0.11.0\ngo: downloading github.com/fatih/color v1.19.0\ngo: downloading github.com/shirou/gopsutil/v3 v3.24.5\ngo: downloading cel.dev/expr v0.25.3\ngo: downloading github.com/go-playground/assert/v2 v2.2.0\ngo: downloading github.com/go-openapi/inflect v1.0.0\ngo: downloading github.com/zclconf/go-cty-yaml v1.2.0\ngo: downloading github.com/klauspost/cpuid/v2 v2.4.0\ngo: downloading github.com/frankban/quicktest v1.14.6\ngo: downloading modernc.org/opt v0.2.0\ngo: downloading modernc.org/sortutil v1.2.1\ngo: downloading modernc.org/strutil v1.2.1\ngo: downloading modernc.org/token v1.1.0\ngo: downloading modernc.org/gc/v2 v2.6.5\ngo: downloading github.com/mattn/go-colorable v0.1.15\ngo: downloading github.com/envoyproxy/go-control-plane/envoy v1.37.0\ngo: downloading github.com/antlr4-go/antlr/v4 v4.13.1\ngo: downloading github.com/lufia/plan9stats v0.0.0-20260802145828-341c2f0c90b5\ngo: downloading github.com/power-devops/perfstat v0.0.0-20260805114148-88456608a4f6\ngo: downloading github.com/shoenig/go-m1cpu v0.2.2\ngo: downloading github.com/tklauser/go-sysconf v0.4.0\ngo: downloading github.com/yusufpapurcu/wmi v1.2.4\ngo: downloading github.com/agext/levenshtein v1.2.3\ngo: downloading github.com/apparentlymart/go-textseg/v15 v15.0.0\ngo: downloading github.com/mitchellh/go-wordwrap v1.0.1\ngo: downloading github.com/go-test/deep v1.0.8\ngo: downloading github.com/zclconf/go-cty-debug v0.0.0-20240509010212-0d6042c53940\ngo: downloading github.com/emicklei/go-restful/v3 v3.13.0\ngo: downloading modernc.org/gc/v3 v3.1.5\ngo: downloading github.com/shoenig/test v1.7.0\ngo: downloading github.com/envoyproxy/go-control-plane v0.14.0\ngo: downloading github.com/tklauser/numcpus v0.12.0\ngo: downloading github.com/go-ole/go-ole v1.3.0\ngo: downloading github.com/apparentlymart/go-textseg/v17 v17.0.1\ngo: downloading github.com/hashicorp/golang-lru/v2 v2.0.7\ngo: downloading github.com/hashicorp/golang-lru v0.5.4\ngo: downloading github.com/cncf/xds/go v0.0.0-20260202195803-dba9d589def2\ngo: downloading github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-mod=readonly",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service"
+      ],
+      "exit_code": 0,
+      "output": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-resource-service\",\n\t\"Version\": \"v0.0.0-20261024051201-01c079f1787f\",\n\t\"Time\": \"2026-10-24T05:12:01Z\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.mod\",\n\t\"GoVersion\": \"1.26.10\",\n\t\"Sum\": \"h1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=\",\n\t\"GoModSum\": \"h1:cgx1BbE7BtNXjEHoWThNBdWTw5+e7slcCFneCl88Sp0=\"\n}\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-mod=readonly",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-session-gateway/api"
+      ],
+      "exit_code": 0,
+      "output": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-session-gateway/api\",\n\t\"Version\": \"v0.1.1-0.20261024051540-811cc3839244\",\n\t\"Time\": \"2026-10-24T05:15:40Z\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-session-gateway/api/@v/v0.1.1-0.20261024051540-811cc3839244.mod\",\n\t\"GoVersion\": \"1.26.9\",\n\t\"Sum\": \"h1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU=\",\n\t\"GoModSum\": \"h1:UkqQImej+6VSty5W5AZv55scFHNrZR1qoTDy/8IdVbA=\"\n}\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-mod=readonly",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console"
+      ],
+      "exit_code": 0,
+      "output": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console\",\n\t\"Version\": \"v0.0.0-20261023185414-0a53b99c8d9f\",\n\t\"Time\": \"2026-10-23T18:54:14Z\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod\",\n\t\"GoVersion\": \"1.26.9\",\n\t\"Sum\": \"h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=\",\n\t\"GoModSum\": \"h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8=\"\n}\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit_code": 0,
+      "output": "all modules verified\n"
+    }
+  ],
+  "candidate_processes_changed": false,
+  "business_api_calls": 0,
+  "formal_modules": [
+    {
+      "Path": "github.com/zhangzhe-ctrl/ani-resource-service",
+      "Version": "v0.0.0-20261024051201-01c079f1787f",
+      "Time": "2026-10-24T05:12:01Z",
+      "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f",
+      "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.mod",
+      "GoVersion": "1.26.10",
+      "Sum": "h1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=",
+      "GoModSum": "h1:cgx1BbE7BtNXjEHoWThNBdWTw5+e7slcCFneCl88Sp0="
+    },
+    {
+      "Path": "github.com/zhangzhe-ctrl/ani-session-gateway/api",
+      "Version": "v0.1.1-0.20261024051540-811cc3839244",
+      "Time": "2026-10-24T05:15:40Z",
+      "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244",
+      "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-session-gateway/api/@v/v0.1.1-0.20261024051540-811cc3839244.mod",
+      "GoVersion": "1.26.9",
+      "Sum": "h1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU=",
+      "GoModSum": "h1:UkqQImej+6VSty5W5AZv55scFHNrZR1qoTDy/8IdVbA="
+    },
+    {
+      "Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+      "Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+      "Time": "2026-10-23T18:54:14Z",
+      "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+      "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+      "GoVersion": "1.26.9",
+      "Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+      "GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+    }
+  ],
+  "result": "PASS_EXACT_PIN_STRICT_TIDY_NO_REPLACE",
+  "non_mod_source_unchanged": true,
+  "outputs": {
+    "go.mod": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671",
+    "go.sum": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a"
+  },
+  "elapsed_seconds": 45.826
+}

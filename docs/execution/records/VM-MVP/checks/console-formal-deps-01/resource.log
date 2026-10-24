@@ -1,0 +1,14 @@
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go mod tidy
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go mod tidy -diff
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go list -m -json github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console
+{
+	"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+	"Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+	"Time": "2026-10-23T18:54:14Z",
+	"Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+	"GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+	"GoVersion": "1.26.9",
+	"Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+	"GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+}
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go build -mod=readonly ./api/vm/v1 ./internal/service/vm ./internal/data/vm ./internal/server

@@ -1,0 +1,90 @@
+{
+  "observed_at": "2026-10-23T22:54:54.031107+00:00",
+  "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+  "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+  "launcher_uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+  "node": "ani-02",
+  "vmi_phase": "Running",
+  "sole_launcher": true,
+  "container_states": [
+    {
+      "name": "compute",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-23T22:23:58Z"
+        }
+      }
+    }
+  ],
+  "compute_log_selected": [],
+  "runtime_sample_before": "PROCESS /proc/1 virt-launcher-m\n1 (virt-launcher-m) S 0 1 1 0 -1 4194560 1268 8799 3 11 1 2 18 5 20 0 6 0 21808883 1677414400 2240 18446744073709551615 1 1 0 0 0 0 1002060288 0 2143420159 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/12 virt-launcher\n12 (virt-launcher) S 1 1 1 0 -1 4194560 5881 814 50 15 179 96 0 1 20 0 17 0 21808890 2594058240 16570 18446744073709551615 1 1 0 0 0 0 1002060288 0 2143420159 0 0 0 17 5 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/19 virtqemud\n19 (virtqemud) S 12 1 1 0 -1 4194560 6639 5438 2 5 220 123 3 4 20 0 19 0 21808988 1397800960 7773 18446744073709551615 1 1 0 0 0 0 0 4096 16391 0 0 0 17 8 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/79 qemu-kvm\n79 (qemu-kvm) S 1 78 78 0 -1 138412416 1699795 0 0 0 154523 30104 0 0 20 0 10 0 21809251 5853822976 1049152 18446744073709551615 1 1 0 0 0 0 268444224 4096 16963 0 0 0 17 14 0 0 0 137252 0 0 0 0 0 0 0 0 0\n Id   Name                                                                                  State\n-----------------------------------------------------------------------------------------------------\n 1    tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-068d56dd-d4fc-4ca8-8430-16c36bad0761   running\n\nDomain: 'tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-068d56dd-d4fc-4ca8-8430-16c36bad0761'\n  state.state=1\n  state.reason=1\n  cpu.time=1846510000000\n  cpu.user=1545450000000\n  cpu.system=301060000000\n  cpu.cache.monitor.count=0\n  cpu.haltpoll.success.time=899421267\n  cpu.haltpoll.fail.time=407643013\n  block.count=2\n  block.0.name=vda\n  block.0.path=/dev/disk-08b2c432e3d55000ab1d6bc2450eced8\n  block.0.backingIndex=2\n  block.0.rd.reqs=182\n  block.0.rd.bytes=3301888\n  block.0.rd.times=110114281\n  block.0.wr.reqs=0\n  block.0.wr.bytes=0\n  block.0.wr.times=0\n  block.0.fl.reqs=0\n  block.0.fl.times=0\n  block.0.allocation=0\n  block.0.capacity=48318382080\n  block.0.physical=48318382080\n  block.0.limits.request_alignment=512\n  block.0.limits.discard_alignment=65536\n  block.0.limits.transfer_hw_max=4194304\n  block.0.limits.iov_max=1024\n  block.0.limits.iov_hw_max=65535\n  block.0.limits.memory_alignment_minimal=512\n  block.0.limits.memory_alignment_optimal=4096\n  block.1.name=sda\n  block.1.path=/var/run/kubevirt-private/vmi-disks/media-install/disk.img\n  block.1.backingIndex=1\n  block.1.rd.reqs=171943\n  block.1.rd.bytes=3024953896\n  block.1.rd.times=1637787145662\n  block.1.wr.reqs=0\n  block.1.wr.bytes=0\n  block.1.wr.times=0\n  block.1.fl.reqs=0\n  block.1.fl.times=0\n  block.1.allocation=0\n  block.1.capacity=4886364160\n  block.1.physical=3349262336\n  block.1.limits.request_alignment=512\n  block.1.limits.iov_max=1024\n  block.1.limits.memory_alignment_minimal=512\n  block.1.limits.memory_alignment_optimal=4096\n\n",
+  "runtime_sample_after": "PROCESS /proc/1 virt-launcher-m\n1 (virt-launcher-m) S 0 1 1 0 -1 4194560 1268 8799 3 11 1 2 18 5 20 0 6 0 21808883 1677414400 2240 18446744073709551615 1 1 0 0 0 0 1002060288 0 2143420159 0 0 0 17 3 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/12 virt-launcher\n12 (virt-launcher) S 1 1 1 0 -1 4194560 5881 814 50 15 179 97 0 1 20 0 17 0 21808890 2594058240 16570 18446744073709551615 1 1 0 0 0 0 1002060288 0 2143420159 0 0 0 17 5 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/19 virtqemud\n19 (virtqemud) S 12 1 1 0 -1 4194560 6669 5438 2 5 221 124 3 4 20 0 19 0 21808988 1397800960 7773 18446744073709551615 1 1 0 0 0 0 0 4096 16391 0 0 0 17 14 0 0 0 0 0 0 0 0 0 0 0 0 0\nPROCESS /proc/79 qemu-kvm\n79 (qemu-kvm) S 1 78 78 0 -1 138412416 1735717 0 0 0 156031 30263 0 0 20 0 10 0 21809251 5853847552 1049152 18446744073709551615 1 1 0 0 0 0 268444224 4096 16963 0 0 0 17 0 0 0 0 138717 0 0 0 0 0 0 0 0 0\n Id   Name                                                                                  State\n-----------------------------------------------------------------------------------------------------\n 1    tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-068d56dd-d4fc-4ca8-8430-16c36bad0761   running\n\nDomain: 'tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-068d56dd-d4fc-4ca8-8430-16c36bad0761'\n  state.state=1\n  state.reason=1\n  cpu.time=1863030000000\n  cpu.user=1560400000000\n  cpu.system=302630000000\n  cpu.cache.monitor.count=0\n  cpu.haltpoll.success.time=900149546\n  cpu.haltpoll.fail.time=408336238\n  block.count=2\n  block.0.name=vda\n  block.0.path=/dev/disk-08b2c432e3d55000ab1d6bc2450eced8\n  block.0.backingIndex=2\n  block.0.rd.reqs=182\n  block.0.rd.bytes=3301888\n  block.0.rd.times=110114281\n  block.0.wr.reqs=0\n  block.0.wr.bytes=0\n  block.0.wr.times=0\n  block.0.fl.reqs=0\n  block.0.fl.times=0\n  block.0.allocation=0\n  block.0.capacity=48318382080\n  block.0.physical=48318382080\n  block.0.limits.request_alignment=512\n  block.0.limits.discard_alignment=65536\n  block.0.limits.transfer_hw_max=4194304\n  block.0.limits.iov_max=1024\n  block.0.limits.iov_hw_max=65535\n  block.0.limits.memory_alignment_minimal=512\n  block.0.limits.memory_alignment_optimal=4096\n  block.1.name=sda\n  block.1.path=/var/run/kubevirt-private/vmi-disks/media-install/disk.img\n  block.1.backingIndex=1\n  block.1.rd.reqs=172239\n  block.1.rd.bytes=3057119784\n  block.1.rd.times=1642945813204\n  block.1.wr.reqs=0\n  block.1.wr.bytes=0\n  block.1.wr.times=0\n  block.1.fl.reqs=0\n  block.1.fl.times=0\n  block.1.allocation=0\n  block.1.capacity=4886364160\n  block.1.physical=3349262336\n  block.1.limits.request_alignment=512\n  block.1.limits.iov_max=1024\n  block.1.limits.memory_alignment_minimal=512\n  block.1.limits.memory_alignment_optimal=4096\n\n",
+  "counter_projection": {
+    "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+    "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+    "launcher_uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+    "node": "ani-02",
+    "state_before": "1",
+    "state_after": "1",
+    "cpu_ns_before": 1846510000000,
+    "cpu_ns_after": 1863030000000,
+    "cpu_ns_delta": 16520000000,
+    "disks": [
+      {
+        "name": "vda",
+        "path": "/dev/disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "rd.reqs": {
+          "before": 182,
+          "after": 182,
+          "delta": 0
+        },
+        "rd.bytes": {
+          "before": 3301888,
+          "after": 3301888,
+          "delta": 0
+        },
+        "wr.reqs": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "wr.bytes": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      },
+      {
+        "name": "sda",
+        "path": "/var/run/kubevirt-private/vmi-disks/media-install/disk.img",
+        "rd.reqs": {
+          "before": 171943,
+          "after": 172239,
+          "delta": 296
+        },
+        "rd.bytes": {
+          "before": 3024953896,
+          "after": 3057119784,
+          "delta": 32165888
+        },
+        "wr.reqs": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        },
+        "wr.bytes": {
+          "before": 0,
+          "after": 0,
+          "delta": 0
+        }
+      }
+    ],
+    "recent_launcher_errors_warnings": [],
+    "sleep_seconds_between_samples": 8,
+    "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/fedora-v2-installer-domstats.json",
+    "mutations": 0
+  },
+  "after_vm_vmi_uid_guards_pass": true
+}

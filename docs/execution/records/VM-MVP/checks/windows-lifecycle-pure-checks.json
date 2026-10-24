@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-24T06:58:22.387430+00:00",
+  "source_sha256": "65f9936912c878a64b0c6041afc413e01bdb5c2914c3d7acf7b5f1db9591648f",
+  "py_compile": "PASS",
+  "fixture_exit_code": 0,
+  "fixture_stdout": "{\"result\": \"PASS\", \"pure_guards\": 16, \"live_helper_imports\": 0, \"http_requests\": 0, \"guest_commands\": 0}\n",
+  "fixture_stderr": "",
+  "help_exit_code": 0,
+  "elapsed_seconds": 0.223,
+  "live_helper_imports": 0,
+  "http_requests": 0,
+  "guest_commands": 0,
+  "native_calls": 0,
+  "business_mutations": 0
+}

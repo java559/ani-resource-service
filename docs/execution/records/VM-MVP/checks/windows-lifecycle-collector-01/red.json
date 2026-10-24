@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-24T08:05:10.571519+00:00",
+  "source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py",
+  "source_sha256": "7ecdc0420aadd125cb2c43061e45c731b107bba837b0f9396751663c9130ff51",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "py_compile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py",
+        "self-test"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 513, in <module>\n    main()\n    ~~~~^^\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 484, in main\n    self_test(); return\n    ~~~~~~~~~^^\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 460, in self_test\n    checks += collector_fixture_checks()\n              ~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 364, in collector_fixture_checks\n    result = collect(record)\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 357, in collect\n    return driver.native([api_disk])\n           ~~~~~~~~~~~~~^^^^^^^^^^^^\n  File \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/red/vm-product-windows-lifecycle.py\", line 203, in native\n    assert any(s['pvc']['name'] == expected for s in storage), 'logical disk has no verified current physical mapping'\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: logical disk has no verified current physical mapping\n"
+    }
+  ],
+  "business_api_calls": 0,
+  "pg_calls": 0,
+  "native_api_calls": 0,
+  "guest_commands": 0,
+  "source_after_sha256": "7ecdc0420aadd125cb2c43061e45c731b107bba837b0f9396751663c9130ff51",
+  "duration_seconds": 0.30079759005457163,
+  "result": "RED_EXPECTED_RESTORED_DETACHED_MAPPING_FAILURE"
+}

@@ -1,0 +1,127 @@
+{
+  "phase": "LOCAL_TOOLS_AND_OCI_METADATA_ONLY",
+  "registry_requests": 0,
+  "time": "2026-10-24T09:32:02Z",
+  "tools": {
+    "skopeo": {
+      "path": "/usr/bin/skopeo",
+      "version": "skopeo version 1.22.2 commit: 18684bc549c53facc3c39abbb73eeba7ddf7fea5"
+    },
+    "regctl": {
+      "path": null,
+      "version": null
+    },
+    "oras": {
+      "path": null,
+      "version": null
+    },
+    "podman": {
+      "path": "/usr/bin/podman",
+      "version": "podman version 5.8.4"
+    },
+    "docker": {
+      "path": "/usr/bin/docker",
+      "version": "Docker version 29.7.2, build a7dcaa6"
+    },
+    "ctr": {
+      "path": "/usr/bin/ctr",
+      "version": "ctr containerd v2.3.4"
+    },
+    "crane": {
+      "path": null,
+      "version": null
+    }
+  },
+  "archives": {
+    "resource": {
+      "size": 35553280,
+      "oci_layout": {
+        "imageLayoutVersion": "1.0.0"
+      },
+      "index": {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "manifests": [
+          {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+            "size": 2265,
+            "annotations": {
+              "org.opencontainers.image.ref.name": "vm-mvp-8589b66f1370-01a168ce"
+            }
+          }
+        ]
+      },
+      "leaf_manifests": [
+        {
+          "digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+          "actual_sha256": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+          "annotations": {
+            "org.opencontainers.image.ref.name": "vm-mvp-8589b66f1370-01a168ce"
+          }
+        }
+      ]
+    },
+    "session": {
+      "size": 34860032,
+      "oci_layout": {
+        "imageLayoutVersion": "1.0.0"
+      },
+      "index": {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "manifests": [
+          {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+            "size": 2265,
+            "annotations": {
+              "org.opencontainers.image.ref.name": "vm-mvp-c485419ab879-01a168ce"
+            }
+          }
+        ]
+      },
+      "leaf_manifests": [
+        {
+          "digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+          "actual_sha256": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+          "annotations": {
+            "org.opencontainers.image.ref.name": "vm-mvp-c485419ab879-01a168ce"
+          }
+        }
+      ]
+    },
+    "governance": {
+      "size": 83010048,
+      "oci_layout": {
+        "imageLayoutVersion": "1.0.0"
+      },
+      "index": {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "manifests": [
+          {
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+            "size": 2573,
+            "annotations": {
+              "org.opencontainers.image.ref.name": "vm-mvp-a64e0ab8ed6b-01a168ce"
+            }
+          }
+        ]
+      },
+      "leaf_manifests": [
+        {
+          "digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+          "actual_sha256": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+          "annotations": {
+            "org.opencontainers.image.ref.name": "vm-mvp-a64e0ab8ed6b-01a168ce"
+          }
+        }
+      ]
+    }
+  }
+}

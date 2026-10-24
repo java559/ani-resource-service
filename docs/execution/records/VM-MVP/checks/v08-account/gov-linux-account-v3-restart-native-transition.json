@@ -1,0 +1,339 @@
+{
+  "at": "2026-10-24T07:13:11.295640+00:00",
+  "operation": {
+    "id": "c1344ffe-2825-4bc5-b7af-0f202d0caac5",
+    "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "action": "restart",
+    "intentVersion": "44",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T07:13:10.369487332Z"
+  },
+  "current": {
+    "version": "44",
+    "observedState": "Running"
+  },
+  "old_vmi_uid": "b6859733-ec66-40e9-b8eb-2928102524e2",
+  "native": {
+    "namespace": {
+      "kind": "Namespace",
+      "namespace": "",
+      "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+    },
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+    },
+    "template_sha256": "f3e670c0f02e0c80f53857ba83e668559490584d3fdee30d353a8521cff7b927",
+    "run_strategy": "Manual",
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "uid": "18090247-b311-4abb-aa60-a2f39dbe4b56",
+      "phase": "Running",
+      "node": "ani-02"
+    },
+    "launcher": {
+      "kind": "Pod",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-zkws8",
+      "uid": "1d1f9723-6f6e-46f7-80fd-2cbd7451a84b"
+    },
+    "disks": [
+      {
+        "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "role": "system",
+        "volume_name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "vmi_volume_status": [
+          {
+            "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "target": "vda"
+          }
+        ],
+        "vmi_hotpluggable": false,
+        "dv": null,
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "uid": "741c8be2-a016-4297-8ed2-469f7b539fcb",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-741c8be2-a016-4297-8ed2-469f7b539fcb",
+          "uid": "895bea1c-93b1-4585-89ec-6c92658f1215"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-27cbaa0a-050c-49ac-be04-e413fd724a00",
+          "pool": "ani-block-pool",
+          "image_name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00"
+        }
+      },
+      {
+        "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "role": "data",
+        "volume_name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "vmi_volume_status": [
+          {
+            "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "phase": "Ready",
+            "target": "sdb",
+            "hotplugVolume": {
+              "attachPodName": "hp-volume-n84zs",
+              "attachPodUID": "2e0d15b5-d45d-435a-bba6-552160771cec"
+            }
+          }
+        ],
+        "vmi_hotpluggable": true,
+        "dv": null,
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "uid": "12745c61-5e03-4db7-9708-c64eee206977",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-12745c61-5e03-4db7-9708-c64eee206977",
+          "uid": "5eb015cd-6e8d-4d43-b165-d5888ab54936"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+          "pool": "ani-block-pool",
+          "image_name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac"
+        }
+      },
+      {
+        "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "role": "data",
+        "volume_name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "vmi_volume_status": [
+          {
+            "name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "phase": "Ready",
+            "target": "sda",
+            "hotplugVolume": {
+              "attachPodName": "hp-volume-n84zs",
+              "attachPodUID": "2e0d15b5-d45d-435a-bba6-552160771cec"
+            }
+          }
+        ],
+        "vmi_hotpluggable": true,
+        "dv": null,
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "uid": "6ccafb95-7738-48ed-be5a-cef65ca8609c",
+          "phase": "Bound",
+          "volume_mode": "Block",
+          "access_modes": [
+            "ReadWriteOnce"
+          ]
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-6ccafb95-7738-48ed-be5a-cef65ca8609c",
+          "uid": "d4948825-7120-4aea-95e8-5a5ca122dc11"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+          "pool": "ani-block-pool",
+          "image_name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5"
+        }
+      }
+    ]
+  },
+  "vm_status": {
+    "ready": true,
+    "created": true,
+    "printableStatus": "Running",
+    "stateChangeRequests": null,
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T07:11:49Z",
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      }
+    ]
+  },
+  "events": [
+    {
+      "type": "Normal",
+      "reason": "SuccessfulDelete",
+      "message": "Stopped the virtual machine by deleting the virtual machine instance 3edc4260-e139-4999-9266-4ea54e0f1f75",
+      "firstTimestamp": "2026-10-24T06:57:27Z",
+      "lastTimestamp": "2026-10-24T06:57:27Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulDelete",
+      "message": "Stopped the virtual machine by deleting the virtual machine instance b6859733-ec66-40e9-b8eb-2928102524e2",
+      "firstTimestamp": "2026-10-24T07:10:56Z",
+      "lastTimestamp": "2026-10-24T07:10:56Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created virtual machine pod virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-zkws8",
+      "firstTimestamp": "2026-10-24T07:11:37Z",
+      "lastTimestamp": "2026-10-24T07:11:37Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created attachment pod hp-volume-n84zs",
+      "firstTimestamp": "2026-10-24T07:11:49Z",
+      "lastTimestamp": "2026-10-24T07:11:49Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created hotplug attachment pod hp-volume-n84zs, for volume disk-5dbc2c93986554f98413f198f5e9c1a6",
+      "firstTimestamp": "2026-10-24T07:11:49Z",
+      "lastTimestamp": "2026-10-24T07:11:49Z",
+      "count": 2
+    },
+    {
+      "type": "Normal",
+      "reason": "SuccessfulCreate",
+      "message": "Created hotplug attachment pod hp-volume-n84zs, for volume disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+      "firstTimestamp": "2026-10-24T07:11:49Z",
+      "lastTimestamp": "2026-10-24T07:11:49Z",
+      "count": 2
+    },
+    {
+      "type": "Normal",
+      "reason": "VolumeMountedToPod",
+      "message": "Volume disk-5dbc2c93986554f98413f198f5e9c1a6 has been mounted in virt-launcher pod",
+      "firstTimestamp": "2026-10-24T07:11:58Z",
+      "lastTimestamp": "2026-10-24T07:11:58Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "VolumeMountedToPod",
+      "message": "Volume disk-d296c9f62e765756bb4cdef2d0f8f2f9 has been mounted in virt-launcher pod",
+      "firstTimestamp": "2026-10-24T07:11:58Z",
+      "lastTimestamp": "2026-10-24T07:11:58Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Created",
+      "message": "VirtualMachineInstance defined.",
+      "firstTimestamp": "2026-10-24T07:12:00Z",
+      "lastTimestamp": "2026-10-24T07:12:00Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "VolumeReady",
+      "message": "Successfully attach hotplugged volume disk-5dbc2c93986554f98413f198f5e9c1a6 to VM",
+      "firstTimestamp": "2026-10-24T07:12:00Z",
+      "lastTimestamp": "2026-10-24T07:12:00Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "VolumeReady",
+      "message": "Successfully attach hotplugged volume disk-d296c9f62e765756bb4cdef2d0f8f2f9 to VM",
+      "firstTimestamp": "2026-10-24T07:12:00Z",
+      "lastTimestamp": "2026-10-24T07:12:00Z",
+      "count": 1
+    },
+    {
+      "type": "Normal",
+      "reason": "Started",
+      "message": "VirtualMachineInstance started.",
+      "firstTimestamp": "2026-10-24T07:12:00Z",
+      "lastTimestamp": "2026-10-24T07:12:00Z",
+      "count": 1
+    }
+  ],
+  "vmi_status": {
+    "phase": "Running",
+    "nodeName": "ani-02",
+    "reason": null,
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T07:11:49Z",
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      }
+    ],
+    "migrationState": null
+  },
+  "launcher_status": {
+    "phase": "Running",
+    "containers": [
+      {
+        "name": "compute",
+        "ready": true,
+        "restartCount": 0,
+        "state": {
+          "running": {
+            "startedAt": "2026-10-24T07:11:48Z"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-24T09:37:14.720442+00:00",
+  "result": "PASS_ORIGINAL_HEAD_INDEX_DIRTY_BYTES_AND_LOCAL_REF",
+  "before": {
+    "head": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "index": "/home/chabking/workspace/ani-governance/.git/worktrees/ani-governance19/index",
+    "index_sha256": "a34ea61646ba7364e8a7bd3dbc93c45a0242941c2aee4f3944eff5c36fd71629",
+    "status_sha256": "a10eefdb0810bfd435f96c0b1a4b2535e4b3deacef0eb5085a4f55f994355ade",
+    "tracked_dirty_bytes_sha256": "cf3c0eea1aa58ecb415d395523f3319514ec5dfbfc6e7627691015123a53a0d0"
+  },
+  "after": {
+    "head": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "index": "/home/chabking/workspace/ani-governance/.git/worktrees/ani-governance19/index",
+    "index_sha256": "a34ea61646ba7364e8a7bd3dbc93c45a0242941c2aee4f3944eff5c36fd71629",
+    "status_sha256": "a10eefdb0810bfd435f96c0b1a4b2535e4b3deacef0eb5085a4f55f994355ade",
+    "tracked_dirty_bytes_sha256": "cf3c0eea1aa58ecb415d395523f3319514ec5dfbfc6e7627691015123a53a0d0"
+  },
+  "local_ref": "refs/heads/codex/vm-mvp-governance-impl-20261023",
+  "commit": "b7112f7962e1aa23d903db5d557afdd5bb75af4d",
+  "temporary_commit_worktree": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-coverage-01/fixture-commit-worktree",
+    "normal_removed": true,
+    "filesystem_absent": true,
+    "registration_absent": true,
+    "pre_removal_porcelain_empty": true,
+    "separate_ignored_enumeration": "NOT_CAPTURED_BEFORE_NORMAL_REMOVE",
+    "only_operations": "base checkout, approved file copy, normal git commit, own index synchronization; no build/test/generated output"
+  },
+  "runtime_image_source_remains": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "no_more_build_or_pg": true
+}

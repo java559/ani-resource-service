@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-24T07:31:19.921032+00:00",
+  "host": "fedora",
+  "gowork": "off",
+  "fresh_task_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "previous_cache_unchanged_by_this_step": true,
+  "transport": "command-scoped SSH443 with existing strict task known_hosts",
+  "modules": [
+    {
+      "expected": {
+        "name": "resource",
+        "commit": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+        "module": "github.com/zhangzhe-ctrl/ani-resource-service",
+        "version": "v0.0.0-20261024051201-01c079f1787f",
+        "subdir": "",
+        "gomod_sha256": "b40af31c9c40205f6e4e6975a40f6adb6aba0d492749a533ffd5e76c049ca6d4",
+        "branch": "refs/heads/codex/vm-mvp-resource-vm-sdk-20261023"
+      },
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "download",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f"
+      ],
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-resource-service\",\n\t\"Version\": \"v0.0.0-20261024051201-01c079f1787f\",\n\t\"Error\": \"github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f: invalid version: git fetch -f --end-of-options origin refs/heads/*:refs/heads/* refs/tags/*:refs/tags/* in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:\\n\\tConnection closed by 28.0.0.37 port 443\\r\\n\\t\u81f4\u547d\u9519\u8bef\uff1a\u65e0\u6cd5\u8bfb\u53d6\u8fdc\u7a0b\u4ed3\u5e93\u3002\\n\\t\\n\\t\u8bf7\u786e\u8ba4\u60a8\u6709\u6b63\u786e\u7684\u8bbf\u95ee\u6743\u9650\u5e76\u4e14\u4ed3\u5e93\u5b58\u5728\u3002\"\n}\n"
+    }
+  ],
+  "elapsed_seconds": 38.266
+}

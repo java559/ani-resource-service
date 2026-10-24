@@ -1,0 +1,153 @@
+{
+  "at": "2026-10-23T16:44:55.270431+00:00",
+  "layer": "GUEST",
+  "scope": "authorized real product network probes and existing browser marker readback",
+  "vm_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+  "vm_uid": "fe9272cb-858e-4290-9c31-94876b259028",
+  "vmi_uid": "f4587484-ad34-4822-9342-eee625d2e772",
+  "http_target_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/http-target.json",
+  "expected_dns_service_ip": "10.96.0.1",
+  "driver_sha256": "ab7ecd0649db04752a9ae380dd7cb6b908d52bb460035219bab83f070c5ccdb4",
+  "observed": {
+    "username": "aniuser",
+    "marker": "vm-mvp-01a168ce-linux-v2-browser",
+    "boot_id": "f2cd2600-11ca-4248-b3fd-291c1b13e78e",
+    "address": {
+      "argv": [
+        "ip",
+        "-j",
+        "address"
+      ],
+      "exit": 0,
+      "stdout": "[{\"ifindex\":1,\"ifname\":\"lo\",\"flags\":[\"LOOPBACK\",\"UP\",\"LOWER_UP\"],\"mtu\":65536,\"qdisc\":\"noqueue\",\"operstate\":\"UNKNOWN\",\"group\":\"default\",\"txqlen\":1000,\"link_type\":\"loopback\",\"address\":\"00:00:00:00:00:00\",\"broadcast\":\"00:00:00:00:00:00\",\"addr_info\":[{\"family\":\"inet\",\"local\":\"127.0.0.1\",\"prefixlen\":8,\"scope\":\"host\",\"label\":\"lo\",\"valid_life_time\":4294967295,\"preferred_life_time\":4294967295},{\"family\":\"inet6\",\"local\":\"::1\",\"prefixlen\":128,\"scope\":\"host\",\"noprefixroute\":true,\"valid_life_time\":4294967295,\"preferred_life_time\":4294967295}]},{\"ifindex\":2,\"ifname\":\"enp1s0\",\"flags\":[\"BROADCAST\",\"MULTICAST\",\"UP\",\"LOWER_UP\"],\"mtu\":1400,\"qdisc\":\"fq_codel\",\"operstate\":\"UP\",\"group\":\"default\",\"txqlen\":1000,\"link_type\":\"ether\",\"address\":\"fa:00:a4:e5:82:c7\",\"broadcast\":\"ff:ff:ff:ff:ff:ff\",\"addr_info\":[{\"family\":\"inet\",\"local\":\"10.83.1.2\",\"prefixlen\":24,\"metric\":100,\"broadcast\":\"10.83.1.255\",\"scope\":\"global\",\"dynamic\":true,\"label\":\"enp1s0\",\"valid_life_time\":86312435,\"preferred_life_time\":86312435},{\"family\":\"inet6\",\"local\":\"fe80::f800:a4ff:fee5:82c7\",\"prefixlen\":64,\"scope\":\"link\",\"valid_life_time\":4294967295,\"preferred_life_time\":4294967295}]}]\n",
+      "stderr": "",
+      "body_sha256": "1cfc79fc1d95e78123f5f4483dfb8bae3a530f301d64cd4fe8a9ad0cff3feaea"
+    },
+    "routes": {
+      "argv": [
+        "ip",
+        "-j",
+        "route"
+      ],
+      "exit": 0,
+      "stdout": "[{\"dst\":\"default\",\"gateway\":\"10.83.1.1\",\"dev\":\"enp1s0\",\"protocol\":\"dhcp\",\"prefsrc\":\"10.83.1.2\",\"metric\":100,\"flags\":[]},{\"dst\":\"10.83.1.0/24\",\"dev\":\"enp1s0\",\"protocol\":\"kernel\",\"scope\":\"link\",\"prefsrc\":\"10.83.1.2\",\"metric\":100,\"flags\":[]},{\"dst\":\"10.83.1.1\",\"dev\":\"enp1s0\",\"protocol\":\"dhcp\",\"scope\":\"link\",\"prefsrc\":\"10.83.1.2\",\"metric\":100,\"flags\":[]},{\"dst\":\"10.96.0.3\",\"gateway\":\"10.83.1.1\",\"dev\":\"enp1s0\",\"protocol\":\"dhcp\",\"prefsrc\":\"10.83.1.2\",\"metric\":100,\"flags\":[]}]\n",
+      "stderr": "",
+      "body_sha256": "c7a1dee5a6f9de7d20ab96d6d3798da6e5378872ab2f64340ce0fe27f5545451"
+    },
+    "target_route": {
+      "argv": [
+        "ip",
+        "-j",
+        "route",
+        "get",
+        "172.16.101.31"
+      ],
+      "exit": 0,
+      "stdout": "[{\"dst\":\"172.16.101.31\",\"gateway\":\"10.83.1.1\",\"dev\":\"enp1s0\",\"prefsrc\":\"10.83.1.2\",\"flags\":[],\"uid\":1000,\"cache\":[]}]\n",
+      "stderr": "",
+      "body_sha256": "72501a2ec91567e3256c5c17cc1460d83b66e4782612f32169d32b33c6474ee5"
+    },
+    "dns_getent": {
+      "argv": [
+        "getent",
+        "ahostsv4",
+        "kubernetes.default.svc.cluster.local"
+      ],
+      "error": "Command '['getent', 'ahostsv4', 'kubernetes.default.svc.cluster.local']' timed out after 18 seconds"
+    },
+    "dns_resolvectl": {
+      "argv": [
+        "resolvectl",
+        "query",
+        "kubernetes.default.svc.cluster.local"
+      ],
+      "error": "Command '['resolvectl', 'query', 'kubernetes.default.svc.cluster.local']' timed out after 18 seconds"
+    },
+    "dns_uplink": {
+      "argv": [
+        "resolvectl",
+        "dns"
+      ],
+      "exit": 0,
+      "stdout": "Global:\nLink 2 (enp1s0): 10.96.0.3\n",
+      "stderr": "",
+      "body_sha256": "e249a0cec88e1504e889e457dc60fb3dfe2de4684d3f8b4db0db1814678da8b8"
+    },
+    "http": {
+      "argv": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--silent",
+        "--connect-timeout",
+        "5",
+        "--max-time",
+        "12",
+        "http://172.16.101.31:39190/vm-mvp-01a168ce-linux-v2/5b2160d72615913154120a32"
+      ],
+      "exit": 28,
+      "stdout": "",
+      "stderr": "curl: (28) Failed to connect to 172.16.101.31 port 39190 after 5002 ms: Timeout was reached\n",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "https_egress": {
+      "argv": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--silent",
+        "--connect-timeout",
+        "5",
+        "--max-time",
+        "12",
+        "https://example.com/"
+      ],
+      "exit": 28,
+      "stdout": "",
+      "stderr": "curl: (28) Resolving timed out after 5000 milliseconds\n",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ssh_units": {
+      "argv": [
+        "systemctl",
+        "show",
+        "ssh.socket",
+        "ssh.service",
+        "-p",
+        "Id",
+        "-p",
+        "ActiveState",
+        "-p",
+        "SubState"
+      ],
+      "exit": 0,
+      "stdout": "Id=ssh.socket\nActiveState=active\nSubState=listening\n\nId=ssh.service\nActiveState=inactive\nSubState=dead\n",
+      "stderr": "",
+      "body_sha256": "95511466a2a23f004e8db3d16953ee9fca3fca750995afed20d34736995a374e"
+    },
+    "ssh_listen": {
+      "argv": [
+        "ss",
+        "-ltn",
+        "sport = :22"
+      ],
+      "exit": 0,
+      "stdout": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      4096         0.0.0.0:22        0.0.0.0:*          \nLISTEN 0      4096            [::]:22           [::]:*          \n",
+      "stderr": "",
+      "body_sha256": "8b78f786ea46d795a743e80219e866fe317a7b42ce9275278057fbae5bd2e922"
+    },
+    "ssh_runtime_directory_exists": false
+  },
+  "marker": "PASS",
+  "dns": "FAIL",
+  "http": "FAIL",
+  "https_egress": "FAIL",
+  "result": "PARTIAL_FAIL",
+  "capture_correction": {
+    "reason": "TTY CR before exact JSON prefix caused anchored regex timeout; complete guest JSON extracted offline without repeating network requests",
+    "original_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/network-1792773957.json",
+    "original_receipt_sha256": "ea8aaf65e44582447ac4b5d43d166bbe7adc5c085586f2846a2084c2fcfdbe42",
+    "original_transcript": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/network-console-1792773957.txt",
+    "original_transcript_sha256": "8df78d2a6f075d42e0bae0f1906f686e9c9b9aa3d07c46fa66d7d7cc963aa858"
+  }
+}

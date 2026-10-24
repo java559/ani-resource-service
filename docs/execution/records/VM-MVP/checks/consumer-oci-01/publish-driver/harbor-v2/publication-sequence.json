@@ -1,0 +1,98 @@
+{
+  "phase": "THREE_EXACT_IMAGES_PUBLISHED_DIGEST_VERIFIED",
+  "approved_plan_sha256": "9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07",
+  "approved_publisher_sha256": "89d582008b88aa03e6147841c0d76a1cad22212e377d55e3586c599e4a182385",
+  "started_at": "2026-10-24T10:06:55.302514+00:00",
+  "images": [
+    {
+      "service": "resource",
+      "attempt_started_at": "2026-10-24T10:06:55.302869+00:00",
+      "publish": {
+        "exit_code": 0,
+        "elapsed_seconds": 18.925,
+        "result": {
+          "result": "PUBLISHED_DIGEST_VERIFIED",
+          "metadata": {
+            "service": "resource",
+            "archive_sha256": "5e42813305610864db0d17cb366386156946b359f91e9bb069a48ebc8dbbb800",
+            "artifact_receipt_sha256": "4923e4d3f1281ad3d256f61626ff464106b229f33df1c6057c6677f584eff622",
+            "manifest_digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+            "destination": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+            "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+            "source_tree": "e51622e689476c524ddd29776d1b217738822a21"
+          },
+          "copy_attempts": 1,
+          "plan_sha256": "9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07",
+          "transport": "strict-tls",
+          "verified_at": "2026-10-24T10:07:14.209144+00:00",
+          "deployments": 0,
+          "registry_logins": 0,
+          "automatic_copy_retries": 0,
+          "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/resource.json"
+        }
+      }
+    },
+    {
+      "service": "session",
+      "attempt_started_at": "2026-10-24T10:07:14.228582+00:00",
+      "publish": {
+        "exit_code": 0,
+        "elapsed_seconds": 19.97,
+        "result": {
+          "result": "PUBLISHED_DIGEST_VERIFIED",
+          "metadata": {
+            "service": "session",
+            "archive_sha256": "e59153de4d8f59bd50f82fae285d710cc0694ee0128e9a0427050a81bd116b69",
+            "artifact_receipt_sha256": "f7ba77ec32758dba3c0b9080e4d24a46aea1410c9bc6071233256a0fcd11c7bf",
+            "manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+            "destination": "172.16.101.10:30003/icn-01a15337-release/ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+            "source_commit": "c485419ab879fed9a2fad3a064fd328d829a2671",
+            "source_tree": "a793407819bc7eaea34348f0962175cbeecc3463"
+          },
+          "copy_attempts": 1,
+          "plan_sha256": "9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07",
+          "transport": "strict-tls",
+          "verified_at": "2026-10-24T10:07:34.175003+00:00",
+          "deployments": 0,
+          "registry_logins": 0,
+          "automatic_copy_retries": 0,
+          "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/session.json"
+        }
+      }
+    },
+    {
+      "service": "governance",
+      "attempt_started_at": "2026-10-24T10:07:34.199863+00:00",
+      "publish": {
+        "exit_code": 0,
+        "elapsed_seconds": 26.664,
+        "result": {
+          "result": "PUBLISHED_DIGEST_VERIFIED",
+          "metadata": {
+            "service": "governance",
+            "archive_sha256": "b465b5cc097e26b81a3ba3283e6b641d0972ceae4658a5e142c17b1287fcfd34",
+            "artifact_receipt_sha256": "6c979f1670eed3d32cc8c73638c703cd44bcc4bae1a06d75253a79045f168b23",
+            "manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+            "destination": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+            "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+            "source_tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+          },
+          "copy_attempts": 1,
+          "plan_sha256": "9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07",
+          "transport": "strict-tls",
+          "verified_at": "2026-10-24T10:08:00.839839+00:00",
+          "deployments": 0,
+          "registry_logins": 0,
+          "automatic_copy_retries": 0,
+          "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/governance.json"
+        }
+      }
+    }
+  ],
+  "registry_logins": 0,
+  "deployments": 0,
+  "shared_restarts": 0,
+  "project_configuration_changes": 0,
+  "credential_values_or_hashes_public": false,
+  "finished_at": "2026-10-24T10:08:00.864851+00:00"
+}

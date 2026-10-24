@@ -1,0 +1,7 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "namespace": "rook-ceph",
+  "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+  "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+}

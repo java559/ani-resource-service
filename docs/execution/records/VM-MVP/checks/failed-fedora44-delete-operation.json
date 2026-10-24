@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-23T21:17:18.919982+00:00",
+  "delete": {
+    "id": "c40749b2-4a38-466c-9b82-6e15ad5d32ff",
+    "vmId": "cd8bfd49-de9b-4a68-8607-15638452d9d7",
+    "action": "/vm.v1.VMService/AcceptDelete",
+    "intentVersion": "2",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T21:15:10.511724256Z"
+  },
+  "original_create": {
+    "id": "ed66ba77-7baa-40b0-8e1f-55ada1f965da",
+    "vmId": "cd8bfd49-de9b-4a68-8607-15638452d9d7",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intentVersion": "1",
+    "state": "failed",
+    "reason": "VM_SUPERSEDED_BY_DELETE",
+    "observedAt": "2026-10-23T21:14:12.579057163Z"
+  },
+  "mutations": 0
+}

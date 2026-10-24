@@ -1,0 +1,50 @@
+{
+  "phase": "bind-fedora44",
+  "task": "vm-mvp-20261023-01a168ce",
+  "private_plan_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/iso-plans.json",
+  "source_kind": "INSTALL_ISO",
+  "guest_initialization": "OMITTED",
+  "compute_code": "vm-mvp-iso-01a168ce",
+  "compute_preset_id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+  "compute_admission_send_attempts": 1,
+  "compute_vm_usage_selectable": true,
+  "expected_media_keys_only_not_readiness": {
+    "fedora44": "fedora-44-iso",
+    "windows2025": "windows-server-2025-iso",
+    "virtio": "virtio-win-0.1.271"
+  },
+  "systems": {
+    "fedora44": {
+      "name": "vm-mvp-fedora44-iso",
+      "root_size_gb": 48,
+      "os_family": "linux"
+    },
+    "windows2025": {
+      "name": "vm-mvp-windows2025-iso",
+      "root_size_gb": 64,
+      "os_family": "windows"
+    }
+  },
+  "bound_media": {
+    "virtio": {
+      "media_key": "virtio-win-0.1.271",
+      "pvc_uid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+      "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5",
+      "proof_basis": "MEDIA_SOURCE_READY_CDI_CHECKSUM_AND_ISO_METADATA",
+      "prefix_bytewise_sha256_status": "PENDING",
+      "guest_driver_recognition": "NOT_RUN",
+      "catalog_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-media-catalog-config18.json",
+      "source_readiness_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/virtio-ready.json"
+    },
+    "fedora44": {
+      "media_key": "fedora-44-iso",
+      "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+      "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912",
+      "proof_basis": "PASS_ORIGINAL_ISO_PRESERVED",
+      "prefix_bytewise_sha256_status": "PASS_ORIGINAL_PREFIX_SHA256",
+      "guest_driver_recognition": "NOT_RUN",
+      "catalog_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-iso-fedora44-catalog-01.json",
+      "source_readiness_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/fedora44-ready.json"
+    }
+  }
+}

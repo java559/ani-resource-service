@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "version": "40",
+  "checks": {
+    "final_three_a": true,
+    "same_vm_uid": true,
+    "same_vmi_uid": true,
+    "same_launcher_uid": true,
+    "same_boot_id": true,
+    "same_three_physical_volumes": true,
+    "native_data_ready_and_hotpluggable": true,
+    "no_ctrl_c_logout_or_marker_writes": true,
+    "both_original_operations_succeeded": true,
+    "send_once_each": true
+  },
+  "detach_operation": {
+    "id": "39353dba-1172-4a55-be03-08f30e2a5196",
+    "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "action": "detach-disk",
+    "intentVersion": "39",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T06:14:49.695558543Z"
+  },
+  "reattach_operation": {
+    "id": "03f94371-8bff-457c-810e-65e201bf42e1",
+    "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "action": "attach-disk",
+    "intentVersion": "40",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T06:23:02.068465987Z"
+  },
+  "initial_guest_receipt": "gov-linux-snapshot-v3-offline-a-guest-readback-initial.json",
+  "final_guest_receipt": "gov-linux-snapshot-v3-offline-a-hotplug-guest-readback.json",
+  "d6_physical_pre_reattach_reference": "gov-linux-snapshot-v3-offline-a-detached-storage.json",
+  "guest_bytes_written": 0,
+  "driver_sha256": "2faf4a60c7ec44cccb9663172167debc5dce9c1799385ac4c1b9bd38e3289b7b"
+}

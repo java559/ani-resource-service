@@ -1,0 +1,406 @@
+{
+  "state": "B_PRIVATE_PG_INPUTS_AND_HARBOR_PREFLIGHT_READY_NOT_CONNECTED",
+  "prepared_at": "2026-10-24T10:14:58.719003+00:00",
+  "authority": {
+    "selected_option": "B: fully isolated task Image database and keys",
+    "root_scope_decision": "Goal4 controlled V24 CPU Instance product-test support: one task-only Image directory/project and fixed-existing-digest internal CopyArtifact. This is neither a new VM guest source nor the three VM05B service-image publication. Root reviews the guarded writes before execution.",
+    "historical_proposals_unchanged": true,
+    "option_A_shared_Image_database_and_keyring": "NOT_SELECTED_NOT_READ_NOT_CONNECTED"
+  },
+  "evidence": {
+    "b-private-pg-prepared.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-private-pg-prepared.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-private-pg-prepared.json",
+      "sha256": "3598235bdae2552e32b087bbad0fce451eb2840af359ed3da73ba7af19a55e75"
+    },
+    "instance-existing-grants-readonly.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/instance-existing-grants-readonly.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/instance-existing-grants-readonly.json",
+      "sha256": "5b759f7ad2003a54c39778f384e26a7676db691164d761b09880123d026794b0"
+    },
+    "b-command-inputs-prepared.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-command-inputs-prepared.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-command-inputs-prepared.json",
+      "sha256": "616b728fb6d6a8f2e374ff70fe87dd6af90f55ad666352b6288cbe71e0f04e42"
+    },
+    "b-harbor-readonly.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly.json",
+      "sha256": "c9dbba33a33964f288824352678ad88feb458bf168fbc87a874d888623d97c06"
+    },
+    "b-harbor-tls-readonly.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-tls-readonly.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-tls-readonly.json",
+      "sha256": "782d4ed0d3b27d2709c4cff82009e9fee99a14a9192fe8bf04f52fd851890090"
+    },
+    "instance-v24.proposed.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/instance-v24.proposed.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/instance-v24.proposed.json",
+      "sha256": "8957f5b34f3b1a8fb89ce234b7f86f9a3955a7295097b7d620ce328bc4383c99"
+    },
+    "image-isolated.proposed.yaml": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/image-isolated.proposed.yaml",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/image-isolated.proposed.yaml",
+      "sha256": "6e01acbe648e9424ccacb582e3279edee839f88c1c548de03c33514fd1fc5d07"
+    },
+    "process-environment.proposed.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/process-environment.proposed.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/process-environment.proposed.json",
+      "sha256": "aaeb8a346986c27467df79e4970bd0859d2f77fdbd8a9522461f0b7b4b5aad33"
+    },
+    "rbac.proposed.yaml": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/rbac.proposed.yaml",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/rbac.proposed.yaml",
+      "sha256": "44281181867ff950259bbe1b1be4eec3799354e3bf7a461a3d4eb715154bbe68"
+    },
+    "qualification.proposed.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/qualification.proposed.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/qualification.proposed.json",
+      "sha256": "e9dfb2abae932ac78e4cae213524f913c24d42f18c23f86a1051fd6cfe0126d1"
+    },
+    "guarded-change.proposed.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/guarded-change.proposed.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/guarded-change.proposed.json",
+      "sha256": "db2e34cadd01737b5ee96efbd27232e85391520b934fc2d6671d89e1754b985a"
+    },
+    "isolated-image-copy.proposed.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/isolated-image-copy.proposed.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/isolated-image-copy.proposed.json",
+      "sha256": "da5ac50ad667bb1542584201760afa1b6707459091dbcf7198ee26f03eb8590b"
+    },
+    "b-harbor-readonly.py": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly.py",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly.py",
+      "sha256": "127063eac57f4f873603c8d9173c81269086271669c557a8e71e5cfc686f4e62"
+    },
+    "prepare-b-command-inputs.py": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/prepare-b-command-inputs.py",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/prepare-b-command-inputs.py",
+      "sha256": "6b84dc98ebc6337b8d1f30bf222967c3aeb11263582a0bd05ac0368831127ad4"
+    },
+    "b-harbor-readonly-curl.py": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly-curl.py",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly-curl.py",
+      "sha256": "221fffda1307cab395d74d07e03950a08d2e8910f61d1eff393f8148a99414bc"
+    },
+    "b-harbor-readonly-curl.json": {
+      "local": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly-curl.json",
+      "fedora": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-harbor-readonly-curl.json",
+      "sha256": "2d256f6508a2d7bfe013edb4fe2a93497fe014f08dc234b058335b1b0c87eece"
+    }
+  },
+  "completed": {
+    "private_and_isolated_image_pg": "PASS; see b-private-pg-prepared.json",
+    "database": {
+      "name": "vm_image_v24_01a168ce",
+      "oid": "108794",
+      "owner": "vm_image_v24_owner_01a168ce",
+      "runtime": "vm_image_v24_runtime_01a168ce",
+      "runtime_oid": "108793",
+      "migration_version": 1,
+      "runtime_no_ddl_temp_superuser_or_role_memberships": true
+    },
+    "existing_instance_schema": "Versions 1-6 match exact8589 and existing runtime grants complete",
+    "instance_ddl_remaining": 0,
+    "instance_grants_remaining": 0,
+    "private_command_inputs": "PRIVATE_INPUTS_PREPARED_ZERO_SEND; original copied config prefix preserved; O_EXCL inputs must not be recreated"
+  },
+  "normal_image_actions_not_executed": {
+    "endpoint": "https://172.16.101.10:30003",
+    "source": "ani-kf-manual-20261009/ani/kubeflow-jupyter@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "destination": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "destination_tag": null,
+    "commands": {
+      "init-platform": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+        "-conf",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs",
+        "-image-operator-config",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+        "-image-admin-input",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/init-platform.json",
+        "-image-admin",
+        "init-platform"
+      ],
+      "register-platform": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+        "-conf",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs",
+        "-image-operator-config",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+        "-image-admin-input",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/register-platform.json",
+        "-image-admin",
+        "register-platform"
+      ]
+    },
+    "init_intent": {
+      "idempotency_key": "8e01602e-0179-4e85-9e60-f8f84d31d40d"
+    },
+    "registration_intent": {
+      "idempotency_key": "a1a53373-b13f-475d-91ad-dbb8940b1ec6",
+      "image_reference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "display_name": "V24 task workspace",
+      "description": "Fixed existing workspace artifact; task-only Instance regression",
+      "purposes": [
+        "container"
+      ],
+      "accelerator": "undeclared"
+    },
+    "copy_intent": {
+      "send_attempts": 0,
+      "method": "POST",
+      "path": "/api/v2.0/projects/vm-mvp-v24-platform-01a168ce/repositories/workspace-candidate/artifacts",
+      "from": "ani-kf-manual-20261009/ani/kubeflow-jupyter@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "destination_digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "tag": null
+    },
+    "ordered_gates": [
+      "StrictTLS source GET200 must match exact digest/repository/type linux/amd64; exact new task project GET404. Unexpected status stops.",
+      "Run production Image operator init-platform once with the persisted input key. Record actual project Location ID and ImageSpace installation/task binding; fresh-read exact ID. Do not adopt an existing project by name.",
+      "Fresh destination artifact GET404 under that exact owned projectID; persist send_attempts=1 before one CopyArtifact POST. Fixed from query, flat destination repository, no tag/no overwrite/source mutation/layer download.",
+      "Unknown CopyArtifact outcome: exact destination digest GET only; do not resend blindly or invent a new intent. Different ownership or digest stops.",
+      "Read back exact destination digest/platform; run normal operator register-platform once with its persisted UUID. Actual normal product catalog must return imageID.",
+      "Normal task-tenant Image space enable only if absent; persist one key. Freeze its exact project/pull robot IDs. No SQL registration, permission, quota or ledger writes."
+    ],
+    "unknown_init": "Production lifecycle blocks SpaceOwnershipUnconfirmed when a project cannot be attributed to its ACK. Query the original command; only explicit Root-reviewed recover-project with exact identity, never new init key/name adoption."
+  },
+  "resource_and_gov_config_delta_not_applied": {
+    "private_refs": {
+      "configuration_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs/config.yaml",
+      "instance_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/instance.json",
+      "operator_configuration_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs/config.yaml",
+      "operator_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+      "image_runtime_dsn_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/image-runtime.dsn"
+    },
+    "resource": "Original task process: add ANI_INSTANCE_CONFIG_FILE to the prepared independent Instance config; use copied conf with only the isolated Image section appended. Existing Compute/VM/Network DSNs and configs unchanged. No competing owner process.",
+    "governance": "Only the exact additions in process-environment.proposed.json: real Image client to39181, ConfigV2 writes and real Quota listener39187 with new task-only mTLS leaves. Existing database/credential/VM/Network/Origin references unchanged.",
+    "session_gateway": "No env/config/binary/PKI/Redis1/key/Origin/port/TTL change and no restart. Prepared PID3226715/start69963261 expires2026-10-24T10:32:32Z; Root owns same-scope maintenance and every future action must fresh-pin current process.",
+    "scheduler": "Explicit CPU PodPlacement NONE/no priority; do not set ANI_INSTANCE_SCHEDULER_BASELINES_ALIGNED or claim a scheduling/GPU baseline.",
+    "acc": "Keep the one actual formal ExternalName peer/SAN/client tuple from instance-v24.proposed.json. Task-host reachability remains NOT_MEASURED. CPU flow does not establish GPU/ACC acceptance."
+  },
+  "qualification_and_quota_not_called": {
+    "identity": {
+      "gov_tenant_id": 1,
+      "resource_tenant_uuid": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "plan_id": 2,
+      "role_id": 3
+    },
+    "normal_admin_preflight_gets": [
+      "/api/v1/admin/tenants/1",
+      "/api/v1/admin/plans/2",
+      "/api/v1/admin/plan-modules?noPaging=true",
+      "/api/v1/admin/roles/3",
+      "/api/v1/admin/permissions?noPaging=true",
+      "/api/v1/admin/quota-definitions?noPaging=true",
+      "/api/v1/admin/tenants/1/quota-accounts",
+      "/api/v1/admin/plan-quotas?noPaging=true"
+    ],
+    "normal_qualification_diff": {
+      "modules_add_only_if_missing": [
+        "INSTANCE",
+        "IMAGE",
+        "MODEL",
+        "INFERENCE"
+      ],
+      "note": "MODEL and INFERENCE are needed only for the requested TRAINING/INFERENCE catalog reads. Resolve actual canonical active permission IDs/methods/routes, preserve every original module and permission. No SQL inserts. Missing module/grant may be reported as actual403 instead of silently claiming coverage.",
+      "modules_api": {
+        "method": "POST",
+        "path": "/api/v1/admin/plan-modules",
+        "body_template": {
+          "data": {
+            "planId": 2,
+            "module": "EXACT_MISSING_MODULE"
+          }
+        }
+      },
+      "role_api": {
+        "method": "PUT",
+        "path": "/api/v1/admin/roles/3",
+        "body_template": {
+          "data": {
+            "tenantId": 1,
+            "permissions": "sorted unique union of original IDs and exact active IDs for approved codes"
+          },
+          "updateMask": "permissions"
+        }
+      },
+      "permission_codes": [
+        "instance:create",
+        "instance:list",
+        "instance:read",
+        "instance:delete",
+        "instance:exec",
+        "instance:operation:read",
+        "instance:preset:read",
+        "image:space:enable",
+        "image:space:get",
+        "image:registration:get",
+        "image:registration:list",
+        "modeldev:compute-preset:read",
+        "inference:compute-preset:read"
+      ]
+    },
+    "three_live_catalog_reads": [
+      {
+        "path": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&page=1&pageSize=100",
+        "usage": "CONTAINER_INSTANCE",
+        "required_module": "INSTANCE",
+        "required_permission": "instance:preset:read",
+        "pass": "HTTP200; actual enabled compatible nonempty item set and every selected usage matches request; 403/empty remains actual failure"
+      },
+      {
+        "path": "/api/v1/compute-presets?usage=TRAINING&page=1&pageSize=100",
+        "usage": "TRAINING",
+        "required_module": "MODEL",
+        "required_permission": "modeldev:compute-preset:read",
+        "pass": "HTTP200; actual enabled compatible nonempty item set and every selected usage matches request; 403/empty remains actual failure"
+      },
+      {
+        "path": "/api/v1/compute-presets?usage=INFERENCE&page=1&pageSize=100",
+        "usage": "INFERENCE",
+        "required_module": "INFERENCE",
+        "required_permission": "inference:compute-preset:read",
+        "pass": "HTTP200; actual enabled compatible nonempty item set and every selected usage matches request; 403/empty remains actual failure"
+      }
+    ],
+    "resource_demand": {
+      "cpu_millis": 1500,
+      "memory_mib": 2048,
+      "workspace_bytes": 1073741824,
+      "preset_candidate": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "preset_not_yet_accepted_for_INSTANCE": true
+    },
+    "quota_guard": "Use actual definition quotaCode/unit/enforcement and normal account limit/occupied/available/overLimit before accepting Instance. Derive quantities from the real frozen Resource CreateSpec; do not invent quota codes or convert units without their actual definition. Maintain the real Gov original ledger/admission/replay/release path.",
+    "quota_plan_change_if_required": {
+      "create": {
+        "method": "POST",
+        "path": "/api/v1/admin/plan-quotas",
+        "body_template": {
+          "data": {
+            "planId": 2,
+            "quotaCode": "ACTUAL_REQUIRED_CODE",
+            "quotaValue": "DECIMAL_UINT64_FROM_ACTUAL_UNIT_AND_OCCUPIED_PLUS_DEMAND"
+          }
+        }
+      },
+      "update": {
+        "method": "PUT",
+        "path": "/api/v1/admin/plan-quotas/{actual_owned_id}",
+        "body_template": {
+          "data": {
+            "planId": 2,
+            "quotaCode": "SAME_ACTUAL_CODE",
+            "quotaValue": "MAX_CURRENT_LIMIT_OCCUPIED_PLUS_DEMAND"
+          },
+          "updateMask": "quotaValue"
+        }
+      },
+      "requires_fresh_exact_delta_review": true,
+      "forbidden": [
+        "SQL quota-account/ledger credits",
+        "zero-charge simulation",
+        "disable enforcement",
+        "lower existing higher limits",
+        "change other tenant quota",
+        "invent monetary prices/balance API"
+      ]
+    },
+    "currency_boundary": "These official quota/account APIs express resource units, not monetary prices or wallet cash. No CPU/memory/workspace unit-price field is evidenced here. If monetary charging is required, its actual owner contract must be identified; no invented0price."
+  },
+  "rbac_delta_not_created": {
+    "manifest": "rbac.proposed.yaml",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "workload_sa": "vm-mvp-v24-workload-01a168ce",
+    "automount_service_account_token": false,
+    "workload_roles": 0,
+    "session_gateway_existing_sa_uid": "e15e6f06-f8ac-4c5a-be9a-51ac5a412b11",
+    "new_role_and_binding": "vm-mvp-v24-sg-exec-01a168ce",
+    "role_scope": "pods/list only in exact task namespace (actual PodResolver uses ListPods); pods/exec create resourceNames only returned owned Instance Pod name. Freeze Notebook->STS->Pod controller UIDs first; placeholder cannot be applied.",
+    "allowdeny": "Preserve original seven RBAC object UIDs/rules/two namespaces. Original22 checks allow only the explicitly declared NS1 pods/list addition; exact owned Pod exec allowed, any other Pod exec/other-namespace pod list/Secret/cluster-wide access denied.",
+    "new_components": 0
+  },
+  "guarded_apply_not_executed": {
+    "proposal": "guarded-change.proposed.json",
+    "historical_overrides": [
+      "OptionB selected; existing Instance migrations/grants already complete:0DDL/0GRANT.",
+      "Historical shared Image preferred path and user-specific-copy-approval wording are superseded by Root B choice and Goal4 task-test support interpretation above. Original proposal bytes remain history."
+    ],
+    "before_maintenance": [
+      "Fresh exact process PID/startticks/argv/cwd/listener/binary/env guard; private byte backups0600. Never TERM a stale PID.",
+      "Fresh Resource six operation-table pending0, Instancepending0, Gov pending_all/pending_vm/unknown0.",
+      "Root explicit no active handoff/window plus fresh SG active0/RedisDB1leases0; SG itself untouched.",
+      "Fresh cluster527UID/Ready3nodes and original taskNS, all3protectedVM logical/native/VMI/launcher/versions/specs/rootdataretiredbackend/snapshot/NoCloud/source/Network/config bytes.",
+      "39187 loopback listener unowned/free; Image and Instance pointers target only intended task DBs."
+    ],
+    "maintenance": "NormalTERM only exact task Resource/Gov one at a time; same binary/env except reviewed additions, budgets unchanged. Readyz+real mTLS service/Quota checks plus protected fingerprints unchanged. No shared Deployment/runtime/controller/StorageClass/VM changes.",
+    "rollback": "Before business acceptance, normalTERM only new exact-owned PID and restore original byte config/env/binary. Once Instance is accepted, preserve owner/outbox until normal GovDelete and complete native/storage/network cleanup; never disable an in-flight owner as rollback."
+  },
+  "cleanup_ownership": {
+    "image_database": "DBvm_image_v24_01a168ce OID108794 and exact new2roles only; normalDROP after task product rows/workers/consumers terminal and parent approval. Existing Compute/VM/sharedImageDB remain.",
+    "private_material": "Only new P private tree after service/workload/dependency cleanup; no shared Secret/CA changes or userSSHkeys.",
+    "harbor": "After actual single Instance productDelete terminal/NotebookSTS/Pod/workspace/network refsGone and consumers0: normaloperator unregister exacttask registration; disable exactcreatedrobots; normalDELETE only ownedproject/artifact under recorded actualID. Source project/repo/tag/digest untouched;0registryGC/blobpurge.",
+    "rbac": "Remove only new3objects by recorded UID after workloadGone; original7RBAC/SA unchanged.",
+    "protected_guest_vms": [
+      "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "fc154879-8a40-4b18-967c-215f5cf5992d"
+    ]
+  },
+  "not_performed": {
+    "harbor_project_create": 0,
+    "artifact_copy": 0,
+    "registration": 0,
+    "normal_qualification_or_quota_api": 0,
+    "service_restarts": 0,
+    "rbac_writes": 0,
+    "instance_create": 0,
+    "guest_or_vm_mutations": 0,
+    "shared_database_or_secret_writes": 0
+  },
+  "source_contracts": [
+    "api/protos/admin/service/v1/i_quota.proto:12-25 (Gov)",
+    "api/protos/quota/service/v1/quota_catalog.proto:36-44 (Gov)",
+    "api/protos/identity/service/v1/plan_quota.proto (Gov)",
+    "pkg/permcode/compute_catalog.go:8-15 (Gov)",
+    "internal/biz/image/lifecycle.go:202+ (Resource)",
+    "internal/data/image/harbor_project.go (Resource)",
+    "internal/runtime/kubernetes/pod_resolver.go:68 (SG)"
+  ],
+  "resolved_transport_history": {
+    "stage": "source artifact strict-TLS read-only preflight",
+    "first_attempt": {
+      "receipt": "b-harbor-readonly.json",
+      "result": "URLError before HTTP response, second GET not sent, no retry"
+    },
+    "diagnosis": {
+      "receipt": "b-harbor-tls-readonly.json",
+      "attempts": 1,
+      "http_requests": 0,
+      "authorization_headers": 0,
+      "exception": "SSLCertVerificationError",
+      "verify_code": 92,
+      "verify_message": "CA cert does not include key usage extension",
+      "ca_identity": "Projected CN=ANI Harbor Offline CA; not expired. Docs successful file first cert CN=172.16.101.10. Different public certificate bytes alone do not prove endpoint drift.",
+      "next_minimal_delta_proposed": "Keep the existing projected CA and all private credential inputs; use an existing normal strict certificate/hostname/expiry-validating TLS client for the same two fixed GETs. No insecure flags, alternate endpoint, new trust root or automatic retry."
+    },
+    "resolution": {
+      "receipt": "b-harbor-readonly-curl.json",
+      "result": "PASS_SOURCE_IDENTITY_AND_NEW_PROJECT_ABSENT_READ_ONLY",
+      "source_status": 200,
+      "source_artifact_id": 9,
+      "source_project_id": 3,
+      "source_digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "source_platform": "linux/amd64",
+      "destination_project_status": 404,
+      "ca_unchanged": true,
+      "credential_argv_or_output": false,
+      "automatic_retries": 0,
+      "write_or_layer_download": 0,
+      "next_minimal_delta_proposed": "RESOLVED by the explicitly approved curl normal-validation client; original CA and Go product TLS configuration unchanged."
+    }
+  },
+  "next_root_review": "Exact init-platform -> fixed CopyArtifact -> register-platform mutations and then guarded task Resource/Gov maintenance/normal qualification/quota/RBAC; no writes or maintenance are implied by the preflight PASS.",
+  "canonical_receipt_directory": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/checks/v24-live-prep-01"
+}

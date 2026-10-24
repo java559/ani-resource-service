@@ -1,0 +1,255 @@
+{
+  "at": "2026-10-23T20:02:23.211267+00:00",
+  "phase": "RUNNING_NATIVE_FROZEN_NOT_GUEST",
+  "tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ],
+    "roles": [
+      "tenant:manager"
+    ]
+  },
+  "name": "vm-mvp-tenant2-linux-01a168ce",
+  "key": "a4805830-6e85-517a-8f17-65d756710d8b",
+  "body_without_password": {
+    "data": {
+      "name": "vm-mvp-tenant2-linux-01a168ce",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04",
+      "systemDiskSizeGb": "12",
+      "idempotencyKey": "a4805830-6e85-517a-8f17-65d756710d8b",
+      "startAfterCreate": true,
+      "network": {
+        "vpcId": "vpc_c44c262a220748aab0e4b20558849409",
+        "subnetId": "subnet_ea6b62fc625349bcad46ce56ce60f90d"
+      },
+      "guestInitialization": {
+        "username": "aniuser"
+      }
+    }
+  },
+  "credential_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-credentials.json",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-vm.json",
+  "send_attempts": 1,
+  "outcome": "acknowledged",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+  "media_key": "ubuntu-24.04",
+  "catalog": {
+    "compute": {
+      "id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "name": "VM MVP 1500m 2048MiB",
+      "code": "vm-mvp-01a168ce",
+      "description": "Task VM acceptance",
+      "compute_type": "cpu",
+      "cpu_millis": "1500",
+      "memory_mib": "2048",
+      "enabled": true,
+      "gpu": null,
+      "created_at": "2026-10-23T15:09:26.908658Z",
+      "updated_at": "2026-10-23T15:09:26.908658Z",
+      "selectable": true,
+      "unavailable_reason": ""
+    },
+    "media": {
+      "mediaKey": "ubuntu-24.04",
+      "name": "Ubuntu 24.04.5 LTS",
+      "kind": "DISK_IMAGE",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "architecture": "amd64",
+      "firmware": "bios",
+      "rootBus": "virtio",
+      "dataBus": "scsi",
+      "nicModel": "virtio",
+      "persistentTpm": false,
+      "persistentUefi": false,
+      "driverMediaKey": "",
+      "virtualCapacityBytes": "3758096384",
+      "initializationCapability": "CLOUD_INIT_NOCLOUD",
+      "initializationVerified": true
+    }
+  },
+  "placement": {
+    "namespace": {
+      "kind": "Namespace",
+      "namespace": "",
+      "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404"
+    },
+    "nad": {
+      "kind": "NetworkAttachmentDefinition",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-mvp-tenant2-01a168ce",
+      "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+    },
+    "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "network_mapping_active": true,
+    "vpc": {
+      "id": "vpc_c44c262a220748aab0e4b20558849409",
+      "name": "vm-mvp-tenant2-01a168ce",
+      "description": "VM MVP tenant2 V10 preparation",
+      "cidr": "10.84.0.0/16",
+      "state": "available",
+      "reason": "",
+      "created_at": "2026-10-23T19:39:07.514643Z",
+      "updated_at": "2026-10-23T19:58:30.901736Z",
+      "version": "357",
+      "observed_at": "2026-10-23T19:58:30.872901Z",
+      "observation_stale": false,
+      "last_operation_id": "6622b59f-66b8-483a-80b6-6f17c70d432a",
+      "subnet_count": "1"
+    },
+    "subnet": {
+      "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+      "name": "vm-mvp-tenant2-01a168ce",
+      "description": "VM MVP tenant2 V10 preparation",
+      "cidr": "10.84.1.0/24",
+      "gateway": "10.84.1.1",
+      "state": "available",
+      "reason": "",
+      "reason_message": "",
+      "created_at": "2026-10-23T19:39:13.377039Z",
+      "updated_at": "2026-10-23T19:58:32.438310Z",
+      "version": "356",
+      "observed_at": "2026-10-23T19:58:32.376861Z",
+      "observation_stale": false,
+      "last_operation_id": "6c225fda-56de-4ee0-8fe4-ddcbbbb40448",
+      "available_ip_range": "10.84.1.2-10.84.1.254",
+      "used_ip_range": ""
+    },
+    "source": {
+      "media_key": "ubuntu-24.04",
+      "name": "Ubuntu 24.04.5 LTS",
+      "kind": "DISK_IMAGE",
+      "cluster_id": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "pvc_name": "vm-mvp-ubuntu-2404-source",
+      "pvc_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+      "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+      "volume_mode": "Block",
+      "content_type": "kubevirt",
+      "virtual_capacity_bytes": 3758096384,
+      "requested_bytes": 8000000000,
+      "os_family": "linux",
+      "os_version": "24.04.5 LTS (Noble Numbat)",
+      "architecture": "amd64",
+      "firmware": "bios",
+      "root_bus": "virtio",
+      "data_bus": "scsi",
+      "nic_model": "virtio",
+      "persistent_tpm": false,
+      "persistent_uefi": false,
+      "driver_media_key": "",
+      "initialization_capability": "CLOUD_INIT_NOCLOUD",
+      "initialization_verified": true
+    },
+    "source_pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ubuntu-2404-source",
+      "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+    },
+    "storage_class": "ani-block",
+    "storage_class_uid": "e7813a57-3d1c-47e4-a298-86212a59e51e"
+  },
+  "operation": {
+    "id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+    "vmId": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intentVersion": "1",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T20:02:08.871985942Z"
+  },
+  "current": {
+    "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "name": "vm-mvp-tenant2-linux-01a168ce",
+    "version": "1",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Running",
+    "observedState": "Running",
+    "reason": "",
+    "observedAt": "2026-10-23T20:02:05.458572556Z",
+    "addresses": [
+      {
+        "nicName": "default",
+        "address": "10.84.1.2",
+        "observedAt": "2026-10-23T20:02:05.458572556Z"
+      }
+    ],
+    "lastOperationId": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "native_receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-tenant2-linux-native.json",
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/operations/4ded9db7-6492-45d2-925a-1d551ed066c1",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "status": 200
+    }
+  ],
+  "guest": "NOT_RUN",
+  "browser": "NOT_RUN"
+}

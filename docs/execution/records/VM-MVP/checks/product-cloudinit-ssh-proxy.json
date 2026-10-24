@@ -1,0 +1,80 @@
+{
+  "pod": {
+    "kind": "Pod",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-mvp-ssh-proxy-01a168ce",
+    "uid": "ba3f345a-765e-42ca-9814-ea4960fb39fc"
+  },
+  "phase": "Pending",
+  "node": "ani-02",
+  "conditions": [
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T04:33:04Z",
+      "observedGeneration": 1,
+      "status": "False",
+      "type": "PodReadyToStartContainers"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T04:33:04Z",
+      "observedGeneration": 1,
+      "status": "True",
+      "type": "Initialized"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T04:33:04Z",
+      "message": "containers with unready status: [proxy]",
+      "observedGeneration": 1,
+      "reason": "ContainersNotReady",
+      "status": "False",
+      "type": "Ready"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T04:33:04Z",
+      "message": "containers with unready status: [proxy]",
+      "observedGeneration": 1,
+      "reason": "ContainersNotReady",
+      "status": "False",
+      "type": "ContainersReady"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T04:33:04Z",
+      "observedGeneration": 1,
+      "status": "True",
+      "type": "PodScheduled"
+    }
+  ],
+  "container_statuses": [
+    {
+      "image": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+      "imageID": "",
+      "lastState": {},
+      "name": "proxy",
+      "ready": false,
+      "restartCount": 0,
+      "started": false,
+      "state": {
+        "waiting": {
+          "reason": "ContainerCreating"
+        }
+      }
+    }
+  ],
+  "annotations": {
+    "networking.kubercloud.com/subnet": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d",
+    "networking.kubercloud.com/vnic": "auto-vm-mvp-ssh-proxy-01a168ce-vnic-x97tp",
+    "v1.multus-cni.io/default-network": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce"
+  },
+  "plan_sha256": "0124346063d83d48c111af2f0a1af87f5e084520758730a7484b678794a3e139",
+  "create_send_attempts": 1,
+  "vnic": {
+    "kind": "VNic",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "auto-vm-mvp-ssh-proxy-01a168ce-vnic-x97tp",
+    "uid": "67701c18-b92a-42fa-a172-4070fc62972b"
+  }
+}

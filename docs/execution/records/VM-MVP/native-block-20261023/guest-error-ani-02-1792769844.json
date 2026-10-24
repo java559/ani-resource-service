@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-23T15:37:24.993383+00:00",
+  "result": "FAIL",
+  "layer": "GUEST",
+  "scope": "native environment probe only",
+  "console_driver": "official SHA-verified v1.9.0 virtctl KubeVirt serialconsole subresource over native authenticated TLS",
+  "node": "ani-02",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+  },
+  "vmi": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachineInstance",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "b3d3a6f3-dbeb-4f04-b701-7dd3325988c7"
+  },
+  "error": "Timeout exceeded.\n<pexpect.pty_spawn.spawn object at 0x7fba87f396a0>\ncommand: /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64\nargs: [b'/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64', b'console', b'vm-mvp-ani-02', b'--namespace', b'vm-mvp-probe-01a168ce', b'--kubeconfig', b'/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', b'--timeout=20']\nbuffer (last 100 chars): '1;31m*\\x1b[0m\\x1b[0;31m*   \\x1b[0m] Job systemd-networkd-wait-online.se…tart running (1min 42s / no limit)\\r\\r\\n'\nbefore (last 100 chars): '1;31m*\\x1b[0m\\x1b[0;31m*   \\x1b[0m] Job systemd-networkd-wait-online.se…tart running (1min 42s / no limit)\\r\\r\\n'\nafter: <class 'pexpect.exceptions.TIMEOUT'>\nmatch: None\nmatch_index: None\nexitstatus: None\nflag_eof: False\npid: 1428911\nchild_fd: 6\nclosed: False\ntimeout: 30\ndelimiter: <class 'pexpect.exceptions.EOF'>\nlogfile: None\nlogfile_read: None\nlogfile_send: None\nmaxread: 2000\nignorecase: False\nsearchwindowsize: None\ndelaybeforesend: 0.05\ndelayafterclose: 0.1\ndelayafterterminate: 0.1\nsearcher: searcher_re:\n    0: re.compile('login:')\n    1: re.compile('\\\\$ ')"
+}

@@ -1,0 +1,135 @@
+{
+  "at": "2026-10-23T20:02:23.206475+00:00",
+  "scope": "read-only actual Gov tenant2 native identity; no guest/browser assertion",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+  },
+  "launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "virt-launcher-vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc-6t5rc",
+    "uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+  },
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "native_uid": 107,
+  "root_disk": {
+    "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+    "role": "system",
+    "name": "system",
+    "sizeGb": "12",
+    "requestedBytes": "12000000000",
+    "observedCapacityBytes": "12884901888",
+    "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+    "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+    "attached": true,
+    "preparationState": "Bound",
+    "reason": ""
+  },
+  "dv": {
+    "kind": "DataVolume",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+    "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae"
+  },
+  "pvc": {
+    "kind": "PersistentVolumeClaim",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+    "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+  },
+  "pvc_spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "dataSource": {
+      "apiGroup": "cdi.kubevirt.io",
+      "kind": "VolumeCloneSource",
+      "name": "volume-clone-source-33497874-e0c4-4428-8ea1-2c296e8086ae"
+    },
+    "dataSourceRef": {
+      "apiGroup": "cdi.kubevirt.io",
+      "kind": "VolumeCloneSource",
+      "name": "volume-clone-source-33497874-e0c4-4428-8ea1-2c296e8086ae"
+    },
+    "resources": {
+      "requests": {
+        "storage": "12G"
+      }
+    },
+    "storageClassName": "ani-block",
+    "volumeMode": "Block",
+    "volumeName": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc"
+  },
+  "pv": {
+    "kind": "PersistentVolume",
+    "namespace": "",
+    "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+    "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+  },
+  "pv_csi": {
+    "controllerExpandSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "controllerPublishSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "driver": "rook-ceph.rbd.csi.ceph.com",
+    "nodeStageSecretRef": {
+      "name": "rook-csi-rbd-node",
+      "namespace": "rook-ceph"
+    },
+    "volumeAttributes": {
+      "clusterID": "rook-ceph",
+      "imageFeatures": "layering",
+      "imageFormat": "2",
+      "imageName": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9",
+      "journalPool": "ani-block-pool",
+      "pool": "ani-block-pool",
+      "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+    },
+    "volumeHandle": "0001-0009-rook-ceph-0000000000000004-016ddb5e-363a-4557-9b14-858beafe6fe9"
+  },
+  "attachment_id": "att_dc9331390ff6468b8a7560c406b4a1db",
+  "vmi_interfaces": [
+    {
+      "infoSource": "domain",
+      "ipAddress": "10.84.1.2",
+      "ipAddresses": [
+        "10.84.1.2"
+      ],
+      "linkState": "up",
+      "mac": "fa:00:75:19:33:88",
+      "name": "default",
+      "podInterfaceName": "eth0",
+      "queueCount": 1
+    }
+  ],
+  "compare_v3_vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+  },
+  "compare_v3_node": "ani-02",
+  "two_distinct_nodes": true,
+  "scheduling_modified": false,
+  "result": "PASS_NATIVE_IDENTITY_NOT_GUEST"
+}

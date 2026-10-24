@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-24T07:46:46.303674+00:00",
+  "phase": "test",
+  "repo": "session",
+  "host": "fedora",
+  "gowork": "off",
+  "private_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "steps": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-mod=readonly",
+        "./internal/transport/grpc",
+        "./internal/runtime/kubevirt"
+      ],
+      "exit_code": 0,
+      "output": "ok  \tgithub.com/zhangzhe-ctrl/ani-session-gateway/internal/transport/grpc\t0.024s\nok  \tgithub.com/zhangzhe-ctrl/ani-session-gateway/internal/runtime/kubevirt\t0.082s\n"
+    }
+  ],
+  "candidate_processes_changed": false,
+  "business_api_calls": 0,
+  "result": "PASS_AFFECTED_FORMAL_TESTS",
+  "non_mod_source_unchanged": true,
+  "outputs": {
+    "go.mod": "3984133143b4e19868776da1630bb51f0472bcde52310a9487efb4b8e8af26c8",
+    "go.sum": "c111fd5b9881d15fe56895e92fd72046b7b4cce7aee3be58122973c41e804062"
+  },
+  "elapsed_seconds": 16.863
+}

@@ -1,0 +1,62 @@
+{
+  "state": "CONSOLE_FORMAL_DEPENDENCY_PINNED_PARTIAL_DOWNSTREAM_DELIVERY",
+  "recorded_at": "2026-10-24T04:46:47.746910+00:00",
+  "module": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+  "version": "v0.0.0-20261023185414-0a53b99c8d9f",
+  "source_manifest_sha256": "3cc35dbf57031dcd81775c0357370ca3759fde0d87f13d0e052e02a50f631f52",
+  "source_files": 3322,
+  "non_mod_sum_source_unchanged": true,
+  "output_files": {
+    "resource/go.mod": "41152b583c720153bbdf215ae63f6e366de9986f8f465eb309dcfc3d368b4e6e",
+    "resource/go.sum": "b4130ec594f543e4b73e0e4c38abccf2f6eb1138e64fd46748a6fe450f09d3e1",
+    "session/go.mod": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+    "session/go.sum": "97ab4e4c936eef493115db5949c35c2ded58f6f10ade6f501691216d31d3270c",
+    "session/api/go.mod": "cb0da045b65e71091e42420447c742df4ac86bcd7129e7bf94edd81f9ad05d93",
+    "session/api/go.sum": "c6caaebcd7e01e1898597a5ec2168daab6dc728dee709b44bbf1bd2c92118b61",
+    "governance/go.mod": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+    "governance/go.sum": "b98b4e39429250d0e27e3fdf3077654d99caf98de4c39a002435b81fa3a8ecb5"
+  },
+  "steps": {
+    "sg-api": {
+      "receipt": "sg-api.json",
+      "sha256": "7cd65fe38a0a81bc921c32154a669a4af09c38e2aaaca1280183bf52597a7214",
+      "result": "PASS"
+    },
+    "resource": {
+      "receipt": "resource.json",
+      "sha256": "0e69a6cc863d4e110a00435997e00fee754611299616b31dac82d0d392e00b1d",
+      "result": "PASS"
+    },
+    "sg": {
+      "receipt": "sg.json",
+      "sha256": "a580fc672a9eb69bb308306ed70a53426d61303f74c93633abc2eb014b0d3e0e",
+      "result": "PASS"
+    },
+    "gov": {
+      "receipt": "gov.json",
+      "sha256": "a9b831c02279ca1aea528a0cfc5e90c4694f7dfaeda6ba14253a84ebb01e804c",
+      "result": "FAIL_OR_BLOCKED"
+    }
+  },
+  "remaining_boundaries": [
+    "SG root self API v0.0.0 with inherited ./api replace remains unpublished; kube-openapi inherited replace unchanged",
+    "Gov still uses Resource SDK v0.0.0-20261022081320-13fa2b465960 and SG API v0.1.1-0.20261013075651-d889f9490b84; new VM contracts not published",
+    "Gov readonly affected build stopped on existing old Resource SDK VCS shallow-file fetch error before contract compilation; no retry/cache rewrite",
+    "No complete formal-ref/full make verify claim"
+  ],
+  "tidy_effects": {
+    "resource": [
+      "go-restful/v3 same-version promoted to direct, matching existing import",
+      "x/crypto v0.53.0 -> v0.57.0 required by already-pinned x/net v0.60.0"
+    ],
+    "session_api": [
+      "grpc1.79.3 ->1.83.2 and corresponding indirects required by formal console module"
+    ],
+    "gov": "No tidy attempted to avoid resolving or upgrading unpublished other SDK contracts; formal console download/list succeeded"
+  },
+  "git_transport": "Per-command SSH443 rewrite and existing task-private strict known_hosts; no key copied/global config changed",
+  "running_candidates_changed": false,
+  "business_api_calls": 0,
+  "git_pushes": 0,
+  "source_transfer": "Initial 46MB SCP normal-TERM after slow partial; reconstructed exact 3283 reused hashes plus 39 frozen original-tar files, 952320B overlay"
+}

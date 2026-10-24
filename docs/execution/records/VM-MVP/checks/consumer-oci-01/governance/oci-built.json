@@ -1,0 +1,208 @@
+{
+  "base_cached_before_build": {
+    "id": "sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "repo_digests": [
+      "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+    ]
+  },
+  "build_environment": {
+    "CGO_ENABLED": "0",
+    "GOARCH": "amd64",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": "2",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "SOURCE_DATE_EPOCH": "1792829794"
+  },
+  "business_api_calls": 0,
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.072,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/base-inspect.log",
+      "log_sha256": "bbd4f0ddbe88c70bc2ee38834d2074aa0d19e5c09597e8986be79726e35db11e",
+      "stage": "base-inspect",
+      "timeout_seconds": 299.907
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.022,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/tag-absence.log",
+      "log_sha256": "00d869b30102a6a9acfcdb68ad4cce7bc20eaf87d44b905d7f0874954f60f5ba",
+      "stage": "tag-absence",
+      "timeout_seconds": 299.833
+    },
+    {
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "vm-mvp-governance-oci-check-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.021,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/check-container-absence.log",
+      "log_sha256": "fed6cfb85039de6ee1b5993694b26c51591b38f75d67f63e1c86465ae1c84609",
+      "stage": "check-container-absence",
+      "timeout_seconds": 299.809
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.007,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/go-version.log",
+      "log_sha256": "4e0b213cba780f63b02f3ab9001ee61e4101d254e0af1a8205574c19dad0f93b",
+      "stage": "go-version",
+      "timeout_seconds": 298.813
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "edit",
+        "-json"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source",
+      "elapsed_seconds": 0.01,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/module-replacements.log",
+      "log_sha256": "a70011a30be4515c6233b093aa8ecfe4aaa4fc3de2fd70197f3e338ccc2156f7",
+      "stage": "module-replacements",
+      "timeout_seconds": 298.804
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-ldflags",
+        "-X main.version=vm-mvp-a64e0ab8ed6b-01a168ce",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/context/gov-server",
+        "./app/admin/service/cmd/server"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source",
+      "elapsed_seconds": 298.88,
+      "exit_code": -15,
+      "interrupted": false,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/compile.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stage": "compile",
+      "timed_out": true,
+      "timeout_seconds": 298.791
+    }
+  ],
+  "deployments": 0,
+  "elapsed_seconds": 300.093,
+  "error": "compile exceeded global deadline",
+  "error_type": "AssertionError",
+  "finished_at": "2026-10-24T08:32:19.616998+00:00",
+  "host": "fedora/172.16.101.31",
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "phase": "FAILED_NO_RETRY",
+  "prepared_sha256": "325ac27ab5d71fe44484d79cd9ec579dfb05c3d1c8091bbe0bdbb691b8e6770c",
+  "result": "FAIL",
+  "service": "governance",
+  "service_restarts": 0,
+  "source": {
+    "archive": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source.tar.gz",
+    "archive_bytes": 3387197,
+    "archive_sha256": "bba9834610be2b376480f0ee75d9fb2e87e96bf2d3a8e4acaa5a636c56630ec8",
+    "commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+    "file_count": 1487,
+    "manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source-manifest.json",
+    "manifest_sha256": "90c7d09ea7e15ea6c0f1d379095924dcc58702a28541b74bd38a3f7361e0e6f4",
+    "parent": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "repository": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+    "runtime_embed_inputs": [
+      {
+        "go_source": "app/admin/service/cmd/server/assets/assets.go",
+        "pattern": "app/admin/service/cmd/server/assets/openapi.yaml",
+        "selected_inputs": [
+          "app/admin/service/cmd/server/assets/openapi.yaml"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf"
+        ]
+      },
+      {
+        "go_source": "sql/bootstrap/bootstrap.go",
+        "pattern": "sql/bootstrap/001_initial.sql",
+        "selected_inputs": [
+          "sql/bootstrap/001_initial.sql"
+        ]
+      }
+    ],
+    "source_date_epoch": 1792829794,
+    "tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+  },
+  "source_driver_sha256": "38fcb0b6987f5953be1661bf85e4865f48745cc82097a9764cbac0fe03e648b4",
+  "started_at": "2026-10-24T08:27:19.523708+00:00",
+  "vm_mutations": 0
+}

@@ -1,0 +1,76 @@
+{
+  "state": "PUBLISHED_REMOTE_EXACT_HEAD_VERIFIED",
+  "started_at": "2026-10-24T04:21:35.441127+00:00",
+  "commit": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+  "remote_ref": "refs/heads/codex/vm-mvp-console-api-20261023",
+  "ssh_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "push_send_count": 1,
+  "force_flags_used": false,
+  "other_refs_written": false,
+  "guards": {
+    "head_exact": true,
+    "nine_file_hashes_modes_exact": true,
+    "core_hooksPath_absent": true,
+    "existing_pre_push_absent": "/home/chabking/workspace/ani-resource-service/.git/hooks/pre-push",
+    "task_guard_path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/git-console-api-push-hooks/pre-push",
+    "task_guard_sha256": "980ec16b7ee437de77a43dfefa0a6bca08dcfb37a56686e788b4a2562ca10edb",
+    "git_config_changed": false
+  },
+  "fresh_remote_absence": {
+    "command": [
+      "git",
+      "-c",
+      "core.sshCommand=ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8",
+      "ls-remote",
+      "--exit-code",
+      "--heads",
+      "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+      "refs/heads/codex/vm-mvp-console-api-20261023"
+    ],
+    "exit_code": 2,
+    "stdout": "",
+    "stderr": ""
+  },
+  "push_ack": {
+    "command": [
+      "git",
+      "-c",
+      "core.hooksPath=/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/git-console-api-push-hooks",
+      "-c",
+      "core.sshCommand=ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8",
+      "push",
+      "--porcelain",
+      "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+      "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b:refs/heads/codex/vm-mvp-console-api-20261023"
+    ],
+    "exit_code": 0,
+    "stdout": "To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git\n*\t0a53b99c8d9f126fd02e6cdde2841c8fbea9046b:refs/heads/codex/vm-mvp-console-api-20261023\t[new branch]\nDone\n",
+    "stderr": "remote: \nremote: Create a pull request for 'codex/vm-mvp-console-api-20261023' on GitHub by visiting:        \nremote:      https://github.com/zhangzhe-ctrl/ani-resource-service/pull/new/codex/vm-mvp-console-api-20261023        \nremote: \n"
+  },
+  "remote_exact_verification": {
+    "command": [
+      "git",
+      "-c",
+      "core.sshCommand=ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8",
+      "ls-remote",
+      "--exit-code",
+      "--heads",
+      "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+      "refs/heads/codex/vm-mvp-console-api-20261023"
+    ],
+    "exit_code": 0,
+    "stdout": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b\trefs/heads/codex/vm-mvp-console-api-20261023\n",
+    "stderr": ""
+  },
+  "module": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+  "commit_utc": "2026-10-23T18:54:14Z",
+  "expected_pseudo_version": "v0.0.0-20261023185414-0a53b99c8d9f",
+  "formal_module_resolution": "PASS_FORMAL_MODULE_FETCHABLE_EXACT_VERSION_AND_COMMIT",
+  "finished_at": "2026-10-24T04:21:54.730854+00:00",
+  "module_resolution_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/provider-console-module-resolution-02.json",
+  "module_resolution_receipt_sha256": "866a7dbe8731bae6c61240f5985814cb33cccdab5ba01ce7f87a6e723f8d387c",
+  "module_sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+  "go_mod_sum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8=",
+  "module_resolution_finished_at": "2026-10-24T04:26:18.991776+00:00",
+  "module_resolution_previous_failure": "provider-console-module-resolution.json"
+}
