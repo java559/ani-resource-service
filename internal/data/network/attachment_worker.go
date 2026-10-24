@@ -82,7 +82,7 @@ func (p *Postgres) FinishAttachment(ctx context.Context, w biz.AttachmentWork, p
 	if e != nil {
 		return e
 	}
-	isManaged := managed.WorkloadMode == "controller_managed"
+	isManaged := (managed.WorkloadMode == "controller_managed" || managed.WorkloadMode == "vm_managed")
 	if isManaged && old == biz.Attached && progress.State == biz.Reserved {
 		valid = true
 	}
@@ -94,7 +94,23 @@ func (p *Postgres) FinishAttachment(ctx context.Context, w biz.AttachmentWork, p
 		// Recheck the existing high water and Confirm ACK while the attachment
 		// parents/version/lease are locked. No caller can clear a fence merely
 		// by setting ProtocolBlocked=false in a stale progress value.
-		if !isManaged || !a.ProtocolBlocked || progress.ProtocolBlocked || !progress.Observed || progress.State != biz.Attached || progress.Reason != "" || progress.ConsumerSnapshot == nil || !biz.ManagedProtocolRecoveryMatches(managed, *progress.ConsumerSnapshot, progress.PodName, progress.PodUID) {
+		openRecovery, closedRecovery := false, false
+		if progress.ConsumerSnapshot != nil {
+			openRecovery = progress.State == biz.Attached && biz.ManagedProtocolRecoveryMatches(managed, *progress.ConsumerSnapshot, progress.PodName, progress.PodUID)
+			closedRecovery = progress.State == biz.Released && progress.PodName == "" && progress.PodUID == "" && w.RequireFreshRelations && !progress.Proof.CollectedAt.Before(w.Now) && biz.VMClosedProtocolRecoveryMatches(managed, *progress.ConsumerSnapshot)
+			if closedRecovery {
+				var relations []attachmentRelation
+				if len(progress.Relations) == 0 || json.Unmarshal(progress.Relations, &relations) != nil {
+					closedRecovery = false
+				}
+				for _, relation := range relations {
+					if relation.Current || relation.AddressEligible {
+						closedRecovery = false
+					}
+				}
+			}
+		}
+		if !isManaged || !a.ProtocolBlocked || progress.ProtocolBlocked || !progress.Observed || progress.Reason != "" || (!openRecovery && !closedRecovery) {
 			return biz.ErrLeaseLost
 		}
 		protocolBlocked = false

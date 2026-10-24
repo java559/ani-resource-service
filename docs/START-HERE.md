@@ -85,6 +85,38 @@ NET-05A 的观察、时效、调度与增量验收统一见[持续观察规格](
 本仓库独立拥有生成源码，不在构建或运行时依赖 layout 或 ANI 内部目录。
 旧版 START-HERE 中的初始化交接及待讨论问题由上述词汇、ADR、规格和来源记录取代；历史版本仍可从 Git 查询。
 
+## VM MVP
+
+- [虚拟机一期规格 v2](specs/vm-mvp.md)：Linux/Windows、ISO 与 qcow2/raw、Block/RWO 自有盘、多盘、VNC、原生热插拔、在线/离线快照恢复及租户主网的唯一业务规则。
+- [VM v1 正式合同](contracts/vm-v1.md)：API、action/usage/codec、compute、Network v3、可信 console binding 及 Gov 删除持久受理栅栏的唯一字段/接线规则。
+- [纵向实施计划 v2](plans/vm-mvp.md)：VM-00 至 VM-05B 共16卡；先贯通真实Linux主链，再补齐一期范围。
+- [整批执行 Goal](plans/vm-mvp-complete-goal-20261023.md)：本轮完整范围和授权边界；以当前用户指令补充。重任务仅ssh fedora、集群仅172.16.101.10～12、Git传输仅SSH；按依赖连续执行16卡，不逐卡询问。共享runtime/组件变更和正式发布仍须取得具体批准；旧环境Block缺项须在10～12重新核验。
+- [验收矩阵 V01–V25](verification/vm-mvp-acceptance.md)：CODE/PG/BOUNDARY/LIVE/GUEST/BROWSER及双系统必需格子，含Gov删除投递暂停期间的受理栅栏；本文件不维护执行结果。
+- [制包来源](references/vm-mvp-sources.md)、[设计复核历史](execution/records/VM-MVP/design-review-20261023.md)、[制包校验历史](execution/records/VM-MVP/package-validation-20261023.md)：固定输入与历史证据，不作当前环境或实施状态。
+- [首卡 Goal](plans/vm-mvp-goals/VM-00.md)、[维护窗口 Goal](plans/vm-mvp-goals/VM-00R.md)；其余16卡文件在同目录。单卡范围按完整Goal连续执行授权组合。
+- 空白模板：[环境输入](plans/vm-mvp-templates/environment-inputs.yaml)、[runtime变更准备单](plans/vm-mvp-templates/runtime-change-plan.md)、[任务报告](plans/vm-mvp-templates/task-report.md)。填写后的输入、变更单、报告统一放入docs/execution/records/VM-MVP/。
+- [VM候选部署交接](execution/records/VM-MVP/vm-candidate-deployment-handoff.md)：实际候选来源、依赖顺序、迁移/密钥和部署/回退边界；正式实现refs与镜像仍UNPUBLISHED，不复制验收矩阵。
+- 当前结果仅见[唯一执行状态](execution/status.md#vm-mvp)。
+
+### 文档接入与唯一状态
+
+不可变输入包为ani-vm-mvp-v2-20261023.zip，SHA-256为ef781d20e31f02ecdd6e3e0f98dcd3bd77ee38a3b790b0a69b0ef86ecd49a10d。VM-00按下表将正式内容按差异接入，替换旧VM规格和计划中的相反规则，保留无关内容；不覆盖根README，不修改AGENTS或remote-execution。迁移后的Markdown链接及Goal文字路径均指向仓内目标；包README引用统一指本VM入口。
+
+| 包内文件 | Resource目标位置 |
+|---|---|
+| docs/specs/vm-mvp.md | [docs/specs/vm-mvp.md](specs/vm-mvp.md) |
+| docs/contracts/vm-v1.md | [docs/contracts/vm-v1.md](contracts/vm-v1.md) |
+| docs/plans/vm-mvp.md | [docs/plans/vm-mvp.md](plans/vm-mvp.md) |
+| docs/verification/acceptance.md | [docs/verification/vm-mvp-acceptance.md](verification/vm-mvp-acceptance.md) |
+| docs/references/sources.md | [docs/references/vm-mvp-sources.md](references/vm-mvp-sources.md) |
+| docs/review/consistency-review.md | [docs/execution/records/VM-MVP/design-review-20261023.md](execution/records/VM-MVP/design-review-20261023.md) |
+| docs/review/package-validation.md | [docs/execution/records/VM-MVP/package-validation-20261023.md](execution/records/VM-MVP/package-validation-20261023.md) |
+| goals/*.md | docs/plans/vm-mvp-goals/，保留16个原文件名 |
+| templates/* | docs/plans/vm-mvp-templates/，保留3个原文件名，模板保持空白 |
+| README.md | 不覆盖仓库README；由本VM入口承接映射及接入规则 |
+
+唯一当前状态始终为docs/execution/status.md#vm-mvp；证据仅以docs/execution/records/VM-MVP/为本批索引。Gov、SG和前端记录链接到该索引，不再建立第二套总状态。两份历史复核仅保留制包时事实，不重写为实施通过声明；目标行为和计划也不作为产品验收证据。
+
 ## Image MVP
 
 - [2026-10-13 tenant-a 前端演示手动操作](execution/records/IMAGE-MVP/frontend-demo-tenant-a-20261013/README.md)：真实租户空间、两类镜像推送/登记和恢复记录。

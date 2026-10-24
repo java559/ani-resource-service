@@ -1,0 +1,92 @@
+# VM-00填写的输入模板；不是可直接执行的集群清单。
+# null表示未知，只阻断依赖该事实的任务。不得伪填PASS或保存凭据内容。
+document_version: 2
+task_scope: ani-vm-mvp
+recorded_at: null
+execution:
+  source_snapshot_ref: null
+  host: null
+  effective_remote_execution_rule: null
+  task_directory: null
+  credential_reference_only: null
+repositories:
+  resource: {head: null, dirty_manifest_sha256: null}
+  governance: {head: null, dirty_manifest_sha256: null}
+  session_gateway: {head: null, dirty_manifest_sha256: null}
+  frontend: {repository: null, head: null, path: null, framework: null}
+cluster:
+  id: null
+  uid: null
+  kubernetes_version: null
+  kubevirt_version: null
+  cdi_version: null
+  multus_version: null
+  kcn_image_digest: null
+  eligible_vm_nodes: []
+  runtime_type: null
+  runtime_version: null
+  runtime_config_source: null
+  runtime_service_name: null
+runtime_change:
+  state: NOT_VERIFIED
+  reason: null # 先只读重核172.16.101.10～12；确有缺项才登记BLOCKED_ENV并等待具体批准
+  live_read_verified: false
+  user_idle_confirmation_ref: null
+  explicit_authorization_ref: null
+  approved_nodes: []
+  maintenance_window: null
+  change_plan_ref: null
+  backup_reference: null
+  applied: false
+  verified: false
+storage_policy:
+  root_data_volume_mode: Block
+  root_data_access_modes: [ReadWriteOnce]
+  size_unit: GB
+  bytes_per_gb: 1000000000
+  size_step_gb: 1
+storage_observed:
+  root_data_storage_class: null
+  storage_class_uid: null
+  storage_profile: null
+  csi_driver: null
+  binding_mode: null
+  reclaim_policy: null
+  volume_snapshot_class: null
+  snapshot_driver: null
+  snapshot_deletion_policy: null
+  backend_state_storage_class: null
+  backend_state_mode: Filesystem
+  capacity_allocation_unit: null
+capabilities_observed:
+  snapshot_api: null
+  snapshot_controller: null
+  snapshot_gate: null
+  declarative_hotplug_gate: null
+  legacy_hotplug_gate: null
+  persistent_state_native: null
+  # v1.9 VMPersistentState已GA，不新增旧实验gate任务。
+tenants: []
+# 每个tenant填写tenant_id/namespace/namespace_uid/vpc_id/subnet_id，
+# 以及受管NAD name/UID/config_digest、KCN subnet binding_revision；
+# NAD不存在时登记缺项，不在VM-00擅建。
+media: []
+# 每项填写key/kind/OS具体版本/architecture/源PVC namespace+name+UID/
+# checksum/source_volume_mode/content_type/虚拟容量及PVC请求容量/
+# firmware/root与data总线/NIC型号/driver_key/TPM要求；
+# 目标root/data始终Block，指定FS→Block克隆需单独验证。
+live_scope:
+  explicit_authorization_ref: null
+  allowed_namespaces: []
+  allowed_object_prefixes: []
+  allowed_nodes: []
+  excluded_resources: []
+  cleanup_plan_ref: null
+capability_blockers:
+  ENV_BLOCK: NOT_VERIFIED
+  ENV_MEDIA: NOT_VERIFIED
+  ENV_NETWORK: NOT_VERIFIED
+  ENV_SNAPSHOT: NOT_VERIFIED
+  ENV_HOTPLUG: NOT_VERIFIED
+  ENV_TPM: CONDITIONAL_NOT_VERIFIED
+  INPUT_FRONTEND: NOT_VERIFIED

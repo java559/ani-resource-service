@@ -14,6 +14,7 @@ import (
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
+	vmv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network"
@@ -101,6 +102,11 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
+	vms, consumer, err := wireVM(context.Background(), bc.Network, compute, repository, provider, attachments, instances, consumer, policy.StaleAfter)
+	if err != nil {
+		return err
+	}
+	defer vms.Close()
 	attachmentWorker, err := biz.NewAttachmentWorker(repository, provider, consumer, uuid.NewString(), policy)
 	if err != nil {
 		return err
@@ -118,6 +124,9 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 		return err
 	}
 	additional := []server.Stepper{attachmentWorker, switchWorker, retirementWorker}
+	if vms != nil {
+		additional = append(additional, vms.worker)
+	}
 	if defaultWorker != nil {
 		additional = append(additional, defaultWorker)
 	}
@@ -154,9 +163,15 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if instances != nil {
 		instancev1.RegisterInstanceServiceServer(gs, instances.service)
 	}
+	if vms != nil {
+		vmv1.RegisterVMServiceServer(gs, vms.service)
+	}
 	configured = true
 	admin := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
 	servers := []transport.Server{gs, admin, execution}
+	if vms != nil && vms.console != nil {
+		servers = append(servers, vms.console)
+	}
 	if instances != nil {
 		servers = append(servers, instances.execution, instances.terminal)
 	}

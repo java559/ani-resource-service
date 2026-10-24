@@ -14,6 +14,7 @@ import (
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
+	vmv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network"
@@ -122,6 +123,15 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		_ = observability.Shutdown(ctx)
 		return nil, err
 	}
+	vms, routedConsumer, err := wireVM(context.Background(), bc.Network, compute, repository, provider, attachments, instances, routedConsumer, policy.StaleAfter)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if !configured {
+			vms.Close()
+		}
+	}()
 	attachmentWorker, err := biz.NewAttachmentWorker(repository, provider, routedConsumer, uuid.NewString(), policy, observability.ObserveAttachmentWork)
 	if err != nil {
 		consumer.Close()
@@ -146,6 +156,9 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		return nil, err
 	}
 	additional := []server.Stepper{attachmentWorker, switchWorker, retirementWorker}
+	if vms != nil {
+		additional = append(additional, vms.worker)
+	}
 	if defaultWorker != nil {
 		additional = append(additional, defaultWorker)
 	}
@@ -188,8 +201,14 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	if instances != nil {
 		instancev1.RegisterInstanceServiceServer(grpcServer, instances.service)
 	}
+	if vms != nil {
+		vmv1.RegisterVMServiceServer(grpcServer, vms.service)
+	}
 	adminServer := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
 	servers := []transport.Server{grpcServer, adminServer, observation, execution}
+	if vms != nil && vms.console != nil {
+		servers = append(servers, vms.console)
+	}
 	if instances != nil {
 		servers = append(servers, instances.execution, instances.terminal)
 	}
@@ -199,6 +218,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 		kratos.AfterStart(func(context.Context) error { readiness.Set(true); return nil }),
 		kratos.BeforeStop(func(context.Context) error { readiness.Set(false); return nil }),
 		kratos.AfterStop(func(ctx context.Context) error {
+			vms.Close()
 			consumer.Close()
 			instances.Close()
 			compute.Close()

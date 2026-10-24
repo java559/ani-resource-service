@@ -13,13 +13,15 @@ const (
 	ContainerInstance
 	Training
 	Inference
+	VirtualMachine
 )
 
-func ValidUsage(u Usage) bool { return u >= ContainerInstance && u <= Inference }
+func ValidUsage(u Usage) bool { return u >= ContainerInstance && u <= VirtualMachine }
 
 const ResolveMethod = "/compute.v1.ComputePresetService/ResolveComputePreset"
 const ListMethod = "/compute.v1.ComputePresetService/ListPresets"
 const ContainerResolveMethod = "/instance.v1.InstanceService/ResolveCreateSpec"
+const VMResolveMethod = "/vm.v1.VMService/ResolveCreateSpec"
 
 var platformMethods = map[string]struct{}{
 	"/compute.v1.ComputePresetService/AdminListPresets":      {},
@@ -78,6 +80,10 @@ func ScopeFromContext(ctx context.Context) (Scope, error) {
 			if s.Usage != ContainerInstance {
 				return Scope{}, ErrDenied
 			}
+		case VMResolveMethod:
+			if s.Usage != VirtualMachine {
+				return Scope{}, ErrDenied
+			}
 		default:
 			return Scope{}, ErrDenied
 		}
@@ -130,7 +136,7 @@ func (r *Resolver) Resolve(ctx context.Context, tenant, presetID string, u Usage
 		return Selection{}, e
 	}
 	s, _ := CallerFromContext(ctx)
-	if s.Method != ResolveMethod && s.Method != ContainerResolveMethod {
+	if s.Method != ResolveMethod && s.Method != ContainerResolveMethod && s.Method != VMResolveMethod {
 		return Selection{}, ErrDenied
 	}
 	p, e := r.repo.GetPreset(ctx, presetID)
