@@ -1,0 +1,2790 @@
+{
+  "at": "2026-10-24T19:51:32.613372+00:00",
+  "scope": "shared Resource/Gov/SG deployment preflight only",
+  "writes": 0,
+  "service_changes": 0,
+  "business_requests": 0,
+  "secret_values_output": 0,
+  "other_tenant_business_reads": 0,
+  "workloads": [
+    {
+      "kind": "Deployment",
+      "namespace": "ani-system",
+      "name": "ani-resource-service",
+      "uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+      "resource_version": "63651746",
+      "generation": 34,
+      "observed_generation": 34,
+      "replicas": 1,
+      "ready_replicas": 1,
+      "available_replicas": 1,
+      "strategy": {
+        "type": "Recreate"
+      },
+      "selector": {
+        "matchLabels": {
+          "app": "ani-resource-service"
+        }
+      },
+      "service_account": "ani-resource-service",
+      "template_sha256": "ad41aaf56e5a73ab723529af24362079c0ac431025e7a24e3262de9266ba2cef",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+          "image_pull_policy": "IfNotPresent",
+          "env": [
+            {
+              "name": "ANI_NETWORK_MODE"
+            },
+            {
+              "name": "ANI_NETWORK_DATABASE_DSN",
+              "valueFrom": {
+                "secretKeyRef": {
+                  "key": "network-dsn",
+                  "name": "resource-runtime-private"
+                }
+              }
+            },
+            {
+              "name": "ANI_NETWORK_CURSOR_SIGNING_KEY",
+              "valueFrom": {
+                "secretKeyRef": {
+                  "key": "network-cursor-key",
+                  "name": "resource-runtime-private"
+                }
+              }
+            },
+            {
+              "name": "ANI_NETWORK_CLIENT_CA"
+            },
+            {
+              "name": "ANI_NETWORK_TLS_CERT"
+            },
+            {
+              "name": "ANI_NETWORK_TLS_KEY"
+            },
+            {
+              "name": "ANI_INSTANCE_CONFIG_FILE",
+              "file_ref": "/run/resource-private/instance-config.json"
+            },
+            {
+              "name": "ANI_COMPUTE_CONFIG_FILE",
+              "file_ref": "/run/resource-private/compute-config.json"
+            },
+            {
+              "name": "ANI_NETWORK_KUBECONFIG"
+            },
+            {
+              "name": "NETWORK_KUBECONFIG"
+            },
+            {
+              "name": "ANI_OBSERVATION_REQUEST_QPS"
+            },
+            {
+              "name": "ANI_OBSERVATION_REQUEST_BURST"
+            },
+            {
+              "name": "GOMEMLIMIT"
+            }
+          ],
+          "env_from": [],
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19093,
+              "name": "terminal",
+              "protocol": "TCP"
+            }
+          ],
+          "readiness_probe": {
+            "failureThreshold": 3,
+            "httpGet": {
+              "path": "/readyz",
+              "port": "admin",
+              "scheme": "HTTP"
+            },
+            "periodSeconds": 5,
+            "successThreshold": 1,
+            "timeoutSeconds": 2
+          },
+          "liveness_probe": {
+            "failureThreshold": 3,
+            "httpGet": {
+              "path": "/healthz",
+              "port": "admin",
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 10,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "timeoutSeconds": 2
+          },
+          "config_arg_refs": [
+            "/run/configs"
+          ],
+          "volume_mounts": [
+            {
+              "mountPath": "/run/configs",
+              "name": "configs",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-mtls",
+              "name": "tls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-private",
+              "name": "private",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-quota-mtls",
+              "name": "quota-tls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/resource-accelerator-mtls",
+              "name": "accelerator-tls",
+              "readOnly": true
+            }
+          ],
+          "resources": {
+            "limits": {
+              "cpu": "2",
+              "memory": "1Gi"
+            },
+            "requests": {
+              "cpu": "500m",
+              "memory": "256Mi"
+            }
+          }
+        }
+      ],
+      "init_container_names": [
+        "copy-private-files"
+      ],
+      "volume_refs": [
+        {
+          "name": "configs",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "resource-configs"
+          }
+        },
+        {
+          "name": "tls",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "resource-server-mtls"
+          }
+        },
+        {
+          "name": "private-source",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "resource-runtime-private"
+          }
+        },
+        {
+          "name": "private"
+        },
+        {
+          "name": "instance-source",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "resource-instance-private"
+          }
+        },
+        {
+          "name": "quota-tls",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "resource-quota-mtls"
+          }
+        },
+        {
+          "name": "accelerator-tls",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "resource-accelerator-node-agent-bc-client"
+          }
+        }
+      ],
+      "pull_secret_refs": [
+        {
+          "name": "icn-01a15337-release-pull"
+        }
+      ],
+      "pods": [
+        {
+          "kind": "Pod",
+          "namespace": "ani-system",
+          "name": "ani-resource-service-5d859b7976-cnldn",
+          "uid": "a9899ae3-5d77-4ef9-8566-7df32abb38a3",
+          "resource_version": "63651738",
+          "node": "ani-01",
+          "owner_refs": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "ReplicaSet",
+              "name": "ani-resource-service-5d859b7976",
+              "uid": "668c2eb4-1db4-4ffe-889f-8665f28cd0b3"
+            }
+          ],
+          "phase": "Running",
+          "ready": true,
+          "containers": [
+            {
+              "name": "server",
+              "image": "sha256:9c2c69f9bc41c6b561c9c7116ef233395250d47d6fa5e07a555fd080a22f5de1",
+              "image_id": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+              "ready": true,
+              "restart_count": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "namespace": "ani-system",
+      "name": "ani-governance",
+      "uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+      "resource_version": "58362733",
+      "generation": 143,
+      "observed_generation": 143,
+      "replicas": 1,
+      "ready_replicas": 1,
+      "available_replicas": 1,
+      "strategy": {
+        "type": "Recreate"
+      },
+      "selector": {
+        "matchLabels": {
+          "app": "ani-governance"
+        }
+      },
+      "service_account": "governance-runtime",
+      "template_sha256": "0ba50246d8579ca3ff1915356dfb1c823a0327e5f22e21bf2a3ec2103452e1e3",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+          "image_pull_policy": "IfNotPresent",
+          "env": [
+            {
+              "name": "ANI_OBSERVABILITY_GRPC_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-observability-service.ani-system.svc",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_OBSERVABILITY_CA_FILE",
+              "file_ref": "/run/secrets/observability-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_OBSERVABILITY_CLIENT_CERT_FILE",
+              "file_ref": "/run/secrets/observability-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_OBSERVABILITY_CLIENT_KEY_FILE",
+              "file_ref": "/run/secrets/observability-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INSTANCE_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-resource-service.ani-system.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_INSTANCE_CA"
+            },
+            {
+              "name": "ANI_INSTANCE_CERT"
+            },
+            {
+              "name": "ANI_INSTANCE_KEY"
+            },
+            {
+              "name": "ANI_ACCESS_KEY_ENCRYPTION_KEY_FILE",
+              "file_ref": "/run/secrets/ake/access-key-encryption-key"
+            },
+            {
+              "name": "ANI_MODELDEV_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-modeldev.ani-system.svc",
+                "port": 9000
+              }
+            },
+            {
+              "name": "ANI_MODELDEV_CA"
+            },
+            {
+              "name": "ANI_MODELDEV_CERT"
+            },
+            {
+              "name": "ANI_MODELDEV_KEY"
+            },
+            {
+              "name": "ANI_MODELDEV_TIMEOUT"
+            },
+            {
+              "name": "ANI_NETWORK_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-resource-service.ani-system.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_NETWORK_CA"
+            },
+            {
+              "name": "ANI_NETWORK_CERT"
+            },
+            {
+              "name": "ANI_NETWORK_KEY"
+            },
+            {
+              "name": "ANI_IMAGE_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-resource-service.ani-system.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_IMAGE_CA"
+            },
+            {
+              "name": "ANI_IMAGE_CERT"
+            },
+            {
+              "name": "ANI_IMAGE_KEY"
+            },
+            {
+              "name": "ANI_MODEL_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-model-grpc.ani-system.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_MODEL_CA"
+            },
+            {
+              "name": "ANI_MODEL_CERT"
+            },
+            {
+              "name": "ANI_MODEL_KEY"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_NAME"
+            },
+            {
+              "name": "ANI_QUOTA_ENABLED"
+            },
+            {
+              "name": "ANI_QUOTA_INTERNAL_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "0.0.0.0",
+                "port": 19093
+              }
+            },
+            {
+              "name": "ANI_QUOTA_CA_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_QUOTA_CERT_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_QUOTA_KEY_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/tls.key"
+            },
+            {
+              "name": "ANI_ACCELERATOR_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_ACCELERATOR_SERVER_NAME"
+            },
+            {
+              "name": "ANI_QUOTA_RESOURCE_DNS_SAN"
+            },
+            {
+              "name": "ANI_INSTANCE_CLUSTER_ID"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CA"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CERT"
+            },
+            {
+              "name": "ANI_ACCELERATOR_KEY"
+            },
+            {
+              "name": "ANI_ACCELERATOR_TIMEOUT"
+            },
+            {
+              "name": "GWA_AUTH_REFRESH_COOKIE_INSECURE"
+            },
+            {
+              "name": "ANI_INSTANCE_SG_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-session-gateway-grpc.ani-system.svc.cluster.local",
+                "port": 9090
+              }
+            },
+            {
+              "name": "ANI_INSTANCE_SG_SERVER_NAME"
+            },
+            {
+              "name": "ANI_INSTANCE_SG_CA_FILE",
+              "file_ref": "/run/secrets/session-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_INSTANCE_SG_CERT_FILE",
+              "file_ref": "/run/secrets/session-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_INSTANCE_SG_KEY_FILE",
+              "file_ref": "/run/secrets/session-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INSTANCE_CONFIG_V2_WRITES"
+            },
+            {
+              "name": "ANI_INFERENCE_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-inference-grpc.ani-system.svc.cluster.local",
+                "port": 19090
+              }
+            },
+            {
+              "name": "ANI_INFERENCE_CA_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_CERT_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_KEY_FILE",
+              "file_ref": "/run/secrets/model-inference-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INFERENCE_SERVER_NAME"
+            },
+            {
+              "name": "ANI_NETWORK_TIMEOUT"
+            },
+            {
+              "name": "GODEBUG"
+            },
+            {
+              "name": "ANI_QUOTA_MODELDEV_ENABLED"
+            },
+            {
+              "name": "ANI_MODEL_TIMEOUT"
+            }
+          ],
+          "env_from": [],
+          "ports": [
+            {
+              "containerPort": 7788,
+              "name": "http",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19093,
+              "name": "quota-grpc",
+              "protocol": "TCP"
+            }
+          ],
+          "readiness_probe": {
+            "failureThreshold": 3,
+            "initialDelaySeconds": 5,
+            "periodSeconds": 10,
+            "successThreshold": 1,
+            "tcpSocket": {
+              "port": 7788
+            },
+            "timeoutSeconds": 1
+          },
+          "liveness_probe": {
+            "failureThreshold": 3,
+            "initialDelaySeconds": 15,
+            "periodSeconds": 20,
+            "successThreshold": 1,
+            "tcpSocket": {
+              "port": 7788
+            },
+            "timeoutSeconds": 1
+          },
+          "config_arg_refs": [],
+          "volume_mounts": [
+            {
+              "mountPath": "/run/secrets/observability-mtls",
+              "name": "observability-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/configs",
+              "name": "configs",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/ake",
+              "name": "ake",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/modeldev-mtls",
+              "name": "modeldev-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/resource-mtls",
+              "name": "resource-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/model-inference-mtls",
+              "name": "model-inference-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/accelerator-lab-mtls",
+              "name": "accelerator-lab-mtls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/secrets/session-mtls",
+              "name": "session-mtls",
+              "readOnly": true
+            }
+          ],
+          "resources": {
+            "limits": {
+              "cpu": "1",
+              "memory": "1Gi"
+            },
+            "requests": {
+              "cpu": "100m",
+              "memory": "128Mi"
+            }
+          }
+        }
+      ],
+      "init_container_names": [],
+      "volume_refs": [
+        {
+          "name": "observability-mtls",
+          "secret_ref": {
+            "defaultMode": 292,
+            "secretName": "ani-observability-governance-client-tls"
+          }
+        },
+        {
+          "name": "configs",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-configs"
+          }
+        },
+        {
+          "name": "ake",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-runtime-keys"
+          }
+        },
+        {
+          "name": "modeldev-mtls",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-modeldev-client-tls"
+          }
+        },
+        {
+          "name": "resource-mtls",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-resource-mtls"
+          }
+        },
+        {
+          "name": "model-inference-mtls",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-model-inference-tls"
+          }
+        },
+        {
+          "name": "accelerator-lab-mtls",
+          "secret_ref": {
+            "defaultMode": 420,
+            "secretName": "governance-accelerator-node-agent-bc-client"
+          }
+        },
+        {
+          "name": "session-mtls",
+          "secret_ref": {
+            "defaultMode": 292,
+            "secretName": "governance-session-mtls"
+          }
+        }
+      ],
+      "pull_secret_refs": [
+        {
+          "name": "icn-01a15337-release-pull"
+        },
+        {
+          "name": "ani-inference-runtime-pull"
+        }
+      ],
+      "pods": [
+        {
+          "kind": "Pod",
+          "namespace": "ani-system",
+          "name": "ani-governance-564c8c959f-ztftn",
+          "uid": "68f41619-c02e-4aa7-950f-138a6792143c",
+          "resource_version": "58362722",
+          "node": "ani-01",
+          "owner_refs": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "ReplicaSet",
+              "name": "ani-governance-564c8c959f",
+              "uid": "1446e698-bd74-432b-80d6-d1b5979a38e7"
+            }
+          ],
+          "phase": "Running",
+          "ready": true,
+          "containers": [
+            {
+              "name": "server",
+              "image": "sha256:49031def60e97ab2bd97a9eb6546ead8c39cf0484279934cf2b0d598619aefdb",
+              "image_id": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+              "ready": true,
+              "restart_count": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Deployment",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway",
+      "uid": "36588530-93e5-4b64-90bf-6a9b9b1e8f4b",
+      "resource_version": "63736838",
+      "generation": 7,
+      "observed_generation": 7,
+      "replicas": 1,
+      "ready_replicas": 1,
+      "available_replicas": 1,
+      "strategy": {
+        "type": "Recreate"
+      },
+      "selector": {
+        "matchLabels": {
+          "app": "ani-session-gateway"
+        }
+      },
+      "service_account": "ani-session-gateway",
+      "template_sha256": "ed314eac231f295caaa213e2b35f2e36ab9ec855829082342af11634bd66ac86",
+      "containers": [
+        {
+          "name": "server",
+          "image": "localhost/ani-session-gateway:fb35493-terminal-20261019-static1",
+          "image_pull_policy": "Never",
+          "env": [
+            {
+              "name": "PUBLIC_WS_BASE_URL",
+              "endpoint_ref": {
+                "scheme": "ws",
+                "host": "172.16.101.10",
+                "port": 30086
+              }
+            },
+            {
+              "name": "ALLOWED_ORIGINS"
+            },
+            {
+              "name": "STORE_MODE"
+            },
+            {
+              "name": "REDIS_URL",
+              "valueFrom": {
+                "secretKeyRef": {
+                  "key": "redis-url",
+                  "name": "ani-session-gateway-runtime"
+                }
+              }
+            },
+            {
+              "name": "TICKET_ENCRYPTION_KEY_FILE",
+              "file_ref": "/run/sg-runtime/ticket-key"
+            },
+            {
+              "name": "RESOURCE_INSTANCE_ADDR",
+              "endpoint_ref": {
+                "scheme": null,
+                "host": "ani-resource-instance-terminal.ani-system.svc.cluster.local",
+                "port": 19093
+              }
+            },
+            {
+              "name": "RESOURCE_INSTANCE_SERVER_NAME"
+            },
+            {
+              "name": "RESOURCE_INSTANCE_CLUSTER_ID"
+            },
+            {
+              "name": "RESOURCE_INSTANCE_CA_FILE",
+              "file_ref": "/run/sg-tls/ca.crt"
+            },
+            {
+              "name": "RESOURCE_INSTANCE_CERT_FILE",
+              "file_ref": "/run/sg-tls/tls.crt"
+            },
+            {
+              "name": "RESOURCE_INSTANCE_KEY_FILE",
+              "file_ref": "/run/sg-tls/tls.key"
+            },
+            {
+              "name": "INSTANCE_CONTROL_CA_FILE",
+              "file_ref": "/run/sg-tls/ca.crt"
+            },
+            {
+              "name": "INSTANCE_CONTROL_CERT_FILE",
+              "file_ref": "/run/sg-tls/tls.crt"
+            },
+            {
+              "name": "INSTANCE_CONTROL_KEY_FILE",
+              "file_ref": "/run/sg-tls/tls.key"
+            }
+          ],
+          "env_from": [],
+          "ports": [
+            {
+              "containerPort": 8080,
+              "name": "http",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 9090,
+              "name": "grpc",
+              "protocol": "TCP"
+            }
+          ],
+          "readiness_probe": {
+            "failureThreshold": 3,
+            "httpGet": {
+              "path": "/readyz",
+              "port": 8080,
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 2,
+            "periodSeconds": 5,
+            "successThreshold": 1,
+            "timeoutSeconds": 1
+          },
+          "liveness_probe": {
+            "failureThreshold": 3,
+            "httpGet": {
+              "path": "/healthz",
+              "port": 8080,
+              "scheme": "HTTP"
+            },
+            "initialDelaySeconds": 5,
+            "periodSeconds": 15,
+            "successThreshold": 1,
+            "timeoutSeconds": 1
+          },
+          "config_arg_refs": [],
+          "volume_mounts": [
+            {
+              "mountPath": "/run/sg-tls",
+              "name": "tls",
+              "readOnly": true
+            },
+            {
+              "mountPath": "/run/sg-runtime",
+              "name": "runtime",
+              "readOnly": true
+            }
+          ],
+          "resources": {
+            "limits": {
+              "cpu": "500m",
+              "memory": "256Mi"
+            },
+            "requests": {
+              "cpu": "50m",
+              "memory": "64Mi"
+            }
+          }
+        }
+      ],
+      "init_container_names": [],
+      "volume_refs": [
+        {
+          "name": "tls",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "ani-session-gateway-tls"
+          }
+        },
+        {
+          "name": "runtime",
+          "secret_ref": {
+            "defaultMode": 288,
+            "secretName": "ani-session-gateway-runtime"
+          }
+        }
+      ],
+      "pull_secret_refs": [],
+      "pods": [
+        {
+          "kind": "Pod",
+          "namespace": "ani-system",
+          "name": "ani-session-gateway-85744bb67d-pkkmr",
+          "uid": "c5c71013-68c7-4616-947e-92d0bbc0ae84",
+          "resource_version": "63736832",
+          "node": "ani-02",
+          "owner_refs": [
+            {
+              "apiVersion": "apps/v1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "ReplicaSet",
+              "name": "ani-session-gateway-85744bb67d",
+              "uid": "9f55c3a8-45f3-49c5-be4b-b4f1d2d0c027"
+            }
+          ],
+          "phase": "Running",
+          "ready": true,
+          "containers": [
+            {
+              "name": "server",
+              "image": "localhost/ani-session-gateway:fb35493-terminal-20261019-static1",
+              "image_id": "sha256:73a2f714432b17c92fe2c3f04e4eee33d00362364270b3358220b8861245f279",
+              "ready": true,
+              "restart_count": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-resource-service",
+      "uid": "6fd9d7aa-0969-401f-a8ae-8032b53e04e2",
+      "resource_version": "3113151",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.73.172",
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        },
+        {
+          "name": "admin",
+          "port": 19091,
+          "protocol": "TCP",
+          "targetPort": "admin"
+        }
+      ],
+      "selector": {
+        "app": "ani-resource-service"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-resource-service-82kq8",
+          "uid": "85c537e2-e40d-4917-9a3e-fccf5f671088",
+          "resource_version": "63651740",
+          "ports": [
+            {
+              "name": "admin",
+              "port": 19091,
+              "protocol": "TCP"
+            },
+            {
+              "name": "grpc",
+              "port": 19090,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.218"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-resource-service-5d859b7976-cnldn",
+                "namespace": "ani-system",
+                "uid": "a9899ae3-5d77-4ef9-8566-7df32abb38a3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-resource-instance-terminal",
+      "uid": "f0646b8b-b353-45b1-915a-131ee92767df",
+      "resource_version": "41218577",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.137.188",
+      "ports": [
+        {
+          "name": "terminal",
+          "port": 19093,
+          "protocol": "TCP",
+          "targetPort": 19093
+        }
+      ],
+      "selector": {
+        "app": "ani-resource-service"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-resource-instance-terminal-bqt6d",
+          "uid": "af84045d-7ecd-4958-a238-3d4fd86f6b5d",
+          "resource_version": "63651739",
+          "ports": [
+            {
+              "name": "terminal",
+              "port": 19093,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.218"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-resource-service-5d859b7976-cnldn",
+                "namespace": "ani-system",
+                "uid": "a9899ae3-5d77-4ef9-8566-7df32abb38a3"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-governance",
+      "uid": "a305b105-32ef-425c-8118-310089e7063b",
+      "resource_version": "44174779",
+      "type": "NodePort",
+      "cluster_ip": "10.96.126.167",
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 30085,
+          "port": 7788,
+          "protocol": "TCP",
+          "targetPort": 7788
+        }
+      ],
+      "selector": {
+        "app": "ani-governance"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-governance-pw5t8",
+          "uid": "02fa8bef-1502-4f1a-9633-ce25f804a12a",
+          "resource_version": "58362729",
+          "ports": [
+            {
+              "name": "http",
+              "port": 7788,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.254"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-governance-564c8c959f-ztftn",
+                "namespace": "ani-system",
+                "uid": "68f41619-c02e-4aa7-950f-138a6792143c"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-governance-internal",
+      "uid": "268ee7b3-53ea-4377-aaaa-10fa917e20db",
+      "resource_version": "26101949",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.3.210",
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19093,
+          "protocol": "TCP",
+          "targetPort": 19093
+        }
+      ],
+      "selector": {
+        "app": "ani-governance"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-governance-internal-q8k5r",
+          "uid": "6ef299ff-b154-4c07-bb77-ea234b83c5c4",
+          "resource_version": "58362731",
+          "ports": [
+            {
+              "name": "grpc",
+              "port": 19093,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.254"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-governance-564c8c959f-ztftn",
+                "namespace": "ani-system",
+                "uid": "68f41619-c02e-4aa7-950f-138a6792143c"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway-grpc",
+      "uid": "884e4aeb-8f31-4c61-870f-a4675c72eb32",
+      "resource_version": "63363330",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.44.115",
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 9090,
+          "protocol": "TCP",
+          "targetPort": 9090
+        }
+      ],
+      "selector": {
+        "app": "ani-session-gateway"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-session-gateway-grpc-8vvlb",
+          "uid": "0baf0fef-037c-4a23-aa81-60b347406553",
+          "resource_version": "63736833",
+          "ports": [
+            {
+              "name": "grpc",
+              "port": 9090,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.76"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-session-gateway-85744bb67d-pkkmr",
+                "namespace": "ani-system",
+                "uid": "c5c71013-68c7-4616-947e-92d0bbc0ae84"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway-ws",
+      "uid": "948cff54-4b50-4cdb-9a55-8a10e45d3572",
+      "resource_version": "63363331",
+      "type": "NodePort",
+      "cluster_ip": "10.96.137.78",
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 30086,
+          "port": 8080,
+          "protocol": "TCP",
+          "targetPort": 8080
+        }
+      ],
+      "selector": {
+        "app": "ani-session-gateway"
+      },
+      "dependency": false,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-system",
+          "name": "ani-session-gateway-ws-v6c4j",
+          "uid": "8aaba292-a4ea-471e-b30f-78f713108f9a",
+          "resource_version": "63736835",
+          "ports": [
+            {
+              "name": "http",
+              "port": 8080,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.76"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "ani-session-gateway-85744bb67d-pkkmr",
+                "namespace": "ani-system",
+                "uid": "c5c71013-68c7-4616-947e-92d0bbc0ae84"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-platform",
+      "name": "postgresql",
+      "uid": "9e50c954-fe1b-46ea-81e9-2c1e1d3eb20a",
+      "resource_version": "3113110",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.181.27",
+      "ports": [
+        {
+          "name": "postgres",
+          "port": 5432,
+          "protocol": "TCP",
+          "targetPort": 5432
+        }
+      ],
+      "selector": {
+        "app": "postgresql"
+      },
+      "dependency": true,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-platform",
+          "name": "postgresql-sq7tn",
+          "uid": "d1951769-2a24-44eb-aab7-d6097f2cabbb",
+          "resource_version": "50091457",
+          "ports": [
+            {
+              "name": "postgres",
+              "port": 5432,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.250"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "postgresql-0",
+                "namespace": "ani-platform",
+                "uid": "e185d93d-3730-4166-87e3-82a5877982fe"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "Service",
+      "namespace": "ani-platform",
+      "name": "valkey",
+      "uid": "742ca62c-202e-469c-bcfa-615b4fc898f7",
+      "resource_version": "3113111",
+      "type": "ClusterIP",
+      "cluster_ip": "10.96.136.25",
+      "ports": [
+        {
+          "name": "valkey",
+          "port": 6379,
+          "protocol": "TCP",
+          "targetPort": 6379
+        }
+      ],
+      "selector": {
+        "app": "valkey"
+      },
+      "dependency": true,
+      "endpoint_slices": [
+        {
+          "kind": "EndpointSlice",
+          "namespace": "ani-platform",
+          "name": "valkey-28g98",
+          "uid": "fd5653b9-428e-44fb-94c6-773ef3eda31c",
+          "resource_version": "50080929",
+          "ports": [
+            {
+              "name": "valkey",
+              "port": 6379,
+              "protocol": "TCP"
+            }
+          ],
+          "endpoints": [
+            {
+              "addresses": [
+                "10.16.0.92"
+              ],
+              "conditions": {
+                "ready": true,
+                "serving": true,
+                "terminating": false
+              },
+              "target_ref": {
+                "kind": "Pod",
+                "name": "valkey-0",
+                "namespace": "ani-platform",
+                "uid": "cf211410-6ffc-48da-9aba-8417222206ef"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "config_refs": [
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "ani-observability-governance-client-tls",
+      "uid": "4e8142de-21fd-4f98-83dc-cf46293d7e6f",
+      "resource_version": "41521388",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway-runtime",
+      "uid": "05a0d5b1-8180-4a7c-82a5-6f6fbd33c3e1",
+      "resource_version": "41285817",
+      "type": "Opaque",
+      "keys": [
+        "redis-url",
+        "ticket-key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": [
+        {
+          "key": "redis-url",
+          "endpoint_ref": {
+            "scheme": "redis",
+            "host": "valkey.ani-platform.svc.cluster.local",
+            "port": 6379
+          }
+        }
+      ]
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway-tls",
+      "uid": "5f4701da-46dd-4447-945c-17f5e216e75a",
+      "resource_version": "41218471",
+      "type": "Opaque",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-accelerator-node-agent-bc-client",
+      "uid": "db12e807-332e-4f92-942f-9cafc7338152",
+      "resource_version": "49687535",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-configs",
+      "uid": "28ccb290-7bcf-4f5a-bdf5-b92feeeab060",
+      "resource_version": "29605450",
+      "type": "Opaque",
+      "keys": [
+        "auth.yaml",
+        "client.yaml",
+        "data.yaml",
+        "logger.yaml",
+        "server.yaml"
+      ],
+      "configuration_file_hashes": {
+        "auth.yaml": "20c175e1cb032cc81017e95ef707fcdcb94ab988fff36ee47b04770cc8d64c03",
+        "client.yaml": "0078c12f96ce4675f386304d62acdd14dfa36ea8a2b52473bb237f239b050ca1",
+        "data.yaml": "bb927df0c1a2ae0b168e9bdfe5f3cd584bf4e0c07ce0724d1d3770b97b38c2b0",
+        "logger.yaml": "1c561580d4fde39732363612621c7c2e0a106f9ce29b2e6a5eece773ed1dba12",
+        "server.yaml": "8c9bea16b867f80956c43b9d323fe81cd9327596a99dd476f339fa49435e26ba"
+      },
+      "configuration_field_paths": {
+        "auth.yaml": [
+          "authn.jwt.access_token_expires",
+          "authn.jwt.key",
+          "authn.jwt.method",
+          "authn.jwt.private_key",
+          "authn.jwt.public_key",
+          "authn.jwt.refresh_token_expires",
+          "authn.oidc.audience",
+          "authn.oidc.issuer_url",
+          "authn.oidc.method",
+          "authn.preshared_key.valid_keys.[]",
+          "authn.type",
+          "authz.casbin",
+          "authz.type"
+        ],
+        "client.yaml": [
+          "client.grpc.middleware.auth.key",
+          "client.grpc.middleware.auth.method",
+          "client.grpc.middleware.enable_circuit_breaker",
+          "client.grpc.middleware.enable_logging",
+          "client.grpc.middleware.enable_metadata",
+          "client.grpc.middleware.enable_recovery",
+          "client.grpc.middleware.enable_tracing",
+          "client.grpc.middleware.enable_validate",
+          "client.grpc.timeout"
+        ],
+        "data.yaml": [
+          "data.database.connection_max_lifetime",
+          "data.database.debug",
+          "data.database.driver",
+          "data.database.enable_metrics",
+          "data.database.enable_trace",
+          "data.database.max_idle_connections",
+          "data.database.max_open_connections",
+          "data.database.migrate",
+          "data.database.source",
+          "data.redis.addr",
+          "data.redis.dial_timeout",
+          "data.redis.password",
+          "data.redis.read_timeout",
+          "data.redis.write_timeout"
+        ],
+        "logger.yaml": [
+          "logger.fluent.endpoint",
+          "logger.logrus.disable_colors",
+          "logger.logrus.disable_timestamp",
+          "logger.logrus.formatter",
+          "logger.logrus.level",
+          "logger.logrus.timestamp_format",
+          "logger.type",
+          "logger.zap.filename",
+          "logger.zap.level",
+          "logger.zap.max_age",
+          "logger.zap.max_backups",
+          "logger.zap.max_size"
+        ],
+        "server.yaml": [
+          "server.asynq.codec",
+          "server.asynq.concurrency",
+          "server.asynq.enable_gracefully_shutdown",
+          "server.asynq.enable_strict_priority",
+          "server.asynq.location",
+          "server.asynq.queues.critical",
+          "server.asynq.queues.default",
+          "server.asynq.queues.low",
+          "server.asynq.shutdown_timeout",
+          "server.asynq.uri",
+          "server.rest.addr",
+          "server.rest.cors.allow_credentials",
+          "server.rest.cors.headers.[]",
+          "server.rest.cors.methods.[]",
+          "server.rest.enable_pprof",
+          "server.rest.enable_swagger",
+          "server.rest.middleware.enable_circuit_breaker",
+          "server.rest.middleware.enable_logging",
+          "server.rest.middleware.enable_metadata",
+          "server.rest.middleware.enable_recovery",
+          "server.rest.middleware.enable_tracing",
+          "server.rest.middleware.enable_validate",
+          "server.rest.timeout"
+        ]
+      },
+      "safe_refs": [
+        {
+          "field": "authn.oidc.issuer_url",
+          "endpoint_ref": {
+            "scheme": "https",
+            "host": "example.com",
+            "port": null
+          }
+        },
+        {
+          "field": "data.database.source"
+        },
+        {
+          "field": "data.redis.addr",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "valkey.ani-platform.svc.cluster.local",
+            "port": 6379
+          }
+        }
+      ]
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-model-inference-tls",
+      "uid": "58a4f34d-ffa5-4d40-bfc1-9500acc852c4",
+      "resource_version": "26101903",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-modeldev-client-tls",
+      "uid": "d22320ae-f4b2-4965-9a7a-59560abf33be",
+      "resource_version": "16235264",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-resource-mtls",
+      "uid": "c99b8af8-709b-4f14-a6aa-ad8ef42ead2b",
+      "resource_version": "3072369",
+      "type": "Opaque",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-runtime-keys",
+      "uid": "15398e3b-09bc-4b6a-9d98-d5428239672a",
+      "resource_version": "2715373",
+      "type": "Opaque",
+      "keys": [
+        "access-key-encryption-key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "governance-session-mtls",
+      "uid": "90919e26-436b-475e-b173-afb667d7fdd4",
+      "resource_version": "41218475",
+      "type": "Opaque",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-accelerator-node-agent-bc-client",
+      "uid": "db90de3d-329c-4413-94c8-2de8d71fda05",
+      "resource_version": "49687559",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-configs",
+      "uid": "73c854a5-8cdc-4f66-8027-6682c2e66916",
+      "resource_version": "54051062",
+      "type": "Opaque",
+      "keys": [
+        "config.yaml"
+      ],
+      "configuration_file_hashes": {
+        "config.yaml": "4b232e14de0d3220387d3b85940813cbf26890e6c6557d39be2e80255c0825e0"
+      },
+      "configuration_field_paths": {
+        "config.yaml": [
+          "image.allow_never_expires",
+          "image.cursor_signing_key_file",
+          "image.database_dsn_file",
+          "image.enabled",
+          "image.encryption_keys_file",
+          "image.harbor_ca_file",
+          "image.harbor_password_file",
+          "image.harbor_url",
+          "image.harbor_username",
+          "image.installation_id",
+          "image.platform_project",
+          "image.publisher_days",
+          "image.pull_days",
+          "image.request_timeout",
+          "image.robot_name_prefix",
+          "network.cluster_id",
+          "network.cursor_signing_key",
+          "network.database_dsn",
+          "network.instance_consumer_endpoint",
+          "network.kubeconfig",
+          "network.namespace_prefix",
+          "network.observation.audit_interval",
+          "network.observation.audit_jitter",
+          "network.observation.audit_timeout",
+          "network.observation.flush_interval",
+          "network.observation.queue_capacity",
+          "network.observation.request_burst",
+          "network.observation.request_qps",
+          "network.observation.workers_per_kind",
+          "network.platform_default_vpc_egress.cluster_uid",
+          "network.platform_default_vpc_egress.name",
+          "network.platform_default_vpc_egress.namespace",
+          "network.platform_default_vpc_egress.uid",
+          "network.vpc_cidr_presets.[]",
+          "network.worker.lease",
+          "network.worker.observe_every",
+          "network.worker.poll_interval",
+          "network.worker.request_timeout",
+          "network.worker.retry_max",
+          "network.worker.retry_min",
+          "network.worker.stale_after",
+          "server.admin.addr",
+          "server.admin.network",
+          "server.admin.timeout",
+          "server.grpc.addr",
+          "server.grpc.network",
+          "server.grpc.timeout",
+          "server.shutdown_timeout"
+        ]
+      },
+      "safe_refs": [
+        {
+          "field": "image.cursor_signing_key_file",
+          "file_ref": "/run/resource-private/image-cursor-key"
+        },
+        {
+          "field": "image.database_dsn_file",
+          "file_ref": "/run/resource-private/image-dsn"
+        },
+        {
+          "field": "image.encryption_keys_file",
+          "file_ref": "/run/resource-private/encryption-keys.json"
+        },
+        {
+          "field": "image.harbor_ca_file",
+          "file_ref": "/run/resource-private/harbor-ca.pem"
+        },
+        {
+          "field": "image.harbor_password_file",
+          "file_ref": "/run/resource-private/harbor-password"
+        },
+        {
+          "field": "image.harbor_url",
+          "endpoint_ref": {
+            "scheme": "https",
+            "host": "172.16.101.10",
+            "port": 30003
+          }
+        },
+        {
+          "field": "network.kubeconfig"
+        },
+        {
+          "field": "server.admin.addr",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "0.0.0.0",
+            "port": 19091
+          }
+        },
+        {
+          "field": "server.grpc.addr",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "0.0.0.0",
+            "port": 19090
+          }
+        }
+      ]
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-instance-private",
+      "uid": "cdf12bb6-8226-4e82-a4c7-ffc415ae8bfd",
+      "resource_version": "44138685",
+      "type": "Opaque",
+      "keys": [
+        "compute-config.json",
+        "instance-config.json",
+        "instance-dsn",
+        "instance-signing.key"
+      ],
+      "configuration_file_hashes": {
+        "compute-config.json": "170c172aa6ee2157711db36c98266b8e62be62d77d4d067a0bb9b518fd2134e7",
+        "instance-config.json": "3baa00c756e8fc1fbd4b2dd05aa6255b725edf0dab5738e6ac80e7e9dc870024"
+      },
+      "configuration_field_paths": {
+        "compute-config.json": [
+          "ClusterID",
+          "DatabaseDSNFile"
+        ],
+        "instance-config.json": [
+          "DatabaseDSNFile",
+          "QuotaAddress",
+          "QuotaCAFile",
+          "QuotaCertFile",
+          "QuotaKeyFile",
+          "QuotaServerName",
+          "ReleaseAddress",
+          "ReleaseCAFile",
+          "ReleaseCertFile",
+          "ReleaseKeyFile",
+          "ReleaseServerName",
+          "Service.ClusterID",
+          "Service.GID",
+          "Service.NetworkV2Writes",
+          "Service.ServiceAccount",
+          "Service.Shell",
+          "Service.StorageClass",
+          "Service.UID",
+          "Service.WorkspaceSize",
+          "SigningKeyFile",
+          "TerminalAddress"
+        ]
+      },
+      "safe_refs": [
+        {
+          "field": "DatabaseDSNFile",
+          "file_ref": "/run/resource-private/instance-dsn"
+        },
+        {
+          "field": "DatabaseDSNFile",
+          "file_ref": "/run/resource-private/instance-dsn"
+        },
+        {
+          "field": "SigningKeyFile",
+          "file_ref": "/run/resource-private/instance-signing.key"
+        },
+        {
+          "field": "QuotaAddress",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "ani-governance-internal.ani-system.svc.cluster.local",
+            "port": 19093
+          }
+        },
+        {
+          "field": "QuotaCAFile",
+          "file_ref": "/run/resource-quota-mtls/ca.crt"
+        },
+        {
+          "field": "QuotaCertFile",
+          "file_ref": "/run/resource-quota-mtls/tls.crt"
+        },
+        {
+          "field": "QuotaKeyFile",
+          "file_ref": "/run/resource-quota-mtls/tls.key"
+        },
+        {
+          "field": "ReleaseAddress",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+            "port": 19090
+          }
+        },
+        {
+          "field": "ReleaseCAFile",
+          "file_ref": "/run/resource-accelerator-mtls/ca.crt"
+        },
+        {
+          "field": "ReleaseCertFile",
+          "file_ref": "/run/resource-accelerator-mtls/tls.crt"
+        },
+        {
+          "field": "ReleaseKeyFile",
+          "file_ref": "/run/resource-accelerator-mtls/tls.key"
+        },
+        {
+          "field": "TerminalAddress",
+          "endpoint_ref": {
+            "scheme": null,
+            "host": "0.0.0.0",
+            "port": 19093
+          }
+        }
+      ]
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-quota-mtls",
+      "uid": "dc5fb383-a11a-4a3a-81a2-6eedb2598a80",
+      "resource_version": "38186156",
+      "type": "kubernetes.io/tls",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-runtime-private",
+      "uid": "144fc361-48d7-4ae2-ae7e-11c5587cb8db",
+      "resource_version": "3085824",
+      "type": "Opaque",
+      "keys": [
+        "encryption-keys.json",
+        "harbor-ca.pem",
+        "harbor-password",
+        "image-cursor-key",
+        "image-dsn",
+        "network-cursor-key",
+        "network-dsn"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": [
+        {
+          "key": "network-dsn",
+          "endpoint_ref": {
+            "scheme": "postgres",
+            "host": "postgresql.ani-platform.svc.cluster.local",
+            "port": 5432
+          }
+        }
+      ]
+    },
+    {
+      "kind": "Secret",
+      "namespace": "ani-system",
+      "name": "resource-server-mtls",
+      "uid": "010f649c-a38d-470c-8b3f-0a54fcd733a9",
+      "resource_version": "3072355",
+      "type": "Opaque",
+      "keys": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "configuration_file_hashes": {},
+      "configuration_field_paths": {},
+      "safe_refs": []
+    }
+  ],
+  "rbac": [
+    {
+      "kind": "ClusterRoleBinding",
+      "namespace": "",
+      "name": "ani-network-egress-ani-system",
+      "uid": "57c2ad17-11fa-4fed-a1ee-899381ba092d",
+      "resource_version": "3075202",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "ani-resource-service",
+          "namespace": "ani-system"
+        }
+      ],
+      "role_ref": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "ani-network-egress"
+      },
+      "role_uid": "533fb2b0-9ab2-4770-9a04-dfb3cb27efca",
+      "rules": [
+        {
+          "apiGroups": [
+            "networking.kubercloud.com"
+          ],
+          "resources": [
+            "vpcs",
+            "subnets",
+            "eips",
+            "snats",
+            "eipgateways",
+            "vlannetworks"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.kubercloud.com"
+          ],
+          "resources": [
+            "snats"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.kubercloud.com"
+          ],
+          "resources": [
+            "nats",
+            "vnics",
+            "vnicips"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "nodes",
+            "pods",
+            "services",
+            "configmaps"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "namespaces"
+          ],
+          "verbs": [
+            "get",
+            "create"
+          ]
+        },
+        {
+          "apiGroups": [
+            "networking.k8s.io"
+          ],
+          "resources": [
+            "servicecidrs"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resourceNames": [
+            "ani-01",
+            "ani-02",
+            "ani-03"
+          ],
+          "resources": [
+            "nodes"
+          ],
+          "verbs": [
+            "patch"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "ClusterRoleBinding",
+      "namespace": "",
+      "name": "ani-network-load-balancer-ani-system",
+      "uid": "95fa9bab-3f02-4d67-8321-4df29b990d13",
+      "resource_version": "3075207",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "ani-resource-service",
+          "namespace": "ani-system"
+        }
+      ],
+      "role_ref": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "ani-network-load-balancer"
+      },
+      "role_uid": "5c22bfd9-5b2d-46a7-99fa-17d4d85ae855",
+      "rules": [
+        {
+          "apiGroups": [
+            "gateway.networking.k8s.io"
+          ],
+          "resources": [
+            "gateways",
+            "httproutes",
+            "tcproutes",
+            "udproutes"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "gateway.envoyproxy.io"
+          ],
+          "resources": [
+            "backends",
+            "backendtrafficpolicies",
+            "clienttrafficpolicies",
+            "envoypatchpolicies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "gateway.networking.k8s.io"
+          ],
+          "resources": [
+            "gatewayclasses"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "gateway.envoyproxy.io"
+          ],
+          "resources": [
+            "envoyproxies"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "deployments",
+            "replicasets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "discovery.k8s.io"
+          ],
+          "resources": [
+            "endpointslices"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apiextensions.k8s.io"
+          ],
+          "resources": [
+            "customresourcedefinitions"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch"
+          ]
+        },
+        {
+          "apiGroups": [
+            "authorization.k8s.io"
+          ],
+          "resources": [
+            "subjectaccessreviews"
+          ],
+          "verbs": [
+            "create"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "ClusterRoleBinding",
+      "namespace": "",
+      "name": "ani-resource-instance",
+      "uid": "46234a62-7813-4bd2-abc3-83cb17ef45e9",
+      "resource_version": "38192472",
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "ani-resource-service",
+          "namespace": "ani-system"
+        }
+      ],
+      "role_ref": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "ClusterRole",
+        "name": "ani-resource-instance"
+      },
+      "role_uid": "cc9564ae-1967-408e-b0de-d2c010badbd9",
+      "rules": [
+        {
+          "apiGroups": [
+            "kubeflow.org"
+          ],
+          "resources": [
+            "notebooks"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "statefulsets"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "scheduling.volcano.sh"
+          ],
+          "resources": [
+            "podgroups"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "update"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "pods/log"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "events"
+          ],
+          "verbs": [
+            "list"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumeclaims"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "persistentvolumes",
+            "namespaces",
+            "serviceaccounts"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            "storage.k8s.io"
+          ],
+          "resources": [
+            "storageclasses"
+          ],
+          "verbs": [
+            "get"
+          ]
+        },
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "secrets"
+          ],
+          "verbs": [
+            "get",
+            "create",
+            "update"
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "internal_ips": [
+        "172.16.101.10"
+      ],
+      "ready": true
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "internal_ips": [
+        "172.16.101.11"
+      ],
+      "ready": true
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "internal_ips": [
+        "172.16.101.12"
+      ],
+      "ready": true
+    }
+  ],
+  "service_accounts": [
+    {
+      "kind": "ServiceAccount",
+      "namespace": "ani-system",
+      "name": "ani-resource-service",
+      "uid": "03e9a3e2-431d-4591-8615-9195b765349d",
+      "resource_version": "3075201",
+      "automount_service_account_token": null,
+      "pull_secret_refs": []
+    },
+    {
+      "kind": "ServiceAccount",
+      "namespace": "ani-system",
+      "name": "ani-session-gateway",
+      "uid": "ea477d23-5480-4d3b-b640-b4bdc969893c",
+      "resource_version": "41218479",
+      "automount_service_account_token": true,
+      "pull_secret_refs": []
+    },
+    {
+      "kind": "ServiceAccount",
+      "namespace": "ani-system",
+      "name": "governance-runtime",
+      "uid": "1bd49b60-927a-43de-b243-c0463b8ad5b3",
+      "resource_version": "2715380",
+      "automount_service_account_token": false,
+      "pull_secret_refs": []
+    }
+  ],
+  "protected_windows": {
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "resource_version": "63431646",
+      "expected_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "uid_matches": true
+    },
+    "storage": [
+      {
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+          "resource_version": "63201577",
+          "expected_uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+          "uid_matches": true
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+          "uid": "e8054cd4-5267-432a-b38d-73d7787bbfe2",
+          "resource_version": "63218904",
+          "expected_uid": "e8054cd4-5267-432a-b38d-73d7787bbfe2",
+          "uid_matches": true
+        },
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-19f6fd74-f141-40f3-bb76-9871a9ccd543",
+        "image_name": "csi-vol-19f6fd74-f141-40f3-bb76-9871a9ccd543",
+        "claim_ref_uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3"
+      },
+      {
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-89317f205600510abc65e40402c83abb",
+          "uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+          "resource_version": "63207202",
+          "expected_uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+          "uid_matches": true
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-4845491e-8dad-48f5-b16b-c59def6d9dc6",
+          "uid": "8775db76-7dba-4f66-9b2d-f577061966d1",
+          "resource_version": "63242060",
+          "expected_uid": "8775db76-7dba-4f66-9b2d-f577061966d1",
+          "uid_matches": true
+        },
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd",
+        "image_name": "csi-vol-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd",
+        "claim_ref_uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6"
+      },
+      {
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-cca2005bd9365327a5ded8236385b9ba",
+          "uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+          "resource_version": "63207203",
+          "expected_uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+          "uid_matches": true
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-a65c5a84-bdec-4427-a5a3-f489235dfdda",
+          "uid": "5f6a1a20-0330-4d8c-87e9-66a18eb6185e",
+          "resource_version": "63242059",
+          "expected_uid": "5f6a1a20-0330-4d8c-87e9-66a18eb6185e",
+          "uid_matches": true
+        },
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-c3be8df8-f1c2-4974-aae5-bf29635c9f28",
+        "image_name": "csi-vol-c3be8df8-f1c2-4974-aae5-bf29635c9f28",
+        "claim_ref_uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda"
+      },
+      {
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-media-driver",
+          "uid": "752a82db-f998-488b-b580-c112f986e067",
+          "resource_version": "63207204",
+          "expected_uid": "752a82db-f998-488b-b580-c112f986e067",
+          "uid_matches": true
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-752a82db-f998-488b-b580-c112f986e067",
+          "uid": "b211f771-0674-4541-a143-3b20c1080033",
+          "resource_version": "63218905",
+          "expected_uid": "b211f771-0674-4541-a143-3b20c1080033",
+          "uid_matches": true
+        },
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-0521e073-7460-4700-853d-2b0aa18ab27a",
+        "image_name": "csi-vol-0521e073-7460-4700-853d-2b0aa18ab27a",
+        "claim_ref_uid": "752a82db-f998-488b-b580-c112f986e067"
+      },
+      {
+        "pvc": {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c",
+          "resource_version": "60361468",
+          "expected_uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c",
+          "uid_matches": true
+        },
+        "pv": {
+          "kind": "PersistentVolume",
+          "namespace": "",
+          "name": "pvc-21096268-968f-4e03-9b24-d2f435ed448c",
+          "uid": "becd670c-c761-4b70-987c-236e6e336a8b",
+          "resource_version": "60363059",
+          "expected_uid": "becd670c-c761-4b70-987c-236e6e336a8b",
+          "uid_matches": true
+        },
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-26c451cf-6e28-4e1d-8684-bde96e3ea665",
+        "image_name": "csi-vol-26c451cf-6e28-4e1d-8684-bde96e3ea665",
+        "claim_ref_uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+      }
+    ]
+  },
+  "historical_recovery_root": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023",
+  "historical_recovery_files": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/deploy.py",
+      "bytes": 9835,
+      "mode": "0o644",
+      "sha256": "8db3ea6f187f11257877f65e8c8042da048c3ce02deffef7312195fb2fa18588"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/deployment-r2-receipt.json",
+      "bytes": 4666,
+      "mode": "0o600",
+      "sha256": "9d72fe0a1c32b7284260cd4786cc4bbcdee7ffff5b8b0125535f53d774a7f630"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/deployment-after-four-actions.json",
+      "bytes": 3330,
+      "mode": "0o644",
+      "sha256": "cb482c16daa3b9c3da4ed570249769414e70c202799bd88359fe0c1a31e40452"
+    }
+  ],
+  "vm_wiring_observation": {
+    "ani-resource-service": {
+      "env_names": [
+        "ANI_COMPUTE_CONFIG_FILE",
+        "ANI_INSTANCE_CONFIG_FILE",
+        "ANI_NETWORK_CLIENT_CA",
+        "ANI_NETWORK_CURSOR_SIGNING_KEY",
+        "ANI_NETWORK_DATABASE_DSN",
+        "ANI_NETWORK_KUBECONFIG",
+        "ANI_NETWORK_MODE",
+        "ANI_NETWORK_TLS_CERT",
+        "ANI_NETWORK_TLS_KEY",
+        "ANI_OBSERVATION_REQUEST_BURST",
+        "ANI_OBSERVATION_REQUEST_QPS",
+        "GOMEMLIMIT",
+        "NETWORK_KUBECONFIG"
+      ],
+      "ANI_VM_CONFIG_FILE_present": false,
+      "ANI_VM_V1_WRITES_present": false,
+      "explicit_KUBECONFIG_present": false
+    },
+    "ani-governance": {
+      "env_names": [
+        "ANI_ACCELERATOR_ADDR",
+        "ANI_ACCELERATOR_CA",
+        "ANI_ACCELERATOR_CERT",
+        "ANI_ACCELERATOR_KEY",
+        "ANI_ACCELERATOR_SERVER_NAME",
+        "ANI_ACCELERATOR_TIMEOUT",
+        "ANI_ACCESS_KEY_ENCRYPTION_KEY_FILE",
+        "ANI_IMAGE_ADDR",
+        "ANI_IMAGE_CA",
+        "ANI_IMAGE_CERT",
+        "ANI_IMAGE_KEY",
+        "ANI_INFERENCE_ADDR",
+        "ANI_INFERENCE_CA_FILE",
+        "ANI_INFERENCE_CERT_FILE",
+        "ANI_INFERENCE_KEY_FILE",
+        "ANI_INFERENCE_SERVER_NAME",
+        "ANI_INSTANCE_ADDR",
+        "ANI_INSTANCE_CA",
+        "ANI_INSTANCE_CERT",
+        "ANI_INSTANCE_CLUSTER_ID",
+        "ANI_INSTANCE_CONFIG_V2_WRITES",
+        "ANI_INSTANCE_KEY",
+        "ANI_INSTANCE_SG_ADDR",
+        "ANI_INSTANCE_SG_CA_FILE",
+        "ANI_INSTANCE_SG_CERT_FILE",
+        "ANI_INSTANCE_SG_KEY_FILE",
+        "ANI_INSTANCE_SG_SERVER_NAME",
+        "ANI_MODELDEV_ADDR",
+        "ANI_MODELDEV_CA",
+        "ANI_MODELDEV_CERT",
+        "ANI_MODELDEV_KEY",
+        "ANI_MODELDEV_TIMEOUT",
+        "ANI_MODEL_ADDR",
+        "ANI_MODEL_CA",
+        "ANI_MODEL_CERT",
+        "ANI_MODEL_KEY",
+        "ANI_MODEL_SERVER_NAME",
+        "ANI_MODEL_TIMEOUT",
+        "ANI_NETWORK_ADDR",
+        "ANI_NETWORK_CA",
+        "ANI_NETWORK_CERT",
+        "ANI_NETWORK_KEY",
+        "ANI_NETWORK_TIMEOUT",
+        "ANI_OBSERVABILITY_CA_FILE",
+        "ANI_OBSERVABILITY_CLIENT_CERT_FILE",
+        "ANI_OBSERVABILITY_CLIENT_KEY_FILE",
+        "ANI_OBSERVABILITY_GRPC_ADDR",
+        "ANI_QUOTA_CA_FILE",
+        "ANI_QUOTA_CERT_FILE",
+        "ANI_QUOTA_ENABLED",
+        "ANI_QUOTA_INTERNAL_ADDR",
+        "ANI_QUOTA_KEY_FILE",
+        "ANI_QUOTA_MODELDEV_ENABLED",
+        "ANI_QUOTA_RESOURCE_DNS_SAN",
+        "GODEBUG",
+        "GWA_AUTH_REFRESH_COOKIE_INSECURE"
+      ],
+      "ANI_VM_CONFIG_FILE_present": false,
+      "ANI_VM_V1_WRITES_present": false,
+      "explicit_KUBECONFIG_present": false
+    },
+    "ani-session-gateway": {
+      "env_names": [
+        "ALLOWED_ORIGINS",
+        "INSTANCE_CONTROL_CA_FILE",
+        "INSTANCE_CONTROL_CERT_FILE",
+        "INSTANCE_CONTROL_KEY_FILE",
+        "PUBLIC_WS_BASE_URL",
+        "REDIS_URL",
+        "RESOURCE_INSTANCE_ADDR",
+        "RESOURCE_INSTANCE_CA_FILE",
+        "RESOURCE_INSTANCE_CERT_FILE",
+        "RESOURCE_INSTANCE_CLUSTER_ID",
+        "RESOURCE_INSTANCE_KEY_FILE",
+        "RESOURCE_INSTANCE_SERVER_NAME",
+        "STORE_MODE",
+        "TICKET_ENCRYPTION_KEY_FILE"
+      ],
+      "ANI_VM_CONFIG_FILE_present": false,
+      "ANI_VM_V1_WRITES_present": false,
+      "explicit_KUBECONFIG_present": false
+    }
+  },
+  "schema_status": "NOT_QUERIED; preflight is metadata/config refs only",
+  "finished_at": "2026-10-24T19:51:39.173756+00:00",
+  "redaction_notes": {
+    "environment_values_and_value_hashes": "omitted; names and references only",
+    "invalid_endpoint_or_file_refs_removed": 2,
+    "raw_configuration_or_secret_values": "never output; only configuration-file hashes/field paths and valid safe refs retained"
+  },
+  "windows_namespace_shared_sa_bindings": [],
+  "sg_base_rbac_objects": [
+    {
+      "kind": "clusterrole",
+      "name": "ani-session-gateway",
+      "present": false
+    },
+    {
+      "kind": "clusterrolebinding",
+      "name": "ani-session-gateway",
+      "present": false
+    }
+  ],
+  "rbac_observation_scope": "Explicit three shared ServiceAccount subjects in ClusterRoleBindings and ani-system/retained Windows namespace RoleBindings; no authorization mutation or impersonation request; not a proof about every group grant.",
+  "baseline_recovery_refs": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/baseline/deployments.apps.json",
+      "bytes": 150564,
+      "mode": "0o644",
+      "sha256": "ad163eb65a5efffda4b6c4172bd1be0725a7ea82c6fca8fee0f7f7db462619e6"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/baseline/services.json",
+      "bytes": 40168,
+      "mode": "0o644",
+      "sha256": "36c929e301abd2dc2d7f66cedf379bf5572960a94a970f81e7b3353ceec734cb"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/deploy/ani_governance-before.dump",
+      "bytes": 10376169,
+      "mode": "0o600",
+      "sha256": null
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/deploy/ani_resource_network-before.dump",
+      "bytes": 1273169,
+      "mode": "0o600",
+      "sha256": null
+    }
+  ],
+  "current_vs_network_release": {
+    "ani-resource-service": {
+      "current_image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+      "historical_image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+      "matches": true
+    },
+    "ani-governance": {
+      "current_image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+      "historical_image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+      "matches": true
+    }
+  },
+  "historical_sources": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service/docs/execution/records/NETWORK-STACK-RELEASE-20261023/release.json",
+      "sha256": "eadcaf4f632b687e6afddef917faeaa07c99fcaafb44dd43875f0b48402adc34",
+      "meaning": "historical successful release and provenance; current images revalidated independently"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-live-prep-01/shared-deploy-refs-readonly.json",
+      "sha256": "f598f47f701e65b241342b3e2e19a7f4445a272002d1ff2f6df8b1807370f730",
+      "meaning": "historical 09:17 shared Deployment and Service identities"
+    },
+    {
+      "path": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/docs/execution/records/VM-MVP/vm-candidate-deployment-handoff.md",
+      "sha256": "1d7c0d6bf649a3288e5f75f84510264a0378c6b3ea652b0dc1b8e3a9b5cb72b0",
+      "meaning": "VM candidate wiring/migrations/keys/rollback contract; historical authorization wording superseded by current user instructions"
+    }
+  ],
+  "database_reference_limitations": {
+    "compute_vm_shared_database_file_ref": {
+      "namespace": "ani-system",
+      "secret": "resource-instance-private",
+      "key": "instance-dsn",
+      "managed_path": "/run/resource-private/instance-dsn",
+      "basis": "Current compute-config.json and instance-config.json both reference this file; new VM config must match Compute."
+    },
+    "target_database_name": "NOT_VERIFIED",
+    "bounded_read_error": "One extra resource-instance-private metadata/content request hit 8s API response timeout; no retry and no PG read",
+    "vm_schema_versions_1_2": "NOT_VERIFIED",
+    "historical_network_backup_is_not_a_verified_backup_of_compute_vm_target": true
+  },
+  "assessment": {
+    "status": "READ_ONLY_PREFLIGHT_COMPLETE_CONFIGURATION_AND_MIGRATION_PREPARATION_REQUIRED_BEFORE_SHARED_VM_ENABLEMENT",
+    "current_deployments": "Three existing ani-system Deployments; all current Ready1/1 and strategy Recreate",
+    "provenance": "Current shared Resource/Gov image digests still match successful 20261023 network release; no changed image detected in these two workloads. New Gov a64 non-VM source compatibility remains for Root to resolve.",
+    "vm_wiring": "Resource ANI_VM_CONFIG_FILE absent; no mounted VM JSON found among referenced config keys; Gov ANI_VM_V1_WRITES absent. Shared VM is not wired by the current templates.",
+    "minimum_update_workload_order": [
+      "ani-system/ani-resource-service",
+      "ani-system/ani-session-gateway",
+      "ani-system/ani-governance"
+    ],
+    "strategy_limit": "All three currently Recreate at one replica. Image updates retain a stop/start interruption unless Root explicitly includes a reviewed strategy change. This preflight did not change strategy.",
+    "configuration_increments": [
+      "Resource managed VM JSON with same Compute DSN file, fixed cluster/media/network/storage mappings and recoverable GuestCredentialKeyFile; add ANI_VM_CONFIG_FILE reference/mount.",
+      "Resource owner-only -vm-migrate verification/apply for migrations/vm/001_vm.sql and 002_guest_initialization.sql if target schema absent; runtime owner separation; no startup implicit migration.",
+      "Resource and SG reviewed VM/CSI snapshot/CDI/PVC/VM/VMI/subresource RBAC increments: no VM-family rule found in current explicit shared Resource SA bindings; SG base ClusterRole/Binding ani-session-gateway absent and no explicit shared-SA binding in retained Windows namespace.",
+      "SG new Harbor image needs an existing pull Secret reference; current SG has no imagePullSecrets. Preserve Redis reference, ticket key, mTLS and allowed Origin configuration.",
+      "Gov new compatible image/API permission catalog sync and VM gating; current shared access-key encryption root and all existing non-VM clients/config refs must stay stable. No VM-specific Gov SQL schema migration is declared by the handoff."
+    ],
+    "endpoint_increment": "Current Resource instance-terminal Service19093 already exists and Ready. Published Resource wireVM registers VMConsole on the existing terminal when Instance is wired, and SG reuses RESOURCE_INSTANCE_ADDR. No new Service/port is proven necessary by this preflight.",
+    "dependency_observation": "Six existing Resource/Gov/SG Services, PostgreSQL Service ani-platform/postgresql and Valkey Service ani-platform/valkey each had one Ready endpoint. This is metadata readiness, not a new business test or DB schema check.",
+    "rollback_scope": "Preserve current three Deployment UIDs, image references/imageIDs, template/config hashes, SA/pull refs and existing six Service UIDs. Historical baseline deployment/service snapshots plus Gov/Network backups are references only; fresh target Compute/VM DB backup and compatible recovery image are still required before mutation. Legacy pre-VM images are not an approved rollback after accepting VM v1 state.",
+    "protected_windows": "Native VM UID and all five current root-owned PVC/PV UID/CSI mappings match the frozen protection map; no VM/Guest/API mutation performed. Windows acceptance remains deferred.",
+    "not_verified": [
+      "Shared Compute/VM target database name/current schema versions and fresh backup",
+      "New Gov a64 compatibility with current integrated non-VM source",
+      "Group-derived effective RBAC outside explicitly inspected binding scopes",
+      "Active shared SG sessions/leases and exact maintenance admission boundary before rollout"
+    ]
+  },
+  "assessment_updated_at": "2026-10-24T19:56:54.406533+00:00"
+}

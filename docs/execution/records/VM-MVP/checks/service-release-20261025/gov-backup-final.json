@@ -1,0 +1,325 @@
+{
+  "postgresql": {
+    "pod": "ani-platform/postgresql-0",
+    "pod_uid": "e185d93d-3730-4166-87e3-82a5877982fe",
+    "service": "ani-platform/postgresql",
+    "service_uid": "9e50c954-fe1b-46ea-81e9-2c1e1d3eb20a",
+    "container": "postgresql",
+    "node": "ani-01",
+    "client_image": "172.16.101.10:5000/library/postgres@sha256:7bade6d532592ca8ce7ee32def7399dad2607c4ea5583839fc4352a095a11ea6",
+    "container_id": "containerd://000d82b8a8c83fbecc6dfc1291f711289688f7cf657621816d80cf5c773531ac",
+    "operator_credential_reference": "existing /etc/postgres-admin/postgres-password mounted from ani-platform/ani-postgres-admin"
+  },
+  "dsn_equivalence": {
+    "database": "ani_governance",
+    "same_database_role_endpoint": true,
+    "same_credential_fields": true,
+    "same_transport_options": true,
+    "secret_references": [
+      {
+        "name": "governance-db-auth",
+        "namespace": "ani-system",
+        "uid": "c44cc2ca-0f2a-42f8-ab98-1e26f7c79429",
+        "resource_version": "2652669"
+      },
+      {
+        "name": "governance-configs",
+        "namespace": "ani-system",
+        "uid": "28ccb290-7bcf-4f5a-bdf5-b92feeeab060",
+        "resource_version": "29605450"
+      }
+    ],
+    "private_references": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private-backup/app.dsn",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private-backup/data.yaml"
+    ]
+  },
+  "target_schema": {
+    "database": "ani_governance",
+    "runtime_role": "gov_app",
+    "transaction_read_only": "on",
+    "server_version_num": "170011",
+    "role_attributes": {
+      "rolsuper": false,
+      "rolcreatedb": false,
+      "rolcreaterole": false,
+      "rolinherit": true,
+      "rolbypassrls": false,
+      "database_create": false,
+      "database_temp": true,
+      "public_create": false
+    },
+    "database_owner": {
+      "database_oid": "71364",
+      "role": "postgres",
+      "role_oid": "10",
+      "rolsuper": true,
+      "rolcreatedb": true,
+      "rolcreaterole": true,
+      "rolbypassrls": true
+    },
+    "required_tables": {
+      "public.sys_apis": true,
+      "public.sys_permissions": true,
+      "public.sys_permission_apis": true,
+      "public.sys_plan_modules": true,
+      "public.sys_quota_operations": true,
+      "public.sys_modeldev_acceptances": true
+    },
+    "critical_columns": [
+      {
+        "table": "sys_apis",
+        "column": "business_module",
+        "type": "character varying"
+      },
+      {
+        "table": "sys_plan_modules",
+        "column": "module",
+        "type": "character varying"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "action",
+        "type": "character varying"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "canonical_request",
+        "type": "text"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "create_operation_id",
+        "type": "character varying"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "dispatch_state",
+        "type": "character varying"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "instance_contract_version",
+        "type": "bigint"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "lease_generation",
+        "type": "bigint"
+      },
+      {
+        "table": "sys_quota_operations",
+        "column": "resource_tenant_id",
+        "type": "character varying"
+      }
+    ],
+    "atlas_schema": [
+      "atlas_schema_revisions"
+    ]
+  },
+  "atlas_revisions": [
+    {
+      "version": "20260921134442",
+      "description": "initial",
+      "applied": 1204,
+      "total": 1204,
+      "hash": "wcoowx/qa0ev483qqzyy2giZB06OLheXrMOnWzoyHQo=",
+      "has_error": false
+    },
+    {
+      "version": "20260922190000",
+      "description": "quota_expand",
+      "applied": 31,
+      "total": 31,
+      "hash": "O2egZip9fZi342945Yxx8knOMw5JKExhpIIfPcuT1W8=",
+      "has_error": false
+    },
+    {
+      "version": "20260922190100",
+      "description": "quota_constraints",
+      "applied": 4,
+      "total": 4,
+      "hash": "rlPy/NiWSfQWSZFQqlPvw0qM69zD3buJkuG+glRs7WY=",
+      "has_error": false
+    },
+    {
+      "version": "20260923130000",
+      "description": "gpu_sqlc",
+      "applied": 67,
+      "total": 67,
+      "hash": "84U1Q5JGapJCOfBJI5WHyIJZmMyAZH8L9C0TpWTDa1s=",
+      "has_error": false
+    },
+    {
+      "version": "20260923130100",
+      "description": "gpu_no_rls_catalog",
+      "applied": 2,
+      "total": 2,
+      "hash": "cdqI+cpZb1dPb1I5N+WxS080vdmTvtuW2eQcm+aXDtI=",
+      "has_error": false
+    },
+    {
+      "version": "20260923130200",
+      "description": "gpu_sync_ref",
+      "applied": 3,
+      "total": 3,
+      "hash": "0sMs/hhU9HtpX5bdEmi+ZaOWpNltzzTLF7rbeZ2+iOU=",
+      "has_error": false
+    },
+    {
+      "version": "20260923143455",
+      "description": "drop_geo_location",
+      "applied": 4,
+      "total": 4,
+      "hash": "tc/Yx6HpPDRJEwa19U8QlKpSjnJSY3zGpZ1CMsebqmc=",
+      "has_error": false
+    },
+    {
+      "version": "20260930093111",
+      "description": "cpu_modeldev_acceptance",
+      "applied": 6,
+      "total": 6,
+      "hash": "Y/xjm2ilrHWkZPWgQPWS8AlYtH2u+SqMr4Xpgp4K2hY=",
+      "has_error": false
+    },
+    {
+      "version": "20260930103955",
+      "description": "cpu_modeldev_release_binding",
+      "applied": 3,
+      "total": 3,
+      "hash": "HI0TZgADCIKkLgYHW4Eoc/ls56UoOfEE4CvbTZEoJ+E=",
+      "has_error": false
+    },
+    {
+      "version": "20261003074738",
+      "description": "cpu_modeldev_delivery",
+      "applied": 2,
+      "total": 2,
+      "hash": "nvvVxK4LOArCtapmgfFAenoBNLXdIWZuaBYyvERgR9Y=",
+      "has_error": false
+    },
+    {
+      "version": "20261003152319",
+      "description": "cpu_modeldev_stop",
+      "applied": 2,
+      "total": 2,
+      "hash": "ge4KGvRk7VKQbsrA/9uplEw5rd6+X+dK6/Gx5fd3eDY=",
+      "has_error": false
+    },
+    {
+      "version": "20261010131938",
+      "description": "access_key_idempotency",
+      "applied": 10,
+      "total": 10,
+      "hash": "d1eLc/HyZKkmWrdFcha/fZXKNZf7FTHuwpYYx1Y2CsQ=",
+      "has_error": false
+    },
+    {
+      "version": "20261019090000",
+      "description": "instance_contract_version",
+      "applied": 2,
+      "total": 2,
+      "hash": "CfUrsdKs6ZSV2GLeGL+k7IYQXiY3L2eMbhlDfeJwGAs=",
+      "has_error": false
+    },
+    {
+      "version": "20261022010000",
+      "description": "modeldev_execution_v21",
+      "applied": 1,
+      "total": 1,
+      "hash": "6m8WFFeWys4NuZLzl1Kv6JgUIzQ92lxcaGEzDz5gP9Y=",
+      "has_error": false
+    }
+  ],
+  "existing_permission_note": "database TEMP=true is inherited existing configuration, not owner or persistent schema CREATE; unchanged",
+  "started_at": "2026-10-24T20:50:13.967367+00:00",
+  "result": "PASS_GOV_DSN_SCHEMA_ATLAS_AND_FRESH_FULL_PRIVATE_BACKUP",
+  "shared_database_writes": 0,
+  "schema_ddl": 0,
+  "role_grant_changes": 0,
+  "service_changes": 0,
+  "catalog_changes": 0,
+  "credential_values_or_hashes_public": false,
+  "existing_dump_receipt": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/backup-readonly-attempt04.json",
+    "sha256": "de439fdebedd34ebe85e72ce816a934ba67909db4b2daf17e80d6935f00e465e"
+  },
+  "steps": [
+    {
+      "phase": "before-pod",
+      "exit_code": 0
+    },
+    {
+      "phase": "before-service",
+      "exit_code": 0
+    },
+    {
+      "phase": "before-secret-0",
+      "exit_code": 0
+    },
+    {
+      "phase": "before-secret-1",
+      "exit_code": 0
+    },
+    {
+      "phase": "runtime-keys-private-snapshot",
+      "exit_code": 0
+    },
+    {
+      "phase": "pg_restore_list_full_archive_file",
+      "exit_code": 0,
+      "seconds": 0.466
+    },
+    {
+      "phase": "after-pod",
+      "exit_code": 0
+    },
+    {
+      "phase": "after-service",
+      "exit_code": 0
+    },
+    {
+      "phase": "after-secret-0",
+      "exit_code": 0
+    },
+    {
+      "phase": "after-secret-1",
+      "exit_code": 0
+    },
+    {
+      "phase": "runtime-keys-after",
+      "exit_code": 0
+    }
+  ],
+  "runtime_keys_backup": {
+    "namespace": "ani-system",
+    "name": "governance-runtime-keys",
+    "uid": "15398e3b-09bc-4b6a-9d98-d5428239672a",
+    "resource_version": "2715373",
+    "key_names": [
+      "access-key-encryption-key"
+    ],
+    "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private-backup-final/governance-runtime-keys.secret.json",
+    "file_mode": "0o600",
+    "values_or_value_hashes_exported": false,
+    "copied_to_local": false
+  },
+  "backup": {
+    "database": "ani_governance",
+    "format": "PostgreSQL custom full database",
+    "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private-backup-attempt04/ani_governance-before-catalog.dump",
+    "bytes": 10411646,
+    "sha256": "969319f324360f9d4a49bcfa219bcaea128ca904c5605629443edc871b18d8d6",
+    "file_mode": "0o600",
+    "ownership_acl_included": true,
+    "table_or_schema_filters": [],
+    "toc_readback": "PASS",
+    "private_toc_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private-backup-final/archive-list.txt",
+    "restore_not_executed": true,
+    "copied_to_local": false,
+    "temporary_pod_archive": "task-only path removed by successful shell EXIT trap"
+  },
+  "deployment_and_secret_reference_metadata_unchanged": true,
+  "finished_at": "2026-10-24T20:50:15.543155+00:00",
+  "heavy_lock_released": true
+}
