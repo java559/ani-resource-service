@@ -44,6 +44,12 @@ Installer的[五文件普通SSH任务分支发布](checks/service-release-202610
 
 仅复现该必要用例的实际源为[lifecycle driver](checks/v10-network-positive-02/driver-v3.py)、[受控放置](checks/v10-network-positive-02/placement.py)、[最终Guest HTTP driver](checks/v10-network-positive-02/guest-http-placed-v6.py)；执行必须从原Fedora隔离路径、冻结input及Root release出发，不能直接从记录目录绕过身份/源码/阶段守卫。正常Delete各send1，[最终正常回收](checks/v10-network-positive-02/final-cleanup.json)确认两Delete succeeded、16冻结原生对象Gone、四root base/temp ABSENT且匹配trash空、Attachment Released/unblocked，用户session均正常撤销；首轮PENDING原件保留，无手动backend删除。Windows及其支持资源仍保持原暂缓状态；CODE/PG证据未失效，未重跑全量，Goal ACTIVE，一期未完成。
 
+## 2026-10-25 独立 ISO marker 补验进行中
+
+旧Fedora ISO账户人工认可保持；旧VM/root已经删除，V14缺失的marker停开不能回补旧证据。因此仅新建一个[正常Gov ISO用例](checks/iso-marker-02/create-01.json)，VM96575d3e…/原Create f9299104…已[Running v1](checks/iso-marker-02/observe-02.json)，root与安装副本[CSI归属](checks/iso-marker-02/csi-frozen-01.json)提前冻结。[真实VNC加载现场](checks/iso-marker-02/browser-loading-01.json)仍在首次启动，安装/marker/系统盘读回均未通过；一次宿主活动样本不代替Guest可用性。继续从本VM和原op推进，不能再创建替代VM；Windows18/五PVC及共享源保持，Windows暂缓范围澄清仍未获答复，不以沉默批准Windows变更。
+
+[TaskSG续期](checks/sg-task-token-renewal-3925313.json)后的当前PID259124/start75216121、expires2026-10-25T01:06:55Z，binary/env/key/PKI/RBAC范围保持；旧3925313/18:47到期条目均是历史时点。正常API阶段session均已注销；Root当前临时浏览器为新ISO保留正常TaskGov会话/VNC工作流，待断流/最终清理收口，不据API logout宣称浏览器会话已撤销。[V10六份私有口令副本退休](checks/v10-network-positive-02/private-inputs-retired.json)只清该已结束用例的重复输入，不删除恢复所需原始凭据引用。严格DNS的规格/接口缺项以[只读原子网](checks/v10-network-positive-02/dns-input-readonly.json)记录，不推断Guest当前resolver或公网可达性。
+
 ## 当前可追溯产物与可获取依赖
 
 以下 `$run` 固定指 `/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce`。二进制 SHA 是已有构建/启动回执中的实际值；PID 是交接时点记录，不是以后重启的身份授权。

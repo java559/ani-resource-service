@@ -1,0 +1,26 @@
+{
+  "result": "READONLY_ORIGINAL_CLUSTER_AND_SUBNET_DNS",
+  "at": "2026-10-25T00:00:49.545841+00:00",
+  "nodes": {
+    "ani-01": [
+      "172.16.101.10"
+    ],
+    "ani-02": [
+      "172.16.101.11"
+    ],
+    "ani-03": [
+      "172.16.101.12"
+    ]
+  },
+  "subnet_identity": {
+    "name": "subnet-fbd064f6018040dab6a8d909b7afb87f",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "c24a983c-f9f4-403d-9807-8164004000a3"
+  },
+  "spec_dns_dhcp": {
+    "cidrBlock": "10.83.1.0/24"
+  },
+  "status_dns_dhcp": {},
+  "guest_public_office_network_requests": 0,
+  "mutations": 0
+}
