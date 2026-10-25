@@ -65,7 +65,7 @@ func (p *KCProvider) resolveVMNetwork(ctx context.Context, s biz.VMNetworkSelect
 	static = static && e.NADName == v.NADName && e.NADUID == v.NADUID && e.NADConfigDigest == v.NADConfigDigest
 	if !static {
 		var err error
-		v, err = p.LookupManagedVMNetwork(ctx, s.TenantID, s.VPCID, s.SubnetID, s.ClusterID, s.Namespace)
+		v, err = p.lookupManagedVMNetwork(ctx, s.TenantID, s.VPCID, s.SubnetID, s.ClusterID, s.Namespace, requireRunnable)
 		if err != nil {
 			return biz.VMPrimaryPlan{}, err
 		}
@@ -90,12 +90,14 @@ func (p *KCProvider) resolveVMNetwork(ctx context.Context, s biz.VMNetworkSelect
 		if ns.GetLabels()[ownerLabel] != "ani-network-service" || ns.GetLabels()[tenantLabel] != s.TenantID {
 			return biz.VMPrimaryPlan{}, biz.Fail(biz.AttachmentConflict, "managed VM namespace ownership changed")
 		}
-		sa, err := p.client.Resource(vmServiceAccounts).Namespace(s.Namespace).Get(ctx, record.ServiceAccount, metav1.GetOptions{})
-		if err != nil {
-			return biz.VMPrimaryPlan{}, readFailure(err)
-		}
-		if err = verifyVMNetworkObject(sa, record, "ServiceAccount", record.ServiceAccount, record.ServiceAccountUid); err != nil {
-			return biz.VMPrimaryPlan{}, err
+		if requireRunnable {
+			sa, err := p.client.Resource(vmServiceAccounts).Namespace(s.Namespace).Get(ctx, record.ServiceAccount, metav1.GetOptions{})
+			if err != nil {
+				return biz.VMPrimaryPlan{}, readFailure(err)
+			}
+			if err = verifyVMNetworkObject(sa, record, "ServiceAccount", record.ServiceAccount, record.ServiceAccountUid); err != nil {
+				return biz.VMPrimaryPlan{}, err
+			}
 		}
 	}
 	nad, err := p.client.Resource(vmNADs).Namespace(s.Namespace).Get(ctx, e.NADName, metav1.GetOptions{})

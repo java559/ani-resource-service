@@ -169,11 +169,18 @@ func verifyVMNetworkObject(value *unstructured.Unstructured, record sqlcgen.Netw
 // LookupManagedVMNetwork is read-only. The caller must still run the existing
 // ResolveVMNetworkSelection checks before admitting a create specification.
 func (p *KCProvider) LookupManagedVMNetwork(ctx context.Context, tenant, vpc, subnet, cluster, namespace string) (ManagedVMNAD, error) {
+	return p.lookupManagedVMNetwork(ctx, tenant, vpc, subnet, cluster, namespace, true)
+}
+
+// Stopped/closing consumers still verify the pinned namespace/NAD identity and
+// real Subnet binding, but do not need today's auxiliary preparation to be ready.
+// This never creates a registration or promotes an observed object to trust.
+func (p *KCProvider) lookupManagedVMNetwork(ctx context.Context, tenant, vpc, subnet, cluster, namespace string, requireRunnable bool) (ManagedVMNAD, error) {
 	legacy, hasLegacy := p.vmNetworks[vmNetworkPolicyKey(tenant, subnet, namespace)]
 	if hasLegacy && (legacy.ClusterID != cluster || legacy.VPCID != vpc) {
 		return ManagedVMNAD{}, biz.Fail(biz.PlacementMismatch, "VM network placement differs")
 	}
-	if p.vmAutoNetwork == nil || cluster != p.repository.placement.ClusterID {
+	if (requireRunnable && p.vmAutoNetwork == nil) || cluster != p.repository.placement.ClusterID {
 		if hasLegacy {
 			return legacy, nil
 		}
@@ -191,7 +198,7 @@ func (p *KCProvider) LookupManagedVMNetwork(ctx context.Context, tenant, vpc, su
 		return ManagedVMNAD{}, biz.Fail(biz.PlacementMismatch, "VM network placement differs")
 	}
 	record, err := p.repository.queries.GetVMNamespace(ctx, sqlcgen.GetVMNamespaceParams{TenantID: tenant, ClusterID: cluster})
-	if errors.Is(err, pgx.ErrNoRows) || (err == nil && (!record.Ready || record.Namespace != namespace)) {
+	if errors.Is(err, pgx.ErrNoRows) || (err == nil && ((requireRunnable && !record.Ready) || record.Namespace != namespace)) {
 		if hasLegacy {
 			return legacy, nil
 		}
@@ -200,9 +207,14 @@ func (p *KCProvider) LookupManagedVMNetwork(ctx context.Context, tenant, vpc, su
 	if err != nil {
 		return ManagedVMNAD{}, databaseFailure(err)
 	}
-	digest, _ := VMNADConfigDigest(automaticVMNADConfig(*p.vmAutoNetwork))
-	if record.TemplateID != vmNetworkTemplate || record.NadConfigDigest != digest || record.ServiceAccount != p.vmAutoNetwork.ServiceAccount {
+	if record.TemplateID != vmNetworkTemplate {
 		return ManagedVMNAD{}, biz.Fail(biz.NetworkNotReady, "managed VM network template differs from deployment policy")
+	}
+	if requireRunnable {
+		digest, _ := VMNADConfigDigest(automaticVMNADConfig(*p.vmAutoNetwork))
+		if record.NadConfigDigest != digest || record.ServiceAccount != p.vmAutoNetwork.ServiceAccount {
+			return ManagedVMNAD{}, biz.Fail(biz.NetworkNotReady, "managed VM network template differs from deployment policy")
+		}
 	}
 	return ManagedVMNAD{TenantID: tenant, VPCID: vpc, SubnetID: subnet, ClusterID: cluster, Namespace: namespace, NamespaceUID: record.NamespaceUid, NADName: record.NadName, NADUID: record.NadUid, NADConfigDigest: record.NadConfigDigest, KCNSubnetRef: namespace + "/" + b.ProviderName}, nil
 }

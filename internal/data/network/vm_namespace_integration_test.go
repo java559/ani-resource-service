@@ -30,6 +30,12 @@ type vmNetworkAPI struct {
 }
 
 func (s *vmNetworkAPI) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if strings.HasPrefix(r.URL.Path, "/apis/kubevirt.io/") {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusNotFound)
+		_ = json.NewEncoder(w).Encode(map[string]any{"apiVersion": "v1", "kind": "Status", "reason": "NotFound", "code": 404})
+		return
+	}
 	if !strings.Contains(r.URL.Path, "/network-attachment-definitions") && !strings.Contains(r.URL.Path, "/serviceaccounts") {
 		s.legacy.ServeHTTP(w, r)
 		return
@@ -293,5 +299,75 @@ func TestVMAutoNetworkPGPinsPartialReceiptAndRefusesUIDDrift(t *testing.T) {
 	var persisted string
 	if err := f.owner.QueryRow(ctx, "SELECT nad_uid FROM network_vm_namespaces WHERE tenant_id=$1 AND cluster_id=$2", f.r.TenantID, f.r.ClusterID).Scan(&persisted); err != nil || persisted != nadUID {
 		t.Fatal("pinned NAD UID changed", persisted, err)
+	}
+}
+
+func TestVMAutoNetworkPGStopAndClosureSurviveAuxiliaryPreparationFailure(t *testing.T) {
+	for _, fault := range []string{"not-ready", "sa-missing", "sa-replaced", "current-template-changed"} {
+		t.Run(fault, func(t *testing.T) {
+			f, api, _ := newAutoVMNetwork(t)
+			policy := awaitAutoVMNetwork(t, f)
+			f.r.WorkloadMode = "vm_managed"
+			f.r.VMExpectation = &biz.VMNetworkExpectation{NADName: policy.NADName, NADUID: policy.NADUID, NADConfigDigest: policy.NADConfigDigest}
+			a := f.prepare(t)
+			ctx := context.Background()
+			saKey := "/api/v1/namespaces/" + a.Namespace + "/serviceaccounts/ani-vm-workload"
+			switch fault {
+			case "not-ready":
+				if _, err := f.owner.Exec(ctx, "UPDATE network_vm_namespaces SET ready=false,reason='VM_NETWORK_PREPARATION_FAILED' WHERE tenant_id=$1 AND cluster_id=$2", a.TenantID, a.ClusterID); err != nil {
+					t.Fatal(err)
+				}
+			case "sa-missing":
+				api.mu.Lock()
+				delete(api.objects, saKey)
+				api.mu.Unlock()
+			case "sa-replaced":
+				api.mu.Lock()
+				api.objects[saKey]["metadata"].(map[string]any)["uid"] = "replacement-sa"
+				api.mu.Unlock()
+			case "current-template-changed":
+				if err := f.provider.ConfigureVMAutoNetwork(data.VMAutoNetworkConfig{ServerSocket: "/run/reconfigured-kcn.sock"}); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if _, err := f.p.ResolveVMNetworkSelection(ctx, f.r, time.Minute); err == nil {
+				t.Fatal("new/running VM admitted after auxiliary failure", fault)
+			}
+			c := vmConsumerFor(a)
+			c.DesiredRunState = "stopped"
+			c.RetiredPods, c.CurrentPods = c.CurrentPods, nil
+			setManagedConsumer(f, c)
+			workerPolicy := biz.DefaultWorkerPolicy()
+			workerPolicy.ObserveEvery = 5 * time.Millisecond
+			workerPolicy.RetryMin = time.Millisecond
+			var err error
+			f.worker, err = biz.NewAttachmentWorker(f.p, f.provider, f.consumer, uuid.NewString(), workerPolicy)
+			if err != nil {
+				t.Fatal(err)
+			}
+			a = f.step(t, a.ID)
+			if a.State != biz.Reserved || a.Reason != "" || a.PodUID != "" || attachmentProtocolBlocked(t, f, a.ID) {
+				t.Fatal("stopped VM could not converge after auxiliary failure", fault, a)
+			}
+			closed := time.Now()
+			c.SnapshotRevision++
+			c.State = "closed"
+			c.DesiredRunState = "deleted"
+			c.FinalizationID = uuid.NewString()
+			c.ClosedAt = &closed
+			setManagedConsumer(f, c)
+			for i := 0; i < 4 && a.State != biz.Released; i++ {
+				a = f.step(t, a.ID)
+			}
+			if a.State != biz.Released || a.Reason != "" || attachmentProtocolBlocked(t, f, a.ID) {
+				t.Fatal("closed VM remained fenced on auxiliary failure", fault, a)
+			}
+			api.mu.Lock()
+			creates := api.creates
+			api.mu.Unlock()
+			if creates != 2 {
+				t.Fatal("closure repaired or adopted Kubernetes objects", creates)
+			}
+		})
 	}
 }
