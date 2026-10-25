@@ -1,0 +1,62 @@
+{
+  "result": "PASS_EXACT_TWO_DATA_GUEST_OFFLINE_FLUSHED_READONLY_PRESERVED",
+  "at": "2026-10-25T02:54:40.629109+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "18",
+  "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+  "original_online_restore_three_a_reference": "../windows-online-restore-guest-02/observed.json",
+  "original_online_restore_three_a_sha256": "919649cb85e2176969881f7d52f1805d0e94363c3e75684b2fde766edd8bc572",
+  "actual_short_commands": [
+    "Get-Disk|select Number,SerialNumber,Size,IsOffline,IsReadOnly,IsBoot,IsSystem",
+    "Write-VolumeCache -DriveLetter T,U",
+    "$?;Get-Disk -Number 1,2|select Number,SerialNumber,Size,IsOffline,IsReadOnly,IsBoot,IsSystem",
+    "Get-Disk -Number 1,2|Set-Disk -IsOffline $true",
+    "$?;Get-Disk -Number 1,2|select Number,SerialNumber,Size,IsOffline,IsReadOnly,IsBoot,IsSystem"
+  ],
+  "cache_flush_actual_return": true,
+  "offline_actual_return": true,
+  "readonly_flags_preserved": true,
+  "disks": [
+    {
+      "number": 1,
+      "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+      "size_bytes": 3221225472,
+      "is_offline": true,
+      "is_readonly": true,
+      "is_boot": false,
+      "is_system": false
+    },
+    {
+      "number": 2,
+      "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+      "size_bytes": 4294967296,
+      "is_offline": true,
+      "is_readonly": false,
+      "is_boot": false,
+      "is_system": false
+    }
+  ],
+  "marker_format_drive_letter_writes": 0,
+  "api_business_sends": 0,
+  "vnc_disconnected_normally": true,
+  "input_failures_retained": "guest-input-cancelled-01.json; second long line entered continuation and was canceled; neither long input counted as executed PASS; actual short-command fresh disk query proved both still online before the only successful offline operation",
+  "readonly_flush_explanation": "T/U existing paths already mapped to exact D3/D4; actual Write-VolumeCache normal return and subsequent $? True. Fresh full serial/3GiB/4GiB/nonboot/nonsystem identities checked before Set-Disk. Offline operation returned True; final actual Get-Disk shows both offline and Readonly unchanged. No Readonly toggles, marker writes, formatting or letter assignments.",
+  "screenshots": [
+    {
+      "path": "windows-hotloop-input-cancelled-20261025.jpg",
+      "sha256": "4b6bbc88bbc6d0eb42a7b29f4ebad9a1273fe1a45d6519572034a64e4bce1ae7"
+    },
+    {
+      "path": "windows-hotloop-data-online-before-20261025.jpg",
+      "sha256": "6e60f452cd51b8e042eddeb36e374b25f9667d83df571c75c2b62664091e22e3"
+    },
+    {
+      "path": "windows-hotloop-flush-true-identities-20261025.jpg",
+      "sha256": "56141bd7c814964177c9e44c9378539fabe58b60b0425e430d2f74ed50399d15"
+    },
+    {
+      "path": "windows-hotloop-two-offline-readonly-preserved-20261025.jpg",
+      "sha256": "db8593f476d023b9d48714f31ea26e90c4e9a253bb92294511d1dec021e9c467"
+    }
+  ]
+}

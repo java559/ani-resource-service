@@ -1,0 +1,37 @@
+{
+  "result": "PASS_EXISTING_WINDOWS_LOGIN_AND_VISIBLE_DESKTOP_ONLY",
+  "recorded_at": "2026-10-25T04:53:21.602935+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_version": "22",
+  "observed_state": "Running",
+  "existing_account": "Administrator",
+  "existing_password_accepted": true,
+  "new_credentials_entered_or_changed_by_agent": 0,
+  "credential_value_or_hash_retained": false,
+  "visible_results": [
+    "User Profile Service and Preparing Windows after existing-password submission",
+    "responsive Windows security menu",
+    "Task Manager process view",
+    "Start menu for Administrator",
+    "first-login diagnostic privacy page",
+    "Only required diagnostic choice selected and submitted",
+    "normal taskbar and Server Manager dashboard after privacy page"
+  ],
+  "nonbinding_notices": [
+    "cancelled historical unexpected-shutdown reason prompt without fabricated reason",
+    "closed Windows Admin Center/Azure Arc informational welcome without enrolment"
+  ],
+  "screenshots": {
+    "browser-task-manager-after-login-01.jpg": "f590bd0760b0cdb0e3182bd1f68255123407f2170342cbbfd66b85317703745f",
+    "browser-required-diagnostics-selected-01.jpg": "59783a60275736b986367a829b2ec487a71ca1bfae8b70fecc996e2a001898dc",
+    "browser-desktop-ready-01.jpg": "2cc3995c1f06be88d1d59eedea3fd5d4ea1a428ff02a397949f234c1457256d9"
+  },
+  "current_readonly_performance_summary_sha256": "f2e610bb1709825566f73c49582eb1224deca96dbf2e53e20b181549cbaed69a",
+  "cause_of_black_screen": "NOT_ESTABLISHED; first-login setup visibly continued, root latency observed, no causal layer proved",
+  "user_manual_final_verdict": "PENDING_USER",
+  "guest_power_actions": 0,
+  "product_disk_or_snapshot_actions": 0,
+  "guest_marker_reads_or_writes": 0,
+  "qga_install_or_validation": "NOT_RUN",
+  "goal_status": "ACTIVE_NOT_PHASE_ONE_COMPLETE"
+}

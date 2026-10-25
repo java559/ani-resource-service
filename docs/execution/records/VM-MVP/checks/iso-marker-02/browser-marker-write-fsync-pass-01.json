@@ -1,0 +1,27 @@
+{
+  "result": "PASS_UNIQUE_MARKER_WRITE_FSYNC_READBACK",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "observed_version": 1,
+  "native_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+  "root_pvc_uid": "59e413b6-6fca-4af5-a523-a65687eb2e6b",
+  "guest_uid": 1000,
+  "guest_account": "liveuser",
+  "marker_path": "/mnt/sysroot/var/tmp/ani-vm-mvp-iso-marker-02-477516c6d35e56fa6fc26195.txt",
+  "marker_text": "ANI_VM_MVP_ISO_MARKER_02\nVM=96575d3e-185d-4939-a01f-b82562d7af08\nROOT_SERIAL=17c22fdb-263e-5543-a12d-f369cac39298\nUNIQUE=477516c6d35e56fa6fc26195\n",
+  "marker_sha256": "334d701c0adf9003eb24d9dfb65b99337bce4643d727cc9cbfded3489ea7d5a5",
+  "marker_ascii_bytes": 146,
+  "write_started": true,
+  "fsync_file_and_directory": true,
+  "unique_program_exec_count": 1,
+  "program_sha256": "99e3926ccf8271616977367c425247562b45767329c1e3409b30a3d729a75577",
+  "actual_program_readback": "1636 2172 99e3926ccf8271616977367c425247562b45767329c1e3409b30a3d729a75577",
+  "repl_source_sha256": "887595a9f1719095e3421a7944d0d796ff94c01b3589c221e2c7f7ffd8860f31",
+  "temporary_ui_sha256": "70d9924a07c24124d32ed82b73496042d4fd05a73ab5cdc7555aed53d1814db5",
+  "input_failure_preserved": "segment6 SyntaxError before append; segment7 length assertion rejected; actual900/prefixSHA matched before one re-input of unappended segment6. No exec until full payload/program SHA matched.",
+  "power_cycle_marker_readback": "NOT_RUN",
+  "screenshots": {
+    "browser-repl-prefix-900-recovered-01.jpg": "e7e5536835532954970b6f159e29bbc7f650ba06fbe99dbe120b4bed2764df0b",
+    "browser-repl-program-sha-pass-01.jpg": "17bd37bcf75b818a8b54eab8cf1748b5bbf4cb483ee14e9679fc03f47c93fddd",
+    "browser-marker-write-fsync-pass-flat-01.jpg": "1fead04aa241108040f748570688fe6aace70fb6cbd8098c729dccd8123f0ff4"
+  }
+}

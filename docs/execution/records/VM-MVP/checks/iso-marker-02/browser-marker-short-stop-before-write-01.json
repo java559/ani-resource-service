@@ -1,0 +1,18 @@
+{
+  "result": "STOP_PAYLOAD_BEFORE_PROGRAM_EXECUTION",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "observed_version": 1,
+  "runner_input": "guest-marker-short-01.json",
+  "runner_input_sha256": "3348c1c8944644256ea981b6605a1d95ce91a0de13dcacf30c41eb9fa8926164",
+  "visible_guest_result": {
+    "result": "STOP_PAYLOAD",
+    "write_started": false
+  },
+  "program_exec": 0,
+  "marker_write": 0,
+  "precise_input_corruption_cause": "NOT_VERIFIED",
+  "original_error_or_input_not_replayed": true,
+  "screenshot": "browser-marker-short-stop-before-write-01.jpg",
+  "screenshot_sha256": "4ed10e5ec715f1c839961083643f0c04e0131860fef1ad17d0ae56c4b8148016",
+  "next_action": "Short bounded REPL segments with explicit actual length/SHA readback before any independent exec; Windows user handoff takes priority"
+}

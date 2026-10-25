@@ -1,0 +1,486 @@
+{
+  "task_name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "stage": "complete",
+  "result": "PASS_NATIVE_SYSTEM_DISK_STARTED_ONLY",
+  "started_at": "2026-10-25T04:25:11.426411+00:00",
+  "runner_sha256": "dd432b1d70b08cfbb4b6afeda938e2f9f6ece2eeb8721eac880e6762fa5d2630",
+  "original_native_sha256": "bd28c5d1fc50f1be0225569f288e042c87e35d958dcabb03627a31356c576c1a",
+  "frozen_request_sha256": "108be646dda9d053f731413a212280bd73667ad0efc4a856fee688066dd348be",
+  "start_observe": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/iso-marker-02-controls/observe-start-03.json",
+    "sha256": "a67282850aebd10653431c00e3a671fa50f2ccb2bd2fa57433999265454f2630"
+  },
+  "controls_journal_reference": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/iso-marker-02-controls/private/journal.json",
+    "sha256": "d2d862c78efe2da9ade023dd9388cebfd46247873e41df68be97e84b499989a2"
+  },
+  "operations": {
+    "stop": {
+      "id": "c88d748d-d653-449d-86f3-7a1980e4cbcc",
+      "vmId": "96575d3e-185d-4939-a01f-b82562d7af08",
+      "action": "stop",
+      "state": "succeeded",
+      "intentVersion": "2"
+    },
+    "eject": {
+      "id": "0845763b-4036-465c-a976-53b3458a2787",
+      "vmId": "96575d3e-185d-4939-a01f-b82562d7af08",
+      "action": "eject-media",
+      "state": "succeeded",
+      "intentVersion": "3"
+    },
+    "boot": {
+      "id": "6771dbc5-5396-4c8a-97a3-41b5677560a3",
+      "vmId": "96575d3e-185d-4939-a01f-b82562d7af08",
+      "action": "set-boot",
+      "state": "succeeded",
+      "intentVersion": "4"
+    },
+    "start": {
+      "id": "0cbe2dac-0372-4d09-900c-fe5a28c298f5",
+      "vmId": "96575d3e-185d-4939-a01f-b82562d7af08",
+      "action": "start",
+      "state": "succeeded",
+      "intentVersion": "5"
+    }
+  },
+  "current": {
+    "id": "96575d3e-185d-4939-a01f-b82562d7af08",
+    "name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+    "version": "5",
+    "lastOperationId": "0cbe2dac-0372-4d09-900c-fe5a28c298f5",
+    "observedState": "Running",
+    "closing": false
+  },
+  "calls": [
+    {
+      "label": "cluster",
+      "kind": "namespace",
+      "name": "kube-system",
+      "namespace": null,
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "tenant-namespace",
+      "kind": "namespace",
+      "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "namespace": null,
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "vm",
+      "kind": "virtualmachine",
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "vmi",
+      "kind": "virtualmachineinstance",
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "node",
+      "kind": "node",
+      "name": "ani-02",
+      "namespace": null,
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "owned-launcher",
+      "kind": "pods",
+      "name": null,
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": "kubevirt.io/created-by=e4e2c6a5-ab73-4699-ab9c-e0e8de23340a",
+      "exit": 0
+    },
+    {
+      "label": "root-dv",
+      "kind": "datavolume",
+      "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "root-pvc",
+      "kind": "pvc",
+      "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "root-pv",
+      "kind": "pv",
+      "name": "pvc-0bc0df20-82a5-4c15-a37a-a35d4d3d2e46",
+      "namespace": null,
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "installer-dv",
+      "kind": "datavolume",
+      "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "installer-pvc",
+      "kind": "pvc",
+      "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "installer-pv",
+      "kind": "pv",
+      "name": "pvc-98a29fab-bc65-40c8-895b-206599976ab5",
+      "namespace": null,
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "vm-final",
+      "kind": "virtualmachine",
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "vmi-final",
+      "kind": "virtualmachineinstance",
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    },
+    {
+      "label": "launcher-final",
+      "kind": "pod",
+      "name": "virt-launcher-vm-96575d3e-185d-4939-a01f-b82562d7af08-bq4vv",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "selector": null,
+      "exit": 0
+    }
+  ],
+  "cluster_writes": 0,
+  "api_auth_calls": 0,
+  "API_calls": 0,
+  "PG_calls": 0,
+  "Guest_actions": 0,
+  "Ceph_calls": 0,
+  "network_probes": 0,
+  "credential_values_or_hashes_public": false,
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "namespace": {
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "native": {
+    "vm": {
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "68f92d12-8d14-4d73-ba97-996d328c23f9"
+    },
+    "vmi": {
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "e4e2c6a5-ab73-4699-ab9c-e0e8de23340a",
+      "phase": "Running",
+      "ready": true,
+      "node": "ani-02",
+      "owner_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9"
+    },
+    "launcher": {
+      "name": "virt-launcher-vm-96575d3e-185d-4939-a01f-b82562d7af08-bq4vv",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "6e0e53a7-18e7-4f23-beef-a1b998745a84",
+      "phase": "Running",
+      "compute_ready": true,
+      "node": "ani-02",
+      "owner_vmi_uid": "e4e2c6a5-ab73-4699-ab9c-e0e8de23340a"
+    },
+    "node": {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+    },
+    "storage": [
+      {
+        "role": "root",
+        "volume": "disk-17c22fdb263e5543a12df369cac39298",
+        "dv": {
+          "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+          "uid": "f3a0fd69-4859-4378-90ba-d98ace3bb82e"
+        },
+        "pvc": {
+          "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+          "uid": "59e413b6-6fca-4af5-a523-a65687eb2e6b"
+        },
+        "pv": {
+          "name": "pvc-0bc0df20-82a5-4c15-a37a-a35d4d3d2e46",
+          "uid": "b9d7095f-26d7-497f-af4a-124307b228f7"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-6c7a4256-7705-4e62-844d-58ddbd63524d"
+        },
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "volume_mode": "Block",
+        "dv_owner_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+        "pvc_owner_dv_uid": "f3a0fd69-4859-4378-90ba-d98ace3bb82e",
+        "pv_claim_pvc_uid": "59e413b6-6fca-4af5-a523-a65687eb2e6b"
+      },
+      {
+        "role": "installer",
+        "volume": "media-install",
+        "dv": {
+          "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+          "uid": "3a8fb059-be2e-4783-b324-c2ab7c31f7c7"
+        },
+        "pvc": {
+          "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+          "uid": "f9a08b79-528b-4c1f-8061-1897bfbd7dc9"
+        },
+        "pv": {
+          "name": "pvc-98a29fab-bc65-40c8-895b-206599976ab5",
+          "uid": "35e8b694-b4fc-4cc2-b7e8-94b67352570d"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-b768c669-b6fc-45fd-9cf9-132a7356a7c1"
+        },
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "volume_mode": "Filesystem",
+        "dv_owner_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+        "pvc_owner_dv_uid": "3a8fb059-be2e-4783-b324-c2ab7c31f7c7",
+        "pv_claim_pvc_uid": "f9a08b79-528b-4c1f-8061-1897bfbd7dc9"
+      }
+    ]
+  },
+  "vm_spec": {
+    "runStrategy": "Manual",
+    "template": {
+      "metadata": {
+        "annotations": {
+          "kubevirt.io/pci-topology-version": "v3",
+          "networking.kubercloud.com/subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+        },
+        "labels": {
+          "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "network.ani.io/attachment-id": "att_4eff0f4508ba46069692b2d6dc36e608",
+          "network.ani.io/generation": "1",
+          "network.ani.io/instance-id": "96575d3e-185d-4939-a01f-b82562d7af08",
+          "network.ani.io/submission-id": "122a0780-6055-56cd-9ccd-7414374c5fb5",
+          "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "vm.ani.io/create-digest": "WSBNGXMN4CMFXXZQBDEB55RHT7XPS62BMHG3LWRFXFYFGRLDKRIQ",
+          "vm.ani.io/vm-id": "96575d3e-185d-4939-a01f-b82562d7af08"
+        }
+      },
+      "spec": {
+        "architecture": "amd64",
+        "domain": {
+          "cpu": {
+            "cores": 2,
+            "sockets": 1,
+            "threads": 1
+          },
+          "devices": {
+            "disks": [
+              {
+                "bootOrder": 1,
+                "disk": {
+                  "bus": "virtio"
+                },
+                "name": "disk-17c22fdb263e5543a12df369cac39298",
+                "serial": "17c22fdb-263e-5543-a12d-f369cac39298"
+              }
+            ],
+            "inputs": [
+              {
+                "bus": "usb",
+                "name": "console-tablet",
+                "type": "tablet"
+              }
+            ],
+            "interfaces": [
+              {
+                "bridge": {},
+                "model": "virtio",
+                "name": "default"
+              }
+            ]
+          },
+          "firmware": {
+            "bootloader": {
+              "efi": {
+                "secureBoot": false
+              }
+            },
+            "serial": "763cbfb4-9e24-4eb5-a85e-5e46ed10af72",
+            "uuid": "96575d3e-185d-4939-a01f-b82562d7af08"
+          },
+          "machine": {
+            "type": "q35"
+          },
+          "memory": {
+            "guest": "4Gi"
+          },
+          "resources": {
+            "limits": {
+              "cpu": "2"
+            },
+            "requests": {
+              "cpu": "2",
+              "memory": "4Gi"
+            }
+          }
+        },
+        "networks": [
+          {
+            "multus": {
+              "default": true,
+              "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+            },
+            "name": "default"
+          }
+        ],
+        "serviceAccountName": "default",
+        "volumes": [
+          {
+            "dataVolume": {
+              "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298"
+            },
+            "name": "disk-17c22fdb263e5543a12df369cac39298"
+          }
+        ]
+      }
+    }
+  },
+  "vmi_spec": {
+    "architecture": "amd64",
+    "domain": {
+      "cpu": {
+        "cores": 2,
+        "maxSockets": 4,
+        "model": "host-model",
+        "sockets": 1,
+        "threads": 1
+      },
+      "devices": {
+        "disks": [
+          {
+            "bootOrder": 1,
+            "disk": {
+              "bus": "virtio"
+            },
+            "name": "disk-17c22fdb263e5543a12df369cac39298",
+            "serial": "17c22fdb-263e-5543-a12d-f369cac39298"
+          }
+        ],
+        "inputs": [
+          {
+            "bus": "usb",
+            "name": "console-tablet",
+            "type": "tablet"
+          }
+        ],
+        "interfaces": [
+          {
+            "bridge": {},
+            "model": "virtio",
+            "name": "default"
+          }
+        ]
+      },
+      "features": {
+        "acpi": {
+          "enabled": true
+        }
+      },
+      "firmware": {
+        "bootloader": {
+          "efi": {
+            "secureBoot": false
+          }
+        },
+        "serial": "763cbfb4-9e24-4eb5-a85e-5e46ed10af72",
+        "uuid": "96575d3e-185d-4939-a01f-b82562d7af08"
+      },
+      "machine": {
+        "type": "q35"
+      },
+      "memory": {
+        "guest": "4Gi",
+        "maxGuest": "16Gi"
+      },
+      "resources": {
+        "limits": {
+          "cpu": "2"
+        },
+        "requests": {
+          "cpu": "2",
+          "memory": "4Gi"
+        }
+      }
+    },
+    "evictionStrategy": "None",
+    "networks": [
+      {
+        "multus": {
+          "default": true,
+          "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+        },
+        "name": "default"
+      }
+    ],
+    "serviceAccountName": "default",
+    "volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298"
+        },
+        "name": "disk-17c22fdb263e5543a12df369cac39298"
+      }
+    ]
+  },
+  "root_volume_status": [
+    {
+      "name": "disk-17c22fdb263e5543a12df369cac39298",
+      "persistentVolumeClaimInfo": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "45Gi"
+        },
+        "claimName": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+        "filesystemOverhead": "0",
+        "requests": {
+          "storage": "48G"
+        },
+        "volumeMode": "Block"
+      },
+      "target": "vda"
+    }
+  ],
+  "native_system_disk_boot": true,
+  "install_device_and_volume_absent": true,
+  "retained_installer_original_chain": true,
+  "Guest_login_verified": false,
+  "Guest_marker_verified": false,
+  "conclusion": "Native system-disk start only; no Guest login or marker claim",
+  "finished_at": "2026-10-25T04:25:16.960799+00:00",
+  "heavy_lock_released": true
+}

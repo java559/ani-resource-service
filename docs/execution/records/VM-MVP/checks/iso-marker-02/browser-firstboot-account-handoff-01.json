@@ -1,0 +1,17 @@
+{
+  "result": "SYSTEM_DISK_FIRSTBOOT_ACCOUNT_FIELDS_VISIBLE_USER_HANDOFF_REQUIRED_NOT_MARKER_READBACK_PASS",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "version": "5",
+  "native_after_start_sha256": "ba9b58dc13f39c362ce6533a23f548b24e1c66207469f75d1ad299b4553899ec",
+  "observed": "Fedora installed-system first-run About You page: Full Name, Username, Password and Confirm Password empty; Next disabled",
+  "actions": [
+    "kept American English language",
+    "kept English US keyboard",
+    "kept default light theme"
+  ],
+  "new_credentials_entered_by_agent": 0,
+  "new_credentials_submitted_by_agent": 0,
+  "post_boot_marker_read": false,
+  "old_fedora_account_acceptance": "USER_ACCEPTED_MANUALLY_UNCHANGED",
+  "screenshot_sha256": "acde3e2df5e20f451bed073ea4805195b5f2c07aeede2fc430cdf877b6284a44"
+}

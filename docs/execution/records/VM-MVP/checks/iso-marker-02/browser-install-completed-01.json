@@ -1,0 +1,17 @@
+{
+  "result": "PASS_ORIGINAL_ISO_INTERACTIVE_INSTALLATION_COMPLETED_NOT_INSTALLED_SYSTEM_BOOT_OR_MARKER_PERSISTENCE",
+  "at": "2026-10-25T03:06:39.384952+00:00",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "version": "1",
+  "native_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+  "vmi_uid": "27550850-b1fc-4fe9-99fb-6e08ef7d5a24",
+  "actual_text": "Successfully installed. To begin using Fedora Linux 44 (KDE Plasma Desktop Edition), reboot your system. Exit to live desktop.",
+  "manual_install_completed": true,
+  "restarts_rebuilds_or_media_replacements": 0,
+  "guest_marker_writes": 0,
+  "product_stop_eject_boot_start": 0,
+  "new_accounts_or_credentials": 0,
+  "screenshot": "browser-install-completed-01.jpg",
+  "screenshot_sha256": "06c60d5b669ab94c19ec4540d5f7f03dba6f56d52f774fec491cf7409c8ce12d",
+  "limits": "Only original interactive ISO installer success; installed root boot, unique marker write/stop/start/readback and cleanup still pending. No NoCloud, automated installer or account injection."
+}
