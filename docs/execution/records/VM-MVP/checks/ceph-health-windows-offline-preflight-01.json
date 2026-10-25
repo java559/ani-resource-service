@@ -1,0 +1,97 @@
+{
+  "SG_or_service_actions": 0,
+  "causal_conclusion": "NOT_DETERMINED_BY_THIS_SAMPLE; Ceph warnings or a successful health read alone do not establish the cause of Windows Get-Disk latency or Linux ISO copy speed",
+  "ceph_health_detail_attempts": 0,
+  "ceph_status_attempts": 1,
+  "client_io": {
+    "read_bytes_sec": 2651161,
+    "read_op_per_sec": 40,
+    "write_bytes_sec": 437107,
+    "write_op_per_sec": 27
+  },
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "command": [
+    "ceph",
+    "status",
+    "--format",
+    "json"
+  ],
+  "command_exit_code": 0,
+  "elapsed_seconds": 2.646363,
+  "finished_at": "2026-10-25T01:46:21.255829+00:00",
+  "full_flags": {
+    "full_or_nearfull_health_check_codes": [],
+    "interpretation": "No FULL/NEARFULL check in this status result; raw OSD flags not exposed, not independently verified",
+    "osd_flag_fields_exposed_in_status": false
+  },
+  "health_checks": {
+    "AUTH_INSECURE_CLIENT_KEY_TYPE": {
+      "count": 4,
+      "severity": "HEALTH_WARN"
+    },
+    "AUTH_INSECURE_KEYS_ALLOWED": {
+      "count": 1,
+      "severity": "HEALTH_WARN"
+    },
+    "AUTH_INSECURE_KEYS_CREATABLE": {
+      "count": 1,
+      "severity": "HEALTH_WARN"
+    },
+    "BLUESTORE_SLOW_OP_ALERT": {
+      "count": 3,
+      "severity": "HEALTH_WARN",
+      "summary": "3 OSD(s) experiencing slow operations in BlueStore"
+    },
+    "MON_DISK_LOW": {
+      "count": 1,
+      "severity": "HEALTH_WARN",
+      "summary": "mon c is low on available space"
+    },
+    "OSD_SLOW_PING_TIME_BACK": {
+      "count": 4,
+      "longest_ms": 2337.665,
+      "severity": "HEALTH_WARN"
+    },
+    "OSD_SLOW_PING_TIME_FRONT": {
+      "count": 4,
+      "longest_ms": 2294.281,
+      "severity": "HEALTH_WARN"
+    },
+    "RECENT_CRASH": {
+      "count": 1,
+      "severity": "HEALTH_WARN"
+    }
+  },
+  "health_status": "HEALTH_WARN",
+  "heavy_lock_released": true,
+  "new_pods": 0,
+  "osd": {
+    "num_in_osds": 3,
+    "num_osds": 3,
+    "num_remapped_pgs": 0,
+    "num_up_osds": 3
+  },
+  "pg": {
+    "bytes_avail": 279161643008,
+    "bytes_total": 644245094400,
+    "bytes_used": 365083451392,
+    "data_bytes": 120950263738,
+    "num_objects": 34787,
+    "num_pgs": 81,
+    "pgs_by_state": [
+      {
+        "count": 81,
+        "state_name": "active+clean"
+      }
+    ]
+  },
+  "pool_image_trash_enumerations": 0,
+  "reader": {
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "namespace": "rook-ceph",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "result": "READONLY_CEPH_STATUS_SAMPLE_SUCCEEDED",
+  "sampled_at": "2026-10-25T01:46:18.609368+00:00",
+  "writes": 0
+}

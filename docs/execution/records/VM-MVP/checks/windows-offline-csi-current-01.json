@@ -1,0 +1,294 @@
+{
+  "at": "2026-10-25T02:09:22.506194+00:00",
+  "source_sha256": "f5cf837f43a9c8b16ab92b1682069b628ce14044661117c62d653fe8d036de41",
+  "snapshot_id": "b70cc689-1a8e-592c-ba4f-5d6b72243d36",
+  "scope": "Exact original failed offline Snapshot, 4 frozen VS, 4 known bound VSC names only",
+  "reads": [
+    {
+      "kind": "namespace",
+      "name": "kube-system",
+      "namespace": "",
+      "outcome": "FOUND",
+      "current_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc"
+    },
+    {
+      "kind": "volumesnapshot.snapshot.storage.k8s.io",
+      "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshotcontent.snapshot.storage.k8s.io",
+      "name": "snapcontent-d947a7db-83b1-4285-b564-e45938a1c2ee",
+      "namespace": "",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshot.snapshot.storage.k8s.io",
+      "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshotcontent.snapshot.storage.k8s.io",
+      "name": "snapcontent-ed470202-f445-45ad-8849-eea31b0405ca",
+      "namespace": "",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshot.snapshot.storage.k8s.io",
+      "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-cca2005bd9365327a5ded8236385b9ba",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshotcontent.snapshot.storage.k8s.io",
+      "name": "snapcontent-f9ffe0a9-1d81-4c7a-bf90-e94241c104f4",
+      "namespace": "",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshot.snapshot.storage.k8s.io",
+      "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-media-driver",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "volumesnapshotcontent.snapshot.storage.k8s.io",
+      "name": "snapcontent-2eca65ed-f72b-4b08-87f9-ca329a055096",
+      "namespace": "",
+      "outcome": "NAME_ABSENT"
+    },
+    {
+      "kind": "virtualmachinesnapshot.snapshot.kubevirt.io",
+      "name": "vm-snap-b70cc689-1a8e-592c-ba4f-5d6b72243d36",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "outcome": "FOUND",
+      "current_uid": "45bbbe1a-b616-4bc7-8976-ad92481814e0"
+    }
+  ],
+  "volumes": [
+    {
+      "volume_name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+      "frozen_vs": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "uid": "d947a7db-83b1-4285-b564-e45938a1c2ee"
+      },
+      "known_vsc_name": "snapcontent-d947a7db-83b1-4285-b564-e45938a1c2ee",
+      "historical_vsc_own_uid": "NOT_RECORDED_IN_ORIGINAL_PROGRESS_EVIDENCE",
+      "progress01": {
+        "readyToUse": true,
+        "error_code": null,
+        "error_message": null,
+        "error_time": null,
+        "snapshotHandle": null,
+        "creationTime": "2026-10-24T15:33:41Z",
+        "restoreSize": "75Gi"
+      },
+      "progress02": {
+        "readyToUse": true,
+        "error_code": null,
+        "error_message": null,
+        "error_time": null,
+        "snapshotHandle": null,
+        "creationTime": "2026-10-24T15:33:41Z",
+        "restoreSize": "75Gi"
+      },
+      "current_vs": {
+        "identity": "FROZEN_UID_GONE_NAME_ABSENT",
+        "frozen_uid": "d947a7db-83b1-4285-b564-e45938a1c2ee"
+      },
+      "current_vsc": {
+        "identity": "KNOWN_BOUND_NAME_ABSENT_HISTORICAL_OWN_UID_NOT_RECORDED"
+      },
+      "new_success_evidence": false,
+      "previously_failed_now_successful": false
+    },
+    {
+      "volume_name": "disk-89317f205600510abc65e40402c83abb",
+      "frozen_vs": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb",
+        "uid": "ed470202-f445-45ad-8849-eea31b0405ca"
+      },
+      "known_vsc_name": "snapcontent-ed470202-f445-45ad-8849-eea31b0405ca",
+      "historical_vsc_own_uid": "NOT_RECORDED_IN_ORIGINAL_PROGRESS_EVIDENCE",
+      "progress01": {
+        "readyToUse": false,
+        "error_code": "DeadlineExceeded",
+        "error_message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+        "error_time": "2026-10-24T15:36:02Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "progress02": {
+        "readyToUse": false,
+        "error_code": "Aborted",
+        "error_message": "Failed to check and update snapshot content: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = Aborted desc = an operation with the given Volume ID snapshot-ed470202-f445-45ad-8849-eea31b0405ca already exists\"",
+        "error_time": "2026-10-24T15:36:38Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "current_vs": {
+        "identity": "FROZEN_UID_GONE_NAME_ABSENT",
+        "frozen_uid": "ed470202-f445-45ad-8849-eea31b0405ca"
+      },
+      "current_vsc": {
+        "identity": "KNOWN_BOUND_NAME_ABSENT_HISTORICAL_OWN_UID_NOT_RECORDED"
+      },
+      "new_success_evidence": false,
+      "previously_failed_now_successful": false
+    },
+    {
+      "volume_name": "disk-cca2005bd9365327a5ded8236385b9ba",
+      "frozen_vs": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-cca2005bd9365327a5ded8236385b9ba",
+        "uid": "f9ffe0a9-1d81-4c7a-bf90-e94241c104f4"
+      },
+      "known_vsc_name": "snapcontent-f9ffe0a9-1d81-4c7a-bf90-e94241c104f4",
+      "historical_vsc_own_uid": "NOT_RECORDED_IN_ORIGINAL_PROGRESS_EVIDENCE",
+      "progress01": {
+        "readyToUse": false,
+        "error_code": "DeadlineExceeded",
+        "error_message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-c3be8df8-f1c2-4974-aae5-bf29635c9f28: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+        "error_time": "2026-10-24T15:36:02Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "progress02": {
+        "readyToUse": false,
+        "error_code": "DeadlineExceeded",
+        "error_message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-c3be8df8-f1c2-4974-aae5-bf29635c9f28: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+        "error_time": "2026-10-24T15:36:02Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "current_vs": {
+        "identity": "FROZEN_UID_GONE_NAME_ABSENT",
+        "frozen_uid": "f9ffe0a9-1d81-4c7a-bf90-e94241c104f4"
+      },
+      "current_vsc": {
+        "identity": "KNOWN_BOUND_NAME_ABSENT_HISTORICAL_OWN_UID_NOT_RECORDED"
+      },
+      "new_success_evidence": false,
+      "previously_failed_now_successful": false
+    },
+    {
+      "volume_name": "media-driver",
+      "frozen_vs": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-media-driver",
+        "uid": "2eca65ed-f72b-4b08-87f9-ca329a055096"
+      },
+      "known_vsc_name": "snapcontent-2eca65ed-f72b-4b08-87f9-ca329a055096",
+      "historical_vsc_own_uid": "NOT_RECORDED_IN_ORIGINAL_PROGRESS_EVIDENCE",
+      "progress01": {
+        "readyToUse": false,
+        "error_code": "DeadlineExceeded",
+        "error_message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-0521e073-7460-4700-853d-2b0aa18ab27a: \"rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL\"",
+        "error_time": "2026-10-24T15:36:03Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "progress02": {
+        "readyToUse": false,
+        "error_code": "Aborted",
+        "error_message": "Failed to check and update snapshot content: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-0521e073-7460-4700-853d-2b0aa18ab27a: \"rpc error: code = Aborted desc = an operation with the given Volume ID snapshot-2eca65ed-f72b-4b08-87f9-ca329a055096 already exists\"",
+        "error_time": "2026-10-24T15:37:49Z",
+        "snapshotHandle": null,
+        "creationTime": null,
+        "restoreSize": null
+      },
+      "current_vs": {
+        "identity": "FROZEN_UID_GONE_NAME_ABSENT",
+        "frozen_uid": "2eca65ed-f72b-4b08-87f9-ca329a055096"
+      },
+      "current_vsc": {
+        "identity": "KNOWN_BOUND_NAME_ABSENT_HISTORICAL_OWN_UID_NOT_RECORDED"
+      },
+      "new_success_evidence": false,
+      "previously_failed_now_successful": false
+    }
+  ],
+  "auth_posts": 0,
+  "api_admissions": 0,
+  "native_writes": 0,
+  "guest_commands": 0,
+  "pg_calls": 0,
+  "backend_calls": 0,
+  "logs_read": 0,
+  "global_lists": 0,
+  "snapshot_retries": 0,
+  "new_cases": 0,
+  "historical_acceptance_backfilled": false,
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "original_evidence": {
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-restore-a-01/offline-native-progress01.json": "294c70b7ea0252152629036ace4243c42a456570c94503c969b434d07a3faa68",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-restore-a-01/offline-native-progress02.json": "e46e4699529b30e9ececad042d38b84a8fc2c9ac0181657a56ad400b531a2878"
+  },
+  "native_snapshot_current": {
+    "identity": "SAME_FROZEN_UID",
+    "uid": "45bbbe1a-b616-4bc7-8976-ad92481814e0",
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-25T02:08:26Z",
+          "reason": "In error state",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T15:33:32Z",
+          "reason": "Not ready",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T15:38:32Z",
+          "reason": "snapshot deadline exceeded",
+          "status": "True",
+          "type": "Failure"
+        }
+      ],
+      "error": {
+        "message": "VolumeSnapshot vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb error: Failed to check and update snapshot content: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = Aborted desc = an operation with the given Volume ID snapshot-ed470202-f445-45ad-8849-eea31b0405ca already exists\"",
+        "time": "2026-10-24T15:36:38Z"
+      },
+      "phase": "Failed",
+      "readyToUse": false,
+      "sourceUID": "9a751320-5f97-4e56-af6a-30964610321b",
+      "virtualMachineSnapshotContentName": "vmsnapshot-content-45bbbe1a-b616-4bc7-8976-ad92481814e0"
+    }
+  },
+  "result": "COMPLETE_ONE_BOUNDED_READ_ONLY_OBSERVATION",
+  "new_csi_success_volumes": [],
+  "any_previously_failed_csi_snapshot_now_ready": false,
+  "all_four_exact_snapshots_now_successful": false,
+  "original_gov_operation": {
+    "source": "Frozen progress02, not re-queried in this CSI-only observation",
+    "operation": {
+      "id": "f197a58b-b517-45b4-bf2d-3cf4a25465a3",
+      "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "action": "create-snapshot",
+      "intentVersion": "17",
+      "state": "failed",
+      "reason": "VM_DEPENDENCY_CHANGED: VM_SNAPSHOT_CONTENT_ABSENT",
+      "observedAt": "2026-10-24T15:38:56.787589625Z"
+    }
+  },
+  "conclusion": "New success requires exact same VS UID plus matching VSC ref, both Ready and a nonempty handle; Gone is not recovery proof. No failed acceptance is backfilled."
+}

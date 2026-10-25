@@ -1,0 +1,41 @@
+{
+  "result": "OBSERVED_EXACT_ROOT_MOUNTS_NOT_MARKER_OR_INSTALL_PASS",
+  "task_name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "native_receipt_sha256": "bd28c5d1fc50f1be0225569f288e042c87e35d958dcabb03627a31356c576c1a",
+  "observation": "Real VNC original liveuser tty3 during software installation; normal logout to getty prompt",
+  "guest_user": "liveuser",
+  "guest_uid": 1000,
+  "command": "id; lsblk -o NAME,PKNAME,SIZE,TYPE,FSTYPE,SERIAL,MOUNTPOINTS /dev/vda; findmnt -J -S /dev/vda3 -o TARGET,SOURCE,FSTYPE,FSROOT,OPTIONS",
+  "parent_disk": "vda",
+  "actual_parent_serial": "17c22fdb-263e-5543-a",
+  "full_logical_serial": "17c22fdb-263e-5543-a12d-f369cac39298",
+  "source": "/dev/vda3[/root]",
+  "fstype": "btrfs",
+  "fsroot": "/root",
+  "canonical_target": "/mnt/sysroot",
+  "compatible_target": "/mnt/sysimage",
+  "home_source_excluded": "/dev/vda3[/home]",
+  "observed_options": [
+    "rw",
+    "relatime",
+    "seclabel",
+    "compress=zstd:1",
+    "discard=async",
+    "space_cache=v2",
+    "subvolid=256",
+    "subvol=/root"
+  ],
+  "marker_writer_prepared_sha256": "b3fea81f35892188a7596b84327f8ca49b66bb49654e4dafac20b253bdb75650",
+  "writer_status": "NOT_RUN",
+  "writer_delta": "Accept observed canonical root and identical-root alias, with read-only subprocess timeouts; actual st_dev/1777/writability must still pass in writer",
+  "marker_writes": 0,
+  "sudo_or_credentials_or_mounts": 0,
+  "product_stop_eject_boot_start": 0,
+  "windows_mutations": 0,
+  "public_or_office_probes": 0,
+  "screenshots_sha256": {
+    "browser-root-mounts-01.jpg": "a2af77ba1b82691d6ce2cb28591088f9767a59ee96db4d0f61c59b0c61570a9b",
+    "browser-root-mounts-logout-01.jpg": "faa4042ee749bb1ca5c7bf0427babafc5be7922170ffd18b86295c0fbb90643f"
+  }
+}
