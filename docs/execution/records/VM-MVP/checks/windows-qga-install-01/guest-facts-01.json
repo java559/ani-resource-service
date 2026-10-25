@@ -1,0 +1,26 @@
+{
+  "result": "PASS_GUEST_SCRIPT",
+  "guest_exec_sends": 1,
+  "script_sha256": "5d305e111f681aaeb340fb2d5721968f538cbf147fc3f079b07fafbf8e640d57",
+  "script_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-qga-install-01/scripts/facts.ps1",
+  "guest_pid": 2612,
+  "at": "2026-10-25T07:27:43.562714+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "24",
+  "target": {
+    "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "vmi_uid": "d3cc1de1-bd43-4b91-93f1-cfdca333dbd0",
+    "launcher_uid": "5ee91577-65df-455b-bb38-45526e88cc02",
+    "vm_spec_sha256": "cd2f6877ed9c3eb4884d076042188713a8a44e5d04dbd5835ebd34e5ae65de73"
+  },
+  "runner_sha256": "350b3fcaa543d37643a7fc3510fb41403ad99b75bc489db6a0125b46ac83f16d",
+  "own_normal_logout_confirmed": true,
+  "status": {
+    "exitcode": 0,
+    "err-data": "IzwgQ0xJWE1MDQo8T2JqcyBWZXJzaW9uPSIxLjEuMC4xIiB4bWxucz0iaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS9wb3dlcnNoZWxsLzIwMDQvMDQiPjxPYmogUz0icHJvZ3Jlc3MiIFJlZklkPSIwIj48VE4gUmVmSWQ9IjAiPjxUPlN5c3RlbS5NYW5hZ2VtZW50LkF1dG9tYXRpb24uUFNDdXN0b21PYmplY3Q8L1Q+PFQ+U3lzdGVtLk9iamVjdDwvVD48L1ROPjxNUz48STY0IE49IlNvdXJjZUlkIj4xPC9JNjQ+PFBSIE49IlJlY29yZCI+PEFWPuato+WcqOWHhuWkh+mmluasoeS9v+eUqOaooeWdl+OAgjwvQVY+PEFJPjA8L0FJPjxOaWwgLz48UEk+LTE8L1BJPjxQQz4tMTwvUEM+PFQ+Q29tcGxldGVkPC9UPjxTUj4tMTwvU1I+PFNEPiA8L1NEPjwvUFI+PC9NUz48L09iaj48T2JqIFM9InByb2dyZXNzIiBSZWZJZD0iMSI+PFROUmVmIFJlZklkPSIwIiAvPjxNUz48STY0IE49IlNvdXJjZUlkIj4yPC9JNjQ+PFBSIE49IlJlY29yZCI+PEFWPuato+WcqOWHhuWkh+mmluasoeS9v+eUqOaooeWdl+OAgjwvQVY+PEFJPjA8L0FJPjxOaWwgLz48UEk+LTE8L1BJPjxQQz4tMTwvUEM+PFQ+Q29tcGxldGVkPC9UPjxTUj4tMTwvU1I+PFNEPiA8L1NEPjwvUFI+PC9NUz48L09iaj48T2JqIFM9InByb2dyZXNzIiBSZWZJZD0iMiI+PFROUmVmIFJlZklkPSIwIiAvPjxNUz48STY0IE49IlNvdXJjZUlkIj4zPC9JNjQ+PFBSIE49IlJlY29yZCI+PEFWPkdldC1EaXNrIHwgU2VsZWN0LU9iamVjdCBOdW1iZXIsU2VyaWFsTnVtYmVyLFNpemUsUGFydGl0aW9uU3R5bGUsSXNPZmZsaW5lLElzUmVhZE9ubHksSXNCb290LElzU3lzdGVtKTwvQVY+PEFJPjEzODM2MDc0MTI8L0FJPjxOaWwgLz48UEk+LTE8L1BJPjxQQz4xMDA8L1BDPjxUPkNvbXBsZXRlZDwvVD48U1I+MDwvU1I+PFNEPuW3suWujOaIkCAxLzE8L1NEPjwvUFI+PC9NUz48L09iaj48T2JqIFM9InByb2dyZXNzIiBSZWZJZD0iMyI+PFROUmVmIFJlZklkPSIwIiAvPjxNUz48STY0IE49IlNvdXJjZUlkIj4yPC9JNjQ+PFBSIE49IlJlY29yZCI+PEFWPuato+WcqOWHhuWkh+mmluasoeS9v+eUqOaooeWdl+OAgjwvQVY+PEFJPjA8L0FJPjxOaWwgLz48UEk+LTE8L1BJPjxQQz4tMTwvUEM+PFQ+Q29tcGxldGVkPC9UPjxTUj4tMTwvU1I+PFNEPiA8L1NEPjwvUFI+PC9NUz48L09iaj48L09ianM+",
+    "out-data": "eyJSZXN1bHQiOiJQQVNTX0FHRU5UX0dVRVNUX0RJU0tfRkFDVFMiLCJTZXJ2aWNlIjp7IlN0YXR1cyI6IlJ1bm5pbmciLCJOYW1lIjoicWVtdS1nYSIsIlN0YXJ0VHlwZSI6IkF1dG9tYXRpYyJ9LCJEaXNrcyI6W3siTnVtYmVyIjowLCJTZXJpYWxOdW1iZXIiOiI3NmM0M2YzMC1lOGI4LTViMWItYjE5Zi1mYmI3YzA0NDU5YjUiLCJTaXplIjo4MDUzMDYzNjgwMCwiUGFydGl0aW9uU3R5bGUiOiJNQlIiLCJJc09mZmxpbmUiOmZhbHNlLCJJc1JlYWRPbmx5IjpmYWxzZSwiSXNCb290Ijp0cnVlLCJJc1N5c3RlbSI6dHJ1ZX0seyJOdW1iZXIiOjEsIlNlcmlhbE51bWJlciI6Ijg5MzE3ZjIwLTU2MDAtNTEwYS1iYzY1LWU0MDQwMmM4M2FiYiIsIlNpemUiOjMyMjEyMjU0NzIsIlBhcnRpdGlvblN0eWxlIjoiR1BUIiwiSXNPZmZsaW5lIjp0cnVlLCJJc1JlYWRPbmx5IjpmYWxzZSwiSXNCb290IjpmYWxzZSwiSXNTeXN0ZW0iOmZhbHNlfSx7Ik51bWJlciI6MiwiU2VyaWFsTnVtYmVyIjoiY2NhMjAwNWItZDkzNi01MzI3LWE1ZGUtZDgyMzYzODViOWJhIiwiU2l6ZSI6NDI5NDk2NzI5NiwiUGFydGl0aW9uU3R5bGUiOiJHUFQiLCJJc09mZmxpbmUiOmZhbHNlLCJJc1JlYWRPbmx5IjpmYWxzZSwiSXNCb290IjpmYWxzZSwiSXNTeXN0ZW0iOmZhbHNlfV19DQo=",
+    "exited": true
+  },
+  "stdout": "{\"Result\":\"PASS_AGENT_GUEST_DISK_FACTS\",\"Service\":{\"Status\":\"Running\",\"Name\":\"qemu-ga\",\"StartType\":\"Automatic\"},\"Disks\":[{\"Number\":0,\"SerialNumber\":\"76c43f30-e8b8-5b1b-b19f-fbb7c04459b5\",\"Size\":80530636800,\"PartitionStyle\":\"MBR\",\"IsOffline\":false,\"IsReadOnly\":false,\"IsBoot\":true,\"IsSystem\":true},{\"Number\":1,\"SerialNumber\":\"89317f20-5600-510a-bc65-e40402c83abb\",\"Size\":3221225472,\"PartitionStyle\":\"GPT\",\"IsOffline\":true,\"IsReadOnly\":false,\"IsBoot\":false,\"IsSystem\":false},{\"Number\":2,\"SerialNumber\":\"cca2005b-d936-5327-a5de-d8236385b9ba\",\"Size\":4294967296,\"PartitionStyle\":\"GPT\",\"IsOffline\":false,\"IsReadOnly\":false,\"IsBoot\":false,\"IsSystem\":false}]}\r\n",
+  "stderr": "#< CLIXML\r\n<Objs Version=\"1.1.0.1\" xmlns=\"http://schemas.microsoft.com/powershell/2004/04\"><Obj S=\"progress\" RefId=\"0\"><TN RefId=\"0\"><T>System.Management.Automation.PSCustomObject</T><T>System.Object</T></TN><MS><I64 N=\"SourceId\">1</I64><PR N=\"Record\"><AV>正在准备首次使用模块。</AV><AI>0</AI><Nil /><PI>-1</PI><PC>-1</PC><T>Completed</T><SR>-1</SR><SD> </SD></PR></MS></Obj><Obj S=\"progress\" RefId=\"1\"><TNRef RefId=\"0\" /><MS><I64 N=\"SourceId\">2</I64><PR N=\"Record\"><AV>正在准备首次使用模块。</AV><AI>0</AI><Nil /><PI>-1</PI><PC>-1</PC><T>Completed</T><SR>-1</SR><SD> </SD></PR></MS></Obj><Obj S=\"progress\" RefId=\"2\"><TNRef RefId=\"0\" /><MS><I64 N=\"SourceId\">3</I64><PR N=\"Record\"><AV>Get-Disk | Select-Object Number,SerialNumber,Size,PartitionStyle,IsOffline,IsReadOnly,IsBoot,IsSystem)</AV><AI>1383607412</AI><Nil /><PI>-1</PI><PC>100</PC><T>Completed</T><SR>0</SR><SD>已完成 1/1</SD></PR></MS></Obj><Obj S=\"progress\" RefId=\"3\"><TNRef RefId=\"0\" /><MS><I64 N=\"SourceId\">2</I64><PR N=\"Record\"><AV>正在准备首次使用模块。</AV><AI>0</AI><Nil /><PI>-1</PI><PC>-1</PC><T>Completed</T><SR>-1</SR><SD> </SD></PR></MS></Obj></Objs>"
+}

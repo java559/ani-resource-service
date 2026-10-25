@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-25T07:17:06.335615+00:00",
+  "result": "PASS_EXACT_GUEST_MSI_HASH_AND_ABSENT_SERVICE_BEFORE_INSTALL",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "24",
+  "vmi_uid": "d3cc1de1-bd43-4b91-93f1-cfdca333dbd0",
+  "source_file": "D:\\guest-agent\\qemu-ga-x86_64.msi",
+  "source_size_bytes": 11770368,
+  "guest_certutil_sha256": "22230284dda8ba4c96a834fe1087228a1db5d0b86247a9d7fcb164d279634817",
+  "certutil_success_observed": true,
+  "exact_source_reference": "windows-qga-source-file-01/observed.json",
+  "exact_source_reference_sha256": "b38ca45e904affea4942630b05b5fed839178efe7c01a2d14c9dcc4e32fa39d7",
+  "service_before": "SC OpenService error1060: specified service does not exist",
+  "install_admission": "COMMAND_PREPARED_NOT_YET_ENTER",
+  "existing_user_prepared_media": true,
+  "new_downloads": 0,
+  "guest_data_marker_writes": 0,
+  "screenshot": {
+    "path": "windows-qga-preinstall-20261025.jpg",
+    "sha256": "c43d3db4f799ee9a985e9034e771bb5b6bd5123fc8efc108e069876d9a5f037a"
+  }
+}
