@@ -1,0 +1,21 @@
+{
+  "result": "WAITING_ACTION_TIME_EULA_CONFIRMATION",
+  "vm_id": "1823315c-e0ae-421a-b76d-e27f97343160",
+  "native_vm_uid": "f8e50d20-aab9-4f8b-8fb1-f46dad2b6575",
+  "create_operation": "7a966d11-066b-4031-91e8-eb64a8a18d9b",
+  "infrastructure": "Running; root and two ISO volumes Bound",
+  "dns": {
+    "mode": "CUSTOM",
+    "nameservers": [
+      "223.5.5.5"
+    ]
+  },
+  "edition_selected": "Windows Server 2025 Standard (Desktop Experience)",
+  "license_accepted": false,
+  "product_key_entered": false,
+  "azure_pay_as_you_go_selected": false,
+  "guest_acceptance": "NOT_RUN",
+  "screenshots": [
+    "windows-license.png"
+  ]
+}

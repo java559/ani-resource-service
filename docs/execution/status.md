@@ -1017,4 +1017,6 @@ The first CPU Unix-socket path failure, Network alias/reproof and full-Stop fail
 
 ### 2026-10-25 恢复执行：100.64.128.12
 
-用户授权在 `10.10.1.66–68` 续做，先自动 NAD/SA 与创建 DNS 选择，再推进 VM 必要主链；重任务仍只 Fedora、正式前端由他人负责、只做必要验证。上文 172 环境结果保留历史归属。本轮新代码受影响单元、NAD 真 PG 和 DNS 冻结重载已通过；候选尚未上线，Guest 与产品创建链继续，精确断点及证据见[本轮记录](records/VM-MVP/nad-dns-20261025.md)。
+用户授权在 `10.10.1.66–68` 续做，先自动 NAD/SA 与创建 DNS 选择，再推进 VM 必要主链；重任务仍只 Fedora、正式前端由他人负责、只做必要验证。上文 172 环境结果保留历史归属。本轮 Resource/Gov 代码、正式 API 依赖和候选镜像已上线；静态映射清空后，真实租户 namespace 已由 Network worker 自动准备 NAD/SA。正常租户 API 的 Ubuntu 云镜像创建、初始化/网络、停开、浏览器登录、两数据盘、在线/离线恢复及恢复后热插拔均通过；该 VM 正常 DELETE 已 succeeded/Deleted，32 原生对象 Gone、Network attachment released，受保护资源保持。删除末端发现 Resource SA 缺少 `kcn-system/nics:list`，补最小 Role/Binding 后原操作自行完成，未重发或改账。CODE/PG/BOUNDARY/LIVE/GUEST/BROWSER 的范围及后端回收验证边界见[本轮记录](records/VM-MVP/nad-dns-20261025.md)。
+
+当前仅暂停依赖人工确认的 Windows 安装：VM `1823315c-e0ae-421a-b76d-e27f97343160` 停在 Server 2025 Standard（桌面体验）EULA 页，未接受条款、未输入产品密钥、未选 Azure 付费。确认后继续 Windows 首启/账户、Agent、双数据盘及快照必要主链。当前环境的 Linux ISO 安装未重跑，未宣布一期完成；不自动合 main/tag/release。
