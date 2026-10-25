@@ -163,6 +163,9 @@ func (n *Native) EnsureVM(ctx context.Context, v biz.VM) (biz.ObjectRef, error) 
 	}
 	domain := map[string]any{"cpu": map[string]any{"sockets": int64(1), "cores": int64(v.Spec.Cores), "threads": int64(1)}, "memory": map[string]any{"guest": fmt.Sprintf("%dMi", v.Spec.MemoryMiB)}, "resources": map[string]any{"requests": map[string]any{"cpu": fmt.Sprintf("%dm", v.Spec.CPUMillis), "memory": fmt.Sprintf("%dMi", v.Spec.MemoryMiB)}, "limits": map[string]any{"cpu": fmt.Sprintf("%dm", v.Spec.CPUMillis)}}, "devices": map[string]any{"disks": disks, "interfaces": []any{map[string]any{"name": "default", "bridge": map[string]any{}, "model": v.Spec.Media.NICModel}}}}
 	domain["devices"].(map[string]any)["inputs"] = []any{consoleTablet()}
+	if e = configureWindowsDomain(v, domain); e != nil {
+		return biz.ObjectRef{}, e
+	}
 	if v.Spec.Media.Firmware == "uefi" {
 		domain["firmware"] = map[string]any{"bootloader": map[string]any{"efi": map[string]any{"secureBoot": false}}}
 	}
@@ -436,6 +439,9 @@ func (n *Native) controlVM(ctx context.Context, v biz.VM, action string, options
 }
 func (n *Native) Start(ctx context.Context, v biz.VM) error {
 	if e := n.ValidateBackendConfiguration(ctx, v.Spec); e != nil {
+		return e
+	}
+	if e := n.ensureWindowsDomain(ctx, v); e != nil {
 		return e
 	}
 	if e := n.ensureConsoleTablet(ctx, v); e != nil {
