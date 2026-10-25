@@ -1,0 +1,5 @@
+go: downloading github.com/GehirnInc/crypt v0.0.0-20230320061759-8cc1b52080c5
+# github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm
+internal/data/vm/guest_credentials.go:15:2: module lookup disabled by GOPROXY=off
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm [setup failed]
+FAIL

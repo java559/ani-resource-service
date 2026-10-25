@@ -81,6 +81,8 @@ ISO 路径为空白 Block 根盘+预定义安装光驱/必要驱动光驱，VNC 
 
 Windows 固定至少一个明确版本及 VirtIO 驱动，驱动光驱 SATA/只读，验证识盘、NetKVM、键鼠、SCSI 数据盘及 Guest Agent。没有自动驱动注入、激活或 Installing/Installed 自定义状态。要求 TPM/UEFI 的所选 OS 必须使用原生持久状态，KubeVirt backend PVC 为 Filesystem，并验证对应存储的快照能力；不能用关闭系统要求替代实现。[U07]
 
+原生默认配置仅由已冻结的 `os_family=windows` 选择，采用 [KubeVirt v1.9 Windows 示例](https://github.com/kubevirt/kubevirt/blob/v1.9.0/examples/vmi-windows.yaml#L10-L35)中的 ACPI/APIC、Hyper-V relaxed/vapic/spinlocks（8191），以及 UTC、禁用 HPET、PIT delay、RTC catchup 和 Hyper-V clock。新建时渲染；旧模板只在正常 Start 的已停止、无 VMI/launcher/原生待处理请求阶段，以归属、UID 和 resourceVersion 守卫补齐缺项。保留其他配置，显式冲突报错，运行态不改模板，Linux 不应用这些默认值；配置存在不替代真实 Windows 可用性验收。
+
 ### S05.1 Linux 镜像的可选账户初始化
 
 仅对目录中明确标记、且已由真实客体验证原生 NoCloud 的 Linux `DISK_IMAGE` 提供可选账户初始化。能力证据绑定同一 source PVC UID、内容校验值和实际 OS 版本；不能按 OS 名称推断支持，也不能把仅创建 Secret、VMI Running 或另一镜像的结果标为 verified。Windows、ISO 安装路径及未验证介质不接受此输入。

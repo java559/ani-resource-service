@@ -1,0 +1,66 @@
+{
+  "GOPROXY": "off",
+  "GOTOOLCHAIN": "local",
+  "GOWORK": "off",
+  "api_calls": 0,
+  "argv": [
+    "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+    "build",
+    "-trimpath",
+    "-buildvcs=false",
+    "-ldflags",
+    "-X main.Name=ani-resource-service -X main.Version=vm-mvp-windows-domain-profile-01a168ce",
+    "-o",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/resource-server.windows-domain-profile",
+    "./cmd/ani-resource-service"
+  ],
+  "base_commit": "f018c53373bb66a16b5e423100412a5fe5b9e9c2",
+  "binary": {
+    "bytes": 78671694,
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/resource-server.windows-domain-profile",
+    "sha256": "b08aadf7b8acd17d3e6c921ce0b35c84bf1c0bfcc6cb4c8d38b14b507f8fc96e"
+  },
+  "binary_build_info_sha256": "69015219de5421066c888a7a632254ed7d08841854b0b215aa42030296d46066",
+  "budgets": {
+    "CPUQuota": "200%",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": 2,
+    "GOMEMLIMIT": "1536MiB",
+    "MemoryMax": "2300M",
+    "MemorySwapMax": 0
+  },
+  "changed_files": [
+    "internal/data/vm/native.go",
+    "internal/data/vm/windows_domain.go",
+    "internal/data/vm/windows_domain_test.go"
+  ],
+  "diff": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/code.diff",
+    "sha256": "c407e8f4c48e77241d3c266b52698627ca421bc3eafd6415054782f4ae30df9d"
+  },
+  "elapsed_seconds": 17.264,
+  "exit_code": 0,
+  "formatted_files": [
+    "internal/data/vm/native.go",
+    "internal/data/vm/windows_domain.go",
+    "internal/data/vm/windows_domain_test.go"
+  ],
+  "git_publications": 0,
+  "go_version": "go version go1.26.10 linux/amd64",
+  "host": "fedora",
+  "image_operations": 0,
+  "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/build.log",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "no_replace": true,
+  "original_infra_failure_preserved": true,
+  "pg_calls": 0,
+  "phase": "build",
+  "result": "PASS",
+  "service_changes": 0,
+  "source_manifest": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/source-manifest.json",
+    "sha256": "7c65825c7e4ff1634ff72fff545f95152b6956017e754f36129446ddfd85f6b7"
+  },
+  "source_sha256": "e2b9988ded4c7986e418efa5e70786f3257280c5adc619b2045071f36bee9189",
+  "source_unchanged": true
+}

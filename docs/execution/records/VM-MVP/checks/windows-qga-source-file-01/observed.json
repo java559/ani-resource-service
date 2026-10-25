@@ -1,0 +1,109 @@
+{
+  "result": "PASS_CONFIRMED_ORIGINAL_ISO_AND_SINGLE_MSI_SOURCE_HASH_ONLY",
+  "started_at": "2026-10-25T06:24:14.562286+00:00",
+  "collector_sha256": "cf79867c9687031dfd226e89d1529bf450d0b032a74fd4997767f0d0f2e68388",
+  "calls": [
+    {
+      "label": "original_ISO_full_SHA256",
+      "argv": [
+        "/usr/bin/sha256sum",
+        "/home/chabking/virtio-win-0.1.271.iso"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 12.149,
+      "stderr": ""
+    },
+    {
+      "label": "list_only_exact_MSI_leaf",
+      "argv": [
+        "/usr/bin/7z",
+        "l",
+        "-slt",
+        "/home/chabking/virtio-win-0.1.271.iso",
+        "guest-agent/qemu-ga-x86_64.msi"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.238,
+      "stderr": ""
+    },
+    {
+      "label": "extract_only_exact_MSI_leaf_to_owned_private_file",
+      "argv": [
+        "/usr/bin/7z",
+        "x",
+        "-so",
+        "/home/chabking/virtio-win-0.1.271.iso",
+        "guest-agent/qemu-ga-x86_64.msi"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.023,
+      "stderr": ""
+    }
+  ],
+  "Guest_actions": 0,
+  "VM_or_cluster_operations": 0,
+  "API_calls": 0,
+  "other_source_reads": 0,
+  "new_tools_or_downloads": 0,
+  "ISO_writes": 0,
+  "full_ISO_extractions": 0,
+  "installer_runs": 0,
+  "guest_exact_hash_comparison": "NOT_VERIFIED_64HEX_NOT_YET_TRANSCRIBED",
+  "authenticode": "Original Guest NotSigned observation remains unchanged; not remeasured here",
+  "actual_budget": {
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-p786617-i21741192.scope",
+    "cpu_max": "200000 100000",
+    "memory_max_bytes": 2411724800,
+    "memory_swap_max": "0"
+  },
+  "available_existing_tools": {
+    "bsdtar": null,
+    "isoinfo": "/usr/bin/isoinfo",
+    "xorriso": null,
+    "7z": "/usr/bin/7z",
+    "sha256sum": "/usr/bin/sha256sum"
+  },
+  "source_before": {
+    "path": "/home/chabking/virtio-win-0.1.271.iso",
+    "dev": 53,
+    "ino": 25857697,
+    "bytes": 726501376,
+    "mode": "0o644",
+    "mtime_ns": 1792759212547572114,
+    "ctime_ns": 1792759234469612254
+  },
+  "source_full_sha256": "bbe6166ad86a490caefad438fef8aa494926cb0a1b37fa1212925cfd81656429",
+  "tool_banner": [
+    "7-Zip 26.02 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-06-25"
+  ],
+  "selected_leaf_metadata": {
+    "Path": "guest-agent/qemu-ga-x86_64.msi",
+    "Folder": "-",
+    "Size": "11770368",
+    "Packed Size": "11770368",
+    "Modified": "2025-01-20 08:00:00",
+    "Mode": "-r--r--r--",
+    "Symbolic Link": ""
+  },
+  "extracted_leaf": {
+    "ISO_entry_path": "guest-agent/qemu-ga-x86_64.msi",
+    "private_path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-qga-source-file-01/private/qemu-ga-x86_64.msi",
+    "bytes": 11770368,
+    "sha256": "22230284dda8ba4c96a834fe1087228a1db5d0b86247a9d7fcb164d279634817",
+    "mode": "0o600",
+    "executed": false
+  },
+  "source_after": {
+    "path": "/home/chabking/virtio-win-0.1.271.iso",
+    "dev": 53,
+    "ino": 25857697,
+    "bytes": 726501376,
+    "mode": "0o644",
+    "mtime_ns": 1792759212547572114,
+    "ctime_ns": 1792759234469612254
+  },
+  "source_unchanged": true,
+  "elapsed_seconds": 12.499,
+  "finished_at": "2026-10-25T06:24:27.061385+00:00",
+  "limitation": "This binds the MSI to the confirmed original source ISO, not a publisher signature, Guest hash equality, installation or AgentConnected acceptance."
+}

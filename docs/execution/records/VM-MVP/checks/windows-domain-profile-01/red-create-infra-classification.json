@@ -1,0 +1,14 @@
+{
+  "result": "INFRA_SETUP_FAILURE_NOT_BEHAVIOR_RED",
+  "original_receipt": "red-create.json",
+  "original_log": "red-create.log",
+  "originals_preserved": true,
+  "go_test_exit_code": 1,
+  "elapsed_seconds": 148.918,
+  "actual_error": "GOPROXYoff missing exact github.com/GehirnInc/crypt v0.0.0-20230320061759-8cc1b52080c5 in default module cache",
+  "cause": "runner omitted original task GOMODCACHE/GOCACHE",
+  "existing_verified_module_cache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod",
+  "original_pinned_module_ziphash_matches_f018_go_sum": true,
+  "module_downloads": 0,
+  "implementation_before_behavior_red": false
+}
