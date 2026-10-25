@@ -1,0 +1,126 @@
+{
+  "principal": {
+    "tenant_id": 2,
+    "resource_tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "tenant_code": "vm-isolation-01a168ce"
+  },
+  "foreign_vm_id": "db174e19-7269-42ff-9c22-57190c66535b",
+  "foreign_vm_absent_from_list": true,
+  "denied": [
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/operations/7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/start",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/console-sessions",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_e413becb1f4a46468f058e32f33a6305",
+      "status": 404,
+      "reason": "RESOURCE_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 404,
+      "reason": "RESOURCE_NOT_FOUND"
+    }
+  ],
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/tenants?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles/4",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/roles/4",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/operations/7ffb2de2-ca10-4e51-ae9a-fb5c487342a3",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/start",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/db174e19-7269-42ff-9c22-57190c66535b/console-sessions",
+      "status": 404,
+      "reason": "VM_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_e413becb1f4a46468f058e32f33a6305",
+      "status": 404,
+      "reason": "RESOURCE_NOT_FOUND"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 404,
+      "reason": "RESOURCE_NOT_FOUND"
+    }
+  ],
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/isolation-credentials.json"
+}

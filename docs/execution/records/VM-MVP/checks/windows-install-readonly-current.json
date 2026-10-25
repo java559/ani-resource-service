@@ -1,0 +1,328 @@
+{
+  "at": "2026-10-24T05:47:42.832531+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "host": "fedora",
+  "maximum_seconds": 30,
+  "writes": 0,
+  "guest_commands": 0,
+  "measurements": {
+    "vmi_recent_events": {
+      "status": "OBSERVED",
+      "events": []
+    },
+    "launcher_recent_events": {
+      "status": "OBSERVED",
+      "events": []
+    },
+    "pod_top": {
+      "status": "OBSERVED",
+      "exit_code": 0,
+      "stdout": "POD                                                           NAME                CPU(cores)   MEMORY(bytes)   \nvirt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq   compute             603m         4194Mi          \nvirt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq   guest-console-log   0m           2Mi             \n",
+      "stderr": ""
+    },
+    "accelerator": {
+      "status": "OBSERVED",
+      "accelerators": [
+        "accelerator=kvm"
+      ],
+      "reason": null,
+      "exit_code": 0
+    },
+    "ceph_health": {
+      "status": "OBSERVED",
+      "health": "HEALTH_WARN",
+      "full": false,
+      "slow": true,
+      "availability_warning": false,
+      "check_codes": [
+        "AUTH_INSECURE_CLIENT_KEY_TYPE",
+        "AUTH_INSECURE_KEYS_ALLOWED",
+        "AUTH_INSECURE_KEYS_CREATABLE",
+        "BLUESTORE_SLOW_OP_ALERT",
+        "MON_DISK_LOW",
+        "RECENT_CRASH"
+      ]
+    },
+    "ceph_capacity": {
+      "status": "OBSERVED",
+      "stats": {
+        "total_bytes": 644245094400,
+        "total_avail_bytes": 306067898368,
+        "total_used_bytes": 338177196032,
+        "total_used_raw_bytes": 338177196032,
+        "total_used_raw_ratio": 0.5249201059341431,
+        "num_osds": 3,
+        "num_per_pool_osds": 3,
+        "num_per_pool_omap_osds": 3
+      },
+      "pool": [
+        {
+          "name": "ani-block-pool",
+          "stats": {
+            "stored": 83944557360,
+            "objects": 21612,
+            "kb_used": 239804013,
+            "bytes_used": 245559308689,
+            "percent_used": 0.47311779856681824,
+            "max_avail": 91154767872
+          }
+        }
+      ]
+    }
+  },
+  "identity": {
+    "vm": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+    },
+    "vmi": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7"
+    },
+    "launcher": {
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1"
+    },
+    "node": "ani-01",
+    "vm_status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T22:26:04Z",
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "All of the VMI's DVs are bound and ready",
+          "reason": "AllDVsReady",
+          "status": "True",
+          "type": "DataVolumesReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "cannot migrate VMI: PVC vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+          "reason": "DisksNotLiveMigratable",
+          "status": "False",
+          "type": "LiveMigratable"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "status": "True",
+          "type": "StorageLiveMigratable"
+        }
+      ],
+      "created": true,
+      "desiredGeneration": 2,
+      "observedGeneration": 2,
+      "printableStatus": "Running",
+      "ready": true,
+      "runStrategy": "Manual",
+      "volumeSnapshotStatuses": [
+        {
+          "enabled": true,
+          "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5"
+        },
+        {
+          "enabled": true,
+          "name": "media-install"
+        },
+        {
+          "enabled": true,
+          "name": "media-driver"
+        }
+      ]
+    },
+    "vmi_phase": "Running",
+    "vmi_conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:26:04Z",
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "All of the VMI's DVs are bound and ready",
+        "reason": "AllDVsReady",
+        "status": "True",
+        "type": "DataVolumesReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      }
+    ],
+    "pod_phase": "Running",
+    "pod_conditions": [
+      {
+        "lastProbeTime": "2026-10-23T22:25:51Z",
+        "lastTransitionTime": "2026-10-23T22:25:51Z",
+        "message": "the virtual machine is not paused",
+        "reason": "NotPaused",
+        "status": "True",
+        "type": "kubevirt.io/virtual-machine-unpaused"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:26:03Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "PodReadyToStartContainers"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:26:03Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "Initialized"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:26:04Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:26:04Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "ContainersReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-23T22:25:51Z",
+        "observedGeneration": 1,
+        "status": "True",
+        "type": "PodScheduled"
+      }
+    ],
+    "container_statuses": [
+      {
+        "allocatedResources": {
+          "cpu": "2",
+          "devices.kubevirt.io/kvm": "1",
+          "devices.kubevirt.io/tun": "1",
+          "devices.kubevirt.io/vhost-net": "1",
+          "ephemeral-storage": "50M",
+          "memory": "4592762881"
+        },
+        "containerID": "containerd://dc46deb5fe845314a14f9ded77390a410cdcc342ef374c23f4aa0975e079a757",
+        "image": "172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0",
+        "imageID": "172.16.101.10:5000/kubevirt/virt-launcher@sha256:2a47dceaa6ed4176175f58f4f7d927064f55d935fdd56e3999ac4dbe7d3a8e6a",
+        "lastState": {},
+        "name": "compute",
+        "ready": true,
+        "resources": {
+          "limits": {
+            "cpu": "2",
+            "devices.kubevirt.io/kvm": "1",
+            "devices.kubevirt.io/tun": "1",
+            "devices.kubevirt.io/vhost-net": "1"
+          },
+          "requests": {
+            "cpu": "2",
+            "devices.kubevirt.io/kvm": "1",
+            "devices.kubevirt.io/tun": "1",
+            "devices.kubevirt.io/vhost-net": "1",
+            "ephemeral-storage": "50M",
+            "memory": "4592762881"
+          }
+        },
+        "restartCount": 0,
+        "started": true,
+        "state": {
+          "running": {
+            "startedAt": "2026-10-23T22:26:03Z"
+          }
+        },
+        "user": {
+          "linux": {
+            "gid": 107,
+            "supplementalGroups": [
+              107
+            ],
+            "uid": 107
+          }
+        },
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/kubevirt-private",
+            "name": "private"
+          },
+          {
+            "mountPath": "/var/run/kubevirt",
+            "name": "public"
+          },
+          {
+            "mountPath": "/var/run/kubevirt-ephemeral-disks",
+            "name": "ephemeral-disks"
+          },
+          {
+            "mountPath": "/var/run/libvirt",
+            "name": "libvirt-runtime"
+          },
+          {
+            "mountPath": "/var/run/kubevirt/sockets",
+            "name": "sockets"
+          },
+          {
+            "mountPath": "/var/run/kubevirt-private/vmi-disks/media-install",
+            "name": "media-install"
+          },
+          {
+            "mountPath": "/var/run/kubevirt-private/vmi-disks/media-driver",
+            "name": "media-driver"
+          },
+          {
+            "mountPath": "/var/run/kubevirt/hotplug-disks",
+            "name": "hotplug-disks"
+          }
+        ]
+      }
+    ],
+    "container_resources": [
+      {
+        "name": "compute",
+        "resources": {
+          "limits": {
+            "cpu": "2",
+            "devices.kubevirt.io/kvm": "1",
+            "devices.kubevirt.io/tun": "1",
+            "devices.kubevirt.io/vhost-net": "1"
+          },
+          "requests": {
+            "cpu": "2",
+            "devices.kubevirt.io/kvm": "1",
+            "devices.kubevirt.io/tun": "1",
+            "devices.kubevirt.io/vhost-net": "1",
+            "ephemeral-storage": "50M",
+            "memory": "4592762881"
+          }
+        }
+      }
+    ]
+  },
+  "result": "READ_ONLY_OBSERVATION_COMPLETE",
+  "elapsed_seconds": 4.047,
+  "finished_at": "2026-10-24T05:47:46.879571+00:00"
+}

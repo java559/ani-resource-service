@@ -1,0 +1,78 @@
+{
+  "scope": "V3 next exact owned volume only after root VM/VMI Gone; skip Gone UIDs",
+  "business_posts": 0,
+  "native_writes": 0,
+  "backend_exec": 0,
+  "gone_uids": [
+    "198d300b-8af1-4093-aa4a-5af45e50f95a",
+    "3922eb1f-ea52-499d-9df8-cabf96b5ccd9",
+    "79121165-7547-472a-9939-ee0bd4273c41",
+    "8beddace-a96e-4630-a976-a2557d0ad1ba",
+    "cc14cc58-b0d5-48bb-ab27-444ee02de318",
+    "cd111ccf-bba4-45dc-8409-2ae0079ad13d",
+    "fd2d0a93-58a1-4045-802a-0e39d9045c15",
+    "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8"
+  ],
+  "samples": [
+    {
+      "at": "2026-10-24T18:17:29.401353+00:00",
+      "newly_gone": [
+        "198d300b-8af1-4093-aa4a-5af45e50f95a"
+      ],
+      "first_remaining": {
+        "ref": {
+          "kind": "persistentvolumes",
+          "namespace": "",
+          "name": "pvc-198d300b-8af1-4093-aa4a-5af45e50f95a",
+          "uid": "cd111ccf-bba4-45dc-8409-2ae0079ad13d"
+        },
+        "deletion_timestamp": null,
+        "finalizers": [
+          "external-provisioner.volume.kubernetes.io/finalizer",
+          "kubernetes.io/pv-protection",
+          "external-attacher/rook-ceph-rbd-csi-ceph-com"
+        ],
+        "status": {
+          "lastPhaseTransitionTime": "2026-10-24T18:12:32Z",
+          "phase": "Released"
+        },
+        "events": [
+          {
+            "type": "Warning",
+            "reason": "VolumeFailedDelete",
+            "message": "persistentvolume pvc-198d300b-8af1-4093-aa4a-5af45e50f95a is still attached to node ani-02",
+            "count": 7,
+            "lastTimestamp": "2026-10-24T18:13:17Z"
+          },
+          {
+            "type": "Warning",
+            "reason": "VolumeFailedDelete",
+            "message": "rpc error: code = DeadlineExceeded desc = context deadline exceeded",
+            "count": 1,
+            "lastTimestamp": "2026-10-24T18:16:20Z"
+          },
+          {
+            "type": "Warning",
+            "reason": "VolumeFailedDelete",
+            "message": "rpc error: code = Aborted desc = an operation with the given Volume ID 0001-0009-rook-ceph-0000000000000004-13f69f66-a318-4c7d-830f-1db8e2800943 already exists",
+            "count": 1,
+            "lastTimestamp": "2026-10-24T18:16:23Z"
+          }
+        ]
+      }
+    },
+    {
+      "at": "2026-10-24T18:19:05.757908+00:00",
+      "newly_gone": [
+        "cd111ccf-bba4-45dc-8409-2ae0079ad13d",
+        "cc14cc58-b0d5-48bb-ab27-444ee02de318",
+        "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8",
+        "8beddace-a96e-4630-a976-a2557d0ad1ba",
+        "3922eb1f-ea52-499d-9df8-cabf96b5ccd9",
+        "fd2d0a93-58a1-4045-802a-0e39d9045c15",
+        "79121165-7547-472a-9939-ee0bd4273c41"
+      ],
+      "first_remaining": null
+    }
+  ]
+}

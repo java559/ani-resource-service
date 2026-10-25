@@ -1,0 +1,101 @@
+{
+  "state": "EXECUTOR_PREPARED_NOT_PUBLISHED",
+  "source_sha256": "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+  "frozen_publication_plan_sha256": "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+  "original_plan_unchanged": true,
+  "execution_host": "fedora/172.16.101.31",
+  "tool": {
+    "path": "/usr/bin/skopeo",
+    "version": "skopeo version 1.22.2 commit: 18684bc549c53facc3c39abbb73eeba7ddf7fea5"
+  },
+  "checks_receipt": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/prepared-checks.json",
+    "sha256": "9136d7b5f68e58ce1eaacb8ad2b1eba839076b0fdd7106d5ac61a3b20a4f6a1e"
+  },
+  "actual_skopeo_local_source_inspect": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/skopeo-local-source-inspect.json",
+    "sha256": "c14477bc6e73a87b711b70f9225d89291a70f323137dc6d2055a69d6125e0f90",
+    "source_syntax_delta": null
+  },
+  "current_registry_requests": 0,
+  "current_registry_writes": 0,
+  "current_registry_logins": 0,
+  "current_image_loads_pulls_builds_runs": 0,
+  "explicit_approval_still_required": [
+    "exact three destination image writes",
+    "transport for 172.16.101.10:5000",
+    "existing private auth-file ref and SHA or explicit anonymous mode",
+    "exclusive exact task-tag publication window"
+  ],
+  "guard_behavior": {
+    "default_strict_tls": true,
+    "http_dormant_requires_exact_endpoint_approval": true,
+    "unknown_copy_ack_reconcile_only_no_resend": true,
+    "copy_retries": 0,
+    "preserve_digests": true,
+    "independent_raw_manifest_digest": true,
+    "existing_tag_refuses_write": true,
+    "atomic_registry_create_only_available": false,
+    "no_overwrite_boundary": "Registry V2 lacks atomic create-only tag writes; operator must reserve exact new task tags exclusively for absence/copy/readback."
+  },
+  "future_commands_not_executed": [
+    [
+      "python3",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/publish.py",
+      "publish",
+      "--service",
+      "resource",
+      "--root-authorized",
+      "--exclusive-new-task-tags",
+      "--approved-plan-sha256",
+      "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+      "--approved-driver-sha256",
+      "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+      "--transport",
+      "strict-tls",
+      "--auth-file",
+      "APPROVED_EXISTING_FEDORA_0600_AUTH_FILE",
+      "--approved-auth-file-sha256",
+      "APPROVED_AUTH_FILE_SHA"
+    ],
+    [
+      "python3",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/publish.py",
+      "publish",
+      "--service",
+      "session",
+      "--root-authorized",
+      "--exclusive-new-task-tags",
+      "--approved-plan-sha256",
+      "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+      "--approved-driver-sha256",
+      "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+      "--transport",
+      "strict-tls",
+      "--auth-file",
+      "APPROVED_EXISTING_FEDORA_0600_AUTH_FILE",
+      "--approved-auth-file-sha256",
+      "APPROVED_AUTH_FILE_SHA"
+    ],
+    [
+      "python3",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/publish.py",
+      "publish",
+      "--service",
+      "governance",
+      "--root-authorized",
+      "--exclusive-new-task-tags",
+      "--approved-plan-sha256",
+      "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+      "--approved-driver-sha256",
+      "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+      "--transport",
+      "strict-tls",
+      "--auth-file",
+      "APPROVED_EXISTING_FEDORA_0600_AUTH_FILE",
+      "--approved-auth-file-sha256",
+      "APPROVED_AUTH_FILE_SHA"
+    ]
+  ],
+  "deployments": 0
+}

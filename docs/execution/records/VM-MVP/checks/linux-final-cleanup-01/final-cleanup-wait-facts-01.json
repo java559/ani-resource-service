@@ -1,0 +1,769 @@
+{
+  "at": "2026-10-24T18:32:45.431473+00:00",
+  "scope": "exact two original network attachments; exact nine known trash IDs; one unknown image",
+  "native_writes": 0,
+  "backend_writes": 0,
+  "business_delete_sends": 0,
+  "network": {
+    "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+      "original_attachment_id": "att_6781cbb15303438f86108d349f3ddfae",
+      "row": {
+        "id": "att_6781cbb15303438f86108d349f3ddfae",
+        "state": "released",
+        "released_at": "2026-10-24T18:14:06.07896+00:00",
+        "protocol_blocked": false
+      },
+      "persisted_provider_relations": {
+        "provider_relations": [
+          {
+            "UID": "52a0eafe-3442-46c3-85c7-6a7dcd6169ca",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-4kzmf",
+            "OwnerUID": "47317bb0-a8b7-4fe5-8527-6dae9fcf7ee2",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "e28bca6d-f89f-4c18-98d8-663803513327",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-72qpp",
+            "OwnerUID": "b6859733-ec66-40e9-b8eb-2928102524e2",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "bbed24fb-9f64-42e4-a1b4-20c3075b0646",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-76dcq",
+            "OwnerUID": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "ceb39733-dba1-4a98-bb60-27bdf2090452",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-bbmjw",
+            "OwnerUID": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "06a0c364-cfa8-4e72-922c-ab50efb81ef5",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-lhmnx",
+            "OwnerUID": "769e5a06-e948-49d1-bc91-8f0b6256a1f8",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "194993ef-0557-4a1c-bcfb-d23a830e10af",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-ndzzr",
+            "OwnerUID": "3edc4260-e139-4999-9266-4ea54e0f1f75",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "1f8a3c06-d793-4773-8413-90d9eafb98ce",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-nxs58",
+            "OwnerUID": "06af5288-9d55-4ae6-96bf-9cba7e8d9d93",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "468a456f-d0dd-4a70-af5a-2284c0e267d7",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-pc9tp",
+            "OwnerUID": "f926c761-5700-41c9-90e5-a204e16bc606",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "59a0cef8-33ca-488d-b3a5-46409f8b5eb1",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-r6l6j",
+            "OwnerUID": "e2a77112-b36c-446e-b6fa-0ec9753a4c58",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "d6f77a5a-863f-4852-83f3-64525fb2c78c",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-t2z8h",
+            "OwnerUID": "dad7b0a1-ea99-4515-823b-d1b36f942b7d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "1d1f9723-6f6e-46f7-80fd-2cbd7451a84b",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-zkws8",
+            "OwnerUID": "18090247-b311-4abb-aa60-a2f39dbe4b56",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "a795cbfb-a2b7-4656-83a3-a031085eadbf",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-9bxqb",
+            "OwnerUID": "ceb39733-dba1-4a98-bb60-27bdf2090452",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "6f86d067-2948-4dd5-8131-c8aab2e5b564",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-c4sb8",
+            "OwnerUID": "bbed24fb-9f64-42e4-a1b4-20c3075b0646",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+            "OwnerUID": "1f8a3c06-d793-4773-8413-90d9eafb98ce",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "ee6bbc5a-f080-406a-b027-9b853d9e8cd7",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-f4cd4",
+            "OwnerUID": "1d1f9723-6f6e-46f7-80fd-2cbd7451a84b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "512dd093-1e8c-46e6-b3e8-bd98f575ac0d",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-fqjgh",
+            "OwnerUID": "d6f77a5a-863f-4852-83f3-64525fb2c78c",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "0084945c-d68e-4e9c-96e9-a6f946cd3ac0",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-qdk5p",
+            "OwnerUID": "468a456f-d0dd-4a70-af5a-2284c0e267d7",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "0fe52ecd-26dc-4bb6-8f6b-5b080c813fe4",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-svdhd",
+            "OwnerUID": "52a0eafe-3442-46c3-85c7-6a7dcd6169ca",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "1f4ef3ca-5ad9-4237-9712-02b61b85d91a",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-wlc86",
+            "OwnerUID": "06a0c364-cfa8-4e72-922c-ab50efb81ef5",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "2352aa8b-da97-4e1e-9f17-9760d8cc49c9",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-xv85m",
+            "OwnerUID": "194993ef-0557-4a1c-bcfb-d23a830e10af",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "fbc20fe2-3756-4ea9-a92e-4aa23ad8809b",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-z9kml",
+            "OwnerUID": "e28bca6d-f89f-4c18-98d8-663803513327",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "3fe75633-7f57-4ff2-b0e7-ad34f1c9ce4a",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-zt69h",
+            "OwnerUID": "59a0cef8-33ca-488d-b3a5-46409f8b5eb1",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "16020f1b-a966-404b-b6fd-5c8e84d02959",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-9bxqb",
+            "Address": "10.83.1.9",
+            "OwnerUID": "a795cbfb-a2b7-4656-83a3-a031085eadbf",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "c58ebd13-d903-4d28-92f9-3dbbd3a2d6a7",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-c4sb8",
+            "Address": "10.83.1.9",
+            "OwnerUID": "6f86d067-2948-4dd5-8131-c8aab2e5b564",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "be937f41-f70d-49fc-a708-6864ddc23e36",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+            "Address": "10.83.1.5",
+            "OwnerUID": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "eef48d03-fdc0-4943-8875-3064bbde5574",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-f4cd4",
+            "Address": "10.83.1.8",
+            "OwnerUID": "ee6bbc5a-f080-406a-b027-9b853d9e8cd7",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "a9c119ab-a934-44f5-a956-ce612d69dcd6",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-fqjgh",
+            "Address": "10.83.1.2",
+            "OwnerUID": "512dd093-1e8c-46e6-b3e8-bd98f575ac0d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "f67b16ce-5a4e-4135-944b-2a4fdf6e3660",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-qdk5p",
+            "Address": "10.83.1.6",
+            "OwnerUID": "0084945c-d68e-4e9c-96e9-a6f946cd3ac0",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "ebd3a44e-de15-438c-af5c-1501e38a3bcf",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-svdhd",
+            "Address": "10.83.1.5",
+            "OwnerUID": "0fe52ecd-26dc-4bb6-8f6b-5b080c813fe4",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "b540770d-bc62-4617-a59a-f4b38a7b1fc1",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-wlc86",
+            "Address": "10.83.1.7",
+            "OwnerUID": "1f4ef3ca-5ad9-4237-9712-02b61b85d91a",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "075fd4a3-fb28-48c4-9b05-a4cc124fdf65",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-xv85m",
+            "Address": "10.83.1.6",
+            "OwnerUID": "2352aa8b-da97-4e1e-9f17-9760d8cc49c9",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "15427895-6144-455a-baef-9e9eca840210",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-z9kml",
+            "Address": "10.83.1.7",
+            "OwnerUID": "fbc20fe2-3756-4ea9-a92e-4aa23ad8809b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "44dcae8d-de86-4224-9857-91d971b2a098",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-zt69h",
+            "Address": "10.83.1.8",
+            "OwnerUID": "3fe75633-7f57-4ff2-b0e7-ad34f1c9ce4a",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Kind": "VirtualMachine",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "06af5288-9d55-4ae6-96bf-9cba7e8d9d93",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "18090247-b311-4abb-aa60-a2f39dbe4b56",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.8",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.9",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "3edc4260-e139-4999-9266-4ea54e0f1f75",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "47317bb0-a8b7-4fe5-8527-6dae9fcf7ee2",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.5",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.9",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "769e5a06-e948-49d1-bc91-8f0b6256a1f8",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "b6859733-ec66-40e9-b8eb-2928102524e2",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.7",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "dad7b0a1-ea99-4515-823b-d1b36f942b7d",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "Address": "10.83.1.2",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "e2a77112-b36c-446e-b6fa-0ec9753a4c58",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "f926c761-5700-41c9-90e5-a204e16bc606",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "OwnerUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          }
+        ]
+      },
+      "authoritative_vnic_refs": [
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-9bxqb",
+          "uid": "a795cbfb-a2b7-4656-83a3-a031085eadbf",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-c4sb8",
+          "uid": "6f86d067-2948-4dd5-8131-c8aab2e5b564",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+          "uid": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-f4cd4",
+          "uid": "ee6bbc5a-f080-406a-b027-9b853d9e8cd7",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-fqjgh",
+          "uid": "512dd093-1e8c-46e6-b3e8-bd98f575ac0d",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-qdk5p",
+          "uid": "0084945c-d68e-4e9c-96e9-a6f946cd3ac0",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-svdhd",
+          "uid": "0fe52ecd-26dc-4bb6-8f6b-5b080c813fe4",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-wlc86",
+          "uid": "1f4ef3ca-5ad9-4237-9712-02b61b85d91a",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-xv85m",
+          "uid": "2352aa8b-da97-4e1e-9f17-9760d8cc49c9",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-z9kml",
+          "uid": "fbc20fe2-3756-4ea9-a92e-4aa23ad8809b",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-zt69h",
+          "uid": "3fe75633-7f57-4ff2-b0e7-ad34f1c9ce4a",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        }
+      ],
+      "vnic_gone": [
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-9bxqb",
+            "uid": "a795cbfb-a2b7-4656-83a3-a031085eadbf",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-c4sb8",
+            "uid": "6f86d067-2948-4dd5-8131-c8aab2e5b564",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-crsvn",
+            "uid": "97c45465-8e02-4b82-8ef4-bd3b22c705e2",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-f4cd4",
+            "uid": "ee6bbc5a-f080-406a-b027-9b853d9e8cd7",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-fqjgh",
+            "uid": "512dd093-1e8c-46e6-b3e8-bd98f575ac0d",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-qdk5p",
+            "uid": "0084945c-d68e-4e9c-96e9-a6f946cd3ac0",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-svdhd",
+            "uid": "0fe52ecd-26dc-4bb6-8f6b-5b080c813fe4",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-wlc86",
+            "uid": "1f4ef3ca-5ad9-4237-9712-02b61b85d91a",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-xv85m",
+            "uid": "2352aa8b-da97-4e1e-9f17-9760d8cc49c9",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-z9kml",
+            "uid": "fbc20fe2-3756-4ea9-a92e-4aa23ad8809b",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-55099440-c47b-4f81-af-vnic-zt69h",
+            "uid": "3fe75633-7f57-4ff2-b0e7-ad34f1c9ce4a",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        }
+      ],
+      "vnic_result": "GONE"
+    },
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+      "original_attachment_id": "att_a79e10732ff0417eb82fc4dfdb98a153",
+      "row": {
+        "id": "att_a79e10732ff0417eb82fc4dfdb98a153",
+        "state": "released",
+        "released_at": "2026-10-24T18:00:58.759097+00:00",
+        "protocol_blocked": false
+      },
+      "persisted_provider_relations": {
+        "provider_relations": [
+          {
+            "UID": "3af15e13-84bb-4ad6-87cc-accad5b9854b",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-pg4x7",
+            "OwnerUID": "4976b0da-fb59-44a7-a18a-482c504674a3",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-s6dnp",
+            "OwnerUID": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "9aa44691-b767-4e83-9a35-9eb77718fd75",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-v4x7t",
+            "OwnerUID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "d91b1612-d9f6-47ca-8ba5-435637cd1544",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-c7b5q",
+            "OwnerUID": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "83cf04c2-c5da-4da2-a492-4e692bf6475b",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-jx59h",
+            "OwnerUID": "9aa44691-b767-4e83-9a35-9eb77718fd75",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "50e5915f-a6f8-4954-80a1-b96d08c9560f",
+            "Kind": "VNic",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-rvvtb",
+            "OwnerUID": "3af15e13-84bb-4ad6-87cc-accad5b9854b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "4e8b189d-5c2c-4e6a-8424-abd999f888b8",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-c7b5q",
+            "Address": "10.83.1.2",
+            "OwnerUID": "d91b1612-d9f6-47ca-8ba5-435637cd1544",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "67a77da3-e74e-45ba-95be-36ec44cf0ced",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-jx59h",
+            "Address": "10.83.1.13",
+            "OwnerUID": "83cf04c2-c5da-4da2-a492-4e692bf6475b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "783aba5b-cf77-4db6-a428-4a9d9f769d6a",
+            "Kind": "VNicIP",
+            "Name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-rvvtb",
+            "Address": "10.83.1.4",
+            "OwnerUID": "50e5915f-a6f8-4954-80a1-b96d08c9560f",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+            "Kind": "VirtualMachine",
+            "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "OwnerUID": "",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "Address": "10.83.1.13",
+            "OwnerUID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "4976b0da-fb59-44a7-a18a-482c504674a3",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "Address": "10.83.1.4",
+            "OwnerUID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          {
+            "UID": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "Address": "10.83.1.2",
+            "OwnerUID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          }
+        ]
+      },
+      "authoritative_vnic_refs": [
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-c7b5q",
+          "uid": "d91b1612-d9f6-47ca-8ba5-435637cd1544",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-jx59h",
+          "uid": "83cf04c2-c5da-4da2-a492-4e692bf6475b",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        },
+        {
+          "kind": "VNic",
+          "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-rvvtb",
+          "uid": "50e5915f-a6f8-4954-80a1-b96d08c9560f",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+        }
+      ],
+      "vnic_gone": [
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-c7b5q",
+            "uid": "d91b1612-d9f6-47ca-8ba5-435637cd1544",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-jx59h",
+            "uid": "83cf04c2-c5da-4da2-a492-4e692bf6475b",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        },
+        {
+          "original": {
+            "kind": "VNic",
+            "name": "auto-virt-launcher-vm-068d56dd-d4fc-4ca8-84-vnic-rvvtb",
+            "uid": "50e5915f-a6f8-4954-80a1-b96d08c9560f",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+          },
+          "gone": true,
+          "same_name_replacement_uid": null
+        }
+      ],
+      "vnic_result": "GONE"
+    }
+  },
+  "network_attachment_column_names": [
+    "tenant_id",
+    "attachment_id",
+    "vpc_id",
+    "subnet_id",
+    "binding_id",
+    "instance_id",
+    "slot",
+    "request_key",
+    "submission_id",
+    "generation",
+    "fingerprint",
+    "cluster_id",
+    "namespace",
+    "binding_revision",
+    "plan",
+    "state",
+    "reason",
+    "protocol_blocked",
+    "version",
+    "pod_name",
+    "pod_uid",
+    "confirm_uid",
+    "finalization_id",
+    "provider_relations",
+    "created_at",
+    "updated_at",
+    "observed_at",
+    "released_at",
+    "next_check_at",
+    "lease_owner",
+    "lease_until",
+    "epoch",
+    "requested_generation",
+    "processed_generation",
+    "retry_not_before",
+    "evidence_hash",
+    "evidence_applied_at"
+  ],
+  "reader": {
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+    "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+    "container": "mgr",
+    "identity": "mgr.a"
+  },
+  "backend": {
+    "trash_ls_long_supported": true,
+    "trash_ls_help": "usage: rbd trash ls [--pool <pool>] [--namespace <namespace>] [--all] [--long] \n                    [--format <format>] [--pretty-format] \n                    <pool-spec> \n\nList trash images.\n\nPositional arguments\n  <pool-spec>          pool specification\n                       (example: <pool-name>[/<namespace>]\n\nOptional arguments\n  -p [ --pool ] arg    pool name\n  --namespace arg      namespace name\n  -a [ --all ]         list images from all sources\n  -l [ --long ]        long listing format\n  --format arg         output format (plain, json, or xml) [default: plain]\n  --pretty-format      pretty formatting (json and xml)\n\n",
+    "trash_long": {
+      "result": "TIMEOUT",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 28.009
+    },
+    "purge_schedule_list_help": "usage: rbd trash purge schedule list [--pool <pool>] [--namespace <namespace>] \n                                     [--recursive] [--format <format>] \n                                     [--pretty-format] \n\nList trash purge schedule.\n\nOptional arguments\n  -p [ --pool ] arg    pool name\n  --namespace arg      namespace name\n  -R [ --recursive ]   list all schedules\n  --format arg         output format (plain, json, or xml) [default: plain]\n  --pretty-format      pretty formatting (json and xml)\n\n",
+    "pool_purge_schedule": {
+      "result": "ERROR",
+      "exit_code": 13,
+      "stderr": "rbd: rbd trash purge schedule list failed: (13) Permission denied: access denied: does your client key have mgr caps? See http://docs.ceph.com/en/latest/mgr/administrator/#client-authentication\n",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 0.103
+    },
+    "unknown_image_info": {
+      "result": "ERROR",
+      "exit_code": 2,
+      "stderr": "rbd: error opening image csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153: (2) No such file or directory\n",
+      "stdout_bytes": 0,
+      "elapsed_seconds": 4.481
+    }
+  },
+  "finished_at": "2026-10-24T18:33:51.614107+00:00"
+}

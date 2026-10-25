@@ -1,0 +1,15 @@
+{
+  "cpu_original_delete_ledger_native_complete": true,
+  "actual_owner_receipts": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-live-prep-01/b-cpu-cleanup-01.json",
+      "sha256": "ad5a64f767f4efb1d9dbaca9e296fc612b00c8f7be17c4dd5cc79158b7d85501"
+    }
+  ],
+  "owner": "vm_console",
+  "case_ids": [
+    "64413d16-05df-4623-a545-0e2f226c6006",
+    "049db72b-c288-4993-94eb-07fa666a7ac2"
+  ],
+  "normal_delete_native_backend_role_and_original_ledger_verified": true
+}

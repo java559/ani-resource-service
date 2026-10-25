@@ -1,0 +1,48 @@
+OVERLAY16C_VERIFIED
+=== RUN   TestRestorePreviewFiveSetsAndVersionIdentityDigest
+--- PASS: TestRestorePreviewFiveSetsAndVersionIdentityDigest (0.00s)
+=== RUN   TestRestoreMappingRecoversDeletedInventoryAndKeepsDetachedExtras
+--- PASS: TestRestoreMappingRecoversDeletedInventoryAndKeepsDetachedExtras (0.00s)
+=== RUN   TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping
+--- PASS: TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping (0.01s)
+=== RUN   TestRestoreMappingRetiresMediaWithoutDiscardingNewerLogicalCopies
+--- PASS: TestRestoreMappingRetiresMediaWithoutDiscardingNewerLogicalCopies (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	0.016s
+=== RUN   TestBackendRestoreKeepsOldUIDsUntilNativeReclamation
+--- PASS: TestBackendRestoreKeepsOldUIDsUntilNativeReclamation (0.00s)
+=== RUN   TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone
+--- PASS: TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone (0.00s)
+=== RUN   TestSnapshotUsesNativeSelectedDeleteClassWithoutChangingSharedPolicy
+--- PASS: TestSnapshotUsesNativeSelectedDeleteClassWithoutChangingSharedPolicy (0.00s)
+=== RUN   TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup
+--- PASS: TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup (0.00s)
+=== RUN   TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization
+--- PASS: TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization (0.01s)
+=== RUN   TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID
+--- PASS: TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.025s
+=== RUN   TestSnapshotServiceReadsAreScopedAndPreviewIsSideEffectFree
+--- PASS: TestSnapshotServiceReadsAreScopedAndPreviewIsSideEffectFree (0.00s)
+=== RUN   TestRestoreAdmissionRechecksFreshNativeSnapshotBeforeAccept
+--- PASS: TestRestoreAdmissionRechecksFreshNativeSnapshotBeforeAccept (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.008s
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/cleanup-checkpoint
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/delete-takeover
+--- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints (1.71s)
+    --- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/cleanup-checkpoint (0.80s)
+    --- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/delete-takeover (0.92s)
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/native-completed
+    snapshots_integration_test.go:400: new PVC/PV omitted before mapping {5cd696e7-882b-42d4-a20f-11205b6c8849 00c323b5-f3a9-463a-b706-a86c556d1b66 1fe32d2c-c5da-4a53-95a8-2e769b346225 /vm.v1.VMService/AcceptDelete 00c323b5-f3a9-463a-b706-a86c556d1b66 dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd [123 34 101 120 112 101 99 116 101 100 95 118 101 114 115 105 111 110 34 58 32 50 44 32 34 99 114 101 97 116 101 95 111 112 101 114 97 116 105 111 110 95 105 100 34 58 32 34 53 49 56 51 50 53 101 55 45 100 100 48 48 45 52 52 54 56 45 97 102 54 54 45 100 100 53 51 100 56 52 51 97 52 57 54 34 125] 3 accepted    <nil> <nil>  0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC} <nil>
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/lost-checkpoint
+    snapshots_integration_test.go:400: new PVC/PV omitted before mapping {60347c34-c49d-4bc0-b40c-69f99e17ecf7 be2f46aa-d81a-462d-adb7-727d69e716c2 6e296f9b-92b4-45b6-ab39-2078e82dc6d3 /vm.v1.VMService/AcceptDelete be2f46aa-d81a-462d-adb7-727d69e716c2 dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd [123 34 101 120 112 101 99 116 101 100 95 118 101 114 115 105 111 110 34 58 32 50 44 32 34 99 114 101 97 116 101 95 111 112 101 114 97 116 105 111 110 95 105 100 34 58 32 34 48 98 53 57 100 52 48 50 45 97 54 97 99 45 52 57 53 53 45 57 53 56 54 45 50 100 57 49 50 101 98 51 102 56 102 54 34 125] 3 accepted    <nil> <nil>  0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC} <nil>
+--- FAIL: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint (1.60s)
+    --- FAIL: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/native-completed (0.73s)
+    --- FAIL: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/lost-checkpoint (0.87s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	3.326s
+FAIL

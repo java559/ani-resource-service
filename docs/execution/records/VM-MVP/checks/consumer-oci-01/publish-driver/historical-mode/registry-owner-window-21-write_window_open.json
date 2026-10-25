@@ -1,0 +1,22 @@
+{
+  "automatic_restore_seconds": 1800,
+  "controller_pid": 3573735,
+  "controller_start_ticks": "56463112",
+  "event": "WRITE_WINDOW_OPEN",
+  "expires_at": "2026-10-22T20:32:42.745680+00:00",
+  "finish_signal": "/run/ani-modeldev-v21-registry-owner-window-21/finish",
+  "identity": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "node_internal_ip": "172.16.101.10",
+    "node_machine_id": "cd933c2ed43e460986560541fa038e54",
+    "node_name": "ani-01",
+    "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+    "task_owner": "modeldev-execution-v2.1-20261022-01a15f47"
+  },
+  "observed_at": "2026-10-22T20:02:44.698426+00:00",
+  "opened_at": "2026-10-22T20:02:44.698220+00:00",
+  "original_unit_sha256": "599642ae7fb4b9628fec2ade787df7d7f553b6aac34580834bc0bbe54084d06b",
+  "properties": "MainPID=3838611\nExecStart={ path=/home/ubuntu/ani-kubeflow-first-install-dee542a-20261004/materials-frozen-dee542a-attempt-01/bin/hauler ; argv[]=/home/ubuntu/ani-kubeflow-first-install-dee542a-20261004/materials-frozen-dee542a-attempt-01/bin/hauler store serve registry --port 5000 --directory /var/lib/ani-installer/ani-lab/work/registry-data --readonly=false --store /var/lib/ani-installer/ani-lab/work/hauler-store ; ignore_errors=no ; start_time=[Fri 2026-10-23 04:02:44 CST] ; stop_time=[n/a] ; pid=3838611 ; code=(null) ; status=0/0 }\nActiveState=active\nDropInPaths=/run/systemd/system/ani-image-registry.service.d/90-modeldev-v21-owner-window-21.conf\n",
+  "runtime_dropin": "/run/systemd/system/ani-image-registry.service.d/90-modeldev-v21-owner-window-21.conf",
+  "window": "21"
+}

@@ -1,0 +1,254 @@
+{
+  "business_api_calls": 0,
+  "cluster_calls": 0,
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 0.185,
+      "exit": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/base-inspect.log",
+      "log_sha256": "bbd4f0ddbe88c70bc2ee38834d2074aa0d19e5c09597e8986be79726e35db11e",
+      "stage": "base-inspect"
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 0.026,
+      "exit": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/local-tag-absence.log",
+      "log_sha256": "59c18dc66f2debd9c56233fcd70721acc497e45bd2d777e756b683d75a4e4350",
+      "stage": "local-tag-absence"
+    },
+    {
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "vm-mvp-resource-4cc56c8f-help-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 0.022,
+      "exit": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/helper-absence.log",
+      "log_sha256": "96dd47bf749bc93ce993704a450d917e4e75a07ce5b15efdd9228511064c1c42",
+      "stage": "helper-absence"
+    },
+    {
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--iidfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/image.id",
+        "--tag",
+        "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+        "--file",
+        "Dockerfile",
+        "."
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/context",
+      "elapsed_seconds": 28.695,
+      "exit": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/docker-build.log",
+      "log_sha256": "d9d9beb285ed5d7b353a14e72d62ff0fa27f89f8b60eb69c66fef4f7e0201e4d",
+      "stage": "docker-build"
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vm-mvp-resource-4cc56c8f-help-01a168ce",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+        "-help"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 4.099,
+      "exit": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/help-only.log",
+      "log_sha256": "af26e901efc7e3c19c4e6d3cf83a5e7b529021f7b5527deb265746225c9d107f",
+      "stage": "help-only"
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 0.083,
+      "exit": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/image-inspect.log",
+      "log_sha256": "5af378460e87ae06151efac2d331e2d54ce6f8c02f22669c631595872447c50c",
+      "stage": "image-inspect"
+    },
+    {
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/ani-resource-service-vm-mvp-4cc56c8fc598-01a168ce.oci.tar:vm-mvp-4cc56c8fc598-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01",
+      "elapsed_seconds": 4.814,
+      "exit": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/oci-export.log",
+      "log_sha256": "d452217738a2738d0d0439e017554d9908b1eefaaad4f626ffdb835a92116a62",
+      "stage": "oci-export"
+    }
+  ],
+  "compilations": 0,
+  "deployments": 0,
+  "docker_image": {
+    "architecture": "amd64",
+    "config": {
+      "Entrypoint": [
+        "/ani-resource-service"
+      ],
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+      ],
+      "Labels": {
+        "org.opencontainers.image.revision": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+        "org.opencontainers.image.source": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+        "org.opencontainers.image.version": "vm-mvp-4cc56c8fc598-01a168ce"
+      },
+      "User": "65532:65532",
+      "WorkingDir": "/"
+    },
+    "id": "sha256:57f0150b6c41baf34e7caf20189122581ba8321dfb8b816be607ce22d2ec4439",
+    "os": "linux",
+    "tag": "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+  },
+  "driver_sha256": "5f2d17093df3d74c736c9b3733c73d7870e4913b207c99e7ba0e4b8fbdc1d0e5",
+  "elapsed_seconds": 45.241,
+  "error_class": "TimeoutError",
+  "finished_at": "2026-10-24T17:58:08.310461+00:00",
+  "full_test_runs": 0,
+  "git_network_calls": 0,
+  "host": "fedora/172.16.101.31",
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "oci": {
+    "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/ani-resource-service-vm-mvp-4cc56c8fc598-01a168ce.oci.tar",
+    "archive_bytes": 35556864,
+    "archive_sha256": "91453ff9781e0865c80d6c1e29119b5bb80ce1ae66ae6a91005dc82df830cc6c",
+    "binary_sha256_inside_oci": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+    "manifest": {
+      "config": {
+        "digest": "sha256:df6d9e9fa3fa8dacc25a5f2b2fa1cdedbb612fa760e156520b31488461f21602",
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "size": 3582
+      },
+      "layers": [
+        {
+          "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 88276
+        },
+        {
+          "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 12760
+        },
+        {
+          "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 475570
+        },
+        {
+          "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 29309
+        },
+        {
+          "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 75
+        },
+        {
+          "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 197
+        },
+        {
+          "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 132
+        },
+        {
+          "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 168
+        },
+        {
+          "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 91
+        },
+        {
+          "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 361
+        },
+        {
+          "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 320
+        },
+        {
+          "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 144572
+        },
+        {
+          "digest": "sha256:19ff75d82d9bf268af8199b8867ac5f1c94c650f7d2cf2ca680b015ec88c6851",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 34783557
+        }
+      ],
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "schemaVersion": 2
+    },
+    "manifest_digest": "sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a"
+  },
+  "provenance": {
+    "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-start-before-vmi-01/resource-server.candidate22",
+    "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+    "binary_version_retained": "vm-mvp-candidate22-01a168ce",
+    "candidate22_build_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-start-before-vmi-01/build.json",
+    "candidate22_build_receipt_sha256": "6b85e260cbdf0345d8773c8db5c03764ff2a47a398ce3caac524b4f211937b71",
+    "exact_git_bytes_and_modes_files": 538,
+    "recompiled": false,
+    "source_manifest_sha256": "203a1aa2b78b8bae2557bc240b0e32db799ca8f010cca7e230bb4f04a2a7dc19",
+    "source_map_sha256": "dd02373be6c582a06ca7b653d13468f95c2bc138049276ebf4fffde1d0164688"
+  },
+  "reason": "stage failed; inspect stage/provenance; no retry",
+  "registry_logins": 0,
+  "registry_writes": 0,
+  "result": "STOPPED_NO_PUSH_NO_RETRY",
+  "service_changes": 0,
+  "source_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "source_tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31",
+  "started_at": "2026-10-24T17:57:23.069881+00:00"
+}

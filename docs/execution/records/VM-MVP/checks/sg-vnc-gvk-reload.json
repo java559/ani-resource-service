@@ -1,0 +1,22 @@
+{
+  "root_authorized_window": "First failed VNC is closed; reload owned SG after captured identity red/green and affected tests",
+  "old_pid": 1485171,
+  "new_pid": 1543621,
+  "readyz_200": true,
+  "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/session-gateway-gvk",
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "unchanged": [
+    "ServiceAccount",
+    "RBAC",
+    "kubeconfig",
+    "runtime-env.json",
+    "ticket.key",
+    "Redis DB1",
+    "temporary page",
+    "transparent relay"
+  ],
+  "process_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/process.json",
+  "token_expires_at": "2026-10-23T16:59:49Z",
+  "adapter_sha256": "197a3c80b6179cb29573f9e46ecf3dbcd4d0f5d73b8eb9c82aedd529ba24166d",
+  "wire_test_sha256": "4f2539a1dfb2e66126366e0f83bd3e191ffea0abdb036c629080bf90bfd3e4c4"
+}

@@ -1,0 +1,40 @@
+{
+  "state": "PASS_NORMAL_PLATFORM_REGISTRATION_AFTER_COMPATIBILITY_PROBE",
+  "idempotency_key": "e38da487-a9d4-4982-8f6d-48134f35ef4d",
+  "send_attempts": 1,
+  "result": {
+    "ID": "img_d238746701ee4e9aa149a3beba8a3e49",
+    "TenantID": "",
+    "SpaceID": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+    "Repository": "workspace-candidate-02",
+    "SourceReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate-02@sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "Digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "ResolvedReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate-02@sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "MediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "Scope": "platform",
+    "Metadata": {
+      "DisplayName": "V24 CPU default long-running workspace",
+      "Description": "Existing fixed CPU artifact; default entrypoint plus bash UID1000 compatibility probe passed",
+      "Purposes": [
+        "container"
+      ],
+      "Accelerator": "undeclared"
+    },
+    "Platforms": [
+      {
+        "OS": "linux",
+        "Architecture": "amd64",
+        "Variant": ""
+      }
+    ],
+    "Version": 1,
+    "CreatedBy": "operator:vm-mvp-v24-01a168ce",
+    "UpdatedBy": "operator:vm-mvp-v24-01a168ce",
+    "CreatedAt": "2026-10-24T18:53:38.2516+08:00",
+    "UpdatedAt": "2026-10-24T18:53:38.2516+08:00",
+    "UnregisteredAt": null
+  },
+  "private_stdout_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/register-platform-02.stdout",
+  "protected_vm_mutations": 0,
+  "observed_at": "2026-10-24T10:53:38.261116+00:00"
+}

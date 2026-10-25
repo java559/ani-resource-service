@@ -1,0 +1,89 @@
+{
+  "at": "2026-10-24T20:58:01.602444+00:00",
+  "host": "fedora",
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200,
+      "elapsed_seconds": 0.758,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-private/platform-login.json",
+      "top_level_keys": [
+        "access_token",
+        "expires_in",
+        "issued_at"
+      ]
+    },
+    {
+      "label": "admin-me",
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": "NORMAL",
+      "elapsed_seconds": 0.422,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-private/admin-me.json",
+      "top_level_keys": [
+        "address",
+        "createdAt",
+        "createdBy",
+        "gender",
+        "id",
+        "lastLoginAt",
+        "lastLoginIp",
+        "mobile",
+        "nickname",
+        "orgUnitIds",
+        "orgUnitNames",
+        "positionIds",
+        "positionNames",
+        "region",
+        "roleIds",
+        "roleNames",
+        "roles",
+        "status",
+        "telephone",
+        "tenantId",
+        "updatedAt",
+        "updatedBy",
+        "username"
+      ]
+    },
+    {
+      "label": "virtual-switches",
+      "method": "GET",
+      "path": "/api/v1/admin/networks/virtual-switches?limit=20",
+      "status": 400,
+      "elapsed_seconds": 0.003,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-private/virtual-switches.json",
+      "top_level_keys": [
+        "code",
+        "message",
+        "metadata",
+        "reason"
+      ],
+      "code": 400,
+      "reason": "INVALID_NETWORK_REQUEST"
+    },
+    {
+      "label": "platform-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": "revoked",
+      "elapsed_seconds": 0.116,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-private/platform-logout.json",
+      "top_level_keys": [
+        "session_revoked",
+        "status"
+      ],
+      "session_revoked": true
+    }
+  ],
+  "vm_writes": 0,
+  "guest_operations": 0,
+  "egress_probes": 0,
+  "result": "FAIL_RETAIN_ORIGINAL_RESPONSE",
+  "error_type": "AssertionError",
+  "reason": "virtual-switches did not pass",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T20:58:03.386260+00:00"
+}

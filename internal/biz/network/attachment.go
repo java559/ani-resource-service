@@ -33,8 +33,11 @@ type PodPrimaryPlan struct {
 	Namespace, PrimaryNetworkRef                     string
 	TenantID, InstanceID, AttachmentID, SubmissionID string
 	Generation                                       int64
+	VMPrimary                                        *VMPrimaryPlan `json:",omitempty"`
 }
 type Attachment struct {
+	VMPrimary                                                     *VMPrimaryPlan
+	VMCurrentAddresses                                            []VMCurrentAddress
 	WorkloadMode                                                  string
 	SnapshotRevision                                              int64
 	SnapshotHash                                                  string
@@ -59,6 +62,7 @@ type PrepareAttachment struct {
 	SubmissionID                                            string
 	Generation                                              int64
 	ClusterID, Namespace                                    string
+	VMExpectation                                           *VMNetworkExpectation `json:",omitempty"`
 }
 
 func (r PrepareAttachment) Fingerprint() string {
@@ -104,12 +108,15 @@ func (a *Attachments) Prepare(ctx context.Context, r PrepareAttachment) (Attachm
 		return Attachment{}, err
 	}
 	r.TenantID = tenant
-	if r.WorkloadMode != "" && r.WorkloadMode != "single_pod" && r.WorkloadMode != "controller_managed" {
+	if r.WorkloadMode != "" && r.WorkloadMode != "single_pod" && r.WorkloadMode != "controller_managed" && r.WorkloadMode != "vm_managed" {
 		return Attachment{}, Fail(InvalidArgument, "invalid attachment workload mode")
 	}
 	// Empty is the immutable v1 spelling and remains omitted from its digest.
 	if r.WorkloadMode == "single_pod" {
 		r.WorkloadMode = ""
+	}
+	if (r.WorkloadMode == "vm_managed" && !ValidVMNetworkExpectation(r.VMExpectation)) || (r.WorkloadMode != "vm_managed" && r.VMExpectation != nil) {
+		return Attachment{}, Fail(InvalidArgument, "VM network expectation differs from workload mode")
 	}
 	submission, err := uuid.Parse(r.SubmissionID)
 	if err != nil || submission == uuid.Nil || r.SubmissionID != submission.String() || r.Generation < 1 || !attachmentName.MatchString(r.InstanceID) || r.Slot != "primary" || strings.TrimSpace(r.RequestKey) != r.RequestKey || len(r.RequestKey) < 1 || len(r.RequestKey) > 128 || !validSubnetID(r.SubnetID) || (r.VPCID != "" && !validVPCID(r.VPCID)) || strings.TrimSpace(r.ClusterID) == "" || len(r.ClusterID) > 128 || !namespaceName.MatchString(r.Namespace) {

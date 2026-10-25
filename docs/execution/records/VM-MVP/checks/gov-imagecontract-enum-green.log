@@ -1,0 +1,10 @@
+{"scope": "only expected identity.Module_value enum snapshot adds VIRTUAL_MACHINE=17", "before_sha256": "7ad140e3ec7780dac2a4a646fa6e39c79fab821c674020695cbde149542c4645", "after_sha256": "53df0656f1b8de151d9c3fb1e1b97bfdde989dff4d57f6a4593a7495a0955481", "canonical_proto_sha256": "6b5c4a274e57a6aec9e72036ec76a8451e6e78cee4fd7a0206f8ace4fc9ddd45"}
+53df0656f1b8de151d9c3fb1e1b97bfdde989dff4d57f6a4593a7495a0955481  tests/imagecontract/contract_test.go
+=== RUN   TestPublicImageSurface
+--- PASS: TestPublicImageSurface (0.00s)
+=== RUN   TestImageModulePreservesExistingContract
+--- PASS: TestImageModulePreservesExistingContract (0.00s)
+=== RUN   TestImageCatalogRouteConsistency
+--- PASS: TestImageCatalogRouteConsistency (0.29s)
+PASS
+ok  	go-wind-admin/tests/imagecontract	0.321s

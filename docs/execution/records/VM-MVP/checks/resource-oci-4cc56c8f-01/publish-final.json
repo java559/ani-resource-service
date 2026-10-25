@@ -1,0 +1,143 @@
+{
+  "archive_sha256": "91453ff9781e0865c80d6c1e29119b5bb80ce1ae66ae6a91005dc82df830cc6c",
+  "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "cluster_writes": 0,
+  "commands": [
+    {
+      "elapsed_seconds": 0.092,
+      "exit": 0,
+      "stage": "cluster identity"
+    },
+    {
+      "elapsed_seconds": 0.143,
+      "exit": 0,
+      "stage": "three node identity"
+    },
+    {
+      "elapsed_seconds": 0.093,
+      "exit": 0,
+      "stage": "original Harbor identity metadata"
+    },
+    {
+      "argv": [
+        "/usr/bin/skopeo",
+        "copy",
+        "--preserve-digests",
+        "--retry-times=0",
+        "--dest-tls-verify=true",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/ani-resource-service-vm-mvp-4cc56c8fc598-01a168ce.oci.tar:vm-mvp-4cc56c8fc598-01a168ce",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+      ],
+      "elapsed_seconds": 15.292,
+      "exit": 0,
+      "finished_at": "2026-10-24T19:49:33.998154+00:00",
+      "stage": "copy-once",
+      "started_at": "2026-10-24T19:49:18.703774+00:00",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/publish-final-private/copy-once-4.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/publish-final-private/copy-once-4.stdout",
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "/usr/bin/skopeo",
+        "--command-timeout",
+        "20s",
+        "inspect",
+        "--raw",
+        "--no-tags",
+        "--retry-times=0",
+        "--tls-verify=true",
+        "--cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+      ],
+      "elapsed_seconds": 0.252,
+      "exit": 0,
+      "finished_at": "2026-10-24T19:49:34.276785+00:00",
+      "stage": "independent-manifest-read",
+      "started_at": "2026-10-24T19:49:34.022826+00:00",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/publish-final-private/independent-manifest-read-5.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/publish-final-private/independent-manifest-read-5.stdout",
+      "timeout_seconds": 25
+    }
+  ],
+  "copy_attempts": 1,
+  "copy_outcome": "EXIT_ZERO_AWAITING_INDEPENDENT_READ",
+  "credential_values_or_hashes_public": false,
+  "deployments": 0,
+  "expected_manifest_digest": "sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+  "finished_at": "2026-10-24T19:49:34.279906+00:00",
+  "fresh_authenticated_head404": true,
+  "granted_actions": [
+    "pull",
+    "push"
+  ],
+  "heavy_lock_acquired": true,
+  "heavy_lock_released": true,
+  "independent_manifest_sha256": "3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+  "nodes": [
+    {
+      "internal_ip": "172.16.101.10",
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    },
+    {
+      "internal_ip": "172.16.101.11",
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+    },
+    {
+      "internal_ip": "172.16.101.12",
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+    }
+  ],
+  "old_tags_untouched": true,
+  "plan_sha256": "3a733f08bd06b1a61d093e3b230f69a2149bf734a82e2927825c0f7a023f18e4",
+  "plan_unchanged": true,
+  "publisher_sha256": "9f9d5bbc999ff40b48a71d66f235abfe460311edd48a75baf211b75f8b9fa8d8",
+  "registry_writes_attempted": 1,
+  "remote_manifest_digest": "sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+  "requests": [
+    {
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.285,
+      "http_status": 200,
+      "method": "GET",
+      "stage": "original exact repo authorization",
+      "started_at": "2026-10-24T19:49:18.374771+00:00",
+      "timeout_seconds": 5
+    },
+    {
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.028,
+      "http_status": 404,
+      "method": "HEAD",
+      "stage": "fresh exact new-tag absence",
+      "started_at": "2026-10-24T19:49:18.666533+00:00",
+      "timeout_seconds": 15
+    }
+  ],
+  "result": "PASS_EXACT4CC_OCI_PUBLISHED_AND_INDEPENDENT_DIGEST_VERIFIED",
+  "same_original_auth_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+  "same_original_identity": {
+    "namespace": "ani-system",
+    "resource_version": "42355378",
+    "secret": "icn-01a15337-release-pull",
+    "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46"
+  },
+  "scope_or_identity_changes": 0,
+  "service_changes": 0,
+  "source_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "started_at": "2026-10-24T19:49:17.854773+00:00",
+  "strict_https": true,
+  "tag_overwritten": false,
+  "target": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+}

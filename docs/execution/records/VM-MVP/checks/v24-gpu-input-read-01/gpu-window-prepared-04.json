@@ -1,0 +1,178 @@
+{
+  "state": "GPU_WINDOW_PREPARED_BLOCKED_BY_ACTUAL_CAPACITY_OBSERVATION",
+  "live_window_allowed": false,
+  "capacity_receipt": "capacity-preflight-05.json",
+  "preset_body_prepared_not_sent": {
+    "data": {
+      "code": "vm-mvp-v24-gpu-01a168ce",
+      "name": "VM MVP V24 T4 shared 3840MiB",
+      "compute_type": "gpu",
+      "cpu_millis": "2000",
+      "memory_mib": "4096",
+      "enabled": true,
+      "gpu": {
+        "profile_id": "39b93b25-1a47-482d-b496-585642376b74",
+        "profile_version": "1",
+        "devices_per_instance": 1
+      }
+    }
+  },
+  "spec_digest": "NOT_A_PUBLIC_INPUT; Gov AdminCreate verifies actual Profile.SpecDigest against baseline-bound canonical spec and freezes Resource GPU reference; no client-computed guess",
+  "preset_permissions": {
+    "create": "compute:preset:admin:create",
+    "delete": "compute:preset:admin:delete",
+    "module": "SYSTEM"
+  },
+  "temporary_config_delta": [
+    {
+      "file": "private/resource-candidate/compute.json",
+      "field": "ClusterID",
+      "old": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "new": "0fcdb8b1-22bf-4528-af59-82843dc88f21"
+    },
+    {
+      "file": "private/v24-instance-01/instance.json",
+      "field": "Service.ClusterID",
+      "old": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "new": "0fcdb8b1-22bf-4528-af59-82843dc88f21"
+    },
+    {
+      "file": "private/v24-instance-01/instance.json",
+      "field": "ReleaseAddress",
+      "old": "ani-accelerator-service.ani-accelerator.svc.cluster.local:19090",
+      "new": "127.0.0.1:43941"
+    },
+    {
+      "file": "private/v24-instance-01/gov-runtime-env.json",
+      "field": "ANI_INSTANCE_CLUSTER_ID",
+      "old": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "new": "0fcdb8b1-22bf-4528-af59-82843dc88f21"
+    }
+  ],
+  "originals_to_preserve": [
+    "VM config Service.ClusterID527",
+    "Network cluster527",
+    "three original VM frozen specs",
+    "Resource original release leaf and exact SAN",
+    "signer/Image/SA/pullSecret",
+    "same Resource/Gov binaries and budgets"
+  ],
+  "window_qualifiers": [
+    "V10 normalDelete plus native and physical release complete; pending0/active0/lease0",
+    "No VM Create/change/console during temporary Gov ANI_INSTANCE_CLUSTER_ID change",
+    "Exact original2config+Govenv bytes copied privately and restored after normal GPUDelete/physicalrelease",
+    "Original CPU GET and exact old key/body replay return oldIDs/oldop; no new ledger",
+    "All original VM GETs unchanged after restore"
+  ],
+  "quota": {
+    "definition": "gpu.shared_memory_mib",
+    "demand_mib": 3840,
+    "physical_entry_needed": false,
+    "original_plan2_policy": "ABSENT_ACTUALLY_READ",
+    "consumers": "fresh exact two known task tenants1/2",
+    "normal_add_if_approved": {
+      "method": "POST",
+      "path": "/api/v1/admin/plan-quotas",
+      "body": {
+        "data": {
+          "planId": 2,
+          "quotaCode": "gpu.shared_memory_mib",
+          "quotaValue": "3840"
+        }
+      }
+    },
+    "normal_restore": "DELETE /api/v1/admin/plan-quotas?id=<real ACK id>; then GET policy absent and tenant1 quota limit0/occupied0/available0",
+    "definitions_prices_business_sql_writes": 0
+  },
+  "image": {
+    "image_id": "img_d238746701ee4e9aa149a3beba8a3e49",
+    "artifact_id": 67,
+    "project_id": 18,
+    "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "accelerator": "undeclared",
+    "purposes": [
+      "container"
+    ],
+    "root_domain_ack": "2026-10-24: admission/profile/quota/device allocation/injection/release, no CUDA benchmark requirement; preserve original CMD/User",
+    "new_copy_or_registration": false
+  },
+  "nonallocating_observation": {
+    "capacity": "GET /api/v1/accelerator/capacity?profile_id=39b93b25-1a47-482d-b496-585642376b74&profile_version=1 (already read once; incomplete, no retry authorized)",
+    "admission_preview": "POST /api/v1/accelerator/admission-preview resolves+fits without allocation, needs actual pool_id; public response hides execution plan",
+    "compute_admin_create": "verifies profile digest/baseline/pool/group and returns summary; no execution or capacity reservation",
+    "full_plan": "Normal InstanceCreate admission resolves and persists original canonical plan; inspect original ledger/ACC/owner, never fake plan"
+  },
+  "unresolved": [
+    "capacity SOURCE_UNKNOWN observation2026-10-22 completefalse known_free_units0: must not allocate",
+    "normal PlanQuota create/delete privileges absent; no qualification writes for these performed",
+    "No new GPU Create key/body frozen or sent before actual preset ACK and future window approval"
+  ],
+  "source_references": [
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/api/protos/compute/service/v1/compute.proto",
+      "line_start": 43,
+      "line_end": 64,
+      "file_sha256": "8abc440a84985370aaa68bd4c65d31d7efc577fabed31c90c65b72af26eed7ba"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/internal/service/compute_presets.go",
+      "line_start": 240,
+      "line_end": 340,
+      "file_sha256": "acc736fcf05d59d3620a705f270cdccc18c0c7d6164da9e8057cb1175e14bc15"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/cmd/server/wiring_ent.go",
+      "line_start": 242,
+      "line_end": 253,
+      "file_sha256": "cd3ce7d0e6398ad640166dd0e432c65208bf1dfcd09f6b9e1a0029dfac74b7da"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/cmd/server/wiring_ent.go",
+      "line_start": 432,
+      "line_end": 434,
+      "file_sha256": "cd3ce7d0e6398ad640166dd0e432c65208bf1dfcd09f6b9e1a0029dfac74b7da"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/internal/commandcontract/instance_gpu.go",
+      "line_start": 147,
+      "line_end": 191,
+      "file_sha256": "3750910793130e06c0089f03490d3ad928e87302739fe0033f242a89be90bae5"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/api/protos/admin/service/v1/i_plan_quota.proto",
+      "line_start": 13,
+      "line_end": 45,
+      "file_sha256": "8c0a958f18b40d3d83f28adcff940dd6bbdfe7323b4dac7a0d0608d4c3beae54"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/internal/data/quota_ledger_repo.go",
+      "line_start": 249,
+      "line_end": 272,
+      "file_sha256": "ac302c4c6165fd74caed61da17657347f747d35a0517c82e7c85368232ac1d57"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/internal/data/quota_admin_repo.go",
+      "line_start": 92,
+      "line_end": 117,
+      "file_sha256": "a3b7753c3795ac2c808288a9888ea16e93d258f5c48fb47e702bd2c3cf755197"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance/app/admin/service/internal/service/accelerator_service.go",
+      "line_start": 478,
+      "line_end": 530,
+      "file_sha256": "8ebe85e6aa068d8fed38a50d78102b7cc133469433da9c5de489c208b90c897d"
+    },
+    {
+      "path": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/internal/data/instance/image.go",
+      "line_start": 12,
+      "line_end": 24,
+      "file_sha256": "4373563e244f0a5ceaf2c48d039a68488afcee396961dc32ed8b492c0e3619c1"
+    },
+    {
+      "path": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/internal/biz/image/runtime.go",
+      "line_start": 52,
+      "line_end": 107,
+      "file_sha256": "d4afc1bfefdcd5f0ebf000e45a5faa34e4c4aefe92b3bf89b70a8817ab107d0f"
+    }
+  ]
+}

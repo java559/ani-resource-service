@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal/v1"
+	console "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -18,10 +19,11 @@ import (
 type InstanceTerminalServer struct {
 	server  *grpc.Server
 	address string
+	methods map[string]bool
 }
 
-func NewInstanceTerminalServer(address, caFile, certFile, keyFile string, handler pb.InstanceTerminalServiceServer) (*InstanceTerminalServer, error) {
-	if address == "" || handler == nil {
+func NewInstanceTerminalServer(address, caFile, certFile, keyFile string, handler pb.InstanceTerminalServiceServer, vmHandler ...console.VMConsoleServiceServer) (*InstanceTerminalServer, error) {
+	if address == "" || (handler == nil && (len(vmHandler) != 1 || vmHandler[0] == nil)) || len(vmHandler) > 1 {
 		return nil, fmt.Errorf("instance terminal address and validation required")
 	}
 	ca, e := os.ReadFile(caFile)
@@ -36,19 +38,35 @@ func NewInstanceTerminalServer(address, caFile, certFile, keyFile string, handle
 	if e != nil {
 		return nil, fmt.Errorf("instance terminal server identity unavailable")
 	}
+	methods := map[string]bool{}
+	if handler != nil {
+		methods["/instance.terminal.v1.InstanceTerminalService/ValidateTerminalTarget"] = true
+	}
 	gs := grpc.NewServer(grpc.Creds(credentials.NewTLS(&tls.Config{MinVersion: tls.VersionTLS13, Certificates: []tls.Certificate{cert}, ClientCAs: roots, ClientAuth: tls.RequireAndVerifyClientCert})), grpc.UnaryInterceptor(func(ctx context.Context, r any, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (any, error) {
 		p, ok := peer.FromContext(ctx)
 		if !ok {
 			return nil, status.Error(codes.Unauthenticated, "SG_IDENTITY_REQUIRED")
 		}
 		t, ok := p.AuthInfo.(credentials.TLSInfo)
-		if !ok || len(t.State.VerifiedChains) == 0 || len(t.State.PeerCertificates) == 0 || len(t.State.PeerCertificates[0].URIs) != 1 || t.State.PeerCertificates[0].URIs[0].String() != "spiffe://ani.internal/service/ani-session-gateway" || info.FullMethod != "/instance.terminal.v1.InstanceTerminalService/ValidateTerminalTarget" {
+		if !ok || len(t.State.VerifiedChains) == 0 || len(t.State.PeerCertificates) == 0 || len(t.State.PeerCertificates[0].URIs) != 1 || t.State.PeerCertificates[0].URIs[0].String() != "spiffe://ani.internal/service/ani-session-gateway" || !methods[info.FullMethod] {
 			return nil, status.Error(codes.PermissionDenied, "SG_IDENTITY_REQUIRED")
 		}
 		return next(ctx, r)
 	}))
-	pb.RegisterInstanceTerminalServiceServer(gs, handler)
-	return &InstanceTerminalServer{gs, address}, nil
+	if handler != nil {
+		pb.RegisterInstanceTerminalServiceServer(gs, handler)
+	}
+	s := &InstanceTerminalServer{gs, address, methods}
+	if len(vmHandler) == 1 {
+		s.RegisterVMConsole(vmHandler[0])
+	}
+	return s, nil
+}
+
+// RegisterVMConsole is called at composition time, before the listener starts.
+func (s *InstanceTerminalServer) RegisterVMConsole(handler console.VMConsoleServiceServer) {
+	console.RegisterVMConsoleServiceServer(s.server, handler)
+	s.methods["/vm.console.v1.VMConsoleService/ValidateConsoleSession"] = true
 }
 func (s *InstanceTerminalServer) Start(context.Context) error {
 	listener, e := net.Listen("tcp", s.address)

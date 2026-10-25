@@ -1,0 +1,24 @@
+{
+  "result": "INFRASTRUCTURE_BUILD_FAILED_TESTS_NOT_RUN",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "original_result": "INCOMPLETE_RETAIN_EXCLUSIVE_FIXTURE",
+  "original_receipt": "pg-executed.json",
+  "original_receipt_sha256": "a5e444ec68bb32988fa4a76f5956e89e7d94bbf3105d50f8acac6bdb3ce8acef",
+  "group": "data",
+  "go_exit_code": 1,
+  "named_results": [],
+  "compiler_package": "go-wind-admin/app/admin/service/internal/data/ent",
+  "compiler_error": "compile: writing output: write $WORK/b536/_pkg_.a: disk quota exceeded",
+  "data_cases_not_run": 4,
+  "service_cases_not_run": 2,
+  "fixture_retained": true,
+  "actual_created_database": "vm_v24data01_01a168ce",
+  "actual_created_roles": [
+    "vm_v24data01_owner_01a168ce",
+    "vm_v24data01_runtime_01a168ce"
+  ],
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "automatic_retry": false,
+  "cache_cleanup": false
+}

@@ -1,0 +1,28 @@
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/running
+    console_test.go:74: console depended on unavailable storage: {VM:{Kind:VirtualMachine Namespace:tenant-console Name:vm-ad64cfef-4180-4e02-9cdb-6811374fbbbb UID:09c49008-a8bd-4891-b9c3-45296fef7db6} VMI:0x2a507ed2b480 Launcher:0x2a507ed2b6c0 Running:true Stopped:false Deleted:false State:Running Reason: Volumes:[] BackendStates:[] StateChangeRequests:[]} VM_DEPENDENCY_NOT_READY
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/not-running
+    console_test.go:74: console depended on unavailable storage: {VM:{Kind:VirtualMachine Namespace:tenant-console Name:vm-0475088e-3689-4e9a-ab8b-87d660aa8757 UID:599c1448-7dbe-4f65-bbbd-8330c71e2836} VMI:0x2a507ed2ba40 Launcher:0x2a507ed2bc40 Running:false Stopped:false Deleted:false State:Pending Reason: Volumes:[] BackendStates:[] StateChangeRequests:[]} VM_DEPENDENCY_NOT_READY
+--- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage (0.00s)
+    --- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage/running (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers (0.00s)
+    --- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage/not-running (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.010s
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running
+    console_test.go:52: console read unrelated storage or lost second version check: VM_DEPENDENCY_NOT_READY &{NativePort:<nil> full:1 identity:0}
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing
+--- FAIL: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences (0.00s)
+    --- FAIL: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.007s
+FAIL

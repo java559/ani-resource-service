@@ -97,7 +97,7 @@ func (w *AttachmentWorker) Step(ctx context.Context) (bool, error) {
 	call, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
 	consumer, consumerErr := w.consumer.GetSubmission(call, a)
 	cancel()
-	if a.WorkloadMode == "controller_managed" {
+	if a.WorkloadMode == "controller_managed" || a.WorkloadMode == "vm_managed" {
 		return w.stepManaged(ctx, work, consumer, consumerErr)
 	}
 	if consumerErr == nil && validConsumer(a, consumer) {
@@ -182,7 +182,10 @@ func (w *AttachmentWorker) Step(ctx context.Context) (bool, error) {
 	return true, err
 }
 func validConsumer(a Attachment, c ConsumerSubmission) bool {
-	if a.WorkloadMode == "controller_managed" {
+	if a.WorkloadMode == "controller_managed" || a.WorkloadMode == "vm_managed" {
+		if a.WorkloadMode == "vm_managed" {
+			return validVMConsumer(a, c)
+		}
 		return validManagedConsumer(a, c)
 	}
 	if len(c.PodUIDs) > 1 {

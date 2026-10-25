@@ -1,0 +1,14 @@
+{
+  "state": "FAILED_READ_ONLY_NO_MUTATION",
+  "started_at": "2026-10-24T10:09:11.218700+00:00",
+  "requests": [],
+  "registry_writes": 0,
+  "image_layer_downloads": 0,
+  "automatic_retries": 0,
+  "credential_output": false,
+  "certificate_verification": true,
+  "hostname_verification": "172.16.101.10 IP SAN",
+  "failure_stage": "source-artifact",
+  "failure_type": "URLError",
+  "finished_at": "2026-10-24T10:09:11.232060+00:00"
+}

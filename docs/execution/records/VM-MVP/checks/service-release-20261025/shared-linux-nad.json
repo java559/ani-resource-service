@@ -1,0 +1,44 @@
+{
+  "started_at": "2026-10-24T21:57:42.453617+00:00",
+  "host": "fedora",
+  "task": "vm-mvp-shared-01a168ce",
+  "result": "PASS_TASK_NAD_CREATED_AND_FROZEN",
+  "create_attempts": 1,
+  "namespace_label_writes": 0,
+  "kcn_configuration_changes": 0,
+  "vm_mutations": 0,
+  "gov_tenant_id": "14",
+  "resource_tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+  "manifest_sha256": "5bd8a0323df27e5531eb7cccc494c97238287660172d0d517b436c920dde1070",
+  "network_selection": {
+    "TenantID": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "VPCID": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+    "SubnetID": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+    "ClusterID": "0fcdb8b1-22bf-4528-af59-82843dc88f21",
+    "Namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "NamespaceUID": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+    "NADName": "vm-mvp-shared-main-01a168ce",
+    "NADUID": "074c10e9-5006-4f4d-8971-42e6da957b5e",
+    "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "KCNSubnetRef": "tenant-a893c319-d6d8-4609-a340-3f222964d00f/subnet-ad3fc788b3314750a2b25fe8015cf74e"
+  },
+  "nad": {
+    "name": "vm-mvp-shared-main-01a168ce",
+    "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "uid": "074c10e9-5006-4f4d-8971-42e6da957b5e",
+    "resource_version": "64109376"
+  },
+  "kcn_objects": [
+    {
+      "kind": "VPC",
+      "name": "vpc-ebe24085d6e84c01a2433a5017b47e5b",
+      "uid": "f9a0ce0a-d20f-42cb-ba27-510ffa0658ae"
+    },
+    {
+      "kind": "Subnet",
+      "name": "subnet-ad3fc788b3314750a2b25fe8015cf74e",
+      "uid": "0ceb1a01-519e-4624-8273-9c222d44b4f7"
+    }
+  ],
+  "finished_at": "2026-10-24T21:57:43.595246+00:00"
+}

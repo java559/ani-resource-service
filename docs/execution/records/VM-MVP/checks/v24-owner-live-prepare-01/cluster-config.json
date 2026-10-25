@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-24T10:53:09.101831+00:00",
+  "scope": "EXACT_NON_SENSITIVE_CLUSTER_ID_FIELDS_ONLY",
+  "application_calls": 0,
+  "secret_values_exported": false,
+  "config_writes": 0,
+  "task_compute": {
+    "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/compute.json",
+    "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc"
+  },
+  "task_instance_Service_ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "acc_configmap": {
+    "namespace": "ani-system",
+    "name": "accelerator-modeldev-execution-v21",
+    "uid": "84a95682-84d7-41e0-8842-a897fc72885a",
+    "resource_version": "51903981",
+    "cluster_fields": []
+  },
+  "acc_registry_contents": "NOT_READ_NO_RPC_OR_BUSINESS_DB; configured ids do not prove the complete registered cluster set",
+  "result": "NON_SENSITIVE_CLUSTER_CONFIG_CAPTURED",
+  "seconds": 0.169
+}

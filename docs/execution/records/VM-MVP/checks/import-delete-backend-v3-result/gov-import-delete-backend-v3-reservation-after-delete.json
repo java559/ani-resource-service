@@ -1,0 +1,160 @@
+{
+  "at": "2026-10-24T05:22:12.055929+00:00",
+  "vm_id": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+  "delete_operation_id": "bb9fa9c1-1b79-4059-bb8f-ffcde66db765",
+  "source_receipt": "evidence/gov-import-delete-backend-v3.json",
+  "source_receipt_sha256": "5dc2c0844c19b4ee1a2035fd9dcaad8b6413288f63f9ee8ee643a8243cf84397",
+  "pre_delete_actual_image_id_observed": false,
+  "trusted_attribution": {
+    "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "pool": "ani-block-pool",
+    "image": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "directory": "csi.volumes.default",
+    "key": "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reverse_object": "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "reverse_request_verified": true,
+    "claim": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+    }
+  },
+  "scope": "post-delete exact names/keys absence; no claim a previously existing physical image was observed deleted",
+  "initial_attempt": {
+    "first_command": [
+      "rbd",
+      "info",
+      "ani-block-pool/csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+      "--format=json"
+    ],
+    "result": "KUBECTL_EXEC_TIMEOUT_NOT_MEASURED",
+    "timeout_seconds": 8,
+    "raw_stdout_stderr": "NOT_RETAINED",
+    "no_absence_conclusion": true
+  },
+  "reads": [
+    {
+      "argv": [
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "--format=json"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "{\"name\":\"csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc\",\"id\":\"20cc87108566ef\",\"size\":8589934592,\"objects\":2048,\"order\":22,\"object_size\":4194304,\"snapshot_count\":0,\"block_name_prefix\":\"rbd_data.20cc87108566ef\",\"format\":2,\"features\":[\"layering\",\"operations\"],\"op_features\":[\"clone-child\"],\"flags\":[],\"create_timestamp\":\"Sat Oct 24 05:18:33 2026\",\"access_timestamp\":\"Sat Oct 24 05:18:33 2026\",\"modify_timestamp\":\"Sat Oct 24 05:18:33 2026\",\"parent\":{\"pool\":\"ani-block-pool\",\"pool_namespace\":\"\",\"image\":\"csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp\",\"id\":\"20cc87ab6aaa20\",\"snapshot\":\"csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc\",\"trash\":false,\"overlap\":8589934592}}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp",
+        "--format=json"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "{\"name\":\"csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp\",\"id\":\"20cc87ab6aaa20\",\"size\":8589934592,\"objects\":2048,\"order\":22,\"object_size\":4194304,\"snapshot_count\":1,\"block_name_prefix\":\"rbd_data.20cc87ab6aaa20\",\"format\":2,\"features\":[\"layering\",\"deep-flatten\",\"operations\"],\"op_features\":[\"clone-parent\",\"clone-child\"],\"flags\":[],\"create_timestamp\":\"Sat Oct 24 05:15:45 2026\",\"access_timestamp\":\"Sat Oct 24 05:15:45 2026\",\"modify_timestamp\":\"Sat Oct 24 05:15:45 2026\",\"parent\":{\"pool\":\"ani-block-pool\",\"pool_namespace\":\"\",\"image\":\"csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a\",\"id\":\"20cc8740729bdb\",\"snapshot\":\"3e44a205-1447-4c7a-adf3-59b25a3c8759\",\"trash\":false,\"overlap\":8589934592}}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+        "-"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 1,
+      "stdout": "No such key: ani-block-pool/csi.volumes.default/csi.volume.pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724\n",
+      "stderr": "command terminated with exit code 1\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+        "-"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+      "stderr": "Writing to -\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.volname",
+        "-"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+      "stderr": "Writing to -\n"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.imagename",
+        "-"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "stdout": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+      "stderr": "Writing to -\n"
+    },
+    {
+      "argv": [
+        "rbd",
+        "trash",
+        "ls",
+        "ani-block-pool",
+        "--format=json"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "matching_exact_names": [],
+      "stderr": ""
+    }
+  ],
+  "result": "NOT_ALL_ABSENT_OR_NOT_MEASURED",
+  "related_claims_after": [
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+        "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724"
+      },
+      "absent": true,
+      "replacement_uid": null
+    },
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+        "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+      },
+      "absent": true,
+      "replacement_uid": null
+    }
+  ],
+  "associated_pvs_after": []
+}

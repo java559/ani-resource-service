@@ -1,0 +1,19 @@
+=== RUN   TestSnapshotRestoreActualProcessExitRecovery
+    snapshots_process_integration_test.go:232: waited actual child pid=2842402 step="native_restore_completed" exit=73
+        === RUN   TestSnapshotRestoreProcessChild
+        committed checkpoint=native_restore_completed operation=203aa576-b47e-4159-8117-010dc889e8c4 pid=2842402 exit=73
+    snapshots_process_integration_test.go:232: waited actual child pid=2842409 step="mapping_committed" exit=74
+        === RUN   TestSnapshotRestoreProcessChild
+        committed checkpoint=mapping_committed operation=203aa576-b47e-4159-8117-010dc889e8c4 pid=2842409 exit=74
+    snapshots_process_integration_test.go:232: waited actual child pid=2842415 step="cleanup_completed" exit=75
+        === RUN   TestSnapshotRestoreProcessChild
+        committed checkpoint=cleanup_completed operation=203aa576-b47e-4159-8117-010dc889e8c4 pid=2842415 exit=75
+    snapshots_process_integration_test.go:232: waited actual child pid=2842424 step="" exit=0
+        === RUN   TestSnapshotRestoreProcessChild
+        original operation=203aa576-b47e-4159-8117-010dc889e8c4 converged pid=2842424
+        --- PASS: TestSnapshotRestoreProcessChild (0.03s)
+        PASS
+    snapshots_process_integration_test.go:299: PG+BOUNDARY: three committed checkpoints survived actual exits 73/74/75; fourth process completed the same operation; native restore/apply/old-volume-delete each once
+--- PASS: TestSnapshotRestoreActualProcessExitRecovery (3.05s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	3.062s

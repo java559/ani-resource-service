@@ -1,0 +1,34 @@
+{
+  "evidence_kind": "point_in_time_browser_observation",
+  "execution_host": "existing local in-app browser, task-only VNC page",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "windows": {
+    "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "business_version": 3,
+    "eula_approval": "call_585d2322729a41f7b7f76ef064f674ab question 0: 批准接受并继续安装",
+    "eula_acceptance": "performed; actual next page was installation target selection",
+    "edition": "Windows Server 2025 Standard Desktop Experience",
+    "product_key_entered": false,
+    "azure_pay_as_you_go_selected": false,
+    "storage_driver": "E:\\vioscsi\\2k25\\amd64\\vioscsi.inf, Red Hat VirtIO SCSI pass-through controller",
+    "root_detection": "one disk 0, 75.0 GB unallocated as rendered by Windows installer",
+    "installation": "started; subsequent actual progress 5 percent then 6 percent",
+    "installed_or_firstboot_pass": false,
+    "evidence": [
+      "vm-windows-after-eula-load-driver.png",
+      "vm-windows-virtio-root-detected.png",
+      "vm-windows-server2025-installing.png"
+    ]
+  },
+  "fedora_iso": {
+    "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "business_version": 7,
+    "preceding_api_and_native_receipt": "product-fedora44-iso-v2-firstboot.json",
+    "actual_browser": "installed Plasma Desktop firstboot Welcome; language, keyboard and default appearance steps completed; About You account page visible",
+    "new_password_entered_by_agent": false,
+    "account_setup": "human handoff requested because browser policy requires user entry and submission of new credentials",
+    "logged_in_or_guest_marker_pass": false,
+    "evidence": "vm-fedora44-firstboot-account-handoff.png"
+  },
+  "boundary": "Browser install progress is not completed ISO, Windows driver/network, guest persistence, snapshot or final cleanup acceptance."
+}

@@ -1,0 +1,41 @@
+{
+  "host": "172.16.101.10:30003",
+  "project": "icn-01a15337-release",
+  "https_certificate_verification": "PASS",
+  "proxy": "explicitly disabled",
+  "ca_source": {
+    "namespace": "ani-harbor",
+    "secret": "ani-harbor-tls",
+    "uid": "79294703-4e15-4a63-a64b-2e3c3355f372",
+    "field": "tls.crt",
+    "public_ca_path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/deploy-resume-20261022/harbor-certs/ca.crt",
+    "sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20"
+  },
+  "existing_identity_source": {
+    "namespace": "ani-system",
+    "secret": "icn-01a15337-release-pull",
+    "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46"
+  },
+  "scopes": [
+    {
+      "repository": "icn-01a15337-release/kcn-resource-resume-20261022",
+      "granted_actions": [
+        "pull",
+        "push"
+      ],
+      "push_permitted": true
+    },
+    {
+      "repository": "icn-01a15337-release/kcn-nodefacts-resume-20261022",
+      "granted_actions": [
+        "pull",
+        "push"
+      ],
+      "push_permitted": true
+    }
+  ],
+  "registry_mutation": "NONE",
+  "protected_authfile": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/deploy-resume-20261022/harbor-existing-identity-auth.json",
+  "status": "PUSH_IDENTITY_CONFIRMED",
+  "target": "res"
+}

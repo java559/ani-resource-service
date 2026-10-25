@@ -1,0 +1,331 @@
+{
+  "at": "2026-10-24T08:27:00.217560+00:00",
+  "phase": "preview-for-root-review",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved pre-Restore stages only; Restore/Delete remain disabled",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "preview": {
+    "version": "7",
+    "snapshotId": "e1083370-757b-5f66-bb5a-81920d78f1d7",
+    "snapshotUid": "8bd93f36-8014-4115-b599-0178bc421d94",
+    "disks": [
+      {
+        "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      }
+    ],
+    "previewDigest": "70035de7532951f76979ae5315846ba9e22f32ea1f7e824624cecb697da434e5"
+  },
+  "holder": {
+    "manifest": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "vm-mvp-cleanup-hold-root-01a168ce",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "labels": {
+          "ani.io/task": "vm-mvp-01a168ce",
+          "ani.io/purpose": "restore-cleanup-readonly-holder"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "kind": "VirtualMachine",
+            "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+            "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+            "controller": false,
+            "blockOwnerDeletion": false
+          }
+        ],
+        "annotations": {
+          "v1.multus-cni.io/default-network": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce",
+          "networking.kubercloud.com/subnet": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+        }
+      },
+      "spec": {
+        "restartPolicy": "Never",
+        "automountServiceAccountToken": false,
+        "activeDeadlineSeconds": 1800,
+        "terminationGracePeriodSeconds": 10,
+        "nodeSelector": {
+          "kubernetes.io/hostname": "ani-01"
+        },
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 107,
+          "runAsGroup": 107,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "held-old-root",
+            "persistentVolumeClaim": {
+              "claimName": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+              "readOnly": true
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "hold",
+            "image": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+            "imagePullPolicy": "Never",
+            "command": [
+              "/bin/sh",
+              "-ec",
+              "test -b /dev/held-root; exec sleep 1800"
+            ],
+            "volumeDevices": [
+              {
+                "name": "held-old-root",
+                "devicePath": "/dev/held-root"
+              }
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              },
+              "limits": {
+                "cpu": "50m",
+                "memory": "64Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "manifest_sha256": "0c4e103de4b4e33a10f79e1d906a7a755d09b34f06c16f64ea935bbf1818ada7",
+    "send_attempts": 1,
+    "ack_unknown": false,
+    "create_exit": 0,
+    "create_stderr": "",
+    "ref": {
+      "kind": "Pod",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-mvp-cleanup-hold-root-01a168ce",
+      "uid": "cd0afd8d-e64a-4009-bf0c-bf717d232e36"
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T08:25:31Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T08:24:11Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T08:25:31Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T08:25:31Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T08:24:10Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "allocatedResources": {
+            "cpu": "10m",
+            "memory": "16Mi"
+          },
+          "containerID": "containerd://02493f0a8afe98c8710feebc8170e731024c102e8a455a8b70e8e81cdfed570d",
+          "image": "172.16.101.10:5000/kubevirt/cdi-importer:v1.66.1",
+          "imageID": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+          "lastState": {},
+          "name": "hold",
+          "ready": true,
+          "resources": {
+            "limits": {
+              "cpu": "50m",
+              "memory": "64Mi"
+            },
+            "requests": {
+              "cpu": "10m",
+              "memory": "16Mi"
+            }
+          },
+          "restartCount": 0,
+          "started": true,
+          "state": {
+            "running": {
+              "startedAt": "2026-10-24T08:25:30Z"
+            }
+          },
+          "user": {
+            "linux": {
+              "gid": 107,
+              "supplementalGroups": [
+                107
+              ],
+              "uid": 107
+            }
+          }
+        }
+      ],
+      "hostIP": "172.16.101.10",
+      "hostIPs": [
+        {
+          "ip": "172.16.101.10"
+        }
+      ],
+      "observedGeneration": 1,
+      "phase": "Running",
+      "podIP": "10.84.1.3",
+      "podIPs": [
+        {
+          "ip": "10.84.1.3"
+        }
+      ],
+      "qosClass": "Burstable",
+      "startTime": "2026-10-24T08:24:11Z"
+    },
+    "ready": true,
+    "volume_attachments": [
+      {
+        "kind": "VolumeAttachment",
+        "namespace": "",
+        "name": "csi-e72a08cc3eda2c224d1e202c75ae347d3e1e887886eb8eb20f0326a82d232223",
+        "uid": "afd28945-7779-473b-abef-134b64bcfb3b"
+      }
+    ]
+  },
+  "current": {
+    "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "name": "vm-mvp-tenant2-linux-01a168ce",
+    "version": "7",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Stopped",
+    "observedState": "Stopped",
+    "reason": "",
+    "observedAt": "2026-10-24T07:54:26.620606524Z",
+    "addresses": [],
+    "lastOperationId": "9fd0800b-4bf7-425e-a1f6-0781eda4bcc5",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "role": "data",
+        "name": "vm-mvp-cleanup-data-a-01a168ce",
+        "sizeGb": "2",
+        "requestedBytes": "2000000000",
+        "observedCapacityBytes": "2147483648",
+        "volumeName": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+        "serial": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "role": "data",
+        "name": "vm-mvp-cleanup-data-b-01a168ce",
+        "sizeGb": "2",
+        "requestedBytes": "2000000000",
+        "observedCapacityBytes": "2147483648",
+        "volumeName": "disk-54f24010e31a52fab747e15e8acdc5f3",
+        "serial": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "protected_unchanged": true,
+  "restore_requests": 0,
+  "delete_requests": 0
+}

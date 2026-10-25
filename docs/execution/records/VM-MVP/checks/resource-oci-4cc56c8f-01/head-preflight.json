@@ -1,0 +1,46 @@
+{
+  "auth_file_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+  "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+  "cluster_calls": 0,
+  "credential_values_or_hashes_public": false,
+  "finished_at": "2026-10-24T18:02:54.281008+00:00",
+  "granted_actions": [
+    "pull",
+    "push"
+  ],
+  "image_pushes": 0,
+  "original_prepared_sha256": "90ecf7ff78e11fbf7f96dba639c427e4aa2dd07ae174fede9056cc7304ed2a22",
+  "registry_writes": 0,
+  "requests": [
+    {
+      "body_read": true,
+      "distribution_api_version": null,
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.044,
+      "http_status": 200,
+      "method": "GET",
+      "stage": "same exact repository auth scope",
+      "started_at": "2026-10-24T18:02:54.217409+00:00",
+      "timeout_seconds": 5
+    },
+    {
+      "body_read": false,
+      "distribution_api_version": null,
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.017,
+      "http_status": 404,
+      "method": "HEAD",
+      "stage": "new exact4cc tag",
+      "started_at": "2026-10-24T18:02:54.262792+00:00",
+      "timeout_seconds": 15
+    }
+  ],
+  "result": "READY_STRICT_TLS_AUTHENTICATED_HEAD404_NEW_TAG_ABSENT",
+  "retained_get_timeout_receipt_sha256": "1de2cc07ba2f0f853dd6181ed422cfbc508093e7deab69f4cac3802dfc10caf3",
+  "same_original_private_authority": true,
+  "service_changes": 0,
+  "source_sha256": "4d91dc9c961e1898382917ee2b62cbc12d2b0f67f24843ec151065f2eaab7a93",
+  "started_at": "2026-10-24T18:02:54.213161+00:00",
+  "strict_tls": true,
+  "target_absent": true
+}

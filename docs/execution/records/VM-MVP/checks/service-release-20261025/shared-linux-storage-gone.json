@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-24T22:34:40.043770+00:00",
+  "business_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "resource_vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "resource_tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+  "namespace": {
+    "name": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca"
+  },
+  "vm_uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "inventory_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/storage-inventory.json",
+  "inventory_sha256": "9be05ebc3b6657a27b6af71025fbf2691bc1b85de9cbd6455b6491a34fb7b857",
+  "runner_sha256": "5f1bc2a7231c5d53a06d8bb399694764482818a0e235b022a16e6038f7f31b0b",
+  "observation": "after-delete-01",
+  "normal_delete_evidence": {
+    "operation_id": "cf6dd416-b815-4003-846b-e40f4587cf33",
+    "receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/observe-deleted-02.json",
+    "receipt_sha256": "698f356e5a5649dbf9c0c1819ca47cc872517baf208d4e6bcc0814c518e71269",
+    "binding": "Root-supplied original normal Gov DELETE; no API call or resend by this observer"
+  },
+  "scope": "one VM/root CSI and dedicated task namespace; no claim about uncaptured historical UIDs",
+  "mutations": 0,
+  "backend_writes": 0,
+  "new_pods_or_proxies": 0,
+  "calls": [
+    {
+      "label": "metadata:namespace/kube-system",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "namespace",
+        "kube-system",
+        "--ignore-not-found=true",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 52,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:namespace/tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "namespace",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "--ignore-not-found=true",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 84,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:virtualmachines.kubevirt.io/vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "virtualmachines.kubevirt.io",
+        "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "--ignore-not-found=true",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:virtualmachineinstances.kubevirt.io/vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "virtualmachineinstances.kubevirt.io",
+        "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "--ignore-not-found=true",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:datavolumes.cdi.kubevirt.io/vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "datavolumes.cdi.kubevirt.io",
+        "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "--ignore-not-found=true",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:persistentvolumeclaims/vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "persistentvolumeclaims",
+        "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "--ignore-not-found=true",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:persistentvolumes/pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "persistentvolumes",
+        "pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+        "--ignore-not-found=true",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:secret/vm-init-a704da75-2520-4df2-beaf-f163709ae4ad",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "secret",
+        "vm-init-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "--ignore-not-found=true",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:pods/scope-set",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "pods",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{range .items}}{{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}{{end}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:vnics.networking.kubercloud.com/scope-set",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "vnics.networking.kubercloud.com",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{range .items}}{{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}{{end}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:vnicips.networking.kubercloud.com/scope-set",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "vnicips.networking.kubercloud.com",
+        "-n",
+        "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "-o=go-template={{range .items}}{{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}{{end}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "metadata:volumeattachments.storage.k8s.io/scope-set",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "volumeattachments.storage.k8s.io",
+        "-o=go-template={{range .items}}{{if eq .spec.source.persistentVolumeName \"pvc-4a47c95a-a050-4908-9897-247ca953bc83\"}}{{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}{{end}}{{end}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "existing_backend_reader_guard",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "get",
+        "pod",
+        "rook-ceph-tools-68d6bc7cc7-2z8tk",
+        "-n",
+        "rook-ceph",
+        "-o=go-template={{.metadata.name}}{{\"\\t\"}}{{.metadata.uid}}{{\"\\t\"}}{{if .metadata.namespace}}{{.metadata.namespace}}{{end}}{{\"\\t\"}}{{if .metadata.deletionTimestamp}}{{.metadata.deletionTimestamp}}{{end}}{{\"\\t\"}}{{range .metadata.ownerReferences}}{{.kind}}:{{.name}}:{{.uid}}:{{if .controller}}true{{else}}false{{end}};{{end}}{{\"\\n\"}}{{.status.phase}}{{\"\\t\"}}{{range .status.containerStatuses}}{{.name}}:{{if .state.running}}running{{else}}other{{end}};{{end}}{{\"\\n\"}}"
+      ],
+      "exit_code": 0,
+      "stdout_bytes": 195,
+      "stderr_bytes": 0
+    },
+    {
+      "label": "exact_root_image:csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "exec",
+        "-n",
+        "rook-ceph",
+        "rook-ceph-tools-68d6bc7cc7-2z8tk",
+        "-c",
+        "rook-ceph-tools",
+        "--",
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985",
+        "--format=json"
+      ],
+      "exit_code": 2,
+      "stdout_bytes": 0,
+      "stderr_bytes": 137
+    },
+    {
+      "label": "exact_root_image:csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985-temp",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "exec",
+        "-n",
+        "rook-ceph",
+        "rook-ceph-tools-68d6bc7cc7-2z8tk",
+        "-c",
+        "rook-ceph-tools",
+        "--",
+        "rbd",
+        "info",
+        "ani-block-pool/csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985-temp",
+        "--format=json"
+      ],
+      "exit_code": 2,
+      "stdout_bytes": 0,
+      "stderr_bytes": 142
+    },
+    {
+      "label": "one_bounded_root_filtered_trash_list",
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=8s",
+        "exec",
+        "-n",
+        "rook-ceph",
+        "rook-ceph-tools-68d6bc7cc7-2z8tk",
+        "-c",
+        "rook-ceph-tools",
+        "--",
+        "rbd",
+        "trash",
+        "ls",
+        "-p",
+        "ani-block-pool",
+        "--format=json"
+      ],
+      "result": "COMPLETE",
+      "exit_code": 0,
+      "stdout_bytes": 80,
+      "stderr_bytes": 0,
+      "stdout_limit_bytes": 2097152,
+      "timeout_seconds": 10
+    }
+  ],
+  "native": [
+    {
+      "original": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "uid": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+      },
+      "current": [],
+      "result": "ABSENT",
+      "original_uid_absent": true
+    },
+    {
+      "original": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "uid": "8ab05b07-69fa-4bc5-9ed1-92aea234b351"
+      },
+      "current": [],
+      "result": "ABSENT",
+      "original_uid_absent": true
+    },
+    {
+      "original": {
+        "kind": "DataVolume",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "uid": "0facf83a-f4ac-4c13-8934-80ff613bdbf5"
+      },
+      "current": [],
+      "result": "ABSENT",
+      "original_uid_absent": true
+    },
+    {
+      "original": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "name": "vd-69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+        "uid": "ebee0a8b-d0bc-4a88-b867-a5b5708185a9"
+      },
+      "current": [],
+      "result": "ABSENT",
+      "original_uid_absent": true
+    },
+    {
+      "original": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+        "uid": "7a56bbb7-9d79-4d92-aec8-d1a826549553"
+      },
+      "current": [],
+      "result": "ABSENT",
+      "original_uid_absent": true
+    }
+  ],
+  "backend": {
+    "result": "ROOT_CSI_CURRENT_BACKEND_ABSENT",
+    "pool": "ani-block-pool",
+    "volume_handle": "0001-0009-rook-ceph-0000000000000004-ecfc0114-9d06-423a-b470-34cb7717e985",
+    "volume_uuid": "ecfc0114-9d06-423a-b470-34cb7717e985",
+    "base_image": "csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985",
+    "temporary_image": "csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985-temp",
+    "historical_image_ids_captured": false,
+    "scope": "exact frozen root CSI names and UUID-derived matching trash only",
+    "reader": {
+      "namespace": "rook-ceph",
+      "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+      "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+      "container": "rook-ceph-tools"
+    },
+    "collector_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/linux-final-cleanup-01/cleanup.py",
+    "collector_sha256": "b7c7f44c291b1784f113ed6bfca887818805d53683abe593e7d8f999733ad4cd",
+    "bounded_list_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/known-rbd-gc-02/observe-once.py",
+    "bounded_list_sha256": "93ab33fe342bcd806370462b090a651205398372654668686d3d50e4ce2bc2b2",
+    "images": [
+      {
+        "name": "csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985",
+        "pool": "ani-block-pool",
+        "result": "ABSENT"
+      },
+      {
+        "name": "csi-vol-ecfc0114-9d06-423a-b470-34cb7717e985-temp",
+        "pool": "ani-block-pool",
+        "result": "ABSENT"
+      }
+    ],
+    "matching_trash": []
+  },
+  "result": "PASS_SCOPED_NATIVE_AND_ROOT_CSI_CURRENT_ABSENCE",
+  "nocloud_secret": {
+    "name": "vm-init-a704da75-2520-4df2-beaf-f163709ae4ad",
+    "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "expected_owner_vm_uid": "053a7810-b846-42e0-a5a0-c2feedaccc89",
+    "initial_uid_captured": false,
+    "current": [],
+    "result": "CONTRACT_NAME_ABSENT",
+    "projection": "name/uid/namespace/deletionTimestamp/ownerReferences only; no Secret data or annotations"
+  },
+  "namespace_scope_sets": [
+    {
+      "resource": "pods",
+      "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "namespace_uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+      "initial_uids_captured": false,
+      "current": [],
+      "current_count": 0,
+      "result": "SCOPE_ZERO_ABSENCE"
+    },
+    {
+      "resource": "vnics.networking.kubercloud.com",
+      "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "namespace_uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+      "initial_uids_captured": false,
+      "current": [],
+      "current_count": 0,
+      "result": "SCOPE_ZERO_ABSENCE"
+    },
+    {
+      "resource": "vnicips.networking.kubercloud.com",
+      "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+      "namespace_uid": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+      "initial_uids_captured": false,
+      "current": [],
+      "current_count": 0,
+      "result": "SCOPE_ZERO_ABSENCE"
+    }
+  ],
+  "volume_attachments": {
+    "frozen_pv_name": "pvc-4a47c95a-a050-4908-9897-247ca953bc83",
+    "initial_uids_captured": false,
+    "current": [],
+    "projection": "complete metadata query projected to this frozen PV only; unrelated objects not exported",
+    "result": "ZERO_CURRENT_PV_REFERENCES"
+  },
+  "native_gone": true,
+  "finished_at": "2026-10-24T22:34:42.918719+00:00"
+}

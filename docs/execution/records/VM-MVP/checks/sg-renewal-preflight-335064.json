@@ -1,0 +1,31 @@
+{
+  "active_samples": [
+    0.0
+  ],
+  "actual_pid": 335064,
+  "actual_startticks": 75561411,
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "expected_pid": 335064,
+  "expected_startticks": 75561411,
+  "full_environment_sha256": "5157ebbef0d7254de47f5ece862cb8455e0307cef40c396c10fd2af53ba83ea1",
+  "heavy_lock_released": true,
+  "leases": 0,
+  "namespace_count": 2,
+  "old_token_expires_at": "2026-10-25T02:05:15Z",
+  "owned_listeners": [
+    39182,
+    39185
+  ],
+  "rbac_object_count": 7,
+  "rbac_scope_fingerprint_sha256": "87266d55cca9eb216a1a5e007af32fd2edd4309affc3dcb7e1329999603d0db2",
+  "rbac_writes": 0,
+  "redis_db": 1,
+  "requested_future_ttl_seconds": 3600,
+  "result": "PASS_READONLY_FRESH_PID_SCOPE_ACTIVE0_LEASE0_NO_TOKEN_REQUEST",
+  "runner_sha256": "ef6d0fa1c42745d9b74b3ae057dd89a54e2e2899bca3b67b33143746e27a759f",
+  "runtime_env_subset_matches": true,
+  "sampled_at": "2026-10-25T01:58:05.947721+00:00",
+  "service_changes": 0,
+  "term_calls": 0,
+  "token_requests": 0
+}

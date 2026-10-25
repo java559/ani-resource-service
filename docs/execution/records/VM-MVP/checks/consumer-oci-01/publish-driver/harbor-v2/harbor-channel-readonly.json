@@ -1,0 +1,58 @@
+{
+  "phase": "READONLY_EXISTING_HARBOR_CHANNEL",
+  "observed_at": "2026-10-24T09:53:00.498181+00:00",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "historical_success": {
+    "receipt": "evidence/backend-images.json",
+    "sha256": "e09813db0520d68beba88c493b76d8f6c4000652eaf260edbfef21c51d6cce86",
+    "project": "icn-01a15337-release",
+    "endpoint": "172.16.101.10:30003",
+    "skopeo_tls_verified_push_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "existing_identity_metadata_only": {
+    "namespace": "ani-system",
+    "secret": "icn-01a15337-release-pull",
+    "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46",
+    "resource_version": "42355378",
+    "type": "kubernetes.io/dockerconfigjson",
+    "exists": true,
+    "values_read_or_copied": false
+  },
+  "old_task_authfiles": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-auth.private.json",
+      "exists": false
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/kcn-network-platform-20261021/deploy-resume-20261022/harbor-existing-identity-auth.json",
+      "exists": false
+    }
+  ],
+  "ca": {
+    "task_public_copy": "certs/ca.crt",
+    "sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+    "ip_san": "172.16.101.10",
+    "issuer": "ANI Harbor Offline CA",
+    "not_after": "2029-01-05T16:55:31Z"
+  },
+  "historical_scopes": {
+    "receipts": [
+      "evidence/harbor-preflight.json",
+      "evidence/harbor-res-preflight.json"
+    ],
+    "same_secret_uid": true,
+    "multiple_exact_project_repositories_pull_and_push": true,
+    "new_three_repositories_current_scope": "NOT_FRESHLY_CHECKED"
+  },
+  "registry_requests_this_lookup": 0,
+  "registry_writes": 0,
+  "registry_logins": 0,
+  "shared_service_changes": 0,
+  "Hauler_window": "NOT_AUTHORIZED_NOT_PREPARED",
+  "required_next_step": "Root authorization for private auth materialization from exact existing Secret and strict-TLS read-only scope preflight; no new identity or permissions."
+}

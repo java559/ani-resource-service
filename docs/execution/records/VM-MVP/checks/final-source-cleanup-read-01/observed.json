@@ -1,0 +1,116 @@
+{
+  "at": "2026-10-24T08:25:41.107889+00:00",
+  "scope": "single frozen source/two child metadata read; no block contents or mutations",
+  "historical_v22_result": "NOT_MEASURED_UNCHANGED",
+  "writes": 0,
+  "new_objects": 0,
+  "steps": [],
+  "children": [
+    {
+      "name": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp",
+      "result": "PRESENT",
+      "id": "20cc871b765f9e",
+      "parent": {
+        "pool": "ani-block-pool",
+        "pool_namespace": "",
+        "image": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+        "id": "20cc8740729bdb",
+        "snapshot": "064c8085-f041-4b04-9ec5-86373315f47e",
+        "trash": false,
+        "overlap": 8589934592
+      },
+      "snapshot_count": 1,
+      "historical_root_family": "tenant2",
+      "historical_basis": "original root PV exact CSI imageName/handle; not attribution to old V22"
+    },
+    {
+      "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+      "result": "ABSENT",
+      "historical_root_family": "v3",
+      "historical_basis": "original root PV exact CSI imageName/handle; not attribution to old V22"
+    }
+  ],
+  "journal": [
+    {
+      "object": "csi.volume.016ddb5e-363a-4557-9b14-858beafe6fe9",
+      "request_key_result": "PRESENT",
+      "image_key_result": "PRESENT",
+      "image_exact_match": true,
+      "request_role": "DIFFERENT_REQUEST_UNATTRIBUTED"
+    },
+    {
+      "object": "csi.volume.e83a62f0-4113-4320-aa79-1a1e36fb955b",
+      "request_key_result": "ABSENT",
+      "image_key_result": "ABSENT",
+      "image_exact_match": false,
+      "request_role": null
+    },
+    {
+      "object": "csi.volume.0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+      "request_key_result": "PRESENT",
+      "image_key_result": "PRESENT",
+      "image_exact_match": true,
+      "request_role": "DIFFERENT_REQUEST_UNATTRIBUTED"
+    }
+  ],
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "internal_ip": "172.16.101.10"
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "internal_ip": "172.16.101.11"
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "internal_ip": "172.16.101.12"
+    }
+  ],
+  "reader": {
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "namespace": "rook-ceph",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "source_namespace": {
+    "name": "vm-mvp-probe-01a168ce",
+    "uid": "92ab28f6-ec74-47a0-a08e-88c599a85189"
+  },
+  "source_pvc": {
+    "name": "vm-mvp-ubuntu-2404-source",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "phase": "Bound",
+    "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4"
+  },
+  "source_pv": {
+    "name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+    "uid": "7e550d01-dd3d-4f24-9df1-5e29e39fc85b",
+    "volume_handle": "0001-0009-rook-ceph-0000000000000004-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+    "pool": "ani-block-pool",
+    "image": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a"
+  },
+  "source_image": {
+    "name": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+    "result": "PRESENT",
+    "id": "20cc8740729bdb",
+    "parent": null,
+    "snapshot_count": 1
+  },
+  "source_snapshots": [],
+  "source_children": [
+    {
+      "pool": "ani-block-pool",
+      "pool_namespace": "",
+      "image": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp"
+    }
+  ],
+  "result": "MEASURED_METADATA_ONLY",
+  "direct_children_current_count": 1,
+  "normal_source_removal_dependency": "BLOCKED_BY_CURRENT_DESCENDANTS",
+  "seconds": 26.873
+}

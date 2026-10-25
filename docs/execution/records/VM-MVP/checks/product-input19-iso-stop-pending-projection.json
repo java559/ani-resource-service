@@ -1,0 +1,313 @@
+{
+  "at": "2026-10-23T22:21:58.704269+00:00",
+  "scope": "EXACT_TWO_TASK_VM_READ_ONLY_PG_STOP_PROJECTION",
+  "database": "vm_resource_candidate_01a168ce",
+  "targets": [
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": 2,
+      "owner_desired": "Stopped",
+      "owner_observed": "Stopped",
+      "owner_snapshot_revision": 4,
+      "owner_consumer": {
+        "State": "open",
+        "PodUIDs": null,
+        "ClosedAt": null,
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Generation": 1,
+        "InstanceID": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "Controllers": [
+          {
+            "Owner": {
+              "UID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+              "Kind": "VirtualMachine",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            }
+          }
+        ],
+        "CurrentPods": null,
+        "RetiredPods": [
+          {
+            "Owner": {
+              "UID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "9aa44691-b767-4e83-9a35-9eb77718fd75",
+              "Kind": "Pod",
+              "Name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-v4x7t",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "v1"
+            }
+          }
+        ],
+        "AttachmentID": "att_a79e10732ff0417eb82fc4dfdb98a153",
+        "SubmissionID": "5df0e7fc-8f1b-5bd4-9f01-aa9615678b55",
+        "ControllerUIDs": [
+          "2f9e7340-9f53-4dc0-903f-81759767f3a3"
+        ],
+        "FinalizationID": "",
+        "RootController": {
+          "UID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+          "Kind": "VirtualMachine",
+          "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "DesiredRunState": "stopped",
+        "ProtocolVersion": 3,
+        "SnapshotRevision": 4
+      },
+      "operation_id": "7af20f28-60f7-4ebf-a46d-0de0cffeade9",
+      "operation_state": "succeeded",
+      "operation_reason": "",
+      "operation_pending": null,
+      "attachment_id": "att_a79e10732ff0417eb82fc4dfdb98a153",
+      "attachment_state": "reserved",
+      "attachment_reason": "",
+      "attachment_protocol_blocked": false,
+      "attachment_active_pod_uid": "",
+      "persisted_snapshot_revision": 4,
+      "persisted_snapshot_hash": "fb8178ffa76f7d1cff707b12a167acb71f47a33ff81c60f1fbfdc8990bee30e5",
+      "confirmed_snapshot_revision": 2,
+      "confirmed_pod_uid_history": "9aa44691-b767-4e83-9a35-9eb77718fd75",
+      "persisted_snapshot": {
+        "State": "open",
+        "PodUIDs": null,
+        "ClosedAt": null,
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Generation": 1,
+        "InstanceID": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "Controllers": [
+          {
+            "Owner": {
+              "UID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+              "Kind": "VirtualMachine",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            }
+          }
+        ],
+        "CurrentPods": null,
+        "RetiredPods": [
+          {
+            "Owner": {
+              "UID": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "9aa44691-b767-4e83-9a35-9eb77718fd75",
+              "Kind": "Pod",
+              "Name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-v4x7t",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "v1"
+            }
+          }
+        ],
+        "AttachmentID": "att_a79e10732ff0417eb82fc4dfdb98a153",
+        "SubmissionID": "5df0e7fc-8f1b-5bd4-9f01-aa9615678b55",
+        "ControllerUIDs": [
+          "2f9e7340-9f53-4dc0-903f-81759767f3a3"
+        ],
+        "FinalizationID": "",
+        "RootController": {
+          "UID": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+          "Kind": "VirtualMachine",
+          "Name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "DesiredRunState": "stopped",
+        "ProtocolVersion": 3,
+        "SnapshotRevision": 4
+      },
+      "owner_consumer_semantic_json_sha256": "9614da137741f0f8d3e5a2d5854a557ac7e1db1af6d70be4a8ba050bb2d27c2f",
+      "owner_consumer_hash_basis": "sorted JSON projection of stored JSONB, not claimed native protocol hash",
+      "owner_consumer_desired": "stopped",
+      "persisted_consumer_desired": "stopped",
+      "pending_action": null,
+      "pending_submitted": null
+    },
+    {
+      "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": 2,
+      "owner_desired": "Stopped",
+      "owner_observed": "Stopped",
+      "owner_snapshot_revision": 4,
+      "owner_consumer": {
+        "State": "open",
+        "PodUIDs": null,
+        "ClosedAt": null,
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Generation": 1,
+        "InstanceID": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "Controllers": [
+          {
+            "Owner": {
+              "UID": "9a751320-5f97-4e56-af6a-30964610321b",
+              "Kind": "VirtualMachine",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            }
+          }
+        ],
+        "CurrentPods": null,
+        "RetiredPods": [
+          {
+            "Owner": {
+              "UID": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "fd02d255-a058-411b-a84f-93fdf3ee37d1",
+              "Kind": "Pod",
+              "Name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-q9n56",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "v1"
+            }
+          }
+        ],
+        "AttachmentID": "att_fe8601440e004fe0a57427e8f00536c2",
+        "SubmissionID": "0b64b25a-e3c2-52e1-ac60-d62ae19d2c69",
+        "ControllerUIDs": [
+          "1b6caed4-4c29-4d2d-af11-59fbacda2622"
+        ],
+        "FinalizationID": "",
+        "RootController": {
+          "UID": "9a751320-5f97-4e56-af6a-30964610321b",
+          "Kind": "VirtualMachine",
+          "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "DesiredRunState": "stopped",
+        "ProtocolVersion": 3,
+        "SnapshotRevision": 4
+      },
+      "operation_id": "7f5fc5cc-4988-4a82-8a61-a284bf619b57",
+      "operation_state": "succeeded",
+      "operation_reason": "",
+      "operation_pending": null,
+      "attachment_id": "att_fe8601440e004fe0a57427e8f00536c2",
+      "attachment_state": "reserved",
+      "attachment_reason": "",
+      "attachment_protocol_blocked": false,
+      "attachment_active_pod_uid": "",
+      "persisted_snapshot_revision": 4,
+      "persisted_snapshot_hash": "931937a6863d64baa828db15242d551ce1f370ea1b89e6e95292b29cb8505483",
+      "confirmed_snapshot_revision": 2,
+      "confirmed_pod_uid_history": "fd02d255-a058-411b-a84f-93fdf3ee37d1",
+      "persisted_snapshot": {
+        "State": "open",
+        "PodUIDs": null,
+        "ClosedAt": null,
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Generation": 1,
+        "InstanceID": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "Controllers": [
+          {
+            "Owner": {
+              "UID": "9a751320-5f97-4e56-af6a-30964610321b",
+              "Kind": "VirtualMachine",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            }
+          }
+        ],
+        "CurrentPods": null,
+        "RetiredPods": [
+          {
+            "Owner": {
+              "UID": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+              "Kind": "VirtualMachineInstance",
+              "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "kubevirt.io/v1"
+            },
+            "Reference": {
+              "UID": "fd02d255-a058-411b-a84f-93fdf3ee37d1",
+              "Kind": "Pod",
+              "Name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-q9n56",
+              "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "APIVersion": "v1"
+            }
+          }
+        ],
+        "AttachmentID": "att_fe8601440e004fe0a57427e8f00536c2",
+        "SubmissionID": "0b64b25a-e3c2-52e1-ac60-d62ae19d2c69",
+        "ControllerUIDs": [
+          "1b6caed4-4c29-4d2d-af11-59fbacda2622"
+        ],
+        "FinalizationID": "",
+        "RootController": {
+          "UID": "9a751320-5f97-4e56-af6a-30964610321b",
+          "Kind": "VirtualMachine",
+          "Name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "DesiredRunState": "stopped",
+        "ProtocolVersion": 3,
+        "SnapshotRevision": 4
+      },
+      "owner_consumer_semantic_json_sha256": "40edec4433d84f032134fe04b7b9de179b80752a7ebadcba2dab9ab4cfdc70d6",
+      "owner_consumer_hash_basis": "sorted JSON projection of stored JSONB, not claimed native protocol hash",
+      "owner_consumer_desired": "stopped",
+      "persisted_consumer_desired": "stopped",
+      "pending_action": null,
+      "pending_submitted": null
+    }
+  ],
+  "business_writes": 0,
+  "new_power_requests": 0
+}

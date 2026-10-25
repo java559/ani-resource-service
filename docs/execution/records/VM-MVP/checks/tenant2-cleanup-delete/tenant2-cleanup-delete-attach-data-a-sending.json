@@ -1,0 +1,128 @@
+{
+  "at": "2026-10-24T08:11:50.120687+00:00",
+  "phase": "attach-data-a-sending",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved pre-Restore stages only; Restore/Delete remain disabled",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "command": {
+    "phase": "attach-data-a",
+    "method": "POST",
+    "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks/0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee/attach",
+    "body": {
+      "data": {
+        "expectedVersion": "3",
+        "idempotencyKey": "f2bfafde-ac1e-5928-9142-632cb6332f43",
+        "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee"
+      }
+    },
+    "send_attempts": 2,
+    "ack_unknown": true,
+    "body_sha256": "9b2247b04c270b4d1750af107f8fa93eb31a4902fbe62320988e53d37a8ad188",
+    "before": {
+      "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "name": "vm-mvp-tenant2-linux-01a168ce",
+      "version": "3",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "desiredState": "Stopped",
+      "observedState": "Stopped",
+      "reason": "",
+      "observedAt": "2026-10-24T07:54:26.620606524Z",
+      "addresses": [],
+      "lastOperationId": "e9d446a9-363f-4617-b1c1-d6099d30b1f1",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+          "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+          "role": "data",
+          "name": "vm-mvp-cleanup-data-a-01a168ce",
+          "sizeGb": "2",
+          "requestedBytes": "2000000000",
+          "observedCapacityBytes": "0",
+          "volumeName": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+          "serial": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+          "attached": false,
+          "preparationState": "PendingPopulation",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "cpuMillis": "1500",
+      "memoryMib": "2048",
+      "systemDiskSizeGb": "12",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04"
+    },
+    "snapshot_ids_before": [],
+    "transport_error": "product API POST /api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks/0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee/attach failed: HTTP 503 reason=VM_DEPENDENCY_NOT_READY",
+    "attempt_history": [
+      {
+        "attempt": 1,
+        "http_status": 503,
+        "error": "product API POST /api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks/0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee/attach failed: HTTP 503 reason=VM_DEPENDENCY_NOT_READY",
+        "original_phase_receipts": [
+          {
+            "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-cleanup-delete-attach-data-a-attempt01-sending.json",
+            "sha256": "bea1db740e8b82138f7f0bcf1fbca9624d962dd0f153f5204062e5a92122ff1d"
+          },
+          {
+            "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-cleanup-delete-attach-data-a-attempt01-unknown-or-rejected.json",
+            "sha256": "8b7c92c6851e12065101dbf70d2ca01180a97baef0bf0dbb313c0d0177583cec"
+          }
+        ]
+      }
+    ],
+    "recovery_guard": {
+      "resource_ops": [],
+      "gov_ops": [],
+      "key_sha256": "9ceb2c60325a6c1be67b6e03ec780f0cc302ae596944d772d60d70165a8ceee8",
+      "same_body_sha256": "9b2247b04c270b4d1750af107f8fa93eb31a4902fbe62320988e53d37a8ad188",
+      "native_ready_verified": true,
+      "authorization": "Root explicitly approved exactly one same-key/body replay after two-repo absence; never reset send count"
+    }
+  }
+}

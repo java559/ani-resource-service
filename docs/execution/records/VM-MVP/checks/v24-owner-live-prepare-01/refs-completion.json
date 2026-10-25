@@ -1,0 +1,120 @@
+{
+  "at": "2026-10-24T10:47:04.751227+00:00",
+  "scope": "EXACT_DISCOVERED_GRPC_SERVICE_AND_CLIENT_SECRET_METADATA_COMPLETION",
+  "services": [
+    {
+      "namespace": "ani-system",
+      "name": "ani-model-grpc",
+      "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+      "clusterIP": "10.96.44.130",
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        }
+      ],
+      "selector": {
+        "app.kubernetes.io/name": "ani-model-service"
+      }
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-inference-grpc",
+      "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+      "clusterIP": "10.96.166.234",
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        }
+      ],
+      "selector": {
+        "app.kubernetes.io/instance": "ani-inference",
+        "app.kubernetes.io/name": "ani-inference"
+      }
+    }
+  ],
+  "client_secret_refs": [
+    {
+      "namespace": "ani-system",
+      "name": "governance-accelerator-node-agent-bc-client",
+      "uid": "db12e807-332e-4f92-942f-9cafc7338152",
+      "resource_version": "49687535",
+      "fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "governance-model-inference-tls",
+      "uid": "58a4f34d-ffa5-4d40-bfc1-9500acc852c4",
+      "resource_version": "26101903",
+      "fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ]
+    }
+  ],
+  "owner_secret_refs": [
+    {
+      "namespace": "ani-system",
+      "name": "ani-model-mtls",
+      "uid": "efeb4ba0-fb52-416a-9b8a-8ffb92025c49",
+      "resource_version": "15443416",
+      "fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-inference-mtls",
+      "uid": "2a2bfb2d-505c-4d25-a5a3-6cea21643907",
+      "resource_version": "15443417",
+      "fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ]
+    }
+  ],
+  "secret_values_exported": false,
+  "application_calls": 0,
+  "writes": 0,
+  "public_requests": 0,
+  "actual_task_gov_client_environment": {},
+  "actual_task_gov_unset_client_names": [
+    "ANI_ACCELERATOR_ADDR",
+    "ANI_ACCELERATOR_CA",
+    "ANI_ACCELERATOR_CERT",
+    "ANI_ACCELERATOR_KEY",
+    "ANI_ACCELERATOR_SERVER_NAME",
+    "ANI_ACCELERATOR_TIMEOUT",
+    "ANI_INFERENCE_ADDR",
+    "ANI_INFERENCE_CA_FILE",
+    "ANI_INFERENCE_CERT_FILE",
+    "ANI_INFERENCE_KEY_FILE",
+    "ANI_INFERENCE_SERVER_NAME",
+    "ANI_MODEL_ADDR",
+    "ANI_MODEL_CA",
+    "ANI_MODEL_CERT",
+    "ANI_MODEL_KEY",
+    "ANI_MODEL_SERVER_NAME",
+    "ANI_MODEL_TIMEOUT"
+  ],
+  "task_gov_process": {
+    "pid": 3305121,
+    "startticks": "70294688",
+    "environment_projection": "only managed endpoint/SAN/file-reference variables; no general env dump"
+  },
+  "result": "EXACT_METADATA_COMPLETION_CAPTURED",
+  "seconds": 0.655
+}

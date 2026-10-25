@@ -20,7 +20,7 @@ type attachmentSnapshotWriter interface {
 
 func managedAttachment(ctx context.Context, db attachmentSnapshotReader, row sqlcgen.NetworkAttachment) (biz.Attachment, error) {
 	a, err := attachment(row)
-	if err != nil || a.WorkloadMode != "controller_managed" {
+	if err != nil || (a.WorkloadMode != "controller_managed" && a.WorkloadMode != "vm_managed") {
 		return a, err
 	}
 	var snapshot, root []byte

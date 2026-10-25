@@ -1,0 +1,96 @@
+{
+  "child_image_opens": 0,
+  "existing_reader_pod_uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+  "fresh_cluster_or_version_or_D3_or_trash_or_task_or_schedule_reads": 0,
+  "interpretation": "Both exact readonly image opens succeeded and list_snaps returned0 at this new sample. There was no current snapshot namespace entry to map. Earlier errno110/open failures are retained, not rewritten. This does not prove trash image absence or completed physical reclamation.",
+  "kubectl_exit": 0,
+  "local_frozen_vsc_match": {
+    "frozen_handle_count": 9,
+    "inventory_reference": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/linux-final-cleanup-01/inventory.json",
+    "inventory_sha256": "d8010db34e2875d8c38f0b742866062720d4e57122bcde9b8f51d8f895a82b10",
+    "match_rule": "exact original_name == csi-snap- plus frozen handle final UUID",
+    "rows": [
+      {
+        "disk": "root",
+        "image_id": "20cc87c1cde11d",
+        "matches": [],
+        "result": "NO_CURRENT_SNAPSHOTS_TO_MATCH"
+      },
+      {
+        "disk": "D4",
+        "image_id": "20cc87987d1f99",
+        "matches": [],
+        "result": "NO_CURRENT_SNAPSHOTS_TO_MATCH"
+      }
+    ]
+  },
+  "original_conclusion_sha256": "1a0a5ddb43fef7fa71eb4cfc79666855b31482bd6a976994617dac6e5ff4ce8f",
+  "result": {
+    "child_image_opens": 0,
+    "elapsed_seconds": 7.351,
+    "existing_identity": "client.admin original /etc/ceph/ceph.conf + /etc/ceph/keyring",
+    "finished_at": "2026-10-24T19:08:56.321565+00:00",
+    "per_image_budget_seconds": 15,
+    "pool": "ani-block-pool",
+    "result": "TWO_BOUNDED_READONLY_ATTEMPTS_COMPLETE",
+    "rows": [
+      {
+        "disk": "root",
+        "elapsed_seconds": 6.657,
+        "exit": 0,
+        "image_id": "20cc87c1cde11d",
+        "read": {
+          "binding_methods": {
+            "list_children": true,
+            "list_snaps": true,
+            "set_snap_by_id": true,
+            "snap_get_namespace_type": true,
+            "snap_get_trash_namespace": true
+          },
+          "child_image_opens": 0,
+          "doc_introspection_used": false,
+          "elapsed_seconds": 6.548,
+          "image_id": "20cc87c1cde11d",
+          "list_may_be_truncated_at13": false,
+          "read_only": true,
+          "result": "READONLY_NAMESPACE_COMPLETE",
+          "snapshot_count_at_most13": 0,
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      },
+      {
+        "disk": "D4",
+        "elapsed_seconds": 0.694,
+        "exit": 0,
+        "image_id": "20cc87987d1f99",
+        "read": {
+          "binding_methods": {
+            "list_children": true,
+            "list_snaps": true,
+            "set_snap_by_id": true,
+            "snap_get_namespace_type": true,
+            "snap_get_trash_namespace": true
+          },
+          "child_image_opens": 0,
+          "doc_introspection_used": false,
+          "elapsed_seconds": 0.58,
+          "image_id": "20cc87987d1f99",
+          "list_may_be_truncated_at13": false,
+          "read_only": true,
+          "result": "READONLY_NAMESPACE_COMPLETE",
+          "snapshot_count_at_most13": 0,
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      }
+    ],
+    "started_at": "2026-10-24T19:08:48.970090+00:00",
+    "total_budget_seconds": 30,
+    "writes": 0
+  },
+  "source_sha256": "1ad5b64819ee5bb2947c53f306878bd6ebbe5bde690bab9a453c6c30be0f9b19",
+  "writes": 0
+}

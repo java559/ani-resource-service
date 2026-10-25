@@ -1,0 +1,76 @@
+{
+  "scope": "tools/localdeps/gow/internal/pkg only; no runtime binary changes",
+  "red": {
+    "command": [
+      "go",
+      "test",
+      "./tools/localdeps/gow/internal/pkg",
+      "-run",
+      "^TestNewModuleInspectorFromGo",
+      "-count=1",
+      "-v"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "gowork": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-dev.work",
+    "source_hashes": {
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/module_inspector.go": "46af015b615176289bf651aafbf80b61c131ab0f90841c13ca04b4e258fc0c0f",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/module_inspector_test.go": "375f6d36b23ac3ed6151959dedb90eb046ff17467d011465639f5359a36af21d",
+      "gov-stage-01/go.mod": "b17a8943c742e7af6491e136012413205fe7793f2f42af940725694fb98f7fae",
+      "gov-stage-01/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673",
+      "gov-dev.work": "020ec349ef7fb1660af129868e3d39f4e681d01bcc3c706e9c8afb96eb94d201"
+    },
+    "exit_code": 1,
+    "seconds": 0.7679725770140067,
+    "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-module-inspector-07-red.log",
+    "expected_failure_seen": true
+  },
+  "business_workspace_disabled": false,
+  "green": {
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "gowork": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-dev.work",
+    "source_hashes": {
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/file.go": "9b673606c8b88f4829ac97dbec366770d89717e160997a51c81918e5a3e22201",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/file_test.go": "0ce1285969472463b22ba2bbd8e3df8c2315279f8c1328bd10f74bb7cddcf9f9",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/flags.go": "92cbd50802f77ca5dc25b5d7b60c36ac6644750d42846a64af13c20b0b6268f4",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/gocmd.go": "dfbcb77c38e8afe4d70255cb6e371c628b999545c76d4878211487f32c011d76",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/list_services_test.go": "cc60c122db03b860aa8d794b608c05c03a5c7faa23b8b269f82b7da8a8f9b16c",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/module_inspector.go": "7e2dd165bdc02e5609269db3ec4c12b4bf5083d6747f538f8df6e30160984aa7",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/module_inspector_test.go": "375f6d36b23ac3ed6151959dedb90eb046ff17467d011465639f5359a36af21d",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/path.go": "477461de718088c55bbdd05feeeb4827afe83bd5e91ba17c6ea1afb20893f400",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/path_test.go": "d6731a3a45b51f87eb0016f6448aca6a2fd611b08b13494f7f831e532515a044",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/repo.go": "9367eaf58ec3fb10a23ab5a6aa575f1e0d25f9ea9e8ed9339c346d7c681b9d49",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/repo_test.go": "4158d61efd6222443304ceafea5315aeeb2953a4528cd0402801e852401c780a",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/vcs_url.go": "24f2f3fde4868a4c773e56d5144cc17d1e05558ef1b85e0104e04e498c99bf40",
+      "gov-stage-01/tools/localdeps/gow/internal/pkg/vcs_url_test.go": "5765620472c121d11ccc5711325364577c6d6368f958e1a4e18527e058d82a64",
+      "gov-stage-01/go.mod": "b17a8943c742e7af6491e136012413205fe7793f2f42af940725694fb98f7fae",
+      "gov-stage-01/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673",
+      "gov-dev.work": "020ec349ef7fb1660af129868e3d39f4e681d01bcc3c706e9c8afb96eb94d201"
+    },
+    "checks": [
+      {
+        "command": [
+          "go",
+          "test",
+          "./tools/localdeps/gow/internal/pkg",
+          "-count=1",
+          "-v"
+        ],
+        "exit_code": 0,
+        "seconds": 0.9687074630055577,
+        "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-module-inspector-07-test.log"
+      },
+      {
+        "command": [
+          "go",
+          "vet",
+          "./tools/localdeps/gow/internal/pkg"
+        ],
+        "exit_code": 0,
+        "seconds": 0.2658875200431794,
+        "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-module-inspector-07-vet.log"
+      }
+    ],
+    "source_unchanged_after": true,
+    "result": "PASS"
+  }
+}

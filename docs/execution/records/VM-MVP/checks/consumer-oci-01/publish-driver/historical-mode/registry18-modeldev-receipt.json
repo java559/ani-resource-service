@@ -1,0 +1,14 @@
+{
+  "state": "TAG_DIGEST_CONFIG_READBACK_PASS",
+  "immutable_ref": "172.16.101.10:5000/ani/modeldev-service-execution-v21@sha256:23c9d3ca69a2b26cc59dae83e2d9ee8a7066971a535f1f5ee7fdd630c12ea3ff",
+  "source_commit": "0814ae3ef0b7f3cd143a9211f710977f93a19ac1",
+  "source_tree": "8e5a149efd28d92499a3cf88db850c1fbaaa187f",
+  "source": "oci-archive:/home/chabking/workspace/modeldev-execution-v2.1-20261022-01a15f47/resume-md-missing-training-logs/release/service.oci.tar",
+  "config_digest": "sha256:ccf18c01f4d236744e4abbb59dbb68f20428061b42b948b6ab999643b8665fb4",
+  "rootfs_diffids": [
+    "sha256:52e42a953e5808dc17eafc440ea29e25a31b535756c698b45f33216a6f9a914f"
+  ],
+  "registry_window": "18",
+  "registry_readonly_restore_pending": true,
+  "at": "2026-10-22T18:55:07.555463+00:00"
+}

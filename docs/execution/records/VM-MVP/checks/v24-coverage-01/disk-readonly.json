@@ -1,0 +1,117 @@
+{
+  "at": "2026-10-24T09:04:05.819095+00:00",
+  "result": "READ_ONLY",
+  "filesystem": {
+    "argv": [
+      "df",
+      "-B1",
+      "--output=target,fstype,size,used,avail,pcent",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce",
+      "/tmp",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod"
+    ],
+    "exit_code": 0,
+    "stdout": "\u6302\u8f7d\u70b9 \u7c7b\u578b        1B\u7684\u5757         \u5df2\u7528        \u53ef\u7528 \u5df2\u7528%\n/home  btrfs 534721310720 468025184256 64404779008   88%\n/tmp   tmpfs   8377167872   6280560640  2096607232   75%\n/home  btrfs 534721310720 468025184256 64404779008   88%\n/home  btrfs 534721310720 468025184256 64404779008   88%",
+    "stderr": ""
+  },
+  "inodes": {
+    "argv": [
+      "df",
+      "-i",
+      "--output=target,itotal,iused,iavail,ipcent",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce",
+      "/tmp",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "df: \u9009\u9879 -i \u548c --output \u662f\u4e92\u65a5\u7684\n\u8bf7\u5c1d\u8bd5\u6267\u884c \"df --help\" \u6765\u83b7\u53d6\u66f4\u591a\u4fe1\u606f\u3002"
+  },
+  "runner_temp_environment": {
+    "TMPDIR": "UNSET_BY_WHITELIST",
+    "GOTMPDIR": "UNSET_BY_WHITELIST",
+    "default": "/tmp",
+    "actual_WORK_path": "NOT_CAPTURED; original log contains literal $WORK/b536; normal Go exit may remove work directory"
+  },
+  "task_cache_usage": [
+    {
+      "argv": [
+        "du",
+        "-s",
+        "-B1",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build"
+      ],
+      "exit_code": 0,
+      "stdout": "15738511360\t/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "du",
+        "-s",
+        "-B1",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod"
+      ],
+      "exit_code": 0,
+      "stdout": "1677193216\t/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+      "stderr": ""
+    }
+  ],
+  "active_task_go_processes": [],
+  "historical_temp_references": [
+    {
+      "path": "/tmp/avp-jtov8fqg",
+      "references": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource-gate.json"
+      ],
+      "exists": false,
+      "active_task_pids": []
+    },
+    {
+      "path": "/tmp/avp-py6ps510",
+      "references": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/resource-gate.json"
+      ],
+      "exists": false,
+      "active_task_pids": []
+    },
+    {
+      "path": "/tmp/avp-sl7_2d7w",
+      "references": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session-gate.json"
+      ],
+      "exists": false,
+      "active_task_pids": []
+    }
+  ],
+  "temp_candidates": [],
+  "mutations": 0,
+  "safe_reclaim_list": [],
+  "reclaim_requires_separate_approval": true,
+  "inode_command_correction": {
+    "at": "2026-10-24T09:04:42.540613+00:00",
+    "argv": [
+      "df",
+      "-i",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce",
+      "/tmp",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod"
+    ],
+    "exit_code": 0,
+    "stdout": "\u6587\u4ef6\u7cfb\u7edf        Inodes \u5df2\u7528I   \u53ef\u7528I \u5df2\u7528I% \u6302\u8f7d\u70b9\n/dev/sda3            0     0       0      - /home\ntmpfs          1048576 29636 1018940     3% /tmp\n/dev/sda3            0     0       0      - /home\n/dev/sda3            0     0       0      - /home",
+    "stderr": ""
+  },
+  "exact_mount_entries": [
+    "tmpfs /tmp tmpfs rw,seclabel,nosuid,nodev,nr_inodes=1048576,inode64,usrquota 0 0",
+    "/dev/sda3 /home btrfs rw,seclabel,relatime,compress=zstd:1,space_cache=v2,subvolid=257,subvol=/home 0 0"
+  ],
+  "proposed_build_only_temp": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/go-tmp",
+    "env": "GOTMPDIR only; keep TMPDIR unset",
+    "created": false,
+    "keep_source_cache_fixture": true
+  }
+}

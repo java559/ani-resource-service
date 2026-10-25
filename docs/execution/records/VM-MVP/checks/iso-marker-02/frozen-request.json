@@ -1,0 +1,165 @@
+{
+  "task_name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "namespace": {
+    "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "source": {
+    "media_key": "fedora-44-iso",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "pvc_name": "vm-mvp-fedora44-http-source",
+    "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+    "dv_uid": "739fbaee-e8ed-4162-861f-34617ad9856a",
+    "pv_name": "pvc-4ccc186a-5569-4d78-b849-63714f636df1",
+    "pv_uid": "16713980-2ae0-40d7-922e-a92f069ec089",
+    "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+  },
+  "preset": {
+    "id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+    "name": "VM MVP ISO 2vCPU 4096MiB",
+    "code": "vm-mvp-iso-01a168ce",
+    "description": "Task VM ISO Linux and Windows acceptance",
+    "compute_type": "cpu",
+    "cpu_millis": "2000",
+    "memory_mib": "4096",
+    "enabled": true,
+    "gpu": null,
+    "created_at": "2026-10-23T19:04:53.18398Z",
+    "updated_at": "2026-10-23T19:04:53.18398Z",
+    "selectable": true,
+    "unavailable_reason": ""
+  },
+  "media": {
+    "mediaKey": "fedora-44-iso",
+    "name": "Fedora KDE 44 installation ISO",
+    "kind": "INSTALL_ISO",
+    "osFamily": "linux",
+    "osVersion": "44",
+    "architecture": "amd64",
+    "firmware": "uefi",
+    "rootBus": "virtio",
+    "dataBus": "scsi",
+    "nicModel": "virtio",
+    "persistentTpm": false,
+    "persistentUefi": false,
+    "driverMediaKey": "",
+    "virtualCapacityBytes": "4886364160",
+    "initializationCapability": "NONE",
+    "initializationVerified": false
+  },
+  "body": {
+    "data": {
+      "idempotencyKey": "9551acd3-c408-4083-9d04-19c7823756cc",
+      "name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "sourceKind": "INSTALL_ISO",
+      "mediaKey": "fedora-44-iso",
+      "systemDiskSizeGb": "48",
+      "dataDisks": [],
+      "startAfterCreate": true,
+      "network": {
+        "vpcId": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "subnetId": "subnet_fbd064f6018040dab6a8d909b7afb87f"
+      }
+    }
+  },
+  "protected": {
+    "task_processes": {
+      "governance": {
+        "pid": 35161,
+        "start_ticks": 74249534,
+        "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+        "argv": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+          "-c",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+        ],
+        "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+        "listen_ports": [
+          39180,
+          39187
+        ]
+      },
+      "resource": {
+        "pid": 3881653,
+        "start_ticks": 72749000,
+        "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+        "argv": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-start-before-vmi-01/resource-server.candidate22",
+          "-conf",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs-v2"
+        ],
+        "cwd": "/home/chabking",
+        "listen_ports": [
+          39181,
+          39183,
+          39184
+        ]
+      }
+    },
+    "windows": {
+      "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+      "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "node": "ani-01",
+      "pvc_refs": [
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-89317f205600510abc65e40402c83abb",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-cca2005bd9365327a5ded8236385b9ba",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-media-driver",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "752a82db-f998-488b-b580-c112f986e067"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        }
+      ]
+    },
+    "source": {
+      "media_key": "fedora-44-iso",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "pvc_name": "vm-mvp-fedora44-http-source",
+      "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+      "dv_uid": "739fbaee-e8ed-4162-861f-34617ad9856a",
+      "pv_name": "pvc-4ccc186a-5569-4d78-b849-63714f636df1",
+      "pv_uid": "16713980-2ae0-40d7-922e-a92f069ec089",
+      "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+    },
+    "network": {
+      "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "VPCID": "vpc_e413becb1f4a46468f058e32f33a6305",
+      "SubnetID": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "NamespaceUID": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "NADName": "vm-mvp-main-v2",
+      "NADUID": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+      "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "KCNSubnetRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+    },
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  }
+}

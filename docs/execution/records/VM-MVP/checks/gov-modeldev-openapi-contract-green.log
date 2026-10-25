@@ -1,0 +1,52 @@
+{"scope": "single test overlay", "prior_test_sha256": "30d1162db53a7dbd78d5916bb3e170d8c0f0786fa60b381dc01595ba06609fae", "test_sha256": "71a4e7343d6bde34c16d9cd6ce7bf23031fd0557ecc77567fa3cd8534c933266", "canonical_source_hashes": {"app/admin/service/cmd/server/assets/openapi.yaml": "453791b9ebef904263f87952e7d552eab8da71148c7fb0cda9f49353aee253c0", "app/admin/service/internal/server/modeldev_http.go": "eb20e658e3883d05dfe0ed557cfd736fe13f0934cb79c711bd9407c883898e82", "app/admin/service/internal/server/modeldev_http_test.go": "db14011e05b68cebbfc2cbcf29355eb9646a447414f6d4d8dd6a30b5bc25997c", "api/protos/modeldev/service/v1/execution.proto": "faa922598d987c9c04d108b320cd196dc4257567f4c9fb8bb4fb98a94bf71d46"}}
+71a4e7343d6bde34c16d9cd6ce7bf23031fd0557ecc77567fa3cd8534c933266  app/admin/service/cmd/server/assets/modeldev_openapi_test.go
+=== RUN   TestModelDevCreateOpenAPIContract
+--- PASS: TestModelDevCreateOpenAPIContract (0.11s)
+PASS
+ok  	go-wind-admin/app/admin/service/cmd/server/assets	0.117s
+=== RUN   TestDecodeModelDevCreatePreservesParameterPresence
+=== RUN   TestDecodeModelDevCreatePreservesParameterPresence/omitted_learning_rate
+=== RUN   TestDecodeModelDevCreatePreservesParameterPresence/explicit_default
+--- PASS: TestDecodeModelDevCreatePreservesParameterPresence (0.00s)
+    --- PASS: TestDecodeModelDevCreatePreservesParameterPresence/omitted_learning_rate (0.00s)
+    --- PASS: TestDecodeModelDevCreatePreservesParameterPresence/explicit_default (0.00s)
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/missing_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/null_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/empty_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/control_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/lone_surrogate_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/duplicate_key
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/escaped_duplicate_intent_field
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/nested_duplicate
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/null_parameters
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/missing_parameters
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/array_parameters
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/legacy_preset
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/zero_timeout
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/injected_tenant
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/injected_actor
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/trailing_object
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/invalid_utf8
+=== RUN   TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/oversize
+--- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/missing_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/null_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/empty_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/control_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/lone_surrogate_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/duplicate_key (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/escaped_duplicate_intent_field (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/nested_duplicate (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/null_parameters (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/missing_parameters (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/array_parameters (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/legacy_preset (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/zero_timeout (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/injected_tenant (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/injected_actor (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/trailing_object (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/invalid_utf8 (0.00s)
+    --- PASS: TestDecodeModelDevCreateRejectsAmbiguousOrInjectedJSON/oversize (0.00s)
+PASS
+ok  	go-wind-admin/app/admin/service/internal/server	0.576s

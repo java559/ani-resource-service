@@ -1,0 +1,679 @@
+{
+  "at": "2026-10-24T06:50:10.305401+00:00",
+  "authorization": "Root explicitly approved restored Goal single new RO Pod/3CM; previous bare internal stop flag does not override human Goal",
+  "cleanup": [
+    {
+      "delete_ack": "{\"kind\":\"Pod\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce\",\"namespace\":\"vm-mvp-probe-01a168ce\",\"uid\":\"45b270c9-8873-42b2-acf1-b1eadba59c1e\",\"resourceVersion\":\"61749447\",\"generation\":2,\"creationTimestamp\":\"2026-10-24T06:50:01Z\",\"deletionTimestamp\":\"2026-10-24T06:55:29Z\",\"deletionGracePeriodSeconds\":30,\"labels\":{\"vm.ani.io/purpose\":\"virtio-prefix-proof\",\"vm.ani.io/task\":\"01a168ce\"},\"annotations\":{\"k8s.v1.cni.cncf.io/network-status\":\"[{\\n    \\\"name\\\": \\\"kc-networking\\\",\\n    \\\"interface\\\": \\\"eth0\\\",\\n    \\\"ips\\\": [\\n        \\\"10.16.0.255\\\"\\n    ],\\n    \\\"mac\\\": \\\"fa:00:1e:80:be:19\\\",\\n    \\\"default\\\": true,\\n    \\\"dns\\\": {},\\n    \\\"gateway\\\": [\\n        \\\"10.16.0.1\\\"\\n    ]\\n}]\",\"networking.kubercloud.com/vnic\":\"auto-vm-mvp-virtio-prefix-01a168ce-vnic-xxgnq\",\"vm.ani.io/nonce\":\"b430d4edcba347dd8854cd374238c3ef\",\"vm.ani.io/plan-sha256\":\"d2e783d8e5ffa6f900beb978074f295ee73030020e1e08f158447752020e8a14\"},\"managedFields\":[{\"manager\":\"kc-networking-controller\",\"operation\":\"Update\",\"apiVersion\":\"v1\",\"time\":\"2026-10-24T06:50:01Z\",\"fieldsType\":\"FieldsV1\",\"fieldsV1\":{\"f:metadata\":{\"f:annotations\":{\"f:networking.kubercloud.com/vnic\":{}}}}},{\"manager\":\"kubectl-create\",\"operation\":\"Update\",\"apiVersion\":\"v1\",\"time\":\"2026-10-24T06:50:01Z\",\"fieldsType\":\"FieldsV1\",\"fieldsV1\":{\"f:metadata\":{\"f:annotations\":{\".\":{},\"f:vm.ani.io/nonce\":{},\"f:vm.ani.io/plan-sha256\":{}},\"f:labels\":{\".\":{},\"f:vm.ani.io/purpose\":{},\"f:vm.ani.io/task\":{}}},\"f:spec\":{\"f:activeDeadlineSeconds\":{},\"f:automountServiceAccountToken\":{},\"f:containers\":{\"k:{\\\"name\\\":\\\"verify\\\"}\":{\".\":{},\"f:command\":{},\"f:image\":{},\"f:imagePullPolicy\":{},\"f:name\":{},\"f:resources\":{\".\":{},\"f:limits\":{\".\":{},\"f:cpu\":{},\"f:memory\":{}},\"f:requests\":{\".\":{},\"f:cpu\":{},\"f:memory\":{}}},\"f:securityContext\":{\".\":{},\"f:allowPrivilegeEscalation\":{},\"f:capabilities\":{\".\":{},\"f:drop\":{}},\"f:readOnlyRootFilesystem\":{}},\"f:terminationMessagePath\":{},\"f:terminationMessagePolicy\":{},\"f:volumeMounts\":{\".\":{},\"k:{\\\"mountPath\\\":\\\"/source\\\"}\":{\".\":{},\"f:mountPath\":{},\"f:name\":{},\"f:readOnly\":{}},\"k:{\\\"mountPath\\\":\\\"/tools\\\"}\":{\".\":{},\"f:mountPath\":{},\"f:name\":{},\"f:readOnly\":{}},\"k:{\\\"mountPath\\\":\\\"/work\\\"}\":{\".\":{},\"f:mountPath\":{},\"f:name\":{}}}}},\"f:dnsPolicy\":{},\"f:enableServiceLinks\":{},\"f:nodeSelector\":{},\"f:restartPolicy\":{},\"f:schedulerName\":{},\"f:securityContext\":{\".\":{},\"f:runAsGroup\":{},\"f:runAsNonRoot\":{},\"f:runAsUser\":{},\"f:seccompProfile\":{\".\":{},\"f:type\":{}}},\"f:terminationGracePeriodSeconds\":{},\"f:volumes\":{\".\":{},\"k:{\\\"name\\\":\\\"source\\\"}\":{\".\":{},\"f:name\":{},\"f:persistentVolumeClaim\":{\".\":{},\"f:claimName\":{},\"f:readOnly\":{}}},\"k:{\\\"name\\\":\\\"tools\\\"}\":{\".\":{},\"f:name\":{},\"f:projected\":{\".\":{},\"f:defaultMode\":{},\"f:sources\":{}}},\"k:{\\\"name\\\":\\\"work\\\"}\":{\".\":{},\"f:emptyDir\":{\".\":{},\"f:sizeLimit\":{}},\"f:name\":{}}}}}},{\"manager\":\"multus-daemon\",\"operation\":\"Update\",\"apiVersion\":\"v1\",\"time\":\"2026-10-24T06:50:27Z\",\"fieldsType\":\"FieldsV1\",\"fieldsV1\":{\"f:metadata\":{\"f:annotations\":{\"f:k8s.v1.cni.cncf.io/network-status\":{}}}},\"subresource\":\"status\"},{\"manager\":\"kubelet\",\"operation\":\"Update\",\"apiVersion\":\"v1\",\"time\":\"2026-10-24T06:54:57Z\",\"fieldsType\":\"FieldsV1\",\"fieldsV1\":{\"f:status\":{\"f:conditions\":{\"k:{\\\"type\\\":\\\"ContainersReady\\\"}\":{\".\":{},\"f:lastProbeTime\":{},\"f:lastTransitionTime\":{},\"f:observedGeneration\":{},\"f:reason\":{},\"f:status\":{},\"f:type\":{}},\"k:{\\\"type\\\":\\\"Initialized\\\"}\":{\".\":{},\"f:lastProbeTime\":{},\"f:lastTransitionTime\":{},\"f:observedGeneration\":{},\"f:reason\":{},\"f:status\":{},\"f:type\":{}},\"k:{\\\"type\\\":\\\"PodReadyToStartContainers\\\"}\":{\".\":{},\"f:lastProbeTime\":{},\"f:lastTransitionTime\":{},\"f:observedGeneration\":{},\"f:status\":{},\"f:type\":{}},\"k:{\\\"type\\\":\\\"PodScheduled\\\"}\":{\"f:observedGeneration\":{}},\"k:{\\\"type\\\":\\\"Ready\\\"}\":{\".\":{},\"f:lastProbeTime\":{},\"f:lastTransitionTime\":{},\"f:observedGeneration\":{},\"f:reason\":{},\"f:status\":{},\"f:type\":{}}},\"f:containerStatuses\":{},\"f:hostIP\":{},\"f:hostIPs\":{},\"f:observedGeneration\":{},\"f:phase\":{},\"f:podIP\":{},\"f:podIPs\":{\".\":{},\"k:{\\\"ip\\\":\\\"10.16.0.255\\\"}\":{\".\":{},\"f:ip\":{}}},\"f:startTime\":{}}},\"subresource\":\"status\"}]},\"spec\":{\"volumes\":[{\"name\":\"source\",\"persistentVolumeClaim\":{\"claimName\":\"vm-mvp-virtio-http-source\",\"readOnly\":true}},{\"name\":\"tools\",\"projected\":{\"sources\":[{\"configMap\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-00\",\"items\":[{\"key\":\"payload\",\"path\":\"part00\"}]}},{\"configMap\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-01\",\"items\":[{\"key\":\"payload\",\"path\":\"part01\"}]}},{\"configMap\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-02\",\"items\":[{\"key\":\"payload\",\"path\":\"part02\"}]}}],\"defaultMode\":420}},{\"name\":\"work\",\"emptyDir\":{\"sizeLimit\":\"8Mi\"}}],\"containers\":[{\"name\":\"verify\",\"image\":\"172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05\",\"command\":[\"/bin/sh\",\"-ec\",\"set -eu; test \\\"$(id -u)\\\" = 107; cat /tools/part00 /tools/part01 /tools/part02 \\u003e /work/verifier; actual=$(sha256sum /work/verifier); test \\\"${actual%% *}\\\" = 0a029e7ffd1fc07629dafd65c208bf7dc38f8e8b4ec29e46c68cacded326b9f0; chmod 0500 /work/verifier; exec /work/verifier /source/disk.img 726501376 bbe6166ad86a490caefad438fef8aa494926cb0a1b37fa1212925cfd81656429\"],\"resources\":{\"limits\":{\"cpu\":\"750m\",\"memory\":\"256Mi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"60Mi\"}},\"volumeMounts\":[{\"name\":\"source\",\"readOnly\":true,\"mountPath\":\"/source\"},{\"name\":\"tools\",\"readOnly\":true,\"mountPath\":\"/tools\"},{\"name\":\"work\",\"mountPath\":\"/work\"}],\"terminationMessagePath\":\"/dev/termination-log\",\"terminationMessagePolicy\":\"File\",\"imagePullPolicy\":\"Never\",\"securityContext\":{\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":true,\"allowPrivilegeEscalation\":false}}],\"restartPolicy\":\"Never\",\"terminationGracePeriodSeconds\":30,\"activeDeadlineSeconds\":298,\"dnsPolicy\":\"ClusterFirst\",\"nodeSelector\":{\"kubernetes.io/hostname\":\"ani-03\"},\"serviceAccountName\":\"default\",\"serviceAccount\":\"default\",\"automountServiceAccountToken\":false,\"nodeName\":\"ani-03\",\"securityContext\":{\"runAsUser\":107,\"runAsGroup\":107,\"runAsNonRoot\":true,\"seccompProfile\":{\"type\":\"RuntimeDefault\"}},\"schedulerName\":\"default-scheduler\",\"tolerations\":[{\"key\":\"node.kubernetes.io/not-ready\",\"operator\":\"Exists\",\"effect\":\"NoExecute\",\"tolerationSeconds\":300},{\"key\":\"node.kubernetes.io/unreachable\",\"operator\":\"Exists\",\"effect\":\"NoExecute\",\"tolerationSeconds\":300}],\"priority\":0,\"enableServiceLinks\":true,\"preemptionPolicy\":\"PreemptLowerPriority\"},\"status\":{\"observedGeneration\":1,\"phase\":\"Running\",\"conditions\":[{\"type\":\"PodReadyToStartContainers\",\"observedGeneration\":1,\"status\":\"True\",\"lastProbeTime\":null,\"lastTransitionTime\":\"2026-10-24T06:50:29Z\"},{\"type\":\"Initialized\",\"observedGeneration\":1,\"status\":\"True\",\"lastProbeTime\":null,\"lastTransitionTime\":\"2026-10-24T06:50:01Z\",\"reason\":\"PodCompleted\"},{\"type\":\"Ready\",\"observedGeneration\":1,\"status\":\"False\",\"lastProbeTime\":null,\"lastTransitionTime\":\"2026-10-24T06:54:57Z\",\"reason\":\"PodCompleted\"},{\"type\":\"ContainersReady\",\"observedGeneration\":1,\"status\":\"False\",\"lastProbeTime\":null,\"lastTransitionTime\":\"2026-10-24T06:54:57Z\",\"reason\":\"PodCompleted\"},{\"type\":\"PodScheduled\",\"observedGeneration\":1,\"status\":\"True\",\"lastProbeTime\":null,\"lastTransitionTime\":\"2026-10-24T06:50:01Z\"}],\"hostIP\":\"172.16.101.12\",\"hostIPs\":[{\"ip\":\"172.16.101.12\"}],\"podIP\":\"10.16.0.255\",\"podIPs\":[{\"ip\":\"10.16.0.255\"}],\"startTime\":\"2026-10-24T06:50:01Z\",\"containerStatuses\":[{\"name\":\"verify\",\"state\":{\"terminated\":{\"exitCode\":0,\"reason\":\"Completed\",\"startedAt\":\"2026-10-24T06:50:29Z\",\"finishedAt\":\"2026-10-24T06:54:55Z\",\"containerID\":\"containerd://1c603396a52f0bddca36b76639838b461f4fdcfe656d51ecbc10a547cb873e2c\"}},\"lastState\":{},\"ready\":false,\"restartCount\":0,\"image\":\"172.16.101.10:5000/kubevirt/cdi-importer:v1.66.1\",\"imageID\":\"172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05\",\"containerID\":\"containerd://1c603396a52f0bddca36b76639838b461f4fdcfe656d51ecbc10a547cb873e2c\",\"started\":false,\"allocatedResources\":{\"cpu\":\"100m\",\"memory\":\"60Mi\"},\"resources\":{\"limits\":{\"cpu\":\"750m\",\"memory\":\"256Mi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"60Mi\"}},\"volumeMounts\":[{\"name\":\"source\",\"mountPath\":\"/source\",\"readOnly\":true,\"recursiveReadOnly\":\"Disabled\"},{\"name\":\"tools\",\"mountPath\":\"/tools\",\"readOnly\":true,\"recursiveReadOnly\":\"Disabled\"},{\"name\":\"work\",\"mountPath\":\"/work\"}],\"user\":{\"linux\":{\"uid\":107,\"gid\":107,\"supplementalGroups\":[107]}}}],\"qosClass\":\"Burstable\"}}\n",
+      "delete_exit": 0,
+      "delete_stderr": "",
+      "gone": true,
+      "ref": {
+        "kind": "Pod",
+        "name": "vm-mvp-virtio-prefix-01a168ce",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "uid": "45b270c9-8873-42b2-acf1-b1eadba59c1e"
+      }
+    },
+    {
+      "delete_ack": "{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Success\",\"details\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-00\",\"kind\":\"configmaps\",\"uid\":\"6bb29bfd-823b-4439-87f4-f4360527fc5e\"}}\n",
+      "delete_exit": 0,
+      "delete_stderr": "",
+      "gone": true,
+      "ref": {
+        "kind": "ConfigMap",
+        "name": "vm-mvp-virtio-prefix-01a168ce-00",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "uid": "6bb29bfd-823b-4439-87f4-f4360527fc5e"
+      }
+    },
+    {
+      "delete_ack": "{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Success\",\"details\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-01\",\"kind\":\"configmaps\",\"uid\":\"c71bb77d-4ca2-4d8e-b725-647c4409cf08\"}}\n",
+      "delete_exit": 0,
+      "delete_stderr": "",
+      "gone": true,
+      "ref": {
+        "kind": "ConfigMap",
+        "name": "vm-mvp-virtio-prefix-01a168ce-01",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "uid": "c71bb77d-4ca2-4d8e-b725-647c4409cf08"
+      }
+    },
+    {
+      "delete_ack": "{\"kind\":\"Status\",\"apiVersion\":\"v1\",\"metadata\":{},\"status\":\"Success\",\"details\":{\"name\":\"vm-mvp-virtio-prefix-01a168ce-02\",\"kind\":\"configmaps\",\"uid\":\"2a7c8024-510a-4e7f-8a02-7e63712eeaf0\"}}\n",
+      "delete_exit": 0,
+      "delete_stderr": "",
+      "gone": true,
+      "ref": {
+        "kind": "ConfigMap",
+        "name": "vm-mvp-virtio-prefix-01a168ce-02",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "uid": "2a7c8024-510a-4e7f-8a02-7e63712eeaf0"
+      }
+    }
+  ],
+  "cleanup_pass": true,
+  "created": [
+    {
+      "kind": "ConfigMap",
+      "name": "vm-mvp-virtio-prefix-01a168ce-00",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "6bb29bfd-823b-4439-87f4-f4360527fc5e"
+    },
+    {
+      "kind": "ConfigMap",
+      "name": "vm-mvp-virtio-prefix-01a168ce-01",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "c71bb77d-4ca2-4d8e-b725-647c4409cf08"
+    },
+    {
+      "kind": "ConfigMap",
+      "name": "vm-mvp-virtio-prefix-01a168ce-02",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "2a7c8024-510a-4e7f-8a02-7e63712eeaf0"
+    },
+    {
+      "kind": "Pod",
+      "name": "vm-mvp-virtio-prefix-01a168ce",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "45b270c9-8873-42b2-acf1-b1eadba59c1e"
+    }
+  ],
+  "driver_sha256": "a032f6575bd491a864e96d35e248b3b66425be0d237fbc94c4725a2c0af68887",
+  "execution_window_seconds": 300,
+  "finished_at": "2026-10-24T06:55:26.356218+00:00",
+  "measurement_complete": false,
+  "plan_sha256": "d2e783d8e5ffa6f900beb978074f295ee73030020e1e08f158447752020e8a14",
+  "pod_last_phase": "Running",
+  "protected_after": {
+    "attached_root_media_pvcs": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-6ccafb95-7738-48ed-be5a-cef65ca8609c",
+            "namespace": "",
+            "uid": "d4948825-7120-4aea-95e8-5a5ca122dc11"
+          },
+          "spec_sha256": "1d7a1e4492a6382acf9de6100782c27100887e1fc4c400b5281803358a7df2e2"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "6ccafb95-7738-48ed-be5a-cef65ca8609c"
+        },
+        "spec_sha256": "e8a31912b517afe707d97f3b6a7d184c09fd7cf9f41752004b1398de0ca89856"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-741c8be2-a016-4297-8ed2-469f7b539fcb",
+            "namespace": "",
+            "uid": "895bea1c-93b1-4585-89ec-6c92658f1215"
+          },
+          "spec_sha256": "ad581285787e13cf10a396bf046a6c8eeca94d7a9d01b0448488fc2d2a367eda"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "741c8be2-a016-4297-8ed2-469f7b539fcb"
+        },
+        "spec_sha256": "04b0af4c1766e64c5c6f8d890f2540119c3727c84da7e79bad322f0fd34b094e"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-12745c61-5e03-4db7-9708-c64eee206977",
+            "namespace": "",
+            "uid": "5eb015cd-6e8d-4d43-b165-d5888ab54936"
+          },
+          "spec_sha256": "28b36fac5e6d130611f9af5e77fc9fb37ba181ce6a985bf1a4637c12ea9ad873"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "12745c61-5e03-4db7-9708-c64eee206977"
+        },
+        "spec_sha256": "f1f902da958b14146dc0af6b76c6b05e6c899905d81891d56bf592a6f96203d8"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+            "namespace": "",
+            "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92"
+          },
+          "spec_sha256": "1b20756a6f43f0905852a5892d50c6eedd9716975b35f55c1dba7036571faa8f"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+        },
+        "spec_sha256": "d474a342464091785c4c927d2ade654628fb2f48eaf395e93293d83ccb962dd9"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+            "namespace": "",
+            "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+          },
+          "spec_sha256": "8f38be526ef607efacc9b45c6818c2db2595a1d2a392c8678d9deba3484117ca"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+        },
+        "spec_sha256": "39550a962eb8e84b1aa3248444b11c834dc396a4a44afef73a0963f33c6aefe1"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+            "namespace": "",
+            "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+          },
+          "spec_sha256": "77e4256cdc12043e0b72fef7b85866ad981493c6b53944f70c80b6dc30d21b9b"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+        },
+        "spec_sha256": "8106f00a663edfba35f268252497640c3bf3f06041e33380ffbe0d35f575b198"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-21096268-968f-4e03-9b24-d2f435ed448c",
+            "namespace": "",
+            "uid": "becd670c-c761-4b70-987c-236e6e336a8b"
+          },
+          "spec_sha256": "dd921805842911f5bbabb86321dbd928f8e38c5388d2cde02aa582ac685f027d"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        },
+        "spec_sha256": "68cbcba1061cef9aa2fab77f1b97e907e658c88c335cc130cc814268be067722"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+            "namespace": "",
+            "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+          },
+          "spec_sha256": "16cb9c90c56b9542021a41950d40de7521f9c9d032e3bd0e457a87cdcd46f635"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+        },
+        "spec_sha256": "9670a79665b6e15e044499ae3bed3bdf48080fa0ec4a29ca5ffc49172aa4115a"
+      }
+    },
+    "nads": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-main",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "ac77bddd-82a3-48b9-9916-fbef18f35610"
+        },
+        "spec_sha256": "ae08307cbbb45cde828a5ed8132a70bd456d0a786d728021d0167678946ea402"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-main-v2",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f"
+        },
+        "spec_sha256": "0f5b076ae95f5b17fde0162115d719417b2d37602fe18ee92cfc620d279b5964"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-tenant2-01a168ce",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+        },
+        "spec_sha256": "0f5b076ae95f5b17fde0162115d719417b2d37602fe18ee92cfc620d279b5964"
+      }
+    },
+    "namespaces": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c": {
+        "kind": "Namespace",
+        "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "namespace": "",
+        "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316": {
+        "kind": "Namespace",
+        "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "namespace": "",
+        "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404"
+      }
+    },
+    "source_pvcs": {
+      "vm-mvp-fedora44-http-source": {
+        "annotation_sha256": "9d2d2c126b7bb3e55657e1844f646ca0d26a7595e9ad41accb084b9212cfeb9f",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-fedora44-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00"
+        },
+        "spec_sha256": "99939ea1bfc5cde75f3a15874c0d4f3c93c77a2ed0d516a158000e8f771a7de4"
+      },
+      "vm-mvp-ubuntu-2404-source": {
+        "annotation_sha256": "08ec8f1cd425756ae5eb7dc4757f463e864bc8eb5ad9d20f2f43699ad06bc5e7",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+        },
+        "spec_sha256": "d75ec03055da533b933422f5c41edd27e8963c568540bf478cc3243ba5cd15d3"
+      },
+      "vm-mvp-virtio-http-source": {
+        "annotation_sha256": "afd313c82e79160b6ad802d0c000b6ff7f4c1a9a3dec52df12c0bac8eb7d6ebb",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-virtio-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+        },
+        "spec_sha256": "82726054c0612f40995cc791a5d505d8745ce556c621402d70bff05e8e2fa636"
+      },
+      "vm-mvp-windows2025-http-source": {
+        "annotation_sha256": "f8ec62a5916b19fb7a43632c812e0e36d7532efee773c5d32139d0d58a08e871",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-windows2025-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+        },
+        "spec_sha256": "05e144e0639da0e48ce7f532515930463b29155d92382717018a782d08daeeac"
+      }
+    },
+    "vms": {
+      "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+        },
+        "spec_sha256": "8534e185010097d1c4fd221a0f27da8b3bf87fd1962be39bf828c184e4e7aef2"
+      },
+      "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+        },
+        "spec_sha256": "291cb43d3b20764adddc84e2d2c85e3d5cf817bb7a2c04f78ae9dd1f8236643a"
+      },
+      "e3c11c5a-cf12-4630-a8f9-f907048ffdfc": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+        },
+        "spec_sha256": "710beb114534f5f37ae1d9f9015f6d187e5eb1ea56ad151bc82ff2791e3a13cb"
+      },
+      "fc154879-8a40-4b18-967c-215f5cf5992d": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+        },
+        "spec_sha256": "8162335e24f2e832f3026f73b827bd9663d9eab9cc374801329adc38c312798b"
+      }
+    }
+  },
+  "protected_before": {
+    "attached_root_media_pvcs": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-6ccafb95-7738-48ed-be5a-cef65ca8609c",
+            "namespace": "",
+            "uid": "d4948825-7120-4aea-95e8-5a5ca122dc11"
+          },
+          "spec_sha256": "1d7a1e4492a6382acf9de6100782c27100887e1fc4c400b5281803358a7df2e2"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "6ccafb95-7738-48ed-be5a-cef65ca8609c"
+        },
+        "spec_sha256": "e8a31912b517afe707d97f3b6a7d184c09fd7cf9f41752004b1398de0ca89856"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-741c8be2-a016-4297-8ed2-469f7b539fcb",
+            "namespace": "",
+            "uid": "895bea1c-93b1-4585-89ec-6c92658f1215"
+          },
+          "spec_sha256": "ad581285787e13cf10a396bf046a6c8eeca94d7a9d01b0448488fc2d2a367eda"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "741c8be2-a016-4297-8ed2-469f7b539fcb"
+        },
+        "spec_sha256": "04b0af4c1766e64c5c6f8d890f2540119c3727c84da7e79bad322f0fd34b094e"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-12745c61-5e03-4db7-9708-c64eee206977",
+            "namespace": "",
+            "uid": "5eb015cd-6e8d-4d43-b165-d5888ab54936"
+          },
+          "spec_sha256": "28b36fac5e6d130611f9af5e77fc9fb37ba181ce6a985bf1a4637c12ea9ad873"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "12745c61-5e03-4db7-9708-c64eee206977"
+        },
+        "spec_sha256": "f1f902da958b14146dc0af6b76c6b05e6c899905d81891d56bf592a6f96203d8"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+            "namespace": "",
+            "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92"
+          },
+          "spec_sha256": "1b20756a6f43f0905852a5892d50c6eedd9716975b35f55c1dba7036571faa8f"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+        },
+        "spec_sha256": "d474a342464091785c4c927d2ade654628fb2f48eaf395e93293d83ccb962dd9"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+            "namespace": "",
+            "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+          },
+          "spec_sha256": "8f38be526ef607efacc9b45c6818c2db2595a1d2a392c8678d9deba3484117ca"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+        },
+        "spec_sha256": "39550a962eb8e84b1aa3248444b11c834dc396a4a44afef73a0963f33c6aefe1"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+            "namespace": "",
+            "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+          },
+          "spec_sha256": "77e4256cdc12043e0b72fef7b85866ad981493c6b53944f70c80b6dc30d21b9b"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+        },
+        "spec_sha256": "8106f00a663edfba35f268252497640c3bf3f06041e33380ffbe0d35f575b198"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-21096268-968f-4e03-9b24-d2f435ed448c",
+            "namespace": "",
+            "uid": "becd670c-c761-4b70-987c-236e6e336a8b"
+          },
+          "spec_sha256": "dd921805842911f5bbabb86321dbd928f8e38c5388d2cde02aa582ac685f027d"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        },
+        "spec_sha256": "68cbcba1061cef9aa2fab77f1b97e907e658c88c335cc130cc814268be067722"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c": {
+        "pv": {
+          "ref": {
+            "kind": "PersistentVolume",
+            "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+            "namespace": "",
+            "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+          },
+          "spec_sha256": "16cb9c90c56b9542021a41950d40de7521f9c9d032e3bd0e457a87cdcd46f635"
+        },
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+        },
+        "spec_sha256": "9670a79665b6e15e044499ae3bed3bdf48080fa0ec4a29ca5ffc49172aa4115a"
+      }
+    },
+    "nads": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-main",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "ac77bddd-82a3-48b9-9916-fbef18f35610"
+        },
+        "spec_sha256": "ae08307cbbb45cde828a5ed8132a70bd456d0a786d728021d0167678946ea402"
+      },
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-main-v2",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f"
+        },
+        "spec_sha256": "0f5b076ae95f5b17fde0162115d719417b2d37602fe18ee92cfc620d279b5964"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce": {
+        "ref": {
+          "kind": "NetworkAttachmentDefinition",
+          "name": "vm-mvp-tenant2-01a168ce",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+        },
+        "spec_sha256": "0f5b076ae95f5b17fde0162115d719417b2d37602fe18ee92cfc620d279b5964"
+      }
+    },
+    "namespaces": {
+      "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c": {
+        "kind": "Namespace",
+        "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "namespace": "",
+        "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+      },
+      "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316": {
+        "kind": "Namespace",
+        "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "namespace": "",
+        "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404"
+      }
+    },
+    "source_pvcs": {
+      "vm-mvp-fedora44-http-source": {
+        "annotation_sha256": "9d2d2c126b7bb3e55657e1844f646ca0d26a7595e9ad41accb084b9212cfeb9f",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-fedora44-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00"
+        },
+        "spec_sha256": "99939ea1bfc5cde75f3a15874c0d4f3c93c77a2ed0d516a158000e8f771a7de4"
+      },
+      "vm-mvp-ubuntu-2404-source": {
+        "annotation_sha256": "08ec8f1cd425756ae5eb7dc4757f463e864bc8eb5ad9d20f2f43699ad06bc5e7",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+        },
+        "spec_sha256": "d75ec03055da533b933422f5c41edd27e8963c568540bf478cc3243ba5cd15d3"
+      },
+      "vm-mvp-virtio-http-source": {
+        "annotation_sha256": "afd313c82e79160b6ad802d0c000b6ff7f4c1a9a3dec52df12c0bac8eb7d6ebb",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-virtio-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+        },
+        "spec_sha256": "82726054c0612f40995cc791a5d505d8745ce556c621402d70bff05e8e2fa636"
+      },
+      "vm-mvp-windows2025-http-source": {
+        "annotation_sha256": "f8ec62a5916b19fb7a43632c812e0e36d7532efee773c5d32139d0d58a08e871",
+        "ref": {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-windows2025-http-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+        },
+        "spec_sha256": "05e144e0639da0e48ce7f532515930463b29155d92382717018a782d08daeeac"
+      }
+    },
+    "vms": {
+      "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+        },
+        "spec_sha256": "8534e185010097d1c4fd221a0f27da8b3bf87fd1962be39bf828c184e4e7aef2"
+      },
+      "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+        },
+        "spec_sha256": "291cb43d3b20764adddc84e2d2c85e3d5cf817bb7a2c04f78ae9dd1f8236643a"
+      },
+      "e3c11c5a-cf12-4630-a8f9-f907048ffdfc": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+        },
+        "spec_sha256": "710beb114534f5f37ae1d9f9015f6d187e5eb1ea56ad151bc82ff2791e3a13cb"
+      },
+      "fc154879-8a40-4b18-967c-215f5cf5992d": {
+        "ref": {
+          "kind": "VirtualMachine",
+          "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+        },
+        "spec_sha256": "8162335e24f2e832f3026f73b827bd9663d9eab9cc374801329adc38c312798b"
+      }
+    }
+  },
+  "protected_unchanged": true,
+  "result": "NOT_MEASURED_WINDOW_300S",
+  "source_after": {
+    "annotation_sha256": "afd313c82e79160b6ad802d0c000b6ff7f4c1a9a3dec52df12c0bac8eb7d6ebb",
+    "dv": {
+      "kind": "DataVolume",
+      "name": "vm-mvp-virtio-http-source",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "8c126d50-aea1-4fd7-8dbf-48fc6e3a2ea8"
+    },
+    "pv": {
+      "kind": "PersistentVolume",
+      "name": "pvc-140ccff9-19af-4b78-9122-b08ee4c7bb8a",
+      "namespace": "",
+      "uid": "4ffec5aa-2058-44d1-81f2-5126c90d2261"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "name": "vm-mvp-virtio-http-source",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+    },
+    "pvc_spec_sha256": "82726054c0612f40995cc791a5d505d8745ce556c621402d70bff05e8e2fa636"
+  },
+  "source_before": {
+    "annotation_sha256": "afd313c82e79160b6ad802d0c000b6ff7f4c1a9a3dec52df12c0bac8eb7d6ebb",
+    "dv": {
+      "kind": "DataVolume",
+      "name": "vm-mvp-virtio-http-source",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "8c126d50-aea1-4fd7-8dbf-48fc6e3a2ea8"
+    },
+    "pv": {
+      "kind": "PersistentVolume",
+      "name": "pvc-140ccff9-19af-4b78-9122-b08ee4c7bb8a",
+      "namespace": "",
+      "uid": "4ffec5aa-2058-44d1-81f2-5126c90d2261"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "name": "vm-mvp-virtio-http-source",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+    },
+    "pvc_spec_sha256": "82726054c0612f40995cc791a5d505d8745ce556c621402d70bff05e8e2fa636"
+  },
+  "source_or_catalog_writes": 0,
+  "source_unchanged": true,
+  "window_elapsed_seconds": 300.005,
+  "window_started_at": "2026-10-24T06:50:16.947083+00:00"
+}

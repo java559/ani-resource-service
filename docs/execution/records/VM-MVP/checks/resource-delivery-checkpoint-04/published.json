@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-24T19:26:23.596796+00:00",
+  "changed_files": 18,
+  "commit": "8cee5522451f9c8cc960108cf8cedc0f2c1e3ec2",
+  "completed_at": "2026-10-24T19:26:35.971045+00:00",
+  "current_full_make_verify": "NOT_RUN; no generation/build/test; runtime identical, reuse existing gates",
+  "hooks_not_bypassed": true,
+  "later_cleanup_updates_automatically_included": false,
+  "main_merge_pr_tag_release_oci_service_cluster_changes": false,
+  "mutable_latest_summary_overlay": {
+    "path": "docs/execution/records/VM-MVP/checks/linux-final-cleanup-01/executed-summary.json",
+    "root_exact_authorization": true,
+    "sha256": "e2bc4b93e6888927f9715149e72d980370e43b99037fdb8af6e241593a15da55"
+  },
+  "non_vm_status_prefix_preserved_from_parent": true,
+  "original_head_index_preserved": true,
+  "pre_push_hook_receipt": {
+    "commit": "8cee5522451f9c8cc960108cf8cedc0f2c1e3ec2",
+    "credential_values_or_hashes_public": false,
+    "expected_remote_oid": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+    "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+    "result": "PASS_EXACT_REF_AND_SECRET_GUARD_NO_EXEMPTIONS",
+    "scanned_files": 23
+  },
+  "pre_push_hook_sha256": "f3e14ba799810d84f619b7f5a14d682ca2948de73840d14c9fe4b8f6a31abb03",
+  "push_exit": 0,
+  "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+  "remote_expected_before": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+  "remote_oid": "8cee5522451f9c8cc960108cf8cedc0f2c1e3ec2",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "retained_precommit_failures": {
+    "guard-failed-link.json": "2e4a492044c7b2a7438b21095f9817388334a2a366136487042fb12a10d55367",
+    "guard-failed.json": "68aae475a31e9cc65cba6b89fe7b5e7d8a237c8ff438cff86d7402965f5a7467"
+  },
+  "root_documents_modified": false,
+  "runtime_equality": {
+    "checkpoint_tree": "fd496ea18844394adf57b108dc7f09111aa9c7b7",
+    "file_count": 538,
+    "original_checkpoint03_equality_sha256": "d5714403e8650d23a8c1926214b132c9bb93b3aba1d8e5f8f5fce9e68f6ae29b",
+    "parent": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+    "proof": "read-tree7f plus exact docs-only allowlist/diff; no runtime path/blob/mode can change",
+    "result": "PASS_EXACT_538_RUNTIME_INHERITED_PARENT7F_EQUALS_4CC_BY_REUSED_PROOF",
+    "runtime_changed_paths": [],
+    "runtime_inspection_repeated": false,
+    "source_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57"
+  },
+  "selected_files": 23,
+  "selected_files_manifest_sha256": "81bd76fab10ac2e88c6e3e8be4ca89f27fe4f6ca8741060e32d516a6d33738a0",
+  "send_count": 1,
+  "state": "PASS_EXACT_ACCEPTANCE_FAST_FORWARD_SSH443",
+  "tree": "fd496ea18844394adf57b108dc7f09111aa9c7b7"
+}

@@ -1,0 +1,41 @@
+{
+  "source_file": "/home/chabking/ubuntu-24.04-server-cloudimg-amd64.img",
+  "source_file_sha256": "04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94",
+  "source_file_bytes": 621284352,
+  "virtual_bytes": 3758096384,
+  "datavolume": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "DataVolume",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+  },
+  "pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "volume_mode": "Block",
+  "access_modes": [
+    "ReadWriteOnce"
+  ],
+  "requested": "8G",
+  "capacity": {
+    "storage": "8Gi"
+  },
+  "pv": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolume",
+    "namespace": "",
+    "name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+    "uid": "7e550d01-dd3d-4f24-9df1-5e29e39fc85b"
+  },
+  "reclaim_policy": "Delete",
+  "csi_driver": "rook-ceph.rbd.csi.ceph.com",
+  "backend_image": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+  "backend_pool": "ani-block-pool",
+  "content_checksum_note": "input qcow2 checksum; CDI converts to Block raw. Not asserted equal to raw PVC bytes.",
+  "retained_for": "root subsequent product-source preparation; native probe only"
+}

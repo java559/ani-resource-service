@@ -1,0 +1,70 @@
+{
+  "pull_secret": "ani-instance-image-pull",
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "network": {
+    "State": "closed",
+    "Reason": "",
+    "Cleaned": true,
+    "ClosedAt": "2026-10-24T10:43:25.109268484Z",
+    "Generation": 1,
+    "RequestKey": "instance-primary:09622397-03a0-5b04-8dbe-7a141602a6cb",
+    "Controllers": [
+      {
+        "Owner": {
+          "UID": "8cfb0171-ff0b-4fe6-b548-6c490e497c14",
+          "Kind": "Notebook",
+          "Name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubeflow.org/v1"
+        },
+        "Reference": {
+          "UID": "e210ef5c-2ee4-48d3-8e84-e80bb013f660",
+          "Kind": "StatefulSet",
+          "Name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "apps/v1"
+        }
+      }
+    ],
+    "CurrentPods": null,
+    "RetiredPods": [
+      {
+        "Owner": {
+          "UID": "e210ef5c-2ee4-48d3-8e84-e80bb013f660",
+          "Kind": "StatefulSet",
+          "Name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "apps/v1"
+        },
+        "Reference": {
+          "UID": "a0f686e2-d1c8-4066-a2a7-f1d4f669ffa8",
+          "Kind": "Pod",
+          "Name": "instance-64413d16-05df-4623-a545-0e2f226c6006-0",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "v1"
+        }
+      }
+    ],
+    "AttachmentID": "att_b5b3bf1987784bd28ad3123c3266787f",
+    "NetworkState": "released",
+    "SubmissionID": "09622397-03a0-5b04-8dbe-7a141602a6cb",
+    "FinalizationID": "80706963-d95e-5159-b89b-919d880f4135",
+    "PrepareStarted": true,
+    "ReleaseStarted": true,
+    "RootController": {
+      "UID": "8cfb0171-ff0b-4fe6-b548-6c490e497c14",
+      "Kind": "Notebook",
+      "Name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "APIVersion": "kubeflow.org/v1"
+    },
+    "BindingRevision": "90a54b61-cb77-4f25-888c-933f1a6ceb1b:c24a983c-f9f4-403d-9807-8164004000a3",
+    "DesiredRunState": "deleted",
+    "SnapshotRevision": 4,
+    "AttachmentVersion": 14,
+    "PrimaryNetworkRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+    "ReleaseAcknowledged": true,
+    "ConfirmedSnapshotRevision": 2
+  },
+  "quota_returned": true
+}

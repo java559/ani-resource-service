@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-24T21:12:23.287148+00:00",
+  "host": "fedora",
+  "result": "PASS_TWO_REVOKED_SESSION_TEMPORARY_LOGIN_RESPONSES_REMOVED",
+  "files": [
+    {
+      "private_file": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-private/platform-login.json",
+      "session_revoked_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-api-smoke.json",
+      "removed": true,
+      "normal_unlink": true,
+      "credential_values_or_hashes_exported": false
+    },
+    {
+      "private_file": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-retry01-private/platform-login.json",
+      "session_revoked_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-api-smoke-retry01.json",
+      "removed": true,
+      "normal_unlink": true,
+      "credential_values_or_hashes_exported": false
+    }
+  ],
+  "business_or_cluster_writes": 0,
+  "production_configs_keys_backups_removed": false
+}

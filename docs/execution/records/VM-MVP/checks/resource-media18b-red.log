@@ -1,0 +1,10 @@
+=== RUN   TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate
+=== RUN   TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate/typed-omitempty
+    media_test.go:175: typed PVC readonly default made the accepted media template diverge false <nil>
+=== RUN   TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate/explicit-false
+--- FAIL: TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate (0.00s)
+    --- FAIL: TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate/typed-omitempty (0.00s)
+    --- PASS: TestMediaTemplateAcceptsTypedPVCReadonlyDefaultWithoutUpdate/explicit-false (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.014s
+FAIL

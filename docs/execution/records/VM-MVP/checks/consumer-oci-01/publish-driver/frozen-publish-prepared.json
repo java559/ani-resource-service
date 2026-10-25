@@ -1,0 +1,130 @@
+{
+  "artifact_boundary": "Three local OCI files only. SG expected missing-config exit1 and Gov help exit0 are not runtime readiness or LIVE business acceptance.",
+  "deployments": 0,
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "images": [
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar",
+      "archive_bytes": 35553280,
+      "archive_sha256": "5e42813305610864db0d17cb366386156946b359f91e9bb069a48ebc8dbbb800",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/resource-oci-built.json",
+      "artifact_receipt_sha256": "4923e4d3f1281ad3d256f61626ff464106b229f33df1c6057c6677f584eff622",
+      "expected_manifest_digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--dest-tls-verify=true",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar:vm-mvp-8589b66f1370-01a168ce",
+        "docker://172.16.101.10:5000/ani/ani-resource-service:vm-mvp-8589b66f1370-01a168ce"
+      ],
+      "local_image_tag": "ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:5000/ani/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+      "service": "resource",
+      "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+      "source_tree": "e51622e689476c524ddd29776d1b217738822a21"
+    },
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar",
+      "archive_bytes": 34860032,
+      "archive_sha256": "e59153de4d8f59bd50f82fae285d710cc0694ee0128e9a0427050a81bd116b69",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/oci-built.json",
+      "artifact_receipt_sha256": "f7ba77ec32758dba3c0b9080e4d24a46aea1410c9bc6071233256a0fcd11c7bf",
+      "expected_manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--dest-tls-verify=true",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar:vm-mvp-c485419ab879-01a168ce",
+        "docker://172.16.101.10:5000/ani/ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "local_image_tag": "ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:5000/ani/ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+      "service": "session",
+      "source_commit": "c485419ab879fed9a2fad3a064fd328d829a2671",
+      "source_tree": "a793407819bc7eaea34348f0962175cbeecc3463"
+    },
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar",
+      "archive_bytes": 83010048,
+      "archive_sha256": "b465b5cc097e26b81a3ba3283e6b641d0972ceae4658a5e142c17b1287fcfd34",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/oci-built-attempt02.json",
+      "artifact_receipt_sha256": "6c979f1670eed3d32cc8c73638c703cd44bcc4bae1a06d75253a79045f168b23",
+      "expected_manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--dest-tls-verify=true",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "docker://172.16.101.10:5000/ani/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "local_image_tag": "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:5000/ani/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+      "service": "governance",
+      "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+      "source_tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+    }
+  ],
+  "registry": {
+    "actual_plain_http": "NOT_PROBED; no HTTP fallback or TLS-verification disable was used",
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "endpoint": "172.16.101.10:5000",
+    "fresh_existing_cluster_reference_count": 5,
+    "push_auth_requirement": "NOT_VERIFIED; no login or credential-helper retrieval",
+    "readonly_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/registry-readonly.json",
+    "readonly_receipt_sha256": "5a7a180ff1172d87a2d451ef15ca0d0aaf768683e29a991d53edc568777b395d",
+    "standard_auth_references": [
+      {
+        "exists": false,
+        "path": "/home/chabking/.docker/config.json"
+      },
+      {
+        "exists": false,
+        "path": "/home/chabking/.config/containers/auth.json"
+      },
+      {
+        "exists": false,
+        "path": "/run/user/1000/containers/auth.json"
+      }
+    ],
+    "standard_ca_references": [
+      {
+        "exists": false,
+        "path": "/etc/docker/certs.d/172.16.101.10:5000/ca.crt"
+      },
+      {
+        "exists": false,
+        "path": "/etc/containers/certs.d/172.16.101.10:5000/ca.crt"
+      }
+    ],
+    "strict_https_v2": {
+      "ca_reference": "curl system trust store",
+      "elapsed_seconds": 0.112,
+      "exit_code": 35,
+      "http_fallback_attempted": false,
+      "http_status": 0,
+      "stderr": "curl: (35) TLS connect error: error:0A00010B:SSL routines::wrong version number\n",
+      "stdout": "\nHTTP_STATUS=000\n",
+      "url": "https://172.16.101.10:5000/v2/"
+    },
+    "writeability": "NOT_VERIFIED; no upload attempted"
+  },
+  "registry_logins": 0,
+  "required_before_execution": [
+    "Human approval for only these three destination task tags; code-branch publication does not authorize image writes.",
+    "Resolve target transport explicitly: current strict HTTPS handshake fails with curl35/wrong version number. No insecure flag or HTTP fallback is approved by this preparation.",
+    "If authentication is required, identify an existing permitted private auth-file reference; do not expose credentials or create a global login.",
+    "Under the approved publication scope, fresh exact target-tag absence must hold. Refuse overwriting any existing tag; record unknown ACKs and inspect exact refs before further writes.",
+    "Verify archive SHA and preserve each OCI manifest digest; record actual registry ACK and an independent digest read. No deployment follows image publication."
+  ],
+  "retained_history": {
+    "classification": "First300s compile timeout/normalTERM retained; same-source approved attempt02 completed.",
+    "governance_first_attempt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/oci-built.json"
+  },
+  "service_restarts": 0,
+  "state": "PREPARED_NOT_PUBLISHED_BLOCKED_ON_SPECIFIC_WRITE_APPROVAL_AND_TRANSPORT",
+  "vm_mutations": 0
+}

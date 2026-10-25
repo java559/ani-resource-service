@@ -1,0 +1,30 @@
+{
+  "result": "LOCK_SCREEN_RECOVERED_MANUAL_DESKTOP_LOGIN_PENDING",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_version": 22,
+  "before": "black pixels with connected VNC after user account setup attempt",
+  "guest_power_mutations": 0,
+  "guest_disk_mutations_by_agent": 0,
+  "storage_config_changes": 0,
+  "actions": [
+    "one CAD during black screen",
+    "normal VNC reconnect",
+    "Esc wake",
+    "normal Setup ShiftF10 response check",
+    "same-scope test SG renewal after normal VNC disconnect and active0/lease0",
+    "normal VNC connect after renewal; Windows lock screen visibly present",
+    "CAD sent at lock screen to prepare manual login"
+  ],
+  "diagnostic_sources": {
+    "summary.json": "afe5d0662c2b1b5d5412dfed66d67637ad5a6997b351223f91df1b853c99bac4",
+    "derived-root-io.json": "8ec08b8822df1d4b925ccc03cf7d7cfeddd89babaf59520c9c2cedbd9be0ca00",
+    "ceph-once-observed.json": "9925366afac82171472131fb3c8406f98edef5f4b82a8fc05994555d77e4278b"
+  },
+  "conclusion": "Root-disk short sample has high per-request I/O elapsed time and Ceph reports slow operations; CPU and host memory not saturated in sample. Black-screen cause remains unproven; recovery after elapsed time and reconnect is not causal proof.",
+  "login_verified": false,
+  "credential_value_or_hash_in_evidence": false,
+  "screenshots": {
+    "browser-black-before-console-refresh-01.jpg": "2c511aa37e820c69809ebe33fbf8fdb4326122405f13130e128d2b5ee25a2a93",
+    "browser-lockscreen-recovered-01.jpg": "c9a6a771a96fe24207aabe21c884cb00ca9501577c1fa6257783ae82206ded4e"
+  }
+}

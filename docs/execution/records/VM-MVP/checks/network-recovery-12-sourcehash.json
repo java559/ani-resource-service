@@ -1,0 +1,11 @@
+{
+  "internal/biz/network/attachment_vm.go": "4ecc566cbd0fb8986f77eabf9a59e9575ea9c29d782e7ead624ce531eaae545c",
+  "internal/biz/network/attachment_managed.go": "2a3645df0099f5d3cd9293e54750072e2e72f208ba3cc8895e653e8889f280cf",
+  "internal/data/network/attachment_vm.go": "d66f42ded2a77ceb619fcdac75ed7a6c88edcbffe92ca05cc347592945ff5827",
+  "internal/data/network/kc_attachment.go": "362df8012e32c4f034de343b7ab66e7889a0d676145e7a7d37ff2be4e1fac429",
+  "internal/data/network/kc_attachment_vm.go": "aa034cfb98f23b92e376fc82c781192e9ef0ec3b8f0ab6c3313ed08aa80b24d7",
+  "internal/data/network/attachment_worker.go": "7f974c4e51ddd2aeec9709eacc9858047cd56d98a31e8b8e0e12c99da1628b5f",
+  "internal/biz/network/attachment_vm_test.go": "dd4fe0e03547e3ac09ccbc9d8ea273eff0e99035db1b20d64ec5dc9a0370f5ac",
+  "internal/data/network/kc_attachment_vm_test.go": "90b9e19bcc12ded246e4128246b1360ed092a355c63592ba46e3bb8d4da0f961",
+  "internal/data/network/attachment_vm_recovery_integration_test.go": "6adef5f62d1f5b3c02a5444d442c02579727e3312c99d42611070aa3e0c75591"
+}

@@ -1,0 +1,611 @@
+{
+  "at": "2026-10-23T20:27:00.568112+00:00",
+  "scope": "one V3 ani02 -> tenant2 ani01 exact private HTTP rejection; not full V10",
+  "url": "http://10.84.1.2:39192/vm-mvp-01a168ce-tenant2/ef51fbf518e815b1ec825a35",
+  "curl_attempts": 1,
+  "result": "PASS_ONE_WAY_REJECTION",
+  "native_before": {
+    "source": {
+      "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+      },
+      "launcher": {
+        "kind": "Pod",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-bbmjw",
+        "uid": "ceb39733-dba1-4a98-bb60-27bdf2090452"
+      },
+      "node": {
+        "kind": "Node",
+        "namespace": "",
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+        "uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+      },
+      "ip": "10.83.1.9",
+      "mac": "fa:00:cc:05:b0:99"
+    },
+    "target": {
+      "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+      },
+      "launcher": {
+        "kind": "Pod",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "virt-launcher-vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc-6t5rc",
+        "uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+      },
+      "node": {
+        "kind": "Node",
+        "namespace": "",
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+        "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+      },
+      "ip": "10.84.1.2",
+      "mac": "fa:00:75:19:33:88"
+    }
+  },
+  "target_before": {
+    "username": "aniuser",
+    "boot_id": "fe087857-bd61-4d76-b892-dbd6b69ba601",
+    "marker": "vm-mvp-01a168ce-tenant2-linux-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "instance_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "firmware_uuid": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:75:19:33:88",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.84.1.2",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.84.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86312596,
+            "preferred_life_time": 86312596
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:75ff:fe19:3388",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      }
+    ],
+    "http": {
+      "process": {
+        "task": "vm-mvp-20261023-01a168ce",
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "port": 39192,
+        "path": "/vm-mvp-01a168ce-tenant2/ef51fbf518e815b1ec825a35",
+        "body": "ANI_VM_GUEST2_HTTP_01a168ce_ef51fbf518e815b1ec825a35\n",
+        "receipt": "/home/aniuser/.vm-mvp-01a168ce-http.json",
+        "pid": 1187,
+        "start_ticks": "51889",
+        "script": "/home/aniuser/vm-mvp-01a168ce-tenant2-http.py",
+        "script_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9"
+      },
+      "source_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9",
+      "listen": "State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nLISTEN 0      5            0.0.0.0:39192      0.0.0.0:*          \n",
+      "loopback_status": 200,
+      "loopback_exact_body": true,
+      "loopback_body_sha256": "da38569533185e14be28597b55e6309ccf3f8584504598335351d4f701939b2d",
+      "process_owner_uid": 1000
+    }
+  },
+  "source_before": {
+    "username": "aniuser",
+    "boot_id": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+    "marker": "vm-mvp-01a168ce-linux-v3-browser",
+    "instance_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "firmware_uuid": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:cc:05:b0:99",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.83.1.9",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.83.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86311149,
+            "preferred_life_time": 86311149
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:ccff:fe05:b099",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      }
+    ]
+  },
+  "authentication": {
+    "source": {
+      "method": "NORMAL_ORIGINAL_PASSWORD_LOGIN",
+      "password_to_shell_seconds": 1.5039860939141363
+    },
+    "target": {
+      "method": "REUSED_EXISTING_TASK_SESSION"
+    }
+  },
+  "curl": {
+    "boot_before": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+    "exit": 28,
+    "http_status": 0,
+    "stdout": "\nANI_CURL_HTTP=000\n",
+    "stderr": "curl: (28) Connection timed out after 8002 milliseconds\n",
+    "body_sha256": "17832c0c936413bf8836bba4a1f338ae666b63aff918fbf1bffeed77707f7af8",
+    "elapsed_seconds": 8.025146030999622,
+    "boot_after": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+    "marker": "vm-mvp-01a168ce-linux-v3-browser"
+  },
+  "target_after": {
+    "username": "aniuser",
+    "boot_id": "fe087857-bd61-4d76-b892-dbd6b69ba601",
+    "marker": "vm-mvp-01a168ce-tenant2-linux-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "instance_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "firmware_uuid": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:75:19:33:88",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.84.1.2",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.84.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86312554,
+            "preferred_life_time": 86312554
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:75ff:fe19:3388",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      }
+    ],
+    "http": {
+      "process": {
+        "task": "vm-mvp-20261023-01a168ce",
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "port": 39192,
+        "path": "/vm-mvp-01a168ce-tenant2/ef51fbf518e815b1ec825a35",
+        "body": "ANI_VM_GUEST2_HTTP_01a168ce_ef51fbf518e815b1ec825a35\n",
+        "receipt": "/home/aniuser/.vm-mvp-01a168ce-http.json",
+        "pid": 1187,
+        "start_ticks": "51889",
+        "script": "/home/aniuser/vm-mvp-01a168ce-tenant2-http.py",
+        "script_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9"
+      },
+      "source_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9",
+      "listen": "State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\nLISTEN 0      5            0.0.0.0:39192      0.0.0.0:*          \n",
+      "loopback_status": 200,
+      "loopback_exact_body": true,
+      "loopback_body_sha256": "da38569533185e14be28597b55e6309ccf3f8584504598335351d4f701939b2d",
+      "process_owner_uid": 1000
+    }
+  },
+  "native_after": {
+    "source": {
+      "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+      },
+      "launcher": {
+        "kind": "Pod",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-bbmjw",
+        "uid": "ceb39733-dba1-4a98-bb60-27bdf2090452"
+      },
+      "node": {
+        "kind": "Node",
+        "namespace": "",
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+        "uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+      },
+      "ip": "10.83.1.9",
+      "mac": "fa:00:cc:05:b0:99"
+    },
+    "target": {
+      "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+      },
+      "launcher": {
+        "kind": "Pod",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "virt-launcher-vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc-6t5rc",
+        "uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+      },
+      "node": {
+        "kind": "Node",
+        "namespace": "",
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+      },
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+        "uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+      },
+      "ip": "10.84.1.2",
+      "mac": "fa:00:75:19:33:88"
+    }
+  },
+  "healthy_pre_post": "PASS"
+}

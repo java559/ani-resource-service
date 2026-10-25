@@ -1,0 +1,68 @@
+{
+  "phase": "WINDOWS_DRIVERS_DHCP_AND_HOTATTACHED_DISK_IDENTITY_VERIFIED",
+  "execution": "Real local browser to task Gov/SG, native Windows VNC; no credential setup",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "product_version_after_hotattach": "11",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "native_vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+  "node": "ani-01",
+  "native_hotattach_receipt": "../windows-hotattach-01/executed.json",
+  "media": {
+    "drive": "D:",
+    "volume_label": "virtio-win-0.1.271",
+    "new_downloads": 0
+  },
+  "netkvm": {
+    "command": "pnputil /add-driver d:\\netkvm\\2k25\\amd64\\netkvm.inf /install",
+    "submitted": 1,
+    "added_driver_packages": 1,
+    "installed_driver_packages": 1,
+    "published_name": "oem0.inf",
+    "device_description": "Red Hat VirtIO Ethernet Adapter",
+    "result": "PASS_DRIVER_AND_DHCP"
+  },
+  "dhcp": {
+    "ipv4": "10.83.1.12",
+    "mask": "255.255.255.0",
+    "gateway": "10.83.1.1",
+    "dhcp_server": "169.254.75.10",
+    "dns_server_reported_only": "10.96.0.3",
+    "mac": "FA-00-59-BB-50-6D",
+    "public_office_dns_probe_requests": 0,
+    "result": "PASS_DHCP_ONLY"
+  },
+  "vioser": {
+    "command": "pnputil /add-driver d:\\vioserial\\2k25\\amd64\\vioser.inf /install",
+    "submitted": 1,
+    "added_driver_packages": 1,
+    "installed_driver_packages": 1,
+    "published_name": "oem1.inf",
+    "result": "PASS_SERIAL_DRIVER_ONLY"
+  },
+  "qga": {
+    "path": "D:\\guest-agent\\qemu-ga-x86_64.msi",
+    "bytes": 11770368,
+    "authenticode_status": "NotSigned",
+    "installer_runs": 0,
+    "result": "NOT_INSTALLED"
+  },
+  "guest_disk_identity": [
+    {"number": 0, "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5", "bytes": 80530636800, "partition_style": "MBR", "is_boot": true, "is_system": true, "is_offline": false},
+    {"number": 1, "serial": "89317f20-5600-510a-bc65-e40402c83abb", "bytes": 3221225472, "partition_style": "RAW", "is_boot": false, "is_system": false, "is_offline": true},
+    {"number": 2, "serial": "cca2005b-d936-5327-a5de-d8236385b9ba", "bytes": 4294967296, "partition_style": "RAW", "is_boot": false, "is_system": false, "is_offline": true}
+  ],
+  "remaining": {
+    "new_account_or_password_entered": false,
+    "account_login": "NOT_RUN_USER_UNAVAILABLE",
+    "data_disk_initialization_and_marker": "NOT_RUN_PENDING_RELIABLE_COMMAND_INPUT",
+    "guest_storage_stop_start_and_restore": "NOT_RUN",
+    "input_history": "Long native keyboard input became unreliable; no InitData invocation or marker write was submitted. A visible temporary-page ASCII sender is being verified. Driver installation and DHCP evidence do not prove storage persistence."
+  },
+  "screenshots": [
+    "windows-netkvm-before-1329.png",
+    "windows-netkvm-installed-1329.png",
+    "windows-dhcp-1330.png",
+    "windows-vioser-qga-signature-1333.png",
+    "windows-two-raw-disks-1336.png"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+  "version": 7,
+  "native_vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+  "state": "USER_ACCEPTED_MANUALLY",
+  "user_instruction": "算了，这个就认为通过了",
+  "scope": "Fedora ISO first account/login item",
+  "observed": "Account wizard displayed Completed; normal TTY authentication was not established. User accepted this item; no further login or account troubleshooting.",
+  "automatic_login": "NOT_VERIFIED",
+  "root_marker_stop_start": "NOT_RUN",
+  "credential_values_recorded": false,
+  "power_mutations": 0,
+  "vnc": "NORMAL_DISCONNECT"
+}

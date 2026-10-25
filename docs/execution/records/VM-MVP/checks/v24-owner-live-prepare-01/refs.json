@@ -1,0 +1,1011 @@
+{
+  "at": "2026-10-24T10:45:01.123990+00:00",
+  "scope": "ONE_METADATA_AND_WHITELIST_CLIENT_REFERENCE_READ",
+  "services": [
+    {
+      "namespace": "ani-accelerator",
+      "name": "ani-accelerator-service",
+      "uid": "bbf97007-b261-4c21-9614-9a0ce6d5e4d7",
+      "resourceVersion": "49783248",
+      "type": "ExternalName",
+      "clusterIP": null,
+      "externalName": "ani-accelerator-service.ani-system.svc.cluster.local",
+      "selector": null,
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        },
+        {
+          "name": "admin",
+          "port": 19091,
+          "protocol": "TCP",
+          "targetPort": "admin"
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-accelerator-service",
+      "uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+      "resourceVersion": "38187871",
+      "type": "ClusterIP",
+      "clusterIP": "10.96.58.69",
+      "externalName": null,
+      "selector": {
+        "app.kubernetes.io/name": "ani-accelerator-service"
+      },
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        },
+        {
+          "name": "admin",
+          "port": 19091,
+          "protocol": "TCP",
+          "targetPort": "admin"
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-governance",
+      "uid": "a305b105-32ef-425c-8118-310089e7063b",
+      "resourceVersion": "44174779",
+      "type": "NodePort",
+      "clusterIP": "10.96.126.167",
+      "externalName": null,
+      "selector": {
+        "app": "ani-governance"
+      },
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 30085,
+          "port": 7788,
+          "protocol": "TCP",
+          "targetPort": 7788
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-governance-internal",
+      "uid": "268ee7b3-53ea-4377-aaaa-10fa917e20db",
+      "resourceVersion": "26101949",
+      "type": "ClusterIP",
+      "clusterIP": "10.96.3.210",
+      "externalName": null,
+      "selector": {
+        "app": "ani-governance"
+      },
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19093,
+          "protocol": "TCP",
+          "targetPort": 19093
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-resource-service",
+      "uid": "6fd9d7aa-0969-401f-a8ae-8032b53e04e2",
+      "resourceVersion": "3113151",
+      "type": "ClusterIP",
+      "clusterIP": "10.96.73.172",
+      "externalName": null,
+      "selector": {
+        "app": "ani-resource-service"
+      },
+      "ports": [
+        {
+          "name": "grpc",
+          "port": 19090,
+          "protocol": "TCP",
+          "targetPort": "grpc"
+        },
+        {
+          "name": "admin",
+          "port": 19091,
+          "protocol": "TCP",
+          "targetPort": "admin"
+        }
+      ]
+    }
+  ],
+  "deployments": [
+    {
+      "namespace": "ani-accelerator",
+      "name": "ani-accelerator-service",
+      "uid": "610302b1-9b30-4a16-928e-f3356a41bb85",
+      "resourceVersion": "49703427",
+      "ready_replicas": 0,
+      "service_account": "accelerator-reader",
+      "containers": [
+        {
+          "name": "accelerator",
+          "image": "172.16.101.10:5000/ani/accelerator@sha256:68085bd3ffa86527ed418541e0feb334fbbff9e755d483753a8af426ef411cb2",
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "config",
+              "mountPath": "/etc/acc",
+              "subPath": null
+            },
+            {
+              "name": "tls",
+              "mountPath": "/run/acc-tls",
+              "subPath": null
+            },
+            {
+              "name": "private",
+              "mountPath": "/run/acc-private",
+              "subPath": null
+            },
+            {
+              "name": "podresources",
+              "mountPath": "/host/pod-resources",
+              "subPath": null
+            },
+            {
+              "name": "cri",
+              "mountPath": "/host/containerd",
+              "subPath": null
+            },
+            {
+              "name": "runtime-journal",
+              "mountPath": "/host/journal/2e5cc7ce6b9c4666a1943a6fa65c1858",
+              "subPath": null
+            },
+            {
+              "name": "runtime-exits",
+              "mountPath": "/var/lib/acc/runtime-exits/formal",
+              "subPath": null
+            },
+            {
+              "name": "tmp",
+              "mountPath": "/tmp",
+              "subPath": null
+            }
+          ],
+          "environment_names": [
+            "NVIDIA_VISIBLE_DEVICES",
+            "NVIDIA_DRIVER_CAPABILITIES"
+          ],
+          "client_ref_env": []
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "config",
+          "configmap_name": "accelerator-configs",
+          "item_field_names": []
+        },
+        {
+          "volume": "tls",
+          "secret_name": "accelerator-server-mtls",
+          "item_field_names": []
+        },
+        {
+          "volume": "private",
+          "secret_name": "accelerator-runtime-private",
+          "item_field_names": []
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-accelerator-service",
+      "uid": "b47a695d-50d8-4231-a786-6cb6c6b01804",
+      "resourceVersion": "62082288",
+      "ready_replicas": 1,
+      "service_account": "accelerator-reader-auth-20261019",
+      "containers": [
+        {
+          "name": "accelerator",
+          "image": "172.16.101.10:5000/ani/modeldev-accelerator-owner-v21@sha256:c78ee7451e1ff046793eb600b2cf16715d159b262ed13097f4926c0463109d51",
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "config",
+              "mountPath": "/etc/acc",
+              "subPath": null
+            },
+            {
+              "name": "tls",
+              "mountPath": "/run/acc-tls",
+              "subPath": null
+            },
+            {
+              "name": "private",
+              "mountPath": "/run/acc-private",
+              "subPath": null
+            },
+            {
+              "name": "tmp",
+              "mountPath": "/tmp",
+              "subPath": null
+            },
+            {
+              "name": "modeldev-owner-public",
+              "mountPath": "/run/modeldev-owner",
+              "subPath": null
+            }
+          ],
+          "environment_names": [],
+          "client_ref_env": []
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "config",
+          "configmap_name": "accelerator-modeldev-execution-v21",
+          "item_field_names": []
+        },
+        {
+          "volume": "tls",
+          "secret_name": "accelerator-server-node-agent-bc",
+          "item_field_names": []
+        },
+        {
+          "volume": "private",
+          "secret_name": "accelerator-node-agent-bc-private",
+          "item_field_names": []
+        },
+        {
+          "volume": "modeldev-owner-public",
+          "configmap_name": "accelerator-modeldev-execution-v21-owner-key",
+          "item_field_names": []
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-governance",
+      "uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+      "resourceVersion": "58362733",
+      "ready_replicas": 1,
+      "service_account": "governance-runtime",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4",
+          "ports": [
+            {
+              "containerPort": 7788,
+              "name": "http",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19093,
+              "name": "quota-grpc",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "observability-mtls",
+              "mountPath": "/run/secrets/observability-mtls",
+              "subPath": null
+            },
+            {
+              "name": "configs",
+              "mountPath": "/run/configs",
+              "subPath": null
+            },
+            {
+              "name": "ake",
+              "mountPath": "/run/secrets/ake",
+              "subPath": null
+            },
+            {
+              "name": "modeldev-mtls",
+              "mountPath": "/run/secrets/modeldev-mtls",
+              "subPath": null
+            },
+            {
+              "name": "resource-mtls",
+              "mountPath": "/run/secrets/resource-mtls",
+              "subPath": null
+            },
+            {
+              "name": "model-inference-mtls",
+              "mountPath": "/run/secrets/model-inference-mtls",
+              "subPath": null
+            },
+            {
+              "name": "accelerator-lab-mtls",
+              "mountPath": "/run/secrets/accelerator-lab-mtls",
+              "subPath": null
+            },
+            {
+              "name": "session-mtls",
+              "mountPath": "/run/secrets/session-mtls",
+              "subPath": null
+            }
+          ],
+          "environment_names": [
+            "ANI_OBSERVABILITY_GRPC_ADDR",
+            "ANI_OBSERVABILITY_CA_FILE",
+            "ANI_OBSERVABILITY_CLIENT_CERT_FILE",
+            "ANI_OBSERVABILITY_CLIENT_KEY_FILE",
+            "ANI_INSTANCE_ADDR",
+            "ANI_INSTANCE_CA",
+            "ANI_INSTANCE_CERT",
+            "ANI_INSTANCE_KEY",
+            "ANI_ACCESS_KEY_ENCRYPTION_KEY_FILE",
+            "ANI_MODELDEV_ADDR",
+            "ANI_MODELDEV_CA",
+            "ANI_MODELDEV_CERT",
+            "ANI_MODELDEV_KEY",
+            "ANI_MODELDEV_TIMEOUT",
+            "ANI_NETWORK_ADDR",
+            "ANI_NETWORK_CA",
+            "ANI_NETWORK_CERT",
+            "ANI_NETWORK_KEY",
+            "ANI_IMAGE_ADDR",
+            "ANI_IMAGE_CA",
+            "ANI_IMAGE_CERT",
+            "ANI_IMAGE_KEY",
+            "ANI_MODEL_ADDR",
+            "ANI_MODEL_CA",
+            "ANI_MODEL_CERT",
+            "ANI_MODEL_KEY",
+            "ANI_MODEL_SERVER_NAME",
+            "ANI_QUOTA_ENABLED",
+            "ANI_QUOTA_INTERNAL_ADDR",
+            "ANI_QUOTA_CA_FILE",
+            "ANI_QUOTA_CERT_FILE",
+            "ANI_QUOTA_KEY_FILE",
+            "ANI_ACCELERATOR_ADDR",
+            "ANI_ACCELERATOR_SERVER_NAME",
+            "ANI_QUOTA_RESOURCE_DNS_SAN",
+            "ANI_INSTANCE_CLUSTER_ID",
+            "ANI_ACCELERATOR_CA",
+            "ANI_ACCELERATOR_CERT",
+            "ANI_ACCELERATOR_KEY",
+            "ANI_ACCELERATOR_TIMEOUT",
+            "GWA_AUTH_REFRESH_COOKIE_INSECURE",
+            "ANI_INSTANCE_SG_ADDR",
+            "ANI_INSTANCE_SG_SERVER_NAME",
+            "ANI_INSTANCE_SG_CA_FILE",
+            "ANI_INSTANCE_SG_CERT_FILE",
+            "ANI_INSTANCE_SG_KEY_FILE",
+            "ANI_INSTANCE_CONFIG_V2_WRITES",
+            "ANI_INFERENCE_ADDR",
+            "ANI_INFERENCE_CA_FILE",
+            "ANI_INFERENCE_CERT_FILE",
+            "ANI_INFERENCE_KEY_FILE",
+            "ANI_INFERENCE_SERVER_NAME",
+            "ANI_NETWORK_TIMEOUT",
+            "GODEBUG",
+            "ANI_QUOTA_MODELDEV_ENABLED",
+            "ANI_MODEL_TIMEOUT"
+          ],
+          "client_ref_env": [
+            {
+              "name": "ANI_MODEL_ADDR",
+              "configured_reference": "ani-model-grpc.ani-system.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_MODEL_CA",
+              "configured_reference": "/run/secrets/model-inference-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_MODEL_CERT",
+              "configured_reference": "/run/secrets/model-inference-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_MODEL_KEY",
+              "configured_reference": "/run/secrets/model-inference-mtls/tls.key"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_NAME",
+              "configured_reference": "ani-model.ani.internal"
+            },
+            {
+              "name": "ANI_ACCELERATOR_ADDR",
+              "configured_reference": "ani-accelerator-service.ani-accelerator.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_ACCELERATOR_SERVER_NAME",
+              "configured_reference": "ani-accelerator-service.ani-accelerator.svc.cluster.local"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CA",
+              "configured_reference": "/run/secrets/accelerator-lab-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CERT",
+              "configured_reference": "/run/secrets/accelerator-lab-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_ACCELERATOR_KEY",
+              "configured_reference": "/run/secrets/accelerator-lab-mtls/tls.key"
+            },
+            {
+              "name": "ANI_ACCELERATOR_TIMEOUT",
+              "configured_reference": "5s"
+            },
+            {
+              "name": "ANI_INFERENCE_ADDR",
+              "configured_reference": "ani-inference-grpc.ani-system.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_INFERENCE_CA_FILE",
+              "configured_reference": "/run/secrets/model-inference-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_CERT_FILE",
+              "configured_reference": "/run/secrets/model-inference-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_KEY_FILE",
+              "configured_reference": "/run/secrets/model-inference-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INFERENCE_SERVER_NAME",
+              "configured_reference": "ani-inference.ani.internal"
+            },
+            {
+              "name": "ANI_MODEL_TIMEOUT",
+              "configured_reference": "3600s"
+            }
+          ]
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "observability-mtls",
+          "secret_name": "ani-observability-governance-client-tls",
+          "item_field_names": []
+        },
+        {
+          "volume": "configs",
+          "secret_name": "governance-configs",
+          "item_field_names": []
+        },
+        {
+          "volume": "ake",
+          "secret_name": "governance-runtime-keys",
+          "item_field_names": []
+        },
+        {
+          "volume": "modeldev-mtls",
+          "secret_name": "governance-modeldev-client-tls",
+          "item_field_names": []
+        },
+        {
+          "volume": "resource-mtls",
+          "secret_name": "governance-resource-mtls",
+          "item_field_names": []
+        },
+        {
+          "volume": "model-inference-mtls",
+          "secret_name": "governance-model-inference-tls",
+          "item_field_names": []
+        },
+        {
+          "volume": "accelerator-lab-mtls",
+          "secret_name": "governance-accelerator-node-agent-bc-client",
+          "item_field_names": []
+        },
+        {
+          "volume": "session-mtls",
+          "secret_name": "governance-session-mtls",
+          "item_field_names": []
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-inference-service",
+      "uid": "9efe7f65-4ccb-4bb9-b841-874851b78b21",
+      "resourceVersion": "50121876",
+      "ready_replicas": 1,
+      "service_account": "ani-inference",
+      "containers": [
+        {
+          "name": "inference",
+          "image": "172.16.101.10:30003/ani-platform-images/ani-inference-service:7dd76ec9f197-20261020@sha256:8a0bf0df5e1ed2dea9c8da9f3f7625a6a8090326b5cc6c609f7820f4fed14419",
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "public-ca-certificates",
+              "mountPath": "/etc/ssl/certs",
+              "subPath": null
+            },
+            {
+              "name": "service-mtls",
+              "mountPath": "/run/service-mtls",
+              "subPath": null
+            },
+            {
+              "name": "managed-config",
+              "mountPath": "/configs",
+              "subPath": null
+            },
+            {
+              "name": "accelerator-mtls",
+              "mountPath": "/run/accelerator-mtls",
+              "subPath": null
+            }
+          ],
+          "environment_names": [
+            "ANI_SERVER_GRPC_ADDR",
+            "ANI_SERVER_ADMIN_ADDR",
+            "ANI_DATABASE_DSN",
+            "ANI_INFERENCE_NAMESPACE",
+            "ANI_HIGRESS_GATEWAY_NAMESPACE",
+            "ANI_HIGRESS_GATEWAY_NAME",
+            "ANI_HIGRESS_ROUTE_NAMESPACE",
+            "ANI_HIGRESS_PUBLIC_BASE_URL",
+            "ANI_HIGRESS_PATH_PREFIX",
+            "ANI_HIGRESS_RATE_LIMIT_NAMESPACE",
+            "ANI_HIGRESS_RATE_LIMIT_PLUGIN",
+            "ANI_MODEL_GRPC_ADDR",
+            "ANI_MODEL_MATERIALIZER_IMAGE",
+            "ANI_MODEL_STORAGE_CLASS",
+            "ANI_MODEL_DOWNLOAD_CA_CONFIGMAP",
+            "ANI_MODEL_DOWNLOAD_CA_KEY",
+            "ANI_MODEL_CA_FILE",
+            "ANI_MODEL_CERT_FILE",
+            "ANI_MODEL_KEY_FILE",
+            "ANI_MODEL_SERVER_NAME",
+            "ANI_SERVER_TLS_CA_FILE",
+            "ANI_SERVER_TLS_CERT_FILE",
+            "ANI_SERVER_TLS_KEY_FILE",
+            "ANI_HIGRESS_CONSOLE_URL",
+            "ANI_HIGRESS_CONSOLE_USERNAME",
+            "ANI_HIGRESS_CONSOLE_PASSWORD",
+            "ANI_ACCELERATOR_GRPC_ADDR",
+            "ANI_ACCELERATOR_CLUSTER_ID",
+            "ANI_ACCELERATOR_SERVER_NAME",
+            "ANI_ACCELERATOR_CA_FILE",
+            "ANI_ACCELERATOR_CERT_FILE",
+            "ANI_ACCELERATOR_KEY_FILE",
+            "ANI_KUBERNETES_SERVICE_ACCOUNT"
+          ],
+          "client_ref_env": [
+            {
+              "name": "ANI_INFERENCE_NAMESPACE",
+              "valueFrom": {
+                "fieldRef": {
+                  "apiVersion": "v1",
+                  "fieldPath": "metadata.namespace"
+                }
+              }
+            },
+            {
+              "name": "ANI_MODEL_GRPC_ADDR",
+              "configured_reference": "ani-model-grpc.ani-system.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_MODEL_MATERIALIZER_IMAGE"
+            },
+            {
+              "name": "ANI_MODEL_STORAGE_CLASS"
+            },
+            {
+              "name": "ANI_MODEL_DOWNLOAD_CA_CONFIGMAP"
+            },
+            {
+              "name": "ANI_MODEL_DOWNLOAD_CA_KEY"
+            },
+            {
+              "name": "ANI_MODEL_CA_FILE",
+              "configured_reference": "/run/service-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_MODEL_CERT_FILE",
+              "configured_reference": "/run/service-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_MODEL_KEY_FILE",
+              "configured_reference": "/run/service-mtls/tls.key"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_NAME",
+              "configured_reference": "ani-model.ani.internal"
+            },
+            {
+              "name": "ANI_ACCELERATOR_GRPC_ADDR",
+              "configured_reference": "ani-accelerator-service.ani-accelerator.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CLUSTER_ID"
+            },
+            {
+              "name": "ANI_ACCELERATOR_SERVER_NAME",
+              "configured_reference": "ani-accelerator-service.ani-accelerator.svc.cluster.local"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CA_FILE",
+              "configured_reference": "/run/accelerator-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_ACCELERATOR_CERT_FILE",
+              "configured_reference": "/run/accelerator-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_ACCELERATOR_KEY_FILE",
+              "configured_reference": "/run/accelerator-mtls/tls.key"
+            }
+          ]
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "public-ca-certificates",
+          "configmap_name": "ani-model-public-ca",
+          "item_field_names": [
+            "ca-certificates.crt"
+          ]
+        },
+        {
+          "volume": "service-mtls",
+          "secret_name": "ani-inference-mtls",
+          "item_field_names": []
+        },
+        {
+          "volume": "managed-config",
+          "configmap_name": "ani-inference-runtime-20261020",
+          "item_field_names": []
+        },
+        {
+          "volume": "accelerator-mtls",
+          "secret_name": "inference-accelerator-node-agent-bc-client",
+          "item_field_names": []
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-model-service",
+      "uid": "f358e30f-842d-419a-9b25-4178caabda0f",
+      "resourceVersion": "59122452",
+      "ready_replicas": 1,
+      "service_account": "ani-model-service",
+      "containers": [
+        {
+          "name": "model",
+          "image": "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165",
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "public-ca-certificates",
+              "mountPath": "/etc/ssl/certs",
+              "subPath": null
+            },
+            {
+              "name": "service-mtls",
+              "mountPath": "/run/service-mtls",
+              "subPath": null
+            }
+          ],
+          "environment_names": [
+            "ANI_SERVER_GRPC_ADDR",
+            "ANI_SERVER_GRPC_TIMEOUT",
+            "ANI_SERVER_ADMIN_ADDR",
+            "ANI_DATABASE_DSN",
+            "ANI_MINIO_ENDPOINT",
+            "ANI_MINIO_SECURE",
+            "ANI_MINIO_BUCKET",
+            "ANI_MINIO_TENANT_BUCKETS",
+            "ANI_MINIO_ACCESS_KEY",
+            "ANI_MINIO_SECRET_KEY",
+            "ANI_IMPORT_KUBERNETES_NAMESPACE",
+            "ANI_IMPORT_JOB_IMAGE",
+            "ANI_IMPORT_STORAGE_CLASS",
+            "ANI_IMPORT_CA_CONFIGMAP",
+            "ANI_IMPORT_CA_KEY",
+            "ANI_IMPORT_WORKER_OWNER",
+            "ANI_ALLOW_DIRECT_ACCESS",
+            "ANI_INFERENCE_GRPC_ADDR",
+            "ANI_MODEL_SERVER_CA_FILE",
+            "ANI_MODEL_SERVER_CERT_FILE",
+            "ANI_MODEL_SERVER_KEY_FILE",
+            "ANI_INFERENCE_CA_FILE",
+            "ANI_INFERENCE_CERT_FILE",
+            "ANI_INFERENCE_KEY_FILE",
+            "ANI_INFERENCE_SERVER_NAME"
+          ],
+          "client_ref_env": [
+            {
+              "name": "ANI_INFERENCE_GRPC_ADDR",
+              "configured_reference": "ani-inference-grpc.ani-system.svc.cluster.local:19090"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_CA_FILE",
+              "configured_reference": "/run/service-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_CERT_FILE",
+              "configured_reference": "/run/service-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_MODEL_SERVER_KEY_FILE",
+              "configured_reference": "/run/service-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INFERENCE_CA_FILE",
+              "configured_reference": "/run/service-mtls/ca.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_CERT_FILE",
+              "configured_reference": "/run/service-mtls/tls.crt"
+            },
+            {
+              "name": "ANI_INFERENCE_KEY_FILE",
+              "configured_reference": "/run/service-mtls/tls.key"
+            },
+            {
+              "name": "ANI_INFERENCE_SERVER_NAME",
+              "configured_reference": "ani-inference.ani.internal"
+            }
+          ]
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "public-ca-certificates",
+          "configmap_name": "ani-model-public-ca",
+          "item_field_names": [
+            "ca-certificates.crt"
+          ]
+        },
+        {
+          "volume": "service-mtls",
+          "secret_name": "ani-model-mtls",
+          "item_field_names": []
+        }
+      ]
+    },
+    {
+      "namespace": "ani-system",
+      "name": "ani-resource-service",
+      "uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+      "resourceVersion": "61644600",
+      "ready_replicas": 1,
+      "service_account": "ani-resource-service",
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e",
+          "ports": [
+            {
+              "containerPort": 19090,
+              "name": "grpc",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19091,
+              "name": "admin",
+              "protocol": "TCP"
+            },
+            {
+              "containerPort": 19093,
+              "name": "terminal",
+              "protocol": "TCP"
+            }
+          ],
+          "mounts": [
+            {
+              "name": "configs",
+              "mountPath": "/run/configs",
+              "subPath": null
+            },
+            {
+              "name": "tls",
+              "mountPath": "/run/resource-mtls",
+              "subPath": null
+            },
+            {
+              "name": "private",
+              "mountPath": "/run/resource-private",
+              "subPath": null
+            },
+            {
+              "name": "quota-tls",
+              "mountPath": "/run/resource-quota-mtls",
+              "subPath": null
+            },
+            {
+              "name": "accelerator-tls",
+              "mountPath": "/run/resource-accelerator-mtls",
+              "subPath": null
+            }
+          ],
+          "environment_names": [
+            "ANI_NETWORK_MODE",
+            "ANI_NETWORK_DATABASE_DSN",
+            "ANI_NETWORK_CURSOR_SIGNING_KEY",
+            "ANI_NETWORK_CLIENT_CA",
+            "ANI_NETWORK_TLS_CERT",
+            "ANI_NETWORK_TLS_KEY",
+            "ANI_INSTANCE_CONFIG_FILE",
+            "ANI_COMPUTE_CONFIG_FILE",
+            "ANI_NETWORK_KUBECONFIG",
+            "NETWORK_KUBECONFIG",
+            "ANI_OBSERVATION_REQUEST_QPS",
+            "ANI_OBSERVATION_REQUEST_BURST",
+            "GOMEMLIMIT"
+          ],
+          "client_ref_env": []
+        }
+      ],
+      "config_refs": [
+        {
+          "volume": "configs",
+          "secret_name": "resource-configs",
+          "item_field_names": []
+        },
+        {
+          "volume": "tls",
+          "secret_name": "resource-server-mtls",
+          "item_field_names": []
+        },
+        {
+          "volume": "private-source",
+          "secret_name": "resource-runtime-private",
+          "item_field_names": []
+        },
+        {
+          "volume": "instance-source",
+          "secret_name": "resource-instance-private",
+          "item_field_names": []
+        },
+        {
+          "volume": "quota-tls",
+          "secret_name": "resource-quota-mtls",
+          "item_field_names": []
+        },
+        {
+          "volume": "accelerator-tls",
+          "secret_name": "resource-accelerator-node-agent-bc-client",
+          "item_field_names": []
+        }
+      ]
+    }
+  ],
+  "secrets_metadata_keys_only": [],
+  "certificates_configured_dns_only": [],
+  "task_client_config_projection": {
+    "gov-runtime-env.json": {
+      "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/gov-runtime-env.json",
+      "allowed_client_keys": {},
+      "absent_allowed_client_keys": [
+        "ANI_ACCELERATOR_ADDR",
+        "ANI_ACCELERATOR_CA",
+        "ANI_ACCELERATOR_CERT",
+        "ANI_ACCELERATOR_KEY",
+        "ANI_ACCELERATOR_SERVER_NAME",
+        "ANI_ACCELERATOR_TIMEOUT",
+        "ANI_INFERENCE_ADDR",
+        "ANI_INFERENCE_CA_FILE",
+        "ANI_INFERENCE_CERT_FILE",
+        "ANI_INFERENCE_KEY_FILE",
+        "ANI_INFERENCE_SERVER_NAME",
+        "ANI_MODEL_ADDR",
+        "ANI_MODEL_CA",
+        "ANI_MODEL_CERT",
+        "ANI_MODEL_KEY",
+        "ANI_MODEL_SERVER_NAME",
+        "ANI_MODEL_TIMEOUT"
+      ]
+    },
+    "resource-runtime-env.json": {
+      "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/resource-runtime-env.json",
+      "allowed_client_keys": {},
+      "absent_allowed_client_keys": [
+        "ANI_ACCELERATOR_ADDR",
+        "ANI_ACCELERATOR_CA",
+        "ANI_ACCELERATOR_CERT",
+        "ANI_ACCELERATOR_KEY",
+        "ANI_ACCELERATOR_SERVER_NAME",
+        "ANI_ACCELERATOR_TIMEOUT",
+        "ANI_INFERENCE_ADDR",
+        "ANI_INFERENCE_CA_FILE",
+        "ANI_INFERENCE_CERT_FILE",
+        "ANI_INFERENCE_KEY_FILE",
+        "ANI_INFERENCE_SERVER_NAME",
+        "ANI_MODEL_ADDR",
+        "ANI_MODEL_CA",
+        "ANI_MODEL_CERT",
+        "ANI_MODEL_KEY",
+        "ANI_MODEL_SERVER_NAME",
+        "ANI_MODEL_TIMEOUT"
+      ]
+    },
+    "instance.json": {
+      "ReleaseAddress": "ani-accelerator-service.ani-accelerator.svc.cluster.local:19090",
+      "ReleaseServerName": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+      "ReleaseCAFile": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/ca.crt",
+      "ReleaseCertFile": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/tls.crt",
+      "ReleaseKeyFile": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-acc/tls.key"
+    }
+  },
+  "config_writes": 0,
+  "application_calls": 0,
+  "gpu_allocations": 0,
+  "model_creates": 0,
+  "secret_values_exported": false,
+  "public_requests": 0,
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "ips": [
+        "172.16.101.10"
+      ]
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "ips": [
+        "172.16.101.11"
+      ]
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "ips": [
+        "172.16.101.12"
+      ]
+    }
+  ],
+  "result": "READ_ONLY_CLIENT_REFERENCES_CAPTURED",
+  "seconds": 1.159
+}

@@ -1,0 +1,260 @@
+{
+  "scope": "original DELETEs only; ~70s bounded read samples; never re-read Gone UIDs; no backend exec or writes",
+  "started_at": "2026-10-24T18:11:17.858447+00:00",
+  "business_posts": 0,
+  "native_writes": 0,
+  "backend_exec": 0,
+  "samples": [
+    {
+      "at": "2026-10-24T18:11:17.862141+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:11:16.89242599Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        },
+        {
+          "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "operation": {
+            "id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+            "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "8",
+            "state": "succeeded",
+            "reason": "",
+            "observedAt": "2026-10-24T18:07:31.748941117Z"
+          },
+          "observed_state": "Deleted",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [
+        "be57a98a-b928-42ff-9fa1-0dfbf211cc3e",
+        "0f98ac51-2971-40b2-9161-72ffc13a0d06",
+        "f43dd8f0-2bd7-4ee6-a9e2-893bd3b15e06",
+        "df765f1a-2038-46cf-b6df-c11df699980d",
+        "9b61937c-3d14-41bf-8fc9-255c720be7f1",
+        "e08c5773-d300-45ee-b9b2-e80ffabeae38",
+        "9a560416-b04e-4dba-9a65-b0d16c870080",
+        "b7685143-956b-4ce8-9994-7f3b7edb9a06",
+        "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad",
+        "e823fe1b-d35a-4704-8335-89f6b214aaa1",
+        "04032b72-35ba-410e-8aca-51f26cda67a0"
+      ],
+      "first_remaining_snapshot": {
+        "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda",
+        "kind": "VolumeSnapshotContent",
+        "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+        "deletion_timestamp": "2026-10-24T18:06:54Z",
+        "finalizers": [
+          "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+        ],
+        "status": {
+          "creationTime": 1792825166352440652,
+          "readyToUse": true,
+          "restoreSize": 12884901888,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-d0403f2f-e729-4685-881a-da4f14db41a2"
+        },
+        "same_state_seconds": 0,
+        "first_seen_at": "2026-10-24T18:11:17.862141+00:00",
+        "latest_exact_uid_events": [
+          {
+            "type": "Warning",
+            "reason": "SnapshotDeleteError",
+            "message": "Failed to delete snapshot",
+            "count": 7,
+            "lastTimestamp": "2026-10-24T18:10:30Z"
+          }
+        ]
+      },
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:13:49.597442+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:13:49.258669051Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [
+        "848d1e62-3c5e-485f-965a-02e65caf5dda",
+        "de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+        "d9625ccf-1b4e-45eb-90b7-216c81eea997",
+        "98b926e4-441b-492d-9cb8-c0472e600ebb",
+        "049e4a37-8750-461b-8e0f-4d7f80273b77",
+        "8706d234-5ab0-4114-b72e-95102d057017"
+      ],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:15:00.957651+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:14:59.589474973Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:16:11.066102+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:16:09.659797177Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:17:21.163567+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:17:20.913151304Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:18:31.253081+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "running",
+            "reason": "",
+            "observedAt": "2026-10-24T18:18:31.279283153Z"
+          },
+          "observed_state": "Running",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    },
+    {
+      "at": "2026-10-24T18:19:41.370125+00:00",
+      "operations": [
+        {
+          "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "operation": {
+            "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+            "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "intentVersion": "48",
+            "state": "succeeded",
+            "reason": "",
+            "observedAt": "2026-10-24T18:18:39.087721663Z"
+          },
+          "observed_state": "Deleted",
+          "desired_state": "Deleted",
+          "closing": true
+        }
+      ],
+      "newly_gone": [
+        "199635fa-df68-4e2f-b114-32fe071a680e",
+        "cd111ccf-bba4-45dc-8409-2ae0079ad13d",
+        "79121165-7547-472a-9939-ee0bd4273c41",
+        "3922eb1f-ea52-499d-9df8-cabf96b5ccd9",
+        "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8",
+        "cc14cc58-b0d5-48bb-ab27-444ee02de318",
+        "198d300b-8af1-4093-aa4a-5af45e50f95a",
+        "8beddace-a96e-4630-a976-a2557d0ad1ba",
+        "fd2d0a93-58a1-4045-802a-0e39d9045c15",
+        "bbed24fb-9f64-42e4-a1b4-20c3075b0646",
+        "7bca4671-89dd-4925-bad9-17e77401729d",
+        "571c6ec3-a565-47ac-ac6f-2e50962f36cb"
+      ],
+      "first_remaining_snapshot": null,
+      "media_pv": null
+    }
+  ],
+  "state": "BOTH_ORIGINAL_OPERATIONS_TERMINAL",
+  "terminal_vm_ids": [
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "55099440-c47b-4f81-afc5-7d8e740d14dc"
+  ],
+  "native_final": {
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761": {
+      "at": "2026-10-24T18:11:17.862141+00:00",
+      "all_original_owned_native_gone": true,
+      "remaining": []
+    },
+    "55099440-c47b-4f81-afc5-7d8e740d14dc": {
+      "at": "2026-10-24T18:19:41.370125+00:00",
+      "all_original_owned_native_gone": true,
+      "remaining": []
+    }
+  },
+  "gone_uid_count": 69
+}

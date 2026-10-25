@@ -1,0 +1,351 @@
+{
+  "result": "PREPARED_NOT_APPLIED",
+  "prepared_at": "2026-10-23T21:38:31.091331+00:00",
+  "process": {
+    "pid": 2123645,
+    "start_ticks": "65651145",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18b",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "dcd745c912972b3ff8fe06ea75ad63e46417d3dfaac735ee09214bed41a40850",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    }
+  },
+  "original_sha256": {
+    "configs/config.yaml": "ea5c2a635c04a9c02605af516cb62f4981d8abea9f4157043e8bd7c54428cd75",
+    "vm.json": "8cebf9680abd8a70a284de4f42d604b19734aafc2db71a92f72721eeae304056",
+    "runtime.env": "9461a07ba01c1d2c0e9332986ace08a362a8964f7a20f23eeb0db0832b53670c"
+  },
+  "proposed_sha256": {
+    "vm.json": "b6ea37c4a38b6519e09ce14bc8f0cd2e046df336e8a2d740287a086debcc54da"
+  },
+  "private_backup_and_proposal_directory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/reload-windows-media-01",
+  "source": {
+    "ready_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/windows2025-ready.json",
+    "ready_receipt_sha256": "df46b62f95cbbe83c7f357c348de99f008df5a9024bd4c3b1da6267cab020a8f",
+    "proof_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/windows2025-onepass.json",
+    "proof_receipt_sha256": "f49dfaa27d6044614b33ac49dcc69c439348d13d7a4635ff1d638c5561ee7578",
+    "namespace_uid": "92ab28f6-ec74-47a0-a08e-88c599a85189",
+    "datavolume": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-windows2025-http-source",
+      "uid": "44a9edbb-ce27-4278-806a-7b02f6d04fec"
+    },
+    "pvc": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-windows2025-http-source",
+      "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+    },
+    "pv": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-40e77734-194b-49fc-8f63-d16a61a5b6a8",
+      "uid": "4b2eb6e4-9a47-48b4-9b62-c9291f555be9"
+    },
+    "storage_class": "ani-block",
+    "storage_class_uid": "e7813a57-3d1c-47e4-a298-86212a59e51e",
+    "volume_mode": "Filesystem",
+    "access_modes": [
+      "ReadWriteOnce"
+    ],
+    "native_dv_succeeded_pvc_pv_bound": true,
+    "full_target_sha256": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+    "target_bytes": 11845763072,
+    "input_sha256": "33b9980c5aaa5bc40aedf20cf9d15f32edafcb6ed883049255713535a61cc40b",
+    "input_bytes": 8726618112,
+    "original_prefix_bytewise_verified": true,
+    "pvd_and_root_identical": true,
+    "volume_label": "SSS_X64FRE_ZH-CN_DV9",
+    "iso9660_root_entries": [
+      {
+        "name": "README.TXT",
+        "directory": false
+      }
+    ],
+    "guest_mount_or_install": "NOT_RUN"
+  },
+  "database": {
+    "database": "vm_resource_candidate_01a168ce",
+    "pending_operation_counts": {
+      "public.network_default_vpc_egress_operations": 0,
+      "public.network_virtual_switch_operations": 0,
+      "public.network_platform_operations": 0,
+      "public.network_operations": 0,
+      "instance.instance_operations": 0,
+      "vm.operations": 0
+    },
+    "assigned_cidrs": [
+      {
+        "kind": "vpc",
+        "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "cidr": "10.83.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "vpc",
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "cidr": "10.84.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "cidr": "10.83.1.0/24",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "cidr": "10.84.1.0/24",
+        "state": "available"
+      }
+    ]
+  },
+  "governance_outbox": {
+    "database": "vm_govlive_01a168ce",
+    "pending_all": 0,
+    "pending_vm": 0,
+    "unknown_states": 0
+  },
+  "existing_ubuntu_vm_guards": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": 20,
+      "state": "Running",
+      "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+      "launcher_uid": "ceb39733-dba1-4a98-bb60-27bdf2090452",
+      "node": "ani-02",
+      "native_template_sha256": "de2c18907fce7df04d92bf19046f993ed03023c4b83c63d45938c759214a48c3",
+      "direct_native_references": [
+        {
+          "kind": "DataVolume",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12",
+          "pv_name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+          "pv_uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+        },
+        {
+          "kind": "Secret",
+          "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "96fcf82c-16d7-4361-9109-179efad82b3f"
+        },
+        {
+          "kind": "DataVolume",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "3ae1521e-ca25-468c-94e4-0e621c68f5c6",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+          "pv_name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+          "pv_uid": "7d05469e-ea85-46ab-b534-c94408f34663"
+        },
+        {
+          "kind": "DataVolume",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "cfb1a6a6-ff1c-4ea5-88a2-2a6c101e40c8",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+          "pv_name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+          "pv_uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b"
+        }
+      ],
+      "cidr_presets": [
+        "10.83.0.0/16",
+        "10.84.0.0/16"
+      ]
+    },
+    {
+      "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": 1,
+      "state": "Running",
+      "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+      "native_vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+      "launcher_uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79",
+      "node": "ani-01",
+      "native_template_sha256": "7dc51d053dba4c5aadce9be521fb6702775d9e50d4ba39bc8ddc255c39124e1e",
+      "direct_native_references": [
+        {
+          "kind": "DataVolume",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00",
+          "pv_name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+          "pv_uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+        },
+        {
+          "kind": "Secret",
+          "name": "vm-init-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+          "uid": "b0341eb0-5c60-4f50-8a0f-9fcee847b92d"
+        }
+      ],
+      "cidr_presets": [
+        "10.83.0.0/16",
+        "10.84.0.0/16"
+      ]
+    }
+  ],
+  "linux_iso_v2": {
+    "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "version": 1,
+    "observed_state": "Running",
+    "closing": false,
+    "create_operation": {
+      "id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+      "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "action": "/vm.v1.VMService/AcceptCreate",
+      "intentVersion": "1",
+      "state": "succeeded",
+      "reason": "",
+      "observedAt": "2026-10-23T21:35:35.23964409Z"
+    },
+    "native_vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+    },
+    "native_vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "uid": "2f9e7340-9f53-4dc0-903f-81759767f3a3"
+    },
+    "native_vmi_phase": "Running",
+    "native_template_sha256": "09e4b72c02367e18195d18ea36fd87f488c3ea2b08166a392d116ec784960fd8",
+    "native_identity_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-fedora44-iso-v2-native.json"
+  },
+  "before_catalog_sha256": "ee329889e6c4107169b4320b5e2d912b5f2a3e3765e2b83c4d13edbd8f0c5603",
+  "pki_sha256": {
+    "ca.key": "80405854feed09c95d13125f428b99193b9af68899915e88409d9215e9267091",
+    "ca.crt": "4837f4acf56ad6177b91bcd4172e595d34495b5b291bfc59f27319737f98313a",
+    "resource-server.key": "260d6117cb50658cb680c624fa9402de11b1ddeefc6fed861f1d0f5ec2ec23f1",
+    "resource-server.csr": "ba25b9219f563de1407041f037c3f414d1f24cd0364c1d8750cf390f3cc6af22",
+    "resource-server.ext": "0cc24dccbf29d4fa45f8bf0817a6ba57a0c786feca38f888f435c1a0152bdd7a",
+    "resource-server.crt": "95855e799fb5181a370230abc3f508fb9bc180391a5607bf701853f1b59e6ee2",
+    "ca.srl": "7c8b5f98d95e8e0edc3222068bea119a99682a5627ebf5aec3dfdc3e5ce5635a",
+    "session-server.key": "11bb71e8306393cfbf7391582e44f5f74d3703c1406837ac1b641d36611cda76",
+    "session-server.csr": "234f4cf94e17ead5f6f54c1322feca13a43e71a33981d47f790fc2d540b2ea23",
+    "session-server.ext": "244bb702d29c45d4cd67581fa6ee82c515d4a5f015cae1ee4f1e752740e160cd",
+    "session-server.crt": "850da39433133c214ca18f9475ddb7263ba4194ea9c484a6295be4a55a49abef",
+    "gov-resource.key": "94604a6c0070dba1e19b645d04c9db581c5e1ece6b25ff161d40da628baf5348",
+    "gov-resource.csr": "74cdde75480d2ac170096b059e8991b61f86985cc847917186db282de83cbc24",
+    "gov-resource.ext": "1d5f29108a73498ab3c79145debb539284627c48981f98da414509f0d87ca834",
+    "gov-resource.crt": "0970264d6725e174852159e342907556c2a1b276c2bb58f0236f17ea187c5ddd",
+    "gov-session.key": "0f1e64663055770c5ec6fbfe9636614a0729cf8d78f4a85ea6718fe6f48f345c",
+    "gov-session.csr": "bef7fb46e8d0764fcf56c81e38d962cd678f7a5fafb525392804a5f64ee1a352",
+    "gov-session.ext": "466cbd10ca1bcf3634e7656e12547ea833b085f5f9d22b01779305fb1163436c",
+    "gov-session.crt": "a6784816fcfabb220917b31b80781ec0676c63cb0ef8d590f593abc273ad7e0a",
+    "session-resource.key": "1cdc41c655999dddab02fbdb79dfbb10439c5e9d2f855617b3e98d4b931bc26a",
+    "session-resource.csr": "3618711294b584497b78fd821c7b8a2b80c2bfd6d16b3ae9182ffacc8591872b",
+    "session-resource.ext": "62603bb471bacbb233718ab0d9f93a9c368b9e0f0467f439dadd88941ee26cec",
+    "session-resource.crt": "61c994296bea56aebc9980e11387b1422fb0aca834816bdd00573d82af1680c0"
+  },
+  "json_field_diff": [
+    {
+      "file": "vm.json",
+      "path": "/Service/Media/3",
+      "operation": "add",
+      "value": {
+        "media_key": "windows-server-2025-iso",
+        "name": "Windows Server 2025 May 2026 installation ISO",
+        "kind": "INSTALL_ISO",
+        "cluster_id": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "pvc_name": "vm-mvp-windows2025-http-source",
+        "pvc_uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+        "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+        "volume_mode": "Filesystem",
+        "content_type": "kubevirt",
+        "virtual_capacity_bytes": 11845763072,
+        "requested_bytes": 12000000000,
+        "os_family": "windows",
+        "os_version": "2025",
+        "architecture": "amd64",
+        "firmware": "bios",
+        "root_bus": "scsi",
+        "data_bus": "scsi",
+        "nic_model": "virtio",
+        "persistent_tpm": false,
+        "persistent_uefi": false,
+        "driver_media_key": "virtio-win-0.1.271",
+        "initialization_capability": "NONE",
+        "initialization_verified": false
+      }
+    }
+  ],
+  "readiness": {
+    "technical": "READY_FOR_REVIEW",
+    "blocking_conditions": [],
+    "execution_allowed": false,
+    "root_approval_required": true,
+    "linux_v2_create_must_be_terminal": true,
+    "fresh_six_tables_and_gov_outbox_must_be_zero": true,
+    "root_must_disconnect_vnc_and_authorize_new_reload_window": true
+  },
+  "unchanged": [
+    "Ubuntu/VirtIO/Fedora media entries",
+    "both Networks entries",
+    "root StorageClass/UID",
+    "MediaStorageClass",
+    "all existing frozen VM specs and native identities",
+    "all other vm.json fields",
+    "config.yaml",
+    "runtime.env",
+    "PKI",
+    "binary",
+    "2CPU/1024MiB budget",
+    "Gov",
+    "SG",
+    "temporary page/relay",
+    "all source DV/PVC/PV identities",
+    "snapshot storage class approval remains separate"
+  ],
+  "execution_recipe": [
+    "Require Root approval of this exact plan SHA and a new explicit disconnected-VNC reload window.",
+    "Fresh-check current task PID/startticks/argv/cwd/binary/env, config/PKI hashes, source/checksum/SC guards, six Resource operation tables and all Gov outbox pending/unknown counts0.",
+    "Re-query original Linuxv2 CREATE operation and require a terminal state; preserve its current VM/VMI/version/template/volume identities and both Ubuntu VMs.",
+    "Normal TERM only the exact approved task Resource process; no KILL. Replace only vm.json with the approved proposal, mode0600; start the identical binary/env/budget/listeners.",
+    "Real mTLS ListMedia and ordinary Gov directory must retain prior three entries and add only this exact Windows profile; recheck protected business/native identities.",
+    "Do not Create a Windows VM, switch root/snapshot storage classes, enter an installer/EULA or hand off new credentials."
+  ],
+  "failure_recovery_recipe": [
+    "Normal TERM only the exact new task PID; restore original vm.json bytes and verify all unchanged files/PKI.",
+    "Start original same binary/argv/cwd/env/budget; require original listeners/three-media catalog and all protected VM identities/version/state.",
+    "On any identity/TERM/restore/probe failure, stop and report; no force, native patch, business-row edit or shared component change."
+  ],
+  "config_files_written": false,
+  "services_restarted": false,
+  "windows_create_sent": 0,
+  "shared_objects_changed": false,
+  "installer_or_eula_interaction": false,
+  "credential_handoff": false
+}

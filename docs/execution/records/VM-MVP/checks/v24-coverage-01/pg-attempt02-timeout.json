@@ -1,0 +1,27 @@
+{
+  "result": "COMPILATION_PROCESS_TIMED_OUT_TESTS_NOT_RUN",
+  "attempt": 2,
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "source_manifest_sha256": "952b4024015936b63d15df0e343d1c0df8d677c6e0c394212049e7266398124e",
+  "source_files_verified": 2452,
+  "receipt": "pg-attempt02-executed.json",
+  "receipt_sha256": "0bf8262b1db740bb4b5fbafc3c89f180bdc56d95b8c4e11af28d92bbcd31fd24",
+  "evidence": {
+    "runner_timeout_seconds": 210,
+    "test_binary_timeout_seconds": 180,
+    "runner_elapsed_seconds": 213.301,
+    "private_data_log_bytes": 0,
+    "named_events": [],
+    "normal_sigterm_on_process_timeout": "runner code fixed timeout branch; no SIGKILL",
+    "fresh_compiler_diagnostic": "NONE_CAPTURED"
+  },
+  "data_cases_not_run": 4,
+  "service_cases_not_run": 2,
+  "fixture_retained": true,
+  "new_service_database_created": false,
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "automatic_retry": false,
+  "quota_or_cache_changes": false,
+  "difference": "Only build GOTMPDIR=/home task-owned0700; tests TMPDIR unchanged; same archive/source/cache/dataDB exactOID/runtimeDSN; no repeated data migration"
+}

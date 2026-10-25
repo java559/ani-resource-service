@@ -1,0 +1,302 @@
+{
+  "vm_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+  "create_operation_id": "c7157a1a-f7cb-408e-9fc1-62138d81d2d9",
+  "action": "delete",
+  "operation_id": "5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+  "expected_version": 4,
+  "admission_send_attempts": 1,
+  "operation": {
+    "id": "5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+    "vmId": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "action": "/vm.v1.VMService/AcceptDelete",
+    "intentVersion": "5",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T17:10:57.618728245Z"
+  },
+  "current": {
+    "id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "name": "vm-mvp-linux-main-v2",
+    "version": "5",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Deleted",
+    "observedState": "Deleted",
+    "reason": "",
+    "observedAt": "2026-10-23T17:10:57.617744028Z",
+    "addresses": [],
+    "lastOperationId": "5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+    "closing": true,
+    "disks": [],
+    "media": [],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    }
+  ],
+  "private_command_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-lifecycle-v2.json",
+  "delete_association_verified": true,
+  "cleanup": {
+    "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "vm_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "create_operation_id": "c7157a1a-f7cb-408e-9fc1-62138d81d2d9",
+    "delete_operation_id": "5d7254dc-abf2-4ec4-aa2d-a9af48485302",
+    "system_and_data_disks": [
+      {
+        "diskId": "b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-b18440e088c35bd492c6b667f2e69a1e",
+        "serial": "b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "business_delete_succeeded": true,
+    "native_uid_guarded_absence": "PASS_INDEPENDENT_UID_MEASUREMENT",
+    "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+    "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+    "compute_preset_id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "frozen_network": {
+      "nad_config_digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "nad_name": "vm-mvp-main-v2",
+      "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+      "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305"
+    },
+    "frozen_namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "storage_cleanup_evidence": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-linux-v2-storage-cleanup.json",
+    "same_attachment_released": true
+  }
+}

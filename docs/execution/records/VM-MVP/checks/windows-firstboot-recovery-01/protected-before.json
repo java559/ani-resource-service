@@ -1,0 +1,201 @@
+{
+  "protected": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb"
+      },
+      "spec_sha256": "00e5488f41cb8d110996b9d005473b3d5044268236632aec9d748169135f4791",
+      "storage": [
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "uid": "198d300b-8af1-4093-aa4a-5af45e50f95a"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-198d300b-8af1-4093-aa4a-5af45e50f95a",
+            "uid": "cd111ccf-bba4-45dc-8409-2ae0079ad13d"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-13f69f66-a318-4c7d-830f-1db8e2800943"
+          },
+          "mode": "Block"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "uid": "cc14cc58-b0d5-48bb-ab27-444ee02de318"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-cc14cc58-b0d5-48bb-ab27-444ee02de318",
+            "uid": "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-4aff6ce9-16ca-43ad-8d18-4acc259f9ead"
+          },
+          "mode": "Block"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "uid": "8beddace-a96e-4630-a976-a2557d0ad1ba"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-8beddace-a96e-4630-a976-a2557d0ad1ba",
+            "uid": "3922eb1f-ea52-499d-9df8-cabf96b5ccd9"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1"
+          },
+          "mode": "Block"
+        }
+      ]
+    },
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "uid": "4976b0da-fb59-44a7-a18a-482c504674a3"
+      },
+      "spec_sha256": "8534e185010097d1c4fd221a0f27da8b3bf87fd1962be39bf828c184e4e7aef2",
+      "storage": [
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+            "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92"
+          },
+          "csi": {
+            "controllerExpandSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "controllerPublishSecretRef": {
+              "name": "rook-csi-rbd-provisioner",
+              "namespace": "rook-ceph"
+            },
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "nodeStageSecretRef": {
+              "name": "rook-csi-rbd-node",
+              "namespace": "rook-ceph"
+            },
+            "volumeAttributes": {
+              "clusterID": "rook-ceph",
+              "imageFeatures": "layering",
+              "imageFormat": "2",
+              "imageName": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+              "journalPool": "ani-block-pool",
+              "pool": "ani-block-pool",
+              "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+            },
+            "volumeHandle": "0001-0009-rook-ceph-0000000000000004-1105c973-54e5-4671-a283-d90bf8da7e78"
+          },
+          "mode": "Block"
+        }
+      ]
+    }
+  ],
+  "business_mutations": 0
+}

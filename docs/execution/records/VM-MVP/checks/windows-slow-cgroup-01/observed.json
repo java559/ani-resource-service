@@ -1,0 +1,1192 @@
+{
+  "result": "ONE_READ_ONLY_CGROUP_AND_DOMAIN_PROJECTION_COMPLETE",
+  "started_at": "2026-10-25T05:19:57.842135+00:00",
+  "source_sha256": "c6bc5a6d12a6a78ff51018853fb0e848615de50eacbf0039f2e387bb5a04b3b1",
+  "calls": [
+    {
+      "label": "cluster527",
+      "exit_code": 0,
+      "seconds": 0.116,
+      "stderr": ""
+    },
+    {
+      "label": "exactVM",
+      "exit_code": 0,
+      "seconds": 0.099,
+      "stderr": ""
+    },
+    {
+      "label": "exactVMI",
+      "exit_code": 0,
+      "seconds": 0.111,
+      "stderr": ""
+    },
+    {
+      "label": "exactLauncher",
+      "exit_code": 0,
+      "seconds": 0.103,
+      "stderr": ""
+    },
+    {
+      "label": "exactNode",
+      "exit_code": 0,
+      "seconds": 0.116,
+      "stderr": ""
+    },
+    {
+      "label": "soleDomain",
+      "exit_code": 0,
+      "seconds": 0.241,
+      "stderr": ""
+    },
+    {
+      "label": "domainCPUClockProjection",
+      "exit_code": 0,
+      "seconds": 0.231,
+      "stderr": ""
+    },
+    {
+      "label": "computeCgroup1",
+      "exit_code": 0,
+      "seconds": 0.647,
+      "stderr": ""
+    },
+    {
+      "label": "computeCgroup2",
+      "exit_code": 0,
+      "seconds": 0.191,
+      "stderr": ""
+    }
+  ],
+  "Guest_commands": 0,
+  "API_mutations": 0,
+  "native_mutations": 0,
+  "Ceph_calls": 0,
+  "root_IO_probes": 0,
+  "new_pods_or_services": 0,
+  "identity": {
+    "cluster": {
+      "name": "kube-system",
+      "uid": "5277649d-e28d-4a0a-ae76-8354365c63bc"
+    },
+    "vm": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+    },
+    "vmi": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a"
+    },
+    "launcher": {
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-5qxps",
+      "uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+    },
+    "node": {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    }
+  },
+  "vmi_domain": {
+    "cpu": {
+      "cores": 2,
+      "maxSockets": 4,
+      "model": "host-model",
+      "sockets": 1,
+      "threads": 1
+    },
+    "resources": {
+      "limits": {
+        "cpu": "2"
+      },
+      "requests": {
+        "cpu": "2",
+        "memory": "4Gi"
+      }
+    },
+    "memory": {
+      "guest": "4Gi",
+      "maxGuest": "16Gi"
+    },
+    "features": {
+      "acpi": {
+        "enabled": true
+      }
+    },
+    "clock": null
+  },
+  "compute_resources": {
+    "limits": {
+      "cpu": "2",
+      "devices.kubevirt.io/kvm": "1",
+      "devices.kubevirt.io/tun": "1",
+      "devices.kubevirt.io/vhost-net": "1"
+    },
+    "requests": {
+      "cpu": "2",
+      "devices.kubevirt.io/kvm": "1",
+      "devices.kubevirt.io/tun": "1",
+      "devices.kubevirt.io/vhost-net": "1",
+      "ephemeral-storage": "50M",
+      "memory": "4592762881"
+    }
+  },
+  "domain": {
+    "type": "kvm",
+    "selected_xml": {
+      "cpu": {
+        "attributes": {
+          "mode": "custom",
+          "match": "exact",
+          "check": "full"
+        },
+        "text": "",
+        "children": [
+          {
+            "name": "model",
+            "attributes": {
+              "fallback": "forbid"
+            },
+            "text": "Cascadelake-Server",
+            "children": {}
+          },
+          {
+            "name": "vendor",
+            "attributes": {},
+            "text": "Intel",
+            "children": {}
+          },
+          {
+            "name": "topology",
+            "attributes": {
+              "sockets": "4",
+              "dies": "1",
+              "clusters": "1",
+              "cores": "2",
+              "threads": "1"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "hypervisor"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "ss"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "tsc_adjust"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "fdp-excptn-only"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "zero-fcs-fds"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "umip"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "pku"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "md-clear"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "stibp"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "flush-l1d"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "arch-capabilities"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "xsaves"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "ibpb"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "ibrs"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "amd-stibp"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "amd-ssbd"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "rdctl-no"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "ibrs-all"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "skip-l1dfl-vmentry"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "mds-no"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "pschange-mc-no"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "rfds-no"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-ins-outs"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-true-ctls"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-store-lma"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-activity-hlt"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-activity-wait-sipi"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vmwrite-vmexit-fields"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-ept"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-desc-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-rdtscp-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-apicv-x2apic"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vpid"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-wbinvd-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-unrestricted-guest"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-rdrand-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invpcid-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vmfunc"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-shadow-vmcs"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-rdseed-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-pml"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-xsaves"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-ept-execonly"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-page-walk-4"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-ept-2mb"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-ept-1gb"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invept"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-eptad"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invept-single-context"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invept-all-context"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invvpid"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invvpid-single-addr"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invvpid-all-context"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invvpid-single-context-noglobals"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-intr-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-nmi-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vnmi"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-preemption-timer"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vintr-pending"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-tsc-offset"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-hlt-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-invlpg-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-mwait-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-rdpmc-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-rdtsc-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-cr3-load-noexit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-cr3-store-noexit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-cr8-load-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-cr8-store-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-flexpriority"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-vnmi-pending"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-movdr-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-io-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-io-bitmap"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-mtf"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-msr-bitmap"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-monitor-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-pause-exit"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-secondary-ctls"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-nosave-debugctl"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-load-perf-global-ctrl"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-ack-intr"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-save-pat"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-load-pat"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-save-efer"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-load-efer"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-exit-save-preemption-timer"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-entry-noload-debugctl"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-entry-ia32e-mode"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-entry-load-perf-global-ctrl"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-entry-load-pat"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-entry-load-efer"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "require",
+              "name": "vmx-eptp-switching"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "hle"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "rtm"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "mpx"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "vmx-apicv-xapic"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "vmx-apicv-register"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "vmx-apicv-vid"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "feature",
+            "attributes": {
+              "policy": "disable",
+              "name": "vmx-posted-intr"
+            },
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "numa",
+            "attributes": {},
+            "text": "",
+            "children": [
+              {
+                "name": "cell",
+                "attributes": {
+                  "id": "0",
+                  "cpus": "0-7",
+                  "memory": "4194304",
+                  "unit": "KiB"
+                },
+                "text": "",
+                "children": {}
+              }
+            ]
+          }
+        ]
+      },
+      "cputune": "NOT_PRESENT",
+      "features": {
+        "attributes": {},
+        "text": "",
+        "children": [
+          {
+            "name": "acpi",
+            "attributes": {},
+            "text": "",
+            "children": {}
+          },
+          {
+            "name": "vmport",
+            "attributes": {
+              "state": "off"
+            },
+            "text": "",
+            "children": {}
+          }
+        ]
+      },
+      "clock": {
+        "attributes": {
+          "offset": "utc"
+        },
+        "text": "",
+        "children": {}
+      }
+    },
+    "full_xml_retained_or_output": false
+  },
+  "samples": [
+    {
+      "at": "2026-10-25T05:19:59.509945+00:00",
+      "files": {
+        "/proc/self/cgroup": "0::/",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 24195614974\nuser_usec 18281157629\nsystem_usec 5914457345\ncore_sched.force_idle_usec 0\nnr_periods 423913\nnr_throttled 15862\nthrottled_usec 2774352372\nnr_bursts 0\nburst_usec 0",
+        "/sys/fs/cgroup/cpu.max": "200000 100000",
+        "/sys/fs/cgroup/cpu.pressure": "some avg10=0.43 avg60=2.52 avg300=6.10 total=1751140797\nfull avg10=0.05 avg60=2.39 avg300=6.00 total=1707385588",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "/sys/fs/cgroup/memory.current": "4402839552",
+        "/sys/fs/cgroup/memory.max": "max",
+        "/sys/fs/cgroup/memory.pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=14076158\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=13703119",
+        "/sys/fs/cgroup/io.pressure": "some avg10=0.00 avg60=0.36 avg300=1.37 total=286756053\nfull avg10=0.00 avg60=0.33 avg300=1.25 total=270606030"
+      }
+    },
+    {
+      "at": "2026-10-25T05:20:04.701246+00:00",
+      "files": {
+        "/proc/self/cgroup": "0::/",
+        "/sys/fs/cgroup/cpu.stat": "usage_usec 24199604820\nuser_usec 18284409724\nsystem_usec 5915195095\ncore_sched.force_idle_usec 0\nnr_periods 423965\nnr_throttled 15862\nthrottled_usec 2774352372\nnr_bursts 0\nburst_usec 0",
+        "/sys/fs/cgroup/cpu.max": "200000 100000",
+        "/sys/fs/cgroup/cpu.pressure": "some avg10=0.38 avg60=2.31 avg300=5.98 total=1751192752\nfull avg10=0.17 avg60=2.19 avg300=5.88 total=1707436440",
+        "/sys/fs/cgroup/memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "/sys/fs/cgroup/memory.current": "4403142656",
+        "/sys/fs/cgroup/memory.max": "max",
+        "/sys/fs/cgroup/memory.pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=14076158\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=13703119",
+        "/sys/fs/cgroup/io.pressure": "some avg10=0.24 avg60=0.39 avg300=1.35 total=286756053\nfull avg10=0.24 avg60=0.36 avg300=1.23 total=270606030"
+      }
+    }
+  ],
+  "interval_seconds": 5.191299,
+  "cpu_stat_delta": {
+    "usage_usec": 3989846,
+    "user_usec": 3252095,
+    "system_usec": 737750,
+    "core_sched.force_idle_usec": 0,
+    "nr_periods": 52,
+    "nr_throttled": 0,
+    "throttled_usec": 0,
+    "nr_bursts": 0,
+    "burst_usec": 0
+  },
+  "cpu_stat_units": "v2 usage_usec/user_usec/system_usec/throttled_usec are microseconds; nr_periods/nr_throttled are counts. v1 throttled_time is nanoseconds.",
+  "memory_events_delta": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "not_measured": [
+    "/sys/fs/cgroup/cpu/cpu.stat",
+    "/sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+    "/sys/fs/cgroup/cpu/cpu.cfs_period_us",
+    "/sys/fs/cgroup/memory/memory.failcnt",
+    "/sys/fs/cgroup/memory/memory.usage_in_bytes",
+    "/sys/fs/cgroup/memory/memory.limit_in_bytes"
+  ],
+  "elapsed_seconds": 6.859,
+  "finished_at": "2026-10-25T05:20:04.701446+00:00",
+  "limitation": "A short compute cgroup sample and configured CPU/timer features cannot establish the cause of Windows interrupts or slow GUI. No Guest execution or runtime changes."
+}

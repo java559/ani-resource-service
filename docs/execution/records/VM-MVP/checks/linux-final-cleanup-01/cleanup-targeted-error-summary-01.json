@@ -1,0 +1,134 @@
+{
+  "at": "2026-10-24T18:06:43.726390+00:00",
+  "result": "NATURAL_FORWARD_PROGRESS_WITH_EXACT_CSI_DELETE_ERRORS_NO_CLONE_PROOF",
+  "original_operations": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+      "state": "running",
+      "desired": "Deleted",
+      "observed": "Running",
+      "native_vm": {
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+        "deletion_timestamp": null,
+        "phase": null,
+        "printableStatus": "Running"
+      },
+      "native_vmi": {
+        "uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+        "deletion_timestamp": null,
+        "phase": "Running",
+        "printableStatus": null
+      }
+    },
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+      "state": "running",
+      "desired": "Deleted",
+      "observed": "Running",
+      "native_vm": null,
+      "native_vmi": null
+    }
+  ],
+  "targets": [
+    {
+      "kind": "VolumeSnapshot",
+      "uid": "e6d7d54f-559f-4d8e-be3d-e2156b63d260",
+      "gone": true,
+      "status": null,
+      "finalizers": null,
+      "events": []
+    },
+    {
+      "kind": "VolumeSnapshotContent",
+      "uid": "85bbe315-f51c-4b24-9ca4-f314fee432d8",
+      "gone": true,
+      "status": null,
+      "finalizers": null,
+      "events": [
+        {
+          "type": "Warning",
+          "reason": "SnapshotDeleteError",
+          "message": "Failed to delete snapshot",
+          "count": 7,
+          "firstTimestamp": "2026-10-24T18:00:52Z",
+          "lastTimestamp": "2026-10-24T18:01:56Z",
+          "eventTime": null,
+          "reportingComponent": "csi-snapshotter rook-ceph.rbd.csi.ceph.com"
+        }
+      ]
+    },
+    {
+      "kind": "PersistentVolume",
+      "uid": "04032b72-35ba-410e-8aca-51f26cda67a0",
+      "gone": false,
+      "status": {
+        "lastPhaseTransitionTime": "2026-10-24T17:58:43Z",
+        "phase": "Released"
+      },
+      "finalizers": [
+        "external-provisioner.volume.kubernetes.io/finalizer",
+        "kubernetes.io/pv-protection",
+        "external-attacher/rook-ceph-rbd-csi-ceph-com"
+      ],
+      "events": [
+        {
+          "type": "Warning",
+          "reason": "VolumeFailedDelete",
+          "message": "rpc error: code = DeadlineExceeded desc = context deadline exceeded",
+          "count": 1,
+          "firstTimestamp": "2026-10-24T18:01:23Z",
+          "lastTimestamp": "2026-10-24T18:01:23Z",
+          "eventTime": null,
+          "reportingComponent": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_543c0b64-5c1e-4bf8-9946-dbc704252798"
+        },
+        {
+          "type": "Warning",
+          "reason": "VolumeFailedDelete",
+          "message": "rpc error: code = Aborted desc = an operation with the given Volume ID 0001-0009-rook-ceph-0000000000000004-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1 already exists",
+          "count": 8,
+          "firstTimestamp": "2026-10-24T18:01:24Z",
+          "lastTimestamp": "2026-10-24T18:03:46Z",
+          "eventTime": null,
+          "reportingComponent": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_543c0b64-5c1e-4bf8-9946-dbc704252798"
+        }
+      ]
+    },
+    {
+      "kind": "PersistentVolume",
+      "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92",
+      "gone": true,
+      "status": null,
+      "finalizers": null,
+      "events": [
+        {
+          "type": "Warning",
+          "reason": "VolumeFailedDelete",
+          "message": "persistentvolume pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0 is still attached to node ani-02",
+          "count": 6,
+          "firstTimestamp": "2026-10-24T17:59:40Z",
+          "lastTimestamp": "2026-10-24T18:00:08Z",
+          "eventTime": null,
+          "reportingComponent": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_543c0b64-5c1e-4bf8-9946-dbc704252798"
+        },
+        {
+          "type": "Warning",
+          "reason": "VolumeFailedDelete",
+          "message": "rpc error: code = DeadlineExceeded desc = context deadline exceeded",
+          "count": 1,
+          "firstTimestamp": "2026-10-24T18:02:57Z",
+          "lastTimestamp": "2026-10-24T18:02:57Z",
+          "eventTime": null,
+          "reportingComponent": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_543c0b64-5c1e-4bf8-9946-dbc704252798"
+        }
+      ]
+    }
+  ],
+  "clone_reference_blocking": "NOT_PROVEN_BY_THIS_EVIDENCE",
+  "business_posts": 0,
+  "native_writes": 0,
+  "backend_exec": 0,
+  "raw_receipt_sha256": "3a32359b75044678ac38f8a612c28b385eb080c6319c78d696cb73232c9b3d1a",
+  "read_errors": []
+}

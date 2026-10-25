@@ -1,0 +1,15 @@
+{
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "source_tree": "d5e3a1742a8a47f85ccfcbdd339c1427e7400b8a",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-governance.git",
+  "remote_ref": "refs/heads/codex/vm-mvp-gov-preserved-runtime-20261025",
+  "remote_before": null,
+  "push_attempts": 1,
+  "no_force": true,
+  "main_tag_release_changed": false,
+  "at": "2026-10-24T20:14:49.345031+00:00",
+  "push_exit_code": 0,
+  "push_output": "remote: \nremote: Create a pull request for 'codex/vm-mvp-gov-preserved-runtime-20261025' on GitHub by visiting:        \nremote:      https://github.com/zhangzhe-ctrl/ani-governance/pull/new/codex/vm-mvp-gov-preserved-runtime-20261025        \nremote: \nTo ssh://ssh.github.com:443/zhangzhe-ctrl/ani-governance.git\n * [new branch]      HEAD -> codex/vm-mvp-gov-preserved-runtime-20261025\n",
+  "independent_remote_oid": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "result": "PASS_TASK_BRANCH_PUSH_AND_INDEPENDENT_OID"
+}

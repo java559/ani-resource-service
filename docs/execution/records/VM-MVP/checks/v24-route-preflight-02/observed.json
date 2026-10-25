@@ -1,0 +1,159 @@
+{
+  "at": "2026-10-24T11:41:51.373863+00:00",
+  "host": "fedora/172.16.101.31",
+  "plan_sha256": "3c762c12742886929a6fca72d2a848c3e6e817e73167914d01aefe1926d06475",
+  "source_sha256": "525f226d31fa6ca5ce4562b57d31fe0deba3e44a63b8445a1b795756f0bd9afc",
+  "result": "DIRECT_TCP_ALL_CONNECTED_ROUTE_ONLY",
+  "commands": [
+    {
+      "argv": [
+        "get",
+        "namespace",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.105
+    },
+    {
+      "argv": [
+        "get",
+        "service",
+        "ani-accelerator-service",
+        "-n",
+        "ani-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.092
+    },
+    {
+      "argv": [
+        "get",
+        "service",
+        "ani-model-grpc",
+        "-n",
+        "ani-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.151
+    },
+    {
+      "argv": [
+        "get",
+        "service",
+        "ani-inference-grpc",
+        "-n",
+        "ani-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.106
+    }
+  ],
+  "targets": [
+    {
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-accelerator-service",
+        "uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+        "resourceVersion": "38187871"
+      },
+      "cluster_ip": "10.96.58.69",
+      "port": 19090,
+      "service_port": {
+        "name": "grpc",
+        "port": 19090,
+        "protocol": "TCP",
+        "targetPort": "grpc"
+      },
+      "selector": {
+        "app.kubernetes.io/name": "ani-accelerator-service"
+      },
+      "tcp": {
+        "started_at": "2026-10-24T11:41:51.897471+00:00",
+        "connect_calls": 1,
+        "timeout_seconds": 2,
+        "destination": "10.96.58.69:19090",
+        "result": "CONNECTED",
+        "errno": 0,
+        "elapsed_seconds": 0.000581
+      }
+    },
+    {
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-model-grpc",
+        "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "resourceVersion": "4071140"
+      },
+      "cluster_ip": "10.96.44.130",
+      "port": 19090,
+      "service_port": {
+        "name": "grpc",
+        "port": 19090,
+        "protocol": "TCP",
+        "targetPort": "grpc"
+      },
+      "selector": {
+        "app.kubernetes.io/name": "ani-model-service"
+      },
+      "tcp": {
+        "started_at": "2026-10-24T11:41:51.898833+00:00",
+        "connect_calls": 1,
+        "timeout_seconds": 2,
+        "destination": "10.96.44.130:19090",
+        "result": "CONNECTED",
+        "errno": 0,
+        "elapsed_seconds": 0.000822
+      }
+    },
+    {
+      "service": {
+        "namespace": "ani-system",
+        "name": "ani-inference-grpc",
+        "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "resourceVersion": "4084801"
+      },
+      "cluster_ip": "10.96.166.234",
+      "port": 19090,
+      "service_port": {
+        "name": "grpc",
+        "port": 19090,
+        "protocol": "TCP",
+        "targetPort": "grpc"
+      },
+      "selector": {
+        "app.kubernetes.io/instance": "ani-inference",
+        "app.kubernetes.io/name": "ani-inference"
+      },
+      "tcp": {
+        "started_at": "2026-10-24T11:41:51.898969+00:00",
+        "connect_calls": 1,
+        "timeout_seconds": 2,
+        "destination": "10.96.166.234:19090",
+        "result": "CONNECTED",
+        "errno": 0,
+        "elapsed_seconds": 0.000822
+      }
+    }
+  ],
+  "tcp_application_bytes_sent": 0,
+  "tls_or_rpc_requests": 0,
+  "secret_reads": 0,
+  "cluster_or_config_writes": 0,
+  "gov_terms": 0,
+  "port_forwards_started": 0,
+  "tcp_window_seconds": 0.071508,
+  "finished_at": "2026-10-24T11:41:51.900089+00:00",
+  "elapsed_seconds": 0.526,
+  "limitations": [
+    "TCP connection is transport reachability only, not TLS/identity/RPC/business acceptance.",
+    "No automatic fallback or port-forward start is authorized or performed."
+  ]
+}

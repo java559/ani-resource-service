@@ -1,0 +1,23 @@
+{
+  "state": "EXISTING_LOG_ERROR_PROJECTION_ONLY",
+  "time_window": "2026-10-24T12:07:00Z/12:08:59Z",
+  "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/gov-clients.log",
+  "log_bytes": 20407,
+  "lines_in_window": 0,
+  "rows": [],
+  "proxy_metadata": {
+    "no_proxy": {
+      "present": false,
+      "entries": 0,
+      "exact_3_ips_present": {
+        "10.96.58.69": false,
+        "10.96.44.130": false,
+        "10.96.166.234": false
+      },
+      "private_10_slash8_present": false
+    }
+  },
+  "rpc_or_http_requests": 0,
+  "service_mutations": 0,
+  "at": "2026-10-24T12:15:57.430885+00:00"
+}

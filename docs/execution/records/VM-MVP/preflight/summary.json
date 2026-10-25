@@ -1,0 +1,66 @@
+{
+  "kubevirt": {
+    "count": 1,
+    "status": "READ"
+  },
+  "cdi": {
+    "count": 1,
+    "status": "READ"
+  },
+  "sc": {
+    "count": 2,
+    "status": "READ"
+  },
+  "storageprofiles": {
+    "count": 2,
+    "status": "READ"
+  },
+  "volumesnapshotclass": {
+    "count": 2,
+    "status": "READ"
+  },
+  "network-attachment-definitions": {
+    "count": 1,
+    "status": "READ"
+  },
+  "namespaces": {
+    "count": 38,
+    "status": "READ"
+  },
+  "virtualmachines": {
+    "count": 1,
+    "status": "READ"
+  },
+  "virtualmachineinstances": {
+    "count": 1,
+    "status": "READ"
+  },
+  "persistentvolumeclaims": {
+    "count": 55,
+    "status": "READ"
+  },
+  "persistentvolumes": {
+    "count": 55,
+    "status": "READ"
+  },
+  "volumesnapshots": {
+    "count": 5,
+    "status": "READ"
+  },
+  "volumesnapshotcontents": {
+    "count": 5,
+    "status": "READ"
+  },
+  "deployments": {
+    "count": 93,
+    "status": "READ"
+  },
+  "daemonsets": {
+    "count": 11,
+    "status": "READ"
+  },
+  "pods": {
+    "count": 267,
+    "status": "READ"
+  }
+}

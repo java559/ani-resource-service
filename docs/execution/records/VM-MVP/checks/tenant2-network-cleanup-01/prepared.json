@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-24T09:07:15.369932+00:00",
+  "plan": {
+    "scope": "one already-created tenant2 VPC/Subnet and its exact task NAD; no tenant1 or other task",
+    "state": "READ_ONLY_PREPARED_NOT_EXECUTED",
+    "business_mutations": 0,
+    "native_mutations": 0,
+    "private_login_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/isolation-credentials.json",
+    "principal": {
+      "tenant_id": 2,
+      "resource_tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "role_ids": [
+        4
+      ]
+    },
+    "sources": [
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-tenant2-network.json",
+        "sha256": "b08479c7522ccc45a9ecfef2d02c1edf44d74e5fe48b0fbbad0feefb0566112d"
+      },
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-network-candidate.json",
+        "sha256": "e049bf7ea5010b4eb914aa4972c8cedbf8a1c5c6158ee5eeb013594b006c9782"
+      },
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-nad-created.json",
+        "sha256": "f2c0b4f3cba16830ee7911eac145e9258e70e5e5c60f2d8da1939253d290c474"
+      },
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-cleanup-delete-cleanup-native.json",
+        "sha256": "107819c70ad9a1b6fd9b8fcad4a685e3d49707e9674ad96fa8f7508aebf4a3ec"
+      },
+      {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-cleanup-delete-cleanup-backend.json",
+        "sha256": "c7cd0a49972154ce0f06f249523079ebb3fa8f4bc7b5b2011a901670f5c5f2c2"
+      }
+    ],
+    "namespace": {
+      "kind": "Namespace",
+      "namespace": "",
+      "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+      "resourceVersion": "59985698",
+      "deletionTimestamp": null
+    },
+    "namespace_labels": {
+      "kubernetes.io/metadata.name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "network.ani.io/managed-by": "ani-network-service",
+      "network.ani.io/tenant-id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316"
+    },
+    "namespace_owner_references": [],
+    "vpc": {
+      "business": {
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.0.0/16",
+        "state": "available",
+        "reason": "",
+        "created_at": "2026-10-23T19:39:07.514643Z",
+        "updated_at": "2026-10-24T09:07:08.719388Z",
+        "version": "14159",
+        "observed_at": "2026-10-24T09:07:08.524868Z",
+        "observation_stale": false,
+        "last_operation_id": "6622b59f-66b8-483a-80b6-6f17c70d432a",
+        "subnet_count": "1"
+      },
+      "native": {
+        "kind": "VPC",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vpc-c44c262a220748aab0e4b20558849409",
+        "uid": "2f2e25c2-55e1-49bf-b284-4d7504b32f2b",
+        "resourceVersion": "59986071",
+        "deletionTimestamp": null
+      },
+      "native_spec": {
+        "allowedNamespaces": {
+          "from": "Same"
+        },
+        "cidrBlock": "10.84.0.0/16",
+        "ipVersion": "IPv4"
+      },
+      "native_status": {
+        "boundResources": {
+          "chassisNode": "",
+          "router": "vpc.tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316.vpc-c44c262a220748aab0e4b20558849409"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-23T19:38:55Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-23T19:38:55Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-23T19:38:55Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "observedGeneration": 1,
+        "subnets": {
+          "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d": "10.84.1.0/24"
+        }
+      }
+    },
+    "subnet": {
+      "business": {
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.1.0/24",
+        "gateway": "10.84.1.1",
+        "state": "available",
+        "reason": "",
+        "reason_message": "",
+        "created_at": "2026-10-23T19:39:13.377039Z",
+        "updated_at": "2026-10-24T09:07:10.520728Z",
+        "version": "14158",
+        "observed_at": "2026-10-24T09:07:10.123181Z",
+        "observation_stale": false,
+        "last_operation_id": "6c225fda-56de-4ee0-8fe4-ddcbbbb40448",
+        "available_ip_range": "10.84.1.2-10.84.1.254",
+        "used_ip_range": ""
+      },
+      "native": {
+        "kind": "Subnet",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "subnet-ea6b62fc625349bcad46ce56ce60f90d",
+        "uid": "29cdddaf-c09b-49df-9323-dd776d8ec929",
+        "resourceVersion": "62049977",
+        "deletionTimestamp": null
+      },
+      "native_spec": {
+        "allowedNamespaces": {
+          "from": "Same"
+        },
+        "cidrBlock": "10.84.1.0/24",
+        "gateway": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vpc-c44c262a220748aab0e4b20558849409",
+        "gatewayIP": "10.84.1.1",
+        "ipVersion": "IPv4",
+        "type": "VPC"
+      },
+      "native_status": {
+        "boundResources": {
+          "gatewayPort": "vpc.tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316.vpc-c44c262a220748aab0e4b20558849409-tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316.subnet-ea6b62fc625349bcad46ce56ce60f90d",
+          "switch": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316.subnet-ea6b62fc625349bcad46ce56ce60f90d"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-23T19:39:00Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-23T19:39:00Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-23T19:39:00Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "gatewayMac": "fa:00:93:dd:4f:16",
+        "observedGeneration": 1,
+        "v4availableIPrange": "10.84.1.2-10.84.1.254",
+        "v4availableIPs": 253,
+        "v4usingIPrange": "",
+        "v4usingIPs": 0
+      }
+    },
+    "nad": {
+      "ref": {
+        "kind": "NetworkAttachmentDefinition",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+        "resourceVersion": "60003290",
+        "deletionTimestamp": null
+      },
+      "config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "owner_references": [],
+      "create_ack_uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+    },
+    "attachment_proof": {
+      "at": "2026-10-24T08:49:29.424503+00:00",
+      "id": "att_dc9331390ff6468b8a7560c406b4a1db",
+      "state": "released",
+      "blocked": false,
+      "source": {
+        "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/tenant2-cleanup-delete-cleanup-native.json",
+        "sha256": "107819c70ad9a1b6fd9b8fcad4a685e3d49707e9674ad96fa8f7508aebf4a3ec"
+      }
+    },
+    "vm_delete_proof": {
+      "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": "9",
+      "closing": true,
+      "observedState": "Deleted",
+      "addresses": []
+    },
+    "namespace_inventory": {
+      "pods": [],
+      "persistentvolumeclaims": [],
+      "virtualmachines.kubevirt.io": [],
+      "virtualmachineinstances.kubevirt.io": [],
+      "datavolumes.cdi.kubevirt.io": [],
+      "virtualmachinesnapshots.snapshot.kubevirt.io": [],
+      "virtualmachinesnapshotcontents.snapshot.kubevirt.io": [],
+      "virtualmachinerestores.snapshot.kubevirt.io": [],
+      "volumesnapshots.snapshot.storage.k8s.io": [],
+      "vnics.networking.kubercloud.com": [],
+      "vnicips.networking.kubercloud.com": [],
+      "eips.networking.kubercloud.com": [],
+      "snats.networking.kubercloud.com": [],
+      "roles.rbac.authorization.k8s.io": [
+        {
+          "kind": "Role",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vm-mvp-sg-01a168ce",
+          "uid": "0e74bff6-40bd-411a-8e5d-fe374b54b127",
+          "resourceVersion": "60075912",
+          "deletionTimestamp": null
+        }
+      ],
+      "rolebindings.rbac.authorization.k8s.io": [
+        {
+          "kind": "RoleBinding",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vm-mvp-sg-01a168ce",
+          "uid": "2e83627f-c01b-49b2-a96a-30ddccfac08f",
+          "resourceVersion": "60075918",
+          "deletionTimestamp": null
+        }
+      ]
+    },
+    "observed_blockers": {},
+    "creation_keys_for_identity_only": {
+      "vpc": "a6d9cd50-dcef-59ef-8ef7-b0d4d5c837c1",
+      "subnet": "34445e1a-a736-58f6-a090-bd57f5c08936"
+    },
+    "delete_contract": {
+      "client_idempotency_key": null,
+      "client_expected_version": null,
+      "body": null,
+      "reason": "both Gov Delete request protos contain only the path resource ID; Resource owns locking/version checks and reuses deleting/deleted operation",
+      "observed_versions_are_guards_only": {
+        "vpc": "14159",
+        "subnet": "14158"
+      },
+      "permissions_required": [
+        "network:subnet:delete",
+        "network:vpc:delete",
+        "network:operation:get"
+      ],
+      "http_success": "202 asynchronous deleting, 200 already deleted per contract; follow actual resource.last_operation_id and GET original operation",
+      "unknown_ack": "persist target/first send; GET same resource and last_operation_id before any explicitly approved repeat; never recreate or choose a new ID"
+    },
+    "ordered_steps": [
+      {
+        "action": "fresh guard",
+        "requirements": [
+          "same tenant/cluster/namespace/VPC/Subnet/NAD UIDs",
+          "all tenant2 VMs Deleted and all attachment references Released/unblocked",
+          "no remaining native consumers/VNic/VNicIP/EIP/SNAT/LB dependency; authoritative Network admission still required",
+          "fresh tenant authorization; no permission grant changes"
+        ]
+      },
+      {
+        "action": "normal Gov DELETE Subnet",
+        "method": "DELETE",
+        "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "body": null,
+        "send_attempts": 0,
+        "wait": "GET same Subnet+last_operation_id until deleted/succeeded and original native Subnet UID absent; blocked/retrying is not success"
+      },
+      {
+        "action": "normal Gov DELETE VPC",
+        "method": "DELETE",
+        "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+        "body": null,
+        "send_attempts": 0,
+        "precondition": "only after Subnet deletion confirmed and no remaining blocking child/egress/LB",
+        "wait": "GET same VPC+last_operation_id until deleted/succeeded and original native VPC UID absent"
+      },
+      {
+        "action": "separate exact task NAD cleanup",
+        "native_delete": false,
+        "precondition": "Root-approved support cleanup: remove only the exact tenant2 trusted policy or stop the task Resource; no consumers; retain tenant1 policy/VM/source/NAD",
+        "proposal": {
+          "kind": "NetworkAttachmentDefinition",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vm-mvp-tenant2-01a168ce",
+          "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+          "resourceVersion": "60003290"
+        },
+        "delete": "fresh exact UID/resourceVersion normal DeleteOptions only after approval; no finalizer/force/namespace cascade"
+      },
+      {
+        "action": "Namespace retained by Network contract",
+        "native_delete": false,
+        "reason": "tenant Namespace is shared placement state; normal VPC deletion does not delete it; NAD has no platform owner-based auto-cleanup",
+        "external_dependencies": "SG owner must handle its namespace-specific Role/RoleBinding/support references. Any eventual exact-UID namespace deletion needs separate final-task/tenant-owner authorization after all resources and mappings are cleared; not implied by VPC DELETE"
+      }
+    ],
+    "v24_dependency": "none found: formal V24 covers legacy compute/container/inference/network v1-v2/Instance terminal regression; tenant1 default fixture remains available",
+    "protected": "tenant1 namespace/VPC/Subnet/VMs, all shared image sources, KCN/global configuration, all unrelated task state",
+    "source_contracts": [
+      "Resource api/network/v1/network.proto DeleteVPCRequest/DeleteSubnetRequest",
+      "Gov api/protos/catalog/service/v1/vpc.proto and admin/service/v1/i_network.proto",
+      "Resource docs/specs/vpc-subnet.md section7 namespace retention and deletion guards"
+    ],
+    "driver_sha256": "1a800ce66c7d82847158b9fbdff773c5e0ca97cfd0743a034515354ecef63db7"
+  },
+  "plan_sha256": "890715bc8e05e192754ae08391990b56d30778052e24fd4b0457845dcdc788d7",
+  "api_events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/operations/f4d5fcfc-b938-457d-82a7-79bd4002436e",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets?vpc_id=vpc_c44c262a220748aab0e4b20558849409&limit=100",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,438 @@
+{
+  "scope": "LIVE_TWO_EXISTING_TENANTS_V24_C06",
+  "at": "2026-10-23T20:30:44.051875+00:00",
+  "source_sha256": "f11efa398c363dd25d332f855a98df44179fbbe73248b08f8d975feb07a174f4",
+  "subjects": [
+    {
+      "tenant_id": 1,
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": 20,
+      "create_operation_id": "f14d60ba-54f2-458d-8e59-458b9d90404c",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+    },
+    {
+      "tenant_id": 2,
+      "resource_tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": 1,
+      "create_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1"
+    }
+  ],
+  "principal": [
+    {
+      "id": 2,
+      "tenant_id": 1,
+      "username": "vm_admin_01a168ce"
+    },
+    {
+      "id": 3,
+      "tenant_id": 2,
+      "username": "vm_isolation_01a168ce"
+    }
+  ],
+  "positive_controls": [
+    {
+      "tenant_id": 1,
+      "vm": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "operation": {
+        "status": 200,
+        "id": "f14d60ba-54f2-458d-8e59-458b9d90404c",
+        "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+      }
+    },
+    {
+      "tenant_id": 2,
+      "vm": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "operation": {
+        "status": 200,
+        "id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc"
+      }
+    }
+  ],
+  "denied": [
+    {
+      "requester_tenant": 1,
+      "owner_tenant": 2,
+      "action": "get-vm",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    },
+    {
+      "requester_tenant": 1,
+      "owner_tenant": 2,
+      "action": "get-original-operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/operations/4ded9db7-6492-45d2-925a-1d551ed066c1",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    },
+    {
+      "requester_tenant": 1,
+      "owner_tenant": 2,
+      "action": "new-console",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/console-sessions",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": "1",
+        "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    },
+    {
+      "requester_tenant": 2,
+      "owner_tenant": 1,
+      "action": "get-vm",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    },
+    {
+      "requester_tenant": 2,
+      "owner_tenant": 1,
+      "action": "get-original-operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/55099440-c47b-4f81-afc5-7d8e740d14dc/operations/f14d60ba-54f2-458d-8e59-458b9d90404c",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    },
+    {
+      "requester_tenant": 2,
+      "owner_tenant": 1,
+      "action": "new-console",
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/55099440-c47b-4f81-afc5-7d8e740d14dc/console-sessions",
+      "status": 404,
+      "reason": "VM_NOT_FOUND",
+      "owner_before": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "owner_after": {
+        "status": 200,
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "20",
+        "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+        "observed_state": "Running",
+        "closing": false
+      },
+      "sg": {
+        "new_key_hashes": [],
+        "session_create_metrics_before": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "session_create_metrics_after": [
+          "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+        ],
+        "new_issue_attempts": 0,
+        "new_sessions": 0
+      }
+    }
+  ],
+  "lists": [
+    {
+      "tenant_id": 1,
+      "own_vm_present": true,
+      "foreign_vm_absent": true,
+      "visible_ids": [
+        "c41e610f-92e5-44cc-a2c3-06221de66bbb",
+        "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "e1b3403b-178c-40c2-a4d5-53a37756039c",
+        "db174e19-7269-42ff-9c22-57190c66535b"
+      ]
+    },
+    {
+      "tenant_id": 2,
+      "own_vm_present": true,
+      "foreign_vm_absent": true,
+      "visible_ids": [
+        "e3c11c5a-cf12-4630-a8f9-f907048ffdfc"
+      ]
+    }
+  ],
+  "vm_mutation_requests": 0,
+  "business_sql_writes": false,
+  "acl_pause": false,
+  "result": "PASS",
+  "native_before": [
+    {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+      }
+    },
+    {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+      }
+    }
+  ],
+  "owners_before": [
+    {
+      "status": 200,
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "20",
+      "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+      "observed_state": "Running",
+      "closing": false
+    },
+    {
+      "status": 200,
+      "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": "1",
+      "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+      "observed_state": "Running",
+      "closing": false
+    }
+  ],
+  "sg_before": {
+    "all_key_hashes": [
+      "512fd8b015a0b85b2e596796251238f5400954cfad23cd9ffb23fcdf21f75ff1",
+      "a80945632c3e4c54b32455e005b58805dee3d54977538e341664c316321f25b3",
+      "b59b6a883d91bfa8e71846fe159f8c2c77cc6743712c7016797051dc69cfa305",
+      "d41adf621b4e394b07e36409f89543f1ac88c4552837afde806f51a78dbe27dc"
+    ],
+    "vm_session_key_hashes": []
+  },
+  "owners_after": [
+    {
+      "status": 200,
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "20",
+      "last_operation_id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+      "observed_state": "Running",
+      "closing": false
+    },
+    {
+      "status": 200,
+      "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": "1",
+      "last_operation_id": "4ded9db7-6492-45d2-925a-1d551ed066c1",
+      "observed_state": "Running",
+      "closing": false
+    }
+  ],
+  "native_after": [
+    {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+      }
+    },
+    {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+      },
+      "vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+      }
+    }
+  ],
+  "sg_after": {
+    "all_key_hashes": [
+      "512fd8b015a0b85b2e596796251238f5400954cfad23cd9ffb23fcdf21f75ff1",
+      "a80945632c3e4c54b32455e005b58805dee3d54977538e341664c316321f25b3",
+      "b59b6a883d91bfa8e71846fe159f8c2c77cc6743712c7016797051dc69cfa305",
+      "d41adf621b4e394b07e36409f89543f1ac88c4552837afde806f51a78dbe27dc"
+    ],
+    "vm_session_key_hashes": []
+  },
+  "sg_total_delta": {
+    "new_key_hashes": [],
+    "session_create_metrics_before": [
+      "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+    ],
+    "session_create_metrics_after": [
+      "ani_session_create_total{mode=\"vnc\",result=\"success\"} 1"
+    ],
+    "new_issue_attempts": 0,
+    "new_sessions": 0
+  },
+  "source_owner_unchanged": true,
+  "native_uid_unchanged": true
+}

@@ -1,0 +1,228 @@
+{
+  "PG_calls": 0,
+  "calls": [
+    {
+      "exit_code": 0,
+      "label": "cluster"
+    },
+    {
+      "exit_code": 0,
+      "label": "a-vmi"
+    },
+    {
+      "exit_code": 0,
+      "label": "a-events"
+    },
+    {
+      "exit_code": 0,
+      "label": "b-vmi"
+    },
+    {
+      "exit_code": 0,
+      "label": "b-events"
+    },
+    {
+      "exit_code": 0,
+      "label": "two-nodes"
+    }
+  ],
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "cluster_writes": 0,
+  "finished_at": "2026-10-24T23:18:13.165638+00:00",
+  "guest_actions": 0,
+  "heavy_lock_released": true,
+  "host_ssh": 0,
+  "native_inventory_sha256": "53de73d6884bfe562d9f67cbee6277e97d3fad7dac49a72b6af0d02be44b0db1",
+  "new_pods": 0,
+  "nodes": {
+    "ani-01": {
+      "kubevirt_heartbeat_annotations": {
+        "kubevirt.io/heartbeat": "2026-10-24T23:17:04Z"
+      },
+      "ready": [
+        {
+          "lastHeartbeatTime": "2026-10-24T23:17:50Z",
+          "lastTransitionTime": "2026-10-10T05:53:29Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "selector_keys_absent": [
+        "kubevirt.io/heartbeat"
+      ],
+      "selector_related_labels": {
+        "kubernetes.io/hostname": "ani-01",
+        "kubevirt.io/schedulable": "true"
+      },
+      "taints": [],
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "unschedulable": false
+    },
+    "ani-02": {
+      "kubevirt_heartbeat_annotations": {
+        "kubevirt.io/heartbeat": "2026-10-24T23:17:04Z"
+      },
+      "ready": [
+        {
+          "lastHeartbeatTime": "2026-10-24T23:14:39Z",
+          "lastTransitionTime": "2026-10-21T09:50:42Z",
+          "message": "kubelet is posting ready status",
+          "reason": "KubeletReady",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "selector_keys_absent": [
+        "kubevirt.io/heartbeat"
+      ],
+      "selector_related_labels": {
+        "kubernetes.io/hostname": "ani-02",
+        "kubevirt.io/schedulable": "true"
+      },
+      "taints": [],
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "unschedulable": false
+    }
+  },
+  "result": "PASS_EXACT_TWO_VMI_SCHEDULING_METADATA_READONLY",
+  "started_at": "2026-10-24T23:18:12.338909+00:00",
+  "vms": {
+    "a": {
+      "affinity": {},
+      "events": [
+        {
+          "count": 9,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:07:05Z",
+          "involved_object_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8",
+          "last_timestamp": "2026-10-24T23:08:23Z",
+          "message": "PVC tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-46e9f35d-0551-566f-beb7-0988dd3dfa4c does not exist, waiting for it to appear",
+          "reason": "FailedPvcNotFound",
+          "reporting_component": "virtualmachine-controller",
+          "source": {
+            "component": "virtualmachine-controller"
+          },
+          "type": "Normal",
+          "uid": "faed2c6e-d307-4871-aaf5-e93193cacda6"
+        },
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:08:54Z",
+          "involved_object_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8",
+          "last_timestamp": "2026-10-24T23:08:54Z",
+          "message": "Created virtual machine pod virt-launcher-vm-ba329ec8-ffe3-4883-a499-48c16e1ef911-w86ld",
+          "reason": "SuccessfulCreate",
+          "reporting_component": "virtualmachine-controller",
+          "source": {
+            "component": "virtualmachine-controller"
+          },
+          "type": "Normal",
+          "uid": "ad9a177d-cc1d-4501-8c4a-3cc1ff37585b"
+        },
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:09:10Z",
+          "involved_object_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8",
+          "last_timestamp": "2026-10-24T23:09:10Z",
+          "message": "VirtualMachineInstance defined.",
+          "reason": "Created",
+          "reporting_component": "virt-handler",
+          "source": {
+            "component": "virt-handler",
+            "host": "ani-02"
+          },
+          "type": "Normal",
+          "uid": "656552f0-5aac-46a3-86be-1b1f69be5127"
+        },
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:09:10Z",
+          "involved_object_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8",
+          "last_timestamp": "2026-10-24T23:09:10Z",
+          "message": "VirtualMachineInstance started.",
+          "reason": "Started",
+          "reporting_component": "virt-handler",
+          "source": {
+            "component": "virt-handler",
+            "host": "ani-02"
+          },
+          "type": "Normal",
+          "uid": "3ec648b0-5891-4bf0-bc6c-fce404290085"
+        }
+      ],
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "node": "ani-02",
+      "node_selector": {},
+      "phase": "Running",
+      "scheduler_name": null,
+      "tolerations": [],
+      "vm_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+      "vmi_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8"
+    },
+    "b": {
+      "affinity": {},
+      "events": [
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:11:45Z",
+          "involved_object_uid": "cf007080-6b6d-4375-b294-fdbfe775b225",
+          "last_timestamp": "2026-10-24T23:11:45Z",
+          "message": "Created virtual machine pod virt-launcher-vm-e43cf28a-ca4e-4115-af66-a14332c827cf-s98zq",
+          "reason": "SuccessfulCreate",
+          "reporting_component": "virtualmachine-controller",
+          "source": {
+            "component": "virtualmachine-controller"
+          },
+          "type": "Normal",
+          "uid": "f124f8d8-7dc8-44bd-8975-51bd6548a3df"
+        },
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:12:10Z",
+          "involved_object_uid": "cf007080-6b6d-4375-b294-fdbfe775b225",
+          "last_timestamp": "2026-10-24T23:12:10Z",
+          "message": "VirtualMachineInstance defined.",
+          "reason": "Created",
+          "reporting_component": "virt-handler",
+          "source": {
+            "component": "virt-handler",
+            "host": "ani-02"
+          },
+          "type": "Normal",
+          "uid": "c25784b0-70f8-4b34-b538-0a9d06792c49"
+        },
+        {
+          "count": 1,
+          "event_time": null,
+          "first_timestamp": "2026-10-24T23:12:10Z",
+          "involved_object_uid": "cf007080-6b6d-4375-b294-fdbfe775b225",
+          "last_timestamp": "2026-10-24T23:12:10Z",
+          "message": "VirtualMachineInstance started.",
+          "reason": "Started",
+          "reporting_component": "virt-handler",
+          "source": {
+            "component": "virt-handler",
+            "host": "ani-02"
+          },
+          "type": "Normal",
+          "uid": "34396bad-041f-47fe-a16b-b00e8b42b925"
+        }
+      ],
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "node": "ani-02",
+      "node_selector": {},
+      "phase": "Running",
+      "scheduler_name": null,
+      "tolerations": [],
+      "vm_id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "vmi_uid": "cf007080-6b6d-4375-b294-fdbfe775b225"
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "observed_at": "2026-10-24T02:57:05.605777+00:00",
+  "objects": {
+    "eip": {
+      "ref": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-01a168ce-public-eip",
+        "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+        "resourceVersion": "61106189",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "ipAddress": "172.16.102.193",
+        "ipVersion": "IPv4",
+        "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+      },
+      "status": {
+        "boundResource": {
+          "disabled": false,
+          "nodeName": "ani-02",
+          "observedGeneration": 1,
+          "resource": "vm-mvp-01a168ce-public-snat",
+          "resourceType": "Snat",
+          "vpc": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vpc-e413becb1f4a46468f058e32f33a6305"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-24T02:54:03Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-24T02:54:03Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+        "phase": "Bound"
+      }
+    },
+    "snat": {
+      "ref": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-01a168ce-public-snat",
+        "uid": "29d922a5-1f3c-4a05-9522-ea86a33d89ad",
+        "resourceVersion": "61106191",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "cidrs": [
+          "10.83.1.0/24"
+        ],
+        "disable": false,
+        "eip": "vm-mvp-01a168ce-public-eip",
+        "vpc": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vpc-e413becb1f4a46468f058e32f33a6305"
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-24T02:54:04Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "eipAddress": "172.16.102.193",
+        "phase": "Bound"
+      }
+    }
+  },
+  "events": {
+    "eip": [],
+    "snat": []
+  },
+  "controller_logs": [
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-controller-77cf4dfdbc-b9rcj",
+        "uid": "672bc56b-a2de-4259-a00b-aad518667b0f",
+        "resourceVersion": "60386219",
+        "deletionTimestamp": ""
+      },
+      "exit_code": 0,
+      "since": "2026-10-24T02:54:20.699935Z",
+      "matching_lines": []
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-controller-77cf4dfdbc-bksfw",
+        "uid": "a42ec5d0-cc00-49e9-b21a-fae75f9c037f",
+        "resourceVersion": "59122842",
+        "deletionTimestamp": ""
+      },
+      "exit_code": 0,
+      "since": "2026-10-24T02:54:20.699935Z",
+      "matching_lines": []
+    },
+    {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-controller-77cf4dfdbc-c4kwl",
+        "uid": "92fb0d38-ef01-4f6b-a869-254d4fba740f",
+        "resourceVersion": "58312482",
+        "deletionTimestamp": ""
+      },
+      "exit_code": 0,
+      "since": "2026-10-24T02:54:20.699935Z",
+      "matching_lines": []
+    }
+  ],
+  "ovn": {
+    "lr-route-list": {
+      "exit_code": 0,
+      "stdout": "IPv4 Routes\nRoute Table <main>:\n          172.16.101.0/24                100.65.0.2 dst-ip intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\n            100.64.0.0/17                100.65.0.2 dst-ip intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\n             10.16.0.0/16                100.65.0.2 dst-ip intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\n             10.96.0.0/16                100.65.0.2 dst-ip intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\n                0.0.0.0/0              100.65.128.2 dst-ip public.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\n",
+      "stderr": ""
+    },
+    "lr-policy-list": {
+      "exit_code": 0,
+      "stdout": "Routing Policies\n     20024 outport == \"public.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\" && ip4.src == 10.83.1.0/24         reroute              100.65.128.5\n         1 outport == \"intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\" && ip4            drop                          \n         1 outport == \"public.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp\" && ip4            drop                          \n",
+      "stderr": ""
+    },
+    "lr-nat-list": {
+      "exit_code": 0,
+      "stdout": "TYPE             GATEWAY_PORT          MATCH                 EXTERNAL_IP        EXTERNAL_PORT    LOGICAL_IP          EXTERNAL_MAC         LOGICAL_PORT\nsnat             public.uplink.tena                          172.16.102.193                      10.83.1.0/24\n",
+      "stderr": ""
+    },
+    "router-ports": {
+      "exit_code": 0,
+      "stdout": "51193d73-d52c-4262-b4b8-ff4771136a13 (intranet.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp)\nca4a9d0d-7984-49a7-bb8a-0214bd2f1547 (public.uplink.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305.lrp)\n5d633add-6dfa-46dc-9a8e-9fc48fff884a (vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.subnet-fbd064f6018040dab6a8d909b7afb87f)\n",
+      "stderr": ""
+    }
+  },
+  "mutations": 0,
+  "scope": "only task tenant1 public egress; no native/OVN/KCN/config changes",
+  "vpc": {
+    "ref": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vpc-e413becb1f4a46468f058e32f33a6305",
+      "uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+      "resourceVersion": "61106192",
+      "deletionTimestamp": ""
+    },
+    "spec": {
+      "allowedNamespaces": {
+        "from": "Same"
+      },
+      "cidrBlock": "10.83.0.0/16",
+      "ipVersion": "IPv4"
+    },
+    "status": {
+      "boundResources": {
+        "chassisNode": "ani-02",
+        "router": "vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305"
+      },
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Valid",
+          "status": "True",
+          "type": "Valid"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Initialized",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "eips": {
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-01a168ce-public-eip": "172.16.102.193"
+      },
+      "observedGeneration": 1,
+      "subnets": {
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f": "10.83.1.0/24"
+      }
+    }
+  },
+  "ovn_pod": {
+    "namespace": "kcn-system",
+    "name": "kcn-ovn-central-85dc666849-5dpwf",
+    "uid": "b899a84b-a7c9-4d59-964c-5b317e6336fd",
+    "resourceVersion": "50044210",
+    "deletionTimestamp": ""
+  },
+  "fedora_same_target_once": {
+    "request_count": 1,
+    "exit_code": 0,
+    "timing": "200 1.1.1.1 0.001107 0.463536",
+    "stderr": "",
+    "elapsed_seconds": 0.517,
+    "tls_verification": "DEFAULT_ENABLED",
+    "guest_acceptance": false
+  }
+}

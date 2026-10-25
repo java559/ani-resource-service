@@ -1,0 +1,61 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "result": "PASS",
+  "at": "2026-10-23T19:18:00.405854+00:00",
+  "disks": [
+    {
+      "label": "data3",
+      "logical_disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "marker": "VM_MVP_V3_DATA3_A_01a168ce",
+      "pvc": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+        "kind": "PersistentVolumeClaim"
+      },
+      "pv": {
+        "namespace": "",
+        "name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+        "uid": "7d05469e-ea85-46ab-b534-c94408f34663",
+        "kind": "PersistentVolume"
+      },
+      "original_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792777715149274616.json",
+      "cold_start_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792782428654499341.json",
+      "same_pvc_pv_uids": true,
+      "marker_rewritten": false
+    },
+    {
+      "label": "data4",
+      "logical_disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "marker": "VM_MVP_V3_DATA4_A_01a168ce",
+      "pvc": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+        "kind": "PersistentVolumeClaim"
+      },
+      "pv": {
+        "namespace": "",
+        "name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+        "uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b",
+        "kind": "PersistentVolume"
+      },
+      "original_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792777763388998726.json",
+      "cold_start_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792782518856884984.json",
+      "same_pvc_pv_uids": true,
+      "marker_rewritten": false
+    }
+  ],
+  "browser": {
+    "screenshot": "/home/chabking/.codex/visualizations/2026/10/23/01a168ce-29f8-77b2-aa8e-b980545b6113/vm-linux-v3-cold-disks-started.png",
+    "root_marker": "vm-mvp-01a168ce-linux-v3-browser",
+    "boot_id": "b6345c74-f82c-4dc9-8db8-dd872a9a6d76",
+    "instance_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "ipv4": "10.83.1.7",
+    "root_marker_and_both_disk_serials_observed": true,
+    "original_account_password_login": true,
+    "dns_http": "NOT_RUN_PENDING_NETWORK_APPROVAL"
+  }
+}

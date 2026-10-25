@@ -1,0 +1,92 @@
+{
+  "identity": {
+    "pod": {
+      "namespace": "ani-system",
+      "name": "compute-cpu-8c16g-20261020-predictor-767f954db4-lxvkw",
+      "uid": "33e798f9-76a5-4bc7-a7a7-dd8ba80f7d89",
+      "resourceVersion": "52079932",
+      "deletionTimestamp": ""
+    },
+    "container": "kserve-container",
+    "image": "172.16.101.10:30003/ani-platform-images/vllm-openai-cpu@sha256:827ef38187f9b52f2bb838695ef815ec5b65f4bf3e4c061b002b2b0a19cb0701",
+    "node": "ani-02",
+    "pod_ip": "10.16.0.180",
+    "vnic": {
+      "namespace": "ani-system",
+      "name": "auto-compute-cpu-8c16g-20261020-predictor-7-vnic-w6hwc",
+      "uid": "318cdca2-efa1-4172-8da0-61e458213b3f",
+      "resourceVersion": "52061959",
+      "deletionTimestamp": ""
+    },
+    "vnic_spec": {
+      "macAddress": "fa:00:54:69:84:78",
+      "subnet": "kcn-system/kcn-default",
+      "type": "VETH"
+    },
+    "vnic_gateway": "kcn-system/kcn-cluster",
+    "vpc": {
+      "namespace": "kcn-system",
+      "name": "kcn-cluster",
+      "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+      "resourceVersion": "54374158",
+      "deletionTimestamp": ""
+    },
+    "eip": {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+        "resourceVersion": "54374155",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "ipAddress": "172.16.102.192",
+        "ipVersion": "IPv4",
+        "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+      },
+      "bound_node": "ani-01"
+    },
+    "snat": {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+        "resourceVersion": "54374157",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "disable": false,
+        "eip": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "vpc": "kcn-cluster"
+      }
+    }
+  },
+  "model_pod": {
+    "namespace": "ani-system",
+    "name": "ani-model-service-7544d6db94-lgft8",
+    "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0",
+    "resourceVersion": "59122444",
+    "deletionTimestamp": ""
+  },
+  "is_model_business_container": false,
+  "scope": "existing defaultVPC .192 egress control only",
+  "tool_exit": 0,
+  "tool_stdout": "Python 3.12.15\n",
+  "tool_stderr": "",
+  "request_attempts": 1,
+  "mutations": 0,
+  "result": "FAIL_SAME_TARGET_HTTPS",
+  "sent_at": "2026-10-24T03:43:46.091922+00:00",
+  "exec_exit_code": 0,
+  "exec_stderr": "",
+  "request": {
+    "url": "https://1.1.1.1/cdn-cgi/trace",
+    "tls_verify": true,
+    "request_attempts": 1,
+    "result": "FAIL_SAME_TARGET_HTTPS",
+    "error_type": "TimeoutError",
+    "error": "timed out",
+    "total_seconds": 4.037887
+  },
+  "post_identity_unchanged": true
+}

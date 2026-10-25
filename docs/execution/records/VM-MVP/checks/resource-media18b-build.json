@@ -1,0 +1,18 @@
+{
+  "result": "CODE_PASS_LIVE_NOT_RUN",
+  "base_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-18",
+  "source_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-18b",
+  "overlay_files": {
+    "internal/data/vm/media.go": "285da79d37d28daa239ff90e78b175955969f9598bda50202e946ab0eff864c3",
+    "internal/data/vm/media_test.go": "b0101e010bb9342fb879961b3b6b6090d767b0ca934720016f0d45a613b71a79"
+  },
+  "source_manifest_sha256": "e9955d7701014267c5ba8985beac91494db05fc5d745fcadf83f558a6bd0997a",
+  "file_count": 754,
+  "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18b",
+  "binary_sha256": "dcd745c912972b3ff8fe06ea75ad63e46417d3dfaac735ee09214bed41a40850",
+  "go_work": "task validation workspace only; no formal dependency publication",
+  "red_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-media18b-red.log",
+  "green_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-media18b-green.log",
+  "runtime_replaced": false,
+  "live_retest": "NOT_RUN"
+}

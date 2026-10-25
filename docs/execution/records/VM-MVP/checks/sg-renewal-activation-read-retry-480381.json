@@ -1,0 +1,11 @@
+{
+  "result": "READ_GUARD_FAILED_BEFORE_ACTIVATION_STARTED_OR_TERM",
+  "old_pid": 480381,
+  "old_startticks": 76221862,
+  "binary_environment_unchanged": true,
+  "activation_outcome_absent": true,
+  "staged_receipt_unchanged": true,
+  "failure": "bounded identity GET failed in prefix before OUT.write_text and activation try block",
+  "no_business_mutations": true,
+  "next_action": "one re-observation through same existing activation guards; do not skip UID checks"
+}

@@ -1,0 +1,19 @@
+{
+  "vm": {
+    "uid": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+    "template_subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+  },
+  "vmi": {
+    "uid": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+    "subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+  },
+  "pods": [
+    {
+      "name": "virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf",
+      "uid": "df1cd6f6-3d29-4483-b4dc-168229bfc890",
+      "subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+      "vnic": null
+    }
+  ],
+  "vnics": []
+}

@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-25T03:25:58.569760+00:00",
+  "result": "PASS_ALL_FOUR_POST_ONLINE_RESTORE_NATIVE_HOT_STAGES_GUEST_READBACK_NOT_RUN",
+  "runner_sha256": "66a256cf4b7fb029ad422db4bf652beb79a759c4a917f11801deb0f7b9edfd45",
+  "stages": [
+    {
+      "step": "hot-detach-d3",
+      "operation_id": "feac0873-0e34-41ea-980a-496c35b63c67",
+      "version": "19",
+      "observed_state": "Running",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-hotloop-02/verified-hot-detach-d3.json",
+      "receipt_sha256": "377148a1aaf871fa38a7a006391f910da3e1eeb2c1e1246b1b0ef9f972f8a1f1",
+      "same_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "same_launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+      "session_revoked": true
+    },
+    {
+      "step": "hot-detach-d4",
+      "operation_id": "dda6d49e-dbd0-402e-b770-eaf57a829b32",
+      "version": "20",
+      "observed_state": "Running",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-hotloop-02/verified-hot-detach-d4.json",
+      "receipt_sha256": "dc1b6cb4741f44f512894ddf95d457c012cbeca9dc520c9a0de4ba790235f8b3",
+      "same_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "same_launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+      "session_revoked": true
+    },
+    {
+      "step": "hot-attach-d3",
+      "operation_id": "656e4704-0293-4e95-b5b3-0a07e2decba3",
+      "version": "21",
+      "observed_state": "Running",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-hotloop-02/verified-hot-attach-d3.json",
+      "receipt_sha256": "1346ad0dbcbcc31d8ed7742cc87144ed5d6c3aca29a0be21ff599bb279c2882b",
+      "same_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "same_launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+      "session_revoked": true
+    },
+    {
+      "step": "hot-attach-d4",
+      "operation_id": "af4ddfaa-1200-417a-bd6a-d5ff11996081",
+      "version": "22",
+      "observed_state": "Running",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-hotloop-02/verified-hot-attach-d4.json",
+      "receipt_sha256": "a003c30d2d09add8481249bf96276f89ae093d20224448770982989929fabaf6",
+      "same_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "same_launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+      "session_revoked": true
+    }
+  ],
+  "final_version": "22",
+  "final_operation_id": "af4ddfaa-1200-417a-bd6a-d5ff11996081",
+  "all_business_commands_send_once": true,
+  "original_D3_operation_not_replayed": true,
+  "no_unknown_ack": true,
+  "guest_commands": 0,
+  "new_snapshots": 0,
+  "power_operations": 0,
+  "service_changes": 0,
+  "guest_online_three_A": "ROOT_NEXT_ACTUAL_ACTION"
+}

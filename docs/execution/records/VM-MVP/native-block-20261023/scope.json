@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-23T13:25:53.132483+00:00",
+  "host": "fedora",
+  "namespace": "vm-mvp-probe-01a168ce",
+  "nodes": {
+    "ani-01": "172.16.101.10",
+    "ani-02": "172.16.101.11",
+    "ani-03": "172.16.101.12"
+  },
+  "protected": [
+    "every object outside probe namespace",
+    "all shared StorageClasses/feature gates/runtime/KCN",
+    "original user image files"
+  ],
+  "purpose": "native Block environment probes only",
+  "namespace_existed": false
+}

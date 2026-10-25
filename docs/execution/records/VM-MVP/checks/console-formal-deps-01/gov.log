@@ -1,0 +1,45 @@
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go mod download -json github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f
+{
+	"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+	"Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+	"Info": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.info",
+	"GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+	"Zip": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.zip",
+	"Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+	"Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+	"GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8=",
+	"Origin": {
+		"VCS": "git",
+		"URL": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+		"Subdir": "api/vm/console",
+		"Hash": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b"
+	}
+}
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go list -m -json github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console
+{
+	"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+	"Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+	"Time": "2026-10-23T18:54:14Z",
+	"Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+	"GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+	"GoVersion": "1.26.9",
+	"Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+	"GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+}
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go build -mod=readonly ./app/admin/service/internal/data ./app/admin/service/internal/service
+go: downloading github.com/zhangzhe-ctrl/ani-resource-service v0.0.0-20261022081320-13fa2b465960
+go: downloading github.com/zhangzhe-ctrl/ani-session-gateway/api v0.1.1-0.20261013075651-d889f9490b84
+../../../cache/go-mod/github.com/zhangzhe-ctrl/ani-modeldev-service@v0.0.0-20261021184454-44188466290f/contract/cpup01/protobuf/plan.go:8:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/image_client.go:10:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/instance_client.go:8:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/instance_client.go:9:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/network_client.go:11:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/vm_client.go:6:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it
+app/admin/service/internal/data/resource_clients.go:9:2: github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261022081320-13fa2b465960: invalid version: git fetch --unshallow -f --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:
+	致命错误：shallow file has changed since we read it

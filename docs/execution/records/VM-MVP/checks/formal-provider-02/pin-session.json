@@ -1,0 +1,104 @@
+{
+  "at": "2026-10-24T07:44:34.966280+00:00",
+  "phase": "pin",
+  "repo": "session",
+  "host": "fedora",
+  "gowork": "off",
+  "private_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "steps": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "edit",
+        "-require=github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244",
+        "-dropreplace=github.com/zhangzhe-ctrl/ani-session-gateway/api"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy"
+      ],
+      "exit_code": 0,
+      "output": "go: downloading k8s.io/api v0.34.3\ngo: downloading k8s.io/apimachinery v0.34.3\ngo: downloading github.com/prometheus/client_golang v1.23.2\ngo: downloading go.opentelemetry.io/otel v1.46.0\ngo: downloading go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.46.0\ngo: downloading go.opentelemetry.io/otel/sdk v1.46.0\ngo: downloading go.opentelemetry.io/otel/trace v1.46.0\ngo: downloading go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.46.0\ngo: downloading k8s.io/client-go v0.34.3\ngo: downloading github.com/coder/websocket v1.8.15\ngo: downloading github.com/go-chi/chi/v5 v5.3.2\ngo: downloading github.com/redis/go-redis/v9 v9.22.0\ngo: downloading google.golang.org/grpc v1.83.2\ngo: downloading kubevirt.io/api v0.0.0-20260420171350-acdbd8fddc9c\ngo: downloading kubevirt.io/client-go v1.8.2\ngo: downloading github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal v0.0.0-20261013075021-0937f5aa9c6c\ngo: downloading github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console v0.0.0-20261023185414-0a53b99c8d9f\ngo: downloading google.golang.org/protobuf v1.36.12\ngo: downloading github.com/alicebob/miniredis/v2 v2.39.0\ngo: downloading github.com/gogo/protobuf v1.3.2\ngo: downloading sigs.k8s.io/randfill v1.0.0\ngo: downloading k8s.io/utils v0.0.0-20251002143259-bc988d571ff4\ngo: downloading sigs.k8s.io/yaml v1.6.0\ngo: downloading github.com/beorn7/perks v1.0.1\ngo: downloading github.com/cespare/xxhash/v2 v2.3.0\ngo: downloading github.com/prometheus/client_model v0.6.2\ngo: downloading github.com/prometheus/common v0.66.1\ngo: downloading github.com/google/go-cmp v0.7.0\ngo: downloading github.com/prometheus/procfs v0.16.1\ngo: downloading golang.org/x/sys v0.48.0\ngo: downloading go.uber.org/goleak v1.3.0\ngo: downloading github.com/klauspost/compress v1.18.0\ngo: downloading github.com/go-logr/logr v1.4.4\ngo: downloading go.opentelemetry.io/otel/metric v1.46.0\ngo: downloading github.com/go-logr/stdr v1.2.2\ngo: downloading github.com/stretchr/testify v1.12.1\ngo: downloading github.com/google/uuid v1.6.0\ngo: downloading go.opentelemetry.io/otel/sdk/metric v1.46.0\ngo: downloading go.opentelemetry.io/proto/otlp v1.11.0\ngo: downloading google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688\ngo: downloading k8s.io/klog/v2 v2.130.1\ngo: downloading github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822\ngo: downloading golang.org/x/net v0.60.0\ngo: downloading github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674\ngo: downloading github.com/bsm/ginkgo/v2 v2.12.0\ngo: downloading github.com/bsm/gomega v1.27.10\ngo: downloading go.uber.org/atomic v1.11.0\ngo: downloading github.com/spf13/pflag v1.0.10\ngo: downloading golang.org/x/term v0.46.0\ngo: downloading k8s.io/apiextensions-apiserver v0.34.3\ngo: downloading kubevirt.io/containerized-data-importer-api v1.64.0\ngo: downloading github.com/onsi/ginkgo/v2 v2.21.0\ngo: downloading github.com/onsi/gomega v1.35.1\ngo: downloading github.com/onsi/ginkgo v1.16.4\ngo: downloading github.com/yuin/gopher-lua v1.1.1\ngo: downloading sigs.k8s.io/structured-merge-diff/v6 v6.3.0\ngo: downloading gopkg.in/inf.v0 v0.9.1\ngo: downloading sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730\ngo: downloading go.yaml.in/yaml/v2 v2.4.3\ngo: downloading go.yaml.in/yaml/v3 v3.0.5\ngo: downloading github.com/kylelemons/godebug v1.1.0\ngo: downloading go.opentelemetry.io/auto/sdk v1.2.1\ngo: downloading github.com/cenkalti/backoff/v5 v5.0.3\ngo: downloading github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0\ngo: downloading github.com/fxamacker/cbor/v2 v2.9.0\ngo: downloading golang.org/x/oauth2 v0.36.0\ngo: downloading golang.org/x/time v0.9.0\ngo: downloading github.com/stretchr/objx v0.5.2\ngo: downloading k8s.io/kube-openapi v0.0.0-20250710124328-f3f2b991d03b\ngo: downloading github.com/moby/spdystream v0.5.0\ngo: downloading github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5\ngo: downloading github.com/zeebo/xxh3 v1.1.0\ngo: downloading github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc\ngo: downloading kubevirt.io/controller-lifecycle-operator-sdk/api v0.2.4\ngo: downloading github.com/golang/protobuf v1.5.4\ngo: downloading github.com/go-kit/log v0.2.1\ngo: downloading github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2\ngo: downloading gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c\ngo: downloading github.com/json-iterator/go v1.1.12\ngo: downloading google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688\ngo: downloading gopkg.in/evanphx/json-patch.v4 v4.12.0\ngo: downloading golang.org/x/text v0.42.0\ngo: downloading github.com/x448/float16 v0.8.4\ngo: downloading github.com/google/gnostic-models v0.7.0\ngo: downloading github.com/go-openapi/swag v0.28.0\ngo: downloading github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f\ngo: downloading github.com/klauspost/cpuid/v2 v2.2.10\ngo: downloading github.com/openshift/custom-resource-status v1.1.2\ngo: downloading github.com/go-logfmt/logfmt v0.6.0\ngo: downloading gopkg.in/yaml.v3 v3.0.1\ngo: downloading github.com/kr/pretty v0.3.1\ngo: downloading github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd\ngo: downloading github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee\ngo: downloading github.com/pkg/errors v0.9.1\ngo: downloading github.com/go-openapi/jsonreference v1.0.0\ngo: downloading github.com/emicklei/go-restful/v3 v3.12.2\ngo: downloading github.com/go-openapi/jsonpointer v1.0.0\ngo: downloading github.com/go-openapi/swag/cmdutils v0.28.0\ngo: downloading github.com/go-openapi/swag/conv v0.28.0\ngo: downloading github.com/go-openapi/swag/fileutils v0.28.0\ngo: downloading github.com/go-openapi/swag/jsonutils v0.28.0\ngo: downloading github.com/go-openapi/swag/loading v0.28.0\ngo: downloading github.com/go-openapi/swag/mangling v0.28.0\ngo: downloading github.com/go-openapi/swag/netutils v0.28.0\ngo: downloading github.com/go-openapi/swag/stringutils v0.28.0\ngo: downloading github.com/go-openapi/swag/typeutils v0.28.0\ngo: downloading github.com/go-openapi/swag/yamlutils v0.28.0\ngo: downloading github.com/go-openapi/testify/v2 v2.6.0\ngo: downloading gonum.org/v1/gonum v0.17.0\ngo: downloading github.com/go-task/slim-sprig/v3 v3.0.0\ngo: downloading github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572\ngo: downloading golang.org/x/tools v0.49.0\ngo: downloading github.com/kr/text v0.2.0\ngo: downloading github.com/rogpeppe/go-internal v1.14.1\ngo: downloading github.com/go-openapi/swag/jsonutils/fixtures_test v0.28.0\ngo: downloading github.com/go-openapi/testify/enable/yaml/v2 v2.6.0\ngo: downloading github.com/google/pprof v0.0.0-20241029153458-d1b30febd7db\ngo: downloading github.com/go-openapi/swag/pools v0.28.0\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-mod=readonly",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-session-gateway/api"
+      ],
+      "exit_code": 0,
+      "output": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-session-gateway/api\",\n\t\"Version\": \"v0.1.1-0.20261024051540-811cc3839244\",\n\t\"Time\": \"2026-10-24T05:15:40Z\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-session-gateway/api/@v/v0.1.1-0.20261024051540-811cc3839244.mod\",\n\t\"GoVersion\": \"1.26.9\",\n\t\"Sum\": \"h1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU=\",\n\t\"GoModSum\": \"h1:UkqQImej+6VSty5W5AZv55scFHNrZR1qoTDy/8IdVbA=\"\n}\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-mod=readonly",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console"
+      ],
+      "exit_code": 0,
+      "output": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console\",\n\t\"Version\": \"v0.0.0-20261023185414-0a53b99c8d9f\",\n\t\"Time\": \"2026-10-23T18:54:14Z\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod\",\n\t\"GoVersion\": \"1.26.9\",\n\t\"Sum\": \"h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=\",\n\t\"GoModSum\": \"h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8=\"\n}\n"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "verify"
+      ],
+      "exit_code": 0,
+      "output": "all modules verified\n"
+    }
+  ],
+  "candidate_processes_changed": false,
+  "business_api_calls": 0,
+  "formal_modules": [
+    {
+      "Path": "github.com/zhangzhe-ctrl/ani-session-gateway/api",
+      "Version": "v0.1.1-0.20261024051540-811cc3839244",
+      "Time": "2026-10-24T05:15:40Z",
+      "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-session-gateway/api@v0.1.1-0.20261024051540-811cc3839244",
+      "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-session-gateway/api/@v/v0.1.1-0.20261024051540-811cc3839244.mod",
+      "GoVersion": "1.26.9",
+      "Sum": "h1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU=",
+      "GoModSum": "h1:UkqQImej+6VSty5W5AZv55scFHNrZR1qoTDy/8IdVbA="
+    },
+    {
+      "Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+      "Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+      "Time": "2026-10-23T18:54:14Z",
+      "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+      "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+      "GoVersion": "1.26.9",
+      "Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+      "GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+    }
+  ],
+  "result": "PASS_EXACT_PIN_STRICT_TIDY_NO_REPLACE",
+  "non_mod_source_unchanged": true,
+  "outputs": {
+    "go.mod": "3984133143b4e19868776da1630bb51f0472bcde52310a9487efb4b8e8af26c8",
+    "go.sum": "c111fd5b9881d15fe56895e92fd72046b7b4cce7aee3be58122973c41e804062"
+  },
+  "elapsed_seconds": 20.747
+}

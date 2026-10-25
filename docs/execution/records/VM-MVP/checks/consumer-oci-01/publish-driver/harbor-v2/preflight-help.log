@@ -1,0 +1,12 @@
+usage: preflight.py [-h] [--execute-readonly-authorized]
+                    --approved-plan-sha256 APPROVED_PLAN_SHA256
+                    --approved-publisher-sha256 APPROVED_PUBLISHER_SHA256
+
+Project one approved existing Harbor identity privately; read scopes/tags
+only.
+
+options:
+  -h, --help            show this help message and exit
+  --execute-readonly-authorized
+  --approved-plan-sha256 APPROVED_PLAN_SHA256
+  --approved-publisher-sha256 APPROVED_PUBLISHER_SHA256

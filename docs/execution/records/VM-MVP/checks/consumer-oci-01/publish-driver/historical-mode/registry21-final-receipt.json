@@ -1,0 +1,21 @@
+{
+  "state": "TAG_DIGEST_CONFIG_READBACK_PASS",
+  "immutable_ref": "172.16.101.10:5000/ani/modeldev-accelerator-owner-v21@sha256:c78ee7451e1ff046793eb600b2cf16715d159b262ed13097f4926c0463109d51",
+  "source_commit": "faa0b9e9c06ec2a961e3d777ff5abebc0603a031",
+  "source_tree": "07f7b3b775aae50abb77b4a0b3c8ba6239af5b31",
+  "source": "oci-archive:/home/chabking/workspace/modeldev-execution-v2.1-20261022-01a15f47/resume-core-integration-20261022/acc-attempt-read-scope-20261023/image/candidate.oci.tar",
+  "config_digest": "sha256:dea46f85ef7817f9fde007c16a7728145a3e4c11ac1f6d726966fe803171416c",
+  "rootfs_diffids": [
+    "sha256:574c6db657af082d59a3432cf54d49c606385bfed1813bd40581180500fde392",
+    "sha256:6ea7c5ca81ec67a0ebf9ebe0b5d131b42c554d05bd36f338421c646f2974c578",
+    "sha256:e1b6d6a16a195dee75d28a625f9298d29fd7f2e23ecaa1d0dad6955efc78f3a4"
+  ],
+  "registry_window": "21",
+  "registry_readonly_restore_pending": false,
+  "at": "2026-10-22T20:03:10.535940+00:00",
+  "readonly_restored_at": "2026-10-22T20:03:09.565444+00:00",
+  "readonly_restore_receipt_sha256": "29d0609856ef402848a9be67682a1b8daaea267c883b440a855270ee1acd3d16",
+  "publisher_completed_before_close_by_root_tool_sequence": true,
+  "timestamps_preserve_original_host_clocks": true,
+  "finalized_at": "2026-10-22T20:04:01.064673+00:00"
+}

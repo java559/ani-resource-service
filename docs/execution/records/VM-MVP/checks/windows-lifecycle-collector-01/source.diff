@@ -1,0 +1,186 @@
+--- /home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/windows-lifecycle-collector-01/before.py	2026-10-24 16:00:29.838548066 +0800
++++ /home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service/scripts/vm-product-windows-lifecycle.py	2026-10-24 16:07:10.988309985 +0800
+@@ -176,7 +176,30 @@
+         storage = []
+         original = json.loads((RUN / 'evidence/product-windows2025-iso-native.json').read_text())
+         names = {p['ref']['name'] for p in original['pvcs']}
+-        names.update('vd-' + d['diskId'] for d in disks if d['role'] == 'data')
++        sql = "SELECT record FROM vm.disks WHERE tenant_id='" + TENANT + "' AND vm_id='" + VM + "' ORDER BY disk_id;"
++        records = {}
++        for raw in self.g['psql']('postgres', sql, database='vm_resource_candidate_01a168ce').splitlines():
++            record = json.loads(raw)
++            if not record['Tombstone']:
++                assert record['ID'] not in records
++                records[record['ID']] = record
++        current_refs, disk_names = {}, {}
++        for disk in disks:
++            record = records[disk['diskId']]
++            assert (record['Role'], record['Serial'], record['Attached']) == (disk['role'], disk['serial'], disk['attached'])
++            for physical in (record['PVC'], record['DV']):
++                if physical['Name']:
++                    assert physical['Namespace'] == NS
++            name = record['PVC']['Name'] or record['DV']['Name']
++            assert name and name not in current_refs, 'logical disk has no unique durable physical mapping'
++            current_refs[name], disk_names[disk['diskId']] = record, name
++            names.add(name)
++            volume = next((v for v in template.get('volumes', []) if v['name'] == disk['volumeName']), None)
++            if volume is not None:
++                if 'dataVolume' in volume:
++                    assert volume['dataVolume']['name'] == record['DV']['Name']
++                else:
++                    assert volume.get('persistentVolumeClaim', {}).get('claimName') == name
+         for volume in template.get('volumes', []):
+             if 'dataVolume' in volume:
+                 names.add(volume['dataVolume']['name'])
+@@ -184,9 +207,22 @@
+                 names.add(volume['persistentVolumeClaim']['claimName'])
+         for name in sorted(names):
+             pvc = get('pvc', name, NS, optional=True)
++            record = current_refs.get(name)
++            if record:
++                assert pvc is not None, 'durable disk PVC is missing'
+             if pvc is None:
+                 continue
+-            dv = get('dv', name, NS, optional=True)
++            if record:
++                dv_ref = record['DV']
++                dv = get('dv', dv_ref['Name'], NS) if dv_ref['Name'] else None
++                assert dv is None or owned(dv, 'VirtualMachine', VM_UID)
++                if dv_ref['UID']:
++                    assert dv and dv['metadata']['uid'] == dv_ref['UID']
++                if record['PVC']['UID']:
++                    assert pvc['metadata']['uid'] == record['PVC']['UID']
++                assert owned(pvc, 'DataVolume', dv['metadata']['uid']) if dv else owned(pvc, 'VirtualMachine', VM_UID)
++            else:
++                dv = get('dv', name, NS, optional=True)
+             assert owned(pvc, 'VirtualMachine', VM_UID) or dv and owned(dv, 'VirtualMachine', VM_UID) and owned(pvc, 'DataVolume', dv['metadata']['uid'])
+             item = {'pvc': ref(pvc), 'phase': pvc.get('status', {}).get('phase'),
+                     'mode': pvc['spec'].get('volumeMode'), 'dv': ref(dv) if dv else None}
+@@ -196,10 +232,7 @@
+                 item.update(pv=ref(pv), csi=pv['spec'].get('csi'), reclaim_policy=pv['spec']['persistentVolumeReclaimPolicy'])
+             storage.append(item)
+         for disk in disks:
+-            expected = 'vd-' + disk['diskId']
+-            volume = next((v for v in template.get('volumes', []) if v['name'] == disk['volumeName']), {})
+-            expected = volume.get('dataVolume', {}).get('name',
+-                volume.get('persistentVolumeClaim', {}).get('claimName', expected))
++            expected = disk_names[disk['diskId']]
+             assert any(s['pvc']['name'] == expected for s in storage), 'logical disk has no verified current physical mapping'
+         return {'vm': ref(vm), 'vmi': None if vmi is None else {**ref(vmi), 'phase': vmi.get('status', {}).get('phase'),
+                     'node': vmi.get('status', {}).get('nodeName'), 'volume_status': vmi.get('status', {}).get('volumeStatus', [])},
+@@ -291,6 +324,107 @@
+                                                           'preview_sha256': digest(preview), 'business_mutations': 0})
+ 
+ 
++def collector_fixture_checks():
++    """Exercise actual native collection with only PG/Kubernetes read boundaries faked."""
++    from tempfile import TemporaryDirectory
++    global RUN
++    original_run = RUN
++    calls = []
++    disk_id = DATA['data3']
++    logical = {'diskId': disk_id, 'serial': disk_id, 'role': 'data',
++               'volumeName': 'disk-' + disk_id.replace('-', ''), 'attached': False}
++    restored_name = 'restore-owned-disk-' + disk_id.replace('-', '')
++    record = {'ID': disk_id, 'Role': 'data', 'Serial': disk_id, 'Attached': False, 'Tombstone': False,
++              'PVC': {'Namespace': NS, 'Name': restored_name, 'UID': 'pvc-restored'},
++              'DV': {'Namespace': '', 'Name': '', 'UID': ''}}
++
++    def collect(value, api_disk=None, pvc_uid=None, dv_uid=None, volume=None):
++        api_disk = copy.deepcopy(logical if api_disk is None else api_disk)
++        records = [] if value is None else [copy.deepcopy(value)]
++        name = (value or record)['PVC']['Name'] or (value or record)['DV']['Name']
++        actual_pvc_uid = pvc_uid or (value or record)['PVC']['UID']
++        dv_ref = (value or record)['DV']
++        owner = {'kind': 'DataVolume', 'uid': dv_ref['UID'], 'controller': True} if dv_ref['Name'] else {
++            'kind': 'VirtualMachine', 'uid': VM_UID, 'controller': True}
++        pvc = {'kind': 'PersistentVolumeClaim', 'metadata': {'name': name, 'namespace': NS,
++                    'uid': actual_pvc_uid, 'ownerReferences': [owner]},
++               'spec': {'volumeMode': 'Block', 'accessModes': ['ReadWriteOnce'], 'volumeName': 'pv-fixture'},
++               'status': {'phase': 'Bound'}}
++        objects = {('namespace', 'kube-system', None): {'metadata': {'uid': CLUSTER_UID}},
++                   ('namespace', NS, None): {'metadata': {'uid': NS_UID,
++                       'labels': {'network.ani.io/tenant-id': TENANT}}},
++                   ('vm', 'vm-' + VM, NS): {'kind': 'VirtualMachine',
++                       'metadata': {'name': 'vm-' + VM, 'namespace': NS, 'uid': VM_UID,
++                                    'labels': {'ani.io/tenant-id': TENANT, 'vm.ani.io/vm-id': VM}},
++                       'spec': {'runStrategy': 'Manual', 'template': {'spec': {
++                           'domain': {'firmware': {'uuid': VM}}, 'volumes': [] if volume is None else [volume]}}}},
++                   ('vmi', 'vm-' + VM, NS): None,
++                   ('pods', '-l=kubevirt.io=virt-launcher', NS): {'items': []},
++                   ('pvc', name, NS): pvc,
++                   ('pv', 'pv-fixture', None): {'kind': 'PersistentVolume',
++                       'metadata': {'name': 'pv-fixture', 'uid': 'pv-original'},
++                       'spec': {'claimRef': {'name': name, 'namespace': NS, 'uid': actual_pvc_uid},
++                                'persistentVolumeReclaimPolicy': 'Delete', 'csi': {'volumeHandle': 'owned-volume'}}}}
++        if dv_ref['Name']:
++            objects[('dv', dv_ref['Name'], NS)] = {'kind': 'DataVolume',
++                'metadata': {'name': dv_ref['Name'], 'namespace': NS, 'uid': dv_uid or dv_ref['UID'],
++                             'ownerReferences': [{'kind': 'VirtualMachine', 'uid': VM_UID, 'controller': True}]}}
++
++        def get(kind, name, namespace=None, optional=False):
++            calls.append((kind, name, namespace))
++            value = objects.get((kind, name, namespace))
++            assert value is not None or optional, 'fixture was asked for an unexpected required object'
++            return copy.deepcopy(value)
++
++        def owned(value, kind, uid):
++            return any(o.get('kind') == kind and o.get('uid') == uid and o.get('controller')
++                       for o in value['metadata'].get('ownerReferences', []))
++
++        def psql(owner, query, database):
++            assert owner == 'postgres' and database == 'vm_resource_candidate_01a168ce'
++            assert "tenant_id='" + TENANT + "'" in query and "vm_id='" + VM + "'" in query
++            return '\n'.join(json.dumps(item) for item in records)
++
++        driver = Driver.__new__(Driver)
++        driver.w, driver.g = {'native': get, 'owned': owned}, {'psql': psql}
++        return driver.native([api_disk])
++
++    try:
++        with TemporaryDirectory(prefix='windows-collector-') as directory:
++            RUN = Path(directory)
++            (RUN / 'evidence').mkdir()
++            (RUN / 'evidence/product-windows2025-iso-native.json').write_text('{"pvcs": []}')
++            result = collect(record)
++            assert [item['pvc']['name'] for item in result['storage']] == [restored_name]
++            assert result['storage'][0]['pvc']['uid'] == 'pvc-restored' and result['storage'][0]['dv'] is None
++            assert not any(kind == 'pvc' and name == 'vd-' + disk_id for kind, name, namespace in calls)
++            legacy = copy.deepcopy(record)
++            legacy['PVC'].update(Name='vd-' + disk_id, UID='pvc-legacy')
++            legacy['DV'].update(Namespace=NS, Name='vd-' + disk_id, UID='dv-original')
++            assert collect(legacy)['storage'][0]['dv']['uid'] == 'dv-original'
++            attached = dict(logical, attached=True)
++            attached_record = dict(record, Attached=True)
++            volume = {'name': logical['volumeName'], 'persistentVolumeClaim': {'claimName': restored_name}}
++            assert collect(attached_record, attached, volume=volume)['storage'][0]['pvc']['uid'] == 'pvc-restored'
++            wrong_namespace = copy.deepcopy(record); wrong_namespace['PVC']['Namespace'] = 'other-tenant'
++            wrong_serial = dict(record, Serial='another-disk')
++            rejected = [(record, {'pvc_uid': 'same-name-replacement'}),
++                        (legacy, {'dv_uid': 'same-name-replacement'}),
++                        (wrong_namespace, {}), (wrong_serial, {}), (None, {}),
++                        (attached_record, {'api_disk': attached,
++                            'volume': {'name': logical['volumeName'], 'persistentVolumeClaim': {'claimName': 'stale-physical-pvc'}}})]
++            for value, kwargs in rejected:
++                try:
++                    collect(value, **kwargs)
++                except (AssertionError, KeyError):
++                    pass
++                else:
++                    raise AssertionError('stale or unowned physical mapping was accepted')
++    finally:
++        RUN = original_run
++    return 3 + len(rejected)
++
++
+ def self_test():
+     args = argparse.Namespace(action='stop', intent='installed-stop', root_handoff='Root approves installed-stop',
+         root_evidence='Root-browser-evidence', installation_complete=True, destructive_confirmed=False,
+@@ -356,6 +490,7 @@
+         checks += 1
+     else:
+         raise AssertionError('stale restore preview accepted')
++    checks += collector_fixture_checks()
+     print(json.dumps({'result': 'PASS', 'pure_guards': checks, 'live_helper_imports': 0, 'http_requests': 0, 'guest_commands': 0}))
+ 
+ 

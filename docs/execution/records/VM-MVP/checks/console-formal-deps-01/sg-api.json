@@ -1,0 +1,93 @@
+{
+  "step": "sg-api",
+  "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-formal-deps-01/src/session/api",
+  "gowork": "off",
+  "toolchain": "go1.26.10",
+  "source_manifest_sha256": "3cc35dbf57031dcd81775c0357370ca3759fde0d87f13d0e052e02a50f631f52",
+  "before_mod_sum": {
+    "resource/go.mod": "130c566e4d7db51017f83d536e17b76953b4b004029dedea644f2fb7ea1e9872",
+    "resource/go.sum": "4dcc9b0983bf83e0e04d58ad6758307a7e94f3ae9618e303351e08dfb35eaeef",
+    "session/api/go.mod": "09516fea07d2edb826f268dc9d8d03d36fd675928e8a1a855b14e80ecaa72b87",
+    "session/api/go.sum": "75e23fcdb389d09405f74e00df38f944b5cbb29bdef6e708a652ea9e184f183d",
+    "session/go.mod": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+    "session/go.sum": "5ba74cd53e18486ccc04258cfa9e2b3f2be4107bae3b4a0a2f5ff4d7f1b657e1",
+    "governance/go.mod": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+    "governance/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673"
+  },
+  "started_at": "2026-10-24T04:42:30.628169+00:00",
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy"
+      ],
+      "timeout_seconds": 45,
+      "exit_code": 0,
+      "elapsed_seconds": 20.428,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "timeout_seconds": 25,
+      "exit_code": 0,
+      "elapsed_seconds": 0.059,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console"
+      ],
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "elapsed_seconds": 0.007,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-mod=readonly",
+        "./..."
+      ],
+      "timeout_seconds": 45,
+      "exit_code": 0,
+      "elapsed_seconds": 0.951,
+      "timed_out": false
+    }
+  ],
+  "running_candidate_changed": false,
+  "business_api_calls": 0,
+  "formal_console_module": {
+    "Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+    "Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+    "Time": "2026-10-23T18:54:14Z",
+    "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+    "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+    "GoVersion": "1.26.9",
+    "Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+    "GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+  },
+  "after_mod_sum": {
+    "resource/go.mod": "130c566e4d7db51017f83d536e17b76953b4b004029dedea644f2fb7ea1e9872",
+    "resource/go.sum": "4dcc9b0983bf83e0e04d58ad6758307a7e94f3ae9618e303351e08dfb35eaeef",
+    "session/api/go.mod": "cb0da045b65e71091e42420447c742df4ac86bcd7129e7bf94edd81f9ad05d93",
+    "session/api/go.sum": "c6caaebcd7e01e1898597a5ec2168daab6dc728dee709b44bbf1bd2c92118b61",
+    "session/go.mod": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+    "session/go.sum": "5ba74cd53e18486ccc04258cfa9e2b3f2be4107bae3b4a0a2f5ff4d7f1b657e1",
+    "governance/go.mod": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+    "governance/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673"
+  },
+  "finished_at": "2026-10-24T04:42:52.310560+00:00",
+  "result": "PASS",
+  "log_sha256": "56f3c8c6f113d2f85da83228dde20865c9b06a93c1c560b5209c044fceb977fa"
+}

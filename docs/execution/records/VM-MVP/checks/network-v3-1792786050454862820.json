@@ -1,0 +1,255 @@
+{
+  "at": "2026-10-23T20:06:17.686325+00:00",
+  "layer": "GUEST",
+  "scope": "fixed V3 read-only serial network; BROWSER separate",
+  "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+  "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+  "node": "ani-02",
+  "current_ip": "10.83.1.9",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "expected_boot_id": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+  "product_receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-linux-product-v3.json",
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-guest-credentials-v3.json",
+  "http_target_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/http-target.json",
+  "service_uid": "f0fd7028-8eff-43da-beac-e01ae908cf4e",
+  "service_ip": "10.96.0.1",
+  "dns_uid": "52a9e852-be01-4642-8a5d-bc479ecc4e72",
+  "dns_ip": "10.96.0.3",
+  "driver_sha256": "024584529f86787dd9eee8ba9d8feac132db5ee9c6d72eda64708e631de6a0cd",
+  "identity_precondition": "PASS",
+  "dns": "FAIL",
+  "http": "FAIL",
+  "https_egress": "FAIL",
+  "identity": {
+    "username": "aniuser",
+    "marker": "vm-mvp-01a168ce-linux-v3-browser",
+    "boot_id": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+    "firmware_uuid": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "instance_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:cc:05:b0:99",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.83.1.9",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.83.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86312416,
+            "preferred_life_time": 86312416
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:ccff:fe05:b099",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.83.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.83.1.9",
+        "metric": 100,
+        "flags": []
+      }
+    ]
+  },
+  "observed": {
+    "boot_id": "1b0739e4-578d-4dcf-85db-0e07f4c3b480",
+    "target_route": {
+      "argv": [
+        "ip",
+        "-j",
+        "route",
+        "get",
+        "172.16.101.31"
+      ],
+      "exit": 0,
+      "stdout": "[{\"dst\":\"172.16.101.31\",\"gateway\":\"10.83.1.1\",\"dev\":\"enp1s0\",\"prefsrc\":\"10.83.1.9\",\"flags\":[],\"uid\":1000,\"cache\":[]}]\n",
+      "stderr": "",
+      "body_sha256": "f1dbd31bb840220c04ddf0d0371013c4b44ff02c62080b0df923e446fcb2b61c"
+    },
+    "dns_getent": {
+      "argv": [
+        "getent",
+        "ahostsv4",
+        "kubernetes.default.svc.cluster.local"
+      ],
+      "error": "TimeoutExpired: Command '['getent', 'ahostsv4', 'kubernetes.default.svc.cluster.local']' timed out after 18 seconds"
+    },
+    "dns_resolvectl": {
+      "argv": [
+        "resolvectl",
+        "query",
+        "kubernetes.default.svc.cluster.local"
+      ],
+      "error": "TimeoutExpired: Command '['resolvectl', 'query', 'kubernetes.default.svc.cluster.local']' timed out after 18 seconds"
+    },
+    "dns_uplink": {
+      "argv": [
+        "resolvectl",
+        "dns"
+      ],
+      "exit": 0,
+      "stdout": "Global:\nLink 2 (enp1s0): 10.96.0.3\n",
+      "stderr": "",
+      "body_sha256": "e249a0cec88e1504e889e457dc60fb3dfe2de4684d3f8b4db0db1814678da8b8"
+    },
+    "http": {
+      "argv": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--silent",
+        "--connect-timeout",
+        "5",
+        "--max-time",
+        "12",
+        "http://172.16.101.31:39190/vm-mvp-01a168ce-linux-v2/5b2160d72615913154120a32"
+      ],
+      "exit": 28,
+      "stdout": "",
+      "stderr": "curl: (28) Failed to connect to 172.16.101.31 port 39190 after 5002 ms: Timeout was reached\n",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "https_egress": {
+      "argv": [
+        "curl",
+        "--fail",
+        "--show-error",
+        "--silent",
+        "--connect-timeout",
+        "5",
+        "--max-time",
+        "12",
+        "https://example.com/"
+      ],
+      "exit": 28,
+      "stdout": "",
+      "stderr": "curl: (28) Resolving timed out after 5001 milliseconds\n",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ssh_units": {
+      "argv": [
+        "systemctl",
+        "show",
+        "ssh.socket",
+        "ssh.service",
+        "-p",
+        "Id",
+        "-p",
+        "ActiveState",
+        "-p",
+        "SubState"
+      ],
+      "exit": 0,
+      "stdout": "Id=ssh.socket\nActiveState=active\nSubState=listening\n\nId=ssh.service\nActiveState=inactive\nSubState=dead\n",
+      "stderr": "",
+      "body_sha256": "95511466a2a23f004e8db3d16953ee9fca3fca750995afed20d34736995a374e"
+    },
+    "ssh_listen": {
+      "argv": [
+        "ss",
+        "-ltn",
+        "sport = :22"
+      ],
+      "exit": 0,
+      "stdout": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      4096         0.0.0.0:22        0.0.0.0:*          \nLISTEN 0      4096            [::]:22           [::]:*          \n",
+      "stderr": "",
+      "body_sha256": "8b78f786ea46d795a743e80219e866fe317a7b42ce9275278057fbae5bd2e922"
+    }
+  },
+  "result": "PARTIAL_FAIL"
+}

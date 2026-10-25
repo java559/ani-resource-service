@@ -1,0 +1,38 @@
+{
+  "result": "NATIVE_FRAME_BLACK_AT_CAPTURE",
+  "inspected_at": "2026-10-24T11:03:51.029318+00:00",
+  "capture_receipt": "observed.json",
+  "capture_receipt_sha256": "91a2d104d9f7c93a68b897ffa1d85ff02599aca99c1de8de0daa35d6953e9ec7",
+  "image": "native-frame.png",
+  "image_sha256": "63373382cfa36078355ba24feb69e5e94474e40ec28f26bb01c8bfd7f4ed18e6",
+  "inspection": "Local view_image of original native PNG: black frame, no visible text/window/cursor; pixels decoded without editing.",
+  "pixel_summary": {
+    "mode": "RGB",
+    "size": [
+      1024,
+      768
+    ],
+    "channel_extrema": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "all_rgb_pixels_black": true
+  },
+  "limits": [
+    "One frame only: this does not prove guest hang, installation failure or completion.",
+    "A black native frame at this timestamp means the symptom is not confined to browser/noVNC rendering; no guest/component root cause is proven."
+  ],
+  "additional_cluster_commands": 0,
+  "additional_guest_input": 0,
+  "status_or_handoff_modified": false
+}

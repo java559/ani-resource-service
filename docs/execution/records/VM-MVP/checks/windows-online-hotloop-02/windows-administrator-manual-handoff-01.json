@@ -1,0 +1,20 @@
+{
+  "result": "MANUAL_HANDOFF_PENDING_NOT_PASS",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_version": 22,
+  "observed_state": "Running",
+  "user_request": "我现在有时间核验windows人工登录了",
+  "observed_guest_page": "自定义设置 / Administrator / 密码及重新输入密码均为空 / 完成",
+  "actions": [
+    "Normal VNC connect to existing Windows VM",
+    "Esc wakeup",
+    "exit PowerShell then exit diagnostic cmd",
+    "Skip product-key entry for previously authorized experience installation"
+  ],
+  "new_credential_entered_by_agent": false,
+  "manual_login_verified": false,
+  "windows_disk_snapshot_automation": "PAUSED_FOR_USER_HANDOFF",
+  "post_hot_guest_three_a": "NOT_RUN",
+  "screenshot": "windows-administrator-manual-handoff-01.jpg",
+  "screenshot_sha256": "479e9fc7c4669a7b6c111c8088f3c3a45967bc65e40b92a4e892098270738093"
+}

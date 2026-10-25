@@ -1,0 +1,274 @@
+{
+  "at": "2026-10-23T19:39:17.601851+00:00",
+  "scope": "tenant2 real Gov network; no VM/NAD/namespace/config/SQL mutation",
+  "phase": "VPC_SUBNET_AVAILABLE_NOT_GUEST_ACCEPTANCE",
+  "principal": {
+    "tenant_id": 2,
+    "resource_tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "tenant_code": "vm-isolation-01a168ce"
+  },
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-network-inputs.json",
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/isolation-credentials.json",
+  "requests": {
+    "vpc": {
+      "body": {
+        "name": "vm-mvp-tenant2-01a168ce",
+        "cidr": "10.84.0.0/16",
+        "description": "VM MVP tenant2 V10 preparation",
+        "idempotency_key": "a6d9cd50-dcef-59ef-8ef7-b0d4d5c837c1"
+      },
+      "body_sha256": "510a0d8b86f9e227941a41c0fcc643dfc84d953e50a4d34af73280e7bf550f4e",
+      "send_attempts": 1,
+      "outcome": "acknowledged",
+      "readonly_preflight": {
+        "at": "2026-10-23T19:39:06.333173+00:00",
+        "offered_cidrs": [
+          "10.83.0.0/16",
+          "10.84.0.0/16"
+        ],
+        "inventory_source": "tenant-scoped public VPC pagination",
+        "matching_or_overlapping_resources": []
+      },
+      "last_send_at": "2026-10-23T19:39:06.337112+00:00",
+      "ack_response": {
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.0.0/16",
+        "state": "provisioning",
+        "reason": "",
+        "created_at": "2026-10-23T19:39:07.514643Z",
+        "updated_at": "2026-10-23T19:39:07.514643Z",
+        "version": "1",
+        "observed_at": null,
+        "observation_stale": true,
+        "last_operation_id": "6622b59f-66b8-483a-80b6-6f17c70d432a",
+        "subnet_count": "0"
+      },
+      "resource_id": "vpc_c44c262a220748aab0e4b20558849409",
+      "operation_id": "6622b59f-66b8-483a-80b6-6f17c70d432a",
+      "current": {
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.0.0/16",
+        "state": "available",
+        "reason": "",
+        "created_at": "2026-10-23T19:39:07.514643Z",
+        "updated_at": "2026-10-23T19:39:13.108329Z",
+        "version": "3",
+        "observed_at": "2026-10-23T19:39:12.724019Z",
+        "observation_stale": false,
+        "last_operation_id": "6622b59f-66b8-483a-80b6-6f17c70d432a",
+        "subnet_count": "0"
+      }
+    },
+    "subnet": {
+      "planned_body": {
+        "name": "vm-mvp-tenant2-01a168ce",
+        "vpc_id": "<original-VPC-ACK-id>",
+        "cidr": "10.84.1.0/24",
+        "gateway": "10.84.1.1",
+        "description": "VM MVP tenant2 V10 preparation",
+        "idempotency_key": "34445e1a-a736-58f6-a090-bd57f5c08936"
+      },
+      "body": {
+        "name": "vm-mvp-tenant2-01a168ce",
+        "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+        "cidr": "10.84.1.0/24",
+        "gateway": "10.84.1.1",
+        "description": "VM MVP tenant2 V10 preparation",
+        "idempotency_key": "34445e1a-a736-58f6-a090-bd57f5c08936"
+      },
+      "body_sha256": "2df984e8390ab1c358646ec1f73a32a67e34c5fdd9094ecaedc2e08f01d8d572",
+      "send_attempts": 1,
+      "outcome": "acknowledged",
+      "readonly_preflight": {
+        "at": "2026-10-23T19:39:13.357922+00:00",
+        "inventory_source": "tenant-scoped public parent Subnet cursor pagination",
+        "matching_or_overlapping_resources": []
+      },
+      "last_send_at": "2026-10-23T19:39:13.360334+00:00",
+      "ack_response": {
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.1.0/24",
+        "gateway": "10.84.1.1",
+        "state": "provisioning",
+        "reason": "",
+        "reason_message": "",
+        "created_at": "2026-10-23T19:39:13.377039Z",
+        "updated_at": "2026-10-23T19:39:13.377039Z",
+        "version": "1",
+        "observed_at": null,
+        "observation_stale": true,
+        "last_operation_id": "6c225fda-56de-4ee0-8fe4-ddcbbbb40448"
+      },
+      "resource_id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "operation_id": "6c225fda-56de-4ee0-8fe4-ddcbbbb40448",
+      "current": {
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "description": "VM MVP tenant2 V10 preparation",
+        "cidr": "10.84.1.0/24",
+        "gateway": "10.84.1.1",
+        "state": "available",
+        "reason": "",
+        "reason_message": "",
+        "created_at": "2026-10-23T19:39:13.377039Z",
+        "updated_at": "2026-10-23T19:39:17.135023Z",
+        "version": "3",
+        "observed_at": "2026-10-23T19:39:16.955219Z",
+        "observation_stale": false,
+        "last_operation_id": "6c225fda-56de-4ee0-8fe4-ddcbbbb40448",
+        "available_ip_range": "10.84.1.2-10.84.1.254",
+        "used_ip_range": ""
+      }
+    }
+  },
+  "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+  "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+  "kcn_subnet_ref": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d",
+  "provider_identity_status": "EXACT_NORMAL_PLATFORM_BINDING_AND_NATIVE_UID_VERIFIED",
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpc-cidr-presets",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs?page=1&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/networks/vpcs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_c44c262a220748aab0e4b20558849409",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets?vpc_id=vpc_c44c262a220748aab0e4b20558849409&limit=100",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/networks/subnets",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_ea6b62fc625349bcad46ce56ce60f90d",
+      "status": 200
+    }
+  ],
+  "provider_identity_receipt_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-tenant2-network-identity.json"
+}

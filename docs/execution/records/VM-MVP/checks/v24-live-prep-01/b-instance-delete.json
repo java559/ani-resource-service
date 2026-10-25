@@ -1,0 +1,110 @@
+{
+  "state": "ACCEPTED_NORMAL_DELETE_OF_FAILED_IMAGE_INSTANCE",
+  "step": "delete",
+  "started_at": "2026-10-24T10:43:19.083126+00:00",
+  "sql_writes": 0,
+  "protected_vm_mutations": 0,
+  "before": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "refs": [
+      {
+        "kind": "Notebook",
+        "name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+        "uid": "8cfb0171-ff0b-4fe6-b548-6c490e497c14"
+      },
+      {
+        "kind": "StatefulSet",
+        "name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+        "uid": "e210ef5c-2ee4-48d3-8e84-e80bb013f660"
+      },
+      {
+        "kind": "Pod",
+        "name": "instance-64413d16-05df-4623-a545-0e2f226c6006-0",
+        "uid": "a0f686e2-d1c8-4066-a2a7-f1d4f669ffa8"
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "name": "workspace-64413d16-05df-4623-a545-0e2f226c6006",
+        "uid": "3faba905-a7cf-4fab-bcad-614b00832b02"
+      },
+      {
+        "kind": "PersistentVolume",
+        "name": "pvc-3faba905-a7cf-4fab-bcad-614b00832b02",
+        "uid": "ee23b461-e3bb-4603-b22a-8eba34cc9417"
+      }
+    ],
+    "workspace_csi": {
+      "controllerExpandSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "controllerPublishSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "fsType": "ext4",
+      "nodeStageSecretRef": {
+        "name": "rook-csi-rbd-node",
+        "namespace": "rook-ceph"
+      },
+      "volumeAttributes": {
+        "clusterID": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "imageName": "csi-vol-76c9816d-f6da-4bc1-9507-ffe1bd1841f1",
+        "journalPool": "ani-block-pool",
+        "pool": "ani-block-pool",
+        "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+      },
+      "volumeHandle": "0001-0009-rook-ceph-0000000000000004-76c9816d-f6da-4bc1-9507-ffe1bd1841f1"
+    },
+    "volume_mode": "Filesystem",
+    "pod_node": "ani-03"
+  },
+  "body": {
+    "data": {
+      "instanceId": "64413d16-05df-4623-a545-0e2f226c6006",
+      "idempotencyKey": "1c946a2f-a3ef-4340-93a0-5b24ec05ba57",
+      "expectedVersion": "1"
+    }
+  },
+  "ack": {
+    "operationId": "586c42f4-f52e-4121-a993-71c2cf23e614",
+    "resourceId": "64413d16-05df-4623-a545-0e2f226c6006",
+    "replayed": false,
+    "result": "QUEUED_FOR_OWNER"
+  },
+  "send_attempts": 1,
+  "original_create_operation": {
+    "id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+    "instanceId": "64413d16-05df-4623-a545-0e2f226c6006",
+    "action": "create",
+    "intentVersion": "1",
+    "state": "superseded",
+    "reason": "WAITING_FOR_NOTEBOOK"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/instances/64413d16-05df-4623-a545-0e2f226c6006",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/c8740a66-ce43-47de-bfc7-4771a177e94c",
+      "status": 200
+    }
+  ],
+  "finished_at": "2026-10-24T10:43:19.932842+00:00"
+}

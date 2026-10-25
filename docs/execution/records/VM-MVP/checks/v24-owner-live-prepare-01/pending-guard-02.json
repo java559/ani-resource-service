@@ -1,0 +1,28 @@
+{
+  "scope": "EXACT_EXISTING_SIX_TABLE_PENDING_GUARD_FAILURE_ONLY",
+  "pending_operation_counts": {
+    "public.network_default_vpc_egress_operations": 0,
+    "public.network_virtual_switch_operations": 0,
+    "public.network_platform_operations": 0,
+    "public.network_operations": 0,
+    "instance.instance_operations": 4,
+    "vm.operations": 0
+  },
+  "current_gov_process": {
+    "pid": 3305121,
+    "start_ticks": 70294688,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "private_root_exists": false,
+  "secret_projections": 0,
+  "term_calls": 0,
+  "source_assertion": "b-candidates-maintain.py:112",
+  "application_calls": 0,
+  "config_writes": 0
+}

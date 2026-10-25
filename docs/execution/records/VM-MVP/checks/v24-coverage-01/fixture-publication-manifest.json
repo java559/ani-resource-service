@@ -1,0 +1,38 @@
+{
+  "result": "PASS_ONE_TEST_FILE_CHILD_NORMAL_FAST_FORWARD",
+  "commit": "b7112f7962e1aa23d903db5d557afdd5bb75af4d",
+  "parent": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "tree": "ff251fb116e0ad78c81a17c49b1ddf378dffb74a",
+  "path": "app/admin/service/internal/service/inference_gpu_pg_test.go",
+  "old_blob": "8612be4f16c8afecac25312a6fb7186584ec7ed8",
+  "new_blob": "389143bf644f941d9f99202a63a2212c5a849c90",
+  "changed_files": 1,
+  "diff_numstat": "15\t5\tapp/admin/service/internal/service/inference_gpu_pg_test.go",
+  "source_test_file_sha256": "2e2b57d4b7461a2a3fbddd0a4b2b3f08cfa482d832a73a585d69e0fe4668c518",
+  "original_worktree_unchanged": true,
+  "runtime_api_cmd_migration_deps_unchanged": true,
+  "runtime_image_source_remains": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "gate_reused": "continuation04-manifest.json",
+  "files": [
+    {
+      "path": "commit-fixture.py",
+      "sha256": "1e64281024d02fa54a638d503795f77548a5811a8966f0d299af3401936fc775"
+    },
+    {
+      "path": "push-fixture.py",
+      "sha256": "a62e6a8bec9dddee09b5c0b2d9225b78017e27b90e1ba01058795887fbffb3e9"
+    },
+    {
+      "path": "fixture-committed.json",
+      "sha256": "e5da2b23db5d06a419aa9b0dc1eeb7d0d8ffabd60e118c2c24987f8624c384b5"
+    },
+    {
+      "path": "fixture-published.json",
+      "sha256": "7ed811dda072b883cde886bd3e7531c255c017b1dcd4be012ec3a9a456323be0"
+    },
+    {
+      "path": "fixture-final-guards.json",
+      "sha256": "79b0c28f7e749552be3722dd3c96ce64bc75d725350a3af1886218cb03ae8540"
+    }
+  ]
+}

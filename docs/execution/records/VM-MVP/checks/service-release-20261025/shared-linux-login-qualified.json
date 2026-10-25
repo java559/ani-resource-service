@@ -1,0 +1,288 @@
+{
+  "started_at": "2026-10-24T21:35:29.774055+00:00",
+  "result": "TASK_FIXTURE_AND_CPU_VM_QUALIFICATION_READY",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "base_url": "http://172.16.101.10:30085",
+  "plan_sha256": "35527fa64f72dda19eb454ea01c102c2f8eeba369c1f0aede47c278103614c99",
+  "runner_sha256": "eca08fb8c799fe68a4b3badeb45465f1cfc6b791b166d8cf145ab39e97e3550a",
+  "root_release_sha256": "48be8f8528af8b92975f296c8fdec2f858c997f775e011ffa0f36e31a524ad0d",
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 2.99,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/platform-login.response.json"
+    },
+    {
+      "label": "fresh-role20-guard",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/20",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.556,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/fresh-role20-guard.response.json"
+    },
+    {
+      "label": "exact-existing-backend-login-permission",
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?page=1&pageSize=2&query=%7B%22code%22%3A+%22sys%3Aaccess_backend%22%7D",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.319,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/exact-existing-backend-login-permission.response.json"
+    },
+    {
+      "label": "append-only-role20-login-permission",
+      "method": "PUT",
+      "path": "/api/v1/admin/roles/20",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.494,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/append-only-role20-login-permission.response.json"
+    },
+    {
+      "label": "verify-role20-exact18",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/20",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.197,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/verify-role20-exact18.response.json"
+    },
+    {
+      "label": "platform-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.049,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/platform-logout.response.json"
+    },
+    {
+      "label": "tenant-login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.456,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/tenant-login.response.json"
+    },
+    {
+      "label": "tenant-vm-cpu-presets",
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=VIRTUAL_MACHINE&compute_type=cpu&page=1&pageSize=20",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 1.383,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/tenant-vm-cpu-presets.response.json"
+    },
+    {
+      "label": "tenant-vpc-cidr-presets",
+      "method": "GET",
+      "path": "/api/v1/networks/vpc-cidr-presets",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.408,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/tenant-vpc-cidr-presets.response.json"
+    },
+    {
+      "label": "tenant-own-vpcs",
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs?page=1&pageSize=20",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.183,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/tenant-own-vpcs.response.json"
+    },
+    {
+      "label": "tenant-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "seconds": 0.045,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private-login-gate-01/tenant-logout.response.json"
+    }
+  ],
+  "objects": {
+    "plan": {
+      "id": 27,
+      "name": "vm-mvp-shared-01a168ce",
+      "version": "FREE",
+      "createdAt": "2026-10-24T21:30:43.835234Z",
+      "kubernetes_uid_resource_version_not_exposed": true
+    },
+    "plan_modules": [
+      {
+        "id": 57,
+        "planId": 27,
+        "module": "VIRTUAL_MACHINE",
+        "createdAt": "2026-10-24T21:30:44.214991Z",
+        "kubernetes_uid_resource_version_not_exposed": true
+      },
+      {
+        "id": 58,
+        "planId": 27,
+        "module": "NETWORK",
+        "createdAt": "2026-10-24T21:30:44.933849Z",
+        "kubernetes_uid_resource_version_not_exposed": true
+      }
+    ],
+    "tenant": {
+      "id": 14,
+      "name": "vm-mvp-shared-01a168ce",
+      "code": "vm-mvp-shared-01a168ce",
+      "createdAt": "2026-10-24T21:30:45.309030Z",
+      "kubernetes_uid_resource_version_not_exposed": true
+    },
+    "user": {
+      "id": 21,
+      "tenantId": 14,
+      "createdAt": "2026-10-24T21:30:45.710471Z",
+      "kubernetes_uid_resource_version_not_exposed": true,
+      "only_role_id": 20
+    },
+    "bootstrap_role": {
+      "id": 19,
+      "name": "\u79df\u6237\u7ba1\u7406\u5458",
+      "code": "tenant:manager",
+      "tenantId": 14,
+      "createdAt": "2026-10-24T21:30:45.434585Z",
+      "kubernetes_uid_resource_version_not_exposed": true,
+      "permissions_before_count": 19,
+      "permissions_after": []
+    },
+    "role": {
+      "id": 20,
+      "name": "vm-mvp-shared-01a168ce",
+      "code": "vm-mvp-shared-01a168ce",
+      "tenantId": 14,
+      "createdAt": "2026-10-24T21:30:54.680096Z",
+      "kubernetes_uid_resource_version_not_exposed": true
+    }
+  },
+  "vm_lifecycle_writes": 0,
+  "network_lifecycle_writes": 0,
+  "preset_writes": 0,
+  "quota_account_writes": 0,
+  "sql_or_cluster_calls": 0,
+  "credentials_or_hashes_exported": false,
+  "prior_receipt": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/executed.json",
+    "sha256": "f6c33e2533242d442fc9aaa2003d451cd5dc86c80c04c90398811251856438c9"
+  },
+  "authorization_amendment": "Root explicitly approved only role20 original17 + existing ON sys:access_backend, followed by one tenant qualification session",
+  "login_gate_evidence": {
+    "original_http_status": 403,
+    "original_reason": "FORBIDDEN",
+    "original_message": "insufficient authority",
+    "necessary_missing_code": "sys:access_backend",
+    "fixed_source_gate": "authentication_service.go:531-539; pkg/constants/permission.go:4-8",
+    "prior_saved_activation_facts": "tenant14 ON/APPROVED/plan27; user21 NORMAL/roleIds20; role20 TENANT/ON/ALL with exactly17",
+    "cache_hypothesis_limit": "login reads current user-role and role-permission repositories directly, not Casbin authorization cache"
+  },
+  "selected_permission_ids": [
+    597,
+    598,
+    596,
+    599,
+    621,
+    605,
+    601,
+    68,
+    20,
+    21,
+    22,
+    23,
+    59,
+    56,
+    57,
+    58,
+    24,
+    1
+  ],
+  "selected_permission_codes": [
+    "vm:create",
+    "vm:read",
+    "vm:list",
+    "vm:delete",
+    "vm:compute-preset:read",
+    "vm:console",
+    "vm:power",
+    "network:vpc:presets",
+    "network:vpc:get",
+    "network:vpc:list",
+    "network:vpc:create",
+    "network:vpc:delete",
+    "network:subnet:get",
+    "network:subnet:list",
+    "network:subnet:create",
+    "network:subnet:delete",
+    "network:operation:get",
+    "sys:access_backend"
+  ],
+  "added_permission": {
+    "id": 1,
+    "code": "sys:access_backend"
+  },
+  "role20_permission_count": 18,
+  "role20_updated_at": "2026-10-24T21:35:13.062204Z",
+  "sessions_revoked": {
+    "platform": true,
+    "tenant": true
+  },
+  "tenant_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private/tenant-login.json",
+  "cpu_vm_presets": [
+    {
+      "id": "61c2aa09-7b9e-4865-88bd-c4f39358e394",
+      "code": "modeldev-v21-cpu4-8g-01a15f47",
+      "name": "ModelDev v2.1 CPU 4c8Gi",
+      "compute_type": "cpu",
+      "cpu_millis": "4000",
+      "memory_mib": "8192",
+      "enabled": true,
+      "selectable": true
+    },
+    {
+      "id": "61b5207d-8cbb-40b8-adfa-14977373e7f4",
+      "code": "test-create",
+      "name": "\u6d4b\u8bd5\u521b\u5efa",
+      "compute_type": "cpu",
+      "cpu_millis": "1000",
+      "memory_mib": "1024",
+      "enabled": true,
+      "selectable": true
+    },
+    {
+      "id": "10ff8891-34eb-4427-97ca-9c68415c3898",
+      "code": "cpu-8c16g",
+      "name": "CPU 8c16g",
+      "compute_type": "cpu",
+      "cpu_millis": "8000",
+      "memory_mib": "16384",
+      "enabled": true,
+      "selectable": true
+    }
+  ],
+  "vpc_cidr_presets": {
+    "cidrs": [
+      "10.73.0.0/16"
+    ]
+  },
+  "own_vpc_item_count": 0,
+  "cleanup_order": [
+    "Root normally DELETEs this task's VM and observes terminal physical cleanup; retain accepted command/replay/delete-fence history",
+    "Root normally DELETEs task Subnets/VPC and observes terminal network cleanup before removing tenant identity or bindings",
+    "Revoke task auth sessions, then use normal admin APIs on the recorded new user/role/tenant IDs only; unbind/delete the task user and task role when the product permits",
+    "Use normal tenant cleanup/delete only after no owned resources remain; if protected command/history/reference guards reject deletion, stop and retain the task tenant disabled rather than deleting rows or bypassing checks",
+    "Remove only this new plan's module rows and new plan through normal APIs after its task tenant no longer references them",
+    "After consumers and auth sessions are gone, remove task private credentials/tokens by exact recorded paths; do not remove shared platform credentials"
+  ],
+  "cpu_preset_proposal_only": null,
+  "finished_at": "2026-10-24T21:35:36.880144+00:00",
+  "heavy_lock_released": true
+}

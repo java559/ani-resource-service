@@ -1,0 +1,410 @@
+{
+  "state": "PASS_NORMAL_API_CATALOG",
+  "step": "catalog",
+  "started_at": "2026-10-24T10:33:31.942871+00:00",
+  "sql_writes": 0,
+  "vm_mutations": 0,
+  "plan2_consumers": [
+    {
+      "id": 1,
+      "code": "vm-mvp-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    },
+    {
+      "id": 2,
+      "code": "vm-isolation-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    }
+  ],
+  "permission_matches": {
+    "instance:create": [
+      {
+        "id": 37,
+        "code": "instance:create",
+        "status": "ON",
+        "apiIds": [
+          290
+        ]
+      }
+    ],
+    "instance:list": [
+      {
+        "id": 38,
+        "code": "instance:list",
+        "status": "ON",
+        "apiIds": [
+          289
+        ]
+      }
+    ],
+    "instance:read": [
+      {
+        "id": 39,
+        "code": "instance:read",
+        "status": "ON",
+        "apiIds": [
+          296,
+          302
+        ]
+      }
+    ],
+    "instance:delete": [
+      {
+        "id": 40,
+        "code": "instance:delete",
+        "status": "ON",
+        "apiIds": [
+          292
+        ]
+      }
+    ],
+    "instance:exec": [
+      {
+        "id": 41,
+        "code": "instance:exec",
+        "status": "ON",
+        "apiIds": [
+          293
+        ]
+      }
+    ],
+    "instance:operation:read": [
+      {
+        "id": 42,
+        "code": "instance:operation:read",
+        "status": "ON",
+        "apiIds": [
+          288
+        ]
+      }
+    ],
+    "instance:preset:read": [
+      {
+        "id": 43,
+        "code": "instance:preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ],
+    "image:space:enable": [
+      {
+        "id": 44,
+        "code": "image:space:enable",
+        "status": "ON",
+        "apiIds": [
+          270
+        ]
+      }
+    ],
+    "image:space:get": [
+      {
+        "id": 45,
+        "code": "image:space:get",
+        "status": "ON",
+        "apiIds": [
+          269
+        ]
+      }
+    ],
+    "image:registration:get": [
+      {
+        "id": 46,
+        "code": "image:registration:get",
+        "status": "ON",
+        "apiIds": [
+          266
+        ]
+      }
+    ],
+    "image:registration:list": [
+      {
+        "id": 47,
+        "code": "image:registration:list",
+        "status": "ON",
+        "apiIds": [
+          264
+        ]
+      }
+    ],
+    "modeldev:compute-preset:read": [
+      {
+        "id": 48,
+        "code": "modeldev:compute-preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ],
+    "inference:compute-preset:read": [
+      {
+        "id": 49,
+        "code": "inference:compute-preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ]
+  },
+  "plan2_modules": [
+    {
+      "id": 3,
+      "planId": 2,
+      "module": "DASHBOARD"
+    },
+    {
+      "id": 4,
+      "planId": 2,
+      "module": "OPM"
+    },
+    {
+      "id": 5,
+      "planId": 2,
+      "module": "NETWORK"
+    },
+    {
+      "id": 6,
+      "planId": 2,
+      "module": "VIRTUAL_MACHINE"
+    },
+    {
+      "id": 7,
+      "planId": 2,
+      "module": "INSTANCE"
+    },
+    {
+      "id": 8,
+      "planId": 2,
+      "module": "IMAGE"
+    },
+    {
+      "id": 9,
+      "planId": 2,
+      "module": "MODEL"
+    },
+    {
+      "id": 10,
+      "planId": 2,
+      "module": "INFERENCE"
+    }
+  ],
+  "catalogs": [
+    {
+      "usage": "CONTAINER_INSTANCE",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+            "name": "VM MVP ISO 2vCPU 4096MiB",
+            "code": "vm-mvp-iso-01a168ce",
+            "description": "Task VM ISO Linux and Windows acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "2000",
+            "memory_mib": "4096",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T19:04:53.18398Z",
+            "updated_at": "2026-10-23T19:04:53.18398Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          },
+          {
+            "id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+            "name": "VM MVP 1500m 2048MiB",
+            "code": "vm-mvp-01a168ce",
+            "description": "Task VM acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "1500",
+            "memory_mib": "2048",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T15:09:26.908658Z",
+            "updated_at": "2026-10-23T15:09:26.908658Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          }
+        ],
+        "total": "2",
+        "gpu_catalog_status": "OK",
+        "gpu_catalog_reason": ""
+      }
+    },
+    {
+      "usage": "TRAINING",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+            "name": "VM MVP ISO 2vCPU 4096MiB",
+            "code": "vm-mvp-iso-01a168ce",
+            "description": "Task VM ISO Linux and Windows acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "2000",
+            "memory_mib": "4096",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T19:04:53.18398Z",
+            "updated_at": "2026-10-23T19:04:53.18398Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          },
+          {
+            "id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+            "name": "VM MVP 1500m 2048MiB",
+            "code": "vm-mvp-01a168ce",
+            "description": "Task VM acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "1500",
+            "memory_mib": "2048",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T15:09:26.908658Z",
+            "updated_at": "2026-10-23T15:09:26.908658Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          }
+        ],
+        "total": "2",
+        "gpu_catalog_status": "OK",
+        "gpu_catalog_reason": ""
+      }
+    },
+    {
+      "usage": "INFERENCE",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+            "name": "VM MVP ISO 2vCPU 4096MiB",
+            "code": "vm-mvp-iso-01a168ce",
+            "description": "Task VM ISO Linux and Windows acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "2000",
+            "memory_mib": "4096",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T19:04:53.18398Z",
+            "updated_at": "2026-10-23T19:04:53.18398Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          },
+          {
+            "id": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+            "name": "VM MVP 1500m 2048MiB",
+            "code": "vm-mvp-01a168ce",
+            "description": "Task VM acceptance",
+            "compute_type": "cpu",
+            "cpu_millis": "1500",
+            "memory_mib": "2048",
+            "enabled": true,
+            "gpu": null,
+            "created_at": "2026-10-23T15:09:26.908658Z",
+            "updated_at": "2026-10-23T15:09:26.908658Z",
+            "selectable": true,
+            "unavailable_reason": ""
+          }
+        ],
+        "total": "2",
+        "gpu_catalog_status": "OK",
+        "gpu_catalog_reason": ""
+      }
+    }
+  ],
+  "platform_images": {
+    "items": [
+      {
+        "image_id": "img_e1a98d0e9eb5495dac77cb86483dc053",
+        "scope": "platform",
+        "spaceId": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+        "displayName": "V24 task workspace",
+        "description": "Fixed existing workspace artifact; task-only Instance regression",
+        "repository": "workspace-candidate",
+        "sourceReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+        "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+        "resolvedReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+        "platforms": [
+          {
+            "os": "linux",
+            "architecture": "amd64",
+            "variant": ""
+          }
+        ],
+        "purposes": [
+          "container"
+        ],
+        "accelerator": "undeclared",
+        "version": "1",
+        "createdAt": "2026-10-24T10:19:37.518732Z",
+        "updatedAt": "2026-10-24T10:19:37.518732Z",
+        "unregisteredAt": null
+      }
+    ],
+    "nextCursor": "",
+    "total": "1"
+  },
+  "tenant_image_space": {
+    "status": 404,
+    "reason": "SPACE_NOT_FOUND"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/tenants?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles/3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/plan-modules?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&page=1&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=TRAINING&page=1&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=INFERENCE&page=1&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/images/registrations?scope=platform&purposes=container&limit=100",
+      "status": 200
+    }
+  ],
+  "finished_at": "2026-10-24T10:33:32.590590+00:00"
+}

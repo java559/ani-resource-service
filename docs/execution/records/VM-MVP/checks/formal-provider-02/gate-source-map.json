@@ -1,0 +1,64 @@
+{
+  "at": "2026-10-24T08:18:45.294905+00:00",
+  "result": "PASS_SOURCE_TO_REUSED_AND_FORMAL_GATES",
+  "frozen_non_mod_manifest": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/formal-provider-02/module-inputs.json",
+    "sha256": "da84dd9d09b67885bae5bd93166e1fc41ea3b0b8ca46b30953a70f0c00177014"
+  },
+  "governance": {
+    "prior_current_vet_manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/formal-provider-02/gov-source-current-06c.manifest.json",
+    "changed_since_prior_vet_only": [
+      "tests/imagecontract/contract_test.go",
+      "tools/localdeps/gow/internal/pkg/module_inspector.go",
+      "tools/localdeps/gow/internal/pkg/module_inspector_test.go"
+    ],
+    "changed_tests_and_inspector_covered_by": "validated/receipts/regressions-governance.json",
+    "assets_contract_fix": "Docs modeldev_openapi_test.go SHA71a4e7343d6bde34c16d9cd6ce7bf23031fd0557ecc77567fa3cd8534c933266; existing targeted assets+HTTP PASS",
+    "pinned_buf_original_failure": "gov-source-unit-vet-06.json continuation06b TestPreflightFailsWithoutTouchingOutputs PASS",
+    "original_full_unit": "Original four-failure run retained. Failed cases resolved with targeted checks; full root suite not repeated after formal pins.",
+    "generation_and_pg": "gov-return-04.json plus existing gov-generate-04b.log/gov-test-04b.log/gov-unit-05.log. Runtime/API/cmd/SQL source unchanged from prior vet06c except listed test/tool fixes. No migrations changed in this task.",
+    "formal_no_workspace_gates": [
+      "pin-governance.json",
+      "build-governance-03.json",
+      "test-governance-03.json",
+      "regressions-governance.json"
+    ],
+    "current_go_proto_sql_categories": {
+      "api": 534,
+      "cmd": 18,
+      "runtime_and_tests": 1635,
+      "migration": 14
+    }
+  },
+  "session": {
+    "reused_full_gate_source": "sg-stage-01; owner vm_console confirmed unchanged implementation. Old split full gates have no independent JSON source manifest; none is invented.",
+    "normal_redis_contract_build": [
+      "sg-focused-03.log",
+      "sg-api-03.log",
+      "sg-build-03.log"
+    ],
+    "remaining_full_components": [
+      "sg-remaining-normal-04.log",
+      "sg-generated-04.log",
+      "sg-manifests-04.log",
+      "sg-race-04.log",
+      "sg-vet-04.log",
+      "sg-api-vet-04.log"
+    ],
+    "gvk_increment": [
+      "sg-vnc-adapter-green.log",
+      "sg-vnc-identity-green.log",
+      "sg-vnc-race-green.log",
+      "sg-vnc-vet-green.log",
+      "evidence/sg-vnc-gvk-reload.json"
+    ],
+    "formal_no_workspace_gates": [
+      "pin-session.json",
+      "test-session.json",
+      "build-session-02.json"
+    ],
+    "current_source_unchanged_in_formal_gates": true,
+    "execution_docs_owner_frozen": "execution-docs-final.json"
+  },
+  "boundary": "Code/module commit evidence only. No new LIVE acceptance, deployment, image publication, or Goal completion is claimed."
+}

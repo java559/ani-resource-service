@@ -1,0 +1,9 @@
+{
+  "classification": "DOC_ONLY_AFTER_PASS_NO_TEST_RERUN",
+  "file": "kubekey/builtin/core/roles/ani/snapshot-controller/templates/connection.md",
+  "tested_sha256": "084f441ce09f8b3b3d4a21d66aebe1148153e83ff18c88fd0be73e6c699c9fc9",
+  "current_sha256": "37970200f295cb44f590a0ad443fc205b55ab98c18ecde336f9cf36109df0cf7",
+  "tested_manifest_sha256": "9b31e1b36553fbfa78acaf961f58c44c4383d22a8fc8fdd064ce098cbeb44804",
+  "basis": "Root-reviewed actual successful class-name migration; old classes normally retired, historical bound snapshots/Contents preserved",
+  "source_archive_or_test_changed": false
+}

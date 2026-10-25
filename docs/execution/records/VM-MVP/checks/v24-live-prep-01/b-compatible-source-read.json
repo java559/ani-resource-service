@@ -1,0 +1,86 @@
+{
+  "state": "READ_ONLY_CANDIDATE_METADATA_COLLECTED_NOT_COMPATIBILITY_PASS",
+  "started_at": "2026-10-24T10:46:37.276242+00:00",
+  "writes": 0,
+  "image_layer_downloads": 0,
+  "project_scope": "ani-platform-images",
+  "repositories_limit": 20,
+  "artifact_limit_per_selected_repository": 3,
+  "platform_project": {
+    "project_id": 5,
+    "name": "ani-platform-images",
+    "repo_count": 7,
+    "metadata": {
+      "public": "false"
+    }
+  },
+  "repositories": [
+    {
+      "id": 40,
+      "name": "ani-platform-images/ani-governance",
+      "artifact_count": 1
+    },
+    {
+      "id": 39,
+      "name": "ani-platform-images/ani-inference-service",
+      "artifact_count": 1
+    },
+    {
+      "id": 38,
+      "name": "ani-platform-images/vllm-openai-cpu",
+      "artifact_count": 1
+    },
+    {
+      "id": 37,
+      "name": "ani-platform-images/cpr-20261020-cpu-longrun",
+      "artifact_count": 1
+    },
+    {
+      "id": 33,
+      "name": "ani-platform-images/formal-gpu-cuda",
+      "artifact_count": 1
+    },
+    {
+      "id": 25,
+      "name": "ani-platform-images/demo-nginx",
+      "artifact_count": 1
+    },
+    {
+      "id": 24,
+      "name": "ani-platform-images/demo-busybox",
+      "artifact_count": 1
+    }
+  ],
+  "artifacts": [],
+  "notebook_list_truncated": false,
+  "existing_notebook_images": [
+    {
+      "namespace": "ani-kf-stage2-a",
+      "name": "native-manual-20261009-01",
+      "uid": "765dc757-b722-49c6-a42a-eec1b4d1b054",
+      "ready_replicas": 1,
+      "containers": [
+        {
+          "name": "native-manual-20261009-01",
+          "image": "172.16.101.10:30003/ani-kf-manual-20261009/ani/kubeflow-jupyter:26.03-stage2-v1@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+          "entrypoint_override_present": false,
+          "environment_names": [
+            "JUPYTER_TOKEN",
+            "ANI_S3_ENDPOINT",
+            "ANI_MODEL_BUCKET",
+            "ANI_MODEL_PREFIX",
+            "AWS_CA_BUNDLE",
+            "AWS_ACCESS_KEY_ID",
+            "AWS_SECRET_ACCESS_KEY"
+          ],
+          "mount_names": [
+            "workspace",
+            "ca"
+          ]
+        }
+      ],
+      "secret_volume_names": []
+    }
+  ],
+  "finished_at": "2026-10-24T10:46:38.393387+00:00"
+}

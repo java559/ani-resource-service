@@ -1,0 +1,338 @@
+{
+  "result": "PREPARED_ZERO_CLUSTER_WRITES",
+  "plan_sha256": "bbf2d4a8462816c0afbc5a19b71f07e69133ae20888a1d18f38fc05ebbf4dc74",
+  "prepared_at": "2026-10-24T02:51:35.228260+00:00",
+  "plan": {
+    "scope": "PUBLIC_ONLY; task tenant1 native EIP+Snat; NOT Gov/Resource Network API acceptance",
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "creation_intents": {
+      "eip": "3108d74a-080f-4f20-bfb3-475e8346347f",
+      "snat": "920e8aba-0f6d-49f8-9649-07e87b8614b1"
+    },
+    "objects": {
+      "eip": {
+        "apiVersion": "networking.kubercloud.com/v1",
+        "kind": "EIP",
+        "metadata": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-mvp-01a168ce-public-eip",
+          "labels": {
+            "vm-mvp-test.ani.io/run": "01a168ce",
+            "app.kubernetes.io/managed-by": "vm-mvp-test-driver"
+          },
+          "annotations": {
+            "vm-mvp-test.ani.io/creation-intent": "3108d74a-080f-4f20-bfb3-475e8346347f"
+          }
+        },
+        "spec": {
+          "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d",
+          "ipVersion": "IPv4"
+        }
+      },
+      "snat": {
+        "apiVersion": "networking.kubercloud.com/v1",
+        "kind": "Snat",
+        "metadata": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-mvp-01a168ce-public-snat",
+          "labels": {
+            "vm-mvp-test.ani.io/run": "01a168ce",
+            "app.kubernetes.io/managed-by": "vm-mvp-test-driver"
+          },
+          "annotations": {
+            "vm-mvp-test.ani.io/creation-intent": "920e8aba-0f6d-49f8-9649-07e87b8614b1"
+          }
+        },
+        "spec": {
+          "eip": "vm-mvp-01a168ce-public-eip",
+          "vpc": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vpc-e413becb1f4a46468f058e32f33a6305",
+          "cidrs": [
+            "10.83.1.0/24"
+          ],
+          "disable": false
+        }
+      }
+    },
+    "target_vpc": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vpc-e413becb1f4a46468f058e32f33a6305",
+      "uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+      "resourceVersion": "59202700",
+      "deletionTimestamp": "",
+      "spec_sha256": "63d06e9cc82ebb84ce09400b19ece3cef47328a07b436c69ce772f1181e6e33d"
+    },
+    "target_subnet": {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "subnet-fbd064f6018040dab6a8d909b7afb87f",
+      "uid": "c24a983c-f9f4-403d-9807-8164004000a3",
+      "resourceVersion": "60746618",
+      "deletionTimestamp": "",
+      "spec_sha256": "3f1697a8db71d7d05f426476aead51ac20123082e3e4b7d1798f8ab0f391dc3c"
+    },
+    "shared_protected": [
+      {
+        "resource": "vlannetworks",
+        "namespace": "",
+        "name": "vlan-1027ace223cb4339a32121709654d1d4",
+        "uid": "d9ff64c7-882f-4241-962d-d4c3e5819100",
+        "resourceVersion": "54348687",
+        "deletionTimestamp": "",
+        "labels": {
+          "network.ani.io/binding-id": "5a6b7fb8-d531-4211-8c89-7714a26985b9",
+          "network.ani.io/managed-by": "ani-network-service",
+          "network.ani.io/resource-id": "vlan_1027ace223cb4339a32121709654d1d4"
+        },
+        "spec": {
+          "devName": "ens35",
+          "vClusterName": "ani-public",
+          "vlanID": 0
+        },
+        "spec_sha256": "7955286dbf8f7ea2859498d20744978dfa4c4975ca0ebcdbb67f541a552c04cd"
+      },
+      {
+        "resource": "eipgateways",
+        "namespace": "",
+        "name": "egw-d6d865fccf9946bb90a8a171975be566",
+        "uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243",
+        "resourceVersion": "54348690",
+        "deletionTimestamp": "",
+        "labels": {
+          "network.ani.io/binding-id": "1e66d8ad-eb9f-4c5d-9518-846517f08e80",
+          "network.ani.io/managed-by": "ani-network-service",
+          "network.ani.io/resource-id": "egw_d6d865fccf9946bb90a8a171975be566"
+        },
+        "spec": {
+          "egressType": "Host",
+          "scope": "Public"
+        },
+        "spec_sha256": "7f81e057468fd668fedc75edd92eb044df57967b562e0a9b56beae4c45417cb7"
+      },
+      {
+        "resource": "subnets",
+        "namespace": "kcn-system",
+        "name": "pool-bb811753b25a4fe598dff9cedf5afd1d",
+        "uid": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc",
+        "resourceVersion": "54372851",
+        "deletionTimestamp": "",
+        "labels": {
+          "network.ani.io/binding-id": "f332a57e-80b9-4254-85aa-47a3a2477c8b",
+          "network.ani.io/managed-by": "ani-network-service",
+          "network.ani.io/resource-id": "pool_bb811753b25a4fe598dff9cedf5afd1d",
+          "networking.kubercloud.com/gateway": "kcn-system.pool-bb811753b25a4fe598dff9cedf5afd1d"
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "cidrBlock": "172.16.102.0/24",
+          "enableDHCP": false,
+          "excludeIPs": [
+            "172.16.102.1",
+            "172.16.102.1..172.16.102.191",
+            "172.16.102.2",
+            "172.16.102.208..172.16.102.254"
+          ],
+          "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+          "gatewayIP": "172.16.102.2",
+          "ipVersion": "IPv4",
+          "natOutgoing": false,
+          "type": "Public",
+          "underlayConfig": {
+            "gatewayIP": "172.16.102.1",
+            "vlanNetwork": "vlan-1027ace223cb4339a32121709654d1d4"
+          }
+        },
+        "spec_sha256": "3696cbf6b9c802b5790561057a04302de62559ff5c1ce5d674b73febfe108be9"
+      },
+      {
+        "resource": "eips",
+        "namespace": "kcn-system",
+        "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+        "resourceVersion": "54374155",
+        "deletionTimestamp": "",
+        "labels": {
+          "network.ani.io/binding-id": "c17ba782-8e11-4558-ac57-eec21b642429",
+          "network.ani.io/managed-by": "ani-network-service",
+          "network.ani.io/resource-id": "dve_36b8b4bcec3d4396ae3d5e03dea9466b"
+        },
+        "spec": {
+          "ipAddress": "172.16.102.192",
+          "ipVersion": "IPv4",
+          "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+        },
+        "spec_sha256": "db9691c84e8cc589431ffae6167654b0e13462d1224dd763b71c753cd96579ab"
+      },
+      {
+        "resource": "snats",
+        "namespace": "kcn-system",
+        "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+        "resourceVersion": "54374157",
+        "deletionTimestamp": "",
+        "labels": {
+          "network.ani.io/binding-id": "bc0a058b-a8f2-4f6f-96a0-e91f5c148dc8",
+          "network.ani.io/managed-by": "ani-network-service",
+          "network.ani.io/resource-id": "dve_36b8b4bcec3d4396ae3d5e03dea9466b"
+        },
+        "spec": {
+          "disable": false,
+          "eip": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+          "vpc": "kcn-cluster"
+        },
+        "spec_sha256": "3d123e7e6299406ac77c81641cacc1e2e096ae20338eb21f6050bf9eb7f13b7a"
+      },
+      {
+        "resource": "vpcs",
+        "namespace": "kcn-system",
+        "name": "kcn-cluster",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "resourceVersion": "54374158",
+        "deletionTimestamp": "",
+        "labels": {},
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "ipVersion": "IPv4"
+        },
+        "spec_sha256": "bbaeaed58ce38731d9c6781f204b50435bc605abecfce03e2e7dc32d83661bc0"
+      }
+    ],
+    "protected": {
+      "vms": [
+        {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "resourceVersion": "60001503",
+          "deletionTimestamp": "",
+          "spec_sha256": "c517a1feb2ae302cdcccaafe21a54d74d49345c3f4f272ce44edd861a78e7acc"
+        },
+        {
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+          "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+          "resourceVersion": "60053763",
+          "deletionTimestamp": "",
+          "spec_sha256": "710beb114534f5f37ae1d9f9015f6d187e5eb1ea56ad151bc82ff2791e3a13cb"
+        },
+        {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+          "resourceVersion": "60510721",
+          "deletionTimestamp": "",
+          "spec_sha256": "cb2ed0a34dcf4fcb74b2654dc9248399606844995bec8600d4a7f9edee5149b1"
+        },
+        {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "uid": "9a751320-5f97-4e56-af6a-30964610321b",
+          "resourceVersion": "60459934",
+          "deletionTimestamp": "",
+          "spec_sha256": "8162335e24f2e832f3026f73b827bd9663d9eab9cc374801329adc38c312798b"
+        }
+      ],
+      "sources": [
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ubuntu-2404-source",
+          "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+          "resourceVersion": "59206017",
+          "deletionTimestamp": "",
+          "phase": "Bound",
+          "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-virtio-http-source",
+          "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+          "resourceVersion": "60361406",
+          "deletionTimestamp": "",
+          "phase": "Bound",
+          "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-fedora44-http-source",
+          "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+          "resourceVersion": "60210984",
+          "deletionTimestamp": "",
+          "phase": "Bound",
+          "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-windows2025-http-source",
+          "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+          "resourceVersion": "60361171",
+          "deletionTimestamp": "",
+          "phase": "Bound",
+          "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c"
+        }
+      ],
+      "nads": [
+        {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-mvp-main-v2",
+          "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+          "resourceVersion": "59410461",
+          "deletionTimestamp": "",
+          "config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30"
+        },
+        {
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vm-mvp-tenant2-01a168ce",
+          "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+          "resourceVersion": "60003290",
+          "deletionTimestamp": "",
+          "config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30"
+        }
+      ],
+      "namespaces": [
+        {
+          "namespace": "",
+          "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+          "resourceVersion": "59197776",
+          "deletionTimestamp": ""
+        },
+        {
+          "namespace": "",
+          "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+          "resourceVersion": "59985698",
+          "deletionTimestamp": ""
+        }
+      ]
+    },
+    "source_inventory_sha256": "e9c17594b49b053c3e53f30b4b29d515c8576aade7a5046514f5d22b07d89da1",
+    "steps": [
+      "fresh all UID/spec/identity and both target absences",
+      "journal before EIP CREATE exactly once",
+      "freeze ACK UID; observe only original EIP until Valid/Initialized and phase Available, allocated IPv4 in .193-.207",
+      "journal before Snat CREATE exactly once using recorded EIP original UID and exact VPC UID",
+      "observe original EIP+Snat Bound and address, then Root performs real guest public DNS/HTTPS checks"
+    ],
+    "unknown_ack": "persist unknown; GET exact target/spec/intent for diagnosis, no automatic adoption or repeated CREATE; stop dependent step until reviewed identity",
+    "cleanup_order": [
+      "Snat exact original UID/RV normal DELETE and Gone",
+      "EIP exact original UID/RV normal DELETE and Gone"
+    ],
+    "forbidden": [
+      "shared default .192 or routes",
+      "KCN code/config/restart",
+      "intranet objects/office tests",
+      "source/VM/volume/NAD mutations",
+      "SQL business writes",
+      "finalizer/force/manual backend deletion"
+    ],
+    "dns": "READ_ONLY; no Subnet DNS/Guest changes in this plan",
+    "cluster_mutations": 0,
+    "applied": false
+  },
+  "execution_allowed": false
+}

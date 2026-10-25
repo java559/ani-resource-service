@@ -1,0 +1,8 @@
+{
+  "source": "https://github.com/kubevirt/kubevirt/releases/download/v1.9.0/virtctl-v1.9.0-linux-amd64",
+  "sha256": "40ede2ee37c98a1aeed71c9c219616a05247ce2be109e1edddf0477572e8b978",
+  "official_checksum_source": "https://github.com/kubevirt/kubevirt/releases/expanded_assets/v1.9.0",
+  "official_sha256_matched": true,
+  "version_exit": 0,
+  "version": "Client Version: version.Info{GitVersion:\"v1.9.0\", GitCommit:\"79d34c1762169e5b0370ec491cef5ca12e6b504c\", GitTreeState:\"clean\", BuildDate:\"2026-07-30T12:50:04Z\", GoVersion:\"go1.26.4\", Compiler:\"gc\", Platform:\"linux/amd64\"}\n"
+}

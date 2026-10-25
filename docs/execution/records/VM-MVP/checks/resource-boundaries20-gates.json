@@ -1,0 +1,62 @@
+{
+  "result": "PASS",
+  "at": "2026-10-24T00:06:55.427786+00:00",
+  "base_deployed_source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-19",
+  "base_manifest_sha256": "596d4c7add64d72b6c5432107cb12e67192b212c6fc1fc4276f54ed4b07dea6f",
+  "fixed_gate_source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-boundaries-20",
+  "overlay_files": {
+    "scripts/verify-boundaries": "30e8f8f0239e4b8a2f0c201cc288370121a378ee432ced54023677b13123ce07"
+  },
+  "fixed_manifest_sha256": "914ffbba538b233ebe4e62b7038b14ded588ec58383dc845a0bc126a570ffe47",
+  "file_count": 756,
+  "workspace_main_modules": [
+    "github.com/zhangzhe-ctrl/ani-resource-service",
+    "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console"
+  ],
+  "business_gowork": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-boundaries-20/go.work",
+  "fixture_gowork": "off only for fixture go-list child processes",
+  "red": {
+    "gate": "boundaries",
+    "command": [
+      "./scripts/verify-boundaries"
+    ],
+    "exit_code": 1,
+    "result": "FAIL",
+    "seconds": 4.69,
+    "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-input19-boundaries.log"
+  },
+  "green": {
+    "command": [
+      "./scripts/verify-boundaries"
+    ],
+    "exit_code": 0,
+    "seconds": 1.359,
+    "fixture_rejections": 10,
+    "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-boundaries20-green.log"
+  },
+  "base_and_overlay_source_unchanged_after_gate": true,
+  "candidate_or_business_binary_changed": false,
+  "service_restarted": false,
+  "formal_refs_published": false,
+  "nonempty_package_coverage": {
+    "root_module": "github.com/zhangzhe-ctrl/ani-resource-service",
+    "internal_package_count": 20,
+    "layer_package_counts": {
+      "biz": 5,
+      "conf": 1,
+      "data": 8,
+      "server": 1,
+      "service": 5
+    },
+    "biz_domain_package_counts": {
+      "compute": 1,
+      "image": 1,
+      "instance": 1,
+      "network": 1,
+      "vm": 1
+    },
+    "all_packages_owned_by_exact_root_module": true,
+    "violations": [],
+    "metadata_only_no_compilation_or_test_rerun": true
+  }
+}

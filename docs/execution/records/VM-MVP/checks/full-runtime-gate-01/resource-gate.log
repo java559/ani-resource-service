@@ -1,0 +1,84 @@
+$ /home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go version
+go version go1.26.10 linux/amd64
+$ make verify GO=/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go BUF=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf SQLC=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+test "$(/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf --version)" = "1.60.0"
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+test "$(go version -m /home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf | awk '$1 == "mod" {print $2 "@" $3; exit}')" = "github.com/bufbuild/buf@v1.60.0"
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+test "$(/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc version)" = "v1.31.1"
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+test "$(go version -m /home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc | awk '$1 == "mod" {print $2 "@" $3; exit}')" = "github.com/sqlc-dev/sqlc@v1.31.1"
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+./scripts/verify-source /home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf /home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+./scripts/verify-boundaries
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+boundary fixture rejected: internal/biz/network/nested -> database/sql
+boundary fixture rejected: internal/biz/image/nested -> net/http
+boundary fixture rejected: internal/biz/image/nested -> example.invalid/boundary-fixture/internal/data/image
+boundary fixture rejected: internal/data/image -> example.invalid/boundary-fixture/internal/data/network
+boundary fixture rejected: internal/service/image -> example.invalid/boundary-fixture/internal/service/network
+boundary fixture rejected: internal/biz/network/nested -> example.invalid/boundary-fixture/internal/data/network
+boundary fixture rejected: internal/service/network -> example.invalid/boundary-fixture/internal/data/network
+boundary fixture rejected: internal/data/network -> example.invalid/boundary-fixture/internal/service/network
+boundary fixture rejected: internal/data/network -> example.invalid/boundary-fixture/internal/data/storage
+boundary fixture rejected: internal/service/network -> example.invalid/boundary-fixture/internal/service/storage
+recursive domain and repository ownership boundaries verified
+./scripts/net05a-build-faults.py --network-only
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+{"fault_build": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource/.work/fault-build", "status": "pass"}
+/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go mod tidy -diff
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go test -count=1 ./...
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1	0.007s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1	0.012s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1	0.009s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service	0.051s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute	0.006s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image	0.008s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance	0.005s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network	0.015s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	0.020s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1	0.031s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image	0.506s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image/sqlcgen	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance	1.174s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance/sqlcgen	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.153s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.055s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/server	2.246s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute	0.009s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image	0.008s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance	1.012s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network	0.011s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.010s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/migrations	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/migrations/compute	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/migrations/image	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/migrations/vm	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig	0.003s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/scripts/image-smoke-runtime	0.008s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api	0.016s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/scripts/vpc-read-probe	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/tests/net05	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/relay	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/rpc	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider	0.019s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/tests/runtime	0.056s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv	0.010s
+/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go vet ./...
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go build -trimpath ./...
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go mod verify
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量
+all modules verified
+git diff --check
+/etc/bashrc: 行 12: BASHRCSOURCED: 未绑定的变量

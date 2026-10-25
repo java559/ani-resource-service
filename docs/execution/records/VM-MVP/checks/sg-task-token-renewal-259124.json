@@ -1,0 +1,51 @@
+{
+  "window": "Root authorized a credential refresh before the long ISO acceptance window with active-session/lease0 and unchanged same-SA/two-exact-namespace/seven-RBAC scope; not an EROFS workaround",
+  "old_pid": 259124,
+  "new_pid": 335064,
+  "readyz_200": true,
+  "new_token_expires_at": "2026-10-25T02:05:15Z",
+  "active_sessions_before": 0,
+  "active_leases_before": 0,
+  "permission_checks": 22,
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "same_service_account": true,
+  "same_permissions": true,
+  "same_runtime_env": true,
+  "same_ticket_key": true,
+  "same_pki": true,
+  "normal_term_only": true,
+  "redis_db": 1,
+  "kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig",
+  "previous_kubeconfig_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/kubeconfig.previous-259124",
+  "process_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/sg-candidate/process.json",
+  "temporary_page_and_relay_changed": false,
+  "state": "PASS",
+  "old_startticks": 75216121,
+  "new_startticks": 75561411,
+  "requested_ttl_seconds": 3600,
+  "full_environment_sha256": "5157ebbef0d7254de47f5ece862cb8455e0307cef40c396c10fd2af53ba83ea1",
+  "full_environment_preserved": true,
+  "rbac_scope_fingerprint_sha256": "87266d55cca9eb216a1a5e007af32fd2edd4309affc3dcb7e1329999603d0db2",
+  "protected_gov_resource_unchanged": [
+    {
+      "pid": 35161,
+      "start_ticks": 74249534,
+      "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+      "environment_sha256": "fa817b6ae65a814efd0b5e5177fb6ac9b9c9b50817246bf6ba098df433b06591"
+    },
+    {
+      "pid": 3881653,
+      "start_ticks": 72749000,
+      "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+      "environment_sha256": "20fc70f015afc782892e0d7cecaae2f238eb3712b4e41feeb44419698cd2c1bb"
+    }
+  ],
+  "staged_receipt_sha256": "9059e0459486d3a44135d8fe07329340150db13a581d79721d122cd775ab1f56",
+  "exact_listener_ownership": [
+    39182,
+    39185
+  ],
+  "driver_sha256": "331f169a8c19ab755393703a94c546a365383009ee8e53bbde8ba47d2517f897",
+  "source_helper_sha256": "4cc8177e7ecd69c65e6aa22893daabf66178a144d8fb205f059adf1044179d2d",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc"
+}

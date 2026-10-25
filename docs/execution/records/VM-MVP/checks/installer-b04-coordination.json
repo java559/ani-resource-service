@@ -1,0 +1,10 @@
+{
+  "at_unix": 1792814043.6638439,
+  "classification": "NOT_COMPLETED_DEPENDENCY_DOWNLOAD_COORDINATED_PAUSE",
+  "reason": "Root prioritizes SG credential renewal and real VNC main flow",
+  "normal_signal": "SIGTERM to own timeout wrapper; propagated to its Go process group",
+  "wrapper_pid": 2653782,
+  "test_body_processes": [],
+  "source_manifest_unchanged": "9b31e1b36553fbfa78acaf961f58c44c4383d22a8fc8fdd064ce098cbeb44804",
+  "cache_preserved": true
+}

@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-24T08:10:26.756562+00:00",
+  "phase": "regressions",
+  "repo": "governance",
+  "host": "fedora",
+  "gowork": "off",
+  "private_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "steps": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-mod=readonly",
+        "./tests/imagecontract",
+        "./tools/localdeps/gow/internal/pkg",
+        "-run",
+        "^TestImageModulePreservesExistingContract$|^TestNewModuleInspectorFromGo",
+        "-count=1"
+      ],
+      "exit_code": 0,
+      "output": "ok  \tgo-wind-admin/tests/imagecontract\t0.025s\nok  \tgo-wind-admin/tools/localdeps/gow/internal/pkg\t0.071s\n"
+    }
+  ],
+  "candidate_processes_changed": false,
+  "business_api_calls": 0,
+  "result": "PASS_ORIGINAL_FAILURES_TARGETED",
+  "non_mod_source_unchanged": true,
+  "outputs": {
+    "go.mod": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671",
+    "go.sum": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a"
+  },
+  "elapsed_seconds": 5.539
+}

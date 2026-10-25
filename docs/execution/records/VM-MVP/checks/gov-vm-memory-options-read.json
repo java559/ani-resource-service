@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-23T23:26:12.565818+00:00",
+  "result": "PASS",
+  "tenant_id": 1,
+  "query_usage": "VIRTUAL_MACHINE",
+  "pages": 1,
+  "cpu_catalog_count": 2,
+  "enabled_selectable_cpu_at_least_8192_mib": [],
+  "current_iso_vms": [
+    {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": "3",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "observedState": "Running"
+    },
+    {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": "3",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "observedState": "Running"
+    }
+  ],
+  "resource_writes": 0,
+  "new_idempotency_keys_or_bodies": 0,
+  "auth_login_posts": 1,
+  "scope": "catalog information only; no replacement decision"
+}

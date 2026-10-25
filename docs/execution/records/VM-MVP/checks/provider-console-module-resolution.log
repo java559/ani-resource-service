@@ -1,0 +1,7 @@
+{
+	"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+	"Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+	"Error": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f: invalid version: git ls-remote -q --end-of-options origin in /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/vcs/63a903e28ca002da1f01c53fb1b5a8732a9c0d403fd54f7a4996e2082c8d6d21: exit status 128:\n\t12:23:32.097202 git.c:502               trace: built-in: git ls-remote -q --end-of-options origin\n\t12:23:32.097484 run-command.c:673       trace: run_command: unset GIT_CONFIG_COUNT GIT_DIR GIT_PREFIX; GIT_PROTOCOL=version=2 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8' -o SendEnv=GIT_PROTOCOL -p 443 git@ssh.github.com 'git-upload-pack '\\''/zhangzhe-ctrl/ani-resource-service'\\'''\n\t12:23:32.097512 run-command.c:765       trace: start_command: /bin/sh -c 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8 \"$@\"' 'ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=8' -o SendEnv=GIT_PROTOCOL -p 443 git@ssh.github.com 'git-upload-pack '\\''/zhangzhe-ctrl/ani-resource-service'\\'''\n\tNo ED25519 host key is known for [ssh.github.com]:443 and you have requested strict checking.\r\n\tHost key verification failed.\r\n\t致命错误：无法读取远程仓库。\n\t\n\t请确认您有正确的访问权限并且仓库存在。"
+}
+
+--- git/Go stderr ---

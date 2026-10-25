@@ -1,0 +1,29 @@
+[
+  {
+    "before_sha256": "dc3a233b4002a4aea7e31eb59b0a93d624a58e21676e9bea582c81f49cf69f93",
+    "after_sha256": "accd6cd9b9f7c2b64dd3ae6b0f73811030c0eb27744fac0c68a0786bfb2f84aa",
+    "backup": "/var/backups/ani-vm-mvp-20261023-01a168ce/config.toml.before",
+    "effective_device_ownership": true,
+    "service": "active",
+    "node": "ani-01",
+    "ip": "172.16.101.10"
+  },
+  {
+    "before_sha256": "dc3a233b4002a4aea7e31eb59b0a93d624a58e21676e9bea582c81f49cf69f93",
+    "after_sha256": "accd6cd9b9f7c2b64dd3ae6b0f73811030c0eb27744fac0c68a0786bfb2f84aa",
+    "backup": "/var/backups/ani-vm-mvp-20261023-01a168ce/config.toml.before",
+    "effective_device_ownership": true,
+    "service": "active",
+    "node": "ani-02",
+    "ip": "172.16.101.11"
+  },
+  {
+    "before_sha256": "a192311851c04172988c8dc06763b57d3f8a3cb9222065e460b495b9aa04208b",
+    "after_sha256": "81d60f09fb52a641e0e3af73dd04140d0268322285d9be2d45df67375fadb055",
+    "backup": "/var/backups/ani-vm-mvp-20261023-01a168ce/config.toml.before",
+    "effective_device_ownership": true,
+    "service": "active",
+    "node": "ani-03",
+    "ip": "172.16.101.12"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "intent": "preview-offline",
+  "driver_sha256": "a646fda04b4fd0ca733c17aafef7847277d41a4f2f2319df4b890b4df8e5c457",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-snapshots-v3.json",
+  "phase": "READ_ONLY_PREVIEW",
+  "preview": {
+    "version": "36",
+    "snapshotId": "3d068268-d8d0-5583-810f-9f187e0b05d1",
+    "snapshotUid": "b7685143-956b-4ce8-9994-7f3b7edb9a06",
+    "disks": [
+      {
+        "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "dd773137-07f9-5b7a-9511-fda3dcf09001",
+        "action": "retain-detached",
+        "reason": "disk outside snapshot remains owned and detached"
+      }
+    ],
+    "previewDigest": "eb42f94fd9e817c777a2967457d24077fc9f9c298243834e2610ab994ea4e7ce"
+  },
+  "five_sets_checked": false,
+  "offline_sets_checked": true,
+  "business_mutations": 0
+}

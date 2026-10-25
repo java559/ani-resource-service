@@ -1,0 +1,12 @@
+{
+  "state": "PASS_CONFIG_V2_ONLY_IMAGE_ADDED",
+  "configuration_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs-v2/config.yaml",
+  "original_config_unchanged": true,
+  "semantic_added_paths": [
+    "/image"
+  ],
+  "all_other_values_equal": true,
+  "old_malformed_prepared_copy_preserved": true,
+  "private_values_or_hashes_exported": false,
+  "service_changes": 0
+}

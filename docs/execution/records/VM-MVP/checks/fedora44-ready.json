@@ -1,0 +1,59 @@
+{
+  "datavolume": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "DataVolume",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-fedora44-http-source",
+    "uid": "739fbaee-e8ed-4162-861f-34617ad9856a"
+  },
+  "pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-fedora44-http-source",
+    "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00"
+  },
+  "pv": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolume",
+    "namespace": "",
+    "name": "pvc-4ccc186a-5569-4d78-b849-63714f636df1",
+    "uid": "16713980-2ae0-40d7-922e-a92f069ec089"
+  },
+  "csi": {
+    "controllerExpandSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "controllerPublishSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "driver": "rook-ceph.rbd.csi.ceph.com",
+    "fsType": "ext4",
+    "nodeStageSecretRef": {
+      "name": "rook-csi-rbd-node",
+      "namespace": "rook-ceph"
+    },
+    "volumeAttributes": {
+      "clusterID": "rook-ceph",
+      "imageFeatures": "layering",
+      "imageFormat": "2",
+      "imageName": "csi-vol-6b91a771-54dd-411c-a465-89c591ba1047",
+      "journalPool": "ani-block-pool",
+      "pool": "ani-block-pool",
+      "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+    },
+    "volumeHandle": "0001-0009-rook-ceph-0000000000000004-6b91a771-54dd-411c-a465-89c591ba1047"
+  },
+  "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912",
+  "source_file_sha256": "c8295961d4c41adbf785a31a17c21a971d3b7415fda72dcad0c11c49577bf03a",
+  "source_file_bytes": 3368683520,
+  "actual_disk_file_bytes": 4886364160,
+  "mode": "Filesystem",
+  "content_type": "kubevirt",
+  "read_only_hash": true,
+  "original_iso_prefix_verified": true,
+  "iso_proof": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/fedora44-onepass.json",
+  "guest_mount_or_install": "NOT_RUN"
+}

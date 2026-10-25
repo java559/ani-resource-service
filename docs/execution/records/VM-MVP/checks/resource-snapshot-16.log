@@ -1,0 +1,80 @@
+SOURCE16_VERIFIED 751 49ceba856b85e3473e59c948a71b33f506b0e88eca75fdc0d51d0be371123933
+=== RUN   TestRestorePreviewFiveSetsAndVersionIdentityDigest
+--- PASS: TestRestorePreviewFiveSetsAndVersionIdentityDigest (0.00s)
+=== RUN   TestRestoreMappingRecoversDeletedInventoryAndKeepsDetachedExtras
+--- PASS: TestRestoreMappingRecoversDeletedInventoryAndKeepsDetachedExtras (0.00s)
+=== RUN   TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping
+    snapshots_test.go:237: VM_LEASE_LOST
+--- FAIL: TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping (0.00s)
+=== RUN   TestRestoreMappingRetiresMediaWithoutDiscardingNewerLogicalCopies
+--- PASS: TestRestoreMappingRetiresMediaWithoutDiscardingNewerLogicalCopies (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	0.007s
+=== RUN   TestBackendFrozenDevicesAndConfiguration
+=== RUN   TestBackendFrozenDevicesAndConfiguration/default-is-not-frozen
+=== RUN   TestBackendFrozenDevicesAndConfiguration/class-drift
+=== RUN   TestBackendFrozenDevicesAndConfiguration/retain
+--- PASS: TestBackendFrozenDevicesAndConfiguration (0.00s)
+    --- PASS: TestBackendFrozenDevicesAndConfiguration/default-is-not-frozen (0.00s)
+    --- PASS: TestBackendFrozenDevicesAndConfiguration/class-drift (0.00s)
+    --- PASS: TestBackendFrozenDevicesAndConfiguration/retain (0.00s)
+=== RUN   TestBackendNativeGeneratedIdentityAndStoppedRetention
+--- PASS: TestBackendNativeGeneratedIdentityAndStoppedRetention (0.00s)
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift/owner-uid
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift/vmi-owner-is-not-persistent-vm-owner
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift/wrong-pv-claim
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift/retain-pv
+=== RUN   TestBackendRejectsForeignPVCAndPVDrift/block-backend
+--- PASS: TestBackendRejectsForeignPVCAndPVDrift (0.00s)
+    --- PASS: TestBackendRejectsForeignPVCAndPVDrift/owner-uid (0.00s)
+    --- PASS: TestBackendRejectsForeignPVCAndPVDrift/vmi-owner-is-not-persistent-vm-owner (0.00s)
+    --- PASS: TestBackendRejectsForeignPVCAndPVDrift/wrong-pv-claim (0.00s)
+    --- PASS: TestBackendRejectsForeignPVCAndPVDrift/retain-pv (0.00s)
+    --- PASS: TestBackendRejectsForeignPVCAndPVDrift/block-backend (0.00s)
+=== RUN   TestBackendClosingRegistersTerminatingVolumeWithoutReadiness
+--- PASS: TestBackendClosingRegistersTerminatingVolumeWithoutReadiness (0.00s)
+=== RUN   TestBackendRunningRequiresNativeVolumeStatus
+--- PASS: TestBackendRunningRequiresNativeVolumeStatus (0.00s)
+=== RUN   TestBackendRestoreKeepsOldUIDsUntilNativeReclamation
+--- PASS: TestBackendRestoreKeepsOldUIDsUntilNativeReclamation (0.00s)
+=== RUN   TestBackendCleanupChecksLatePVAndDoesNotDependOnClassOrSource
+--- PASS: TestBackendCleanupChecksLatePVAndDoesNotDependOnClassOrSource (0.00s)
+=== RUN   TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone
+--- PASS: TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone (0.00s)
+=== RUN   TestSnapshotUsesNativeSelectedDeleteClassWithoutChangingSharedPolicy
+--- PASS: TestSnapshotUsesNativeSelectedDeleteClassWithoutChangingSharedPolicy (0.00s)
+=== RUN   TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup
+--- PASS: TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup (0.00s)
+=== RUN   TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization
+    snapshots_test.go:257: missing native hotplug contract did not produce a patch false testing value /metadata/resourceVersion failed: test failed
+--- FAIL: TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization (0.00s)
+=== RUN   TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID
+--- FAIL: TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID (0.00s)
+panic: coding error: you must register resource to list kind for every resource you're going to LIST when creating the client.  See NewSimpleDynamicClientWithCustomListKinds or register the list into the scheme: /v1, Resource=persistentvolumes out of map[/v1, Resource=namespaces:NamespaceList /v1, Resource=persistentvolumeclaims:PersistentVolumeClaimList kubevirt.io/v1, Resource=virtualmachines:VirtualMachineList] [recovered, repanicked]
+
+goroutine 7 [running]:
+testing.tRunner.func1.2({0xb37d40, 0x3687ba36af60})
+	/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/src/testing/testing.go:1974 +0x232
+testing.tRunner.func1()
+	/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/src/testing/testing.go:1977 +0x349
+panic({0xb37d40?, 0x3687ba36af60?})
+	/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/src/runtime/panic.go:860 +0x13a
+k8s.io/client-go/dynamic/fake.(*dynamicResourceClient).List(0x3687ba4a4cc0, {0x3687ba18d350?, 0x24?}, {{{0x0, 0x0}, {0x0, 0x0}}, {0x0, 0x0}, {0x0, ...}, ...})
+	/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/k8s.io/client-go@v0.36.0/dynamic/fake/simple.go:361 +0xa25
+github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm.(*Native).ObserveRetiredVolume(_, {_, _}, {{0x3687ba18d2f0, 0x24}, {0x3687ba18d2c0, 0x24}, {0x0, 0x0}, {0x0, ...}, ...}, ...)
+	/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-16/internal/data/vm/snapshots.go:821 +0xa89
+github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm.TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID(0x3687ba59ed88)
+	/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-16/internal/data/vm/snapshots_test.go:301 +0x994
+testing.tRunner(0x3687ba59ed88, 0xcc86c0)
+	/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/src/testing/testing.go:2036 +0xea
+created by testing.(*T).Run in goroutine 1
+	/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/src/testing/testing.go:2101 +0x4c5
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.024s
+=== RUN   TestSnapshotServiceReadsAreScopedAndPreviewIsSideEffectFree
+--- PASS: TestSnapshotServiceReadsAreScopedAndPreviewIsSideEffectFree (0.00s)
+=== RUN   TestRestoreAdmissionRechecksFreshNativeSnapshotBeforeAccept
+--- PASS: TestRestoreAdmissionRechecksFreshNativeSnapshotBeforeAccept (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.010s
+FAIL

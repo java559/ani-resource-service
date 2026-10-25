@@ -1,0 +1,32 @@
+{
+  "result": "INPUT_BASE64_DECODE_REJECTED_BEFORE_MARKER_PROGRAM_EXEC",
+  "at": "2026-10-25T03:16:50.579335+00:00",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "version": "1",
+  "source_commands_sha256": "b3fea81f35892188a7596b84327f8ca49b66bb49654e4dafac20b253bdb75650",
+  "intended_ascii_characters": 2463,
+  "helper_complete": true,
+  "old_key_event_pacing_ms": 20,
+  "actual_error": "binascii.Error: Invalid base64-encoded string; data character count invalid (original screenshot preserved; exact numeric count is not asserted).",
+  "marker_program_exec": false,
+  "marker_write_started": false,
+  "marker_writes": 0,
+  "native_or_power_actions": 0,
+  "actual_prior_observation": "Installation already Successfully installed. uid1000 liveuser; exact20B serial originalvda, vda3 Btrfs/root still rw on canonical/mnt/sysroot plus alias/mnt/sysimage; home separate subvolume.",
+  "outcome": "Original input failure retained; no overwrite/retry of a created marker. Prepare shorter integrity-checked command and slower normal VNC typing.",
+  "screenshots": [
+    {
+      "path": "browser-installed-root-mounts-01.jpg",
+      "sha256": "a2bd6a4790b5c2de2995dcf3c8ba6d9d6d6b6672333ff2d885b635f1180d0dac"
+    },
+    {
+      "path": "browser-marker-input-rejected-01.jpg",
+      "sha256": "5fda48134d3cc2bf68cbf14352e99c6de940c90bd813957083afe1b02d37f340"
+    }
+  ],
+  "transcription_correction": {
+    "initial_numeric_transcription": 1897,
+    "status": "UNVERIFIED_RETRACTED_BEFORE_PUBLICATION",
+    "basis": "Tiny terminal digits were not reliably transcribed; the original screenshot, decode rejection before exec and zero marker writes are unchanged. Input representation changed; character loss versus duplication is not established."
+  }
+}

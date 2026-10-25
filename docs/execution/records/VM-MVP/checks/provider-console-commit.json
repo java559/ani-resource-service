@@ -1,0 +1,98 @@
+{
+  "commit": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+  "tree": "01cfd543805bd190550f45f74dc71b4ca41b6ce8",
+  "base": "63e138174831ba7cf32452e6216143a147dadc82",
+  "provider_files": {
+    "api/vm/console/go.mod": {
+      "sha256": "039c332865d8331f73206eb5824edbe778c3e9fd9d2fe1d601ae4b5428c47812",
+      "mode": 420
+    },
+    "api/vm/console/go.sum": {
+      "sha256": "959eff84945a118fd71c9da8a6a22f8d6362d2213bd1b601f6e9f3f9e503bcd5",
+      "mode": 420
+    },
+    "api/vm/console/v1/console.proto": {
+      "sha256": "3e1c20b1d008869016f13f66b37da34e1e64c3f95317e2584be49be23bb0311d",
+      "mode": 420
+    },
+    "api/vm/console/v1/console.pb.go": {
+      "sha256": "b0edae10fdab04c61fa26cb89d59ecd0fe7d6df64e7d6cab0d1ae82d2b028f10",
+      "mode": 420
+    },
+    "api/vm/console/v1/console_grpc.pb.go": {
+      "sha256": "aec1d71008701fd7c62fc92c9963d80ea6c59aa54dbfa234707a435122afcc0b",
+      "mode": 420
+    },
+    "scripts/generate-vm-console-api": {
+      "sha256": "a2d6f34ef8f202b06d0891c3010247aba10b9465d0972ed3984649250b5039b9",
+      "mode": 493
+    },
+    "Makefile": {
+      "sha256": "465d82967b5f1f21e4c71cc098a1f67bd292a546763b5d0fa6bc315dc794dd64",
+      "mode": 420
+    },
+    "buf.yaml": {
+      "sha256": "5ef1461d8da520fc385344f0ac458a31bd7959b7f2dc4128486951d48c7b9e8d",
+      "mode": 420
+    },
+    "scripts/verify-source": {
+      "sha256": "c750e1328dba5369f3552fa75adaebb901cd526d10e6ac245c54ecc49e02661a",
+      "mode": 493
+    }
+  },
+  "fedora_verify": {
+    "stage": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-console-provider-01",
+    "base": "63e138174831ba7cf32452e6216143a147dadc82",
+    "result": "PASS",
+    "source_files_unchanged": true,
+    "source_manifest": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-console-selection-01.manifest.json",
+    "previous_fail": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/provider-console-01.json",
+    "independent_console_checks_reused": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/provider-console-01.json",
+    "tmpdir": {
+      "path": "/tmp/avc-8rqyxl5y",
+      "owner_uid": 1000,
+      "inode": 1951597,
+      "device": 38,
+      "mode": "0700",
+      "removed": true
+    },
+    "steps": [
+      {
+        "name": "previous-failing-unix-socket-test",
+        "command": [
+          "go",
+          "test",
+          "-count=1",
+          "-run",
+          "^TestSocketRequiresPrivateDirectoryAndPreservesExistingPath$",
+          "./scripts/lb-api"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 1.647
+      },
+      {
+        "name": "provider-selection-make-verify",
+        "command": [
+          "make",
+          "verify",
+          "BUF=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf",
+          "SQLC=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc"
+        ],
+        "exit_code": 0,
+        "elapsed_seconds": 178.536
+      }
+    ],
+    "commit_created": false,
+    "git_network": false
+  },
+  "git_push": "NOT_RUN_PENDING_SPECIFIC_APPROVAL",
+  "requested_remote_branch": "refs/heads/codex/vm-console-api-20261023",
+  "git_transport": {
+    "default_port22": "CONNECTION_CLOSED_LOCAL_AND_FEDORA",
+    "ssh_443": "READ_ONLY_LS_REMOTE_PASS_BRANCH_ABSENT",
+    "host": "ssh.github.com",
+    "strict_host_key_checking": true,
+    "global_git_config_changed": false
+  },
+  "implementation_and_live_acceptance": "SEPARATE_NOT_INCLUDED_IN_PROVIDER_ONLY_COMMIT"
+}

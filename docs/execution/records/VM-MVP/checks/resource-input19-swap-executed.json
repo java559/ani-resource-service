@@ -1,0 +1,169 @@
+{
+  "approved_plan_sha256": "cd6337b23f524441cfefb6c152e8be0b5829a2653bddcf82a22a7ec50525982b",
+  "phase": "VERIFIED",
+  "result": "PASS",
+  "binary_swap_only": true,
+  "configuration_changed": false,
+  "vm_mutations": 0,
+  "sg_touched": false,
+  "shared_configuration_changed": false,
+  "rollback": {
+    "needed": false
+  },
+  "before": {
+    "resource_pending": {
+      "public.network_default_vpc_egress_operations": 0,
+      "public.network_virtual_switch_operations": 0,
+      "public.network_platform_operations": 0,
+      "public.network_operations": 0,
+      "instance.instance_operations": 0,
+      "vm.operations": 0
+    },
+    "gov_outbox": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    },
+    "four_vms_unchanged": true,
+    "business_guard_sha256": "24312837b2f1da6e09bf1574767869a1209700ff9bb1e0040c2d392a71397ef5",
+    "vm_identities": [
+      {
+        "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": 20,
+        "state": "Running",
+        "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+        "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+        "launcher_uid": "ceb39733-dba1-4a98-bb60-27bdf2090452"
+      },
+      {
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+        "native_vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+        "launcher_uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+      },
+      {
+        "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+        "native_vmi_uid": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+        "launcher_uid": "9aa44691-b767-4e83-9a35-9eb77718fd75"
+      },
+      {
+        "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "native_vmi_uid": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+        "launcher_uid": "fd02d255-a058-411b-a84f-93fdf3ee37d1"
+      }
+    ],
+    "source_nad_guard_sha256": "a71bb31e8535922c6c4bfb82374ad7e2b44062c344b3e83fd95ef976af96e53e",
+    "source_count": 4,
+    "nad_count": 3,
+    "media_keys": [
+      "ubuntu-24.04",
+      "virtio-win-0.1.271",
+      "fedora-44-iso",
+      "windows-server-2025-iso"
+    ]
+  },
+  "original_process": {
+    "pid": 2138275,
+    "start_ticks": "65709464",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18b",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "dcd745c912972b3ff8fe06ea75ad63e46417d3dfaac735ee09214bed41a40850",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    }
+  },
+  "launched_applied": {
+    "pid": 2184281,
+    "start_ticks": "65903547",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.input19",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "9e5f6b0ed545757ca53957bf8d5a530f1220ce472f6f501097ecca353d4acc49",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    },
+    "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/server-input19-applied.log"
+  },
+  "after": {
+    "resource_pending": {
+      "public.network_default_vpc_egress_operations": 0,
+      "public.network_virtual_switch_operations": 0,
+      "public.network_platform_operations": 0,
+      "public.network_operations": 0,
+      "instance.instance_operations": 0,
+      "vm.operations": 0
+    },
+    "gov_outbox": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    },
+    "four_vms_unchanged": true,
+    "business_guard_sha256": "24312837b2f1da6e09bf1574767869a1209700ff9bb1e0040c2d392a71397ef5",
+    "vm_identities": [
+      {
+        "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": 20,
+        "state": "Running",
+        "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+        "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+        "launcher_uid": "ceb39733-dba1-4a98-bb60-27bdf2090452"
+      },
+      {
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+        "native_vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+        "launcher_uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79"
+      },
+      {
+        "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+        "native_vmi_uid": "2f9e7340-9f53-4dc0-903f-81759767f3a3",
+        "launcher_uid": "9aa44691-b767-4e83-9a35-9eb77718fd75"
+      },
+      {
+        "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "native_vmi_uid": "1b6caed4-4c29-4d2d-af11-59fbacda2622",
+        "launcher_uid": "fd02d255-a058-411b-a84f-93fdf3ee37d1"
+      }
+    ],
+    "source_nad_guard_sha256": "a71bb31e8535922c6c4bfb82374ad7e2b44062c344b3e83fd95ef976af96e53e",
+    "source_count": 4,
+    "nad_count": 3,
+    "media_keys": [
+      "ubuntu-24.04",
+      "virtio-win-0.1.271",
+      "fedora-44-iso",
+      "windows-server-2025-iso"
+    ]
+  },
+  "new_pid": 2184281,
+  "admin_ready": 200,
+  "services_restarted": true
+}

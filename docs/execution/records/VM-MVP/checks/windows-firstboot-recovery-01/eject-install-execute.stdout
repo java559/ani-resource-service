@@ -1,0 +1,1 @@
+{"phase": "ORIGINAL_OPERATION_OBSERVED", "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d", "intent": "firstboot-recovery-01-eject-install", "operation_id": "2cc000ae-64e9-47f8-88bf-d341215a714e", "state": "succeeded", "version": "7", "expected_version": "6"}

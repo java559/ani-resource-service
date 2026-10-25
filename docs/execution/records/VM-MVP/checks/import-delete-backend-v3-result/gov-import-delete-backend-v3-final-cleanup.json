@@ -1,0 +1,156 @@
+{
+  "at": "2026-10-24T05:37:00.972113+00:00",
+  "scope": "only already-attributed V22v3 target/temp UIDs and reservation; no backend writes",
+  "vm_id": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+  "delete_operation": {
+    "id": "bb9fa9c1-1b79-4059-bb8f-ffcde66db765",
+    "vmId": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+    "action": "/vm.v1.VMService/AcceptDelete",
+    "intentVersion": "2",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T05:17:00.316964341Z"
+  },
+  "attribution": {
+    "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "pool": "ani-block-pool",
+    "image": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "directory": "csi.volumes.default",
+    "key": "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reverse_object": "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "reverse_request_verified": true,
+    "claim": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+    }
+  },
+  "pre_delete_actual_image_id_observed": false,
+  "historical_v1_v2_result": "UNCHANGED_NOT_MEASURED",
+  "v3_pre_delete_measurement_result": "UNCHANGED_NOT_MEASURED",
+  "timeline": {
+    "delete_succeeded_observed_at": "2026-10-24T05:17:00.316964341Z",
+    "post_delete_PRESENT_measurement_started_at": "2026-10-24T05:22:12.055929+00:00",
+    "post_delete_PRESENT_receipt_last_saved_at": "2026-10-24T05:22:35.692541+00:00",
+    "subsequent_image_and_journal_ABSENT_measurement_started_at": "2026-10-24T05:31:51.653218+00:00",
+    "subsequent_measurement_elapsed_seconds": 6.146
+  },
+  "source_receipts": {
+    "evidence/gov-import-delete-backend-v3.json": "5dc2c0844c19b4ee1a2035fd9dcaad8b6413288f63f9ee8ee643a8243cf84397",
+    "evidence/gov-import-delete-backend-v3-reservation-after-delete.json": "3d5a54a694cebf3de5cdcc9e81ad414c0c4b1cee2393f1d344c1ca20688a1245",
+    "evidence/gov-import-delete-backend-v3-exact-recheck.json": "6d744bccc82f62e704073b8a64b51402aff959601607abf8480c3620cf6758e1"
+  },
+  "result": "NOT_CLEAN_OR_NOT_MEASURED",
+  "transport_exit": null,
+  "timed_out": true,
+  "journal_reads": [
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+        "-"
+      ],
+      "status": "NOT_MEASURED"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volumes.default",
+        "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+        "-"
+      ],
+      "status": "NOT_MEASURED"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.volname",
+        "-"
+      ],
+      "status": "NOT_MEASURED"
+    },
+    {
+      "argv": [
+        "rados",
+        "-p",
+        "ani-block-pool",
+        "getomapval",
+        "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+        "csi.imagename",
+        "-"
+      ],
+      "status": "NOT_MEASURED"
+    }
+  ],
+  "trash_exact_matches": null,
+  "native_absence": [
+    {
+      "ref": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+        "uid": "e68780ed-ac20-4c6e-b278-cfcceb4daf55"
+      },
+      "absent": true,
+      "replacement_uid": null
+    },
+    {
+      "ref": {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+        "uid": "98ae973a-101f-4bc5-ab99-75a421e620da"
+      },
+      "absent": true,
+      "replacement_uid": null
+    },
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+        "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724"
+      },
+      "absent": true,
+      "replacement_uid": null
+    },
+    {
+      "ref": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+        "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+      },
+      "absent": true,
+      "replacement_uid": null
+    },
+    {
+      "ref": {
+        "kind": "VolumeCloneSource",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da",
+        "uid": "3a70a6e3-ad8d-4818-ba52-6001c137716f"
+      },
+      "absent": true,
+      "replacement_uid": null
+    }
+  ],
+  "pvs_for_exact_claim_uids": [],
+  "same_attachment_released": true,
+  "attachment_receipt_scope": "earlier actual original DELETE terminal measurement; no new business API",
+  "elapsed_seconds": 20.682,
+  "finished_at": "2026-10-24T05:37:21.936222+00:00"
+}

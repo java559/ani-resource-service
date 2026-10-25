@@ -1,0 +1,42 @@
+{
+  "GOPROXY": "off",
+  "GOWORK": "off",
+  "argv": [
+    "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+    "build",
+    "-trimpath",
+    "-buildvcs=false",
+    "-ldflags",
+    "-X main.Name=ani-resource-service -X main.Version=vm-mvp-snapshot-list20-01a168ce",
+    "-o",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/snapshot-list-projection-01/resource-server.snapshot-list20",
+    "./cmd/ani-resource-service"
+  ],
+  "base_archive_sha256": "137566539e6f536382f54563782f21de61c2a726be3d73aae88a95b051d27fc5",
+  "base_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "base_manifest_files": 538,
+  "binary": {
+    "bytes": 78656517,
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/snapshot-list-projection-01/resource-server.snapshot-list20",
+    "sha256": "69a8dfe586fc9dae8a7bb9b93b9591191f67839f906127c6054796ea4386cde0"
+  },
+  "changes": [
+    "source/internal/service/vm/snapshots.go",
+    "source/internal/service/vm/snapshots_test.go"
+  ],
+  "elapsed_seconds": 18.874,
+  "exit": 0,
+  "files": {
+    "internal/service/vm/snapshots.go": "6dce02320071f0cde9293d3c61dccada35dccfbc35e36a2bba6cc04f0d75e132",
+    "internal/service/vm/snapshots_test.go": "ff283be178c212706fc606b541b41993de45631c7412ea5cd4ede49fcaa10127"
+  },
+  "go_mod_replace": [],
+  "host": "fedora/172.16.101.31",
+  "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/snapshot-list-projection-01/build.log",
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "phase": "build",
+  "service_changes": 0,
+  "source_sha256": "bafd225186e2154695fc923e4317879d8f0742f0296c65cb007da1186e3b9d5d",
+  "source_unchanged": true,
+  "vm_api_calls": 0
+}

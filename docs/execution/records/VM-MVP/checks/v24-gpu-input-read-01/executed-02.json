@@ -1,0 +1,189 @@
+{
+  "state": "CANONICAL_READ_QUALIFIED_PLATFORM_LIST_RECORDED_NO_REGISTRY_WRITES",
+  "started_at": "2026-10-24T12:33:47.741348+00:00",
+  "source_sha256": "262a25b624f38fa8a2c6557444080f8b16cab89057d0f80e8e056e4060e3aef2",
+  "mutations": [
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "body": {
+        "data": {
+          "name": "accelerator:cluster:list",
+          "code": "accelerator:cluster:list",
+          "status": "ON",
+          "apiIds": [
+            10
+          ]
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/roles/1",
+      "body": {
+        "data": {
+          "tenantId": 0,
+          "permissions": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            31,
+            32,
+            33,
+            34,
+            35,
+            50,
+            51,
+            54
+          ]
+        },
+        "updateMask": "permissions"
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    }
+  ],
+  "cluster_list_requests": 1,
+  "cluster_detail_requests": 0,
+  "platform_read_not_tenant_acceptance": true,
+  "shared_or_cluster_writes": 0,
+  "quota_profile_preset_model_writes": 0,
+  "current_gov": {
+    "pid": 3465703,
+    "start_ticks": 70973412,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "role_before": {
+    "id": 1,
+    "name": "\u5e73\u53f0\u7ba1\u7406\u5458",
+    "code": "platform:admin",
+    "sortOrder": 0,
+    "status": "ON",
+    "isProtected": true,
+    "type": "SYSTEM",
+    "dataScope": "ALL",
+    "permissions": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      34,
+      31,
+      32,
+      33,
+      35,
+      50,
+      51
+    ],
+    "orgUnits": [],
+    "fieldPermissions": [],
+    "tenantId": 0,
+    "updatedBy": 1,
+    "createdAt": "2026-10-23T14:57:52.150859Z",
+    "updatedAt": "2026-10-24T10:32:14.921332Z"
+  },
+  "canonical_api": {
+    "id": 10,
+    "operation": "AcceleratorAdminService_ListClusters",
+    "path": "/api/v1/admin/accelerator/clusters",
+    "method": "GET",
+    "module": "AcceleratorAdminService",
+    "moduleDescription": "Governance requires a JWT platform user and current role permission.\n Accelerator validates the service RPC and its provider-managed cluster scope.",
+    "businessModule": "ACCELERATOR",
+    "description": "",
+    "scope": "ADMIN",
+    "status": "ON",
+    "createdAt": "2026-10-23T14:57:52.150859Z"
+  },
+  "deployed_scope_metadata": {
+    "configmap_name": "accelerator-modeldev-execution-v21",
+    "configmap_uid": "84a95682-84d7-41e0-8842-a897fc72885a",
+    "configmap_rv": "51903981",
+    "platform_listclusters_grants": [],
+    "provider_config_file_references": [
+      "/etc/acc/provider.json"
+    ],
+    "public_provider_connections": [
+      {
+        "ref": "managed:ani-lab-formal",
+        "api_server": "https://kubernetes.default.svc",
+        "server_name": "kubernetes.default.svc"
+      }
+    ],
+    "secret_values_read": false,
+    "scope_semantics": "ACC auth.go copies matching actor/platform/action grant.ClusterIds to caller.ClusterIDs; ListClusters reads only caller.ClusterIDs"
+  },
+  "role_after": {
+    "id": 1,
+    "name": "\u5e73\u53f0\u7ba1\u7406\u5458",
+    "code": "platform:admin",
+    "sortOrder": 0,
+    "status": "ON",
+    "isProtected": true,
+    "type": "SYSTEM",
+    "dataScope": "ALL",
+    "permissions": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7,
+      34,
+      31,
+      32,
+      33,
+      35,
+      50,
+      51,
+      54
+    ],
+    "orgUnits": [],
+    "fieldPermissions": [],
+    "tenantId": 0,
+    "updatedBy": 1,
+    "createdAt": "2026-10-23T14:57:52.150859Z",
+    "updatedAt": "2026-10-24T12:33:50.312029Z"
+  },
+  "permission": {
+    "id": 54,
+    "name": "accelerator:cluster:list",
+    "code": "accelerator:cluster:list",
+    "status": "ON",
+    "menuIds": [],
+    "apiIds": [
+      10
+    ],
+    "createdBy": 1,
+    "createdAt": "2026-10-24T12:33:50.049145Z"
+  },
+  "all_old_role_permissions_and_settings_preserved": true,
+  "clusters": [
+    {
+      "cluster_id": "0fcdb8b1-22bf-4528-af59-82843dc88f21",
+      "display_name": "ANI lab 10-12 formal GPU",
+      "connection_ref": "managed:ani-lab-formal",
+      "version": "1"
+    }
+  ],
+  "next_page_token_present": false,
+  "exact527_returned": false,
+  "finished_at": "2026-10-24T12:33:51.536745+00:00"
+}

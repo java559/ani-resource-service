@@ -1,0 +1,60 @@
+{
+  "at": "2026-10-23T20:53:30.531015+00:00",
+  "script": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-network-environment.py",
+  "script_sha256": "b3b081f07107a0a9b26059694d5f5771a530df59a8f9b85849e80a992a3ee87d",
+  "plan_sha256": "00d2328cf6f9172472ebc69a79ddf69f4c6bc4601874abee143592780945c175",
+  "py_compile": "PASS",
+  "help": "PASS",
+  "pure_fixtures": {
+    "result": "PURE_EXTERNAL_BOUNDARY_FIXTURES_PASS",
+    "checks": [
+      "unknown_ack_persisted",
+      "unknown_ack_absent_never_reposted",
+      "unknown_ack_absent_cannot_be_declared_cleaned",
+      "unknown_ack_present_nonce_cannot_adopt_without_original_uid",
+      "observer_never_adopts_unknown_uid_by_name",
+      "same_name_uid_replacement",
+      "same_name_nonce_changed",
+      "spec_drift",
+      "pending_normal_delete_retains_parent",
+      "unknown_delete_never_reissued",
+      "delete_receives_exact_uid_and_resourceversion",
+      "atomic_private_registry_600",
+      "exact_five_objects_two_tenants",
+      "old_plan_approval_rejected",
+      "missing_human_reference_rejected",
+      "native_auto_allocated_eip_in_reviewed_range",
+      "eip_outside_pool",
+      "eip_allocated_address_drift",
+      "existing_supernet_conflict",
+      "existing_nested_subnet_conflict",
+      "nonoverlapping_original_tenant_subnet_allowed",
+      "config_required_destination_missing",
+      "parent_eip_bound_retained",
+      "transport_delete_uid_rv_preconditions_no_force"
+    ],
+    "count": 24,
+    "cluster_commands": 0,
+    "cluster_mutations": 0,
+    "guest_connections": 0
+  },
+  "apply": "NOT_RUN_NO_USER_APPROVAL",
+  "cleanup": "NOT_RUN",
+  "preflight": {
+    "action": "preflight",
+    "approval_reference": null,
+    "at": "2026-10-23T20:51:57.143198+00:00",
+    "cidr_conflict_inventory_count": 17,
+    "five_names_absent": true,
+    "plan_sha256": "00d2328cf6f9172472ebc69a79ddf69f4c6bc4601874abee143592780945c175",
+    "private_backup_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/network-environment/backup.json",
+    "result": "READ_ONLY_PREFLIGHT_PASS",
+    "script_sha256": "fe6148857da6bf489179d06f327357656f8bfe4d0e3b8cfd8f49edc64f65e964",
+    "source_sha256": "e2662cc7e60250a5ecd33ea14518566db95165e6b0fe9b0e86e4a8a74bbd6ac2"
+  },
+  "private_registry_mode600": {
+    "backup.json": "0o600",
+    "state.json": "0o600"
+  },
+  "network_objects_created": 0
+}

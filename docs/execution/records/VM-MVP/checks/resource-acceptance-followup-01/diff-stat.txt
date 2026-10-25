@@ -1,0 +1,6 @@
+ scripts/vm-product-account-persistence.py    | 433 ++++++++++++++
+ scripts/vm-product-snapshot-linux.py         | 135 +++--
+ scripts/vm-product-tenant2-cleanup-delete.py | 846 +++++++++++++++++++++++++++
+ scripts/vm-product-windows-disks.py          | 399 +++++++++++++
+ scripts/vm-product-windows-lifecycle.py      | 546 +++++++++++++++++
+ 5 files changed, 2322 insertions(+), 37 deletions(-)

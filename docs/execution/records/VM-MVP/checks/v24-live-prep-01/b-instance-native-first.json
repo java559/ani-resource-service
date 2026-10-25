@@ -1,0 +1,140 @@
+{
+  "observed_at": "2026-10-24T10:39:07.868152+00:00",
+  "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+  "objects": [
+    {
+      "kind": "Notebook",
+      "name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+      "uid": "8cfb0171-ff0b-4fe6-b548-6c490e497c14",
+      "owners": [],
+      "phase": null,
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-24T10:38:49Z",
+          "lastTransitionTime": "2026-10-24T10:37:38Z",
+          "status": "True",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": "2026-10-24T10:38:49Z",
+          "lastTransitionTime": "2026-10-24T10:37:22Z",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": "2026-10-24T10:38:49Z",
+          "lastTransitionTime": "2026-10-24T10:38:29Z",
+          "message": "containers with unready status: [workspace]",
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": "2026-10-24T10:38:49Z",
+          "lastTransitionTime": "2026-10-24T10:38:29Z",
+          "message": "containers with unready status: [workspace]",
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": "2026-10-24T10:38:49Z",
+          "lastTransitionTime": "2026-10-24T10:37:22Z",
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "readyReplicas": 0,
+      "replicas": null
+    },
+    {
+      "kind": "Pod",
+      "name": "instance-64413d16-05df-4623-a545-0e2f226c6006-0",
+      "uid": "a0f686e2-d1c8-4066-a2a7-f1d4f669ffa8",
+      "owners": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "StatefulSet",
+          "name": "instance-64413d16-05df-4623-a545-0e2f226c6006",
+          "uid": "e210ef5c-2ee4-48d3-8e84-e80bb013f660"
+        }
+      ],
+      "phase": "Running",
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T10:37:38Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T10:37:22Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T10:38:29Z",
+          "message": "containers with unready status: [workspace]",
+          "observedGeneration": 1,
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T10:38:29Z",
+          "message": "containers with unready status: [workspace]",
+          "observedGeneration": 1,
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T10:37:22Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "readyReplicas": null,
+      "replicas": null,
+      "node": "ani-03",
+      "containers": [
+        {
+          "name": "workspace",
+          "ready": false,
+          "restartCount": 3,
+          "state": {
+            "terminated": {
+              "containerID": "containerd://4507584ecb83df4092e7efaac7aee6241ce024770651e5c9ac501ebdda4edd6f",
+              "exitCode": 1,
+              "finishedAt": "2026-10-24T10:38:28Z",
+              "reason": "Error",
+              "startedAt": "2026-10-24T10:38:28Z"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "name": "workspace-64413d16-05df-4623-a545-0e2f226c6006",
+      "uid": "3faba905-a7cf-4fab-bcad-614b00832b02",
+      "owners": [],
+      "phase": "Bound",
+      "conditions": null,
+      "readyReplicas": null,
+      "replicas": null,
+      "volumeName": "pvc-3faba905-a7cf-4fab-bcad-614b00832b02",
+      "volumeMode": "Filesystem"
+    }
+  ],
+  "cluster_mutations": 0
+}

@@ -1,0 +1,8 @@
+{
+  "result": "REFUSED_BEFORE_PHASE",
+  "cause": "Root supplied wrong release SHA to driver; fixed to actual cf7d... before any phase execution",
+  "api_calls": 0,
+  "lock_or_private_phase_created": false,
+  "original_receipt_reference": "tool command exit74 before release guard passed",
+  "corrected_create_receipt_sha256": "f5e945294038520e4ff1ce8373ecbe89b248691bf6149c371efd99a47a250e8f"
+}

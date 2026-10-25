@@ -1,0 +1,141 @@
+{
+  "state": "PASS_FAILED_IMAGE_NORMAL_UNREGISTER_AND_EXACT_ARTIFACT_CLEANUP",
+  "started_at": "2026-10-24T11:13:52.930776+00:00",
+  "source_mutations": 0,
+  "vm_mutations": 0,
+  "new_registration_and_project_kept": true,
+  "retired_exec_scope_denies": [
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "list",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      "expected": false,
+      "allowed": false
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "create",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+        "subresource": "exec"
+      },
+      "expected": false,
+      "allowed": false
+    }
+  ],
+  "remaining_network_nics": [
+    {
+      "original": {
+        "UID": "c1f1c7c9-eff1-4dfa-b408-91f95c368bac",
+        "Kind": "Nic",
+        "Name": "nic-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c-instance--mv8sd",
+        "OwnerUID": "830cb104-343d-4c90-be18-18b502d0fa19",
+        "Namespace": "kcn-system"
+      },
+      "gone": true
+    }
+  ],
+  "failed_image_active_instance_consumers": 0,
+  "original_artifact": {
+    "id": 66,
+    "project_id": 18,
+    "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712"
+  },
+  "normal_unregister_result": {
+    "ID": "img_e1a98d0e9eb5495dac77cb86483dc053",
+    "TenantID": "",
+    "SpaceID": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+    "Repository": "workspace-candidate",
+    "SourceReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "Digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "ResolvedReference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "MediaType": "application/vnd.oci.image.manifest.v1+json",
+    "Scope": "platform",
+    "Metadata": {
+      "DisplayName": "V24 task workspace",
+      "Description": "Fixed existing workspace artifact; task-only Instance regression",
+      "Purposes": [
+        "container"
+      ],
+      "Accelerator": "undeclared"
+    },
+    "Platforms": [
+      {
+        "OS": "linux",
+        "Architecture": "amd64",
+        "Variant": ""
+      }
+    ],
+    "Version": 2,
+    "CreatedBy": "operator:vm-mvp-v24-01a168ce",
+    "UpdatedBy": "operator:vm-mvp-v24-01a168ce",
+    "CreatedAt": "2026-10-24T18:19:37.518732+08:00",
+    "UpdatedAt": "2026-10-24T19:13:55.332962+08:00",
+    "UnregisteredAt": "2026-10-24T19:13:55.332962+08:00"
+  },
+  "unregister_send_attempts": 1,
+  "unregistered_readback": {
+    "image_id": "img_e1a98d0e9eb5495dac77cb86483dc053",
+    "space_id": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+    "version": 2,
+    "unregistered_at": "2026-10-24T11:13:55.332962+00:00",
+    "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "repository": "workspace-candidate"
+  },
+  "artifact_delete_status": 200,
+  "artifact_readback": "NOT_FOUND_404",
+  "corrected_artifact_kept": {
+    "id": 67,
+    "project_id": 18,
+    "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488"
+  },
+  "task_image_spaces_metadata": [
+    {
+      "space_id": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+      "owner_scope": "platform",
+      "tenant_id": null,
+      "installation_id": "01a168ce-29f8-77b2-aa8e-b980545b6113",
+      "registry_authority": "172.16.101.10:30003",
+      "project_name": "vm-mvp-v24-platform-01a168ce",
+      "harbor_project_id": 18,
+      "state": "available",
+      "version": 3,
+      "credentials": []
+    },
+    {
+      "space_id": "f457f793-1139-47b2-b442-db905e48f0ad",
+      "owner_scope": "tenant",
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "installation_id": "01a168ce-29f8-77b2-aa8e-b980545b6113",
+      "registry_authority": "172.16.101.10:30003",
+      "project_name": "t-vm-mvp-v24-01a168ce",
+      "harbor_project_id": 19,
+      "state": "available",
+      "version": 3,
+      "credentials": [
+        {
+          "purpose": "pull",
+          "state": "active",
+          "generation": 1,
+          "robot_id": 18
+        }
+      ]
+    }
+  ],
+  "task_image_roles_metadata": [
+    {
+      "name": "vm_image_v24_owner_01a168ce",
+      "oid": "108792"
+    },
+    {
+      "name": "vm_image_v24_runtime_01a168ce",
+      "oid": "108793"
+    }
+  ],
+  "finished_at": "2026-10-24T11:13:57.518049+00:00"
+}

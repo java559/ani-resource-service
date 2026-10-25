@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-23T23:32:41.352359+00:00",
+  "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+  "launcher_uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+  "node": "ani-02",
+  "identity_before_after": "PASS",
+  "sleep_seconds_between_samples": 8,
+  "before": {
+    "result": "PASS_OWN_COMPUTE_CGROUP",
+    "scope_basis": "private_namespace_root",
+    "cpu_max": "200000 100000",
+    "counters": {
+      "nr_periods": 40898,
+      "nr_throttled": 5386,
+      "throttled_usec": 84475718,
+      "usage_usec": 5386064883
+    }
+  },
+  "after": {
+    "result": "PASS_OWN_COMPUTE_CGROUP",
+    "scope_basis": "private_namespace_root",
+    "cpu_max": "200000 100000",
+    "counters": {
+      "nr_periods": 40979,
+      "nr_throttled": 5423,
+      "throttled_usec": 84730431,
+      "usage_usec": 5401751274
+    }
+  },
+  "disk_iotune": [
+    {
+      "disk_ordinal": 0,
+      "iotune": null
+    },
+    {
+      "disk_ordinal": 1,
+      "iotune": null
+    }
+  ],
+  "mutations": 0,
+  "full_xml_or_disk_paths_recorded": false,
+  "counter_delta": {
+    "nr_periods": 81,
+    "nr_throttled": 37,
+    "throttled_usec": 254713,
+    "usage_usec": 15686391
+  }
+}

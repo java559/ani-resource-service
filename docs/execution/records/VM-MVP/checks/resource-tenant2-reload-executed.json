@@ -1,0 +1,511 @@
+{
+  "approved_plan_sha256": "ea6191fa0869a0fa9f7a316d1afd0341fe570d9f1dc5142af3cc609b1250c07c",
+  "phase": "VERIFIED",
+  "config_applied": true,
+  "task_only": true,
+  "shared_configuration_changed": false,
+  "binary_rebuilt": false,
+  "steps": [
+    "original task PID exited after TERM"
+  ],
+  "rollback": {
+    "needed": false
+  },
+  "fresh_database": {
+    "database": "vm_resource_candidate_01a168ce",
+    "pending_operation_counts": {
+      "public.network_default_vpc_egress_operations": 0,
+      "public.network_virtual_switch_operations": 0,
+      "public.network_platform_operations": 0,
+      "public.network_operations": 0,
+      "instance.instance_operations": 0,
+      "vm.operations": 0
+    },
+    "assigned_cidrs": [
+      {
+        "kind": "vpc",
+        "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "cidr": "10.83.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "vpc",
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "cidr": "10.84.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "cidr": "10.84.1.0/24",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "cidr": "10.83.1.0/24",
+        "state": "available"
+      }
+    ]
+  },
+  "fresh_cluster": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "nodes": [
+      {
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+      },
+      {
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+      },
+      {
+        "name": "ani-03",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+      }
+    ],
+    "inventory_counts": {
+      "nodes": 3,
+      "servicecidrs": 1,
+      "kcn_subnets": 7,
+      "kcn_vpcs": 6,
+      "node_facts": 3
+    },
+    "assigned_cidrs": [
+      {
+        "kind": "NodePodCIDR",
+        "identity": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "cidr": "10.16.0.0/24"
+      },
+      {
+        "kind": "NodePodCIDR",
+        "identity": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "cidr": "10.16.1.0/24"
+      },
+      {
+        "kind": "NodePodCIDR",
+        "identity": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "cidr": "10.16.2.0/24"
+      },
+      {
+        "kind": "ServiceCIDR",
+        "identity": "2b0fda89-ea60-4588-b989-e4d40e36d7ce",
+        "cidr": "10.96.0.0/16"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0",
+        "cidr": "10.16.0.0/16"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc",
+        "cidr": "172.16.102.0/24"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "fe3365ee-407d-41ab-8b9d-fca9d8b606c9",
+        "cidr": "100.64.0.0/16"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "8c1dbf94-650f-40ab-828b-b83ac8951d16",
+        "cidr": "100.65.0.0/16"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "cdaa1b9e-7285-45c9-b4c5-1e3d03f49084",
+        "cidr": "10.73.0.0/24"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "c24a983c-f9f4-403d-9807-8164004000a3",
+        "cidr": "10.83.1.0/24"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "29cdddaf-c09b-49df-9323-dd776d8ec929",
+        "cidr": "10.84.1.0/24"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "d6081716-5e9b-46a6-a217-33f52ae0d469",
+        "cidr": "10.0.0.0/16"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "269f59ed-c9d0-4fbb-b605-4e552ff497fe",
+        "cidr": "10.2.0.0/16"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "dce12939-eda9-4bee-893b-fbcd30878b33",
+        "cidr": "10.73.0.0/16"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+        "cidr": "10.83.0.0/16"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "2f2e25c2-55e1-49bf-b284-4d7504b32f2b",
+        "cidr": "10.84.0.0/16"
+      }
+    ],
+    "routing_only_intranetNetworks_excluded": true
+  },
+  "fresh_networks": [
+    {
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+      "nad_config_digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "subnet_uid": "c24a983c-f9f4-403d-9807-8164004000a3",
+      "kcn_subnet_ref": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+    },
+    {
+      "tenant_id": "d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+      "nad_uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+      "nad_config_digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "subnet_uid": "29cdddaf-c09b-49df-9323-dd776d8ec929",
+      "kcn_subnet_ref": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+    }
+  ],
+  "fresh_cidr_guard": {
+    "prefix": "10.84.0.0/16",
+    "exact_registered_tenant2_self_references": [
+      {
+        "kind": "vpc",
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "cidr": "10.84.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "cidr": "10.84.1.0/24",
+        "state": "available"
+      },
+      {
+        "kind": "KCNSubnet",
+        "identity": "29cdddaf-c09b-49df-9323-dd776d8ec929",
+        "cidr": "10.84.1.0/24"
+      },
+      {
+        "kind": "KCNVPC",
+        "identity": "2f2e25c2-55e1-49bf-b284-4d7504b32f2b",
+        "cidr": "10.84.0.0/16"
+      }
+    ],
+    "foreign_overlaps": []
+  },
+  "before": {
+    "current": {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "name": "vm-mvp-linux-main-v3",
+      "version": "20",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "desiredState": "Running",
+      "observedState": "Running",
+      "reason": "",
+      "observedAt": "2026-10-23T19:44:29.796640171Z",
+      "addresses": [
+        {
+          "nicName": "default",
+          "address": "10.83.1.9",
+          "observedAt": "2026-10-23T19:44:29.796640171Z"
+        }
+      ],
+      "lastOperationId": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "cpuMillis": "1500",
+      "memoryMib": "2048",
+      "systemDiskSizeGb": "12",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04"
+    },
+    "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+    "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+  },
+  "original_process": {
+    "pid": 1945305,
+    "start_ticks": "64948077",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.console17",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "e94b31f6b714b173c7d49c9fea849ec5bd350f5e8b51333ef06585f75fcf395a",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    }
+  },
+  "launched_applied": {
+    "pid": 1974312,
+    "start_ticks": "65066056",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.console17",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "e94b31f6b714b173c7d49c9fea849ec5bd350f5e8b51333ef06585f75fcf395a",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    },
+    "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/server-tenant2-applied.log"
+  },
+  "after": {
+    "current": {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "name": "vm-mvp-linux-main-v3",
+      "version": "20",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "desiredState": "Running",
+      "observedState": "Running",
+      "reason": "",
+      "observedAt": "2026-10-23T19:44:29.796640171Z",
+      "addresses": [
+        {
+          "nicName": "default",
+          "address": "10.83.1.9",
+          "observedAt": "2026-10-23T19:44:29.796640171Z"
+        }
+      ],
+      "lastOperationId": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "role": "data",
+          "name": "vm-mvp-data3-v3",
+          "sizeGb": "3",
+          "requestedBytes": "3000000000",
+          "observedCapacityBytes": "3221225472",
+          "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "role": "data",
+          "name": "vm-mvp-data4-v3",
+          "sizeGb": "4",
+          "requestedBytes": "4000000000",
+          "observedCapacityBytes": "4294967296",
+          "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "cpuMillis": "1500",
+      "memoryMib": "2048",
+      "systemDiskSizeGb": "12",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04"
+    },
+    "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+    "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+    "resource_media_catalog": {
+      "actor": "governance:user:2",
+      "elapsed_seconds": 0.006315431,
+      "endpoint": "127.0.0.1:39181",
+      "expected_media_keys_present": {
+        "fedora-44-iso": false,
+        "virtio-win-0.1.271": true,
+        "windows-server-2025-iso": false
+      },
+      "mutation_calls": 0,
+      "observed_at": "2026-10-23T19:56:41.041717463Z",
+      "request_id": "78bc7380-0bd6-41e8-9dda-c09d93986f8e",
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "response": {
+        "items": [
+          {
+            "mediaKey": "ubuntu-24.04",
+            "name": "Ubuntu 24.04.5 LTS",
+            "kind": "DISK_IMAGE",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-ubuntu-2404-source",
+            "pvcUid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+            "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+            "volumeMode": "Block",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "3758096384",
+            "requestedBytes": "8000000000",
+            "osFamily": "linux",
+            "osVersion": "24.04.5 LTS (Noble Numbat)",
+            "architecture": "amd64",
+            "firmware": "bios",
+            "rootBus": "virtio",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "",
+            "initializationCapability": "CLOUD_INIT_NOCLOUD",
+            "initializationVerified": true
+          },
+          {
+            "mediaKey": "virtio-win-0.1.271",
+            "name": "VirtIO Windows 0.1.271",
+            "kind": "DRIVER_ISO",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-virtio-http-source",
+            "pvcUid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+            "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5",
+            "volumeMode": "Filesystem",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "1908408320",
+            "requestedBytes": "2000000000",
+            "osFamily": "windows",
+            "osVersion": "0.1.271",
+            "architecture": "amd64",
+            "firmware": "bios",
+            "rootBus": "scsi",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "",
+            "initializationCapability": "NONE",
+            "initializationVerified": false
+          }
+        ]
+      },
+      "result": "PASS",
+      "rpc": "/vm.v1.VMService/ListMedia",
+      "rpc_calls": 1,
+      "source_readiness": "NOT_MEASURED_BY_LIST_MEDIA",
+      "tls_server_name": "ani-network-service"
+    },
+    "gov_vpc_cidr_presets": {
+      "cidrs": [
+        "10.83.0.0/16",
+        "10.84.0.0/16"
+      ]
+    },
+    "tenant_networks": [
+      {
+        "tenant_id": 1,
+        "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+        "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f"
+      },
+      {
+        "tenant_id": 2,
+        "vpc_id": "vpc_c44c262a220748aab0e4b20558849409",
+        "subnet_id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+        "nad_uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+      }
+    ]
+  },
+  "result": "PASS",
+  "new_pid": 1974312,
+  "services_restarted": true
+}

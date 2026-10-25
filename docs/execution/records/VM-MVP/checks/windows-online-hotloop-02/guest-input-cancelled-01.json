@@ -1,0 +1,15 @@
+{
+  "result": "INPUT_REWRITTEN_CANCELLED_NOT_A_GUEST_PREPARATION_PASS",
+  "at": "2026-10-25T02:46:13.130451+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "18",
+  "input_command_sha256": "9d2a660e016d9cd097f445e1bdfc0294f673a6ba6310feca942f0fc62e428f37",
+  "helper_complete_characters": 1166,
+  "enter_sent_once": true,
+  "actual_console": "IME rewrote portions of the long line; no actual PASS output observed; Ctrl+C returned persistent PowerShell prompt",
+  "raw_guest_execution_or_partial_side_effects": "NOT_INFERRED_FROM_HELPER; read-only disk recheck required before any release",
+  "api_business_sends": 0,
+  "hotloop_driver_phases": 0,
+  "screenshot_path": "/home/chabking/.codex/visualizations/2026/10/23/01a168ce-29f8-77b2-aa8e-b980545b6113/windows-hotloop-input-cancelled-20261025.jpg",
+  "screenshot_sha256": "4b6bbc88bbc6d0eb42a7b29f4ebad9a1273fe1a45d6519572034a64e4bce1ae7"
+}

@@ -1,0 +1,25 @@
+{
+  "state": "PASS_DEFAULT_ENTRYPOINT_READY_AND_BASH_UID1000",
+  "step": "probe",
+  "started_at": "2026-10-24T10:51:37.388662+00:00",
+  "default_command_override": false,
+  "source_layer_downloads_to_fedora": 0,
+  "source_writes": 0,
+  "tag_writes": 0,
+  "pod": {
+    "name": "vm-mvp-v24-cpu-source-probe-01",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "776954ca-224d-425e-b1f2-0d078fb01795"
+  },
+  "task_pull_secret_ref": {
+    "name": "ani-instance-image-pull",
+    "uid": "6055f5ee-2cb4-4ff0-aa5c-1b15c77aa3b9",
+    "space_id": "f457f793-1139-47b2-b442-db905e48f0ad"
+  },
+  "phase": "Running",
+  "default_entrypoint_stable_ready_samples": 3,
+  "bash_exit": 0,
+  "bash_uid_gid_1000_marker": true,
+  "normal_uid_rv_cleanup": "POD_GONE",
+  "finished_at": "2026-10-24T10:52:11.262929+00:00"
+}

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Check actual recursive Go imports, including nested domain packages."""
 import json
+import os
 import re
 import subprocess
 import tempfile
 from pathlib import Path
 
 
-def packages(root):
-    output = subprocess.check_output(['go', 'list', '-json', './internal/...'], cwd=root, text=True)
+def packages(root, *, fixture=False):
+    env = {**os.environ, 'GOWORK': 'off'} if fixture else None
+    output = subprocess.check_output(
+        ['go', 'list', '-json', './internal/...'], cwd=root, env=env, text=True)
     decoder = json.JSONDecoder()
     result = []
     while output.strip():
@@ -73,11 +76,11 @@ def self_test():
             path = root / package
             path.mkdir(parents=True, exist_ok=True)
             (path / 'fixture.go').write_text('package fixture\n')
-        assert not violations(packages(root), module), 'valid fixture rejected'
+        assert not violations(packages(root, fixture=True), module), 'valid fixture rejected'
         for package, dependency in cases:
             path = root / package / 'fixture.go'
             path.write_text(f'package fixture\nimport _ "{dependency}"\n')
-            found = violations(packages(root), module)
+            found = violations(packages(root, fixture=True), module)
             assert any(package in error and dependency in error for error in found), (package, found)
             path.write_text('package fixture\n')
             print(f'boundary fixture rejected: {package} -> {dependency}')
@@ -85,7 +88,9 @@ def self_test():
 
 def main():
     root = Path(__file__).resolve().parents[1]
-    module = subprocess.check_output(['go', 'list', '-m'], cwd=root, text=True).strip()
+    # go list -m returns every main module in a workspace, not just this root.
+    module = json.loads(subprocess.check_output(
+        ['go', 'mod', 'edit', '-json'], cwd=root, text=True))['Module']['Path']
     errors = violations(packages(root), module)
     graph = subprocess.check_output(['go', 'list', '-m', 'all'], cwd=root, text=True)
     if re.search(r'ani-iam|ani-notification-service|kubercloud.com/networking|ani-kratos-layout', graph):

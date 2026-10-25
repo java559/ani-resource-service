@@ -1,0 +1,148 @@
+{
+  "snapshot_id": "b70cc689-1a8e-592c-ba4f-5d6b72243d36",
+  "native_snapshot": {
+    "kind": "VirtualMachineSnapshot",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-snap-b70cc689-1a8e-592c-ba4f-5d6b72243d36",
+    "uid": "45bbbe1a-b616-4bc7-8976-ad92481814e0",
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T15:36:06Z",
+          "reason": "In error state",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T15:33:32Z",
+          "reason": "Not ready",
+          "status": "False",
+          "type": "Ready"
+        }
+      ],
+      "error": {
+        "message": "VolumeSnapshot vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb error: Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+        "time": "2026-10-24T15:36:06Z"
+      },
+      "phase": "InProgress",
+      "readyToUse": false,
+      "sourceUID": "9a751320-5f97-4e56-af6a-30964610321b",
+      "virtualMachineSnapshotContentName": "vmsnapshot-content-45bbbe1a-b616-4bc7-8976-ad92481814e0"
+    }
+  },
+  "volumes": [
+    {
+      "name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+      "snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "uid": "d947a7db-83b1-4285-b564-e45938a1c2ee"
+      },
+      "status": {
+        "boundVolumeSnapshotContentName": "snapcontent-d947a7db-83b1-4285-b564-e45938a1c2ee",
+        "creationTime": "2026-10-24T15:33:41Z",
+        "readyToUse": true,
+        "restoreSize": "75Gi"
+      }
+    },
+    {
+      "name": "disk-89317f205600510abc65e40402c83abb",
+      "snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb",
+        "uid": "ed470202-f445-45ad-8849-eea31b0405ca"
+      },
+      "status": {
+        "boundVolumeSnapshotContentName": "snapcontent-ed470202-f445-45ad-8849-eea31b0405ca",
+        "error": {
+          "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+          "time": "2026-10-24T15:36:02Z"
+        },
+        "readyToUse": false
+      }
+    },
+    {
+      "name": "disk-cca2005bd9365327a5ded8236385b9ba",
+      "snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-cca2005bd9365327a5ded8236385b9ba",
+        "uid": "f9ffe0a9-1d81-4c7a-bf90-e94241c104f4"
+      },
+      "status": {
+        "boundVolumeSnapshotContentName": "snapcontent-f9ffe0a9-1d81-4c7a-bf90-e94241c104f4",
+        "error": {
+          "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-c3be8df8-f1c2-4974-aae5-bf29635c9f28: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+          "time": "2026-10-24T15:36:02Z"
+        },
+        "readyToUse": false
+      }
+    },
+    {
+      "name": "media-driver",
+      "snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-media-driver",
+        "uid": "2eca65ed-f72b-4b08-87f9-ca329a055096"
+      },
+      "status": {
+        "boundVolumeSnapshotContentName": "snapcontent-2eca65ed-f72b-4b08-87f9-ca329a055096",
+        "error": {
+          "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-0521e073-7460-4700-853d-2b0aa18ab27a: \"rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL\"",
+          "time": "2026-10-24T15:36:03Z"
+        },
+        "readyToUse": false
+      }
+    }
+  ],
+  "business_mutations": 0,
+  "content": {
+    "kind": "VirtualMachineSnapshotContent",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vmsnapshot-content-45bbbe1a-b616-4bc7-8976-ad92481814e0",
+    "uid": "cd74ba6d-2841-4bda-bc46-975a6b4ef69e",
+    "status": {
+      "error": {
+        "message": "VolumeSnapshot vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb error: Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+        "time": "2026-10-24T15:36:06Z"
+      },
+      "readyToUse": false,
+      "volumeSnapshotStatus": [
+        {
+          "creationTime": "2026-10-24T15:33:41Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5"
+        },
+        {
+          "error": {
+            "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-ed5a05c9-1769-4854-bfdb-c39dde4e8dcd: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+            "time": "2026-10-24T15:36:02Z"
+          },
+          "readyToUse": false,
+          "volumeSnapshotName": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-89317f205600510abc65e40402c83abb"
+        },
+        {
+          "error": {
+            "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-c3be8df8-f1c2-4974-aae5-bf29635c9f28: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"",
+            "time": "2026-10-24T15:36:02Z"
+          },
+          "readyToUse": false,
+          "volumeSnapshotName": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-disk-cca2005bd9365327a5ded8236385b9ba"
+        },
+        {
+          "error": {
+            "message": "Failed to create snapshot: failed to take snapshot of the volume 0001-0009-rook-ceph-0000000000000004-0521e073-7460-4700-853d-2b0aa18ab27a: \"rpc error: code = DeadlineExceeded desc = stream terminated by RST_STREAM with error code: CANCEL\"",
+            "time": "2026-10-24T15:36:03Z"
+          },
+          "readyToUse": false,
+          "volumeSnapshotName": "vmsnapshot-45bbbe1a-b616-4bc7-8976-ad92481814e0-volume-media-driver"
+        }
+      ]
+    }
+  }
+}

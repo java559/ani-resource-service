@@ -1,0 +1,95 @@
+{
+  "at": "2026-10-24T08:56:00.452Z",
+  "layer": "BROWSER",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "observed_product_version": "5",
+  "observed_product_state": "Running",
+  "page": "http://127.0.0.1:39188/login",
+  "result": "INSTALLATION_IN_PROGRESS",
+  "observation": "Actual native VNC has left the 82 percent installation page and shows Windows logo with spinner; later observation remained at boot spinner.",
+  "guest_keyboard_inputs": 0,
+  "guest_settings_changes": 0,
+  "new_credentials_entered": false,
+  "installation_complete": false,
+  "normal_vnc_disconnect_verified": true,
+  "screenshot": "vm-windows-server2025-setup-first-reboot.png",
+  "later_observation": {
+    "at": "2026-10-24T09:09:21.804Z",
+    "observation": "Windows post-reboot setup displays installing 0 percent, do not turn off; computer will restart several times.",
+    "screenshot": "vm-windows-server2025-post-reboot-install.png",
+    "installation_complete": false,
+    "guest_inputs": 0,
+    "normal_vnc_disconnect_verified": true
+  },
+  "latest_observation": {
+    "at": "2026-10-24T09:25:03.048Z",
+    "observation": "Actual Windows post-reboot setup installing 42 percent",
+    "screenshot": "vm-windows-server2025-post-reboot-42pct.png",
+    "installation_complete": false,
+    "guest_inputs": 0,
+    "normal_vnc_disconnect_verified": true
+  },
+  "most_recent_observation": {
+    "at": "2026-10-24T09:55:59.228Z",
+    "observation": "Native VNC connected; current display black. One Shift_L wake key did not change the display. This does not prove installation completion. Original VM/VMI remain Running by independent read-only capture.",
+    "screenshot": "vm-windows-server2025-black-screen-0959.png",
+    "installation_complete": false,
+    "guest_inputs": 1,
+    "guest_settings_changes": 0,
+    "new_credentials_entered": false,
+    "normal_vnc_disconnect_verified": true,
+    "native_receipt": "product-windows-lifecycle-install-black-screen-0959.json"
+  },
+  "later_black_screen_observation": {
+    "at": "2026-10-24T10:12:47.347Z",
+    "observation": "Fresh native VNC still black; one click to wake the visible VNC canvas did not restore a display. No credentials, guest setting or VM lifecycle change.",
+    "screenshot": "vm-windows-server2025-black-screen-later.png",
+    "installation_complete": false,
+    "mouse_clicks": 1,
+    "new_credentials_entered": false,
+    "normal_vnc_disconnect_verified": true
+  },
+  "firstboot_product_key_observation": {
+    "at": "2026-10-24T10:22:17.729Z",
+    "observation": "Native VNC left the black display and shows Windows first-boot Now enter your product key page. Click and visible Alt+L Do this later shortcut attempted; page transition not yet observed. No key, new credential or new agreement accepted.",
+    "screenshot": "vm-windows-server2025-product-key-awaiting.png",
+    "earlier_screenshot": "vm-windows-server2025-firstboot-product-key.png",
+    "product_version": "5",
+    "product_state": "Running",
+    "firstboot_wizard_reached": true,
+    "oobe_complete": false,
+    "guest_login_verified": false,
+    "new_credentials_entered": false,
+    "normal_vnc_disconnect_verified": true
+  },
+  "black_after_firstboot_observation": {
+    "at": "2026-10-24T10:47:26.592Z",
+    "observation": "Fresh native VNC again shows a black display after the earlier first-boot product-key page. Shift+F10 was attempted once on the outer screen container and once on the actual canvas; no visible diagnostic prompt or page transition was observed. No guest command was entered. This does not establish OOBE completion or guest login.",
+    "screenshot": "vm-windows-server2025-black-after-firstboot.png",
+    "product_version": "5",
+    "product_state": "Running",
+    "diagnostic_key_attempts": 2,
+    "guest_commands_entered": 0,
+    "guest_settings_changes": 0,
+    "new_credentials_entered": false,
+    "oobe_complete": false,
+    "guest_login_verified": false,
+    "normal_vnc_disconnect_verified": true
+  },
+  "native_black_confirmed_observation": {
+    "at": "2026-10-24T11:05:15.301573+00:00",
+    "observation": "Fresh normal Gov login/read/console for same v5 VM again shows black. Actual canvas was clicked and one Shift_L wake key sent with confirmed image focus; display unchanged. Independent native hypervisor frame at 11:03Z is also all black. No credentials, guest commands, VM configuration or power actions were applied.",
+    "screenshot": "vm-windows-server2025-native-black-confirmed.png",
+    "native_frame_receipt": "windows-black-screen-frame-02/observed.json",
+    "native_frame_visual_receipt": "windows-black-screen-frame-02/visual-inspection.json",
+    "guest_inputs": {
+      "mouse_clicks": 1,
+      "wake_keys": 1
+    },
+    "oobe_complete": false,
+    "guest_login_verified": false,
+    "new_credentials_entered": false,
+    "normal_vnc_disconnect_verified": true,
+    "diagnostic_boundary": "Native frame black does not establish guest hang or installation failure."
+  }
+}

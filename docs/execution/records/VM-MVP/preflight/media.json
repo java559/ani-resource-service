@@ -1,0 +1,47 @@
+[
+  {
+    "path": "/home/chabking/ubuntu-24.04-server-cloudimg-amd64.img",
+    "file_bytes": 621284352,
+    "sha256": "04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94",
+    "format": "qcow2",
+    "qcow_version": 3,
+    "virtual_bytes": 3758096384
+  },
+  {
+    "path": "/home/chabking/Fedora-KDE-Desktop-Live-44-1.7.x86_64.iso",
+    "file_bytes": 3368683520,
+    "sha256": "c8295961d4c41adbf785a31a17c21a971d3b7415fda72dcad0c11c49577bf03a",
+    "format": "iso",
+    "qcow_version": null,
+    "virtual_bytes": null
+  },
+  {
+    "path": "/home/chabking/zh-cn_windows_server_2025_updated_may_2026_x64_dvd_adcb5eb0.iso",
+    "file_bytes": 8726618112,
+    "sha256": "33b9980c5aaa5bc40aedf20cf9d15f32edafcb6ed883049255713535a61cc40b",
+    "format": "iso",
+    "qcow_version": null,
+    "virtual_bytes": null,
+    "task_requirement_decision": {
+      "selected_installation": "Windows Server 2025 May 2026 Standard with Desktop Experience",
+      "selected_features": {"secured_core": false, "bitlocker": false},
+      "firmware": "BIOS",
+      "persistent_tpm_required": false,
+      "persistent_uefi_required": false,
+      "planned_vcpu": 2,
+      "planned_memory_bytes": 4294967296,
+      "planned_root_bytes": 64000000000,
+      "basis": "Microsoft lists UEFI/TPM as requirements for certain features, with additional TPM/Secure Boot/VBS requirements for Secured-core. This task selects neither Secured-core nor BitLocker. Desktop Experience recommends 4 GB RAM; 32 GB storage is an absolute minimum. No required feature is disabled and Windows 11 requirements are not inferred for Server.",
+      "source": "https://learn.microsoft.com/en-us/windows-server/get-started/hardware-requirements?pivots=windows-server-2025",
+      "verification_scope": "documented requirement decision only; ISO install and Guest acceptance remain NOT_RUN; backend CODE does not imply backend LIVE"
+    }
+  },
+  {
+    "path": "/home/chabking/virtio-win-0.1.271.iso",
+    "file_bytes": 726501376,
+    "sha256": "bbe6166ad86a490caefad438fef8aa494926cb0a1b37fa1212925cfd81656429",
+    "format": "iso",
+    "qcow_version": null,
+    "virtual_bytes": null
+  }
+]

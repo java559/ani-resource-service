@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-23T15:34:09.220591+00:00",
+  "requested": "stop",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+  },
+  "vmi_before": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachineInstance",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "08246bc5-1a30-4625-9a31-fff5c3081d04"
+  },
+  "request_before": []
+}

@@ -1,0 +1,10 @@
+internal/server/image_identity.go: 成功
+internal/server/vm_logging_test.go: 成功
+API_GENERATED
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1	0.012s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.014s
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/server	0.016s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	1.759s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.747s

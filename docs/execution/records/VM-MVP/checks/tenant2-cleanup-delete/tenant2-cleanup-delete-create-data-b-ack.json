@@ -1,0 +1,114 @@
+{
+  "at": "2026-10-24T08:15:46.602742+00:00",
+  "phase": "create-data-b-ack",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved pre-Restore stages only; Restore/Delete remain disabled",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "command": {
+    "phase": "create-data-b",
+    "method": "POST",
+    "route": "/api/v1/virtual-machines/e3c11c5a-cf12-4630-a8f9-f907048ffdfc/disks",
+    "body": {
+      "data": {
+        "expectedVersion": "4",
+        "idempotencyKey": "596654f4-b604-5603-8594-4145e7eaeb0e",
+        "name": "vm-mvp-cleanup-data-b-01a168ce",
+        "sizeGb": "2"
+      }
+    },
+    "send_attempts": 1,
+    "ack_unknown": true,
+    "body_sha256": "0125cfd4a862fcd1db84e49df3bc82cff40acd9d86342da9f319279782a44560",
+    "before": {
+      "id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "name": "vm-mvp-tenant2-linux-01a168ce",
+      "version": "4",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "desiredState": "Stopped",
+      "observedState": "Stopped",
+      "reason": "",
+      "observedAt": "2026-10-24T07:54:26.620606524Z",
+      "addresses": [],
+      "lastOperationId": "694bda95-0d0a-47b4-803e-6a300ec39fa0",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+          "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        },
+        {
+          "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+          "role": "data",
+          "name": "vm-mvp-cleanup-data-a-01a168ce",
+          "sizeGb": "2",
+          "requestedBytes": "2000000000",
+          "observedCapacityBytes": "2147483648",
+          "volumeName": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+          "serial": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "cpuMillis": "1500",
+      "memoryMib": "2048",
+      "systemDiskSizeGb": "12",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04"
+    },
+    "snapshot_ids_before": [],
+    "last_http_elapsed_seconds": 0.06299,
+    "accepted": {
+      "id": "7f8697e6-5ee2-4c8c-910c-970a9d0989d3",
+      "vmId": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "action": "create-disk",
+      "intentVersion": "5",
+      "state": "accepted",
+      "reason": "",
+      "observedAt": ""
+    },
+    "http_status": 202
+  }
+}

@@ -88,13 +88,21 @@ func UUIDFinalization(value string) bool {
 	return err == nil && parsed == value
 }
 func CompareConsumerSnapshot(a Attachment, c ConsumerSubmission) SnapshotComparison {
-	if c.ProtocolVersion != 2 || c.TenantID != a.TenantID || c.InstanceID != a.InstanceID || c.SubmissionID != a.SubmissionID || c.Generation != a.Generation || c.AttachmentID != a.ID || c.ClusterID != a.ClusterID || c.Namespace != a.Namespace {
+	protocol := int32(2)
+	if a.WorkloadMode == "vm_managed" {
+		protocol = 3
+	}
+	if c.ProtocolVersion != protocol || c.TenantID != a.TenantID || c.InstanceID != a.InstanceID || c.SubmissionID != a.SubmissionID || c.Generation != a.Generation || c.AttachmentID != a.ID || c.ClusterID != a.ClusterID || c.Namespace != a.Namespace {
 		return SnapshotConflict
 	}
 	if c.SnapshotRevision < a.SnapshotRevision {
 		return SnapshotStale
 	}
-	if !validManagedConsumer(a, c) {
+	valid := validManagedConsumer(a, c)
+	if a.WorkloadMode == "vm_managed" {
+		valid = validVMConsumer(a, c)
+	}
+	if !valid {
 		return SnapshotConflict
 	}
 	if c.SnapshotRevision == a.SnapshotRevision && a.SnapshotHash != "" && ConsumerSnapshotHash(c) != a.SnapshotHash {
@@ -114,6 +122,17 @@ func CompareConsumerSnapshot(a Attachment, c ConsumerSubmission) SnapshotCompari
 		rank := map[string]int{"open": 0, "closing": 1, "closed": 2}
 		if rank[c.State] < rank[old.State] {
 			return SnapshotConflict
+		}
+		if a.WorkloadMode == "vm_managed" {
+			knownControllers := map[WorkloadReference]bool{}
+			for _, controller := range c.Controllers {
+				knownControllers[controller.Reference] = true
+			}
+			for _, controller := range old.Controllers {
+				if !knownControllers[controller.Reference] {
+					return SnapshotConflict
+				}
+			}
 		}
 		known := map[string]bool{}
 		for _, group := range [][]PodReference{c.CurrentPods, c.RetiredPods} {
@@ -136,7 +155,7 @@ func CompareConsumerSnapshot(a Attachment, c ConsumerSubmission) SnapshotCompari
 // snapshot and its durable Confirm ACK. It never accepts a new revision as a
 // recovery. Provider owner/address proof and the lease are checked separately.
 func ManagedProtocolRecoveryMatches(a Attachment, c ConsumerSubmission, podName, podUID string) bool {
-	if a.WorkloadMode != "controller_managed" || (a.State != Reserved && a.State != Attached) || a.FinalizationID != "" || a.ConsumerSnapshot == nil || a.SnapshotRevision < 1 || a.SnapshotHash == "" || a.RootController.UID == "" {
+	if (a.WorkloadMode != "controller_managed" && a.WorkloadMode != "vm_managed") || (a.State != Reserved && a.State != Attached) || a.FinalizationID != "" || a.ConsumerSnapshot == nil || a.SnapshotRevision < 1 || a.SnapshotHash == "" || a.RootController.UID == "" {
 		return false
 	}
 	if CompareConsumerSnapshot(a, c) != SnapshotAccepted || c.SnapshotRevision != a.SnapshotRevision || ConsumerSnapshotHash(c) != a.SnapshotHash || ConsumerSnapshotHash(*a.ConsumerSnapshot) != a.SnapshotHash {
@@ -235,6 +254,11 @@ func (w *AttachmentWorker) stepManaged(ctx context.Context, work AttachmentWork,
 		if work.ProtocolBlocked && consumerErr == nil && o.Exists && o.VerifiedCurrent && !o.PendingCandidate && p.State == Attached && p.Proof.Covers(work.Requirement) && ManagedProtocolRecoveryMatches(a, consumer, o.PodName, o.PodUID) {
 			p.ProtocolBlocked = false
 			p.ProtocolRecovered = true
+		}
+		if work.ProtocolBlocked && consumerErr == nil && work.RequireFreshRelations && !o.Exists && !o.HasDependencies && !o.PendingCandidate && p.Proof.Covers(work.Requirement) && !p.Proof.CollectedAt.Before(work.Now) && VMClosedProtocolRecoveryMatches(a, consumer) {
+			p.ProtocolBlocked = false
+			p.ProtocolRecovered = true
+			p.State, p.Reason = Released, ""
 		}
 	}
 	if p.ProtocolBlocked {

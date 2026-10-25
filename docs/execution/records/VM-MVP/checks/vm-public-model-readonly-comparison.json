@@ -1,0 +1,299 @@
+{
+  "observed_at": "2026-10-24T03:22:42.061264+00:00",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "ref": {
+        "namespace": "",
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "resourceVersion": "61172321",
+        "deletionTimestamp": ""
+      },
+      "internal_ip": "172.16.101.10"
+    },
+    {
+      "ref": {
+        "namespace": "",
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "resourceVersion": "61170712",
+        "deletionTimestamp": ""
+      },
+      "internal_ip": "172.16.101.11"
+    },
+    {
+      "ref": {
+        "namespace": "",
+        "name": "ani-03",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "resourceVersion": "61171443",
+        "deletionTimestamp": ""
+      },
+      "internal_ip": "172.16.101.12"
+    }
+  ],
+  "model_pods": [
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-model-service-7544d6db94-lgft8",
+        "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0",
+        "resourceVersion": "59122444",
+        "deletionTimestamp": ""
+      },
+      "identification": "ani-model-service image or exact app label",
+      "owners": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "ani-model-service-7544d6db94",
+          "uid": "4750b70f-24a4-445b-96de-8048a8c12d4c"
+        }
+      ],
+      "node": "ani-03",
+      "pod_ip": "10.16.1.218",
+      "pod_ips": [
+        {
+          "ip": "10.16.1.218"
+        }
+      ],
+      "phase": "Running",
+      "host_network": false,
+      "images": [
+        "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165"
+      ],
+      "network_annotations": {
+        "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"kc-networking\",\n    \"interface\": \"eth0\",\n    \"ips\": [\n        \"10.16.1.218\"\n    ],\n    \"mac\": \"fa:00:a0:6d:89:61\",\n    \"default\": true,\n    \"dns\": {},\n    \"gateway\": [\n        \"10.16.0.1\"\n    ]\n}]",
+        "networking.kubercloud.com/vnic": "auto-ani-model-service-7544d6db94-lgft8-vnic-kzb7w"
+      },
+      "vnic_candidates": [
+        {
+          "ref": {
+            "namespace": "ani-system",
+            "name": "auto-ani-model-service-7544d6db94-lgft8-vnic-kzb7w",
+            "uid": "3afcb9c3-344c-4422-9b96-88369e6c11db",
+            "resourceVersion": "54755721",
+            "deletionTimestamp": ""
+          },
+          "owners": [
+            {
+              "apiVersion": "v1",
+              "kind": "Pod",
+              "name": "ani-model-service-7544d6db94-lgft8",
+              "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0"
+            }
+          ],
+          "spec": {
+            "macAddress": "fa:00:a0:6d:89:61",
+            "subnet": "kcn-system/kcn-default",
+            "type": "VETH"
+          },
+          "status": {
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-22T13:27:59Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              },
+              {
+                "lastTransitionTime": "2026-10-22T13:27:59Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-22T13:27:59Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              }
+            ],
+            "dstNic": "",
+            "gateway": "kcn-system/kcn-cluster",
+            "ips": {
+              "auto-ani-model-service-7544d6db94-lgft8-vnic-kzb7w": "10.16.1.218"
+            },
+            "nic": "kcn-system/nic-ani-system-ani-model-service-7544d6db94-lgft8-cdpnj",
+            "nodeName": "ani-03",
+            "primaryIP": "10.16.1.218"
+          }
+        }
+      ],
+      "deployment": {
+        "ref": {
+          "namespace": "ani-system",
+          "name": "ani-model-service",
+          "uid": "f358e30f-842d-419a-9b25-4178caabda0f",
+          "resourceVersion": "59122452",
+          "deletionTimestamp": ""
+        },
+        "image": [
+          "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165"
+        ]
+      },
+      "native_subnet": {
+        "ref": {
+          "namespace": "kcn-system",
+          "name": "kcn-default",
+          "uid": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0",
+          "resourceVersion": "60691646",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "cidrBlock": "10.16.0.0/16",
+          "excludeIPs": [
+            "10.16.0.1"
+          ],
+          "gateway": "kcn-cluster",
+          "gatewayIP": "10.16.0.1",
+          "ipVersion": "IPv4",
+          "natOutgoing": true,
+          "type": "VPC"
+        },
+        "gateway": null
+      }
+    }
+  ],
+  "model_identification": "IDENTIFIED",
+  "shared_default_egress": {
+    "eips": {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+        "resourceVersion": "54374155",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "ipAddress": "172.16.102.192",
+        "ipVersion": "IPv4",
+        "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+      },
+      "status": {
+        "boundResource": {
+          "disabled": false,
+          "nodeName": "ani-01",
+          "observedGeneration": 1,
+          "resource": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+          "resourceType": "Snat",
+          "vpc": "kcn-system/kcn-cluster"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-22T11:16:35Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-22T11:16:35Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+        "phase": "Bound"
+      }
+    },
+    "snats": {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+        "resourceVersion": "54374157",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "disable": false,
+        "eip": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+        "vpc": "kcn-cluster"
+      },
+      "status": {
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-22T11:17:01Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          }
+        ],
+        "eipAddress": "172.16.102.192",
+        "phase": "Bound"
+      }
+    },
+    "vpcs": {
+      "ref": {
+        "namespace": "kcn-system",
+        "name": "kcn-cluster",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+        "resourceVersion": "54374158",
+        "deletionTimestamp": ""
+      },
+      "spec": {
+        "allowedNamespaces": {
+          "from": "All"
+        },
+        "ipVersion": "IPv4"
+      },
+      "status": {
+        "boundResources": {
+          "chassisNode": "ani-01",
+          "router": "vpc.kcn-system.kcn-cluster"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "default": true,
+        "eips": {
+          "kcn-system/ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b": "172.16.102.192"
+        },
+        "observedGeneration": 1,
+        "subnets": {
+          "kcn-system/kcn-default": "10.16.0.0/16"
+        }
+      }
+    }
+  },
+  "network_requests": 0,
+  "mutations": 0,
+  "temporary_193": "ALREADY_CLEANED_NOT_RECREATED",
+  "default_vpc_ovn": {
+    "lr-nat-list": "TYPE             GATEWAY_PORT          MATCH                 EXTERNAL_IP        EXTERNAL_PORT    LOGICAL_IP          EXTERNAL_MAC         LOGICAL_PORT\nsnat             public.uplink.kcn-                          172.16.102.192                      0.0.0.0/0\n",
+    "lr-policy-list": "Routing Policies\n     27000                           ip4.dst == 172.16.101.10         reroute                100.64.0.2\n     27000                           ip4.dst == 172.16.101.11         reroute                100.64.0.6\n     27000                           ip4.dst == 172.16.101.12         reroute                100.64.0.4\n     26000     ip4.dst == $gw.kcn.system.kcn.cluster.networks           allow                          \n     24000 outport == \"vpc.kcn-system.kcn-cluster-kcn-system.sys-service\" && ip4.src == $gw.kcn.system.kcn.cluster.ani.01         reroute                100.64.0.2\n     24000 outport == \"vpc.kcn-system.kcn-cluster-kcn-system.sys-service\" && ip4.src == $gw.kcn.system.kcn.cluster.ani.02         reroute                100.64.0.6\n     24000 outport == \"vpc.kcn-system.kcn-cluster-kcn-system.sys-service\" && ip4.src == $gw.kcn.system.kcn.cluster.ani.03         reroute                100.64.0.4\n     20000 outport == \"public.uplink.kcn-system.kcn-cluster.lrp\" && ip4.src == 0.0.0.0/0         reroute              100.65.128.3\n         1 outport == \"public.uplink.kcn-system.kcn-cluster.lrp\" && ip4            drop                          \n",
+    "lr-route-list": "IPv4 Routes\nRoute Table <main>:\n          172.16.101.0/24                100.64.0.2 dst-ip vpc.kcn-system.kcn-cluster-kcn-system.sys-service\n            100.64.0.0/17                100.64.0.2 dst-ip vpc.kcn-system.kcn-cluster-kcn-system.sys-service\n             10.16.0.0/16                100.64.0.2 dst-ip vpc.kcn-system.kcn-cluster-kcn-system.sys-service\n             10.96.0.0/16                100.64.0.2 dst-ip vpc.kcn-system.kcn-cluster-kcn-system.sys-service\n                0.0.0.0/0              100.65.128.2 dst-ip public.uplink.kcn-system.kcn-cluster.lrp\n"
+  }
+}

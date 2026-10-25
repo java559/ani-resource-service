@@ -1,0 +1,62 @@
+{
+  "phase": "dry-run",
+  "result": "DRY_RUN_READY_FOR_ROOT_DIFF_REVIEW",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "plan_sha256": "611f33f1012352855456b03f693a83299dc3d5e41e644263cc9864ede0ae56d0",
+  "root_release_sha256": "04dab339d2f1b557fc70d182006f9e1c7339b01a650e05779d19b424689f1cd4",
+  "jobs": [
+    {
+      "name": "vmrel-01a168ce-gov-api-dry-01",
+      "uid": "52a7769c-10dc-45a2-9d15-dff5e5372394",
+      "image": "172.16.101.10:30003/icn-01a15337-release/ani-governance-admin@sha256:89935650ddb9a11e4e30e3144321a2cc4dd9df3fab029590211d1c3e90938377",
+      "args": [
+        "sync-apis",
+        "--dry-run"
+      ],
+      "result": "PASS",
+      "pod": {
+        "name": "vmrel-01a168ce-gov-api-dry-01-v9rbj",
+        "uid": "baec8e87-a8d1-4cf0-ae93-d6ba2ab477a7",
+        "image_id": "172.16.101.10:30003/icn-01a15337-release/ani-governance-admin@sha256:89935650ddb9a11e4e30e3144321a2cc4dd9df3fab029590211d1c3e90938377"
+      },
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private/vmrel-01a168ce-gov-api-dry-01.log",
+      "log_sha256": "6f83148fe5579eaf17fdfea7b344a9fd3996cf0ecd14cda107211c690dccf068",
+      "normal_cleanup": "UID_PRECONDITION_DELETE_AND_ABSENCE_VERIFIED"
+    }
+  ],
+  "new_vm_create_enabled": false,
+  "shared_schema_ddl": 0,
+  "role_plan_quota_changes": 0,
+  "secret_values_exported": 0,
+  "original_template_sha256": "0ba50246d8579ca3ff1915356dfb1c823a0327e5f22e21bf2a3ec2103452e1e3",
+  "baseline_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/private/original-deployment.json",
+  "changes": [
+    "ADD DELETE /api/v1/virtual-machines/{data.vm_id}",
+    "ADD DELETE /api/v1/virtual-machines/{data.vm_id}/disks/{data.disk_id}",
+    "ADD DELETE /api/v1/virtual-machines/{data.vm_id}/media/{data.slot}",
+    "ADD DELETE /api/v1/virtual-machines/{data.vm_id}/snapshots/{data.snapshot_id}",
+    "ADD GET /api/v1/virtual-machine-media",
+    "ADD GET /api/v1/virtual-machines",
+    "ADD GET /api/v1/virtual-machines/{vm_id}",
+    "ADD GET /api/v1/virtual-machines/{vm_id}/disks",
+    "ADD GET /api/v1/virtual-machines/{vm_id}/operations/{operation_id}",
+    "ADD GET /api/v1/virtual-machines/{vm_id}/snapshots",
+    "ADD GET /api/v1/virtual-machines/{vm_id}/snapshots/{snapshot_id}",
+    "ADD POST /api/v1/virtual-machines",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/console-sessions",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/disks",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/disks/{data.disk_id}/attach",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/disks/{data.disk_id}/detach",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/force-stop",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/restart",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/snapshots",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/snapshots/{data.snapshot_id}/restore",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/snapshots/{data.snapshot_id}/restore-preview",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/start",
+    "ADD POST /api/v1/virtual-machines/{data.vm_id}/stop",
+    "ADD PUT /api/v1/virtual-machines/{data.vm_id}/boot",
+    "ADD PUT /api/v1/virtual-machines/{data.vm_id}/media/{data.slot}",
+    "REVIEW absent from OpenAPI (retained): GET /api/v1/instance-presets"
+  ],
+  "reviewed_log_candidate_sha256": "6f83148fe5579eaf17fdfea7b344a9fd3996cf0ecd14cda107211c690dccf068"
+}

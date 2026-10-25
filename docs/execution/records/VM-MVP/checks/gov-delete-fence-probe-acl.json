@@ -1,0 +1,192 @@
+{
+  "action": "restore",
+  "phase": "restored",
+  "original": {
+    "delete": true,
+    "insert": true,
+    "select": true,
+    "update": true,
+    "columns": {},
+    "runtime": {
+      "inherit": false,
+      "bypassrls": false,
+      "superuser": false
+    },
+    "database": "vm_govlive_01a168ce",
+    "id_update": true,
+    "table_acl": "{vm_govlive_owner_01a168ce=arwdDxtm/vm_govlive_owner_01a168ce,vm_govlive_runtime_01a168ce=arwd/vm_govlive_owner_01a168ce}",
+    "memberships": 0,
+    "table_owner": "vm_govlive_owner_01a168ce",
+    "table_grants": [
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "UPDATE"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "UPDATE"
+      }
+    ],
+    "database_owner": "vm_govlive_owner_01a168ce",
+    "dispatch_update": true
+  },
+  "current": {
+    "delete": true,
+    "insert": true,
+    "select": true,
+    "update": true,
+    "columns": {},
+    "runtime": {
+      "inherit": false,
+      "bypassrls": false,
+      "superuser": false
+    },
+    "database": "vm_govlive_01a168ce",
+    "id_update": true,
+    "table_acl": "{vm_govlive_owner_01a168ce=arwdDxtm/vm_govlive_owner_01a168ce,vm_govlive_runtime_01a168ce=arwd/vm_govlive_owner_01a168ce}",
+    "memberships": 0,
+    "table_owner": "vm_govlive_owner_01a168ce",
+    "table_grants": [
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "MAINTAIN"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "REFERENCES"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "TRIGGER"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "TRUNCATE"
+      },
+      {
+        "grantee": "vm_govlive_owner_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "UPDATE"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "DELETE"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "INSERT"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "SELECT"
+      },
+      {
+        "grantee": "vm_govlive_runtime_01a168ce",
+        "grantor": "vm_govlive_owner_01a168ce",
+        "grantable": false,
+        "privilege": "UPDATE"
+      }
+    ],
+    "database_owner": "vm_govlive_owner_01a168ce",
+    "dispatch_update": true
+  },
+  "business_row_writes": false,
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/delete-fence-probe-acl.json"
+}

@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-24T18:18:48.091591+00:00",
+  "commit": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+  "completed_at": "2026-10-24T18:19:02.746988+00:00",
+  "current_full_make_verify": "NOT_RUN; reuse actual target PG/Restart/List/build and still-valid original full gates",
+  "hooks_not_bypassed": true,
+  "later_cleanup_updates_automatically_included": false,
+  "main_merge_pr_tag_release_oci_service_cluster_changes": false,
+  "non_vm_status_prefix_preserved_from_parent": true,
+  "original_head_index_preserved": true,
+  "pre_push_hook_receipt": {
+    "commit": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+    "credential_values_or_hashes_public": false,
+    "expected_remote_oid": "e927b40675ac91bc53a11e8d5871d40aedeb1eda",
+    "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+    "result": "PASS_EXACT_REF_AND_SECRET_GUARD_NO_EXEMPTIONS",
+    "scanned_files": 59
+  },
+  "pre_push_hook_sha256": "c3bb488307c90eebc6c01486dcc39dd9b45b772278a75b95c26c4ca554d604d4",
+  "push_exit": 0,
+  "ref": "refs/heads/codex/vm-mvp-resource-acceptance-01a168ce",
+  "remote_expected_before": "e927b40675ac91bc53a11e8d5871d40aedeb1eda",
+  "remote_oid": "7f0614ef7117ce06c7bd43f7083989e2747ce9c3",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "root_documents_modified": false,
+  "runtime_equality": {
+    "candidate22_source_sha256": "e9fe67d412dceca45f114e68f186ff7fee0924b768b5658d51a48901553838b1",
+    "checkpoint_tree": "a24af58923f1d2b99cddbc5b964bad0c46719433",
+    "file_count": 538,
+    "manifest_sha256": "54a0ea68614c10416cdb5b463241b9870ea8e482ce9e4516c38a959925ac3e6b",
+    "no_runtime_difference_from_4cc": true,
+    "result": "PASS_EXACT_538_RUNTIME_FILES_BYTES_AND_MODES_EQUAL_4CC",
+    "source_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+    "source_tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31"
+  },
+  "selected_files": 59,
+  "selected_files_manifest_sha256": "3bceb8d9077e23ec624c7fe9ff3ef71f1d22f643e08c49cf57384f3434d23ce8",
+  "send_count": 1,
+  "state": "PASS_EXACT_ACCEPTANCE_FAST_FORWARD_SSH443",
+  "tree": "a24af58923f1d2b99cddbc5b964bad0c46719433"
+}

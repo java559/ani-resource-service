@@ -1,0 +1,788 @@
+{
+  "host": "fedora",
+  "source_tree": "d5e3a1742a8a47f85ccfcbdd339c1427e7400b8a",
+  "archive_sha256": "56ac38e3a1a2c59b1370e0e9a0bbf959f0f0dd266feddd8c6e340f4f35b49abf",
+  "steps": [
+    {
+      "phase": "format-check",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/gofmt",
+        "-l",
+        "app/admin/service/internal/commandcontract/actions.go",
+        "app/admin/service/internal/commandcontract/contract.go",
+        "app/admin/service/internal/commandcontract/modeldev_test.go"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.008,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/format-check.log",
+      "named_results": []
+    },
+    {
+      "phase": "commandcontract",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=90s",
+        "./app/admin/service/internal/commandcontract"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 26.762,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/commandcontract.log",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/commandcontract",
+          "Test": "TestModelDevGPUCanonicalPreservesSameFormalWholeOrSharedVector/WHOLE_EXCLUSIVE",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/commandcontract",
+          "Test": "TestModelDevGPUCanonicalPreservesSameFormalWholeOrSharedVector/SHARED_FIXED",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/commandcontract",
+          "Test": "TestModelDevGPUCanonicalPreservesSameFormalWholeOrSharedVector",
+          "Action": "pass",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/commandcontract",
+          "Test": "TestModelDevGPUStoredCommandBindsOriginalIdentityActorAndAllCharges",
+          "Action": "pass",
+          "Elapsed": 0.06
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/commandcontract",
+          "Test": "TestModelDevGPUCanonicalRejectsChangedFormalFactsAndUnmeteredCPU",
+          "Action": "pass",
+          "Elapsed": 0.07
+        }
+      ]
+    },
+    {
+      "phase": "modeldev-client",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=150s",
+        "./app/admin/service/internal/data",
+        "-run",
+        "^TestModelDev(GPUPreparedClient|ResumeRegistration|ExecutionHistory|FinetuningRequiresCurrentModelAPIRights)"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 337.266,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/modeldev-client.log",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientPreservesOriginalWholeAndSharedFacts/WHOLE_EXCLUSIVE",
+          "Action": "pass",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientPreservesOriginalWholeAndSharedFacts/SHARED_FIXED",
+          "Action": "pass",
+          "Elapsed": 0.03
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientPreservesOriginalWholeAndSharedFacts",
+          "Action": "pass",
+          "Elapsed": 0.07
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientCPUDoesNotResolveOrCreateGPUFacts",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsUnverifiedPrepareBeforeACC/identity",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsUnverifiedPrepareBeforeACC/selection",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsUnverifiedPrepareBeforeACC/gpu-request",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsUnverifiedPrepareBeforeACC/hash",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsUnverifiedPrepareBeforeACC",
+          "Action": "pass",
+          "Elapsed": 0.06
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/nil",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/quota",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/unknown",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/digest",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/profile",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize/origin-mode",
+          "Action": "pass",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsInvalidACCBeforeFinalize",
+          "Action": "pass",
+          "Elapsed": 0.11
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientRejectsValidButDifferentFinalGPU",
+          "Action": "pass",
+          "Elapsed": 0.03
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevGPUPreparedClientBoundsACCAndNeverFinalizesAfterTimeout",
+          "Action": "pass",
+          "Elapsed": 0.17
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/terminal_owner_evidence",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/absent_before_terminal_evidence",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/managed_close_before_owner_terminal_observation",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/no_dispatch",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/invalid_run",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/invalid_workflow",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/missing_one_identity",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/missing_observation",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/unknown_run_state",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/unknown_workflow_phase",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/partial_terminal",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/run_time_after_proof",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/workflow_time_before_accepted",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/missing_finish",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/invalid_timestamp",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/invalid_digest",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/bad_resource_version",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts/missing_resource_version",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevExecutionHistoryRejectsInventedTerminalFacts",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRebuildsOnlyCurrentDelegation",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/ready_receipt",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/pending_has_no_receipt",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/dependency_is_explicit",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/unknown_state",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/ready_missing_registration",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/ready_missing_model",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/ready_noncanonical_version",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/ready_retains_failure",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/pending_with_invented_IDs",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/dependency_wrong_code",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/general_training_cannot_register",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/missing_registration_after_resume",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/not_closed",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/wrong_original_execution",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations/unknown_nested_wire",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationRejectsUnboundOrInventedObservations",
+          "Action": "pass",
+          "Elapsed": 0.15
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/Unavailable",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/Internal",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/DeadlineExceeded",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/NotFound",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/FailedPrecondition",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/PermissionDenied",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries/InvalidArgument",
+          "Action": "pass",
+          "Elapsed": 0.01
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestModelDevResumeRegistrationPreservesParentBudgetAndNeverRetries",
+          "Action": "pass",
+          "Elapsed": 0.18
+        }
+      ]
+    },
+    {
+      "phase": "http-budgets-quota",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=90s",
+        "./app/admin/service/internal/server",
+        "-run",
+        "^Test(ModelDevAdmissionHTTPBudget|ModelImportAndRegistrationBudgets|ModelDevQuotaReleaseRegistration|ModelDevResourceRelease|ModelDevQuotaReleaseUsesOnly|DecodeModelDevFinetuningWithoutRegistrationTarget)"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 95.21,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/http-budgets-quota.log",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/POST/api/v1/modeldev/executions",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/GET/api/v1/modeldev/artifacts/10000000-0000-4000-8000-000000000001/content",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/POST/api/v1/modeldev/artifacts/10000000-0000-4000-8000-000000000001/content",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/GET/api/v1/modeldev/executions",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/POST/api/v1/modeldev/executions/",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/POST/api/v1/modeldev/executions/10000000-0000-4000-8000-000000000001/stop",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent/POST/admin/permissions",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetPreservesOtherRoutesAndParent",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevAdmissionHTTPBudgetNeverDisablesDeadline",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/model-versions",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/models/10000000-0000-4000-8000-000000000001/upload-url",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/GET/api/v1/model-versions",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/model-versions/",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/models/not-a-uuid/upload-url",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/GET/api/v1/models/10000000-0000-4000-8000-000000000001/upload-url",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/modeldev/executions/10000000-0000-4000-8000-000000000001:resume-model-registration",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/GET/api/v1/modeldev/executions/10000000-0000-4000-8000-000000000001:resume-model-registration",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite/POST/api/v1/modeldev/executions/not-a-uuid:resume-model-registration",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelImportAndRegistrationBudgetsAreExactAndFinite",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestDecodeModelDevFinetuningWithoutRegistrationTarget",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevQuotaReleaseRegistrationIsExplicitAndExact",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevResourceReleaseRejectsCreateUUIDAsCloseUUID",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/server",
+          "Test": "TestModelDevQuotaReleaseUsesOnlyOriginalUniqueMTLSSAN",
+          "Action": "pass",
+          "Elapsed": 0.02
+        }
+      ]
+    },
+    {
+      "phase": "vm-modeldev-service",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=90s",
+        "./app/admin/service/internal/service",
+        "-run",
+        "^Test(VM|ModelDevGpuUsage)"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 40.364,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/vm-modeldev-service.log",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestModelDevGpuUsageDerivesOnlyOriginalLedgerAndFullRelease",
+          "Action": "pass",
+          "Elapsed": 0.03
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestVMDeleteOnlyExplicitVersionRejectionTerminatesFence",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestVMActionIsolationAndCanonical",
+          "Action": "pass",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestVMBindingFreezesSpecWithoutQuotaPlan",
+          "Action": "pass",
+          "Elapsed": 0
+        }
+      ]
+    },
+    {
+      "phase": "openapi-assets",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=90s",
+        "./app/admin/service/cmd/server/assets"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.772,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/openapi-assets.log",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/cmd/server/assets",
+          "Test": "TestModelDevCreateOpenAPIContract",
+          "Action": "pass",
+          "Elapsed": 0.09
+        }
+      ]
+    },
+    {
+      "phase": "build-server",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-ldflags=-s -w",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/server",
+        "./app/admin/service/cmd/server"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 117.815,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-server.log",
+      "named_results": []
+    },
+    {
+      "phase": "build-admin",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-ldflags=-s -w",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/admin",
+        "./app/admin/service/cmd/admin"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.731,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-admin.log",
+      "named_results": []
+    },
+    {
+      "phase": "build-info-server",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version",
+        "-m",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/server"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.009,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-info-server.log",
+      "named_results": []
+    },
+    {
+      "phase": "build-info-admin",
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version",
+        "-m",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/admin"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.009,
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-info-admin.log",
+      "named_results": []
+    }
+  ],
+  "business_api_calls": 0,
+  "database_access": false,
+  "service_changes": false,
+  "binary_build_info": {
+    "server": {
+      "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-info-server.log",
+      "CGO_ENABLED": "0",
+      "GOOS": "linux",
+      "GOARCH": "amd64",
+      "ELF": "64-bit little-endian AMD64",
+      "PT_INTERP": false,
+      "PT_DYNAMIC": false,
+      "module_pins": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/server: go1.26.10",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-modeldev-service\tv0.0.0-20261022185239-0814ae3ef0b7\th1:m/3QQ2iSvuUn+BJNBc9kjohUf724WoYwSR3NN5A1jzA=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service\tv0.0.0-20261024051201-01c079f1787f\th1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal\tv0.0.0-20261013075021-0937f5aa9c6c\th1:+Z/R4AX9U0RpY+smnrCO9cVFTxLqjjp0r7NbUWdchNE=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service/api/vm/console\tv0.0.0-20261023185414-0a53b99c8d9f\th1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-session-gateway/api\tv0.1.1-0.20261024051540-811cc3839244\th1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU="
+      ]
+    },
+    "admin": {
+      "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/private/build-info-admin.log",
+      "CGO_ENABLED": "0",
+      "GOOS": "linux",
+      "GOARCH": "amd64",
+      "ELF": "64-bit little-endian AMD64",
+      "PT_INTERP": false,
+      "PT_DYNAMIC": false,
+      "module_pins": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/admin: go1.26.10",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-modeldev-service\tv0.0.0-20261022185239-0814ae3ef0b7\th1:m/3QQ2iSvuUn+BJNBc9kjohUf724WoYwSR3NN5A1jzA=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service\tv0.0.0-20261024051201-01c079f1787f\th1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal\tv0.0.0-20261013075021-0937f5aa9c6c\th1:+Z/R4AX9U0RpY+smnrCO9cVFTxLqjjp0r7NbUWdchNE=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-resource-service/api/vm/console\tv0.0.0-20261023185414-0a53b99c8d9f\th1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+        "dep\tgithub.com/zhangzhe-ctrl/ani-session-gateway/api\tv0.1.1-0.20261024051540-811cc3839244\th1:OBfuKBJM/sPd3W9pIcFdVaaYQakVWljq3Pf/R13xBiU="
+      ]
+    }
+  },
+  "source_unchanged": true,
+  "binaries": {
+    "server": {
+      "sha256": "faa4ea2d8c7d736f5e97264ba3c742f40b207240aa2daaad571f6229318c6fd5",
+      "bytes": 150872226
+    },
+    "admin": {
+      "sha256": "184caa82f80ebe87a068ad5cc6cabe0dfe0726b9eee4babab2e2f3a98e88cd5a",
+      "bytes": 115306658
+    }
+  },
+  "result": "PASS_TARGETED_TESTS_AND_SERVER_ADMIN_BUILDS",
+  "elapsed_seconds": 641.532,
+  "finished_at": "2026-10-24T20:14:57.595555+00:00"
+}

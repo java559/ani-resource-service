@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-23T15:14:42.675959+00:00",
+  "result": "PASS",
+  "layer": "GUEST",
+  "scope": "native environment probe only",
+  "console_driver": "official SHA-verified v1.9.0 virtctl KubeVirt serialconsole subresource over native authenticated TLS",
+  "node": "ani-02",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+  },
+  "vmi": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachineInstance",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "08246bc5-1a30-4625-9a31-fff5c3081d04"
+  },
+  "launcher": {
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "virt-launcher-vm-mvp-ani-02-pw9sp",
+    "uid": "adb9c054-7d79-4212-949e-0a19102996c4"
+  },
+  "native_uid": 107,
+  "observed": {
+    "root": "VM_BLOCK_PROBE_01a168ce_ani-02",
+    "data": "VM_BLOCK_PROBE_01a168ce_ani-02",
+    "disk": "sda",
+    "username": "vmprobe",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "nocloud_instance_id": "f2e37469-aa32-4b08-a41b-4edef074fe5e",
+    "firmware_uuid": "f2e37469-aa32-4b08-a41b-4edef074fe5e",
+    "boot_id": "7ef3e558-cbb1-46db-b832-e456f74416c7",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n"
+  }
+}

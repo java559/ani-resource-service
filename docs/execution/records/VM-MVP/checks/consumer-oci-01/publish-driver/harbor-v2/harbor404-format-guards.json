@@ -1,0 +1,9 @@
+{
+  "result": "PASS",
+  "publisher_pure_cases": 13,
+  "http_response_cases": 8,
+  "publisher_sha256": "89d582008b88aa03e6147841c0d76a1cad22212e377d55e3586c599e4a182385",
+  "preflight_sha256": "4d8a2e79e25e175d7435c273a3a675a7234b858af5521e7c1f03e07b6126e099",
+  "registry_requests": 0,
+  "registry_writes": 0
+}

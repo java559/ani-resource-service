@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-24T08:17:56.885757+00:00",
+  "layer": "BROWSER",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": 5,
+  "observed": "Windows Server installation 81 percent",
+  "installation_complete": false,
+  "guest_inputs": 0,
+  "business_mutations": 0,
+  "vnc_disconnected_normally": true,
+  "screenshot": "vm-windows-server2025-install-81pct.png",
+  "screenshot_sha256": "2d442a852ed956d12d85e753b0af5e72886a671ceeda5c0b81fdfacda62340f9"
+}

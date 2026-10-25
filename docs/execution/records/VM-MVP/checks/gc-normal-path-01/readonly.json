@@ -1,0 +1,1702 @@
+{
+  "backend_writes": 0,
+  "cephcluster": {
+    "image": "172.16.101.10:5000/ceph/ceph:v20.2.4",
+    "name": "rook-ceph",
+    "phase": "Ready",
+    "uid": "a0812e65-e735-4872-a806-57fa3327fc20",
+    "versions": {
+      "mds": {
+        "ceph version 20.2.4 (7f793731f1b39eb4f465e960113d2363c311b964) tentacle (stable - RelWithDebInfo)": 2
+      },
+      "mgr": {
+        "ceph version 20.2.4 (7f793731f1b39eb4f465e960113d2363c311b964) tentacle (stable - RelWithDebInfo)": 2
+      },
+      "mon": {
+        "ceph version 20.2.4 (7f793731f1b39eb4f465e960113d2363c311b964) tentacle (stable - RelWithDebInfo)": 3
+      },
+      "osd": {
+        "ceph version 20.2.4 (7f793731f1b39eb4f465e960113d2363c311b964) tentacle (stable - RelWithDebInfo)": 3
+      },
+      "overall": {
+        "ceph version 20.2.4 (7f793731f1b39eb4f465e960113d2363c311b964) tentacle (stable - RelWithDebInfo)": 10
+      }
+    }
+  },
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "cluster_writes": 0,
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=6s",
+        "get",
+        "namespace",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.1,
+      "exit": 0,
+      "stage": "cluster identity"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=6s",
+        "get",
+        "nodes",
+        "ani-01",
+        "ani-02",
+        "ani-03",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.156,
+      "exit": 0,
+      "stage": "exact three nodes"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=6s",
+        "get",
+        "pods",
+        "-n",
+        "rook-ceph",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.291,
+      "exit": 0,
+      "stage": "existing rook namespace runtime versions"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=6s",
+        "get",
+        "cephcluster",
+        "rook-ceph",
+        "-n",
+        "rook-ceph",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.096,
+      "exit": 0,
+      "stage": "existing CephCluster"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=6s",
+        "get",
+        "cronjobs",
+        "-n",
+        "rook-ceph",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.106,
+      "exit": 0,
+      "stage": "rook namespace normal scheduled jobs"
+    }
+  ],
+  "credential_changes": 0,
+  "cronjobs": [],
+  "finished_at": "2026-10-24T18:46:27.144640+00:00",
+  "gc_admin_reads": {
+    "elapsed_seconds": 0.518,
+    "kubectl_exit": 0,
+    "pod_uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+    "result": {
+      "configuration_reference": "existing /etc/ceph/ceph.conf + /etc/ceph/keyring",
+      "credential_values_or_hashes_public": false,
+      "finished_at": "2026-10-24T18:49:59.345995+00:00",
+      "identity": "client.admin",
+      "requests": [
+        {
+          "channel": "mon",
+          "command": {
+            "format": "json",
+            "prefix": "mgr dump"
+          },
+          "elapsed_seconds": 0.037,
+          "exit": 0,
+          "result": {
+            "active_gid": 2134226,
+            "active_name": "a",
+            "available": true,
+            "modules": [
+              "dashboard",
+              "iostat",
+              "nfs",
+              "nvmeof",
+              "prometheus"
+            ],
+            "standby_names": [
+              "b"
+            ]
+          },
+          "timeout_seconds": 5
+        },
+        {
+          "channel": "mon",
+          "command": {
+            "format": "json",
+            "prefix": "mgr module ls"
+          },
+          "elapsed_seconds": 0.006,
+          "exit": 0,
+          "result": {
+            "always_on_modules": [
+              "balancer",
+              "crash",
+              "devicehealth",
+              "orchestrator",
+              "pg_autoscaler",
+              "progress",
+              "rbd_support",
+              "status",
+              "telemetry",
+              "volumes"
+            ],
+            "enabled_modules": [
+              "dashboard",
+              "iostat",
+              "nfs",
+              "nvmeof",
+              "prometheus"
+            ]
+          },
+          "timeout_seconds": 5
+        },
+        {
+          "channel": "mgr",
+          "command": {
+            "prefix": "rbd task list"
+          },
+          "elapsed_seconds": 0.015,
+          "exit": 0,
+          "matching_known_tasks": [
+            {
+              "id": "d07c31c0-aba3-4fc4-9e5c-1c15a3266fcc",
+              "message": "Removing image ani-block-pool/20cc87987d1f99 from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc87987d1f99",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "retry_attempts": 100,
+              "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+              "retry_time": "2026-10-24T18:53:04.844048",
+              "sequence": 48
+            },
+            {
+              "id": "48b67700-6821-4fb7-b06e-bea141507033",
+              "message": "Removing image ani-block-pool/20cc87c1cde11d from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc87c1cde11d",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "retry_attempts": 100,
+              "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+              "retry_time": "2026-10-24T18:53:05.918252",
+              "sequence": 49
+            },
+            {
+              "id": "f88fdfd9-03ad-45a0-bab8-4cba74de18d1",
+              "message": "Removing image ani-block-pool/20cc87b511820b from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc87b511820b",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "retry_attempts": 100,
+              "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+              "retry_time": "2026-10-24T18:53:06.707256",
+              "sequence": 50
+            },
+            {
+              "id": "ffd7b995-706c-4871-9b7b-47169f8bc9a6",
+              "message": "Removing image ani-block-pool/20cc871b8dd7ad from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc871b8dd7ad",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 83
+            },
+            {
+              "id": "8c31142b-872e-4e6c-91a7-616c94e7cb86",
+              "message": "Removing image ani-block-pool/20cc87fb4134b9 from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc87fb4134b9",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 84
+            },
+            {
+              "id": "7e631c0f-6b33-4e30-b3f1-0afec9f10b8f",
+              "message": "Removing image ani-block-pool/20cc878795a82b from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc878795a82b",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 91
+            },
+            {
+              "id": "3ebb5d85-1e03-4655-9dc8-f060d7809228",
+              "message": "Removing image ani-block-pool/20cc878c626cb3 from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc878c626cb3",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 92
+            },
+            {
+              "id": "aadaf80b-3b32-4b23-ab98-05488db0bf71",
+              "message": "Removing image ani-block-pool/20cc8795a861a0 from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc8795a861a0",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 93
+            },
+            {
+              "id": "371d4166-c28e-44c6-825c-0d0206f3cd6d",
+              "message": "Removing image ani-block-pool/20cc87eb4a360b from trash",
+              "refs": {
+                "action": "trash remove",
+                "image_id": "20cc87eb4a360b",
+                "pool_name": "ani-block-pool",
+                "pool_namespace": ""
+              },
+              "sequence": 94
+            }
+          ],
+          "other_tasks_not_published": 22,
+          "task_count": 31,
+          "timeout_seconds": 5
+        },
+        {
+          "channel": "mgr",
+          "command": {
+            "level_spec": "",
+            "prefix": "rbd trash purge schedule list"
+          },
+          "elapsed_seconds": 0.049,
+          "exit": 0,
+          "result": {},
+          "timeout_seconds": 5
+        },
+        {
+          "channel": "mgr",
+          "command": {
+            "level_spec": "ani-block-pool/",
+            "prefix": "rbd trash purge schedule list"
+          },
+          "elapsed_seconds": 0.03,
+          "exit": 0,
+          "result": {},
+          "timeout_seconds": 5
+        }
+      ],
+      "trash_object_reads": 0
+    }
+  },
+  "gc_execution_source": {
+    "schedule.py": [
+      "397:     def load(self,",
+      "398:              namespace_validator: Optional[Callable] = None,",
+      "399:              image_validator: Optional[Callable] = None) -> None:",
+      "400:         self.level_specs = {}",
+      "401:         self.schedules = {}",
+      "402: ",
+      "403:         schedule_cfg = self.handler.module.get_module_option(",
+      "404:             self.handler.MODULE_OPTION_NAME, '')",
+      "405:         if schedule_cfg:",
+      "406:             try:",
+      "407:                 level_spec = LevelSpec.make_global()",
+      "408:                 self.level_specs[level_spec.id] = level_spec",
+      "409:                 schedule = Schedule.from_json(level_spec.name, schedule_cfg)",
+      "410:                 self.schedules[level_spec.id] = schedule",
+      "411:             except ValueError:",
+      "412:                 self.handler.log.error(",
+      "413:                     \"Failed to decode configured schedule {}\".format(",
+      "414:                         schedule_cfg))",
+      "415: ",
+      "416:         for pool_id, pool_name in get_rbd_pools(self.handler.module).items():",
+      "417:             try:",
+      "418:                 with self.handler.module.rados.open_ioctx2(int(pool_id)) as ioctx:",
+      "419:                     self.load_from_pool(ioctx, namespace_validator,",
+      "420:                                         image_validator)",
+      "421:             except rados.ConnectionShutdown:",
+      "422:                 raise",
+      "423:             except rados.Error as e:",
+      "424:                 self.handler.log.error(",
+      "425:                     \"Failed to load schedules for pool {}: {}\".format(",
+      "426:                         pool_name, e))",
+      "555:     def to_list(self, level_spec: LevelSpec) -> Dict[str, dict]:",
+      "556:         if level_spec.id in self.schedules:",
+      "557:             parent: Optional[LevelSpec] = level_spec",
+      "558:         else:",
+      "559:             # try to find existing parent",
+      "560:             parent = None",
+      "561:             for level_spec_id in self.schedules:",
+      "562:                 ls = self.level_specs[level_spec_id]",
+      "563:                 if ls == level_spec:",
+      "564:                     parent = ls",
+      "565:                     break",
+      "566:                 if level_spec.is_child_of(ls) and \\",
+      "567:                    (not parent or ls.is_child_of(parent)):",
+      "568:                     parent = ls",
+      "569:             if not parent:",
+      "570:                 # set to non-existing parent so we still could list its children",
+      "571:                 parent = level_spec",
+      "572: ",
+      "573:         result = {}",
+      "574:         for level_spec_id, schedule in self.schedules.items():",
+      "575:             ls = self.level_specs[level_spec_id]",
+      "576:             if ls == parent or ls == level_spec or ls.is_child_of(level_spec):",
+      "577:                 result[level_spec_id] = {",
+      "578:                     'name': schedule.name,",
+      "579:                     'schedule': schedule.to_list(),",
+      "580:                 }",
+      "581:         return result"
+    ],
+    "task.py": [
+      "1: import errno",
+      "2: import json",
+      "3: import rados",
+      "4: import rbd",
+      "5: import re",
+      "6: import traceback",
+      "7: import uuid",
+      "8: ",
+      "9: from contextlib import contextmanager",
+      "10: from datetime import datetime, timedelta",
+      "11: from functools import partial, wraps",
+      "12: from threading import Condition, Lock, Thread",
+      "13: from typing import cast, Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar",
+      "14: ",
+      "15: from .common import (authorize_request, extract_pool_key, get_rbd_pools,",
+      "16:                      is_authorized, GLOBAL_POOL_KEY)",
+      "17: ",
+      "18: ",
+      "19: RBD_TASK_OID = \"rbd_task\"",
+      "20: ",
+      "21: TASK_SEQUENCE = \"sequence\"",
+      "22: TASK_ID = \"id\"",
+      "23: TASK_REFS = \"refs\"",
+      "24: TASK_MESSAGE = \"message\"",
+      "25: TASK_RETRY_ATTEMPTS = \"retry_attempts\"",
+      "26: TASK_RETRY_TIME = \"retry_time\"",
+      "27: TASK_RETRY_MESSAGE = \"retry_message\"",
+      "28: TASK_IN_PROGRESS = \"in_progress\"",
+      "29: TASK_PROGRESS = \"progress\"",
+      "30: TASK_CANCELED = \"canceled\"",
+      "31: ",
+      "32: TASK_REF_POOL_NAME = \"pool_name\"",
+      "33: TASK_REF_POOL_NAMESPACE = \"pool_namespace\"",
+      "34: TASK_REF_IMAGE_NAME = \"image_name\"",
+      "35: TASK_REF_IMAGE_ID = \"image_id\"",
+      "36: TASK_REF_ACTION = \"action\"",
+      "37: ",
+      "38: TASK_REF_ACTION_FLATTEN = \"flatten\"",
+      "39: TASK_REF_ACTION_REMOVE = \"remove\"",
+      "40: TASK_REF_ACTION_TRASH_REMOVE = \"trash remove\"",
+      "41: TASK_REF_ACTION_MIGRATION_EXECUTE = \"migrate execute\"",
+      "42: TASK_REF_ACTION_MIGRATION_COMMIT = \"migrate commit\"",
+      "43: TASK_REF_ACTION_MIGRATION_ABORT = \"migrate abort\"",
+      "44: ",
+      "45: VALID_TASK_ACTIONS = [TASK_REF_ACTION_FLATTEN,",
+      "46:                       TASK_REF_ACTION_REMOVE,",
+      "47:                       TASK_REF_ACTION_TRASH_REMOVE,",
+      "48:                       TASK_REF_ACTION_MIGRATION_EXECUTE,",
+      "49:                       TASK_REF_ACTION_MIGRATION_COMMIT,",
+      "50:                       TASK_REF_ACTION_MIGRATION_ABORT]",
+      "51: ",
+      "52: TASK_RETRY_INTERVAL = timedelta(seconds=30)",
+      "53: TASK_MAX_RETRY_INTERVAL = timedelta(seconds=300)",
+      "54: MAX_COMPLETED_TASKS = 50",
+      "55: ",
+      "56: ",
+      "57: T = TypeVar('T')",
+      "58: FuncT = TypeVar('FuncT', bound=Callable[..., Any])",
+      "59: ",
+      "60: ",
+      "203:     def run(self) -> None:",
+      "204:         try:",
+      "205:             self.log.info(\"TaskHandler: starting\")",
+      "206:             while not self.stop_thread:",
+      "207:                 with self.lock:",
+      "208:                     now = datetime.now()",
+      "209:                     for sequence in sorted([sequence for sequence, task",
+      "210:                                             in self.tasks_by_sequence.items()",
+      "211:                                             if not task.retry_time or task.retry_time <= now]):",
+      "212:                         self.execute_task(sequence)",
+      "213: ",
+      "214:                     self.condition.wait(5)",
+      "215:                     self.log.debug(\"TaskHandler: tick\")",
+      "216: ",
+      "217:         except (rados.ConnectionShutdown, rbd.ConnectionShutdown):",
+      "218:             self.log.exception(\"TaskHandler: client blocklisted\")",
+      "219:             self.module.client_blocklisted.set()",
+      "220:         except Exception as ex:",
+      "221:             self.log.fatal(\"Fatal runtime error: {}\\n{}\".format(",
+      "222:                 ex, traceback.format_exc()))",
+      "392:     def execute_task(self, sequence: int) -> None:",
+      "393:         task = self.tasks_by_sequence[sequence]",
+      "394:         self.log.info(\"execute_task: task={}\".format(str(task)))",
+      "395: ",
+      "396:         pool_valid = False",
+      "397:         try:",
+      "398:             with self.open_ioctx((task.refs[TASK_REF_POOL_NAME],",
+      "399:                                   task.refs[TASK_REF_POOL_NAMESPACE])) as ioctx:",
+      "400:                 pool_valid = True",
+      "401: ",
+      "402:                 action = task.refs[TASK_REF_ACTION]",
+      "403:                 execute_fn = {TASK_REF_ACTION_FLATTEN: self.execute_flatten,",
+      "404:                               TASK_REF_ACTION_REMOVE: self.execute_remove,",
+      "405:                               TASK_REF_ACTION_TRASH_REMOVE: self.execute_trash_remove,",
+      "406:                               TASK_REF_ACTION_MIGRATION_EXECUTE: self.execute_migration_execute,",
+      "407:                               TASK_REF_ACTION_MIGRATION_COMMIT: self.execute_migration_commit,",
+      "408:                               TASK_REF_ACTION_MIGRATION_ABORT: self.execute_migration_abort",
+      "409:                               }.get(action)",
+      "410:                 if not execute_fn:",
+      "411:                     self.log.error(\"Invalid task action: {}\".format(action))",
+      "412:                 else:",
+      "413:                     task.in_progress = True",
+      "414:                     self.in_progress_task = task",
+      "415: ",
+      "416:                     self.lock.release()",
+      "417:                     try:",
+      "418:                         execute_fn(ioctx, task)",
+      "419: ",
+      "420:                     except rbd.OperationCanceled:",
+      "421:                         self.log.info(\"Operation canceled: task={}\".format(",
+      "422:                             str(task)))",
+      "423: ",
+      "424:                     finally:",
+      "425:                         self.lock.acquire()",
+      "426: ",
+      "427:                         task.in_progress = False",
+      "428:                         self.in_progress_task = None",
+      "429: ",
+      "430:                     self.complete_progress(task)",
+      "431:                     self.remove_task(ioctx, task)",
+      "432: ",
+      "433:         except rados.ObjectNotFound as e:",
+      "434:             self.log.error(\"execute_task: {}\".format(e))",
+      "435:             if pool_valid:",
+      "436:                 task.retry_message = \"{}\".format(e)",
+      "437:                 self.update_progress(task, 0)",
+      "438:             else:",
+      "439:                 # pool DNE -- remove in-memory task",
+      "440:                 self.complete_progress(task)",
+      "441:                 self.remove_task(None, task)",
+      "442: ",
+      "443:         except (rados.ConnectionShutdown, rbd.ConnectionShutdown):",
+      "444:             raise",
+      "445: ",
+      "446:         except (rados.Error, rbd.Error) as e:",
+      "447:             self.log.error(\"execute_task: {}\".format(e))",
+      "448:             task.retry_message = \"{}\".format(e)",
+      "449:             self.update_progress(task, 0)",
+      "450: ",
+      "451:         finally:",
+      "452:             task.in_progress = False",
+      "453:             task.retry_attempts += 1",
+      "454:             task.retry_time = datetime.now() + min(",
+      "455:                 TASK_RETRY_INTERVAL * task.retry_attempts,",
+      "456:                 TASK_MAX_RETRY_INTERVAL)",
+      "505:     def execute_trash_remove(self, ioctx: rados.Ioctx, task: Task) -> None:",
+      "506:         self.log.info(\"execute_trash_remove: task={}\".format(str(task)))",
+      "507: ",
+      "508:         try:",
+      "509:             rbd.RBD().trash_remove(ioctx, task.refs[TASK_REF_IMAGE_ID],",
+      "510:                                    on_progress=partial(self.progress_callback, task))",
+      "511:         except rbd.ImageNotFound:",
+      "512:             task.fail(\"Image does not exist\")",
+      "513:             self.log.info(\"{}: task={}\".format(task.failure_message, str(task)))",
+      "837:     def task_list(self, task_id: Optional[str]) -> Tuple[int, str, str]:",
+      "838:         self.log.info(\"task_list: {}\".format(task_id))",
+      "839: ",
+      "840:         if task_id:",
+      "841:             task = self.tasks_by_id.get(task_id)",
+      "842:             if not task or not is_authorized(self.module,",
+      "843:                                              task.refs[TASK_REF_POOL_NAME],",
+      "844:                                              task.refs[TASK_REF_POOL_NAMESPACE]):",
+      "845:                 return -errno.ENOENT, '', \"No such task {}\".format(task_id)",
+      "846: ",
+      "847:             return 0, json.dumps(task.to_dict(), indent=4, sort_keys=True), \"\"",
+      "848:         else:",
+      "849:             tasks = []",
+      "850:             for sequence in sorted(self.tasks_by_sequence.keys()):",
+      "851:                 task = self.tasks_by_sequence[sequence]",
+      "852:                 if is_authorized(self.module,",
+      "853:                                  task.refs[TASK_REF_POOL_NAME],",
+      "854:                                  task.refs[TASK_REF_POOL_NAMESPACE]):",
+      "855:                     tasks.append(task.to_dict())",
+      "856: ",
+      "857:             return 0, json.dumps(tasks, indent=4, sort_keys=True), \"\""
+    ],
+    "trash_purge_schedule.py": [
+      "29:     def setup(self) -> None:",
+      "30:         self.init_schedule_queue()",
+      "31:         self.thread.start()",
+      "32: ",
+      "33:     def shutdown(self) -> None:",
+      "34:         self.log.info(\"TrashPurgeScheduleHandler: shutting down\")",
+      "35:         self.stop_thread = True",
+      "36:         if self.thread.is_alive():",
+      "37:             self.log.debug(\"TrashPurgeScheduleHandler: joining thread\")",
+      "38:             self.thread.join()",
+      "39:         self.log.info(\"TrashPurgeScheduleHandler: shut down\")",
+      "40: ",
+      "41:     def run(self) -> None:",
+      "42:         try:",
+      "43:             self.log.info(\"TrashPurgeScheduleHandler: starting\")",
+      "44:             while not self.stop_thread:",
+      "45:                 refresh_delay = self.refresh_pools()",
+      "46:                 with self.lock:",
+      "47:                     (ns_spec, wait_time) = self.dequeue()",
+      "48:                     if not ns_spec:",
+      "49:                         self.condition.wait(min(wait_time, refresh_delay))",
+      "50:                         continue",
+      "51:                 pool_id, namespace = ns_spec",
+      "52:                 self.trash_purge(pool_id, namespace)",
+      "53:                 with self.lock:",
+      "54:                     self.enqueue(datetime.now(), pool_id, namespace)",
+      "55: ",
+      "56:         except (rados.ConnectionShutdown, rbd.ConnectionShutdown):",
+      "57:             self.log.exception(\"TrashPurgeScheduleHandler: client blocklisted\")",
+      "58:             self.module.client_blocklisted.set()",
+      "59:         except Exception as ex:",
+      "60:             self.log.fatal(\"Fatal runtime error: {}\\n{}\".format(",
+      "61:                 ex, traceback.format_exc()))",
+      "62: ",
+      "63:     def trash_purge(self, pool_id: str, namespace: str) -> None:",
+      "64:         try:",
+      "65:             with self.module.rados.open_ioctx2(int(pool_id)) as ioctx:",
+      "66:                 ioctx.set_namespace(namespace)",
+      "67:                 rbd.RBD().trash_purge(ioctx, datetime.now())",
+      "68:         except (rados.ConnectionShutdown, rbd.ConnectionShutdown):",
+      "69:             raise",
+      "70:         except Exception as e:",
+      "71:             self.log.error(\"exception when purging {}/{}: {}\".format(",
+      "72:                 pool_id, namespace, e))",
+      "253:     def list(self, level_spec: LevelSpec) -> Tuple[int, str, str]:",
+      "254:         self.log.debug(",
+      "255:             \"TrashPurgeScheduleHandler: list: level_spec={}\".format(",
+      "256:                 level_spec.name))",
+      "257: ",
+      "258:         with self.lock:",
+      "259:             result = self.schedules.to_list(level_spec)",
+      "260: ",
+      "261:         return 0, json.dumps(result, indent=4, sort_keys=True), \"\"",
+      "262: ",
+      "263:     def status(self, level_spec: LevelSpec) -> Tuple[int, str, str]:",
+      "264:         self.log.debug(",
+      "265:             \"TrashPurgeScheduleHandler: status: level_spec={}\".format(",
+      "266:                 level_spec.name))",
+      "267: ",
+      "268:         scheduled = []",
+      "269:         with self.lock:",
+      "270:             for schedule_time in sorted(self.queue):",
+      "271:                 for pool_id, namespace in self.queue[schedule_time]:",
+      "272:                     if not level_spec.matches(pool_id, namespace):",
+      "273:                         continue",
+      "274:                     pool_name = self.pools[pool_id][namespace]",
+      "275:                     scheduled.append({",
+      "276:                         'schedule_time': schedule_time,",
+      "277:                         'pool_id': pool_id,",
+      "278:                         'pool_name': pool_name,",
+      "279:                         'namespace': namespace",
+      "280:                     })",
+      "281:         return 0, json.dumps({'scheduled': scheduled}, indent=4,",
+      "282:                              sort_keys=True), \"\""
+    ]
+  },
+  "installed_rbd_support_source": {
+    "module.py": {
+      "functions": [
+        {
+          "end": 74,
+          "line": 39,
+          "name": "with_latest_osdmap"
+        },
+        {
+          "end": 71,
+          "line": 41,
+          "name": "wrapper"
+        },
+        {
+          "end": 93,
+          "line": 87,
+          "name": "__init__"
+        },
+        {
+          "end": 99,
+          "line": 95,
+          "name": "init_handlers"
+        },
+        {
+          "end": 111,
+          "line": 101,
+          "name": "setup_handlers"
+        },
+        {
+          "end": 131,
+          "line": 113,
+          "name": "run"
+        },
+        {
+          "end": 140,
+          "line": 133,
+          "name": "shutdown"
+        },
+        {
+          "end": 152,
+          "line": 144,
+          "name": "mirror_snapshot_schedule_add"
+        },
+        {
+          "end": 164,
+          "line": 156,
+          "name": "mirror_snapshot_schedule_remove"
+        },
+        {
+          "end": 174,
+          "line": 168,
+          "name": "mirror_snapshot_schedule_list"
+        },
+        {
+          "end": 184,
+          "line": 178,
+          "name": "mirror_snapshot_schedule_status"
+        },
+        {
+          "end": 196,
+          "line": 188,
+          "name": "perf_image_stats"
+        },
+        {
+          "end": 208,
+          "line": 200,
+          "name": "perf_image_counters"
+        },
+        {
+          "end": 217,
+          "line": 212,
+          "name": "task_add_flatten"
+        },
+        {
+          "end": 226,
+          "line": 221,
+          "name": "task_add_remove"
+        },
+        {
+          "end": 235,
+          "line": 230,
+          "name": "task_add_trash_remove"
+        },
+        {
+          "end": 244,
+          "line": 239,
+          "name": "task_add_migration_execute"
+        },
+        {
+          "end": 253,
+          "line": 248,
+          "name": "task_add_migration_commit"
+        },
+        {
+          "end": 262,
+          "line": 257,
+          "name": "task_add_migration_abort"
+        },
+        {
+          "end": 271,
+          "line": 266,
+          "name": "task_cancel"
+        },
+        {
+          "end": 280,
+          "line": 275,
+          "name": "task_list"
+        },
+        {
+          "end": 292,
+          "line": 284,
+          "name": "trash_purge_schedule_add"
+        },
+        {
+          "end": 304,
+          "line": 296,
+          "name": "trash_purge_schedule_remove"
+        },
+        {
+          "end": 314,
+          "line": 308,
+          "name": "trash_purge_schedule_list"
+        },
+        {
+          "end": 324,
+          "line": 318,
+          "name": "trash_purge_schedule_status"
+        }
+      ],
+      "selected_lines": [
+        "22: from .perf import PerfHandler, OSD_PERF_QUERY_COUNTERS",
+        "23: from .task import TaskHandler",
+        "24: from .trash_purge_schedule import TrashPurgeScheduleHandler",
+        "25: ",
+        "26: ",
+        "27: class ImageSortBy(enum.Enum):",
+        "28:     write_ops = 'write_ops'",
+        "29:     write_bytes = 'write_bytes'",
+        "30:     write_latency = 'write_latency'",
+        "77: class Module(MgrModule):",
+        "78:     CLICommand = RBDSupportCLICommand",
+        "79:     MODULE_OPTIONS = [",
+        "80:         Option(name=MirrorSnapshotScheduleHandler.MODULE_OPTION_NAME),",
+        "81:         Option(name=MirrorSnapshotScheduleHandler.MODULE_OPTION_NAME_MAX_CONCURRENT_SNAP_CREATE,",
+        "82:                type='int',",
+        "83:                default=10),",
+        "84:         Option(name=TrashPurgeScheduleHandler.MODULE_OPTION_NAME),",
+        "85:     ]",
+        "97:         self.perf = PerfHandler(self)",
+        "98:         self.task = TaskHandler(self)",
+        "99:         self.trash_purge_schedule = TrashPurgeScheduleHandler(self)",
+        "100: ",
+        "101:     def setup_handlers(self) -> None:",
+        "102:         self.log.info(\"starting setup\")",
+        "103:         # new RADOS client is created and registered in the MgrMap",
+        "104:         # implicitly here as 'rados' is a property attribute.",
+        "105:         self.rados.wait_for_latest_osdmap()",
+        "107:         self.perf.setup()",
+        "108:         self.task.setup()",
+        "109:         self.trash_purge_schedule.setup()",
+        "110:         self.log.info(\"setup complete\")",
+        "111:         self.module_ready = True",
+        "112: ",
+        "113:     def run(self) -> None:",
+        "114:         self.log.info(\"recovery thread starting\")",
+        "115:         try:",
+        "134:         self.module_ready = False",
+        "135:         self.mirror_snapshot_schedule.shutdown()",
+        "136:         self.trash_purge_schedule.shutdown()",
+        "137:         self.task.shutdown()",
+        "138:         self.perf.shutdown()",
+        "139:         # shut down client and deregister it from MgrMap",
+        "140:         super().shutdown()",
+        "141: ",
+        "142:     @RBDSupportCLICommand.Write('rbd mirror snapshot schedule add')",
+        "271:             return self.task.task_cancel(task_id)",
+        "272: ",
+        "273:     @RBDSupportCLICommand.Read('rbd task list')",
+        "274:     @with_latest_osdmap",
+        "275:     def task_list(self, task_id: Optional[str] = None) -> Tuple[int, str, str]:",
+        "276:         \"\"\"",
+        "277:         List pending or running asynchronous tasks",
+        "278:         \"\"\"",
+        "279:         with self.task.lock:",
+        "280:             return self.task.task_list(task_id)",
+        "281: ",
+        "282:     @RBDSupportCLICommand.Write('rbd trash purge schedule add')",
+        "283:     @with_latest_osdmap",
+        "284:     def trash_purge_schedule_add(self,",
+        "285:                                  level_spec: str,",
+        "286:                                  interval: str,",
+        "287:                                  start_time: Optional[str] = None) -> Tuple[int, str, str]:",
+        "288:         \"\"\"",
+        "289:         Add rbd trash purge schedule",
+        "290:         \"\"\"",
+        "291:         spec = LevelSpec.from_name(self, level_spec, allow_image_level=False)",
+        "292:         return self.trash_purge_schedule.add_schedule(spec, interval, start_time)",
+        "293: ",
+        "294:     @RBDSupportCLICommand.Write('rbd trash purge schedule remove')",
+        "295:     @with_latest_osdmap",
+        "296:     def trash_purge_schedule_remove(self,",
+        "297:                                     level_spec: str,",
+        "298:                                     interval: Optional[str] = None,",
+        "299:                                     start_time: Optional[str] = None) -> Tuple[int, str, str]:",
+        "300:         \"\"\"",
+        "301:         Remove rbd trash purge schedule",
+        "302:         \"\"\"",
+        "303:         spec = LevelSpec.from_name(self, level_spec, allow_image_level=False)",
+        "304:         return self.trash_purge_schedule.remove_schedule(spec, interval, start_time)",
+        "305: ",
+        "306:     @RBDSupportCLICommand.Read('rbd trash purge schedule list')",
+        "307:     @with_latest_osdmap",
+        "308:     def trash_purge_schedule_list(self,",
+        "309:                                   level_spec: str = '') -> Tuple[int, str, str]:",
+        "310:         \"\"\"",
+        "311:         List rbd trash purge schedule",
+        "312:         \"\"\"",
+        "313:         spec = LevelSpec.from_name(self, level_spec, allow_image_level=False)",
+        "314:         return self.trash_purge_schedule.list(spec)",
+        "315: ",
+        "316:     @RBDSupportCLICommand.Read('rbd trash purge schedule status')",
+        "317:     @with_latest_osdmap",
+        "318:     def trash_purge_schedule_status(self,",
+        "319:                                     level_spec: str = '') -> Tuple[int, str, str]:",
+        "320:         \"\"\"",
+        "321:         Show rbd trash purge schedule status",
+        "322:         \"\"\"",
+        "323:         spec = LevelSpec.from_name(self, level_spec, allow_image_level=False)",
+        "324:         return self.trash_purge_schedule.status(spec)"
+      ],
+      "sha256": "625ad4707b4faa5221b9be82d965b228d1ae8ce85b4d3be72f6916747042edc6"
+    },
+    "schedule.py": {
+      "functions": [
+        {
+          "end": 30,
+          "line": 20,
+          "name": "__init__"
+        },
+        {
+          "end": 33,
+          "line": 32,
+          "name": "__eq__"
+        },
+        {
+          "end": 46,
+          "line": 35,
+          "name": "is_child_of"
+        },
+        {
+          "end": 49,
+          "line": 48,
+          "name": "is_global"
+        },
+        {
+          "end": 52,
+          "line": 51,
+          "name": "get_pool_id"
+        },
+        {
+          "end": 64,
+          "line": 54,
+          "name": "matches"
+        },
+        {
+          "end": 79,
+          "line": 66,
+          "name": "intersects"
+        },
+        {
+          "end": 83,
+          "line": 82,
+          "name": "make_global"
+        },
+        {
+          "end": 96,
+          "line": 86,
+          "name": "from_pool_spec"
+        },
+        {
+          "end": 168,
+          "line": 99,
+          "name": "from_name"
+        },
+        {
+          "end": 228,
+          "line": 171,
+          "name": "from_id"
+        },
+        {
+          "end": 234,
+          "line": 233,
+          "name": "__init__"
+        },
+        {
+          "end": 237,
+          "line": 236,
+          "name": "__eq__"
+        },
+        {
+          "end": 240,
+          "line": 239,
+          "name": "__hash__"
+        },
+        {
+          "end": 253,
+          "line": 242,
+          "name": "to_string"
+        },
+        {
+          "end": 267,
+          "line": 256,
+          "name": "from_string"
+        },
+        {
+          "end": 280,
+          "line": 272,
+          "name": "__init__"
+        },
+        {
+          "end": 283,
+          "line": 282,
+          "name": "__eq__"
+        },
+        {
+          "end": 286,
+          "line": 285,
+          "name": "__hash__"
+        },
+        {
+          "end": 289,
+          "line": 288,
+          "name": "to_string"
+        },
+        {
+          "end": 301,
+          "line": 292,
+          "name": "from_string"
+        },
+        {
+          "end": 308,
+          "line": 306,
+          "name": "__init__"
+        },
+        {
+          "end": 311,
+          "line": 310,
+          "name": "__len__"
+        },
+        {
+          "end": 316,
+          "line": 313,
+          "name": "add"
+        },
+        {
+          "end": 321,
+          "line": 318,
+          "name": "remove"
+        },
+        {
+          "end": 337,
+          "line": 323,
+          "name": "next_run"
+        },
+        {
+          "end": 349,
+          "line": 339,
+          "name": "to_list"
+        },
+        {
+          "end": 352,
+          "line": 351,
+          "name": "to_json"
+        },
+        {
+          "end": 371,
+          "line": 355,
+          "name": "from_json"
+        },
+        {
+          "end": 392,
+          "line": 376,
+          "name": "__init__"
+        },
+        {
+          "end": 395,
+          "line": 394,
+          "name": "__len__"
+        },
+        {
+          "end": 426,
+          "line": 397,
+          "name": "load"
+        },
+        {
+          "end": 480,
+          "line": 428,
+          "name": "load_from_pool"
+        },
+        {
+          "end": 498,
+          "line": 482,
+          "name": "save"
+        },
+        {
+          "end": 509,
+          "line": 500,
+          "name": "add"
+        },
+        {
+          "end": 530,
+          "line": 511,
+          "name": "remove"
+        },
+        {
+          "end": 547,
+          "line": 532,
+          "name": "find"
+        },
+        {
+          "end": 553,
+          "line": 549,
+          "name": "intersects"
+        },
+        {
+          "end": 581,
+          "line": 555,
+          "name": "to_list"
+        },
+        {
+          "end": 347,
+          "line": 340,
+          "name": "item_to_dict"
+        }
+      ],
+      "selected_lines": [
+        "440:                             pool_name, start_after))",
+        "441:                     it, ret = ioctx.get_omap_vals(read_op, start_after, \"\", 128)",
+        "442:                     ioctx.operate_read_op(read_op, self.handler.SCHEDULE_OID)",
+        "443: ",
+        "444:                     it = list(it)",
+        "445:                     for k, v in it:",
+        "446:                         start_after = k",
+        "447:                         v = v.decode()",
+        "448:                         self.handler.log.info(",
+        "478:             with rados.WriteOpCtx() as write_op:",
+        "479:                 ioctx.remove_omap_keys(write_op, stale_keys)",
+        "480:                 ioctx.operate_write_op(write_op, self.handler.SCHEDULE_OID)",
+        "481: ",
+        "482:     def save(self, level_spec: LevelSpec, schedule: Optional[Schedule]) -> None:",
+        "483:         if level_spec.is_global():",
+        "484:             schedule_cfg = schedule and schedule.to_json() or None",
+        "485:             self.handler.module.set_module_option(",
+        "486:                 self.handler.MODULE_OPTION_NAME, schedule_cfg)",
+        "496:                 else:",
+        "497:                     ioctx.remove_omap_keys(write_op, (level_spec.id, ))",
+        "498:                 ioctx.operate_write_op(write_op, self.handler.SCHEDULE_OID)",
+        "499: ",
+        "500:     def add(self,",
+        "501:             level_spec: LevelSpec,",
+        "502:             interval: str,",
+        "503:             start_time: Optional[str]) -> None:",
+        "504:         schedule = self.schedules.get(level_spec.id, Schedule(level_spec.name))"
+      ],
+      "sha256": "425b1b3d6a5b1ed44c05f283722f9449b9ede5fce9da07ac133f317e1de292f9"
+    },
+    "task.py": {
+      "functions": [
+        {
+          "end": 64,
+          "line": 62,
+          "name": "__init__"
+        },
+        {
+          "end": 73,
+          "line": 66,
+          "name": "__call__"
+        },
+        {
+          "end": 92,
+          "line": 80,
+          "name": "__init__"
+        },
+        {
+          "end": 95,
+          "line": 94,
+          "name": "__str__"
+        },
+        {
+          "end": 99,
+          "line": 98,
+          "name": "sequence_key"
+        },
+        {
+          "end": 103,
+          "line": 101,
+          "name": "cancel"
+        },
+        {
+          "end": 107,
+          "line": 105,
+          "name": "fail"
+        },
+        {
+          "end": 126,
+          "line": 109,
+          "name": "to_dict"
+        },
+        {
+          "end": 129,
+          "line": 128,
+          "name": "to_json"
+        },
+        {
+          "end": 143,
+          "line": 132,
+          "name": "from_json"
+        },
+        {
+          "end": 170,
+          "line": 165,
+          "name": "__init__"
+        },
+        {
+          "end": 175,
+          "line": 172,
+          "name": "setup"
+        },
+        {
+          "end": 179,
+          "line": 178,
+          "name": "default_pool_name"
+        },
+        {
+          "end": 185,
+          "line": 181,
+          "name": "extract_pool_spec"
+        },
+        {
+          "end": 193,
+          "line": 187,
+          "name": "extract_image_spec"
+        },
+        {
+          "end": 201,
+          "line": 195,
+          "name": "shutdown"
+        },
+        {
+          "end": 222,
+          "line": 203,
+          "name": "run"
+        },
+        {
+          "end": 232,
+          "line": 225,
+          "name": "open_ioctx"
+        },
+        {
+          "end": 241,
+          "line": 235,
+          "name": "format_image_spec"
+        },
+        {
+          "end": 267,
+          "line": 243,
+          "name": "init_task_queue"
+        },
+        {
+          "end": 302,
+          "line": 269,
+          "name": "load_task_queue"
+        },
+        {
+          "end": 306,
+          "line": 304,
+          "name": "append_task"
+        },
+        {
+          "end": 314,
+          "line": 308,
+          "name": "task_refs_match"
+        },
+        {
+          "end": 330,
+          "line": 316,
+          "name": "find_task"
+        },
+        {
+          "end": 361,
+          "line": 332,
+          "name": "add_task"
+        },
+        {
+          "end": 390,
+          "line": 363,
+          "name": "remove_task"
+        },
+        {
+          "end": 456,
+          "line": 392,
+          "name": "execute_task"
+        },
+        {
+          "end": 480,
+          "line": 458,
+          "name": "progress_callback"
+        },
+        {
+          "end": 493,
+          "line": 482,
+          "name": "execute_flatten"
+        },
+        {
+          "end": 503,
+          "line": 495,
+          "name": "execute_remove"
+        },
+        {
+          "end": 513,
+          "line": 505,
+          "name": "execute_trash_remove"
+        },
+        {
+          "end": 526,
+          "line": 515,
+          "name": "execute_migration_execute"
+        },
+        {
+          "end": 539,
+          "line": 528,
+          "name": "execute_migration_commit"
+        },
+        {
+          "end": 552,
+          "line": 541,
+          "name": "execute_migration_abort"
+        },
+        {
+          "end": 568,
+          "line": 554,
+          "name": "complete_progress"
+        },
+        {
+          "end": 580,
+          "line": 570,
+          "name": "_update_progress"
+        },
+        {
+          "end": 584,
+          "line": 582,
+          "name": "post_progress"
+        },
+        {
+          "end": 588,
+          "line": 586,
+          "name": "update_progress"
+        },
+        {
+          "end": 592,
+          "line": 591,
+          "name": "throttled_update_progress"
+        },
+        {
+          "end": 632,
+          "line": 594,
+          "name": "queue_flatten"
+        },
+        {
+          "end": 668,
+          "line": 634,
+          "name": "queue_remove"
+        },
+        {
+          "end": 691,
+          "line": 670,
+          "name": "queue_trash_remove"
+        },
+        {
+          "end": 699,
+          "line": 693,
+          "name": "get_migration_status"
+        },
+        {
+          "end": 706,
+          "line": 701,
+          "name": "validate_image_migrating"
+        },
+        {
+          "end": 713,
+          "line": 708,
+          "name": "resolve_pool_name"
+        },
+        {
+          "end": 752,
+          "line": 715,
+          "name": "queue_migration_execute"
+        },
+        {
+          "end": 783,
+          "line": 754,
+          "name": "queue_migration_commit"
+        },
+        {
+          "end": 809,
+          "line": 785,
+          "name": "queue_migration_abort"
+        },
+        {
+          "end": 835,
+          "line": 811,
+          "name": "task_cancel"
+        },
+        {
+          "end": 857,
+          "line": 837,
+          "name": "task_list"
+        },
+        {
+          "end": 72,
+          "line": 68,
+          "name": "wrapper"
+        }
+      ],
+      "selected_lines": [
+        "390:                 pass",
+        "391: ",
+        "392:     def execute_task(self, sequence: int) -> None:",
+        "393:         task = self.tasks_by_sequence[sequence]",
+        "394:         self.log.info(\"execute_task: task={}\".format(str(task)))",
+        "395: ",
+        "396:         pool_valid = False",
+        "397:         try:",
+        "398:             with self.open_ioctx((task.refs[TASK_REF_POOL_NAME],",
+        "503:             self.log.info(\"{}: task={}\".format(task.failure_message, str(task)))",
+        "504: ",
+        "505:     def execute_trash_remove(self, ioctx: rados.Ioctx, task: Task) -> None:",
+        "506:         self.log.info(\"execute_trash_remove: task={}\".format(str(task)))",
+        "507: ",
+        "508:         try:",
+        "509:             rbd.RBD().trash_remove(ioctx, task.refs[TASK_REF_IMAGE_ID],",
+        "510:                                    on_progress=partial(self.progress_callback, task))",
+        "511:         except rbd.ImageNotFound:",
+        "835:         return 0, \"\", \"\"",
+        "836: ",
+        "837:     def task_list(self, task_id: Optional[str]) -> Tuple[int, str, str]:",
+        "838:         self.log.info(\"task_list: {}\".format(task_id))",
+        "839: ",
+        "840:         if task_id:",
+        "841:             task = self.tasks_by_id.get(task_id)",
+        "842:             if not task or not is_authorized(self.module,",
+        "843:                                              task.refs[TASK_REF_POOL_NAME],"
+      ],
+      "sha256": "3144a80ad4ae8dc8ec246107d329fc7276a0ca57d23004051bc3585824319680"
+    },
+    "trash_purge_schedule.py": {
+      "functions": [
+        {
+          "end": 27,
+          "line": 19,
+          "name": "__init__"
+        },
+        {
+          "end": 31,
+          "line": 29,
+          "name": "setup"
+        },
+        {
+          "end": 39,
+          "line": 33,
+          "name": "shutdown"
+        },
+        {
+          "end": 61,
+          "line": 41,
+          "name": "run"
+        },
+        {
+          "end": 72,
+          "line": 63,
+          "name": "trash_purge"
+        },
+        {
+          "end": 80,
+          "line": 74,
+          "name": "init_schedule_queue"
+        },
+        {
+          "end": 84,
+          "line": 82,
+          "name": "load_schedules"
+        },
+        {
+          "end": 116,
+          "line": 86,
+          "name": "refresh_pools"
+        },
+        {
+          "end": 137,
+          "line": 118,
+          "name": "load_pool"
+        },
+        {
+          "end": 156,
+          "line": 139,
+          "name": "rebuild_queue"
+        },
+        {
+          "end": 173,
+          "line": 158,
+          "name": "refresh_queue"
+        },
+        {
+          "end": 191,
+          "line": 175,
+          "name": "enqueue"
+        },
+        {
+          "end": 209,
+          "line": 193,
+          "name": "dequeue"
+        },
+        {
+          "end": 223,
+          "line": 211,
+          "name": "remove_from_queue"
+        },
+        {
+          "end": 237,
+          "line": 225,
+          "name": "add_schedule"
+        },
+        {
+          "end": 251,
+          "line": 239,
+          "name": "remove_schedule"
+        },
+        {
+          "end": 261,
+          "line": 253,
+          "name": "list"
+        },
+        {
+          "end": 282,
+          "line": 263,
+          "name": "status"
+        }
+      ],
+      "selected_lines": [
+        "13: ",
+        "14: class TrashPurgeScheduleHandler:",
+        "15:     MODULE_OPTION_NAME = \"trash_purge_schedule\"",
+        "16:     SCHEDULE_OID = \"rbd_trash_purge_schedule\"",
+        "17:     REFRESH_DELAY_SECONDS = 60.0",
+        "18: ",
+        "19:     def __init__(self, module: Any) -> None:",
+        "20:         self.lock = Lock()",
+        "21:         self.condition = Condition(self.lock)",
+        "22:         self.module = module",
+        "80:         self.log.debug(\"TrashPurgeScheduleHandler: queue is initialized\")",
+        "81: ",
+        "82:     def load_schedules(self) -> None:",
+        "83:         self.log.info(\"TrashPurgeScheduleHandler: load_schedules\")",
+        "84:         self.schedules.load()",
+        "85: ",
+        "86:     def refresh_pools(self) -> float:",
+        "87:         elapsed = (datetime.now() - self.last_refresh_pools).total_seconds()",
+        "88:         if elapsed < self.REFRESH_DELAY_SECONDS:"
+      ],
+      "sha256": "34a2df303b33dec7a799a6bc0174aa627ff20fdd996181af733e9447dce567f6"
+    }
+  },
+  "nodes": [
+    {
+      "internal_ips": [
+        "172.16.101.10"
+      ],
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    },
+    {
+      "internal_ips": [
+        "172.16.101.11"
+      ],
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+    },
+    {
+      "internal_ips": [
+        "172.16.101.12"
+      ],
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+    }
+  ],
+  "pods": [
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/ceph/ceph:v20.2.4",
+          "image_id": "172.16.101.10:5000/ceph/ceph@sha256:09ee90f6f3e0c7b9954f71d214ee05e9bbaaaea3716b1dd619603283b829f8b8",
+          "name": "mgr",
+          "ready": true
+        },
+        {
+          "image": "172.16.101.10:5000/rook/ceph:v1.20.7",
+          "image_id": "172.16.101.10:5000/rook/ceph@sha256:de26d6fc252283fa2725d06fcf9e66c21c3a0e4126f9e377e38d5faa580f6344",
+          "name": "watch-active",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph-mgr-a-67c776d466",
+          "uid": "88d60d2a-b0c1-4c62-959a-02c844737931"
+        }
+      ],
+      "phase": "Running",
+      "uid": "a55b16b7-fb00-465e-b084-320fceb2c663"
+    },
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/ceph/ceph:v20.2.4",
+          "image_id": "172.16.101.10:5000/ceph/ceph@sha256:09ee90f6f3e0c7b9954f71d214ee05e9bbaaaea3716b1dd619603283b829f8b8",
+          "name": "mgr",
+          "ready": true
+        },
+        {
+          "image": "172.16.101.10:5000/rook/ceph:v1.20.7",
+          "image_id": "172.16.101.10:5000/rook/ceph@sha256:de26d6fc252283fa2725d06fcf9e66c21c3a0e4126f9e377e38d5faa580f6344",
+          "name": "watch-active",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph-mgr-b-7ff7f8455c-zcdtf",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph-mgr-b-7ff7f8455c",
+          "uid": "68f193d7-bdbb-401a-9b8d-8276b3774b8f"
+        }
+      ],
+      "phase": "Running",
+      "uid": "38206a21-a995-4fed-9486-906e5c668161"
+    },
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/rook/ceph:v1.20.7",
+          "image_id": "172.16.101.10:5000/rook/ceph@sha256:de26d6fc252283fa2725d06fcf9e66c21c3a0e4126f9e377e38d5faa580f6344",
+          "name": "rook-ceph-operator",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph-operator-6d6c8f9fb9-cqfqb",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph-operator-6d6c8f9fb9",
+          "uid": "c0fff3a8-b5b2-4a10-95f5-9e60f8abb6cc"
+        }
+      ],
+      "phase": "Running",
+      "uid": "977241a2-e3fb-4704-873f-db8fd3b5fa98"
+    },
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/ceph/ceph:v20.2.4",
+          "image_id": "172.16.101.10:5000/ceph/ceph@sha256:09ee90f6f3e0c7b9954f71d214ee05e9bbaaaea3716b1dd619603283b829f8b8",
+          "name": "rook-ceph-tools",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph-tools-68d6bc7cc7",
+          "uid": "34dad28c-aaa9-4605-afb6-971686652082"
+        }
+      ],
+      "phase": "Running",
+      "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+    },
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/cephcsi/cephcsi:v3.17.1",
+          "image_id": "172.16.101.10:5000/cephcsi/cephcsi@sha256:e1122fc768ddb7bd5c5cdca9feab0a9eafd1d994d0edf9c204c89ef2707e2aa9",
+          "name": "csi-rbdplugin",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-9j4ft",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986",
+          "uid": "62d7203a-a732-4d5a-81b7-a25552d0452a"
+        }
+      ],
+      "phase": "Running",
+      "uid": "929e2b7d-e06a-4da3-8c53-48e3e932b5d6"
+    },
+    {
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/cephcsi/cephcsi:v3.17.1",
+          "image_id": "172.16.101.10:5000/cephcsi/cephcsi@sha256:e1122fc768ddb7bd5c5cdca9feab0a9eafd1d994d0edf9c204c89ef2707e2aa9",
+          "name": "csi-rbdplugin",
+          "ready": true
+        }
+      ],
+      "deleting": false,
+      "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg",
+      "owner": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986",
+          "uid": "62d7203a-a732-4d5a-81b7-a25552d0452a"
+        }
+      ],
+      "phase": "Running",
+      "uid": "997474bf-2ada-42c8-a7b2-89e67cdf048f"
+    }
+  ],
+  "result": "IDENTITY_VERSION_DISCOVERED_NO_TRASH_READS",
+  "scope": "identity/version/GC pathway only; no nine-id trash reads",
+  "started_at": "2026-10-24T18:46:26.382770+00:00",
+  "three_snapshot_dependencies": {
+    "error": "Traceback (most recent call last):\n  File \"<string>\", line 3, in <module>\n  File \"<string>\", line 3, in <dictcomp>\nTypeError: 'NoneType' object is not subscriptable\ncommand terminated with exit code 1\n",
+    "kubectl_exit": 1
+  },
+  "trash_object_reads": 0
+}

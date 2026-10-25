@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-24T07:28:53.228075+00:00",
+  "lock": {
+    "state": "LOCK_ACQUIRED",
+    "host": "fedora",
+    "pid": 3023374,
+    "dev": 53,
+    "ino": 901308
+  },
+  "authority": "Root explicit exact provider branch authorization; no main/tag/merge/release/deployment",
+  "providers": {
+    "resource": {
+      "commit": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+      "tree": "f2897b347e69cfd7e9cfae0867c1003ad040eb37",
+      "branch": "refs/heads/codex/vm-mvp-resource-vm-sdk-20261023",
+      "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+      "fresh_before": "",
+      "pushes": 1,
+      "push_stdout": "To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git\n*\t01c079f1787f301c547bf9d0d050fb19ca49ff84:refs/heads/codex/vm-mvp-resource-vm-sdk-20261023\t[new branch]\nDone\n",
+      "state": "PUBLISHED_CREATE_ONLY",
+      "independent_after": "01c079f1787f301c547bf9d0d050fb19ca49ff84\trefs/heads/codex/vm-mvp-resource-vm-sdk-20261023",
+      "exact_oid_verified": true,
+      "head_unchanged": true,
+      "index_unchanged": true
+    },
+    "session": {
+      "commit": "811cc383924460a99cae5b209ca5db97a83d42f4",
+      "tree": "407609f776a718d61b74ec95e296ba2db0bb38ad",
+      "branch": "refs/heads/codex/vm-mvp-session-api-20261023",
+      "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-session-gateway.git",
+      "fresh_before": "",
+      "pushes": 1,
+      "push_stdout": "To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-session-gateway.git\n*\t811cc383924460a99cae5b209ca5db97a83d42f4:refs/heads/codex/vm-mvp-session-api-20261023\t[new branch]\nDone\n",
+      "state": "PUBLISHED_CREATE_ONLY",
+      "independent_after": "811cc383924460a99cae5b209ca5db97a83d42f4\trefs/heads/codex/vm-mvp-session-api-20261023",
+      "exact_oid_verified": true,
+      "head_unchanged": true,
+      "index_unchanged": true
+    }
+  },
+  "state": "PASS_BOTH_EXACT_PROVIDER_BRANCHES_PUBLISHED",
+  "finished_at": "2026-10-24T07:29:36.466781+00:00"
+}

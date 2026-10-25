@@ -1,0 +1,136 @@
+{
+  "at": "2026-10-24T00:25:05.661769+00:00",
+  "scope": "exact observed SOURCE normal unit and vet gates; no retrospective complete build-source proof claimed",
+  "source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+  "source_manifest": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-vet-06.manifest.json",
+  "source_manifest_sha256": "e00d992e3c9ce511d3f34fd900c88806928603dce48cbb6fc80b2f34e36b59a1",
+  "file_count": 2325,
+  "candidate_process": {
+    "pid": 1398439,
+    "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "owner_return_manifest_sha256": "10c6ae643e7922a02b0cdeeb46cc73336cf5a28b3dcf047ce5311e47ed401ffc",
+  "binary_source_link": "Owner confirms stage01 build origin; complete source at historical binary-build time was not frozen. This gate certifies the observed manifest only.",
+  "workspace": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-dev.work",
+  "nested_api_quota": "Separate module excluded from root ./...; no change/claim of its gate.",
+  "database_boundary": "No app/database/test environment inherited; no PG build tags; quota_pg tests excluded; env-dependent PG tests may skip. Existing explicit VM PG receipts remain separate.",
+  "commands": [
+    {
+      "gate": "unit",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=4m",
+        "./..."
+      ],
+      "exit_code": 1,
+      "seconds": 231.116,
+      "result": "FAIL",
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-06.log",
+      "skipped_packages": 119,
+      "skipped_tests": 6,
+      "failures": [
+        {
+          "Package": "go-wind-admin/app/admin/service/cmd/server/assets",
+          "Test": "TestModelDevCreateOpenAPIContract",
+          "Elapsed": 0.1
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/cmd/server/assets",
+          "Elapsed": 0.111
+        },
+        {
+          "Package": "go-wind-admin/tests/imagecontract",
+          "Test": "TestImageModulePreservesExistingContract",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/tests/imagecontract",
+          "Elapsed": 0.36
+        },
+        {
+          "Package": "go-wind-admin/tools/localdeps/gow/internal/buf",
+          "Test": "TestPreflightFailsWithoutTouchingOutputs",
+          "Elapsed": 0
+        },
+        {
+          "Package": "go-wind-admin/tools/localdeps/gow/internal/buf",
+          "Elapsed": 1.238
+        },
+        {
+          "Package": "go-wind-admin/tools/localdeps/gow/internal/pkg",
+          "Test": "TestNewModuleInspectorFromGo",
+          "Elapsed": 0.02
+        },
+        {
+          "Package": "go-wind-admin/tools/localdeps/gow/internal/pkg",
+          "Elapsed": 0.417
+        }
+      ]
+    }
+  ],
+  "business_api_calls": 0,
+  "service_restarts": 0,
+  "token_requests": 0,
+  "source_copy_or_private_data_archive": false,
+  "result": "PARTIAL_INTERRUPTED_FOR_AUTH_MAINTENANCE",
+  "interrupted_at": "2026-10-24T00:29:28.711303+00:00",
+  "source_unchanged": true,
+  "source_drift_files": [],
+  "normal_term_only": true,
+  "task_driver_and_children_stopped": true,
+  "unit_completion": "COMPLETE_EXIT_1",
+  "vet": "STARTED_BUT_INTERRUPTED_NORMAL_TERM_FOR_AUTH_MAINTENANCE",
+  "maintenance_priority": "Root authorized SG credential window before token00:34:17; no automatic gate retry",
+  "failure_assertions": [
+    {
+      "package": "go-wind-admin/app/admin/service/cmd/server/assets",
+      "test": "TestModelDevCreateOpenAPIContract",
+      "raw_assertion": "=== RUN   TestModelDevCreateOpenAPIContract\n    modeldev_openapi_test.go:30: \n        \tError Trace:\t/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01/app/admin/service/cmd/server/assets/modeldev_openapi_test.go:30\n        \tError:      \telements differ\n        \t            \t\n        \t            \textra elements in list A:\n        \t            \t([]interface {}) (len=1) {\n        \t            \t (string) (len=9) \"preset_id\"\n        \t            \t}\n        \t            \t\n        \t            \t\n        \t            \textra elements in list B:\n        \t            \t([]interface {}) (len=3) {\n        \t            \t (string) (len=17) \"implementation_id\",\n        \t            \t (string) (len=17) \"compute_preset_id\",\n        \t            \t (string) (len=10) \"parameters\"\n        \t            \t}\n        \t            \t\n        \t            \t\n        \t            \tlistA:\n        \t            \t([]interface {}) (len=5) {\n        \t            \t (string) (len=4) \"name\",\n        \t            \t (string) (len=4) \"kind\",\n        \t            \t (string) (len=9) \"preset_id\",\n        \t            \t (string) (len=18) \"dataset_version_id\",\n        \t            \t (string) (len=15) \"idempotency_key\"\n        \t            \t}\n        \t            \t\n        \t            \t\n        \t            \tlistB:\n        \t            \t([]interface {}) (len=7) {\n        \t            \t (string) (len=4) \"name\",\n        \t            \t (string) (len=4) \"kind\",\n        \t            \t (string) (len=17) \"implementation_id\",\n        \t            \t (string) (len=17) \"compute_preset_id\",\n        \t            \t (string) (len=18) \"dataset_version_id\",\n        \t            \t (string) (len=10) \"parameters\",\n        \t            \t (string) (len=15) \"idempotency_key\"\n        \t            \t}\n        \tTest:       \tTestModelDevCreateOpenAPIContract\n--- FAIL: TestModelDevCreateOpenAPIContract (0.10s)\n"
+    },
+    {
+      "package": "go-wind-admin/tests/imagecontract",
+      "test": "TestImageModulePreservesExistingContract",
+      "raw_assertion": "=== RUN   TestImageModulePreservesExistingContract\n    contract_test.go:45: unexpected module additions or removals\n--- FAIL: TestImageModulePreservesExistingContract (0.00s)\n"
+    },
+    {
+      "package": "go-wind-admin/tools/localdeps/gow/internal/buf",
+      "test": "TestPreflightFailsWithoutTouchingOutputs",
+      "raw_assertion": "=== RUN   TestPreflightFailsWithoutTouchingOutputs\n    locked_chain_test.go:211: unexpected error: buf is not available: run the task-pinned buf (v1.60.0) on PATH, for example BUF=<buf v1.60.0>; the tool never installs tools itself: failed to run `buf --version`: exec: \"buf\": executable file not found in $PATH: \n--- FAIL: TestPreflightFailsWithoutTouchingOutputs (0.00s)\n"
+    },
+    {
+      "package": "go-wind-admin/tools/localdeps/gow/internal/pkg",
+      "test": "TestNewModuleInspectorFromGo",
+      "raw_assertion": "=== RUN   TestNewModuleInspectorFromGo\n    module_inspector_test.go:11: invalid character '{' after top-level value\n--- FAIL: TestNewModuleInspectorFromGo (0.02s)\n"
+    }
+  ],
+  "explicit_test_skips": [
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestAcceleratorJointHTTP"
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestAcceleratorFormalSessionRefresh"
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestBootstrapPostgres"
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestOnboardingConcurrentAcceptance"
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/service",
+      "Test": "TestOnboardingAPIRegistration"
+    },
+    {
+      "Package": "go-wind-admin/app/admin/service/internal/data",
+      "Test": "TestInferenceMetricsLivePrometheus"
+    }
+  ]
+}

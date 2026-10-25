@@ -1,0 +1,39 @@
+{
+  "phase": "NORMAL_STOP_START_THREE_ORIGINAL_MARKERS_READ_ONLY_MATCH",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "product_version": "13",
+  "stop_start_receipt": "../windows-storage-stopstart-01/executed.json",
+  "baseline": "../windows-storage-markers-01/before-stop.json",
+  "native_identity_receipt": "native-disks-readonly-01.json",
+  "read_only_command": "windows-readback-direct-command.txt",
+  "browser_screenshot": "windows-three-a-after-stopstart.png",
+  "markers": [
+    {
+      "path": "C:\\vm-mvp-01a168ce-root.marker",
+      "text": "VM_MVP_WINDOWS_ROOT_A_01a168ce",
+      "sha256": "FDFD39B10F605F3A9E5571C04B04B3B8ECD6E8F9BD8294E1A08376A9BBD7F650",
+      "matches_before_stop": true
+    },
+    {
+      "path": "T:\\vm-mvp-data3.marker",
+      "text": "VM_MVP_WINDOWS_DATA3_A_01a168ce",
+      "sha256": "95AC87CEDA7A842D2A15506B7AC2336F3CADF96B193683D42BB5B4DD20B45E9D",
+      "matches_before_stop": true
+    },
+    {
+      "path": "U:\\vm-mvp-data4.marker",
+      "text": "VM_MVP_WINDOWS_DATA4_A_01a168ce",
+      "sha256": "656D2A600248E2E52165C419341DA30145679B529015E7A9F67618AC6AE5E760",
+      "matches_before_stop": true
+    }
+  ],
+  "guest_marker_writes_after_stop": 0,
+  "new_credentials_entered": false,
+  "account_login": "NOT_RUN_USER_UNAVAILABLE",
+  "historical_failed_read": {
+    "screenshot": "windows-root-missing-after-start.png",
+    "result": "First function-based read command reported FileNotFound. Direct cmd directory listing subsequently found all three original filenames. A separate pure read-only Get-Content/Get-FileHash command then returned all original contents and full hashes. The failed command does not establish data loss; exact input/parsing cause remains unconfirmed."
+  },
+  "baseline_screenshot_limitation": "The saved windows-three-a-before-stop.png captures a disconnected black canvas. It is not visual proof of the original baseline. Baseline values were observed in the prior live browser interaction and recorded in before-stop.json; the current after-start screenshot visibly proves their readback. The historical file has not been replaced.",
+  "scope": "Windows installed root plus two original Block/RWO data disks across one normal Gov Stop/Start. No snapshot/restore, completed account login or QGA success is inferred."
+}

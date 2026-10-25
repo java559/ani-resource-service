@@ -1,0 +1,123 @@
+{
+  "at": "2026-10-24T08:24:29.074434+00:00",
+  "phase": "holder-created",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved pre-Restore stages only; Restore/Delete remain disabled",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "holder": {
+    "manifest": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "metadata": {
+        "name": "vm-mvp-cleanup-hold-root-01a168ce",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "labels": {
+          "ani.io/task": "vm-mvp-01a168ce",
+          "ani.io/purpose": "restore-cleanup-readonly-holder"
+        },
+        "ownerReferences": [
+          {
+            "apiVersion": "kubevirt.io/v1",
+            "kind": "VirtualMachine",
+            "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+            "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+            "controller": false,
+            "blockOwnerDeletion": false
+          }
+        ],
+        "annotations": {
+          "v1.multus-cni.io/default-network": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/vm-mvp-tenant2-01a168ce",
+          "networking.kubercloud.com/subnet": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316/subnet-ea6b62fc625349bcad46ce56ce60f90d"
+        }
+      },
+      "spec": {
+        "restartPolicy": "Never",
+        "automountServiceAccountToken": false,
+        "activeDeadlineSeconds": 1800,
+        "terminationGracePeriodSeconds": 10,
+        "nodeSelector": {
+          "kubernetes.io/hostname": "ani-01"
+        },
+        "securityContext": {
+          "runAsNonRoot": true,
+          "runAsUser": 107,
+          "runAsGroup": 107,
+          "seccompProfile": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "volumes": [
+          {
+            "name": "held-old-root",
+            "persistentVolumeClaim": {
+              "claimName": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+              "readOnly": true
+            }
+          }
+        ],
+        "containers": [
+          {
+            "name": "hold",
+            "image": "172.16.101.10:5000/kubevirt/cdi-importer@sha256:28134acc24521d9bc8c9250fb29a9bfe0278b771139d32ea5b162d8f3af5ee05",
+            "imagePullPolicy": "Never",
+            "command": [
+              "/bin/sh",
+              "-ec",
+              "test -b /dev/held-root; exec sleep 1800"
+            ],
+            "volumeDevices": [
+              {
+                "name": "held-old-root",
+                "devicePath": "/dev/held-root"
+              }
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "10m",
+                "memory": "16Mi"
+              },
+              "limits": {
+                "cpu": "50m",
+                "memory": "64Mi"
+              }
+            },
+            "securityContext": {
+              "allowPrivilegeEscalation": false,
+              "readOnlyRootFilesystem": true,
+              "capabilities": {
+                "drop": [
+                  "ALL"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "manifest_sha256": "0c4e103de4b4e33a10f79e1d906a7a755d09b34f06c16f64ea935bbf1818ada7",
+    "send_attempts": 1,
+    "ack_unknown": false,
+    "create_exit": 0,
+    "create_stderr": "",
+    "ref": {
+      "kind": "Pod",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-mvp-cleanup-hold-root-01a168ce",
+      "uid": "cd0afd8d-e64a-4009-bf0c-bf717d232e36"
+    }
+  }
+}

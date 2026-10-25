@@ -1,0 +1,50 @@
+{
+  "at": "2026-10-24T07:46:31.065512+00:00",
+  "phase": "CLOSED_NORMAL_TERM_AFTER_FORMAL_MODULE_CLOSURE",
+  "local_process": {
+    "pid": 944621,
+    "start_ticks": 9851089,
+    "argv": [
+      "ssh",
+      "-N",
+      "-T",
+      "-n",
+      "-o",
+      "ControlMaster=no",
+      "-o",
+      "ControlPath=none",
+      "-o",
+      "ControlPersist=no",
+      "-o",
+      "ExitOnForwardFailure=yes",
+      "-o",
+      "ServerAliveInterval=30",
+      "-o",
+      "ServerAliveCountMax=3",
+      "-R",
+      "127.0.0.1:43144:ssh.github.com:443",
+      "fedora"
+    ]
+  },
+  "fedora_bind": "127.0.0.1:43144",
+  "destination": "ssh.github.com:443",
+  "purpose": "Fedora formal exact Git Go module download; local transport only",
+  "hostkey_authentication_unchanged": true,
+  "global_config_changes": 0,
+  "https_git_calls": 0,
+  "cleanup_required": false,
+  "exec_session_id": 66784,
+  "normal_term_only": true,
+  "local_process_gone": true,
+  "closed_at": "2026-10-24T08:11:43.780908+00:00",
+  "fedora_listener_gone": true,
+  "fedora_listener_check": {
+    "argv": [
+      "ssh",
+      "fedora",
+      "ss -H -ltn sport = :43144"
+    ],
+    "exit": 0,
+    "stdout": ""
+  }
+}

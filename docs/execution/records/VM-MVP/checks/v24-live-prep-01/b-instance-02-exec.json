@@ -1,0 +1,504 @@
+{
+  "state": "PASS_GOV_INSTANCE_EXEC_REAL_TERMINAL_AND_SCOPED_PERMISSIONS",
+  "started_at": "2026-10-24T11:02:17.006153+00:00",
+  "service_restarts": 0,
+  "vm_mutations": 0,
+  "sg_before": {
+    "process": {
+      "pid": 3296934,
+      "start_ticks": 70262734,
+      "argv": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/session-gateway-gvk"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-stage-01",
+      "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd"
+    },
+    "token_expires_at": "2026-10-24T11:22:27Z",
+    "active": 0,
+    "leases": 0,
+    "active_metric_samples": 1,
+    "empty_gaugevec_means_no_connected_mode": false,
+    "seven_original_rbac_uids_unchanged": true
+  },
+  "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+  "instance": {
+    "id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "name": "vm-mvp-v24-cpu-01a168ce-02",
+    "version": "1",
+    "desiredState": "running",
+    "observedState": "running",
+    "reason": "",
+    "imageId": "img_d238746701ee4e9aa149a3beba8a3e49",
+    "imageDigest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "createOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "lastOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "computeCleaned": false,
+    "workspaceCleaned": false,
+    "quotaReturned": false,
+    "instance_kind": "container",
+    "compute_type": "cpu",
+    "cpu": "1500m",
+    "memory": "2048Mi",
+    "createdAt": "2026-10-24T10:53:50.400184Z",
+    "workspaceSize": "1Gi",
+    "preset_name": "VM MVP 1500m 2048MiB",
+    "preset_code": "vm-mvp-01a168ce",
+    "gpu_summary": null,
+    "scheduling": {
+      "pod_placement": "NONE"
+    },
+    "networkState": "attached",
+    "networkReason": "",
+    "networkCleaned": false,
+    "volumeReferencesReleased": true
+  },
+  "runtime": {
+    "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "version": "1",
+    "observedAt": "2026-10-24T11:02:18.387583704Z",
+    "pod": {
+      "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+      "uid": "8b4d9b12-61bc-4302-a474-1239e52a9701",
+      "nodeName": "ani-03",
+      "podIp": "10.83.1.11",
+      "phase": "Running",
+      "ready": true,
+      "reason": "",
+      "message": "",
+      "environmentSources": [
+        {
+          "name": "ANI_INSTANCE_POD_UID",
+          "sourceType": "downwardAPI"
+        },
+        {
+          "name": "NB_PREFIX",
+          "sourceType": "literal"
+        }
+      ],
+      "mounts": [
+        {
+          "name": "workspace",
+          "volumeType": "persistentVolumeClaim",
+          "mountPath": "/workspace",
+          "readOnly": false
+        }
+      ]
+    },
+    "statefulSet": {
+      "desiredReplicas": 1,
+      "readyReplicas": 1
+    }
+  },
+  "native": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "refs": [
+      {
+        "kind": "Notebook",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2",
+        "uid": "efbabc59-8803-4524-99ac-673ed9661bc7",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      {
+        "kind": "StatefulSet",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2",
+        "uid": "46dfdce9-a21d-4b7b-8b71-afc8373d6ca0",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      {
+        "kind": "Pod",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+        "uid": "8b4d9b12-61bc-4302-a474-1239e52a9701",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "name": "workspace-049db72b-c288-4993-94eb-07fa666a7ac2",
+        "uid": "441c25b9-bb0a-432e-a677-bcf0d3e9889c",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      {
+        "kind": "PersistentVolume",
+        "name": "pvc-441c25b9-bb0a-432e-a677-bcf0d3e9889c",
+        "uid": "ffa5c4a2-2dc3-4105-abb6-9abd4859b212",
+        "namespace": ""
+      }
+    ],
+    "workspace_csi": {
+      "controllerExpandSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "controllerPublishSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "fsType": "ext4",
+      "nodeStageSecretRef": {
+        "name": "rook-csi-rbd-node",
+        "namespace": "rook-ceph"
+      },
+      "volumeAttributes": {
+        "clusterID": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "imageName": "csi-vol-633ce13a-8495-4072-a3a8-4d34ab17d37d",
+        "journalPool": "ani-block-pool",
+        "pool": "ani-block-pool",
+        "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+      },
+      "volumeHandle": "0001-0009-rook-ceph-0000000000000004-633ce13a-8495-4072-a3a8-4d34ab17d37d"
+    },
+    "volume_mode": "Filesystem",
+    "pod_node": "ani-03"
+  },
+  "original_permission_checks_before": [
+    {
+      "check": "namespace-2-read-uid",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "virtualmachines",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "virtualmachineinstances",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "vnc",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "pod-read",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-read",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "other-namespace",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-list",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "secret-read",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "vm-write",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "other-tenant-vm",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "serial-console",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "pod-exec",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-vm",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vmi",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-pod",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vnc",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vm-list",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-vm-delete",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-secret",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-serial",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-exec",
+      "allowed": false,
+      "expected": false
+    }
+  ],
+  "created_rbac": [
+    {
+      "kind": "Role",
+      "name": "vm-mvp-v24-sg-exec-01a168ce",
+      "uid": "f7a1af74-658f-4788-a02e-94cbb5086226",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+    },
+    {
+      "kind": "RoleBinding",
+      "name": "vm-mvp-v24-sg-exec-01a168ce",
+      "uid": "dbde7d59-ef7d-4102-be66-5db7fdf5c100",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+    }
+  ],
+  "original_permission_checks_after": [
+    {
+      "check": "namespace-2-read-uid",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "virtualmachines",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "virtualmachineinstances",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "vnc",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "pod-read",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-read",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "other-namespace",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-list",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "secret-read",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "vm-write",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "other-tenant-vm",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "serial-console",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "pod-exec",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-vm",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vmi",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-pod",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vnc",
+      "allowed": true,
+      "expected": true
+    },
+    {
+      "check": "namespace-2-vm-list",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-vm-delete",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-secret",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-serial",
+      "allowed": false,
+      "expected": false
+    },
+    {
+      "check": "namespace-2-exec",
+      "allowed": false,
+      "expected": false
+    }
+  ],
+  "added_scope_checks": [
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "list",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      "expected": true,
+      "allowed": true
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "create",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+        "subresource": "exec"
+      },
+      "expected": true,
+      "allowed": true
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "create",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "different-owned-pod",
+        "subresource": "exec"
+      },
+      "expected": false,
+      "allowed": false
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "list"
+      },
+      "expected": false,
+      "allowed": false
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "list",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316"
+      },
+      "expected": false,
+      "allowed": false
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "pods",
+        "verb": "create",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+        "subresource": "exec"
+      },
+      "expected": false,
+      "allowed": false
+    },
+    {
+      "attributes": {
+        "group": "",
+        "resource": "secrets",
+        "verb": "get",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      "expected": false,
+      "allowed": false
+    }
+  ],
+  "session": {
+    "sessionId": "2844d15a-f279-40c3-b46e-98cb39d45b5b",
+    "expiresAt": "2026-10-24T11:03:24.846Z"
+  },
+  "terminal": {
+    "close_code": 1000,
+    "marker_observed": true,
+    "runtime_exit_code": 0,
+    "session_id": "2844d15a-f279-40c3-b46e-98cb39d45b5b",
+    "state": "PASS_REAL_TERMINAL_MARKER_AND_NORMAL_EXIT",
+    "stderr_bytes": 0,
+    "stdin_bytes": 75,
+    "stdout_bytes": 224,
+    "subprotocol": "ani.terminal.v1"
+  },
+  "sg_after": {
+    "process": {
+      "pid": 3296934,
+      "start_ticks": 70262734,
+      "argv": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/session-gateway-gvk"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-stage-01",
+      "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd"
+    },
+    "token_expires_at": "2026-10-24T11:22:27Z",
+    "active": 0,
+    "leases": 0,
+    "active_metric_samples": 2,
+    "empty_gaugevec_means_no_connected_mode": false,
+    "seven_original_rbac_uids_unchanged": true
+  },
+  "finished_at": "2026-10-24T11:02:28.454547+00:00"
+}

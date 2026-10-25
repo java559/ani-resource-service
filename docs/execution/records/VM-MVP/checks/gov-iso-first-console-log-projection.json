@@ -1,0 +1,31 @@
+{
+  "logs": [
+    {
+      "service": "resource",
+      "timestamp": "2026-10-24T04:58:22.593872292+08:00",
+      "codes": [
+        "412"
+      ],
+      "reason_tokens": [
+        "VM_CONSOLE_TARGET_CHANGED"
+      ],
+      "trace_ids": [
+        "6dbd8722fdc4eb9381d5598e040829d2"
+      ]
+    },
+    {
+      "service": "gov",
+      "timestamp": "2026-10-24T04:58:22.617+08:00",
+      "codes": [
+        "400"
+      ],
+      "reason_tokens": [
+        "VM_CONSOLE_TARGET_CHANGED"
+      ],
+      "trace_ids": []
+    }
+  ],
+  "native_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-fedora44-iso-native.json",
+  "new_console_requests": 0,
+  "ticket_or_token_values_exported": false
+}

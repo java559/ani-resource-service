@@ -1,0 +1,97 @@
+{
+  "state": "PASS_CPU_DURABLE_ADMISSION_AND_EXACT_REPLAY",
+  "step": "create",
+  "started_at": "2026-10-24T10:37:23.699928+00:00",
+  "sql_writes": 0,
+  "protected_vm_mutations": 0,
+  "ack": {
+    "operationId": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+    "resourceId": "64413d16-05df-4623-a545-0e2f226c6006",
+    "replayed": false,
+    "result": "ACCEPTED"
+  },
+  "body": {
+    "data": {
+      "idempotencyKey": "b4307cd0-f3ad-4932-83e0-bbc8fdce1476",
+      "name": "vm-mvp-v24-cpu-01a168ce",
+      "imageId": "img_e1a98d0e9eb5495dac77cb86483dc053",
+      "imageScope": "platform",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "scheduling": {
+        "pod_placement": "NONE"
+      },
+      "workspace_mount_path": "/workspace",
+      "network": {
+        "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f"
+      }
+    }
+  },
+  "workload_sa": {
+    "name": "vm-mvp-v24-workload-01a168ce",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "uid": "87f057ca-f536-4710-b596-37ba6781b7c1"
+  },
+  "send_attempts": 1,
+  "exact_body_replay": {
+    "operationId": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+    "resourceId": "64413d16-05df-4623-a545-0e2f226c6006",
+    "replayed": true,
+    "result": "ACCEPTED"
+  },
+  "ledger": [
+    {
+      "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resource_id": "64413d16-05df-4623-a545-0e2f226c6006",
+      "create_operation_id": null,
+      "owner_service": "ani-resource-service",
+      "action": "/instance.v1.InstanceService/AcceptCreate",
+      "idempotency_key": "b4307cd0-f3ad-4932-83e0-bbc8fdce1476",
+      "request_hash": "de20cb9fd596a8f0560b28a616a8758e9d39bbc2866ab6fac3942d74479dc635",
+      "instance_contract_version": 2,
+      "canonical_schema": "instance-cpu-v1",
+      "dispatch_state": "ACKED",
+      "attempt_count": 1,
+      "charge_count": 0
+    }
+  ],
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&page=1&pageSize=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/images/registrations?scope=platform&purposes=container&limit=100",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/vpcs/vpc_e413becb1f4a46468f058e32f33a6305",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/networks/subnets/subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/instances",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/instances",
+      "status": 202
+    }
+  ],
+  "finished_at": "2026-10-24T10:37:25.766630+00:00"
+}

@@ -1,0 +1,154 @@
+{
+  "task": "vm-mvp-shared-01a168ce",
+  "phase": "delete-vpc",
+  "host": "fedora",
+  "result": "PASS_NETWORK_DELETED",
+  "wire_cleanup_sha256": "6f959b84e39616bd4a737d0eb3985f3aeef5b37e2c20a5a185e68be338b79a14",
+  "calls": [
+    {
+      "label": "login",
+      "method": "POST",
+      "route": "/api/v1/auth/password/login",
+      "http_status": 200
+    },
+    {
+      "label": "original-resource",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "available",
+      "last_operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+      "reason": ""
+    },
+    {
+      "label": "original-delete",
+      "method": "DELETE",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "deleting",
+      "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "reason": ""
+    },
+    {
+      "label": "operation-0",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "http_status": 200,
+      "id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "state": "queued",
+      "reason": ""
+    },
+    {
+      "label": "resource-0",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "deleting",
+      "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "reason": ""
+    },
+    {
+      "label": "operation-1",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "http_status": 200,
+      "id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "state": "running",
+      "reason": ""
+    },
+    {
+      "label": "resource-1",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "deleting",
+      "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "reason": ""
+    },
+    {
+      "label": "operation-2",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "http_status": 200,
+      "id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "state": "running",
+      "reason": "CLEANUP_PENDING"
+    },
+    {
+      "label": "resource-2",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "deleting",
+      "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "reason": "CLEANUP_PENDING"
+    },
+    {
+      "label": "operation-3",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "http_status": 200,
+      "id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "state": "succeeded",
+      "reason": ""
+    },
+    {
+      "label": "resource-3",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "deleted",
+      "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+      "reason": ""
+    },
+    {
+      "label": "logout",
+      "method": "POST",
+      "route": "/api/v1/auth/logout",
+      "http_status": 200
+    }
+  ],
+  "mutation_attempts": 1,
+  "started_at": "2026-10-24T22:43:44.439543+00:00",
+  "egress_probes": 0,
+  "resource_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+  "operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+  "operation": {
+    "id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+    "resource_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+    "resource_type": "vpc",
+    "kind": "delete_vpc",
+    "state": "succeeded",
+    "reason": "",
+    "created_at": "2026-10-24T22:43:25.885845Z",
+    "updated_at": "2026-10-24T22:43:38.600347Z",
+    "completed_at": "2026-10-24T22:43:38.600347Z",
+    "next_attempt_at": null,
+    "reason_message": ""
+  },
+  "resource": {
+    "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+    "name": "vm-mvp-shared-01a168ce",
+    "description": "Task VM shared-service acceptance; no public or office egress",
+    "cidr": "10.73.0.0/16",
+    "state": "deleted",
+    "reason": "",
+    "created_at": "2026-10-24T21:38:54.599463Z",
+    "updated_at": "2026-10-24T22:43:38.599557Z",
+    "version": "183",
+    "observed_at": "2026-10-24T22:43:35.149216Z",
+    "observation_stale": false,
+    "last_operation_id": "82135b33-0d28-467d-9062-d803dbf7b6eb",
+    "subnet_count": "0"
+  },
+  "original_native_gone": true,
+  "session_revoked": true,
+  "finished_at": "2026-10-24T22:44:04.010517+00:00",
+  "heavy_lock_released": true
+}

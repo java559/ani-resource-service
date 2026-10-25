@@ -1,0 +1,255 @@
+{
+  "history": [
+    {
+      "event": "prepared",
+      "state": "reserved",
+      "reason": "",
+      "pod_uid": "",
+      "version": 1,
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "created_at": "2026-10-23T15:20:58.537168+00:00",
+      "history_id": "8416c9c2-d54b-4017-a032-b8f5858eedfc",
+      "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "finalization_id": null
+    },
+    {
+      "event": "observed",
+      "state": "reserved",
+      "reason": "PROVIDER_OBJECT_MISSING",
+      "pod_uid": "",
+      "version": 2,
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "created_at": "2026-10-23T15:20:59.043273+00:00",
+      "history_id": "509dbeae-c7f5-413f-b953-4b548a712842",
+      "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "finalization_id": null
+    },
+    {
+      "event": "observed",
+      "state": "reserved",
+      "reason": "ATTACHMENT_PROTOCOL_VIOLATION",
+      "pod_uid": "",
+      "version": 299,
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "created_at": "2026-10-23T15:50:05.730885+00:00",
+      "history_id": "c59a52f3-c17a-43f1-b855-832b065a8c5b",
+      "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "finalization_id": null
+    },
+    {
+      "event": "observed",
+      "state": "releasing",
+      "reason": "ATTACHMENT_PROTOCOL_VIOLATION",
+      "pod_uid": "",
+      "version": 441,
+      "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "created_at": "2026-10-23T15:58:58.300515+00:00",
+      "history_id": "cac7f8a4-06e5-4dcf-a50f-54916f66da3d",
+      "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "finalization_id": "a64755b1-788a-590a-92be-4af350ab8d4c"
+    }
+  ],
+  "attachment": {
+    "plan": {
+      "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "VMPrimary": {
+        "NADUID": "ac77bddd-82a3-48b9-9916-fbef18f35610",
+        "NADName": "vm-mvp-main",
+        "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "Generation": 1,
+        "InstanceID": "db174e19-7269-42ff-9c22-57190c66535b",
+        "AttachmentID": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+        "KCNSubnetRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+        "SubmissionID": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+        "FormatVersion": 1,
+        "NADConfigDigest": "0bcb0f9ea70ebbe2f3381fc9fc563b74698467a4138f6567d37108c653cb381e"
+      },
+      "Generation": 1,
+      "InstanceID": "db174e19-7269-42ff-9c22-57190c66535b",
+      "AttachmentID": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "SubmissionID": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+      "WorkloadMode": "vm_managed",
+      "FormatVersion": 1,
+      "PrimaryNetworkRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+    },
+    "slot": "primary",
+    "epoch": 572,
+    "state": "releasing",
+    "reason": "ATTACHMENT_PROTOCOL_VIOLATION",
+    "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+    "pod_uid": "",
+    "version": 572,
+    "pod_name": "",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "subnet_id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+    "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "binding_id": "90a54b61-cb77-4f25-888c-933f1a6ceb1b",
+    "cluster_id": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "created_at": "2026-10-23T15:20:58.533436+00:00",
+    "generation": 1,
+    "updated_at": "2026-10-23T16:06:52.873206+00:00",
+    "confirm_uid": "",
+    "fingerprint": "544a5a556249eef912e7f2e28fbbf00cf0bc8bf32c3e30f8dadeb42126b89dcb",
+    "instance_id": "db174e19-7269-42ff-9c22-57190c66535b",
+    "lease_owner": null,
+    "lease_until": null,
+    "observed_at": "2026-10-23T16:06:52.568252+00:00",
+    "released_at": null,
+    "request_key": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+    "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+    "evidence_hash": "3fcb573fd949227132fea621b2ccba387173678b9f85d3dd818e18876bbb8156",
+    "next_check_at": "2026-10-23T16:06:55.873206+00:00",
+    "submission_id": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+    "finalization_id": "a64755b1-788a-590a-92be-4af350ab8d4c",
+    "binding_revision": "90a54b61-cb77-4f25-888c-933f1a6ceb1b:c24a983c-f9f4-403d-9807-8164004000a3",
+    "protocol_blocked": true,
+    "retry_not_before": "1970-01-01T00:00:00+00:00",
+    "provider_relations": [],
+    "evidence_applied_at": "2026-10-23T16:06:52.873208+00:00",
+    "processed_generation": 1,
+    "requested_generation": 1
+  },
+  "vm_consumer": {
+    "State": "closed",
+    "PodUIDs": null,
+    "ClosedAt": "2026-10-23T15:58:57.655099989Z",
+    "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "Generation": 1,
+    "InstanceID": "db174e19-7269-42ff-9c22-57190c66535b",
+    "Controllers": [
+      {
+        "Owner": {
+          "UID": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+          "Kind": "VirtualMachine",
+          "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "Reference": {
+          "UID": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+          "Kind": "VirtualMachineInstance",
+          "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        }
+      }
+    ],
+    "CurrentPods": null,
+    "RetiredPods": [
+      {
+        "Owner": {
+          "UID": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+          "Kind": "VirtualMachineInstance",
+          "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "kubevirt.io/v1"
+        },
+        "Reference": {
+          "UID": "df1cd6f6-3d29-4483-b4dc-168229bfc890",
+          "Kind": "Pod",
+          "Name": "virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf",
+          "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "APIVersion": "v1"
+        }
+      }
+    ],
+    "AttachmentID": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+    "SubmissionID": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+    "ControllerUIDs": [
+      "caeb592d-b86c-4536-bd3b-cc062058fd41"
+    ],
+    "FinalizationID": "a64755b1-788a-590a-92be-4af350ab8d4c",
+    "RootController": {
+      "UID": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+      "Kind": "VirtualMachine",
+      "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "APIVersion": "kubevirt.io/v1"
+    },
+    "DesiredRunState": "deleted",
+    "ProtocolVersion": 3,
+    "SnapshotRevision": 5
+  },
+  "accepted_snapshot": {
+    "snapshot": {
+      "State": "closed",
+      "PodUIDs": null,
+      "ClosedAt": "2026-10-23T15:58:57.655099989Z",
+      "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "Generation": 1,
+      "InstanceID": "db174e19-7269-42ff-9c22-57190c66535b",
+      "Controllers": [
+        {
+          "Owner": {
+            "UID": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+            "Kind": "VirtualMachine",
+            "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "APIVersion": "kubevirt.io/v1"
+          },
+          "Reference": {
+            "UID": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "APIVersion": "kubevirt.io/v1"
+          }
+        }
+      ],
+      "CurrentPods": null,
+      "RetiredPods": [
+        {
+          "Owner": {
+            "UID": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+            "Kind": "VirtualMachineInstance",
+            "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "APIVersion": "kubevirt.io/v1"
+          },
+          "Reference": {
+            "UID": "df1cd6f6-3d29-4483-b4dc-168229bfc890",
+            "Kind": "Pod",
+            "Name": "virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf",
+            "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "APIVersion": "v1"
+          }
+        }
+      ],
+      "AttachmentID": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+      "SubmissionID": "03c8f596-e443-5fcc-9465-73ba7992d7fd",
+      "ControllerUIDs": [
+        "caeb592d-b86c-4536-bd3b-cc062058fd41"
+      ],
+      "FinalizationID": "a64755b1-788a-590a-92be-4af350ab8d4c",
+      "RootController": {
+        "UID": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+        "Kind": "VirtualMachine",
+        "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+        "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "APIVersion": "kubevirt.io/v1"
+      },
+      "DesiredRunState": "deleted",
+      "ProtocolVersion": 3,
+      "SnapshotRevision": 5
+    },
+    "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "attachment_id": "att_d5fcbeb410c84c4ba697e6dfff62e0d3",
+    "snapshot_hash": "81e26f5400c523182ff8e335ed5daaced516c57c7bc0bdbd7c756aa85b5c0b29",
+    "root_controller": {
+      "UID": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+      "Kind": "VirtualMachine",
+      "Name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "APIVersion": "kubevirt.io/v1"
+    },
+    "confirmed_pod_uid": "",
+    "snapshot_revision": 5,
+    "confirmed_snapshot_revision": 0
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-24T09:07:50.749254+00:00",
+  "plan_sha256": "4618e743daa187127c0e45d1bc4a2373e3e3b779c474ac2a9749f247e89b224a",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "attempt": 2,
+  "original_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/pg-executed.json",
+  "original_receipt_sha256": "a5e444ec68bb32988fa4a76f5956e89e7d94bbf3105d50f8acac6bdb3ce8acef",
+  "runner_sha256": "3512f7ecc2136f8d86f8178e27672875e397717e990e8bd992b4084251b1f2cd",
+  "databases": [
+    {
+      "database": "vm_v24data01_01a168ce",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "dsn_references": {
+        "vm_v24data01_owner_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_owner_01a168ce.dsn",
+        "vm_v24data01_runtime_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_runtime_01a168ce.dsn"
+      },
+      "runtime_guards": {
+        "database": "vm_v24data01_01a168ce",
+        "user": "vm_v24data01_runtime_01a168ce",
+        "superuser": false,
+        "createdb": false,
+        "createrole": false,
+        "bypassrls": false,
+        "inherit": false,
+        "owner_membership": false,
+        "schema_create": false,
+        "temp": false,
+        "dml": true
+      },
+      "database_oid": "105518",
+      "owner_oid": "105516",
+      "runtime_oid": "105517"
+    }
+  ],
+  "tests": [],
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "new_services_or_containers": 0,
+  "source_manifest_sha256": "952b4024015936b63d15df0e343d1c0df8d677c6e0c394212049e7266398124e",
+  "source_files_verified": 2452,
+  "build_tmpdir": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/go-tmp",
+    "uid": 1000,
+    "mode": "0700",
+    "inode": 26516247,
+    "device": 53,
+    "env": "GOTMPDIR only; TMPDIR remains unset"
+  },
+  "result": "INCOMPLETE_RETAIN_EXCLUSIVE_FIXTURE",
+  "error_type": "RuntimeError",
+  "error": "private logs/fixture retained; no candidate database or service changed",
+  "seconds": 213.301
+}

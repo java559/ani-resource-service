@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-23T14:53:29.448436+00:00",
+  "result": "FAIL",
+  "layer": "GUEST",
+  "scope": "native environment probe only",
+  "console_driver": "UID107 compute native libvirt serial console over authenticated kubectl exec",
+  "node": "ani-02",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+  },
+  "vmi": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachineInstance",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ani-02",
+    "uid": "08246bc5-1a30-4625-9a31-fff5c3081d04"
+  },
+  "error": "End Of File (EOF). Exception style platform.\n<pexpect.pty_spawn.spawn object at 0x7f8b497f2a50>\ncommand: /home/chabking/ani-four-service-deploy-20261012/tools/kubectl\nargs: [b'/home/chabking/ani-four-service-deploy-20261012/tools/kubectl', b'--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', b'exec', b'-it', b'-n', b'vm-mvp-probe-01a168ce', b'virt-launcher-vm-mvp-ani-02-pw9sp', b'-c', b'compute', b'--', b'virsh', b'console', b'vm-mvp-probe-01a168ce_vm-mvp-ani-02']\nbuffer (last 100 chars): ''\nbefore (last 100 chars): 'internal error: character device serial0 is not using a PTY\\r\\n\\r\\ncommand terminated with exit code 1\\r\\n'\nafter: <class 'pexpect.exceptions.EOF'>\nmatch: None\nmatch_index: None\nexitstatus: None\nflag_eof: True\npid: 1345866\nchild_fd: 6\nclosed: False\ntimeout: 30\ndelimiter: <class 'pexpect.exceptions.EOF'>\nlogfile: None\nlogfile_read: None\nlogfile_send: None\nmaxread: 2000\nignorecase: False\nsearchwindowsize: None\ndelaybeforesend: 0.05\ndelayafterclose: 0.1\ndelayafterterminate: 0.1\nsearcher: searcher_re:\n    0: re.compile('login:')"
+}

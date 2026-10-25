@@ -1,0 +1,16 @@
+{
+  "pvc_uid": "cd1142e6-c0a3-44b3-922e-f970ece09445",
+  "pvc_name": "vd-2688a35d-9a60-5be5-83ce-69f4b54d1494",
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "pv_name": "pvc-385ecf18-fa4c-4696-9a7a-0aef553a258f",
+  "pv_uid": "ff33603c-60bc-455c-b076-1c3e9c176277",
+  "reclaim": "Delete",
+  "volume_handle": "0001-0009-rook-ceph-0000000000000004-4fc4bce5-2205-46f4-9cdd-840e60690330",
+  "volume_attributes": {
+    "clusterID": "rook-ceph",
+    "pool": "ani-block-pool",
+    "imageName": "csi-vol-4fc4bce5-2205-46f4-9cdd-840e60690330",
+    "imageFeatures": "layering",
+    "journalPool": "ani-block-pool"
+  }
+}

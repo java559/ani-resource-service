@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-24T08:48:27.262016+00:00",
+  "scope": "prepare-only six real Governance PG cases; no joint subprocess fixtures/LIVE load",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "runner_sha256": "2e009bb904624edc26532f484678c4ae9922a636c027dabe904bd001c7c3b161",
+  "archive_sha256": "74ef835fb9640f83d5d4e4424146b16dc34fd87bfbb92d9c1a443334a2d1b2fe",
+  "fixture_entry": "existing gov-pg-setup.py ordered repository CI fixture SQL path with new exclusive DB/role names",
+  "existing_task_fixture_reference": "private/pg/admin.dsn + private/pg/container-id + evidence/pg-fixture.json, exact task container label guard",
+  "migration_inputs": [
+    {
+      "path": "migrations/20260921134442_initial.sql",
+      "sha256": "27d68d4974054ae940c44c217fa6641be256d3740e669f46e7dc008930f7e5db"
+    },
+    {
+      "path": "migrations/20260922190000_quota_expand.sql",
+      "sha256": "1f2092b26321ef516d315f885d9a8f29860ee4efca7f2207f95ff8982cd828e2"
+    },
+    {
+      "path": "sql/data/20260922_quota_catalog_backfill.sql",
+      "sha256": "bd0f8ea274ed5e8518d84273aeaa0cd77622cb6d16de81ac77ffad68b04699dc"
+    },
+    {
+      "path": "migrations/20260922190100_quota_constraints.sql",
+      "sha256": "fe4d700b78e7d4d7585844e4be5f00a9f02e0eead65d37132edbe9bce45ab5b5"
+    },
+    {
+      "path": "migrations/20260923130000_gpu_sqlc.sql",
+      "sha256": "6f3cc164c54b1d1a39ce2e45b629e2a86d07b30e7612bdcd7bb8c1e2997dee78"
+    },
+    {
+      "path": "migrations/20260923130100_gpu_no_rls_catalog.sql",
+      "sha256": "87aeb331e205ed38a66acfbca1ceb1654bcba786bb78c748dcd7994f718a6724"
+    },
+    {
+      "path": "migrations/20260923130200_gpu_sync_ref.sql",
+      "sha256": "75d932f74a0ca4b1d852189f76c784badda0c3dd6560addd7381d997c1905a90"
+    },
+    {
+      "path": "migrations/20260923143455_drop_geo_location.sql",
+      "sha256": "1d438112ef2b29b2de6923e0b4672fc5daab0d142a4202bbc41462634a69869d"
+    },
+    {
+      "path": "migrations/20260930093111_cpu_modeldev_acceptance.sql",
+      "sha256": "d342f5ee05db9a94357b0aa28f70b66ef1bfc3625a7d5b716f38a91ecac7102d"
+    },
+    {
+      "path": "migrations/20260930103955_cpu_modeldev_release_binding.sql",
+      "sha256": "f26233640c9d7bbbada4bf255ff8e83b27bcafeb437cad98cce6f0367a15c380"
+    },
+    {
+      "path": "migrations/20261003074738_cpu_modeldev_delivery.sql",
+      "sha256": "8fdef8e34f797e46291fd25fe4f0a0063e17713deb70ca45bbc101140c85880c"
+    },
+    {
+      "path": "migrations/20261003152319_cpu_modeldev_stop.sql",
+      "sha256": "6296fc033c48955a81bec9b6ed74cd8c5bff055e9807d5c63323e99338dcc281"
+    },
+    {
+      "path": "migrations/20261010131938_access_key_idempotency.sql",
+      "sha256": "366f7da77d92c3d0bc2907cffb197adeeb4e0234d13bbf774209c13201f639b3"
+    },
+    {
+      "path": "migrations/20261019090000_instance_contract_version.sql",
+      "sha256": "36bc4f0a67c2e8615bc461548580fee5bdc47e133c3910cf0d83d3aaf8484fca"
+    },
+    {
+      "path": "migrations/20261022010000_modeldev_execution_v21.sql",
+      "sha256": "fbec939c05d3b28e19e461399483799eefe0377f3171c81c2c873e7fd941bc67"
+    },
+    {
+      "path": "scripts/ops/sql/grant-runtime-role.sql",
+      "sha256": "4a888b76250e431a0055fdb013179e483b390c2695f85692e349b2bfe5f1f0df"
+    }
+  ],
+  "databases": [
+    {
+      "group": "data",
+      "database": "vm_v24data01_01a168ce",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "package": "./app/admin/service/internal/data",
+      "tests": [
+        "TestQuotaPostgresInstanceCPUCommands",
+        "TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract",
+        "TestQuotaGpuProductionEntComposition",
+        "TestQuotaResourceReleasedOriginalLedgerAndEventFence"
+      ]
+    },
+    {
+      "group": "service",
+      "database": "vm_v24svc01_01a168ce",
+      "owner": "vm_v24svc01_owner_01a168ce",
+      "runtime": "vm_v24svc01_runtime_01a168ce",
+      "package": "./app/admin/service/internal/service",
+      "tests": [
+        "TestInferenceGPUAdmissionAndPublicReplay",
+        "TestInferenceCPUActorsRemainTrusted"
+      ]
+    }
+  ],
+  "public_secrets": "DSN file references only; passwords/SQL/DSN/test raw output private0600",
+  "test_env_required": [
+    "ANI_TEST_DATABASE_DSN=<new DB runtime.dsn contents>",
+    "ANI_TEST_DATABASE_EXCLUSIVE=1"
+  ],
+  "runtime_role": "NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS; no owner membership/SCHEMA CREATE/TEMP; DML and sequences only",
+  "on_failure": "retain exclusive new fixtures and private logs; no force/terminate/backend cleanup; report exact failed cases",
+  "on_success": "normal DROP only exact newly recorded database/role OIDs after Go processes exit"
+}

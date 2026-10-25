@@ -1,0 +1,12 @@
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {},
+  "status": "Success",
+  "details": {
+    "name": "ani-cephfs-retain",
+    "group": "snapshot.storage.k8s.io",
+    "kind": "volumesnapshotclasses",
+    "uid": "8275fb3f-c50b-4fc4-93c6-70c1231062c9"
+  }
+}

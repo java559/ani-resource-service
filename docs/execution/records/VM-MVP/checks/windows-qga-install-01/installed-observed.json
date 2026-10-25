@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-25T07:31:52.318566+00:00",
+  "result": "PASS_WINDOWS_QGA_SERVICE_AND_NATIVE_AGENT_CONNECTION",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "24",
+  "vmi_uid": "d3cc1de1-bd43-4b91-93f1-cfdca333dbd0",
+  "exact_guest_source_check": "preinstall-observed.json",
+  "source_sha256": "22230284dda8ba4c96a834fe1087228a1db5d0b86247a9d7fcb164d279634817",
+  "installation": {
+    "command": "msiexec /i D:\\guest-agent\\qemu-ga-x86_64.msi",
+    "full_normal_ui": true,
+    "new_license_or_trust_bypass_prompts_observed": false,
+    "shell_ERRORLEVEL_echo": "1060",
+    "installer_exit_status": "NOT_MEASURED: GUI msiexec launch did not establish an MSI completion exit code; prior SC absence result was1060; not counted as installation exit success"
+  },
+  "actual_guest_service": {
+    "name": "qemu-ga",
+    "state": "RUNNING",
+    "start_type": "AUTO_START",
+    "service_account": "LocalSystem"
+  },
+  "native_AgentConnected": true,
+  "agent_info_reference": "agent-info-01.json",
+  "agent_info_sha256": "34488c41bb19cf769eb0bcc42b7c68a67c8fd24d41cba1675ae831556e083fa1",
+  "agent_version": "109.1.0",
+  "guest_facts_reference": "guest-facts-01.json",
+  "guest_facts_sha256": "522fac70e4dd9622c89780f0697ea0bb24b3660184149e517329ddb31b7d6c1d",
+  "guest_exec_enabled_as_installed": true,
+  "permission_or_RPC_allowlist_changes": 0,
+  "marker_writes": 0,
+  "new_credentials": 0,
+  "screenshot": {
+    "path": "windows-qga-running-auto-20261025.jpg",
+    "sha256": "54bd326250bff2b7d38c4a5ce26d313c2e83a7b1a3f11cba1e2efe9ca4fe6e0a"
+  }
+}

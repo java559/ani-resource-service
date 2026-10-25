@@ -1,0 +1,33 @@
+{
+  "observed_at": "2026-10-24T00:14:42.969228+00:00",
+  "reader": {
+    "kind": "Pod",
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "image": "csi-vol-71297c1c-fa32-4f1e-9827-83c700262691",
+  "initial_image_id": "20cc8788957b38",
+  "command_shape": "kubectl --request-timeout=6s exec -n rook-ceph <exact pinned pod> -- rbd info ani-block-pool/csi-vol-71297c1c-fa32-4f1e-9827-83c700262691 --format=json",
+  "outer_limit_seconds": 20,
+  "driver_limit_unchanged_seconds": 8,
+  "mutations": 0,
+  "fence_continued": false,
+  "elapsed_seconds": 2.14,
+  "exit_code": 0,
+  "stdout_bytes": 667,
+  "stderr_bytes": 0,
+  "result": "READ_SUCCEEDED_EXACT_IMAGE_ID",
+  "image_id": "20cc8788957b38",
+  "size": 12884901888,
+  "parent": {
+    "pool": "ani-block-pool",
+    "pool_namespace": "",
+    "image": "csi-vol-71297c1c-fa32-4f1e-9827-83c700262691-temp",
+    "id": "20cc8760ea38ea",
+    "snapshot": "csi-vol-71297c1c-fa32-4f1e-9827-83c700262691",
+    "trash": false,
+    "overlap": 8589934592
+  },
+  "layer_conclusion": "TRANSIENT_NOT_REPRODUCED_AT_20S_LIMIT"
+}

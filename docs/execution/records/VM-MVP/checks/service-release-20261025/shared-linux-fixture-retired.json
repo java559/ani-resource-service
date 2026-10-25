@@ -1,0 +1,198 @@
+{
+  "result": "PASS_TASK_FIXTURE_IDENTITIES_RETIRED_HISTORY_TENANT_OFF",
+  "phase": "normal-tenant-delete-history-guard-or-off",
+  "started_at": "2026-10-24T22:48:48.022345+00:00",
+  "runner_sha256": "453d8eac8e2e0403b8002669c92ad1be799d1d14d831a9e4d4bc95e6fb7dc032",
+  "root_release_sha256": "8801eb22587a11a04eff7adedb9e856b75af46898810a5d93c5e13739503fb43",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "tenant_id": 14,
+  "user_id": 21,
+  "role_ids": [
+    20,
+    19
+  ],
+  "plan_id": 27,
+  "module_ids": [
+    57,
+    58
+  ],
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 1.291
+    },
+    {
+      "label": "confirm-original-user21-absent",
+      "method": "GET",
+      "path": "/api/v1/admin/users?page=1&pageSize=2&query=%7B%22id%22%3A%2221%22%7D",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 1.768
+    },
+    {
+      "label": "fresh-tenant14",
+      "method": "GET",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.715
+    },
+    {
+      "label": "fresh-plan27",
+      "method": "GET",
+      "path": "/api/v1/admin/plans/27",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.468
+    },
+    {
+      "label": "fresh-role20",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/20",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.689
+    },
+    {
+      "label": "fresh-role19",
+      "method": "GET",
+      "path": "/api/v1/admin/roles/19",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.272
+    },
+    {
+      "label": "delete-task-role20",
+      "method": "DELETE",
+      "path": "/api/v1/admin/roles/20",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 2.37
+    },
+    {
+      "label": "readback-task-role20",
+      "method": "GET",
+      "path": "/api/v1/admin/roles?page=1&pageSize=2&query=%7B%22id%22%3A%2220%22%7D",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.607
+    },
+    {
+      "label": "delete-task-role19",
+      "method": "DELETE",
+      "path": "/api/v1/admin/roles/19",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 403,
+      "seconds": 0.393,
+      "reason_code": "FORBIDDEN"
+    },
+    {
+      "label": "readback-task-role19",
+      "method": "GET",
+      "path": "/api/v1/admin/roles?page=1&pageSize=2&query=%7B%22id%22%3A%2219%22%7D",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.986
+    },
+    {
+      "label": "delete-task-tenant14",
+      "method": "DELETE",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 409,
+      "seconds": 0.317,
+      "reason_code": "QUOTA_HISTORY_PRESENT"
+    },
+    {
+      "label": "history-protected-tenant14",
+      "method": "GET",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.356
+    },
+    {
+      "label": "disable-history-protected-tenant14",
+      "method": "PUT",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.327
+    },
+    {
+      "label": "verify-history-protected-tenant14-OFF",
+      "method": "GET",
+      "path": "/api/v1/admin/tenants/14",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.098
+    },
+    {
+      "label": "platform-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "outcome": "RESPONDED",
+      "send_attempts": 1,
+      "http_status": 200,
+      "seconds": 0.1
+    }
+  ],
+  "sql_or_cluster_calls": 0,
+  "vm_network_writes": 0,
+  "ledger_replay_writes": 0,
+  "plan_module_writes": 0,
+  "tenant_login_posts": 0,
+  "credentials_or_value_hashes_public": false,
+  "original_cleanup_receipt_sha256": "20c548dc298a95e97388f385cf7476ab679fb997ca157578250f673cabefc1df",
+  "original_user_delete_http_status": 200,
+  "user_delete_resends": 0,
+  "original_get500_preserved_not_used_as_absence": true,
+  "user_terminal": "PRIOR_DELETE200_WITH_ALL_CLIENT_REVOCATION_AND_FRESH_ID_LIST_ABSENT",
+  "user_absence_proof": {
+    "method": "normal platform exact-ID HTTP200 list",
+    "id": 21,
+    "total": 0,
+    "items": []
+  },
+  "roles_terminal": {
+    "20": "DELETED_NORMAL_API",
+    "19": "RETAINED_PRODUCT_PROTECTION_PERMISSIONS_EMPTY"
+  },
+  "tenant_terminal": "OFF_QUOTA_HISTORY_PRESENT_LEDGER_AND_REPLAY_RETAINED",
+  "plan_modules_retained": {
+    "plan_id": 27,
+    "module_ids": [
+      57,
+      58
+    ]
+  },
+  "platform_session_revoked": true,
+  "tenant_credentials_removed": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-shared-linux-01/private/tenant-login.json",
+    "normal_login_impossible": true,
+    "basis": "original user DELETE200 with all-client revocation plus fresh exact-ID list absent, tenant OFF, Root-confirmed completed consumers",
+    "shared_platform_credentials_preserved": true,
+    "values_read_or_hashed": false
+  },
+  "finished_at": "2026-10-24T22:48:58.928932+00:00",
+  "heavy_lock_released": true
+}

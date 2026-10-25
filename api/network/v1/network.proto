@@ -219,6 +219,26 @@ message PodPrimaryPlan {
  string subnet_annotation = 3;
  AttachmentLabels labels = 4;
 }
+message VMNetworkExpectation {
+ string nad_name = 1;
+ string nad_uid = 2;
+ string nad_config_digest = 3;
+}
+message VMPrimaryPlan {
+ int32 format_version = 1;
+ string namespace = 2;
+ string nad_name = 3;
+ string nad_uid = 4;
+ string nad_config_digest = 5;
+ string kcn_subnet_ref = 6;
+ AttachmentLabels labels = 7;
+}
+message VMCurrentAddress {
+ string nic_name = 1;
+ string address = 2;
+ string launcher_pod_uid = 3;
+ string vmi_uid = 4;
+}
 message AttachmentLabels {
  string tenant_id = 1;
  string instance_id = 2;
@@ -269,6 +289,8 @@ message Attachment {
  string workload_mode = 23;
  int64 snapshot_revision = 24;
  WorkloadReference root_controller = 25;
+ VMPrimaryPlan vm_primary = 26;
+ repeated VMCurrentAddress vm_current_addresses = 27;
 }
 message PrepareAttachmentRequest {
  string tenant_id = 1;
@@ -282,6 +304,7 @@ message PrepareAttachmentRequest {
  string cluster_id = 9;
  string namespace = 10;
  string workload_mode = 11;
+ VMNetworkExpectation vm_expectation = 12;
 }
 message GetAttachmentRequest { string tenant_id = 1; string attachment_id = 2; }
 message ConfirmAttachmentRequest {

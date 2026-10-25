@@ -1,0 +1,15 @@
+{
+  "error_type": "AssertionError",
+  "expected_pid": 661235,
+  "expected_startticks": 76911546,
+  "heavy_lock_released": true,
+  "rbac_writes": 0,
+  "reason": "",
+  "requested_future_ttl_seconds": 3600,
+  "result": "STOPPED_READONLY_ZERO_TOKEN_REQUEST_ZERO_TERM",
+  "runner_sha256": "9cd50623c4076bec0c4841f00a9d9e17eafeeeac065006af3a3eae8985a39f68",
+  "sampled_at": "2026-10-25T05:39:53.807270+00:00",
+  "service_changes": 0,
+  "term_calls": 0,
+  "token_requests": 0
+}

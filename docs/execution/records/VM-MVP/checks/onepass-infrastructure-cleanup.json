@@ -1,0 +1,118 @@
+{
+  "at": "2026-10-23T21:30:14.946030+00:00",
+  "result": "PASS",
+  "normal_delete_only": true,
+  "tool_refs_gone": [
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-media-iso-onepass",
+      "uid": "ef723e83-edf2-49a4-970c-bf5c858a7e24"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-fedora44-http-source-onepass",
+      "uid": "840accb4-495f-4387-a383-37dfa1454303"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-media-iso-onepass-raw-00",
+      "uid": "68782bba-6d84-4fbd-9581-fc2544f1bc9b"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-media-iso-onepass-raw-01",
+      "uid": "1ea65e25-26b5-4ad9-899e-c253642b7821"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ConfigMap",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-media-iso-onepass-raw-02",
+      "uid": "0712c222-3b54-46b1-a08b-9b1c07a8c38e"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-fedora44-http-source-onepass-attempt02",
+      "uid": "ca717a37-92ab-4c26-84e5-e0eb500217a5"
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-windows2025-http-source-onepass",
+      "uid": "a83610ee-3772-400d-9673-e2aed8c5175f"
+    }
+  ],
+  "sources_preserved": [
+    {
+      "key": "virtio",
+      "datavolume": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-virtio-http-source",
+        "uid": "8c126d50-aea1-4fd7-8dbf-48fc6e3a2ea8"
+      },
+      "pvc": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-virtio-http-source",
+        "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+      },
+      "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5",
+      "preserved": true
+    },
+    {
+      "key": "fedora44",
+      "datavolume": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-fedora44-http-source",
+        "uid": "739fbaee-e8ed-4162-861f-34617ad9856a"
+      },
+      "pvc": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-fedora44-http-source",
+        "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00"
+      },
+      "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912",
+      "preserved": true
+    },
+    {
+      "key": "windows2025",
+      "datavolume": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-windows2025-http-source",
+        "uid": "44a9edbb-ce27-4278-806a-7b02f6d04fec"
+      },
+      "pvc": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-windows2025-http-source",
+        "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+      },
+      "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+      "preserved": true
+    }
+  ],
+  "registry_and_evidence_preserved": true,
+  "source_http_server_stopped": false,
+  "ca_auth_deleted": false
+}

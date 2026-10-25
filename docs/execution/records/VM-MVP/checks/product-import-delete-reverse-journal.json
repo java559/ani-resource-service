@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-23T23:47:31.874536+00:00",
+  "scope": "two known source-child reverse objects, csi.volname/csi.imagename only",
+  "reader": {
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "namespace": "rook-ceph",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+  },
+  "source_pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-ubuntu-2404-source",
+    "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+  },
+  "source_pv": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolume",
+    "namespace": "",
+    "name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+    "uid": "7e550d01-dd3d-4f24-9df1-5e29e39fc85b"
+  },
+  "objects": [
+    {
+      "known_child": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp",
+      "reverse_object": "csi.volume.016ddb5e-363a-4557-9b14-858beafe6fe9",
+      "keys": {
+        "csi.volname": "PRESENT",
+        "csi.imagename": "PRESENT"
+      },
+      "request_matches_original_v22": false,
+      "image_matches_known_child_base": true,
+      "trusted_mapping": false,
+      "request_classification": "OTHER_REQUEST_VALUE_NOT_RECORDED"
+    },
+    {
+      "known_child": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+      "reverse_object": "csi.volume.e83a62f0-4113-4320-aa79-1a1e36fb955b",
+      "keys": {
+        "csi.volname": "PRESENT",
+        "csi.imagename": "PRESENT"
+      },
+      "request_matches_original_v22": false,
+      "image_matches_known_child_base": true,
+      "trusted_mapping": false,
+      "request_classification": "OTHER_REQUEST_VALUE_NOT_RECORDED"
+    }
+  ],
+  "trusted_mapping_found": false,
+  "original_v22_backend": "NOT_MEASURED",
+  "pool_list_or_other_key_reads": 0,
+  "new_probes": 0,
+  "mutations": 0
+}

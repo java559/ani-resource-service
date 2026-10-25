@@ -1,0 +1,192 @@
+{
+  "host": "fedora",
+  "started_at": "2026-10-24T21:57:19.329456+00:00",
+  "task": "vm-mvp-shared-01a168ce",
+  "gov_tenant_id": 14,
+  "phase": "create-subnet",
+  "calls": [
+    {
+      "label": "login",
+      "method": "POST",
+      "route": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "elapsed_seconds": 0.645
+    },
+    {
+      "label": "original-vpc",
+      "method": "GET",
+      "route": "/api/v1/networks/vpcs/vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "http_status": 200,
+      "elapsed_seconds": 0.299,
+      "id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "state": "available",
+      "reason": "",
+      "version": "53",
+      "last_operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+      "observation_stale": false
+    },
+    {
+      "label": "admit-subnet",
+      "method": "POST",
+      "route": "/api/v1/networks/subnets",
+      "http_status": 200,
+      "elapsed_seconds": 0.666,
+      "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "state": "provisioning",
+      "reason": "",
+      "version": "1",
+      "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "observation_stale": true
+    },
+    {
+      "label": "operation-1",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/d28995d7-5d72-4358-adad-345aa44b41a9",
+      "http_status": 200,
+      "elapsed_seconds": 0.227,
+      "id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "state": "queued",
+      "reason": ""
+    },
+    {
+      "label": "resource-1",
+      "method": "GET",
+      "route": "/api/v1/networks/subnets/subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "http_status": 200,
+      "elapsed_seconds": 0.271,
+      "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "state": "provisioning",
+      "reason": "",
+      "version": "1",
+      "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "observation_stale": true
+    },
+    {
+      "label": "operation-2",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/d28995d7-5d72-4358-adad-345aa44b41a9",
+      "http_status": 200,
+      "elapsed_seconds": 0.209,
+      "id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "state": "running",
+      "reason": ""
+    },
+    {
+      "label": "resource-2",
+      "method": "GET",
+      "route": "/api/v1/networks/subnets/subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "http_status": 200,
+      "elapsed_seconds": 0.101,
+      "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "state": "provisioning",
+      "reason": "",
+      "version": "1",
+      "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "observation_stale": true
+    },
+    {
+      "label": "operation-3",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/d28995d7-5d72-4358-adad-345aa44b41a9",
+      "http_status": 200,
+      "elapsed_seconds": 0.199,
+      "id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "state": "retrying",
+      "reason": "PROVIDER_NOT_READY"
+    },
+    {
+      "label": "resource-3",
+      "method": "GET",
+      "route": "/api/v1/networks/subnets/subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "http_status": 200,
+      "elapsed_seconds": 0.856,
+      "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "state": "provisioning",
+      "reason": "PROVIDER_NOT_READY",
+      "version": "2",
+      "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "observation_stale": false
+    },
+    {
+      "label": "operation-4",
+      "method": "GET",
+      "route": "/api/v1/networks/operations/d28995d7-5d72-4358-adad-345aa44b41a9",
+      "http_status": 200,
+      "elapsed_seconds": 0.333,
+      "id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "state": "succeeded",
+      "reason": ""
+    },
+    {
+      "label": "resource-4",
+      "method": "GET",
+      "route": "/api/v1/networks/subnets/subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "http_status": 200,
+      "elapsed_seconds": 0.352,
+      "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+      "state": "available",
+      "reason": "",
+      "version": "3",
+      "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+      "observation_stale": false
+    },
+    {
+      "label": "logout",
+      "method": "POST",
+      "route": "/api/v1/auth/logout",
+      "http_status": 200,
+      "elapsed_seconds": 0.09
+    }
+  ],
+  "business_post_attempts": 1,
+  "vm_mutations": 0,
+  "egress_probes": 0,
+  "kcn_config_changes": 0,
+  "intent": {
+    "method": "POST",
+    "route": "/api/v1/networks/subnets",
+    "body": {
+      "name": "vm-mvp-shared-01a168ce",
+      "vpc_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+      "cidr": "10.73.1.0/24",
+      "description": "Task VM primary network; no egress bindings",
+      "idempotency_key": "151de9bc-09fb-408d-854f-5d7aa97388bf"
+    },
+    "body_sha256": "4aa3076649ae814d5f5a0954f2336ba2c33cdc9a0fb94661f603d6e78e785529"
+  },
+  "result": "PASS_NETWORK_AVAILABLE",
+  "resource": {
+    "id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+    "vpc_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+    "name": "vm-mvp-shared-01a168ce",
+    "description": "Task VM primary network; no egress bindings",
+    "cidr": "10.73.1.0/24",
+    "gateway": "10.73.1.1",
+    "state": "available",
+    "reason": "",
+    "reason_message": "",
+    "created_at": "2026-10-24T21:56:59.955306Z",
+    "updated_at": "2026-10-24T21:57:16.715164Z",
+    "version": "3",
+    "observed_at": "2026-10-24T21:57:16.634938Z",
+    "observation_stale": false,
+    "last_operation_id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+    "available_ip_range": "10.73.1.2-10.73.1.254",
+    "used_ip_range": ""
+  },
+  "operation": {
+    "id": "d28995d7-5d72-4358-adad-345aa44b41a9",
+    "resource_id": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+    "resource_type": "subnet",
+    "kind": "create_subnet",
+    "state": "succeeded",
+    "reason": "",
+    "created_at": "2026-10-24T21:56:59.955306Z",
+    "updated_at": "2026-10-24T21:57:16.734972Z",
+    "completed_at": "2026-10-24T21:57:16.734972Z",
+    "next_attempt_at": null,
+    "reason_message": ""
+  },
+  "session_revoked": true,
+  "finished_at": "2026-10-24T21:57:38.727640+00:00"
+}

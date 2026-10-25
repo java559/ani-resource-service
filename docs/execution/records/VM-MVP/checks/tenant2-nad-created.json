@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-23T19:44:57.393552+00:00",
+  "plan_sha256": "e049bf7ea5010b4eb914aa4972c8cedbf8a1c5c6158ee5eeb013594b006c9782",
+  "scope": "exact task tenant2 NAD create once; no config/restart/VM/shared changes",
+  "request": {
+    "apiVersion": "k8s.cni.cncf.io/v1",
+    "kind": "NetworkAttachmentDefinition",
+    "metadata": {
+      "name": "vm-mvp-tenant2-01a168ce",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "labels": {
+        "vm.ani.io/task": "vm-mvp-20261023-01a168ce"
+      }
+    },
+    "spec": {
+      "config": "{\"cniVersion\":\"0.3.1\",\"name\":\"kc-networking\",\"server_socket\":\"/run/openvswitch/kc-networking-daemon.sock\",\"type\":\"kc-networking\"}"
+    }
+  },
+  "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+  "source_nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+  "source_nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+  "fresh_preflight_pass": true,
+  "send_attempts": 1,
+  "outcome": "acknowledged",
+  "private_journal_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-nad-create.json",
+  "ack": {
+    "apiVersion": "k8s.cni.cncf.io/v1",
+    "kind": "NetworkAttachmentDefinition",
+    "metadata": {
+      "creationTimestamp": "2026-10-23T19:44:41Z",
+      "generation": 1,
+      "labels": {
+        "vm.ani.io/task": "vm-mvp-20261023-01a168ce"
+      },
+      "name": "vm-mvp-tenant2-01a168ce",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "resourceVersion": "60003290",
+      "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+    },
+    "spec": {
+      "config": "{\"cniVersion\":\"0.3.1\",\"name\":\"kc-networking\",\"server_socket\":\"/run/openvswitch/kc-networking-daemon.sock\",\"type\":\"kc-networking\"}"
+    }
+  },
+  "result": "PASS_CREATED_TASK_NAD_ONLY",
+  "config_changed": false,
+  "services_restarted": false
+}

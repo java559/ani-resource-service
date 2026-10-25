@@ -55,6 +55,20 @@ func (p *KCProvider) Observe(ctx context.Context, t biz.ProviderTarget) (biz.Pro
 }
 
 func (p *KCProvider) ObserveAttachment(ctx context.Context, w biz.AttachmentWork) (biz.AttachmentObservation, error) {
+	if w.Attachment.WorkloadMode == "vm_managed" {
+		now, err := p.repository.queries.DatabaseTime(ctx)
+		if err != nil {
+			return biz.AttachmentObservation{}, readFailure(err)
+		}
+		result, err := p.observeAttachment(ctx, w, func(ctx context.Context, gvr schema.GroupVersionResource) ([]unstructured.Unstructured, error) {
+			if gvr == pods {
+				return p.listScoped(ctx, gvr, w.Attachment.Namespace, "")
+			}
+			return p.listAll(ctx, gvr)
+		})
+		result.Proof = biz.ObservationProof{CollectedAt: now, CoveredGeneration: w.Requirement.RequestedGeneration, Hash: contentHash(result.Relations)}
+		return result, err
+	}
 	if p.observation == nil {
 		// observeAttachment validates this Namespace against the saved Subnet
 		// binding before invoking the reader. Preserve an unfiltered Pod list

@@ -1,0 +1,390 @@
+{
+  "started_at": "2026-10-24T20:23:06.780154+00:00",
+  "host": "fedora",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "source_tree": "d5e3a1742a8a47f85ccfcbdd339c1427e7400b8a",
+  "package_input_sha256": "d405be1fa48ea0fb1f9ae649105a92074119ba0baa57a1dac4e3f33d971cea63",
+  "steps": [
+    {
+      "label": "base-inspect",
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.224,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/base-inspect.log"
+    },
+    {
+      "label": "server-elf",
+      "argv": [
+        "readelf",
+        "-l",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/server"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.159,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/server-elf.log"
+    },
+    {
+      "label": "server-build",
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--tag",
+        "ani-governance-server:vm-mvp-2c4172f6eed8-01a168ce",
+        "."
+      ],
+      "exit": 0,
+      "elapsed_seconds": 23.538,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/server-build.log"
+    },
+    {
+      "label": "server-help",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-governance-server:vm-mvp-2c4172f6eed8-01a168ce",
+        "--help"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 6.639,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/server-help.log"
+    },
+    {
+      "label": "server-inspect",
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-governance-server:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.091,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/server-inspect.log"
+    },
+    {
+      "label": "server-export",
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-governance-server:vm-mvp-2c4172f6eed8-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/ani-governance-server-vm-mvp-2c4172f6eed8-01a168ce.oci.tar:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 5.828,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/server-export.log"
+    },
+    {
+      "label": "admin-elf",
+      "argv": [
+        "readelf",
+        "-l",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/admin"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.011,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-elf.log"
+    },
+    {
+      "label": "admin-build",
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--tag",
+        "ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce",
+        "."
+      ],
+      "exit": 0,
+      "elapsed_seconds": 15.983,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-build.log"
+    },
+    {
+      "label": "admin-help",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce",
+        "--help"
+      ],
+      "exit": 1,
+      "elapsed_seconds": 5.158,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-help.log"
+    },
+    {
+      "label": "admin-supported-noarg-usage",
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "exit": 1,
+      "expected_exit": 1,
+      "elapsed_seconds": 0.783,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-supported-noarg-usage.log"
+    },
+    {
+      "label": "admin-final-inspect",
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "elapsed_seconds": 0.094,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-final-inspect.log"
+    },
+    {
+      "label": "admin-final-export",
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/ani-governance-admin-vm-mvp-2c4172f6eed8-01a168ce.oci.tar:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "exit": 0,
+      "expected_exit": 0,
+      "elapsed_seconds": 6.623,
+      "private_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/private/admin-final-export.log"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "server",
+      "binary_path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/server",
+      "binary_sha256": "faa4ea2d8c7d736f5e97264ba3c742f40b207240aa2daaad571f6229318c6fd5",
+      "repository": "icn-01a15337-release/ani-governance",
+      "tag": "vm-mvp-2c4172f6eed8-01a168ce",
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/ani-governance-server-vm-mvp-2c4172f6eed8-01a168ce.oci.tar",
+      "archive_bytes": 45342720,
+      "archive_sha256": "60bd0b1f65ac53059c6445d193c694c59c0a6da1ef179e46d55691e1db9adf80",
+      "manifest_digest": "sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+      "manifest": {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "config": {
+          "mediaType": "application/vnd.oci.image.config.v1+json",
+          "digest": "sha256:d2bbb615690366087c42c332221db45fda37ffc437966eb11d3b8873b70e51fd",
+          "size": 4123
+        },
+        "layers": [
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+            "size": 88276
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+            "size": 12760
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+            "size": 475570
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+            "size": 29309
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+            "size": 75
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+            "size": 197
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+            "size": 132
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+            "size": 168
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+            "size": 91
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+            "size": 361
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+            "size": 320
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+            "size": 144572
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:7374b8a158c12300ff8be1f73dfcd566e30d88d527ade9b53ed37af973f4c51b",
+            "size": 44564974
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:5c4baa149e4e9de01cb4bbd009558248dc84798e9134860158a9bdac076b441b",
+            "size": 1225
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:bd9ddc54bea929a22b334e73e026d4136e5b73f5cc29942896c72e4ece69b13d",
+            "size": 34
+          }
+        ]
+      },
+      "target": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-2c4172f6eed8-01a168ce",
+      "image_id": "sha256:c18009c759a9080142d695c3a87755e6414410f2e5f91c13137026a72abe3b80",
+      "inside_binary_sha256": "faa4ea2d8c7d736f5e97264ba3c742f40b207240aa2daaad571f6229318c6fd5"
+    },
+    {
+      "kind": "admin",
+      "binary_path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-integration-02/bin/admin",
+      "binary_sha256": "184caa82f80ebe87a068ad5cc6cabe0dfe0726b9eee4babab2e2f3a98e88cd5a",
+      "repository": "icn-01a15337-release/ani-governance-admin",
+      "tag": "vm-mvp-2c4172f6eed8-01a168ce",
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/ani-governance-admin-vm-mvp-2c4172f6eed8-01a168ce.oci.tar",
+      "archive_bytes": 36300800,
+      "archive_sha256": "86fd6e8086889bb60f3ca339c5c64fadc3136b1eb3cf577aafce103d474c4fd8",
+      "manifest_digest": "sha256:89935650ddb9a11e4e30e3144321a2cc4dd9df3fab029590211d1c3e90938377",
+      "manifest": {
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "config": {
+          "mediaType": "application/vnd.oci.image.config.v1+json",
+          "digest": "sha256:90d1fa7412f5eed580fa64dfa726bf99d4823e90d592bd074e1dd462af9dbd9a",
+          "size": 4118
+        },
+        "layers": [
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+            "size": 88276
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+            "size": 12760
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+            "size": 475570
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+            "size": 29309
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+            "size": 75
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+            "size": 197
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+            "size": 132
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+            "size": 168
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+            "size": 91
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+            "size": 361
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+            "size": 320
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+            "size": 144572
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:299c2f430885a16d6738f7f30958e0a04529034a7a0dcaa375eec55a4466448e",
+            "size": 35522763
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:1cd4e66192ec4df59b335be23b0a1aee1b374257cfb5c3b2991d39be753fbe18",
+            "size": 1227
+          },
+          {
+            "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+            "digest": "sha256:bd9ddc54bea929a22b334e73e026d4136e5b73f5cc29942896c72e4ece69b13d",
+            "size": 34
+          }
+        ]
+      },
+      "target": "172.16.101.10:30003/icn-01a15337-release/ani-governance-admin:vm-mvp-2c4172f6eed8-01a168ce",
+      "image_id": "sha256:7712f5c9b01e870ef3ae67e59674c9068bc5dbd68afeb7179b400634b47d5d3f",
+      "inside_binary_sha256": "184caa82f80ebe87a068ad5cc6cabe0dfe0726b9eee4babab2e2f3a98e88cd5a"
+    }
+  ],
+  "compilations": 0,
+  "business_api_calls": 0,
+  "registry_writes": 0,
+  "deployments": 0,
+  "result": "PASS_PACKAGED_VERIFIED_SERVER_ADMIN",
+  "elapsed_seconds": 60.75,
+  "finished_at": "2026-10-24T20:25:38.820069+00:00",
+  "heavy_lock_released": true,
+  "original_packaging_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/packaged.json",
+  "original_packaging_sha256": "8a08a025384994f1c84a5ee3a01a760be8d8d8c5d05a99092de92a1fc409d6d7",
+  "additional_compilations": 0,
+  "additional_image_builds": 0
+}

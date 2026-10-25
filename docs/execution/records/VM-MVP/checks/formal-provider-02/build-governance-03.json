@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-24T08:05:49.449675+00:00",
+  "phase": "build",
+  "repo": "governance",
+  "host": "fedora",
+  "gowork": "off",
+  "private_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "steps": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-mod=readonly",
+        "-v",
+        "./app/admin/service/internal/data",
+        "./app/admin/service/internal/service",
+        "./app/admin/service/internal/server",
+        "./app/admin/service/cmd/server"
+      ],
+      "exit_code": 0,
+      "output": "go-wind-admin/app/admin/service/internal/service\ncel.dev/cel-go/interpreter\ncel.dev/cel-go/cel/async\ncel.dev/cel-go/common/debug\ngolang.org/x/exp/slices\ngithub.com/antlr4-go/antlr/v4\ncel.dev/cel-go/parser/gen\ncel.dev/cel-go/parser\ncel.dev/cel-go/checker\ncel.dev/cel-go/common/env\ncel.dev/cel-go/common/stdlib\ncel.dev/cel-go/cel\ncel.dev/cel-go/ext\nbuf.build/go/protovalidate/cel\nbuf.build/go/protovalidate\ngo-wind-admin/pkg/localdeps/kratos-bootstrap/rpc/middleware/validate\ngo-wind-admin/pkg/localdeps/kratos-bootstrap/rpc\ngo-wind-admin/pkg/localdeps/kratos-bootstrap/transport/asynq\ngo-wind-admin/pkg/localdeps/kratos-bootstrap/transport/sse\ngithub.com/swaggest/swgui/v5/static\ngithub.com/vearutop/statigz\ngo-wind-admin/pkg/localdeps/kratos-swagger-ui/internal/swagger\ngo-wind-admin/pkg/localdeps/kratos-swagger-ui\ngithub.com/mileusna/useragent\ngo-wind-admin/pkg/middleware/logging\ngo-wind-admin/pkg/middleware/requestid\ngo-wind-admin/app/admin/service/internal/server\ngo-wind-admin/app/admin/service/cmd/server\n"
+    }
+  ],
+  "candidate_processes_changed": false,
+  "business_api_calls": 0,
+  "result": "PASS_AFFECTED_FORMAL_BUILD",
+  "non_mod_source_unchanged": true,
+  "outputs": {
+    "go.mod": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671",
+    "go.sum": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a"
+  },
+  "elapsed_seconds": 81.833
+}

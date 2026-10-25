@@ -1,0 +1,51 @@
+{
+  "state": "PASS_SOURCE_IDENTITY_AND_NEW_PROJECT_ABSENT_READ_ONLY",
+  "started_at": "2026-10-24T10:14:05.299161+00:00",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/v2.0/projects/ani-kf-manual-20261009/repositories/ani%252Fkubeflow-jupyter/artifacts/sha256%3A8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+      "curl_exit": 0,
+      "expected_status": 200,
+      "response_body_bytes": 2767,
+      "status": 200,
+      "artifact": {
+        "id": 9,
+        "project_id": 3,
+        "repository_name": "ani-kf-manual-20261009/ani/kubeflow-jupyter",
+        "digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+        "media_type": "application/vnd.oci.image.config.v1+json",
+        "artifact_type": "application/vnd.oci.image.config.v1+json",
+        "type": "IMAGE",
+        "size": 333544725,
+        "platform": {
+          "os": "linux",
+          "architecture": "amd64"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2.0/projects/vm-mvp-v24-platform-01a168ce",
+      "curl_exit": 0,
+      "expected_status": 404,
+      "response_body_bytes": 93,
+      "status": 404
+    }
+  ],
+  "registry_writes": 0,
+  "image_layer_downloads": 0,
+  "automatic_retries": 0,
+  "credential_output": false,
+  "credential_argv": false,
+  "credential_transport": "curl --config stdin only",
+  "certificate_verification": true,
+  "hostname_verification": "172.16.101.10 IP SAN",
+  "ca_unchanged": true,
+  "original_failure_receipts": [
+    "b-harbor-readonly.json",
+    "b-harbor-tls-readonly.json"
+  ],
+  "tls_stack_delta": "curl normal chain/hostname/expiry verification; no insecure or certificate-flag relaxation",
+  "finished_at": "2026-10-24T10:14:06.857909+00:00"
+}

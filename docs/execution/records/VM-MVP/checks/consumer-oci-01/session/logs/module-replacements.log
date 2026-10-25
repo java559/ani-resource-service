@@ -1,0 +1,449 @@
+{
+	"Module": {
+		"Path": "github.com/zhangzhe-ctrl/ani-session-gateway"
+	},
+	"Go": "1.26.9",
+	"Require": [
+		{
+			"Path": "github.com/alicebob/miniredis/v2",
+			"Version": "v2.39.0"
+		},
+		{
+			"Path": "github.com/go-chi/chi/v5",
+			"Version": "v5.3.2"
+		},
+		{
+			"Path": "github.com/prometheus/client_golang",
+			"Version": "v1.23.2"
+		},
+		{
+			"Path": "github.com/redis/go-redis/v9",
+			"Version": "v9.22.0"
+		},
+		{
+			"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal",
+			"Version": "v0.0.0-20261013075021-0937f5aa9c6c"
+		},
+		{
+			"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+			"Version": "v0.0.0-20261023185414-0a53b99c8d9f"
+		},
+		{
+			"Path": "github.com/zhangzhe-ctrl/ani-session-gateway/api",
+			"Version": "v0.1.1-0.20261024051540-811cc3839244"
+		},
+		{
+			"Path": "go.opentelemetry.io/otel",
+			"Version": "v1.46.0"
+		},
+		{
+			"Path": "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc",
+			"Version": "v1.46.0"
+		},
+		{
+			"Path": "go.opentelemetry.io/otel/sdk",
+			"Version": "v1.46.0"
+		},
+		{
+			"Path": "go.opentelemetry.io/otel/trace",
+			"Version": "v1.46.0"
+		},
+		{
+			"Path": "google.golang.org/grpc",
+			"Version": "v1.83.2"
+		},
+		{
+			"Path": "google.golang.org/protobuf",
+			"Version": "v1.36.12"
+		},
+		{
+			"Path": "kubevirt.io/api",
+			"Version": "v0.0.0-20260420171350-acdbd8fddc9c"
+		},
+		{
+			"Path": "kubevirt.io/client-go",
+			"Version": "v1.8.2"
+		},
+		{
+			"Path": "github.com/davecgh/go-spew",
+			"Version": "v1.1.2-0.20180830191138-d8f796af33cc",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/emicklei/go-restful/v3",
+			"Version": "v3.12.2",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/fxamacker/cbor/v2",
+			"Version": "v2.9.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-kit/log",
+			"Version": "v0.2.1",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-logfmt/logfmt",
+			"Version": "v0.6.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/jsonpointer",
+			"Version": "v1.0.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/jsonreference",
+			"Version": "v1.0.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/cmdutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/conv",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/fileutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/jsonutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/loading",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/mangling",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/netutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/pools",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/stringutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/typeutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-openapi/swag/yamlutils",
+			"Version": "v0.28.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/gogo/protobuf",
+			"Version": "v1.3.2",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/google/gnostic-models",
+			"Version": "v0.7.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/gorilla/websocket",
+			"Version": "v1.5.4-0.20250319132907-e064f32e3674",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/json-iterator/go",
+			"Version": "v1.1.12",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/moby/spdystream",
+			"Version": "v0.5.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/modern-go/concurrent",
+			"Version": "v0.0.0-20180306012644-bacd9c7ef1dd",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/modern-go/reflect2",
+			"Version": "v1.0.3-0.20250322232337-35a7c28c31ee",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/mxk/go-flowrate",
+			"Version": "v0.0.0-20140419014527-cca7078d478f",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/openshift/custom-resource-status",
+			"Version": "v1.1.2",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/pkg/errors",
+			"Version": "v0.9.1",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/spf13/pflag",
+			"Version": "v1.0.10",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/x448/float16",
+			"Version": "v0.8.4",
+			"Indirect": true
+		},
+		{
+			"Path": "go.yaml.in/yaml/v3",
+			"Version": "v3.0.5",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/oauth2",
+			"Version": "v0.36.0",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/term",
+			"Version": "v0.46.0",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/time",
+			"Version": "v0.9.0",
+			"Indirect": true
+		},
+		{
+			"Path": "gopkg.in/evanphx/json-patch.v4",
+			"Version": "v4.12.0",
+			"Indirect": true
+		},
+		{
+			"Path": "gopkg.in/inf.v0",
+			"Version": "v0.9.1",
+			"Indirect": true
+		},
+		{
+			"Path": "k8s.io/apiextensions-apiserver",
+			"Version": "v0.34.3",
+			"Indirect": true
+		},
+		{
+			"Path": "k8s.io/klog/v2",
+			"Version": "v2.130.1",
+			"Indirect": true
+		},
+		{
+			"Path": "k8s.io/kube-openapi",
+			"Version": "v0.31.0",
+			"Indirect": true
+		},
+		{
+			"Path": "k8s.io/utils",
+			"Version": "v0.0.0-20251002143259-bc988d571ff4",
+			"Indirect": true
+		},
+		{
+			"Path": "kubevirt.io/containerized-data-importer-api",
+			"Version": "v1.64.0",
+			"Indirect": true
+		},
+		{
+			"Path": "kubevirt.io/controller-lifecycle-operator-sdk/api",
+			"Version": "v0.2.4",
+			"Indirect": true
+		},
+		{
+			"Path": "sigs.k8s.io/json",
+			"Version": "v0.0.0-20250730193827-2d320260d730",
+			"Indirect": true
+		},
+		{
+			"Path": "sigs.k8s.io/randfill",
+			"Version": "v1.0.0",
+			"Indirect": true
+		},
+		{
+			"Path": "sigs.k8s.io/structured-merge-diff/v6",
+			"Version": "v6.3.0",
+			"Indirect": true
+		},
+		{
+			"Path": "sigs.k8s.io/yaml",
+			"Version": "v1.6.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/beorn7/perks",
+			"Version": "v1.0.1",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/cenkalti/backoff/v5",
+			"Version": "v5.0.3",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/cespare/xxhash/v2",
+			"Version": "v2.3.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/coder/websocket",
+			"Version": "v1.8.15"
+		},
+		{
+			"Path": "github.com/go-logr/logr",
+			"Version": "v1.4.4",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/go-logr/stdr",
+			"Version": "v1.2.2",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/google/uuid",
+			"Version": "v1.6.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/grpc-ecosystem/grpc-gateway/v2",
+			"Version": "v2.30.0",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/munnerz/goautoneg",
+			"Version": "v0.0.0-20191010083416-a7dc8b61c822",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/prometheus/client_model",
+			"Version": "v0.6.2",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/prometheus/common",
+			"Version": "v0.66.1",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/prometheus/procfs",
+			"Version": "v0.16.1",
+			"Indirect": true
+		},
+		{
+			"Path": "github.com/yuin/gopher-lua",
+			"Version": "v1.1.1",
+			"Indirect": true
+		},
+		{
+			"Path": "go.opentelemetry.io/auto/sdk",
+			"Version": "v1.2.1",
+			"Indirect": true
+		},
+		{
+			"Path": "go.opentelemetry.io/otel/exporters/otlp/otlptrace",
+			"Version": "v1.46.0",
+			"Indirect": true
+		},
+		{
+			"Path": "go.opentelemetry.io/otel/metric",
+			"Version": "v1.46.0",
+			"Indirect": true
+		},
+		{
+			"Path": "go.opentelemetry.io/proto/otlp",
+			"Version": "v1.11.0",
+			"Indirect": true
+		},
+		{
+			"Path": "go.uber.org/atomic",
+			"Version": "v1.11.0",
+			"Indirect": true
+		},
+		{
+			"Path": "go.yaml.in/yaml/v2",
+			"Version": "v2.4.3",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/net",
+			"Version": "v0.60.0",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/sys",
+			"Version": "v0.48.0",
+			"Indirect": true
+		},
+		{
+			"Path": "golang.org/x/text",
+			"Version": "v0.42.0",
+			"Indirect": true
+		},
+		{
+			"Path": "google.golang.org/genproto/googleapis/api",
+			"Version": "v0.0.0-20260819154853-08b0e4226688",
+			"Indirect": true
+		},
+		{
+			"Path": "google.golang.org/genproto/googleapis/rpc",
+			"Version": "v0.0.0-20260819154853-08b0e4226688",
+			"Indirect": true
+		},
+		{
+			"Path": "k8s.io/api",
+			"Version": "v0.34.3"
+		},
+		{
+			"Path": "k8s.io/apimachinery",
+			"Version": "v0.34.3"
+		},
+		{
+			"Path": "k8s.io/client-go",
+			"Version": "v0.34.3"
+		}
+	],
+	"Exclude": null,
+	"Replace": [
+		{
+			"Old": {
+				"Path": "k8s.io/kube-openapi"
+			},
+			"New": {
+				"Path": "k8s.io/kube-openapi",
+				"Version": "v0.0.0-20250710124328-f3f2b991d03b"
+			}
+		}
+	],
+	"Retract": null,
+	"Tool": null,
+	"Ignore": null
+}

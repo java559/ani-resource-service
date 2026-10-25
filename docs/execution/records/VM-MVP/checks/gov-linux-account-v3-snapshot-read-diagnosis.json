@@ -1,0 +1,441 @@
+{
+  "at": "2026-10-24T07:02:40.680471+00:00",
+  "scope": "single original snapshot operation and exact same-VM snapshot Ready chain; no mutation",
+  "api": [
+    {
+      "suffix": "/operations/b9c9a55c-71f3-4d2f-9e4e-84bef8194bfa",
+      "status": 200,
+      "elapsed_seconds": 0.044,
+      "response": {
+        "id": "b9c9a55c-71f3-4d2f-9e4e-84bef8194bfa",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "create-snapshot",
+        "intentVersion": "42",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T07:00:27.275644914Z"
+      }
+    },
+    {
+      "suffix": "",
+      "status": 200,
+      "elapsed_seconds": 0.049,
+      "response": {
+        "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": "42",
+        "observedState": "Stopped",
+        "closing": false
+      }
+    },
+    {
+      "suffix": "/snapshots",
+      "status": 200,
+      "elapsed_seconds": 5.135,
+      "response": {
+        "count": 3,
+        "items": [
+          {
+            "snapshotId": "cdb5b37c-d829-5731-a44d-7c6b4693fef2",
+            "sourceVmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "sourceVmUid": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "ready": true,
+            "completeness": "COMPLETE",
+            "included": [
+              "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+            ],
+            "excluded": [
+              "guest-initialization"
+            ],
+            "indications": [
+              "NoGuestAgent",
+              "Online"
+            ],
+            "disks": [
+              {
+                "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "role": "data",
+                "name": "vm-mvp-data4-v3",
+                "sizeGb": "4",
+                "requestedBytes": "4000000000",
+                "observedCapacityBytes": "4294967296",
+                "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+                "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "role": "system",
+                "name": "system",
+                "sizeGb": "12",
+                "requestedBytes": "12000000000",
+                "observedCapacityBytes": "12884901888",
+                "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+                "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "role": "data",
+                "name": "vm-mvp-data3-v3",
+                "sizeGb": "3",
+                "requestedBytes": "3000000000",
+                "observedCapacityBytes": "3221225472",
+                "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+                "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              }
+            ],
+            "observedAt": "2026-10-24T07:02:40.80893487Z",
+            "reason": ""
+          },
+          {
+            "snapshotId": "3d068268-d8d0-5583-810f-9f187e0b05d1",
+            "sourceVmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "sourceVmUid": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "ready": true,
+            "completeness": "COMPLETE",
+            "included": [
+              "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+            ],
+            "excluded": [
+              "guest-initialization"
+            ],
+            "indications": [],
+            "disks": [
+              {
+                "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "role": "data",
+                "name": "vm-mvp-data4-v3",
+                "sizeGb": "4",
+                "requestedBytes": "4000000000",
+                "observedCapacityBytes": "4294967296",
+                "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+                "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "role": "system",
+                "name": "system",
+                "sizeGb": "12",
+                "requestedBytes": "12000000000",
+                "observedCapacityBytes": "12884901888",
+                "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+                "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "role": "data",
+                "name": "vm-mvp-data3-v3",
+                "sizeGb": "3",
+                "requestedBytes": "3000000000",
+                "observedCapacityBytes": "3221225472",
+                "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+                "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              }
+            ],
+            "observedAt": "2026-10-24T07:02:42.0846076Z",
+            "reason": ""
+          },
+          {
+            "snapshotId": "cb8710d2-76a0-5ac8-ab99-f959075594b2",
+            "sourceVmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "sourceVmUid": "7bca4671-89dd-4925-bad9-17e77401729d",
+            "ready": true,
+            "completeness": "COMPLETE",
+            "included": [
+              "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+            ],
+            "excluded": [
+              "guest-initialization"
+            ],
+            "indications": [],
+            "disks": [
+              {
+                "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "role": "data",
+                "name": "vm-mvp-data4-v3",
+                "sizeGb": "4",
+                "requestedBytes": "4000000000",
+                "observedCapacityBytes": "4294967296",
+                "volumeName": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+                "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "role": "system",
+                "name": "system",
+                "sizeGb": "12",
+                "requestedBytes": "12000000000",
+                "observedCapacityBytes": "12884901888",
+                "volumeName": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+                "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              },
+              {
+                "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "role": "data",
+                "name": "vm-mvp-data3-v3",
+                "sizeGb": "3",
+                "requestedBytes": "3000000000",
+                "observedCapacityBytes": "3221225472",
+                "volumeName": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+                "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+                "attached": true,
+                "preparationState": "Bound",
+                "reason": ""
+              }
+            ],
+            "observedAt": "2026-10-24T07:02:44.506781363Z",
+            "reason": ""
+          }
+        ]
+      }
+    }
+  ],
+  "new_native_count": 1,
+  "native": [
+    {
+      "snapshot": {
+        "kind": "VirtualMachineSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-snap-cb8710d2-76a0-5ac8-ab99-f959075594b2",
+        "uid": "8706d234-5ab0-4114-b72e-95102d057017"
+      },
+      "source_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "ready": true,
+      "phase": "Succeeded",
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T07:00:02Z",
+          "reason": "Operation complete",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T07:00:02Z",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "volumes": [
+        {
+          "volume": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "vs": {
+            "kind": "VolumeSnapshot",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+            "uid": "de2ed829-d2f9-4c6c-84a6-1c320899aa2f"
+          },
+          "ready": true,
+          "content": {
+            "kind": "VolumeSnapshotContent",
+            "namespace": "",
+            "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+            "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda"
+          },
+          "content_ready": true,
+          "deletion_policy": "Delete"
+        },
+        {
+          "volume": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "vs": {
+            "kind": "VolumeSnapshot",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+            "uid": "e823fe1b-d35a-4704-8335-89f6b214aaa1"
+          },
+          "ready": true,
+          "content": {
+            "kind": "VolumeSnapshotContent",
+            "namespace": "",
+            "name": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
+            "uid": "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad"
+          },
+          "content_ready": true,
+          "deletion_policy": "Delete"
+        },
+        {
+          "volume": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "vs": {
+            "kind": "VolumeSnapshot",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+            "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb"
+          },
+          "ready": true,
+          "content": {
+            "kind": "VolumeSnapshotContent",
+            "namespace": "",
+            "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+            "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997"
+          },
+          "content_ready": true,
+          "deletion_policy": "Delete"
+        }
+      ],
+      "content": {
+        "kind": "VirtualMachineSnapshotContent",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-content-8706d234-5ab0-4114-b72e-95102d057017",
+        "uid": "049e4a37-8750-461b-8e0f-4d7f80273b77"
+      },
+      "content_ready": true
+    }
+  ],
+  "logs": {
+    "gov": [],
+    "resource": [
+      {
+        "time": "2026-10-24T13:11:33.683420197+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 2.9168459159999998,
+        "trace_id": "81bac849742c4158a9dac18c023ea648"
+      },
+      {
+        "time": "2026-10-24T13:11:36.681743007+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 2.575962676,
+        "trace_id": "5c3dc55d58fc6f5dbcc50105e52785d6"
+      },
+      {
+        "time": "2026-10-24T13:11:50.067092384+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 4.96333575,
+        "trace_id": "9de2317c93b36d5d4f572f07b80b92dd"
+      },
+      {
+        "time": "2026-10-24T13:16:53.715976707+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 6.234407868,
+        "trace_id": "f08bd3672ca744077bdeecbbf086932c"
+      },
+      {
+        "time": "2026-10-24T13:51:48.383542814+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 2.5843500390000003,
+        "trace_id": "e372659ad0d9033d1876f58a558066b5"
+      },
+      {
+        "time": "2026-10-24T14:01:11.32204919+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 3.0381617,
+        "trace_id": "2694b1d1256dfd42c77e6bfdcec8ef80"
+      },
+      {
+        "time": "2026-10-24T14:55:42.698180891+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 3.633019197,
+        "trace_id": "d33f14b9dbb697adebd15fdf1ec49687"
+      },
+      {
+        "time": "2026-10-24T14:58:50.67467474+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 2.208271756,
+        "trace_id": "9989dbc8a2f5292ab1978e9ca31bbeae"
+      },
+      {
+        "time": "2026-10-24T14:59:09.288983975+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 9.642562322,
+        "trace_id": "8ac859f070212f7053cf08c3fdfc60f2"
+      },
+      {
+        "time": "2026-10-24T14:59:27.272854147+08:00",
+        "level": "ERROR",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 503,
+        "reason": "",
+        "latency": 9.890714272,
+        "error": "rpc error: code = Unavailable desc = VM_DEPENDENCY_NOT_READY",
+        "trace_id": "19b6d775ea4e1c69d7bfd533d31f38b9"
+      },
+      {
+        "time": "2026-10-24T15:00:23.497747755+08:00",
+        "level": "ERROR",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 503,
+        "reason": "",
+        "latency": 9.502977241,
+        "error": "rpc error: code = Unavailable desc = VM_DEPENDENCY_NOT_READY",
+        "trace_id": "60b960177ad405ed0e14d4c165d5b8d0"
+      },
+      {
+        "time": "2026-10-24T15:02:45.88681138+08:00",
+        "level": "INFO",
+        "msg": "server request",
+        "operation": "/vm.v1.VMService/ListSnapshots",
+        "code": 200,
+        "reason": "",
+        "latency": 5.094182082,
+        "trace_id": "a9455ce4ff46bebcb7c02c11fd4100ce"
+      }
+    ]
+  }
+}

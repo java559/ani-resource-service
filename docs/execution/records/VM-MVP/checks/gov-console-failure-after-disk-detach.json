@@ -1,0 +1,24 @@
+{
+  "scope": "READ_ONLY_CONSOLE_FAILURE_DIAGNOSIS",
+  "failure_at_utc": "2026-10-23T17:53:48Z",
+  "gov_http_status": 503,
+  "gov_grpc_code": "Unavailable",
+  "gov_error": "session store unavailable",
+  "gov_latency_seconds": 8.345542327,
+  "resource_resolve_code": 200,
+  "resource_resolve_latency_seconds": 4.983992908,
+  "resource_trace": "2b35eb6877f582875bd0eb16bf790844",
+  "sg_request_id": "9ece5fed-bec7-44a3-8091-d4518c639156",
+  "sg_result": "error",
+  "sg_session_issued_event": false,
+  "gov_sg_timeout_seconds": 5,
+  "sg_resource_validation_timeout_seconds": 3,
+  "resource_narrow_server_logs_raw_grpc_status": false,
+  "sg_readyz": {
+    "status": 200,
+    "body": "ready mode=redis degraded=false\n"
+  },
+  "redis_ping": "PONG",
+  "new_session_requests": 0,
+  "inference": "Resource identity validation exceeds SG 3s deadline; SG maps dependency failures to misleading generic session store unavailable. The raw ValidateConsoleSession transport status was not logged, so deadline remains inferred from source and timings."
+}

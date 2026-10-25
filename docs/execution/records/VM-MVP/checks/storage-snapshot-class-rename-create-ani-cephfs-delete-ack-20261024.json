@@ -1,0 +1,21 @@
+{
+  "apiVersion": "snapshot.storage.k8s.io/v1",
+  "deletionPolicy": "Delete",
+  "driver": "rook-ceph.cephfs.csi.ceph.com",
+  "kind": "VolumeSnapshotClass",
+  "metadata": {
+    "creationTimestamp": "2026-10-24T03:49:06Z",
+    "generation": 1,
+    "labels": {
+      "ani.io/managed-by": "ani-lab"
+    },
+    "name": "ani-cephfs-delete",
+    "resourceVersion": "61232199",
+    "uid": "b1ab26b4-58d2-4ea5-bce2-88263be02728"
+  },
+  "parameters": {
+    "clusterID": "rook-ceph",
+    "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-cephfs-provisioner",
+    "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "kind": "BROWSER_POINT_IN_TIME_NOT_INSTALL_COMPLETION",
+  "observed_at": "2026-10-24T06:00Z",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": 3,
+  "progress_percent": 31,
+  "screenshot": "vm-windows-server2025-install-31pct.png",
+  "screenshot_sha256": "87eb95bcf3ff73c885f3c4652f1ef42f3c75681b75557fbf6cb5e8a04e5e11e4",
+  "browser_tool_timeout": "REPL reset after actions; fresh observed session actually connected; no repeat login or business mutation",
+  "guest_mutations": 0,
+  "installation_complete": "NOT_VERIFIED"
+}

@@ -1,0 +1,42 @@
+{
+  "state": "READ_ONLY_TLS_DIAGNOSIS",
+  "observed_at": "2026-10-24T10:10:34.388997+00:00",
+  "endpoint": "172.16.101.10:30003",
+  "http_requests": 0,
+  "authorization_headers": 0,
+  "registry_writes": 0,
+  "certificates": {
+    "resource_projected": {
+      "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/shared-image/harbor-ca.pem",
+      "public_pem_sha256": "7371905a16dd41d8059629967a6c65f1d49b3a73dca44ee5e2dddef159168ac1",
+      "metadata": [
+        "subject=CN=ANI Harbor Offline CA",
+        "issuer=CN=ANI Harbor Offline CA",
+        "notBefore=Oct  3 16:55:31 2026 GMT",
+        "notAfter=Sep 30 16:55:31 2036 GMT",
+        "sha256 Fingerprint=2E:56:E1:24:51:C7:8F:58:2D:17:FB:14:7B:9E:F3:34:B0:45:CE:76:F9:48:25:D9:6B:10:0B:AC:34:A1:B1:81"
+      ]
+    },
+    "docs_successful": {
+      "reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs/ca.crt",
+      "public_pem_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+      "metadata": [
+        "subject=CN=172.16.101.10",
+        "issuer=CN=ANI Harbor Offline CA",
+        "notBefore=Oct  3 16:55:31 2026 GMT",
+        "notAfter=Jan  5 16:55:31 2029 GMT",
+        "sha256 Fingerprint=F1:82:6F:EA:9E:5B:93:EA:8D:61:71:9D:39:69:49:9B:90:F5:83:10:D8:EC:D9:92:0E:7D:DE:54:6C:1E:87:62"
+      ]
+    }
+  },
+  "tls_socket_attempts": 1,
+  "public_ca_bytes_equal": false,
+  "handshake": {
+    "result": "FAIL_STRICT_TLS",
+    "exception_type": "SSLCertVerificationError",
+    "errno": 1,
+    "verify_code": 92,
+    "verify_message": "CA cert does not include key usage extension"
+  },
+  "finished_at": "2026-10-24T10:10:34.416811+00:00"
+}

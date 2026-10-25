@@ -1,0 +1,235 @@
+{
+  "scope": "PREPARE_ONLY_ONE_MINIMAL_V24_OWNER_WIRING_SLICE",
+  "execution_allowed": false,
+  "actual_refs": [
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/refs.json",
+      "sha256": "9a2d5d7866ab8bbd88b17cf3ba90e30ac63443044b0317f92dbd28790a69a486"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/refs-completion.json",
+      "sha256": "f61ae2cb86276acaa2d7d8fa8d6c193ba601ace7a11ced43359d44d6314c93ff"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/cluster-config.json",
+      "sha256": "f532e0d1f9df7321fd7d2517c2e013be8e977c6a6a94ebe98c3f47aa2b7e36e2"
+    }
+  ],
+  "observed_task_gov_process": {
+    "pid": 3305121,
+    "startticks": "70294688",
+    "environment_projection": "only managed endpoint/SAN/file-reference variables; no general env dump"
+  },
+  "observed_task_gov_clients_disabled": true,
+  "resource_increment": "NONE for the first GPU read/acceptance slice; existing Task Resource Instance+Compute+Image and exact ACC physical-release client are already enabled",
+  "proposed_private_projection": [
+    {
+      "source": {
+        "namespace": "ani-system",
+        "name": "governance-accelerator-node-agent-bc-client",
+        "uid": "db12e807-332e-4f92-942f-9cafc7338152",
+        "resource_version": "49687535",
+        "fields": [
+          "ca.crt",
+          "tls.crt",
+          "tls.key"
+        ]
+      },
+      "allowed_fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "destination_private_directory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc",
+      "not_performed": true
+    },
+    {
+      "source": {
+        "namespace": "ani-system",
+        "name": "governance-model-inference-tls",
+        "uid": "58a4f34d-ffa5-4d40-bfc1-9500acc852c4",
+        "resource_version": "26101903",
+        "fields": [
+          "ca.crt",
+          "tls.crt",
+          "tls.key"
+        ]
+      },
+      "allowed_fields": [
+        "ca.crt",
+        "tls.crt",
+        "tls.key"
+      ],
+      "destination_private_directory": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference",
+      "not_performed": true
+    }
+  ],
+  "first_minimal_gpu_slice": {
+    "only_gov_environment_append": {
+      "ANI_ACCELERATOR_ADDR": "ani-accelerator-service.ani-accelerator.svc.cluster.local:19090",
+      "ANI_ACCELERATOR_SERVER_NAME": "ani-accelerator-service.ani-accelerator.svc.cluster.local",
+      "ANI_ACCELERATOR_CA": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/ca.crt",
+      "ANI_ACCELERATOR_CERT": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.crt",
+      "ANI_ACCELERATOR_KEY": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.key",
+      "ANI_ACCELERATOR_TIMEOUT": "3s"
+    },
+    "candidate_maintenance": "same deployed Gov binary/config/budget; preserve all existing env; normal TERM exact PID/startticks only after pending/active-session guards; Resource/SG/VM untouched",
+    "preconditions": [
+      "normal CPU Instance original Delete/ledger/native cleanup reaches the already-approved checkpoint",
+      "fresh actual candidate producer matches; no new pending Gov/Resource command",
+      "Gov client leaf must have one exact DNS SAN ani-governance; exact configured ACC server SAN validated by existing production client; never use Resource client leaf",
+      "normal current tenant ACCELERATOR plan/grants and GPU quota must pass public APIs; no direct ledger writes",
+      "logical_cluster_constraint must pass using actual current same527 GPU profile/preset; different logical cluster is a blocking result, not a wiring shortcut"
+    ],
+    "first_normal_read_requests": [
+      "GET /api/v1/compute-presets?usage=CONTAINER_INSTANCE&compute_type=GPU&page=1&pageSize=100",
+      "GET /api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "GET /api/v1/me/quota-accounts"
+    ],
+    "no_create_yet": "select only actual enabled GPU preset/current profile version + image eligible for GPU/container; freeze key/body once after the returned selection and quota match",
+    "owner_ack_path": "POST /api/v1/instances -> durable Gov original ledger -> real Resource Instance owner ACK; GET /api/v1/instance-operations/{original_operation_id}; original-key replay same IDs; normal original-ledger Delete/refund after the Root-approved minimum acceptance",
+    "create_dto": "{\"data\":{\"idempotency_key\":\"<new frozen UUID>\",\"name\":\"<task prefix>\",\"image_id\":\"<actual current task image id>\",\"image_scope\":\"platform\",\"preset_id\":\"<actual enabled GPU CONTAINER_INSTANCE preset UUID>\",\"scheduling\":<same approved current scheduling>,\"network\":<same approved current network>}}; no retired cpu/memory/gpu input"
+  },
+  "inference_additional_slice": {
+    "only_after_root_review_environment_append": {
+      "ANI_MODEL_ADDR": "ani-model-grpc.ani-system.svc.cluster.local:19090",
+      "ANI_MODEL_SERVER_NAME": "ani-model.ani.internal",
+      "ANI_MODEL_CA": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/ca.crt",
+      "ANI_MODEL_CERT": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.crt",
+      "ANI_MODEL_KEY": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.key",
+      "ANI_MODEL_TIMEOUT": "30s",
+      "ANI_INFERENCE_ADDR": "ani-inference-grpc.ani-system.svc.cluster.local:19090",
+      "ANI_INFERENCE_SERVER_NAME": "ani-inference.ani.internal",
+      "ANI_INFERENCE_CA_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/ca.crt",
+      "ANI_INFERENCE_CERT_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.crt",
+      "ANI_INFERENCE_KEY_FILE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.key"
+    },
+    "owner_services": [
+      {
+        "namespace": "ani-system",
+        "name": "ani-model-grpc",
+        "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "clusterIP": "10.96.44.130",
+        "ports": [
+          {
+            "name": "grpc",
+            "port": 19090,
+            "protocol": "TCP",
+            "targetPort": "grpc"
+          }
+        ],
+        "selector": {
+          "app.kubernetes.io/name": "ani-model-service"
+        }
+      },
+      {
+        "namespace": "ani-system",
+        "name": "ani-inference-grpc",
+        "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "clusterIP": "10.96.166.234",
+        "ports": [
+          {
+            "name": "grpc",
+            "port": 19090,
+            "protocol": "TCP",
+            "targetPort": "grpc"
+          }
+        ],
+        "selector": {
+          "app.kubernetes.io/instance": "ani-inference",
+          "app.kubernetes.io/name": "ani-inference"
+        }
+      }
+    ],
+    "required_live_input_missing": "NO same-task-tenant READY ModelVersion has been proven. Do not borrow foreign-tenant historic model/version IDs and do not invent one. No Model import/create is authorized by this preparation.",
+    "normal_catalog_gates": [
+      "GET /api/v1/compute-presets?usage=INFERENCE&page=1&pageSize=100",
+      "GET /api/v1/models -> own actual model_id only",
+      "GET /api/v1/models/{actual_own_model_id}/versions",
+      "GET /api/v1/model-versions/{actual_own_model_version_id}; require matching ID and ready status"
+    ],
+    "create_path": "POST /api/v1/inference/services; then GET /api/v1/inference/operations/{original_operation_id}",
+    "create_dto_fields": [
+      "idempotency_key",
+      "name",
+      "model_version_id",
+      "served_model_name",
+      "engine_image",
+      "engine_type",
+      "command",
+      "replicas=1",
+      "runtime_mode=1",
+      "preset_id"
+    ],
+    "do_not_freeze_create_body_until_actual_inputs": true,
+    "real_owner_ack": "existing dispatchManaged calls CreateTrusted with tenant+actor metadata; validates durable ACK before marking dispatch delivered. PG boundary results do not replace it."
+  },
+  "configured_san_evidence_boundary": "SAN strings were read from deployed config; no certificate data was read. Existing production clients will validate actual client/server leaf when Root authorizes private projection/startup.",
+  "source_contracts": [
+    {
+      "path": "app/admin/service/internal/data/accelerator_client.go",
+      "lines": "38-88; GovernanceAcceleratorDNS=ani-governance"
+    },
+    {
+      "path": "app/admin/service/internal/data/model_client.go",
+      "lines": "34-95; timeout must be <=45s"
+    },
+    {
+      "path": "app/admin/service/internal/data/inference_client.go",
+      "lines": "29-80"
+    },
+    {
+      "path": "app/admin/service/cmd/server/wiring_ent.go",
+      "lines": "96-110,204-226,377-400,524-529"
+    },
+    {
+      "path": "app/admin/service/internal/service/inference_compute_binding.go",
+      "lines": "30-48,80-125"
+    },
+    {
+      "path": "app/admin/service/internal/service/inference_service.go",
+      "lines": "243-258"
+    },
+    {
+      "path": "app/admin/service/internal/service/inference_dispatch.go",
+      "lines": "14-73"
+    },
+    {
+      "path": "Resource internal/biz/compute/resolution.go",
+      "lines": "131-154: same configured logical cluster for GPU reference"
+    },
+    {
+      "path": "Resource cmd/ani-resource-service/compute.go",
+      "lines": "73-77: Instance+Compute sameDSN+ClusterID invariant"
+    }
+  ],
+  "not_performed": [
+    "private material projection",
+    "config changes",
+    "service restart",
+    "portforward",
+    "application RPC",
+    "GPU allocation",
+    "Model creation",
+    "public-network probe",
+    "new tests or build"
+  ],
+  "shared_deployed_timeout_not_copied": "Shared Gov ANI_MODEL_TIMEOUT=3600s is incompatible with current Task source max45s. Proposed Task value30s follows the formal client; shared configuration remains untouched.",
+  "logical_cluster_constraint": {
+    "task_compute_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/compute.json",
+    "task_compute_ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "task_instance_Service_ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "same_uuid_as_kube_system_but_not_the_same_concept": "This is explicit Task Compute/Instance logical configuration; the physical kube-system UID is separately guarded and is not proof of ACC registration.",
+    "shared_resource_historical_logical_cluster": "0fcdb8b1-22bf-4528-af59-82843dc88f21 (Root supplied; not freshly reread from Secret)",
+    "acc_configmap": {
+      "namespace": "ani-system",
+      "name": "accelerator-modeldev-execution-v21",
+      "uid": "84a95682-84d7-41e0-8842-a897fc72885a",
+      "resource_version": "51903981",
+      "cluster_fields": []
+    },
+    "acc_actual_registry_set": "NOT_READ: no application RPC or business DB read. Absence of cluster_id in ConfigMap does not prove which clusters are registered.",
+    "blocking_rule": "Resource Resolver.Resolve rejects GPU preset whose GPU.ClusterID differs from its configured clusterID (resolution.go:152). requireInstanceCompute requires same database path and ClusterID across Compute and Instance (compute.go:73). If ACC only offers0fcdb then task527 GPU Create is blocked; never rewrite Task Compute/VM specs, reuse shared Resource owner, register a new ACC cluster or start a competing owner stack without a separate Root-reviewed scope.",
+    "next_read_after_mtls_approval": "normal own tenant ACC profiles filtered by explicit Task logicalClusterID527; existing GPU preset/selection must agree before any key/body/Create"
+  }
+}

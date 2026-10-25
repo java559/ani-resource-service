@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-23T23:18:22.005121+00:00",
+  "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+  "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+  "launcher_uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+  "node": "ani-02",
+  "domain_type": "kvm",
+  "cpu": {
+    "mode": "custom",
+    "model": "Cascadelake-Server"
+  },
+  "compute_kvm_resource": {
+    "requests": "1",
+    "limits": "1"
+  },
+  "kubevirt": {
+    "namespace": "kubevirt",
+    "name": "kubevirt",
+    "uid": "a3f905a6-9829-42d2-8f18-5ff30192ffc8",
+    "resource_version": "52051652",
+    "useEmulation_field_present": false,
+    "useEmulation": null
+  },
+  "xml_printed_or_saved": false,
+  "mutations": 0,
+  "identity_before_after": "PASS",
+  "tcg_hypothesis": "EXCLUDED_DOMAIN_KVM"
+}

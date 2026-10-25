@@ -1,0 +1,24 @@
+# Review-only command list; DO NOT run as a batch. Root confirms commands first.
+# At every step: inspect PREPARED_SEND0; execute once; require original op succeeded before next prepare.
+# Any unknown/failed operation stops dependent actions. Observe only; never blindly re-execute.
+
+# stop; conditional fresh expectedVersion=5
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py prepare --action stop --intent firstboot-recovery-01-stop --root-handoff 'Root approves firstboot-recovery-01-stop; base install reached firstboot product-key page; OOBE/account/login incomplete' --root-evidence 'browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json' --installation-complete
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py execute --action stop --intent firstboot-recovery-01-stop --root-handoff 'Root approves firstboot-recovery-01-stop; base install reached firstboot product-key page; OOBE/account/login incomplete' --execute-authorized --wait-seconds 20
+# Only if acknowledged original op is still running: python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py observe --intent firstboot-recovery-01-stop --wait-seconds 20
+
+# eject-install; conditional fresh expectedVersion=6
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py prepare --action eject-install --intent firstboot-recovery-01-eject-install --root-handoff 'Root approves firstboot-recovery-01-eject-install; base install reached firstboot product-key page; OOBE/account/login incomplete' --root-evidence 'browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json' --installation-complete
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py execute --action eject-install --intent firstboot-recovery-01-eject-install --root-handoff 'Root approves firstboot-recovery-01-eject-install; base install reached firstboot product-key page; OOBE/account/login incomplete' --execute-authorized --wait-seconds 20
+# Only if acknowledged original op is still running: python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py observe --intent firstboot-recovery-01-eject-install --wait-seconds 20
+
+# boot-system; conditional fresh expectedVersion=7
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py prepare --action boot-system --intent firstboot-recovery-01-boot-system --root-handoff 'Root approves firstboot-recovery-01-boot-system; base install reached firstboot product-key page; OOBE/account/login incomplete' --root-evidence 'browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json' --installation-complete
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py execute --action boot-system --intent firstboot-recovery-01-boot-system --root-handoff 'Root approves firstboot-recovery-01-boot-system; base install reached firstboot product-key page; OOBE/account/login incomplete' --execute-authorized --wait-seconds 20
+# Only if acknowledged original op is still running: python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py observe --intent firstboot-recovery-01-boot-system --wait-seconds 20
+
+# start; conditional fresh expectedVersion=8
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py prepare --action start --intent firstboot-recovery-01-start --root-handoff 'Root approves firstboot-recovery-01-start; base install reached firstboot product-key page; OOBE/account/login incomplete' --root-evidence 'browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json'
+python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py execute --action start --intent firstboot-recovery-01-start --root-handoff 'Root approves firstboot-recovery-01-start; base install reached firstboot product-key page; OOBE/account/login incomplete' --execute-authorized --wait-seconds 20
+# Only if acknowledged original op is still running: python3 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py observe --intent firstboot-recovery-01-start --wait-seconds 20
+

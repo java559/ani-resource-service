@@ -1,0 +1,522 @@
+{
+  "NAD_VPC_Subnet_and_sources_deleted": false,
+  "auth_login_posts": 0,
+  "business_posts": 0,
+  "commands": [
+    {
+      "exit": 0,
+      "label": "physical-cluster",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/1-physical-cluster.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/1-physical-cluster.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "three-node-identity",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/2-three-node-identity.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/2-three-node-identity.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-metrics",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/3-shared-SG-metrics.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/3-shared-SG-metrics.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-runtime",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/4-shared-SG-runtime.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/4-shared-SG-runtime.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "existing-valkey",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/5-existing-valkey.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/5-existing-valkey.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-lease",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/6-shared-SG-lease.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/6-shared-SG-lease.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-baseline",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/7-shared-SG-baseline.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/7-shared-SG-baseline.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "exact-current-Gov",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/8-exact-current-Gov.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/8-exact-current-Gov.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Gov-admission-false",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/9-Gov-admission-false.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/9-Gov-admission-false.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Gov-admission-false-independent-readback",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/10-Gov-admission-false-independent-readback.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/10-Gov-admission-false-independent-readback.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Gov-admission-closed-rollout",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/11-Gov-admission-closed-rollout.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/11-Gov-admission-closed-rollout.stdout",
+      "timeout_seconds": 160
+    },
+    {
+      "exit": 0,
+      "label": "Gov-admission-closed-ready-deployment",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/12-Gov-admission-closed-ready-deployment.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/12-Gov-admission-closed-ready-deployment.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Gov-admission-closed-ready-pods",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/13-Gov-admission-closed-ready-pods.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/13-Gov-admission-closed-ready-pods.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "existing-pg-pod-before-delete-proof",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/14-existing-pg-pod-before-delete-proof.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/14-existing-pg-pod-before-delete-proof.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "original-compute_vm-dsn",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/15-original-compute_vm-dsn.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/15-original-compute_vm-dsn.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "pending-compute_vm",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/16-pending-compute_vm.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/16-pending-compute_vm.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "target-virtualmachines-gone",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/17-target-virtualmachines-gone.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/17-target-virtualmachines-gone.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "target-virtualmachineinstances-gone",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/18-target-virtualmachineinstances-gone.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/18-target-virtualmachineinstances-gone.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "original-network-dsn",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/19-original-network-dsn.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/19-original-network-dsn.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "pending-network",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/20-pending-network.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/20-pending-network.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "existing-pg-pod",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/21-existing-pg-pod.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/21-existing-pg-pod.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "original-compute_vm-dsn",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/22-original-compute_vm-dsn.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/22-original-compute_vm-dsn.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "pending-compute_vm",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/23-pending-compute_vm.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/23-pending-compute_vm.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "original-network-dsn",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/24-original-network-dsn.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/24-original-network-dsn.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "pending-network",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/25-pending-network.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/25-pending-network.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "original-governance-dsn",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/26-original-governance-dsn.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/26-original-governance-dsn.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "pending-governance",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/27-pending-governance.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/27-pending-governance.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-metrics",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/28-shared-SG-metrics.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/28-shared-SG-metrics.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-runtime",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/29-shared-SG-runtime.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/29-shared-SG-runtime.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "existing-valkey",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/30-existing-valkey.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/30-existing-valkey.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-lease",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/31-shared-SG-lease.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/31-shared-SG-lease.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "wired-production-VM-secret",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/32-wired-production-VM-secret.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/32-wired-production-VM-secret.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "exact-current-wired-Resource",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/33-exact-current-wired-Resource.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/33-exact-current-wired-Resource.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "VM-config-withdraw-task-network",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/34-VM-config-withdraw-task-network.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/34-VM-config-withdraw-task-network.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "VM-config-withdraw-task-network-independent-readback",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/35-VM-config-withdraw-task-network-independent-readback.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/35-VM-config-withdraw-task-network-independent-readback.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Resource-remove-task-restart-annotation",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/36-Resource-remove-task-restart-annotation.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/36-Resource-remove-task-restart-annotation.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Resource-remove-task-restart-annotation-independent-readback",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/37-Resource-remove-task-restart-annotation-independent-readback.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/37-Resource-remove-task-restart-annotation-independent-readback.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Resource-original-spec-rollout",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/38-Resource-original-spec-rollout.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/38-Resource-original-spec-rollout.stdout",
+      "timeout_seconds": 160
+    },
+    {
+      "exit": 0,
+      "label": "Resource-original-spec-ready-deployment",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/39-Resource-original-spec-ready-deployment.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/39-Resource-original-spec-ready-deployment.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Resource-original-spec-ready-pods",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/40-Resource-original-spec-ready-pods.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/40-Resource-original-spec-ready-pods.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Resource-restored-config-source-after-ready",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/41-Resource-restored-config-source-after-ready.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/41-Resource-restored-config-source-after-ready.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "Gov-still-closed-after-cleanup",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/42-Gov-still-closed-after-cleanup.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/42-Gov-still-closed-after-cleanup.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-unchanged-after-cleanup",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/43-shared-SG-unchanged-after-cleanup.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/43-shared-SG-unchanged-after-cleanup.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-metrics",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/44-shared-SG-metrics.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/44-shared-SG-metrics.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-runtime",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/45-shared-SG-runtime.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/45-shared-SG-runtime.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "existing-valkey",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/46-existing-valkey.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/46-existing-valkey.stdout",
+      "timeout_seconds": 15
+    },
+    {
+      "exit": 0,
+      "label": "shared-SG-lease",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/47-shared-SG-lease.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-wire-01/cleanup-private/47-shared-SG-lease.stdout",
+      "timeout_seconds": 15
+    }
+  ],
+  "db_writes": 0,
+  "delete_proof_sha256": "17cbc2d8ea7e39193b6b7513dd603408cf4b1909bc1011386fedeb8b80549350",
+  "delete_target": {
+    "delete_operation_id": "cf6dd416-b815-4003-846b-e40f4587cf33",
+    "native_gone_receipt": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/shared-storage-gone-after-delete-01.json",
+      "sha256": "0228349464eafd7723a1733ab304099a70fba27c4bf96d2d3fb7fb0666c7b134"
+    },
+    "tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad"
+  },
+  "deleted_business_tombstone_rows_retained": true,
+  "deleted_target": {
+    "deleted_tombstones_preserved": true,
+    "native_VM_VMI_absent": true,
+    "network": {
+      "active_attachment_references": 0,
+      "target_attachment_matches": 1,
+      "target_released_matches": 1
+    },
+    "original_native_gone_receipt": {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/shared-storage-gone-after-delete-01.json",
+      "sha256": "0228349464eafd7723a1733ab304099a70fba27c4bf96d2d3fb7fb0666c7b134"
+    },
+    "vm": {
+      "active_vm_network_references": 0,
+      "attachment_id": "att_2db04f4ce5cc416ea2dcfbebb79b252a",
+      "delete_operation_matches": 1,
+      "deleted_vm_matches": 1,
+      "native": {
+        "Kind": "VirtualMachine",
+        "Name": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+        "Namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+        "UID": "053a7810-b846-42e0-a5a0-c2feedaccc89"
+      },
+      "vm_matches": 1
+    }
+  },
+  "finished_at": "2026-10-24T22:38:27.287384+00:00",
+  "governance": {
+    "deployment_uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+    "image_id": "172.16.101.10:30003/icn-01a15337-release/ani-governance@sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+    "pod_name": "ani-governance-856bf9746f-fntc9",
+    "pod_uid": "f8bcf343-73d0-4c55-bcd7-f3ced52a5228",
+    "ready_replicas": 1,
+    "resource_version": "64211318",
+    "template_sha256": "16f7e219aeb1fbc401455951e04db1b31cae5d57a00599a3e7ab868a35dc0f1c"
+  },
+  "guest_commands": 0,
+  "heavy_lock_released": true,
+  "mutation_attempts": [
+    {
+      "command_exit": 0,
+      "kind": "deployment",
+      "label": "Gov-admission-false",
+      "name": "ani-governance",
+      "new_resource_version": "64209630",
+      "original_resource_version": "64120740",
+      "send_attempts": 1,
+      "state": "INDEPENDENT_READBACK_MATCHES_DESIRED",
+      "uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67"
+    },
+    {
+      "command_exit": 0,
+      "kind": "secret",
+      "label": "VM-config-withdraw-task-network",
+      "name": "resource-vm-private-20261025",
+      "new_resource_version": "64211555",
+      "original_resource_version": "64119219",
+      "send_attempts": 1,
+      "state": "INDEPENDENT_READBACK_MATCHES_DESIRED",
+      "uid": "fc81265f-da5a-4a7e-a1eb-54e373d69da5"
+    },
+    {
+      "command_exit": 0,
+      "kind": "deployment",
+      "label": "Resource-remove-task-restart-annotation",
+      "name": "ani-resource-service",
+      "new_resource_version": "64211577",
+      "original_resource_version": "64119871",
+      "send_attempts": 1,
+      "state": "INDEPENDENT_READBACK_MATCHES_DESIRED",
+      "uid": "e17f1f9e-e406-452f-838d-85062a6e860a"
+    }
+  ],
+  "network_selection": {
+    "ClusterID": "0fcdb8b1-22bf-4528-af59-82843dc88f21",
+    "KCNSubnetRef": "tenant-a893c319-d6d8-4609-a340-3f222964d00f/subnet-ad3fc788b3314750a2b25fe8015cf74e",
+    "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "NADName": "vm-mvp-shared-main-01a168ce",
+    "NADUID": "074c10e9-5006-4f4d-8971-42e6da957b5e",
+    "Namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "NamespaceUID": "c44f78c6-b576-4b37-9e15-2e77c63042ca",
+    "SubnetID": "subnet_ad3fc788b3314750a2b25fe8015cf74e",
+    "TenantID": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "VPCID": "vpc_ebe24085d6e84c01a2433a5017b47e5b"
+  },
+  "pending_before_network_withdrawal": {
+    "compute_vm": {
+      "pending_counts": {
+        "instance_operations": 0,
+        "instance_quota_release_outbox": 0,
+        "vm_operations": 0
+      },
+      "read_only": true,
+      "target_database": "ani_resource_instance"
+    },
+    "governance": {
+      "pending_counts": {
+        "quota_dispatch_pending": 0
+      },
+      "read_only": true,
+      "target_database": "ani_governance"
+    },
+    "network": {
+      "pending_counts": {
+        "network_default_vpc_egress_operations": 0,
+        "network_operations": 0,
+        "network_platform_operations": 0,
+        "network_virtual_switch_operations": 0
+      },
+      "read_only": true,
+      "target_database": "ani_resource_network"
+    }
+  },
+  "phase": "complete",
+  "plan_sha256": "446820077c96e5f11cc7ff969ab97096d560bb54873888414de7ee7b06fc488e",
+  "production_guest_key_and_all_other_config_data_preserved": true,
+  "resource": {
+    "deployment_uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+    "image_id": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service@sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+    "pod_name": "ani-resource-service-5878d6cd95-mhp7w",
+    "pod_uid": "f98a17b8-7412-4251-91b9-90c575a62785",
+    "ready_replicas": 1,
+    "resource_version": "64214069",
+    "template_sha256": "2ee257bb897b84ca0b92cc1627e646d92c4f276c60459db5c816c922f547c06d"
+  },
+  "resource_config_delivery": {
+    "all_Media_sources_unchanged": true,
+    "new_pod_init_complete": true,
+    "original_config_bytes_restored": true,
+    "production_guest_key_unchanged": true,
+    "runtime_shell_probe": false
+  },
+  "result": "PASS_GOV_CREATE_CLOSED_TASK_NETWORK_WITHDRAWN_ORIGINAL_RESOURCE_SPEC_READY",
+  "runner_sha256": "649a582ae125660d076c1acafe5c29a75ce2c194305329af5107c1aa765ed578",
+  "secret_values_or_value_hashes_public": false,
+  "selection_sha256": "69be6a996f61726508adc0bab6e8d5a7da93057ede81a78cf62c9be2502d0b0d",
+  "sessions_after": {
+    "active": 0,
+    "lease_count": 0,
+    "no_clear_or_renewal": true,
+    "redis_database": 15
+  },
+  "sessions_before_Gov": {
+    "active": 0,
+    "lease_count": 0,
+    "no_clear_or_renewal": true,
+    "redis_database": 15
+  },
+  "sessions_before_network_withdrawal": {
+    "active": 0,
+    "lease_count": 0,
+    "no_clear_or_renewal": true,
+    "redis_database": 15
+  },
+  "started_at": "2026-10-24T22:36:31.918374+00:00",
+  "tests_builds": 0,
+  "windows_after": {
+    "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "native_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "prior_product_version": 18,
+    "spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "task_login_posts": 0,
+    "task_product_HTTP_GETs": 0,
+    "version_basis": "pinned actual V24 cleanup receipt; no fresh productAPI claim"
+  },
+  "windows_before": {
+    "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "native_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "prior_product_version": 18,
+    "spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "task_login_posts": 0,
+    "task_product_HTTP_GETs": 0,
+    "version_basis": "pinned actual V24 cleanup receipt; no fresh productAPI claim"
+  }
+}

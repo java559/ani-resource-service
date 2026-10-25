@@ -1,0 +1,48 @@
+{
+  "result": "PASS_EXISTING_ADMINISTRATOR_LOGIN_AND_ROOT_MARKER_READ_ONLY_QGA_HASH_TEXT_PENDING",
+  "recorded_at": "2026-10-25T05:58:26Z",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "product_version": 22,
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "browser": "2",
+  "tab": "1",
+  "identity_observed": "Administrator",
+  "normal_builtin_console_opened": true,
+  "root_marker": {
+    "path": "C:\\vm-mvp-01a168ce-root.marker",
+    "actual_read_command": "type C:\\vm-mvp-01a168ce-root.marker",
+    "actual_body": "VM_MVP_WINDOWS_ROOT_A_01a168ce",
+    "matches_original_A_text": true,
+    "hash_remeasured_this_session": false,
+    "marker_writes": 0
+  },
+  "qga_source_file": {
+    "path": "D:\\guest-agent\\qemu-ga-x86_64.msi",
+    "volume_label_observed": "virtio-win-0.1.271",
+    "bytes": 11770368,
+    "actual_read_command": "dir D:\\guest-agent\\qemu-ga-x86_64.msi & certutil -hashfile D:\\guest-agent\\qemu-ga-x86_64.msi SHA256",
+    "certutil_completed_successfully": true,
+    "sha256_text": null,
+    "sha256_text_status": "Full hash is visibly preserved in screenshot but has not been accurately transcribed; not yet accepted as an exact hash comparison",
+    "installed_this_session": false
+  },
+  "last_input_before_natural_disconnect": {
+    "command": "powershell -NoProfile -Command \"$h=(Get-FileHash 'D:\\guest-agent\\qemu-ga-x86_64.msi').Hash;0,16,32,48|%{$h.Substring($_,16)}\"",
+    "browser_send_progress": "125/125",
+    "enter_sent": false,
+    "guest_echo_complete_verified": false,
+    "resume_rule": "Inspect the existing Guest command line before any new input or Enter; never blindly resend or submit"
+  },
+  "proofs": [
+    {"path": "browser-qga-sha256-01.jpg", "sha256": "7978d56e1433fb7e6069a43e785f0c942c0da19e2ebe484dd84e4b933050936d"},
+    {"path": "browser-session-expired-01.jpg", "sha256": "6f4fb759c97c2358b60e97e5709e5d5c4f01c0fbd1810b5cc735093b44b60aab"}
+  ],
+  "session_end": "Natural VNC session expiry observed; Disconnect/CAD/ASCII controls disabled. Independent SG active0/lease0 still required before service or power work",
+  "new_credentials_entered": 0,
+  "guest_installers_run": 0,
+  "guest_disk_state_changes": 0,
+  "guest_marker_writes": 0,
+  "business_power_mutations": 0,
+  "human_final_acceptance": "PENDING_USER_FEEDBACK",
+  "performance_cause": "NOT_PROVEN"
+}

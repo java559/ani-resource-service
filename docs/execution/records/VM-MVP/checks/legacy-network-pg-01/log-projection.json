@@ -1,0 +1,7 @@
+{
+  "private_raw_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/legacy-network-pg-oci/tests.jsonl",
+  "raw_sha256": "8c442f1a5069727b9fb73ba0e48b890f405b7ebc72b9e3c01eed45970dfb47ed",
+  "public_log_sha256": "4ca62a99cf5dad4adf2e0fcff25c801c8aad28b1b719afd9a2b2d4af816c93ba",
+  "source_result": "executed-oci.json",
+  "only_public_named_test_and_fixture_lines": true
+}

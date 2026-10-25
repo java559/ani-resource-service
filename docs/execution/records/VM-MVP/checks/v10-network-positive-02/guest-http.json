@@ -1,0 +1,35 @@
+{
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "result": "STOPPED_RETAIN_ORIGINAL_ATTEMPT_NO_RETRY",
+  "runner_sha256": "e7d6b4df400b15e14da54219fac9601d556c5577724b96fef88a761c9b8e6848",
+  "inventory_sha256": "bf1390674a4af76a5dc9a85524bedd4fcdfe767be11db1dab01fc32d6b7f4b29",
+  "root_release_sha256": "1b73e09c3cf2ab31b7d0cff9623031ed97ebd4708b4669770f67d1fae4dca702",
+  "started_at": "2026-10-24T23:31:21.803971+00:00",
+  "api_calls": 0,
+  "cluster_writes": 0,
+  "public_dns_office_requests": 0,
+  "server_lifetime_seconds": 180,
+  "secret_values_or_value_hashes_public": false,
+  "guests": {},
+  "servers": {},
+  "requests": {},
+  "cleanup": {
+    "a": {
+      "process_gone": true,
+      "directory_gone": true,
+      "server_not_attempted": true
+    }
+  },
+  "logout": {
+    "a": {
+      "login_attempts": 1,
+      "confirmed": false
+    }
+  },
+  "error_class": "TIMEOUT",
+  "message": "bounded stage raised TIMEOUT",
+  "cleanup_confirmed": false,
+  "logout_confirmed": false,
+  "finished_at": "2026-10-24T23:31:52.048916+00:00",
+  "heavy_lock_released": true
+}

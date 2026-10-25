@@ -1,0 +1,35 @@
+Usage of /ani-resource-service:
+  -base-connectivity string
+    	admin mode: plan, status, resume, pause, dispatch, rollout, enable-new, disable-new, activate-legacy
+  -base-interval duration
+    	shared minimum admission interval (100ms..1h), fixed at planning (default 1s)
+  -base-max int
+    	maximum candidates processed by dispatch (1..10000); accepted operations continue on service workers (default 1)
+  -base-pool string
+    	Intranet pool ID for a new plan; empty freezes the current default
+  -base-reviewed-sha256 string
+    	exact reviewed plan SHA-256 required for resume
+  -base-run string
+    	stable reviewed backfill run UUID
+  -compute-restore
+    	restore pre-compute metadata with all readers stopped using explicit owner secret file
+  -conf string
+    	config path, for example -conf configs/config.yaml (default "configs")
+  -image-admin string
+    	run one controlled Image operator action
+  -image-admin-input string
+    	private JSON input file; empty reads stdin
+  -image-migrate
+    	apply Image migrations using explicit owner secret file
+  -image-operator-config string
+    	private operator identity and output directory JSON file
+  -image-secret-output string
+    	new private credential output file inside the operator output directory
+  -instance-migrate
+    	apply Instance migrations using explicit owner secret file
+  -migrate
+    	apply Network migrations using explicit owner environment
+  -node-facts
+    	run the separately authorized read-only node facts collector
+  -vm-migrate
+    	apply VM migrations using explicit owner secret file

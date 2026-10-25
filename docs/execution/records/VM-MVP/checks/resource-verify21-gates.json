@@ -1,0 +1,1240 @@
+{
+  "started_at": "2026-10-24T01:16:26.312237+00:00",
+  "host": "ssh fedora",
+  "source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-boundaries-20",
+  "source_manifest": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-boundaries20-source-manifest.json",
+  "source_manifest_sha256": "914ffbba538b233ebe4e62b7038b14ded588ec58383dc845a0bc126a570ffe47",
+  "file_count": 756,
+  "deployed_source": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-19",
+  "deployed_source_manifest_sha256": "596d4c7add64d72b6c5432107cb12e67192b212c6fc1fc4276f54ed4b07dea6f",
+  "source_overlay": "only approved verify-boundaries script; no business source difference",
+  "workspace": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-boundaries-20/go.work",
+  "workspace_sha256": "149a54a8718688cb889fff4a1739a776355b690307407b2a80ca1dc2a5109aa4",
+  "ordinary_source_checks_only": true,
+  "formal_make_verify": "NOT_PASSED: strict tidy unresolved unpublished console child module; all independent development-source steps passed or reused; no formal clean-checkout claim",
+  "no_pg_env_or_tags": true,
+  "no_runtime_or_cluster_mutation": true,
+  "commands": [
+    {
+      "gate": "pinned-tools",
+      "command": [
+        "make",
+        "check-buf",
+        "check-sqlc",
+        "TOOLS_DIR=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin",
+        "GO=go"
+      ],
+      "timeout_seconds": 30,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-pinned-tools.log",
+      "exit_code": 0,
+      "seconds": 0.773,
+      "result": "PASS"
+    },
+    {
+      "gate": "deterministic-source",
+      "command": [
+        "./scripts/verify-source",
+        "/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf",
+        "/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/sqlc"
+      ],
+      "timeout_seconds": 180,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-deterministic-source.log",
+      "exit_code": 0,
+      "seconds": 14.388,
+      "result": "PASS"
+    },
+    {
+      "gate": "strict-tidy-diff",
+      "command": [
+        "go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "timeout_seconds": 45,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-strict-tidy-diff.log",
+      "exit_code": 1,
+      "seconds": 0.466,
+      "result": "FAIL"
+    },
+    {
+      "gate": "network-fault-build",
+      "command": [
+        "./scripts/net05a-build-faults.py",
+        "--network-only"
+      ],
+      "timeout_seconds": 120,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-network-fault-build.log",
+      "exit_code": 0,
+      "seconds": 19.77,
+      "result": "PASS"
+    },
+    {
+      "gate": "package-inventory",
+      "command": [
+        "go",
+        "list",
+        "-f",
+        "{{.ImportPath}}",
+        "./..."
+      ],
+      "timeout_seconds": 30,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-package-inventory.log",
+      "exit_code": 0,
+      "seconds": 0.368,
+      "result": "PASS"
+    },
+    {
+      "gate": "remaining-unit",
+      "command": [
+        "go",
+        "test",
+        "-json",
+        "-count=1",
+        "-timeout=3m",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/server",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/image-smoke-runtime",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/vpc-read-probe",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/relay",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/rpc",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/runtime",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
+      ],
+      "timeout_seconds": 180,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-remaining-unit.log",
+      "exit_code": 1,
+      "seconds": 42.8,
+      "result": "FAIL"
+    },
+    {
+      "gate": "remaining-vet",
+      "command": [
+        "go",
+        "vet",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/server",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network",
+        "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/compute",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/image",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance",
+        "github.com/zhangzhe-ctrl/ani-resource-service/migrations/vm",
+        "github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/image-smoke-runtime",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api",
+        "github.com/zhangzhe-ctrl/ani-resource-service/scripts/vpc-read-probe",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/relay",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/rpc",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/runtime",
+        "github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
+      ],
+      "timeout_seconds": 90,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-remaining-vet.log",
+      "exit_code": 0,
+      "seconds": 4.36,
+      "result": "PASS"
+    },
+    {
+      "gate": "all-package-trimpath-build",
+      "command": [
+        "go",
+        "build",
+        "-trimpath",
+        "./..."
+      ],
+      "timeout_seconds": 120,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-all-package-trimpath-build.log",
+      "exit_code": 0,
+      "seconds": 19.313,
+      "result": "PASS"
+    }
+  ],
+  "reused_pass": [
+    {
+      "gate": "data-vm full normal test, all manifest Go format, go mod verify",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-input19-remaining-gates.json"
+    },
+    {
+      "gate": "boundaries real packages and fixture self-test",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-boundaries20-gates.json"
+    },
+    {
+      "gate": "data-vm vet and business binary build",
+      "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-input19-build.json"
+    }
+  ],
+  "package_inventory": {
+    "all": [
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/server",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/image-smoke-runtime",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/vpc-read-probe",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/relay",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/rpc",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/runtime",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
+    ],
+    "ordinary_test_and_vet_reused_packages": [
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm"
+    ],
+    "missing_packages_tested_now": [
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/compute/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/image/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/instance/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/server",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network",
+      "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/compute",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/image",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/instance",
+      "github.com/zhangzhe-ctrl/ani-resource-service/migrations/vm",
+      "github.com/zhangzhe-ctrl/ani-resource-service/pkg/instanceconfig",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/image-smoke-runtime",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api",
+      "github.com/zhangzhe-ctrl/ani-resource-service/scripts/vpc-read-probe",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/relay",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05/rpc",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/net05a/provider",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/runtime",
+      "github.com/zhangzhe-ctrl/ani-resource-service/tests/testenv"
+    ]
+  },
+  "source_manifest_unchanged_after": true,
+  "workspace_unchanged_after": true,
+  "finished_at": "2026-10-24T01:18:08.710659+00:00",
+  "result": "PARTIAL",
+  "ordinary_unit_summary": {
+    "passed_packages": 24,
+    "failed_tests": [
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/scripts/lb-api",
+        "test": "TestSocketRequiresPrivateDirectoryAndPreservesExistingPath"
+      }
+    ],
+    "skipped_tests": [
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+        "test": "TestBuildAppRunsProductionComposition"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+        "test": "TestFullInstanceModeRequiresRealImageRuntime"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service",
+        "test": "TestMainProcessHandlesSignalAndClosesListeners"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentFinishesFreshAuditAfterConsecutiveWatchBoundaries"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPermanentIdentityTenantScopeAndParentDeletion"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentConfirmRecoveryReleaseAndResidualUIDs"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/0"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/1"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/2"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/3"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/4"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPrepareRacesDeleteSubnet/5"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentLateAfterSubnetDeletedProtectsCIDRAndVPC"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPodReadsUseTrustedTenantNamespace/single_pod"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestAttachmentPodReadsUseTrustedTenantNamespace/controller_managed"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/v1"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/v1beta1"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/unknown-version"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/wrong-group"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/wrong-kind"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/wrong-uid"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGNotebookServedOwnerAliases/not-controller"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGProtocolRecoveryRequiresFrozenSnapshotAndConfirm"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGProtocolRecoveryFencesConcurrentConfirmAndClosing"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGStopStartRevisionAndFinalClosure"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGWaitsForUnknownCandidateAndRejectsForgedOwner"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGHistoricalAddressAndNicCleanupFence"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestManagedAttachmentPGFullStopIgnoresSiblingServiceRenewals"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVMAttachmentPGReplayStopAndRelease"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVMBlockedAttachmentPGClosesWithFrozenHistoricalNADAndFreshAbsence"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressRefreshesInvalidAuditWithoutLosingAppliedFacts"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBRefreshesInvalidAuditAndStillRejectsReusedBackendIdentity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillCLIProcessRestartKeepsReviewedPlanAndSingleAdmission"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillReviewedSnapshotPoolPinningRatePauseAndConnectionRecovery"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillClosedPoolRollsBackAndResumesSameIntent"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillRejectsChangedProviderIdentityAndRacesDeletion/changed_identity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillRejectsChangedProviderIdentityAndRacesDeletion/delete_competition"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillLegacyAggregationRequiresAllFreshDependencies"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseAdmissionRequiresDefaultWithoutLeavingAnAcceptedIntent"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConcurrentWorkersDoNotAllocateTwiceOrLoseDeletionFences"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseBackfillRechecksFreshnessAfterPlatformLockWait"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityActualAdapterLifecycleObservationAndPureReads"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityTerminationBeforeAnyProviderCreate"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityPinsPoolAndChildrenAcrossRetryAndDefaultSwitch"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityInitialSnatPendingKeepsCreateOpenThenWorkerRecovers"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityServiceProcessesRecoverCriticalDurableBoundaries"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityFreshRuntimeRecoversPerResourceUnknownCreate/vpcs_POST_success_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityFreshRuntimeRecoversPerResourceUnknownCreate/eips_POST_success_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityFreshRuntimeRecoversPerResourceUnknownCreate/snats_POST_success_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityFreshRuntimeRecoversLateDeleteResponseLoss/eips_DELETE_success_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseConnectivityFreshRuntimeRecoversLateDeleteResponseLoss/vpcs_DELETE_success_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaEmptyMigrationAndRuntimeRole"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaLegacyPublicUpgradePreservesDurableFactsAndReplay"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaUnknownPublicProvenanceStopsWholeUpgrade"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaOneIntranetOnePublicAndSamePurposeContention"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaSnatAndLBClaimContentionBothWinnerOrders/snat-first-true"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaSnatAndLBClaimContentionBothWinnerOrders/snat-first-false"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaTypedTenantPlacementAndVIPConstraints"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestBaseSchemaIntranetPurposeContention"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestDefaultVPCEgressKCRealBusinessLifecycle"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestDefaultVPCEgressKCLostCreateResponseRecoversSameIdentity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestDefaultVPCEgressKCUnknownUndeliveredCreateRetainsReservation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestDefaultVPCEgressKCExactIdentityAndStaleLease"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLegacyDeviceRetirementFencesUnknownAdoptionAndReplays"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLegacyDeviceRetirementRejectsActiveProductVlan"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressFinishesFreshAuditAfterConsecutiveWatchBoundaries"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCDeviceAdoptionPartialFactsAndUntaggedVlan"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCPreManagedDeviceRegistrationAndUntaggedVlan"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCPreManagedRegistrationFencesConfigurationChanges/config_replaced"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCPreManagedRegistrationFencesConfigurationChanges/device_removed"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCPreManagedRegistrationFencesConfigurationChanges/unrelated_annotation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCManagedVlanWithAuditLongerThanRefreshInterval"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCManagedVlanProgressesWhileFactsAreRenewed"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCDeviceFactsCompletedDuringReadAreFresh"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressGRPCContractAuthorizationAndNullableAppliedState"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressPostgresLifecycleIsolationAndPermanentReplay"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressConcurrentBindingAndAcceptanceRollback"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressUnknownCreateRecoveryAndFencing"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressUnderlayPlatformOccupancyAndRetirement"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressUnknownUpdateKeepsOccupancyAndRecoversExactDesiredState"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressKCAdapterSharedObservationLifecycleAndDrift"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressServiceProcessesRecoverLostCreateDeleteAndTombstone"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPublicTenantInterfacesHideSystemResourcesAndPreserveBaseIdentity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPublicBindAndEnableRequireFreshBaseButDisableCanProceed"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEIPUnifiedClaimProjectionForReservedAndBoundLB"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestUnknownPOSTRemainsBlockedUntilTheActualLateRequestAppears"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLeaseExpiryRejectsOldEpochWritesAndRecoversPendingIdentity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestConcurrentAcceptanceAndWorkersUseTheSameDatabaseAuthority"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPureQueriesExposeStaleObservationAndKeepSuccessfulOperationHistory"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestGRPCExposesTenantScopedNetworkContractAndStableErrors"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestKCAdapterExecutesTheVPCContractThroughHTTP"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AWatchStatusReconnectAndUnappliedEvidence"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AInitialForbiddenThrottledWatchDoesNotInventFreshness/403"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AInitialForbiddenThrottledWatchDoesNotInventFreshness/429"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AAttachmentUsesSharedIndexedAuditAndRetainsOrphan"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AReleaseAuditMustStartAfterOwnerClosureResponse/false"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AReleaseAuditMustStartAfterOwnerClosureResponse/true"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ACriticalAuditFollowsCollectionStartedBeforeItsBoundary"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AOldPaginatedListCannotOverwriteNewWatchFact"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ASilentWatchAndReplicaWithOlderAuditCannotRegress"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05APostgresOutageAndLostMemoryHintsRestartDurableIntents"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBFinishesFreshAuditAfterConsecutiveWatchBoundaries/public_private"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCListTotalAcrossPagesAndFilters"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetListTotalAcrossPagesAndParents"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestEgressListTotalsAndInventoryAuthorization"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLoadBalancerListTotalAcrossPagesAndFilters"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityUsesSharedAuditAndKeepsVPCIndependent"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityImportedRuntimeImagesAndInstallDefaults/valid"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityImportedRuntimeImagesAndInstallDefaults/wrong-image"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityImportedRuntimeImagesAndInstallDefaults/missing-owner-chain"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityImportedRuntimeImagesAndInstallDefaults/small-cpu-reduced"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBCapabilityImportedRuntimeImagesAndInstallDefaults/private-service-default"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBPinsExistingAddressesAcrossBothDefaultPoolSwitchesAndClosure"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBAndPublicBindingCoexistWithBackfillPauseResumeAndDeleteRace"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBConcurrentSNATClaimBothArrivalOrders/lb"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBConcurrentSNATClaimBothArrivalOrders/snat"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBConcurrentVIPAndEntryDeletion/vip"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBConcurrentVIPAndEntryDeletion/entry-delete"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBNewRelationsRejectCrossTenantSQLAndAPI"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBUpdateContendsWithParentDeletionInBothOrders/vpc/update-first"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBUpdateContendsWithParentDeletionInBothOrders/vpc/delete-first"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBUpdateContendsWithParentDeletionInBothOrders/entry-subnet/update-first"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBUpdateContendsWithParentDeletionInBothOrders/entry-subnet/delete-first"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBRejectsSystemIntranetEIPWithoutChangingBaseClaim"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredDatabaseAdmissionReplayOfflineAndDeletion"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredDatabaseAdmissionRollsBackWholeReceipt"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredUnknownCreateCannotUseDatabaseDeletionShortcut"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredMixedDatabaseEditPreservesRuntimeFaultAndProjection"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredSchemaProviderTargetAndImmutableRetirement"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredWaitingWakeParksWithoutProviderObservation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredRetiredProductDeletionIgnoresSubsequentExternalVIPAllocation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredActualAdapterLifecycleRestartAndReactivation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredFirstActivationThenProductDelete"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredRedirectWaitsForPreferred443AndWithdrawsWithTarget"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredUpgradeBackfillsOnlyAcceptedConfigurations"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBBackendObservationUsesCurrentDatabaseTime"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterDeletePartialCreationWithoutGeneratedService/backend"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterDeletePartialCreationWithoutGeneratedService/gateway"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterThreeExposuresUpdateAndDelete/private/small"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterThreeExposuresUpdateAndDelete/private/medium"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterThreeExposuresUpdateAndDelete/private/large"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterThreeExposuresUpdateAndDelete/public/small"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterThreeExposuresUpdateAndDelete/public_private/small"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterIdentityLossRemovesRouteAndRetainsAppliedVersion"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterFinalizerAndNeverSentDelete/true"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBActualAdapterFinalizerAndNeverSentDelete/false"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBMultipleListenersMainFlow"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBListenerParametersMainFlow"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/service"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/foreign-namespace"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/nat"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/snat"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/service-uid"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBForeignOccupantsAndUIDReplacementRemainConflicts/bound-vpc-namespace"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBInvalidMemberWithdrawsDespiteGeneratedOwnershipConflict"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBServiceProcessesRecoverUnknownMutationsWithTwoWorkers"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBDeferredFirstGatewayResponseLossBlocksDeleteUntilOriginalVisible"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBComponentsRecoverResponseLossWithFreshWorkers/backend_POST_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBComponentsRecoverResponseLossWithFreshWorkers/policy_POST_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBComponentsRecoverResponseLossWithFreshWorkers/route_UPDATE_response_lost"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBSchemaFrom0006PreservesAllOldColumnsAndDormantReservations"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBListenersUpgradeFrom0008AndReplay"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBUpdateRetainsRemovedSubnetUntilRouteAndBackendCleanup"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBAdmissionAtomicIdentityReplayAndParentOccupancy"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestLBAdmissionRejectsCIDROnlyBackendAndDuplicateVIP"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNetworkMigrationReplayPreservesLedgerAndRestoresRuntimeGrants"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ACapacity"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ANotificationsDuringLeasePreservePendingAndPublicVersion/before_claim"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ANotificationsDuringLeasePreservePendingAndPublicVersion/during_observe"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ANotificationsDuringLeasePreservePendingAndPublicVersion/before_finish"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05ANotificationsDuringLeasePreservePendingAndPublicVersion/after_finish"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AStormCannotBypassBackoffOrCrossTenant"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AOldCacheAfterNewClaimCannotRegressOrCompleteNotification"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AAttachmentNotificationDuringClaimPreservesLeaseAndWake"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AFairDueClaimsAcrossKindsTenantsAndParents"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05AMigrationUpgradesAllThreeHistoricalChecksums"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestIntranetPlatformScopesDefaultsAllocationAndIndependentCapabilities"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestIntranetKCPlatformActualAdapterObservationAndRecovery"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCAcceptanceIsTenantScopedAndReplaysExactly"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCPagesRemainScopedAndCursorCannotChangeFilters"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPostgresRejectsPartialAcceptanceAndCrossTenantReferences"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestRuntimeRoleCannotOwnOrElevateIntoSchemaOwner"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestServiceProcessesRecoverT1AndProviderSuccessWithoutCaller"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestConfirmedProviderRejectionFailsCreationButKeepsDeletionRecoverable"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestActualAdapterBlocksWrongOwnerChangedUIDAndUnexpectedChildren/foreign-owner"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestActualAdapterBlocksWrongOwnerChangedUIDAndUnexpectedChildren/changed-uid"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestActualAdapterBlocksWrongOwnerChangedUIDAndUnexpectedChildren/status-children"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestActualAdapterBlocksWrongOwnerChangedUIDAndUnexpectedChildren/unreported-children"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestProviderOutageAndStaleGenerationCannotBecomeAvailable"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestResourceOldClientSchemaCompatibleSameDatabaseRollback"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNET05OldestSubnetWorkIsNotStarvedByDueVPCObservation"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetConcurrentPermanentIdempotencyAndDeletion"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetAddressRaceAndParentDeletionRace"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetTargetConstraintsAndPagination"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetUnknownCreateRetainsCIDRAndRejectsOldLeaseWrites"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetStaleParentRejectsNewIntentButNotPersistentReplay"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetKCContractAndResidualReferencesBlockCleanup"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetKCIPRangesDetailsAndFences"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetProcessesRecoverProviderSuccessAndUnknownDeletion"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetMigrationUpgradesNET01WithoutChangingDurableFacts"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestSubnetIPRangesMigrationPreservesUnknownOldRows"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVirtualSwitchDurableTwoStepAcceptanceAndRecovery"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVirtualSwitchDeleteWaitsForOldClaimLeaseExpiry"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVirtualSwitchScopePagingAndAtomicConcurrentVlan"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetAcceptsFactsRenewedDuringRead"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetUnknownAndExpiredFacts"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetContendsWithPlatformPool"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetsMainFlow"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetsUseTrustedSystemReadScope/configmaps"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCCIDRPresetsUseTrustedSystemReadScope/pods"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCPageRandomAccessAndScope"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestVPCPageCountAndListShareSnapshot"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestKCPlatformShutdownBeforePostPersistsNoWriteOutcome"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPlatformCancellationPreservesDefinitiveMutationOutcome/definitive_pre_send_failure"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPlatformCancellationPreservesDefinitiveMutationOutcome/uncertain_send_remains_pending"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestPlatformCancellationPreservesDefinitiveMutationOutcome/expired_lease_cannot_clear_pending"
+      },
+      {
+        "package": "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network",
+        "test": "TestNetworkWorkerOwnsVPCCreationAndConfirmedDeletion"
+      }
+    ]
+  },
+  "socket_environment_recovery": {
+    "basis_prior_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/provider-console-02.json",
+    "basis_prior_receipt_sha256": "e759b8313ae7c53f18239ca90cce1396f3ebef5a7b241cb5a5e8dee98247e9e5",
+    "original_environment_tmpdir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tmp",
+    "original_failure": {
+      "package": "scripts/lb-api",
+      "test": "TestSocketRequiresPrivateDirectoryAndPreservesExistingPath",
+      "location": "scripts/lb-api/main_test.go:70",
+      "message": "cannot create isolated socket",
+      "retained_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-remaining-unit.log"
+    },
+    "native_same_test_path_pattern_proof": {
+      "result": "BIND_REJECTED",
+      "bytes": 159,
+      "error": "AF_UNIX path too long",
+      "errno": null
+    },
+    "short_tmpdir": {
+      "path": "/tmp/arv21-54f8fdql",
+      "owner_uid": 1000,
+      "device": 38,
+      "inode": 1976864,
+      "mode": "0700",
+      "removed": true
+    },
+    "source_files_modified": false,
+    "command": [
+      "go",
+      "test",
+      "-count=1",
+      "-timeout=45s",
+      "./scripts/lb-api"
+    ],
+    "exit_code": 0,
+    "result": "PASS",
+    "seconds": 1.722,
+    "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-verify21-lb-api-short-tmp.log",
+    "source_unchanged_after": true
+  },
+  "ordinary_unit_coverage_result": "PASS_COMBINED: all other package tests plus reused same-source data/vm full tests plus lb-api short-TMPDIR package; original Unix path failure retained"
+}

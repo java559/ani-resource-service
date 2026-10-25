@@ -1,0 +1,33 @@
+{
+  "result": "D3_ONLINE_READONLY_CONFIRMED_MOUNT_READBACK_SENT_NOT_YET_OBSERVED",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vm_version": "18",
+  "native_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+  "marker_writes": 0,
+  "format_or_initialize": 0,
+  "root_a_fulltext_sha": "PASS",
+  "d4_a_fulltext_sha": "PASS",
+  "d3_initial_direct_read": "ERROR_FILE_NOT_FOUND_T_NOT_MOUNTED",
+  "d3_actual_number": 1,
+  "d3_actual_serial": "89317f20-5600-510a-bc65-e40402c83abb",
+  "d3_actual_size": 3221225472,
+  "d3_actual_partition_style": "GPT",
+  "d3_initial_is_offline": true,
+  "d3_initial_is_readonly": true,
+  "d3_online_only_command_sent_once": true,
+  "d3_after_online_is_offline": false,
+  "d3_after_online_is_readonly": true,
+  "d3_after_online_basic_partition_number": 2,
+  "d3_after_online_drive_letter": "UNASSIGNED",
+  "mount_command_sent_once": true,
+  "mount_result": "NOT_YET_OBSERVED_DO_NOT_RESEND",
+  "commands_sha256": {
+    "windows-readback-cmd-command.txt": "e7b68e3590eb907551e2b40b50156b55e43afa19fe6c59cecb4c91cf8c589fdd",
+    "windows-d3-online-readonly-command.txt": "15cfa7d64c6a0ce515d27fd845751641986af99ced40bc66ac2d395fb697e12f",
+    "windows-d3-mount-readonly-command.txt": "f56583187ef0b899567890a69ceb1c2dfcbc413687288cd1a0d80d70b3c91cad"
+  },
+  "vnc_during_online_command": "Session naturally expired; normal SG same-scope renewal and normal Gov login; observe existing result, no command replay",
+  "current_sg_pid": 406110,
+  "current_sg_startticks": 75879667,
+  "next_business_stage": "NOT_RELEASED; require actual three-A contents and remaining CSI/flush guards"
+}

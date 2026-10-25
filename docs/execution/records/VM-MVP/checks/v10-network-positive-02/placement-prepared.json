@@ -1,0 +1,36 @@
+{
+  "authorization": "Root Goal4 task-exclusive native VM/VMI probe: only original pair b test placement; no product placement API or shared policy change",
+  "expected_version": "1",
+  "member": "b",
+  "native_vm_uid": "bfc129c7-c7fa-408f-963e-68c28c7f24eb",
+  "node_selector": {
+    "kubernetes.io/hostname": "ani-01"
+  },
+  "old_vmi_uid": "cf007080-6b6d-4375-b294-fdbfe775b225",
+  "original_native_inventory_sha256": "53de73d6884bfe562d9f67cbee6277e97d3fad7dac49a72b6af0d02be44b0db1",
+  "original_prepared_sha256": "d876c2bd7a6776edd79b4c5243c026aca07e93931c788c47a7ff8c31c3259907",
+  "phases": [
+    "patch",
+    "restart",
+    "observe"
+  ],
+  "preserved": "Original scripts/plans/same-node inventory and receipts; original b rootPVC/PV/CSI and spec except the selector; a/Windows5PVC/source/NAD; task Resource/Gov/SG and all shared services. No Guest/DNS/public actions.",
+  "restart_key": "46e5c829-fe28-5efe-8ea5-690327196e03",
+  "restart_route": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/restart",
+  "result": "PREPARED_NOT_EXECUTED_PLACEMENT_AND_RESTART_PENDING",
+  "scheduling_receipt_sha256": "8e5eefb2d056f61a8287f1ee86cf45900d83cdf5c2192e483e268a488a3da5e3",
+  "sources": {
+    "body": "api/protos/vm/service/v1/vm.proto:15-21",
+    "gov_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+    "native_restart": "internal/data/vm/native.go:453-457",
+    "resource_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+    "route": "api/protos/admin/service/v1/i_vm.proto:15"
+  },
+  "target_node": {
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "unknown_policy": "Persist before each single mutation; never repeat patch/Restart after attempted send. Observe only persisted original operation ID. Unknown without ACK stops for original-intent investigation.",
+  "vm_id": "e43cf28a-ca4e-4115-af66-a14332c827cf"
+}

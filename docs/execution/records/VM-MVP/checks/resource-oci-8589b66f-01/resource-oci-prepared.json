@@ -1,0 +1,209 @@
+{
+  "applicable_rules": [
+    "commit AGENTS.md",
+    "commit docs/remote-execution.md; explicit VM Goal overrides historical Ubuntu/local fallback",
+    "fixed commit .github/workflows/ci.yml source make verify; its image job is domain integration testing, not OCI packaging"
+  ],
+  "base": {
+    "cache_read_only_inspection": "PASS; docker29.7.2/buildx0.36.1/skopeo present",
+    "cached_id": "sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "image_pulls": 0,
+    "platform": "linux/amd64",
+    "ref": "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "system_ca": "/etc/ssl/certs/ca-certificates.crt",
+    "user": "65532:65532"
+  },
+  "execution_host": "ssh fedora only",
+  "existing_packaging_facts": {
+    "NodeFacts_Dockerfile": "collector only, not reused",
+    "formal_service_image_workflow": false,
+    "installer_narrow_search": "No Resource release/Dockerfile found in deployment/ani-replica or kubekey build/release sources; no installer edits",
+    "root_Dockerfile": false
+  },
+  "future_authorized_window": {
+    "budget": "GOMAXPROCS2/GOMEMLIMIT1536MiB/-p2/CGO0; serialized after Console V08 release",
+    "deployments": 0,
+    "estimated_warm_cache_seconds": "30-90; estimate only",
+    "git_mutations": 0,
+    "global_lock": "/home/chabking/workspace/ani-network-service-runs/net05a-heavy.lock",
+    "lock_wait_seconds": 5,
+    "maximum_build_segment_seconds": 180,
+    "not_started": true,
+    "operations": [
+      "verify archive and per-file hashes",
+      "offline Go1.26.10 compile exactly cmd/ani-resource-service, GOWORKoff/GOPROXYoff",
+      "cached-base Docker build with network none/pull false and no config",
+      "network-none/read-only/cap-dropALL nonroot -help only (no business/API/DB access)",
+      "docker image inspect + go version -m + binary SHA; export one local OCI archive via skopeo",
+      "freeze OCI manifest/config/layers digests plus OCI archive SHA and all raw command exit/logs"
+    ],
+    "pushes": 0,
+    "required_release": "Root explicit final business source pin after V08 diagnosis plus Console heavylock release",
+    "service_restarts": 0
+  },
+  "gate_reuse": {
+    "boundary": "Root verified runtime/API/cmd/migrations equal full gate; doc and independently-verified driver-only differences retained. No repeated tests planned.",
+    "commit_correspondence_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-runtime-candidate-01/runtime-local-commit.json",
+    "make_verify": "PASS106.486s on exact783-file runtime source, including true process-exit integration test source; integration/PG not rerun by ordinary verify",
+    "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource-gate.json",
+    "receipt_sha256": "f80e1471ea7a4d2604db04c58eea74097e18e9976d4385c95d34c4b2c5813539"
+  },
+  "oci_archive_sha256": "NOT_BUILT",
+  "oci_digest": "NOT_BUILT",
+  "packaging": {
+    "baked_secrets_or_config": false,
+    "dockerfile_path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/Dockerfile",
+    "dockerfile_sha256": "02e1b41a20448641f799ad93668b9500ac834dc8efaaac48f2851291df560b1f",
+    "dockerignore_sha256": "97549317819ef5d4f8754bb134234a1ef1cb048567f1d389ecd10956579adbd8",
+    "ordinary_runtime_only": "NodeFacts collector mode and external ip/ovs tools are not provided by this minimal service image",
+    "remote_root": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01",
+    "required_runtime_inputs_external": [
+      "-conf /mounted/config/path",
+      "existing service mTLS CA/certificate/private-key file references",
+      "existing PostgreSQL/Redis credentials as configured",
+      "existing Kubernetes credential reference if enabled"
+    ],
+    "tag": "ani-resource-service:vm-mvp-8589b66f1370-01a168ce"
+  },
+  "phase": "PREPARED_FINAL_SOURCE_PIN_REQUIRED_NOT_BUILT",
+  "prepared_at": "2026-10-24T07:03:16.879414+00:00",
+  "prepared_commands_not_executed": [
+    {
+      "argv": [
+        "sha256sum",
+        "source.tar.gz"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01",
+      "expected": "137566539e6f536382f54563782f21de61c2a726be3d73aae88a95b051d27fc5",
+      "stage": "archive_guard"
+    },
+    {
+      "argv": [
+        "tar",
+        "-xzf",
+        "source.tar.gz"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01",
+      "precondition": "source directory absent; payload manifest has exactly538 approved committed files, no private inputs",
+      "stage": "extract_isolated"
+    },
+    {
+      "action": "create own empty context directory; copy prepared Dockerfile and .dockerignore from reviewed payload; compile output is the only remaining file allowed; no configs/keys/kubeconfig/DSN/images/media/docs are copied",
+      "stage": "prepare_binary_only_context"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-ldflags",
+        "-X main.Name=ani-resource-service -X main.Version=vm-mvp-8589b66f1370-01a168ce",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+        "./cmd/ani-resource-service"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/source",
+      "env": {
+        "CGO_ENABLED": "0",
+        "GOARCH": "amd64",
+        "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+        "GOFLAGS": "-mod=readonly -p=2",
+        "GOMAXPROCS": "2",
+        "GOMEMLIMIT": "1536MiB",
+        "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod",
+        "GOOS": "linux",
+        "GOPROXY": "off",
+        "GOSUMDB": "off",
+        "GOTOOLCHAIN": "local",
+        "GOWORK": "off",
+        "SOURCE_DATE_EPOCH": "1792821364"
+      },
+      "stage": "compile"
+    },
+    {
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--iidfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/image.id",
+        "--tag",
+        "ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+        "--file",
+        "Dockerfile",
+        "."
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context",
+      "precondition": "exact base ref still cached; context only Dockerfile and same-source compiled binary, .dockerignore rejects everything else",
+      "stage": "local_docker_build"
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vm-mvp-resource-image-help-01a168ce",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+        "-help"
+      ],
+      "precondition": "own container name absent; no mounts/env/ports/business access; retain stdout/stderr exit",
+      "stage": "help_only"
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version",
+        "-m",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service"
+      ],
+      "stage": "binary_build_info"
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-resource-service:vm-mvp-8589b66f1370-01a168ce"
+      ],
+      "stage": "local_image_inspect"
+    },
+    {
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar:vm-mvp-8589b66f1370-01a168ce"
+      ],
+      "note": "local Docker daemon→local OCI archive only, no registry push",
+      "stage": "OCI_export"
+    },
+    {
+      "action": "sha256 binary/Dockerfile/source archive/OCI archive; read OCI index.json then selected manifest/config/layers and validate content digests; store tag+ImageID separately from OCI manifest digest; logs/tools/go version/build flags/commit/tree/root approval and no-push/no-deploy scope",
+      "stage": "provenance"
+    }
+  ],
+  "source": {
+    "archive_bytes": 1235826,
+    "archive_path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/source.tar.gz",
+    "archive_sha256": "137566539e6f536382f54563782f21de61c2a726be3d73aae88a95b051d27fc5",
+    "commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+    "excluded": "Git metadata, docs/evidence/scripts/tests/configs/deployments, credentials/private files/caches and every dirty working-tree byte; only exact committed build inputs included",
+    "file_count": 538,
+    "final_source_pin": "WAIT_ROOT:8589b66 is the prepared baseline only; V08 ListSnapshots503 diagnosis may change runtime, so compile/build is blocked until Root freezes final business commit",
+    "git_network_calls": 0,
+    "git_remote": "git@github.com:zhangzhe-ctrl/ani-resource-service.git",
+    "manifest_path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/source-manifest.json",
+    "manifest_sha256": "5e5ab8ee29ab88213b8c8ce9aa318290d1a8dc24f825745ec9770ee48baed98f",
+    "parent": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+    "source_date_epoch": 1792821364,
+    "tree": "e51622e689476c524ddd29776d1b217738822a21"
+  }
+}

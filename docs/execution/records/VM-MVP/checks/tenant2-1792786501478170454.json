@@ -1,0 +1,177 @@
+{
+  "at": "2026-10-23T20:13:35.630781+00:00",
+  "layer": "GUEST",
+  "scope": "fixed actual tenant2 account/NoCloud/DHCP, one fsynced marker and owned guest HTTP loopback",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7"
+  },
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "interfaces": [
+    {
+      "infoSource": "domain",
+      "ipAddress": "10.84.1.2",
+      "ipAddresses": [
+        "10.84.1.2"
+      ],
+      "linkState": "up",
+      "mac": "fa:00:75:19:33:88",
+      "name": "default",
+      "podInterfaceName": "eth0",
+      "queueCount": 1
+    }
+  ],
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "private_credentials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-credentials.json",
+  "private_plan_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-test.json",
+  "driver_sha256": "5cb96cd551ce68bdf8bb6970ce01224a8fe0a504562b90d8a4c3f2225bbec20d",
+  "browser": "NOT_RUN",
+  "cross_tenant_http": "NOT_RUN",
+  "identity": {
+    "username": "aniuser",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "instance_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "firmware_uuid": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "boot_id": "fe087857-bd61-4d76-b892-dbd6b69ba601",
+    "addresses": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "flags": [
+          "LOOPBACK",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 65536,
+        "qdisc": "noqueue",
+        "operstate": "UNKNOWN",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "127.0.0.1",
+            "prefixlen": 8,
+            "scope": "host",
+            "label": "lo",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          },
+          {
+            "family": "inet6",
+            "local": "::1",
+            "prefixlen": 128,
+            "scope": "host",
+            "noprefixroute": true,
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp1s0",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1400,
+        "qdisc": "fq_codel",
+        "operstate": "UP",
+        "group": "default",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "fa:00:75:19:33:88",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "addr_info": [
+          {
+            "family": "inet",
+            "local": "10.84.1.2",
+            "prefixlen": 24,
+            "metric": 100,
+            "broadcast": "10.84.1.255",
+            "scope": "global",
+            "dynamic": true,
+            "label": "enp1s0",
+            "valid_life_time": 86313381,
+            "preferred_life_time": 86313381
+          },
+          {
+            "family": "inet6",
+            "local": "fe80::f800:75ff:fe19:3388",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      }
+    ],
+    "routes": [
+      {
+        "dst": "default",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.0/24",
+        "dev": "enp1s0",
+        "protocol": "kernel",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "scope": "link",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      },
+      {
+        "dst": "10.96.0.3",
+        "gateway": "10.84.1.1",
+        "dev": "enp1s0",
+        "protocol": "dhcp",
+        "prefsrc": "10.84.1.2",
+        "metric": 100,
+        "flags": []
+      }
+    ]
+  },
+  "marker": {
+    "path": "/home/aniuser/vm-mvp-tenant2-marker",
+    "value": "vm-mvp-01a168ce-tenant2-linux-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "created": true,
+    "fsynced_new_file": true,
+    "boot_id": "fe087857-bd61-4d76-b892-dbd6b69ba601"
+  },
+  "result": "FAIL",
+  "error": "Timeout exceeded.\n<pexpect.pty_spawn.spawn object at 0x7f51e7193a10>\ncommand: /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64\nargs: [b'/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/tools/virtctl-v1.9.0-linux-amd64', b'console', b'vm-e3c11c5a-cf12-4630-a8f9-f907048ffdfc', b'--namespace', b'tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316', b'--kubeconfig', b'/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig', b'--timeout=20']\nbuffer (last 100 chars): ' Fri, 23 Oct 2026 20:14:24 +0000. Datasource DataSourceNoCloud [seed=/dev/vdb].  Up 537.30 seconds\\r\\n'\nbefore (last 100 chars): ' Fri, 23 Oct 2026 20:14:24 +0000. Datasource DataSourceNoCloud [seed=/dev/vdb].  Up 537.30 seconds\\r\\n'\nafter: <class 'pexpect.exceptions.TIMEOUT'>\nmatch: None\nmatch_index: None\nexitstatus: None\nflag_eof: False\npid: 1999592\nchild_fd: 7\nclosed: False\ntimeout: 35\ndelimiter: <class 'pexpect.exceptions.EOF'>\nlogfile: None\nlogfile_read: <_io.StringIO object at 0x7f51e71dbac0>\nlogfile_send: None\nmaxread: 2000\nignorecase: False\nsearchwindowsize: None\ndelaybeforesend: 0.05\ndelayafterclose: 0.1\ndelayafterterminate: 0.1\nsearcher: searcher_re:\n    0: re.compile('(?:^|[\\\\r\\\\n])ANI_GUEST2_HTTP=(\\\\{[^\\\\r\\\\n]+\\\\})\\\\r?\\\\n')"
+}

@@ -1,0 +1,34 @@
+{
+  "at": "2026-10-24T11:54:59.363365+00:00",
+  "scope": "ONE_EXACT_PERSISTED_VPC_BINDING_IDENTITY_READ",
+  "sql_business_writes": 0,
+  "api_mutations": 0,
+  "old_cleanup_plan_modified": false,
+  "source_sha256": "caf08ba94cb9f671899945af3e2992a2d94286cd13ea20c746c5631ba51392a5",
+  "database": "vm_resource_candidate_01a168ce",
+  "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+  "select": "SELECT namespace,provider_name,provider_uid,pending_action FROM network_provider_bindings WHERE tenant_id='b3c946b5-7eb3-4feb-9f82-79712062ca5c' AND vpc_id='vpc_e413becb1f4a46468f058e32f33a6305'",
+  "persisted_rows": [
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "provider_name": "vpc-e413becb1f4a46468f058e32f33a6305",
+      "provider_uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+      "pending_action": ""
+    }
+  ],
+  "native_metadata": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vpc-e413becb1f4a46468f058e32f33a6305",
+    "uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+    "labels": {
+      "network.ani.io/binding-id": "63336afd-419c-47ea-8664-70df2957a512",
+      "network.ani.io/managed-by": "ani-network-service",
+      "network.ani.io/resource-id": "vpc_e413becb1f4a46468f058e32f33a6305",
+      "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+    }
+  },
+  "result": "PERSISTED_AND_NATIVE_EXACT_UID_OWNER_MAPPING_MATCH",
+  "pending_action": "",
+  "original_binding_identity_not_replaced": true
+}

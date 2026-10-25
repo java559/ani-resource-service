@@ -1,0 +1,181 @@
+{
+  "at": "2026-10-24T08:24:14.619218+00:00",
+  "phase": "snapshot-native",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved pre-Restore stages only; Restore/Delete remain disabled",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "native": {
+    "snapshot": {
+      "kind": "VirtualMachineSnapshot",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vm-snap-e1083370-757b-5f66-bb5a-81920d78f1d7",
+      "uid": "8bd93f36-8014-4115-b599-0178bc421d94"
+    },
+    "content": {
+      "kind": "VirtualMachineSnapshotContent",
+      "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+      "name": "vmsnapshot-content-8bd93f36-8014-4115-b599-0178bc421d94",
+      "uid": "5aabad84-1b99-473f-bf9f-a1f6dec8f7ab"
+    },
+    "volumes": [
+      {
+        "disk_id": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "volume": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "source_pvc": {
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00"
+        },
+        "vs": {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vmsnapshot-8bd93f36-8014-4115-b599-0178bc421d94-volume-disk-2e1b4214937a5c45b5b00d400a553d4c",
+          "uid": "6f0a55ee-70f8-43fd-8407-ee8e81e665bc"
+        },
+        "vsc": {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-6f0a55ee-70f8-43fd-8407-ee8e81e665bc",
+          "uid": "dc3df232-4a97-45f0-b559-d3204c5a3208"
+        },
+        "snapshot_handle": "0001-0009-rook-ceph-0000000000000004-4f360da8-7cc8-4158-aa79-611dc3e2b497",
+        "class": {
+          "kind": "VolumeSnapshotClass",
+          "namespace": "",
+          "name": "ani-rbd-delete",
+          "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e"
+        }
+      },
+      {
+        "disk_id": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "volume": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+        "source_pvc": {
+          "name": "vd-0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "b2346dad-6e6d-48dc-a449-3788dd8ab024"
+        },
+        "vs": {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vmsnapshot-8bd93f36-8014-4115-b599-0178bc421d94-volume-disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+          "uid": "e59be611-b1dd-4587-8e37-369d3026e16f"
+        },
+        "vsc": {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-e59be611-b1dd-4587-8e37-369d3026e16f",
+          "uid": "f2141af1-ff25-4ef8-981c-a580669cf82e"
+        },
+        "snapshot_handle": "0001-0009-rook-ceph-0000000000000004-5377f78c-b035-485f-8bc4-5f6fbf8fc66a",
+        "class": {
+          "kind": "VolumeSnapshotClass",
+          "namespace": "",
+          "name": "ani-rbd-delete",
+          "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e"
+        }
+      },
+      {
+        "disk_id": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "volume": "disk-54f24010e31a52fab747e15e8acdc5f3",
+        "source_pvc": {
+          "name": "vd-54f24010-e31a-52fa-b747-e15e8acdc5f3",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "uid": "99a775c0-2d3a-4a0f-8c13-9647bb1bf69d"
+        },
+        "vs": {
+          "kind": "VolumeSnapshot",
+          "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+          "name": "vmsnapshot-8bd93f36-8014-4115-b599-0178bc421d94-volume-disk-54f24010e31a52fab747e15e8acdc5f3",
+          "uid": "c7f06ace-2d02-4d27-b721-c148a2a03e89"
+        },
+        "vsc": {
+          "kind": "VolumeSnapshotContent",
+          "namespace": "",
+          "name": "snapcontent-c7f06ace-2d02-4d27-b721-c148a2a03e89",
+          "uid": "b7b831b9-5558-46ee-bb79-343ae5ffee65"
+        },
+        "snapshot_handle": "0001-0009-rook-ceph-0000000000000004-13f2ba6a-b907-46a7-8f5e-cfec92bba8be",
+        "class": {
+          "kind": "VolumeSnapshotClass",
+          "namespace": "",
+          "name": "ani-rbd-delete",
+          "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e"
+        }
+      }
+    ]
+  },
+  "snapshot": {
+    "snapshotId": "e1083370-757b-5f66-bb5a-81920d78f1d7",
+    "sourceVmId": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "sourceVmUid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+    "ready": true,
+    "completeness": "COMPLETE",
+    "included": [
+      "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+      "disk-2e1b4214937a5c45b5b00d400a553d4c",
+      "disk-54f24010e31a52fab747e15e8acdc5f3"
+    ],
+    "excluded": [
+      "guest-initialization"
+    ],
+    "indications": [],
+    "disks": [
+      {
+        "diskId": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "role": "data",
+        "name": "vm-mvp-cleanup-data-a-01a168ce",
+        "sizeGb": "2",
+        "requestedBytes": "2000000000",
+        "observedCapacityBytes": "2147483648",
+        "volumeName": "disk-0e76e6e5dc6e5ecc8ea0d1925fd43bee",
+        "serial": "0e76e6e5-dc6e-5ecc-8ea0-d1925fd43bee",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-2e1b4214937a5c45b5b00d400a553d4c",
+        "serial": "2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "role": "data",
+        "name": "vm-mvp-cleanup-data-b-01a168ce",
+        "sizeGb": "2",
+        "requestedBytes": "2000000000",
+        "observedCapacityBytes": "2147483648",
+        "volumeName": "disk-54f24010e31a52fab747e15e8acdc5f3",
+        "serial": "54f24010-e31a-52fa-b747-e15e8acdc5f3",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "observedAt": "2026-10-24T08:24:03.369500391Z",
+    "reason": ""
+  },
+  "business_mutations": 0
+}
