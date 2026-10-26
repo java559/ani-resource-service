@@ -1,5 +1,5 @@
 {
-  "result": "WAITING_ACTION_TIME_EULA_CONFIRMATION",
+  "result": "WAITING_USER_FIRST_ADMINISTRATOR_PASSWORD",
   "vm_id": "1823315c-e0ae-421a-b76d-e27f97343160",
   "native_vm_uid": "f8e50d20-aab9-4f8b-8fb1-f46dad2b6575",
   "create_operation": "7a966d11-066b-4031-91e8-eb64a8a18d9b",
@@ -11,11 +11,21 @@
     ]
   },
   "edition_selected": "Windows Server 2025 Standard (Desktop Experience)",
-  "license_accepted": false,
+  "license_accepted": true,
+  "license_approval": "Human action-time approval received 2026-10-26; accepted in native VNC",
+  "storage_drivers_loaded": ["E:\\vioscsi\\2k25\\amd64\\vioscsi.inf", "E:\\viostor\\2k25\\amd64\\viostor.inf"],
+  "root_disk_serial": "7eaebbb4-4f04-5cc5-894e-a50e745c8839",
+  "root_disk_bus": "virtio",
+  "installation": "Real task system disk recognized; installation copied files and automatically rebooted to Administrator initial password page",
+  "account_handoff": "Current native VNC shown to user. New password entry, confirmation and submission remain user-only; no credential entered by agent",
+  "explicit_system_disk_boot_api": "NOT_RUN; INSTALL and DRIVER remain attached until normal product transition after account and Guest Agent installation",
+  "qga": "NOT_RUN",
   "product_key_entered": false,
   "azure_pay_as_you_go_selected": false,
   "guest_acceptance": "NOT_RUN",
   "screenshots": [
-    "windows-license.png"
+    "windows-license.png",
+    "windows-installing.png",
+    "windows-first-account.png"
   ]
 }
