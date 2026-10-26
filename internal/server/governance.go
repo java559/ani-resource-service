@@ -104,6 +104,22 @@ var governanceReadMethods = map[string]struct{}{
 	"/network.v1.TenantLoadBalancerService/GetLoadBalancerOperation": {},
 }
 
+// storageGovernanceMethods is the tenant-bound Storage domain allowlist.
+// Tenant identity is bound to the authenticated Governance scope; no platform
+// scope is accepted for these methods.
+var storageGovernanceMethods = map[string]struct{}{
+	"/storage.v1.StorageService/ListStorageClasses": {},
+	"/storage.v1.StorageService/CreateVolume":       {},
+	"/storage.v1.StorageService/ListVolumes":        {},
+	"/storage.v1.StorageService/GetVolume":          {},
+	"/storage.v1.StorageService/UpdateVolume":       {},
+	"/storage.v1.StorageService/DeleteVolume":       {},
+	"/storage.v1.StorageService/ListBuckets":        {},
+	"/storage.v1.StorageService/ListObjects":        {},
+	"/storage.v1.StorageService/HeadObject":         {},
+	"/storage.v1.StorageService/GetDownloadURL":     {},
+}
+
 // GetVPCMethod is kept for the vpc-read mode and existing deployment checks.
 const GetVPCMethod = "/network.v1.NetworkService/GetVPC"
 
@@ -255,8 +271,9 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 		_, imageMethod := imageGovernanceMethods[info.FullMethod]
 		_, instanceMethod := instanceGovernanceMethods[info.FullMethod]
 		_, computeMethod := computeGovernanceMethods[info.FullMethod]
+		_, storageMethod := storageGovernanceMethods[info.FullMethod]
 		_, vmMethod := vmGovernanceMethods[info.FullMethod]
-		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod && !computeMethod && !vmMethod {
+		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod && !computeMethod && !storageMethod && !vmMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)

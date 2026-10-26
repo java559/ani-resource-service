@@ -14,6 +14,7 @@ import (
 	imagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/image/v1"
 	instancev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/v1"
 	networkv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/network/v1"
+	storagev1 "github.com/zhangzhe-ctrl/ani-resource-service/api/storage/v1"
 	vmv1 "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
@@ -166,6 +167,11 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if vms != nil {
 		vmv1.RegisterVMServiceServer(gs, vms.service)
 	}
+	storageComponents, err := openStorage(context.Background(), bc)
+	if err != nil {
+		return err
+	}
+	storagev1.RegisterStorageServiceServer(gs, storageComponents.service)
 	configured = true
 	admin := server.NewAdminServer(bc.Server.Admin, readiness, observability.Gatherer(), middlewares...)
 	servers := []transport.Server{gs, admin, execution}
