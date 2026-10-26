@@ -247,6 +247,16 @@ func (w *Worker) Step(ctx context.Context) (worked bool, stepErr error) {
 	if err == nil {
 		err = w.finish(ctx, work, progress)
 	}
+	if err == nil && work.Resource.Kind == "subnet" && progress.State == Available && progress.Reason == "" {
+		if preparer, ok := w.provider.(VMNetworkPreparer); ok {
+			// This runs for existing as well as newly created Subnets. The
+			// preparer persists its own readiness; a failed NAD must not degrade
+			// a healthy ordinary-container network or its completed operation.
+			prepareCtx, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
+			_ = preparer.PrepareVMNetwork(prepareCtx, target)
+			cancel()
+		}
+	}
 	if w.observer != nil {
 		w.observer(ctx, work, progress, err)
 	}

@@ -802,6 +802,24 @@ type NetworkVlanNetwork struct {
 	VirtualSwitchID *string
 }
 
+type NetworkVmNamespace struct {
+	TenantID          string
+	ClusterID         string
+	Namespace         string
+	NamespaceUid      string
+	ManagementID      string
+	TemplateID        string
+	NadName           string
+	NadUid            string
+	NadConfig         string
+	NadConfigDigest   string
+	ServiceAccount    string
+	ServiceAccountUid string
+	Ready             bool
+	Reason            string
+	UpdatedAt         time.Time
+}
+
 type NetworkVpc struct {
 	TenantID                 string
 	VpcID                    string
