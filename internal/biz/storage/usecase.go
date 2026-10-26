@@ -48,22 +48,24 @@ func (u *UseCase) namespace(tenant string) (string, error) {
 	return NamespaceName(u.cfg.NamespacePrefix, tenant)
 }
 
-func (u *UseCase) ensureNamespace(ctx context.Context, tenant string) error {
+// ensureNamespace 校验租户命名空间归属与状态，并返回命名空间名。
+// 现有卷的列表、详情、扩容、删除都经过这里，避免命名空间标签失效或进入删除中后继续操作。
+func (u *UseCase) ensureNamespace(ctx context.Context, tenant string) (string, error) {
 	if !CanonicalUUID(tenant) {
-		return ErrInvalid
+		return "", ErrInvalid
 	}
 	name, err := u.namespace(tenant)
 	if err != nil {
-		return err
+		return "", err
 	}
 	ns, err := u.volumes.GetNamespace(ctx, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if ns.Deleting || ns.ManagedBy != NamespaceOwner || ns.TenantID != tenant {
-		return ErrNotFound
+		return "", ErrNotFound
 	}
-	return nil
+	return name, nil
 }
 
 func owned(record *VolumeRecord, tenant string) bool {
@@ -101,7 +103,7 @@ func (u *UseCase) CreateVolume(ctx context.Context, tenant string, req CreateReq
 	} else if !errors.Is(err, ErrNotFound) {
 		return Volume{}, err
 	}
-	if err := u.ensureNamespace(ctx, tenant); err != nil {
+	if _, err := u.ensureNamespace(ctx, tenant); err != nil {
 		return Volume{}, err
 	}
 	if _, err := u.volumes.GetStorageClass(ctx, spec.StorageClassName); err != nil {
@@ -148,7 +150,7 @@ func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize
 	if err != nil {
 		return nil, 0, err
 	}
-	namespace, err := u.namespace(tenant)
+	namespace, err := u.ensureNamespace(ctx, tenant)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -180,7 +182,7 @@ func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize
 
 // GetVolume 返回 spec/status、conditions、事件、绑定 PV 回收策略与可观察使用方。
 func (u *UseCase) GetVolume(ctx context.Context, tenant, name string) (VolumeDetail, error) {
-	namespace, err := u.namespace(tenant)
+	namespace, err := u.ensureNamespace(ctx, tenant)
 	if err != nil {
 		return VolumeDetail{}, err
 	}
@@ -191,7 +193,7 @@ func (u *UseCase) GetVolume(ctx context.Context, tenant, name string) (VolumeDet
 	if !owned(record, tenant) {
 		return VolumeDetail{}, ErrNotFound
 	}
-	consumers, err := u.usage(ctx, namespace)
+	consumers, err := u.usage(ctx, namespace, name)
 	if err != nil {
 		return VolumeDetail{}, err
 	}
@@ -226,7 +228,7 @@ func (u *UseCase) UpdateVolume(ctx context.Context, tenant, name, expectedUID st
 	if err != nil {
 		return Volume{}, err
 	}
-	namespace, err := u.namespace(tenant)
+	namespace, err := u.ensureNamespace(ctx, tenant)
 	if err != nil {
 		return Volume{}, err
 	}
@@ -268,7 +270,7 @@ func (u *UseCase) UpdateVolume(ctx context.Context, tenant, name, expectedUID st
 
 // DeleteVolume 先查引用再以原 UID 为前置条件删除；查询失败不放行。
 func (u *UseCase) DeleteVolume(ctx context.Context, tenant, name, expectedUID string) (DeleteResult, error) {
-	namespace, err := u.namespace(tenant)
+	namespace, err := u.ensureNamespace(ctx, tenant)
 	if err != nil {
 		return DeleteResult{}, err
 	}
@@ -285,7 +287,7 @@ func (u *UseCase) DeleteVolume(ctx context.Context, tenant, name, expectedUID st
 	if record.UID != expectedUID {
 		return DeleteResult{}, ErrIdentityChanged
 	}
-	consumers, err := u.usage(ctx, namespace)
+	consumers, err := u.usage(ctx, namespace, name)
 	if err != nil {
 		return DeleteResult{}, err
 	}
@@ -305,6 +307,10 @@ func (u *UseCase) DeleteVolume(ctx context.Context, tenant, name, expectedUID st
 		}
 		return DeleteResult{}, err
 	}
+	// 删除后再次读取必须仍是原对象：若旧卷删除期间同名新卷被 Create 重建，不能把新对象当作本次删除结果返回。
+	if current.UID != expectedUID {
+		return DeleteResult{}, ErrIdentityChanged
+	}
 	state := DeletionSubmitted
 	if current.Deleting {
 		state = DeletionTerminating
@@ -312,13 +318,14 @@ func (u *UseCase) DeleteVolume(ctx context.Context, tenant, name, expectedUID st
 	return DeleteResult{State: state, Volume: toVolume(current)}, nil
 }
 
-// usage 扫描同一namespace 的 Pod 直接引用与 Notebook 模板引用。
-func (u *UseCase) usage(ctx context.Context, namespace string) ([]Consumer, error) {
-	pods, err := u.volumes.ListPodConsumers(ctx, namespace)
+// usage 只统计引用目标 PVC 的 Pod 直接引用与 Notebook 模板引用；
+// 同命名空间内引用其它 PVC 的工作负载不算使用方。
+func (u *UseCase) usage(ctx context.Context, namespace, claimName string) ([]Consumer, error) {
+	pods, err := u.volumes.ListPodConsumers(ctx, namespace, claimName)
 	if err != nil {
 		return nil, ErrUsageUnknown
 	}
-	notebooks, err := u.volumes.ListNotebookConsumers(ctx, namespace)
+	notebooks, err := u.volumes.ListNotebookConsumers(ctx, namespace, claimName)
 	if err != nil && !errors.Is(err, ErrNotInstalled) {
 		return nil, ErrUsageUnknown
 	}

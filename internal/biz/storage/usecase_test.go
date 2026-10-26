@@ -127,12 +127,24 @@ func (f *fakeVolumes) GetPersistentVolume(context.Context, string) (*PVRecord, e
 	return f.pv, nil
 }
 
-func (f *fakeVolumes) ListPodConsumers(context.Context, string) ([]Consumer, error) {
-	return f.pods, f.podErr
+func (f *fakeVolumes) ListPodConsumers(_ context.Context, _, claimName string) ([]Consumer, error) {
+	out := make([]Consumer, 0, len(f.pods))
+	for _, consumer := range f.pods {
+		if consumer.Claim == claimName {
+			out = append(out, consumer)
+		}
+	}
+	return out, f.podErr
 }
 
-func (f *fakeVolumes) ListNotebookConsumers(context.Context, string) ([]Consumer, error) {
-	return f.notebooks, f.notebookErr
+func (f *fakeVolumes) ListNotebookConsumers(_ context.Context, _, claimName string) ([]Consumer, error) {
+	out := make([]Consumer, 0, len(f.notebooks))
+	for _, consumer := range f.notebooks {
+		if consumer.Claim == claimName {
+			out = append(out, consumer)
+		}
+	}
+	return out, f.notebookErr
 }
 
 func (f *fakeVolumes) ListEvents(context.Context, string, string) ([]Event, error) {
@@ -281,7 +293,7 @@ func TestDeleteUsageAndIdentity(t *testing.T) {
 	if _, err := uc.DeleteVolume(ctx, testTenant, created.Name, "old-uid"); !errors.Is(err, ErrIdentityChanged) {
 		t.Fatalf("old uid must not delete a new object, got %v", err)
 	}
-	volumes.pods = []Consumer{{Kind: "Pod", Namespace: testNS, Name: "worker"}}
+	volumes.pods = []Consumer{{Kind: "Pod", Namespace: testNS, Name: "worker", Claim: created.Name}}
 	if _, err := uc.DeleteVolume(ctx, testTenant, created.Name, created.UID); !errors.Is(err, ErrVolumeInUse) {
 		t.Fatalf("in-use volume must be rejected, got %v", err)
 	}
@@ -298,6 +310,67 @@ func TestDeleteUsageAndIdentity(t *testing.T) {
 	result, err = uc.DeleteVolume(ctx, testTenant, created.Name, created.UID)
 	if err != nil || result.State != DeletionGone {
 		t.Fatalf("already-gone delete = %v, %v", result.State, err)
+	}
+}
+
+func TestDeleteIgnoresConsumersOfOtherClaims(t *testing.T) {
+	ctx := context.Background()
+	volumes := newFake()
+	uc := newUseCase(t, volumes, nil)
+	busy, err := uc.CreateVolume(ctx, testTenant, createRequest(uuid.NewString()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	idle, err := uc.CreateVolume(ctx, testTenant, createRequest(uuid.NewString()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 同命名空间的工作负载只引用 busy，不应阻止 idle 删除。
+	volumes.pods = []Consumer{{Kind: "Pod", Namespace: testNS, Name: "worker", Claim: busy.Name}}
+	result, err := uc.DeleteVolume(ctx, testTenant, idle.Name, idle.UID)
+	if err != nil || result.State != DeletionGone {
+		t.Fatalf("idle volume must be deletable, got %v, %v", result.State, err)
+	}
+	// busy 仍不应被删除。
+	if _, err := uc.DeleteVolume(ctx, testTenant, busy.Name, busy.UID); !errors.Is(err, ErrVolumeInUse) {
+		t.Fatalf("referenced volume must stay protected, got %v", err)
+	}
+	// 详情只回显引用该 PVC 的使用方。
+	detail, err := uc.GetVolume(ctx, testTenant, busy.Name)
+	if err != nil || len(detail.Consumers) != 1 || detail.Consumers[0].Name != "worker" {
+		t.Fatalf("detail consumers = %+v, %v", detail.Consumers, err)
+	}
+	idleDetail, err := uc.GetVolume(ctx, testTenant, idle.Name)
+	if err == nil && len(idleDetail.Consumers) != 0 {
+		t.Fatalf("idle detail must not report consumers: %+v", idleDetail.Consumers)
+	}
+}
+
+func TestVolumeOperationsRequireNamespaceOwnership(t *testing.T) {
+	ctx := context.Background()
+	volumes := newFake()
+	uc := newUseCase(t, volumes, nil)
+	created, err := uc.CreateVolume(ctx, testTenant, createRequest(uuid.NewString()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for name, namespace := range map[string]Namespace{
+		"label-mismatch": {Name: testNS, ManagedBy: "other", TenantID: testTenant},
+		"deleting":       {Name: testNS, ManagedBy: NamespaceOwner, TenantID: testTenant, Deleting: true},
+	} {
+		volumes.namespace = namespace
+		if _, _, err := uc.ListVolumes(ctx, testTenant, 1, 20); !errors.Is(err, ErrNotFound) {
+			t.Fatalf("%s: list must be hidden, got %v", name, err)
+		}
+		if _, err := uc.GetVolume(ctx, testTenant, created.Name); !errors.Is(err, ErrNotFound) {
+			t.Fatalf("%s: detail must be hidden, got %v", name, err)
+		}
+		if _, err := uc.UpdateVolume(ctx, testTenant, created.Name, created.UID, 30); !errors.Is(err, ErrNotFound) {
+			t.Fatalf("%s: resize must be hidden, got %v", name, err)
+		}
+		if _, err := uc.DeleteVolume(ctx, testTenant, created.Name, created.UID); !errors.Is(err, ErrNotFound) {
+			t.Fatalf("%s: delete must be hidden, got %v", name, err)
+		}
 	}
 }
 

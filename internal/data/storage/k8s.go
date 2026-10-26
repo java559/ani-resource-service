@@ -189,7 +189,7 @@ func (k *Kubernetes) GetPersistentVolume(ctx context.Context, name string) (*biz
 	return &biz.PVRecord{Name: pv.GetName(), ReclaimPolicy: policy}, nil
 }
 
-func (k *Kubernetes) ListPodConsumers(ctx context.Context, namespace string) ([]biz.Consumer, error) {
+func (k *Kubernetes) ListPodConsumers(ctx context.Context, namespace, claimName string) ([]biz.Consumer, error) {
 	list, err := k.client.Resource(podGVR).Namespace(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, backendError(err)
@@ -198,16 +198,16 @@ func (k *Kubernetes) ListPodConsumers(ctx context.Context, namespace string) ([]
 	seen := map[string]bool{}
 	for i := range list.Items {
 		pod := &list.Items[i]
-		if !referencesPVC(pod.Object, "spec", "volumes") || seen[pod.GetName()] {
+		if !referencesClaim(pod.Object, claimName, "spec", "volumes") || seen[pod.GetName()] {
 			continue
 		}
 		seen[pod.GetName()] = true
-		out = append(out, biz.Consumer{Kind: "Pod", Namespace: namespace, Name: pod.GetName()})
+		out = append(out, biz.Consumer{Kind: "Pod", Namespace: namespace, Name: pod.GetName(), Claim: claimName})
 	}
 	return out, nil
 }
 
-func (k *Kubernetes) ListNotebookConsumers(ctx context.Context, namespace string) ([]biz.Consumer, error) {
+func (k *Kubernetes) ListNotebookConsumers(ctx context.Context, namespace, claimName string) ([]biz.Consumer, error) {
 	list, err := k.client.Resource(notebookGVR).Namespace(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		if apierrors.IsNotFound(err) {
@@ -219,11 +219,11 @@ func (k *Kubernetes) ListNotebookConsumers(ctx context.Context, namespace string
 	seen := map[string]bool{}
 	for i := range list.Items {
 		notebook := &list.Items[i]
-		if !referencesPVC(notebook.Object, "spec", "template", "spec", "volumes") || seen[notebook.GetName()] {
+		if !referencesClaim(notebook.Object, claimName, "spec", "template", "spec", "volumes") || seen[notebook.GetName()] {
 			continue
 		}
 		seen[notebook.GetName()] = true
-		out = append(out, biz.Consumer{Kind: "Notebook", Namespace: namespace, Name: notebook.GetName()})
+		out = append(out, biz.Consumer{Kind: "Notebook", Namespace: namespace, Name: notebook.GetName(), Claim: claimName})
 	}
 	return out, nil
 }
@@ -341,8 +341,11 @@ func storageClass(item *unstructured.Unstructured) biz.Class {
 	return class
 }
 
-// referencesPVC 判断指定路径下的 volumes 是否直接引用 PVC。
-func referencesPVC(object map[string]any, path ...string) bool {
+// referencesClaim 判断指定路径下的 volumes 是否直接引用目标 PVC；其它 PVC 不算。
+func referencesClaim(object map[string]any, claimName string, path ...string) bool {
+	if claimName == "" {
+		return false
+	}
 	volumes, found, err := unstructured.NestedSlice(object, path...)
 	if err != nil || !found {
 		return false
@@ -352,7 +355,7 @@ func referencesPVC(object map[string]any, path ...string) bool {
 		if !ok || volume["persistentVolumeClaim"] == nil {
 			continue
 		}
-		if claim, ok := volume["persistentVolumeClaim"].(map[string]any); ok && claim["claimName"] != nil {
+		if claim, ok := volume["persistentVolumeClaim"].(map[string]any); ok && claim["claimName"] == claimName {
 			return true
 		}
 	}

@@ -105,6 +105,8 @@ type Consumer struct {
 	Kind      string
 	Namespace string
 	Name      string
+	// Claim 是工作负载引用的 PVC 名称；仅用于后端精确过滤，不下发页面。
+	Claim string
 }
 
 type PVRecord struct {
@@ -204,8 +206,8 @@ type VolumePort interface {
 	ListStorageClasses(ctx context.Context) ([]Class, error)
 	GetStorageClass(ctx context.Context, name string) (*Class, error)
 	GetPersistentVolume(ctx context.Context, name string) (*PVRecord, error)
-	ListPodConsumers(ctx context.Context, namespace string) ([]Consumer, error)
-	ListNotebookConsumers(ctx context.Context, namespace string) ([]Consumer, error)
+	ListPodConsumers(ctx context.Context, namespace, claimName string) ([]Consumer, error)
+	ListNotebookConsumers(ctx context.Context, namespace, claimName string) ([]Consumer, error)
 	ListEvents(ctx context.Context, namespace, pvcUID string) ([]Event, error)
 }
 
