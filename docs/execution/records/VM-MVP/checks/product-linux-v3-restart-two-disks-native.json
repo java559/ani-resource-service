@@ -1,0 +1,562 @@
+{
+  "at": "2026-10-23T19:46:52.737477+00:00",
+  "vm": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachine",
+    "metadata": {
+      "annotations": {
+        "kubevirt.io/latest-observed-api-version": "v1",
+        "kubevirt.io/storage-observed-api-version": "v1"
+      },
+      "creationTimestamp": "2026-10-23T17:16:48Z",
+      "finalizers": [
+        "kubevirt.io/virtualMachineControllerFinalize"
+      ],
+      "generation": 11,
+      "labels": {
+        "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "network.ani.io/attachment-id": "att_6781cbb15303438f86108d349f3ddfae",
+        "network.ani.io/generation": "1",
+        "network.ani.io/instance-id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "network.ani.io/submission-id": "7d5460cf-744d-5507-ae4d-c0bb312686aa",
+        "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "vm.ani.io/create-digest": "GVAOFRNGMD4R43ZMDC3QL2SWHHRSWQAEPTXUDJLJEAGXLFHXNWUQ",
+        "vm.ani.io/vm-id": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+      },
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resourceVersion": "60001503",
+      "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+    },
+    "spec": {
+      "runStrategy": "Manual",
+      "template": {
+        "metadata": {
+          "annotations": {
+            "kubevirt.io/pci-topology-version": "v3",
+            "networking.kubercloud.com/subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+          },
+          "labels": {
+            "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "network.ani.io/attachment-id": "att_6781cbb15303438f86108d349f3ddfae",
+            "network.ani.io/generation": "1",
+            "network.ani.io/instance-id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "network.ani.io/submission-id": "7d5460cf-744d-5507-ae4d-c0bb312686aa",
+            "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "vm.ani.io/create-digest": "GVAOFRNGMD4R43ZMDC3QL2SWHHRSWQAEPTXUDJLJEAGXLFHXNWUQ",
+            "vm.ani.io/vm-id": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+          }
+        },
+        "spec": {
+          "architecture": "amd64",
+          "domain": {
+            "cpu": {
+              "cores": 2,
+              "sockets": 1,
+              "threads": 1
+            },
+            "devices": {
+              "disks": [
+                {
+                  "bootOrder": 1,
+                  "disk": {
+                    "bus": "virtio"
+                  },
+                  "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+                  "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21"
+                },
+                {
+                  "disk": {
+                    "bus": "virtio"
+                  },
+                  "name": "guest-initialization"
+                },
+                {
+                  "disk": {
+                    "bus": "scsi"
+                  },
+                  "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+                  "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+                },
+                {
+                  "disk": {
+                    "bus": "scsi"
+                  },
+                  "name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+                  "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+                }
+              ],
+              "interfaces": [
+                {
+                  "bridge": {},
+                  "model": "virtio",
+                  "name": "default"
+                }
+              ]
+            },
+            "firmware": {
+              "serial": "522910a1-ccac-46d6-a467-206b5ed6da9c",
+              "uuid": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+            },
+            "machine": {
+              "type": "q35"
+            },
+            "memory": {
+              "guest": "2Gi"
+            },
+            "resources": {
+              "limits": {
+                "cpu": "1500m"
+              },
+              "requests": {
+                "cpu": "1500m",
+                "memory": "2Gi"
+              }
+            }
+          },
+          "networks": [
+            {
+              "multus": {
+                "default": true,
+                "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+              },
+              "name": "default"
+            }
+          ],
+          "serviceAccountName": "default",
+          "volumes": [
+            {
+              "dataVolume": {
+                "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21"
+              },
+              "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21"
+            },
+            {
+              "cloudInitNoCloud": {
+                "networkDataSecretRef": {
+                  "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc"
+                },
+                "secretRef": {
+                  "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc"
+                }
+              },
+              "name": "guest-initialization"
+            },
+            {
+              "dataVolume": {
+                "hotpluggable": true,
+                "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+              },
+              "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+            },
+            {
+              "dataVolume": {
+                "hotpluggable": true,
+                "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+              },
+              "name": "disk-5dbc2c93986554f98413f198f5e9c1a6"
+            }
+          ]
+        }
+      }
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T19:43:56Z",
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "All of the VMI's DVs are bound and ready",
+          "reason": "AllDVsReady",
+          "status": "True",
+          "type": "DataVolumesReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "cannot migrate VMI: PVC vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+          "reason": "DisksNotLiveMigratable",
+          "status": "False",
+          "type": "LiveMigratable"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "status": "True",
+          "type": "StorageLiveMigratable"
+        }
+      ],
+      "created": true,
+      "desiredGeneration": 11,
+      "observedGeneration": 11,
+      "printableStatus": "Running",
+      "ready": true,
+      "runStrategy": "Manual",
+      "volumeSnapshotStatuses": [
+        {
+          "enabled": true,
+          "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21"
+        },
+        {
+          "enabled": false,
+          "name": "guest-initialization",
+          "reason": "Snapshot is not supported for this volumeSource type [guest-initialization]"
+        },
+        {
+          "enabled": true,
+          "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        },
+        {
+          "enabled": true,
+          "name": "disk-5dbc2c93986554f98413f198f5e9c1a6"
+        }
+      ]
+    }
+  },
+  "vmi": {
+    "apiVersion": "kubevirt.io/v1",
+    "kind": "VirtualMachineInstance",
+    "metadata": {
+      "annotations": {
+        "kubevirt.io/latest-observed-api-version": "v1",
+        "kubevirt.io/pci-topology-version": "v3",
+        "kubevirt.io/storage-observed-api-version": "v1",
+        "kubevirt.io/vm-generation": "11",
+        "networking.kubercloud.com/subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+      },
+      "creationTimestamp": "2026-10-23T19:43:45Z",
+      "finalizers": [
+        "kubevirt.io/virtualMachineControllerFinalize",
+        "kubevirt.io/foregroundDeleteVirtualMachine"
+      ],
+      "generation": 11,
+      "labels": {
+        "ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "kubevirt.io/nodeName": "ani-02",
+        "network.ani.io/attachment-id": "att_6781cbb15303438f86108d349f3ddfae",
+        "network.ani.io/generation": "1",
+        "network.ani.io/instance-id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "network.ani.io/submission-id": "7d5460cf-744d-5507-ae4d-c0bb312686aa",
+        "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "vm.ani.io/create-digest": "GVAOFRNGMD4R43ZMDC3QL2SWHHRSWQAEPTXUDJLJEAGXLFHXNWUQ",
+        "vm.ani.io/vm-id": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+      },
+      "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "ownerReferences": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+        }
+      ],
+      "resourceVersion": "60001510",
+      "uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0"
+    },
+    "spec": {
+      "architecture": "amd64",
+      "domain": {
+        "cpu": {
+          "cores": 2,
+          "maxSockets": 4,
+          "model": "host-model",
+          "sockets": 1,
+          "threads": 1
+        },
+        "devices": {
+          "disks": [
+            {
+              "bootOrder": 1,
+              "disk": {
+                "bus": "virtio"
+              },
+              "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "serial": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21"
+            },
+            {
+              "disk": {
+                "bus": "virtio"
+              },
+              "name": "guest-initialization"
+            },
+            {
+              "disk": {
+                "bus": "scsi"
+              },
+              "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+              "serial": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+            },
+            {
+              "disk": {
+                "bus": "scsi"
+              },
+              "name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "serial": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+            }
+          ],
+          "interfaces": [
+            {
+              "bridge": {},
+              "model": "virtio",
+              "name": "default"
+            }
+          ]
+        },
+        "features": {
+          "acpi": {
+            "enabled": true
+          }
+        },
+        "firmware": {
+          "serial": "522910a1-ccac-46d6-a467-206b5ed6da9c",
+          "uuid": "55099440-c47b-4f81-afc5-7d8e740d14dc"
+        },
+        "machine": {
+          "type": "q35"
+        },
+        "memory": {
+          "guest": "2Gi",
+          "maxGuest": "8Gi"
+        },
+        "resources": {
+          "limits": {
+            "cpu": "1500m"
+          },
+          "requests": {
+            "cpu": "1500m",
+            "memory": "2Gi"
+          }
+        }
+      },
+      "evictionStrategy": "None",
+      "networks": [
+        {
+          "multus": {
+            "default": true,
+            "networkName": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main-v2"
+          },
+          "name": "default"
+        }
+      ],
+      "serviceAccountName": "default",
+      "volumes": [
+        {
+          "dataVolume": {
+            "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21"
+          },
+          "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21"
+        },
+        {
+          "cloudInitNoCloud": {
+            "networkDataSecretRef": {
+              "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc"
+            },
+            "secretRef": {
+              "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc"
+            }
+          },
+          "name": "guest-initialization"
+        },
+        {
+          "dataVolume": {
+            "hotpluggable": true,
+            "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9"
+          },
+          "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        },
+        {
+          "dataVolume": {
+            "hotpluggable": true,
+            "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6"
+          },
+          "name": "disk-5dbc2c93986554f98413f198f5e9c1a6"
+        }
+      ]
+    },
+    "status": {
+      "activePods": {
+        "ceb39733-dba1-4a98-bb60-27bdf2090452": "ani-02"
+      },
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T19:43:56Z",
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "All of the VMI's DVs are bound and ready",
+          "reason": "AllDVsReady",
+          "status": "True",
+          "type": "DataVolumesReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "cannot migrate VMI: PVC vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+          "reason": "DisksNotLiveMigratable",
+          "status": "False",
+          "type": "LiveMigratable"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "status": "True",
+          "type": "StorageLiveMigratable"
+        }
+      ],
+      "currentCPUTopology": {
+        "cores": 2,
+        "sockets": 1,
+        "threads": 1
+      },
+      "guestOSInfo": {},
+      "interfaces": [
+        {
+          "infoSource": "domain",
+          "ipAddress": "10.83.1.9",
+          "ipAddresses": [
+            "10.83.1.9"
+          ],
+          "linkState": "up",
+          "mac": "fa:00:cc:05:b0:99",
+          "name": "default",
+          "podInterfaceName": "eth0",
+          "queueCount": 1
+        }
+      ],
+      "launcherContainerImageVersion": "172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0",
+      "machine": {
+        "type": "pc-q35-rhel9.8.0"
+      },
+      "memory": {
+        "guestAtBoot": "2Gi",
+        "guestCurrent": "2Gi",
+        "guestRequested": "2Gi",
+        "memoryOverhead": "280Mi"
+      },
+      "migrationMethod": "BlockMigration",
+      "migrationTransport": "Unix",
+      "nodeName": "ani-02",
+      "phase": "Running",
+      "phaseTransitionTimestamps": [
+        {
+          "phase": "Pending",
+          "phaseTransitionTimestamp": "2026-10-23T19:43:45Z"
+        },
+        {
+          "phase": "Scheduling",
+          "phaseTransitionTimestamp": "2026-10-23T19:43:45Z"
+        },
+        {
+          "phase": "Scheduled",
+          "phaseTransitionTimestamp": "2026-10-23T19:43:56Z"
+        },
+        {
+          "phase": "Running",
+          "phaseTransitionTimestamp": "2026-10-23T19:44:06Z"
+        }
+      ],
+      "qosClass": "Burstable",
+      "runtimeUser": 107,
+      "selinuxContext": "none",
+      "virtualMachineRevisionName": "revision-start-vm-7bca4671-89dd-4925-bad9-17e77401729d-11",
+      "volumeStatus": [
+        {
+          "hotplugVolume": {
+            "attachPodName": "hp-volume-f858f",
+            "attachPodUID": "16f8781f-188b-41d9-8393-e5e131b6536b"
+          },
+          "message": "Successfully attach hotplugged volume disk-5dbc2c93986554f98413f198f5e9c1a6 to VM",
+          "name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "4Gi"
+            },
+            "claimName": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "4G"
+            },
+            "volumeMode": "Block"
+          },
+          "phase": "Ready",
+          "reason": "VolumeReady",
+          "target": "sdb"
+        },
+        {
+          "name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "12Gi"
+            },
+            "claimName": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "12G"
+            },
+            "volumeMode": "Block"
+          },
+          "target": "vda"
+        },
+        {
+          "hotplugVolume": {
+            "attachPodName": "hp-volume-f858f",
+            "attachPodUID": "16f8781f-188b-41d9-8393-e5e131b6536b"
+          },
+          "message": "Successfully attach hotplugged volume disk-d296c9f62e765756bb4cdef2d0f8f2f9 to VM",
+          "name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+          "persistentVolumeClaimInfo": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "3Gi"
+            },
+            "claimName": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "filesystemOverhead": "0",
+            "requests": {
+              "storage": "3G"
+            },
+            "volumeMode": "Block"
+          },
+          "phase": "Ready",
+          "reason": "VolumeReady",
+          "target": "sda"
+        },
+        {
+          "name": "guest-initialization",
+          "size": 1048576,
+          "target": "vdb"
+        }
+      ]
+    }
+  },
+  "old_vmi_uid": "e2a77112-b36c-446e-b6fa-0ec9753a4c58",
+  "operation": {
+    "id": "0978a2e6-cb0e-4fbf-8efe-4b0c456455fc",
+    "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "action": "restart",
+    "intentVersion": "20",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T19:44:34.955543722Z"
+  },
+  "new_vmi_observed": true
+}

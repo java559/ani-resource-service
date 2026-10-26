@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-24T06:58:52.475716+00:00",
+  "byte_limit": 65536,
+  "capture": {
+    "exists": false,
+    "status": "EXACT_PATH_NOT_FOUND"
+  },
+  "elapsed_seconds": 0.435,
+  "exact_node": "ani-03/172.16.101.12",
+  "exact_path": "/var/log/pods/vm-mvp-probe-01a168ce_vm-mvp-virtio-prefix-01a168ce_45b270c9-8873-42b2-acf1-b1eadba59c1e/verify/0.log",
+  "exact_pod_uid": "45b270c9-8873-42b2-acf1-b1eadba59c1e",
+  "exit": 0,
+  "mutations": 0,
+  "one_attempt_only": true,
+  "original_receipt_sha256": "dd5c3db8361d885a8d8ccce148bd951367fadaea265cae5b58d72e4a09191c98",
+  "raw_response": "{\"exists\": false, \"status\": \"EXACT_PATH_NOT_FOUND\"}\n",
+  "result": "NOT_MEASURED_EXACT_LOG_ABSENT_OR_INCOMPLETE",
+  "source_reads": 0,
+  "stderr": "",
+  "timeout_seconds": 10
+}

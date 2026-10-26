@@ -1,0 +1,417 @@
+{
+  "state": "PASS_CANONICAL_TASK_CATALOG_AND_PLATFORM_QUOTA_READ_UNION",
+  "started_at": "2026-10-24T10:32:13.505250+00:00",
+  "business_sql_writes": 0,
+  "shared_state_changes": 0,
+  "permission_acks": [
+    {
+      "code": "instance:create",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:create",
+            "code": "instance:create",
+            "status": "ON",
+            "apiIds": [
+              290
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:list",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:list",
+            "code": "instance:list",
+            "status": "ON",
+            "apiIds": [
+              289
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:read",
+            "code": "instance:read",
+            "status": "ON",
+            "apiIds": [
+              296,
+              302
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:delete",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:delete",
+            "code": "instance:delete",
+            "status": "ON",
+            "apiIds": [
+              292
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:exec",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:exec",
+            "code": "instance:exec",
+            "status": "ON",
+            "apiIds": [
+              293
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:operation:read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:operation:read",
+            "code": "instance:operation:read",
+            "status": "ON",
+            "apiIds": [
+              288
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "instance:preset:read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "instance:preset:read",
+            "code": "instance:preset:read",
+            "status": "ON",
+            "apiIds": [
+              259
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "image:space:enable",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "image:space:enable",
+            "code": "image:space:enable",
+            "status": "ON",
+            "apiIds": [
+              270
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "image:space:get",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "image:space:get",
+            "code": "image:space:get",
+            "status": "ON",
+            "apiIds": [
+              269
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "image:registration:get",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "image:registration:get",
+            "code": "image:registration:get",
+            "status": "ON",
+            "apiIds": [
+              266
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "image:registration:list",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "image:registration:list",
+            "code": "image:registration:list",
+            "status": "ON",
+            "apiIds": [
+              264
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "modeldev:compute-preset:read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "modeldev:compute-preset:read",
+            "code": "modeldev:compute-preset:read",
+            "status": "ON",
+            "apiIds": [
+              259
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "inference:compute-preset:read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "inference:compute-preset:read",
+            "code": "inference:compute-preset:read",
+            "status": "ON",
+            "apiIds": [
+              259
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "quota-definition:view",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "quota-definition:view",
+            "code": "quota-definition:view",
+            "status": "ON",
+            "apiIds": [
+              201
+            ]
+          }
+        }
+      },
+      "ack": {}
+    },
+    {
+      "code": "tenant:quota-read",
+      "operation": {
+        "method": "POST",
+        "path": "/api/v1/admin/permissions",
+        "body": {
+          "data": {
+            "name": "tenant:quota-read",
+            "code": "tenant:quota-read",
+            "status": "ON",
+            "apiIds": [
+              229
+            ]
+          }
+        }
+      },
+      "ack": {}
+    }
+  ],
+  "platform_quota_read_union": {
+    "method": "PUT",
+    "path": "/api/v1/admin/roles/1",
+    "body": {
+      "data": {
+        "tenantId": 0,
+        "permissions": [
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          31,
+          32,
+          33,
+          34,
+          35,
+          50,
+          51
+        ]
+      },
+      "updateMask": "permissions"
+    }
+  },
+  "finished_at": "2026-10-24T10:32:14.981137+00:00",
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/apis?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles/1",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/roles/1",
+      "status": 200
+    }
+  ]
+}

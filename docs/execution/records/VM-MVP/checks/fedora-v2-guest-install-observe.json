@@ -1,0 +1,42 @@
+{
+  "recorded_at": "2026-10-23T23:34:39.217Z",
+  "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+  "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+  "version": 3,
+  "source": "Real browser VNC, existing Live user tty2, read-only free/vmstat commands",
+  "memory": {
+    "available_mib_approx": 1600,
+    "swap_used_mib_approx": 2500
+  },
+  "vmstat_samples": [
+    {
+      "user_pct": 2,
+      "system_pct": 2,
+      "idle_pct": 0,
+      "wait_pct": 96,
+      "steal_pct": 0
+    },
+    {
+      "user_pct": 2,
+      "system_pct": 3,
+      "idle_pct": 0,
+      "wait_pct": 95,
+      "steal_pct": 0,
+      "swap_in": 0,
+      "swap_out": 0
+    }
+  ],
+  "last_observed_installation": {
+    "storage": "Completed",
+    "software": "19%",
+    "system_configuration": "Pending",
+    "finalization": "Pending"
+  },
+  "conclusion": "I/O wait observed. No TCG, OOM, specific CSI/Ceph or CPU throttling root cause claim. No replacement preset/VM or shared configuration change.",
+  "guest_mutations": "Installer already writing task blank vda; diagnostic commands read only; no new credentials",
+  "screenshots": [
+    "vm-fedora44-install-memory.png",
+    "vm-fedora44-install-vmstat.png",
+    "vm-fedora44-install-vmstat-readable.png"
+  ]
+}

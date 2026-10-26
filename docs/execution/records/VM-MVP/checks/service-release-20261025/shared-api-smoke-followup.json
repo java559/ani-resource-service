@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-24T21:00:28.332275+00:00",
+  "host": "fedora",
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 500,
+      "elapsed_seconds": 2.377,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-followup-private/platform-login.json",
+      "top_level_keys": [
+        "code",
+        "message",
+        "metadata",
+        "reason"
+      ],
+      "code": 500,
+      "reason": ""
+    }
+  ],
+  "vm_writes": 0,
+  "guest_operations": 0,
+  "egress_probes": 0,
+  "result": "FAIL_RETAIN_ORIGINAL_RESPONSE",
+  "error_type": "AssertionError",
+  "reason": "",
+  "finished_at": "2026-10-24T21:00:31.137443+00:00"
+}

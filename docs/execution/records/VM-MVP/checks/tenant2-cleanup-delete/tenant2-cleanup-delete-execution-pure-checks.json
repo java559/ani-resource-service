@@ -1,0 +1,72 @@
+{
+  "record_kind": "existing execution output transcription; no new checks executed during archival",
+  "execution_host": "ssh fedora / 172.16.101.31",
+  "commands": [
+    "python3 -m py_compile <task-owned-driver>",
+    "python3 <task-owned-driver> self-test"
+  ],
+  "runs": [
+    {
+      "source_sha256": "edd2d72fcc73fa0da220fb5227d0bbb35edb72b7a2565bc961645540d4671514",
+      "exit_code": 0,
+      "py_compile": "PASS",
+      "self_test": {
+        "result": "PASS",
+        "pure_guards": 11,
+        "helper_imports": 0,
+        "api_calls": 0,
+        "guest_commands": 0
+      }
+    },
+    {
+      "source_sha256": "01065f468df7488ed43766ada7d8fa15a2cf1935fe9f2434ca7e5499a4c32e38",
+      "exit_code": 0,
+      "py_compile": "PASS",
+      "self_test": {
+        "result": "PASS",
+        "pure_guards": 17,
+        "helper_imports": 0,
+        "api_calls": 0,
+        "guest_commands": 0
+      }
+    },
+    {
+      "source_sha256": "e5124579d5e7b6ae133dca70332d50b4577ea0dec77fb9a27038cd81581a5aed",
+      "exit_code": 0,
+      "py_compile": "PASS",
+      "self_test": {
+        "result": "PASS",
+        "pure_guards": 19,
+        "helper_imports": 0,
+        "api_calls": 0,
+        "guest_commands": 0
+      }
+    },
+    {
+      "source_sha256": "ae43b550930537ebc38a0133b6c85fb7c6996d8e9c87bfbebf0582639d052e86",
+      "exit_code": 0,
+      "py_compile": "PASS",
+      "self_test": {
+        "result": "PASS",
+        "pure_guards": 21,
+        "helper_imports": 0,
+        "api_calls": 0,
+        "guest_commands": 0
+      }
+    },
+    {
+      "source_sha256": "926b83d7995f17e3929fde05f7f38ba192f1deb9818893a8c0addeb17921c7ba",
+      "exit_code": 0,
+      "py_compile": "PASS",
+      "self_test": {
+        "result": "PASS",
+        "pure_guards": 21,
+        "helper_imports": 0,
+        "api_calls": 0,
+        "guest_commands": 0
+      }
+    }
+  ],
+  "source_path": "scripts/vm-product-tenant2-cleanup-delete.py",
+  "timing": "individual pure-check durations were not separately saved"
+}

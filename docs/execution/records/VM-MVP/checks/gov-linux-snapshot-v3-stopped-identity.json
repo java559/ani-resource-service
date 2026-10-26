@@ -1,0 +1,15 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "version": 28,
+  "original_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "original_vmi_gone": true,
+  "original_launcher_gone": true,
+  "old_launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-55099440-c47b-4f81-afc5-7d8e740d14dc-bbmjw",
+    "uid": "ceb39733-dba1-4a98-bb60-27bdf2090452"
+  },
+  "new_disk_original_pvc_uid_preserved": true,
+  "business_mutations": 0
+}

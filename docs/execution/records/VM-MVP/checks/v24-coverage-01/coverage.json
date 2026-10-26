@@ -1,0 +1,274 @@
+{
+  "at": "2026-10-24T08:40:32.206651+00:00",
+  "acceptance": "V24 docs/verification/vm-mvp-acceptance.md:53",
+  "result": "PARTIAL_REQUIRED_PG_LIVE_GAPS_IDENTIFIED",
+  "rows": [
+    {
+      "item": "compute old three usages",
+      "usages": [
+        "CONTAINER_INSTANCE",
+        "TRAINING",
+        "INFERENCE"
+      ],
+      "CODE": {
+        "result": "PASS_NAMED_CURRENT_SOURCE_RUN",
+        "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-06.log",
+        "tests": [
+          "TestComputeClientSharedConnectionIdentityAndSelection",
+          "TestComputeCatalogRequiresInstancePermission",
+          "TestComputeCatalogForwardsOnlyValidatedUsage"
+        ],
+        "original_whole_run": "four unrelated failing cases retained/resolved separately; these named cases actually passed"
+      },
+      "BOUNDARY": {
+        "result": "PASS",
+        "resource_tests": [
+          "TestVirtualMachineScopeIsExplicitAndKeepsExistingUsages",
+          "TestSelectionV1CanonicalContract"
+        ],
+        "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource-gate.log",
+        "granularity": "Resource log is package-level ordinary-test PASS, not fabricated per-test verbose output"
+      },
+      "PG": {
+        "result": "NO_NAMED_CURRENT_OLD_USAGE_PG_RECEIPT",
+        "note": "new VM usage/usage accounting PG is separate, not proof for all old usages"
+      },
+      "LIVE": {
+        "result": "NOT_RUN_CURRENT_CANDIDATE_THREE_OLD_USAGES",
+        "existing": "task normal catalog/create receipts exercise VIRTUAL_MACHINE, not all three old scopes"
+      },
+      "minimal_next": "Three normal Gov GET /api/v1/compute-presets?usage=<old>&page=1&pageSize=100; verify current scope authorization and a real enabled compatible preset. Empty results are not a positive resolve/create proof."
+    },
+    {
+      "item": "container CPU/GPU admission and original quota",
+      "CODE": {
+        "result": "PASS_NAMED_CURRENT_SOURCE_RUN",
+        "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-06.log",
+        "tests": [
+          "TestInstanceCPUFrozenContractVersionAndOriginalBytes",
+          "TestGpuCapabilityRequiresSameOwnerActions",
+          "TestGpuQuantityBuilderVectorsAndOriginalCharges",
+          "TestQuotaDurableAckFields",
+          "TestInstanceAdmissionFactor10FreezesLogicalQuotaAndExecution",
+          "TestInstanceAdmissionCPUStillFreezesWithoutGPUQuota",
+          "TestInstanceSharedCanonicalAndFrozenParameters"
+        ],
+        "original_whole_run": "four unrelated failing cases retained/resolved separately; these named cases actually passed"
+      },
+      "BOUNDARY": {
+        "result": "PASS",
+        "scope": "current canonical/factor-10/original charges and authorization adapters; fake external owners are not LIVE"
+      },
+      "PG": {
+        "result": "NO_CURRENT_OLD_CONTAINER_PG_RUN_FOUND",
+        "basis": "existing gov-test-04/generate-04 explicitly run only ^TestVMPostgres; unit06 has no quota_pg tags",
+        "reuse": [
+          "TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract",
+          "TestQuotaGpuProductionEntComposition",
+          "TestQuotaResourceReleasedOriginalLedgerAndEventFence",
+          "TestInstanceCurrentAuthorizationOriginalReplayAndOwnerRelease"
+        ]
+      },
+      "LIVE": {
+        "result": "NOT_RUN_CURRENT_CANDIDATE_CPU_GPU_CONTAINER_CHAIN"
+      },
+      "minimal_next": "One task CPU instance plus one minimum compatible GPU instance, normal authorized admission/replay/original-account charge/release. Reuse CPU instance for SG terminal and Network v2; do not use VM unmetered acceptance as quota regression."
+    },
+    {
+      "item": "Inference affected stored dispatch",
+      "CODE": {
+        "result": "PASS_NAMED_CURRENT_SOURCE_RUN",
+        "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-06.log",
+        "tests": [
+          "TestGpuCapabilityEnablesInferenceOwner",
+          "TestInferenceStoredCommandVariantsAndDeleteScope",
+          "TestInferenceManagedDispatchRejectsRetiredGpuCanonical",
+          "TestInferenceManagedDispatchUsesStoredCommandContract"
+        ],
+        "original_whole_run": "four unrelated failing cases retained/resolved separately; these named cases actually passed"
+      },
+      "BOUNDARY": {
+        "result": "PASS",
+        "scope": "stored command contract chosen for dispatch; retired canonical refused; current owner action eligibility preserved"
+      },
+      "PG": {
+        "result": "NO_CURRENT_INFERENCE_PG_RUN_FOUND",
+        "reuse": [
+          "TestInferenceGPUAdmissionAndPublicReplay",
+          "TestInferenceCPUActorsRemainTrusted"
+        ]
+      },
+      "LIVE": {
+        "result": "NOT_RUN_CURRENT_ACTUAL_OWNER_DISPATCH"
+      },
+      "minimal_next": "With a currently authorized existing task-owned Inference resource, issue one legitimate control intent and observe the original owner operation/actor/frozen command and replay; otherwise freeze one ready model+preset and normal create/delete. Do not bypass to owner-admin or expand into Inference feature work."
+    },
+    {
+      "item": "Network v1/v2 compatibility",
+      "CODE": {
+        "result": "PASS_NAMED_CURRENT_SOURCE_RUN",
+        "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-source-unit-06.log",
+        "tests": [
+          "TestNetworkTrustedScope",
+          "TestNetworkNewFieldsRetainIntentAndObservations",
+          "TestNetworkClientAllNewMethodsRebuildMetadata"
+        ],
+        "original_whole_run": "four unrelated failing cases retained/resolved separately; these named cases actually passed"
+      },
+      "BOUNDARY": {
+        "result": "PASS_PACKAGE_LEVEL",
+        "tests": [
+          "TestVMExpectationDoesNotChangeLegacyPrepareFingerprint",
+          "TestManagedConsumerSnapshotRejectsRollbackAndSameRevisionMutation"
+        ],
+        "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource-gate.log",
+        "scope": "empty added VM expectations keep old mode-empty and controller_managed fingerprint bytes; ordinary biz/data Network packages pass"
+      },
+      "PG": {
+        "result": "VM_NETWORK_PG_PASS_LEGACY_V1_V2_NOT_NAMED_HERE",
+        "existing": "VM blocked-closed recovery true PG and current VM lifecycle evidence remain valid but do not silently cover old Pod consumer paths",
+        "reuse": [
+          "TestAttachmentConfirmRecoveryReleaseAndResidualUIDs",
+          "TestAttachmentUnknownConsumerDoesNotExpireAndEpochRejectsLateWrite",
+          "TestAttachmentPermanentIdentityTenantScopeAndParentDeletion"
+        ]
+      },
+      "LIVE": {
+        "result": "PARTIAL",
+        "passed": [
+          "normal Gov task tenant1/tenant2 VPC+Subnet creation and namespace binding",
+          "task VM Network consumer lifecycle"
+        ],
+        "receipts": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-candidate-tenant.json",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-tenant2-network.json"
+        ],
+        "missing": "old legacy v1 + controller-managed v2 Pod consumer prepare/confirm/release replay on current candidate"
+      },
+      "minimal_next": "Reuse normal CPU Instance above for current controller-managed v2. Legacy v1 needs an actually existing owned v1 consumer/original request or the existing trusted legacy fixture; do not invent a public v1 field or rewrite historical data. No public egress test is required for this regression."
+    },
+    {
+      "item": "SG Instance terminal compatibility",
+      "CODE": {
+        "result": "PASS_PACKAGE_LEVEL",
+        "receipts": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-focused-03.log",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-remaining-normal-04.log",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-race-04.log",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-vet-04.log"
+        ],
+        "named_existing_cases": [
+          "TestGeneratedClientCreateSessionRoundTripAndReplay",
+          "TestManagedInstanceTicketBindsOriginalTarget",
+          "TestManagedInstanceResolverRejectsReplacementPod",
+          "TestManagedInstanceExecGuardRejectsPodReplacement",
+          "TestExecAdapterResolvesPodAndBuildsRemoteCommandRequest"
+        ],
+        "granularity": "logs are package-level; names identify existing cases, no individual verbose record fabricated"
+      },
+      "PG": {
+        "result": "NOT_APPLICABLE",
+        "actual_store_boundary": "authenticated task Redis DB15 contract PASS in sg-focused-03.log; this is Redis, not PostgreSQL"
+      },
+      "BOUNDARY": {
+        "result": "PASS",
+        "scope": "old instance binding + Kubernetes exec seam/claim/lease/replay contracts"
+      },
+      "LIVE": {
+        "result": "NOT_RUN_CURRENT_VM_TASK",
+        "owner_confirmation": "vm_console explicitly confirms no current Instance product terminal LIVE receipt; VM VNC and old historical deployments do not substitute"
+      },
+      "minimal_next": "On the single normal CPU Instance above, POST /api/v1/instances/{id}/exec with fresh expectedVersion, stable key and 24x80, open the returned original ticket once, send an inert marker through the normal shell, observe bytes/exit/lease cleanup and original-key replay semantics."
+    }
+  ],
+  "minimal_next_inputs": {
+    "stage": "PREPARED_ONLY_NO_NEW_KEYS_OR_LOADS",
+    "read_only_requests": [
+      {
+        "method": "GET",
+        "path": "/api/v1/compute-presets",
+        "query": {
+          "usage": "CONTAINER_INSTANCE",
+          "page": 1,
+          "pageSize": 100
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/compute-presets",
+        "query": {
+          "usage": "TRAINING",
+          "page": 1,
+          "pageSize": 100
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/api/v1/compute-presets",
+        "query": {
+          "usage": "INFERENCE",
+          "page": 1,
+          "pageSize": 100
+        }
+      }
+    ],
+    "existing_real_pg_fixtures": {
+      "governance_service": {
+        "cwd": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+        "command": [
+          "go",
+          "test",
+          "-tags",
+          "quota_pg",
+          "-count=1",
+          "./app/admin/service/internal/service",
+          "-run",
+          "^(TestInstanceCurrentAuthorizationOriginalReplayAndOwnerRelease|TestInferenceGPUAdmissionAndPublicReplay|TestInferenceCPUActorsRemainTrusted)$"
+        ]
+      },
+      "governance_data": {
+        "command": [
+          "go",
+          "test",
+          "-tags",
+          "quota_pg",
+          "-count=1",
+          "./app/admin/service/internal/data",
+          "-run",
+          "^(TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract|TestQuotaGpuProductionEntComposition|TestQuotaResourceReleasedOriginalLedgerAndEventFence)$"
+        ]
+      },
+      "guard": "only existing test-owned PG helper/isolated DB and restricted role, never candidate business DSN; no test execution in this mapping"
+    },
+    "live_minimum_mutation_bounds": {
+      "CPU": "one normal task Instance, shared across quota/network-v2/terminal evidence, then normal delete/full physical release",
+      "GPU": "one minimum available supported GPU preset/Instance admission with original quota ledger and release; no VM GPU policy change",
+      "Inference": "prefer one control operation on already owned live resource; otherwise only one normal ready model/preset create-delete after exact input review",
+      "legacy_network_v1": "existing original v1 consumer/request required; no fake public field/SQL state manufacture"
+    },
+    "not_yet_frozen_required_inputs": [
+      "authorized old-business principal/plan/action pair and compatible quota accounts",
+      "actual current enabled CPU/GPU presets with correct CONTAINER_INSTANCE/INFERENCE usages",
+      "actual trusted image_id/image_scope and shell-capable CPU image for terminal",
+      "configured reachable actual owner endpoints/mTLS, and ready model/preset for actual Inference dispatch",
+      "existing legacy-v1 owned consumer and original key/body if available"
+    ],
+    "normal_api_entries": {
+      "instance_create": "POST /api/v1/instances",
+      "instance_operation": "GET /api/v1/instance-operations/{operation_id}",
+      "instance_exec": "POST /api/v1/instances/{instance_id}/exec",
+      "instance_delete": "DELETE /api/v1/instances/{instance_id}",
+      "inference_create": "POST /api/v1/inference/services",
+      "inference_operation": "GET /api/v1/inference/operations/{operation_id}",
+      "inference_controls": "POST /api/v1/inference/services/{resource_id}:start|stop|restart|delete"
+    },
+    "unready_input_rule": "Missing catalog/permission/owner input stops only its dependent LIVE step. Do not create placeholder credentials, new GPUs, unmanaged images, namespaces, routes or fake success."
+  },
+  "mapping_only": true,
+  "new_tests": 0,
+  "new_api_calls": 0,
+  "new_loads": 0,
+  "shared_mutations": 0,
+  "repository_files_changed": 0,
+  "stop": "One evidence pass complete; no further audit or execution is performed."
+}

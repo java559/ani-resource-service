@@ -1,0 +1,31 @@
+{
+  "phase": "rollout",
+  "result": "ROLLOUT_READY_IMAGE_VERIFIED_NOT_BUSINESS_ACCEPTANCE",
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "plan_sha256": "611f33f1012352855456b03f693a83299dc3d5e41e644263cc9864ede0ae56d0",
+  "root_release_sha256": "79a6ac367b0c42cf6411cbb8e1105816e00907752f3f8b19347bcfb78898fe28",
+  "jobs": [],
+  "new_vm_create_enabled": false,
+  "shared_schema_ddl": 0,
+  "role_plan_quota_changes": 0,
+  "secret_values_exported": 0,
+  "prior_rollout_attempt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-deploy-01/rollout.json",
+  "prior_rollout_attempt_sha256": "3460224d7040ab7d87774eb5c9ef4527d43268c5f5455e229375bed11c560aca",
+  "only_image_and_create_gate_delta": true,
+  "deployment_uid": "8a843c44-5a82-4e48-a92e-a3c28c665c67",
+  "replicas": 1,
+  "strategy": "Recreate",
+  "patched_generation": 144,
+  "new_template_sha256": "16f7e219aeb1fbc401455951e04db1b31cae5d57a00599a3e7ab868a35dc0f1c",
+  "pods": [
+    {
+      "name": "ani-governance-856bf9746f-vr6pv",
+      "uid": "70bdc806-8a74-452b-a227-11c2b0ef18ea",
+      "image_id": "172.16.101.10:30003/icn-01a15337-release/ani-governance@sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+      "ready": true
+    }
+  ],
+  "ready_replicas": 1,
+  "server_image": "172.16.101.10:30003/icn-01a15337-release/ani-governance@sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+  "ANI_VM_V1_WRITES": "false"
+}

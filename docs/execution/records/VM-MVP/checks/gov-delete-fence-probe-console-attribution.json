@@ -1,0 +1,43 @@
+{
+  "observed_at": "2026-10-24T00:21:44.479847+00:00",
+  "vm_id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+  "original_console_key_sha256": "2c9d2e585653cc0f2206aa169d5813a9342fe94ca865236cdcc14ee3985a1c88",
+  "session_id": "66c00dd5-dddf-479d-be13-69ec6744ae98",
+  "session": {
+    "state": "issued",
+    "created_at": "1792800945155",
+    "ticket_expires_at": "1792801005155",
+    "claimed_at": "0",
+    "closed_at": "0"
+  },
+  "ticket_expired_at_observation": true,
+  "same_original_key_vm_and_binding": true,
+  "vm_session_count": 1,
+  "known_vm_sessions": [
+    "66c00dd5-dddf-479d-be13-69ec6744ae98"
+  ],
+  "original_wire_status_persisted": false,
+  "handwritten_success_http_status": 202,
+  "status_basis": "deployed handwritten non-GET response=202, actual Gov nil-error success + exact SG session; first harness discarded local wire status",
+  "gov_request_logs": [
+    {
+      "ts": "2026-10-24T08:15:45+08:00",
+      "time": "2026-10-24T08:15:45.183+08:00",
+      "operation": "/admin.service.v1.VMService/CreateVMConsoleSession",
+      "code": "200",
+      "reason": "",
+      "latency": "0.460940587"
+    }
+  ],
+  "resource_resolve_logs": [],
+  "sg_issued_logs": [
+    {
+      "request_id": "e2c59fc7-1d2e-4d0b-9ab6-6fec327b3038",
+      "session_id": "66c00dd5-dddf-479d-be13-69ec6744ae98"
+    }
+  ],
+  "delete_send_attempts": 0,
+  "acl_journal_exists": false,
+  "ticket_url_or_ciphertext_read": false,
+  "new_http_or_acl_calls": 0
+}

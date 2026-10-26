@@ -1,0 +1,32 @@
+{
+  "state": "PASS_NORMAL_TASK_TENANT_IMAGE_SPACE_ENABLED",
+  "started_at": "2026-10-24T10:34:33.031974+00:00",
+  "method": "POST",
+  "path": "/api/v1/images/space:enable",
+  "idempotency_key": "30800e29-28c4-46b2-b25f-c4e22b5c3198",
+  "service_or_vm_changes": 0,
+  "ack": {
+    "spaceId": "f457f793-1139-47b2-b442-db905e48f0ad",
+    "projectName": "t-vm-mvp-v24-01a168ce",
+    "registryAuthority": "172.16.101.10:30003",
+    "state": "available",
+    "reason": "",
+    "version": "3",
+    "pullCredentialGeneration": "1",
+    "createdAt": "2026-10-24T10:34:33.073252Z",
+    "updatedAt": "2026-10-24T10:34:38.500002Z"
+  },
+  "readback": {
+    "spaceId": "f457f793-1139-47b2-b442-db905e48f0ad",
+    "projectName": "t-vm-mvp-v24-01a168ce",
+    "registryAuthority": "172.16.101.10:30003",
+    "state": "available",
+    "reason": "",
+    "version": "3",
+    "pullCredentialGeneration": "1",
+    "createdAt": "2026-10-24T10:34:33.073252Z",
+    "updatedAt": "2026-10-24T10:34:38.500002Z"
+  },
+  "send_attempts": 1,
+  "finished_at": "2026-10-24T10:34:38.537916+00:00"
+}

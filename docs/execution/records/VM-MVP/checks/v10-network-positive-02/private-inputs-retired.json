@@ -1,0 +1,36 @@
+{
+  "result": "PASS_SIX_DUPLICATED_PRIVATE_TEST_PASSWORD_COPIES_RETIRED",
+  "at": "2026-10-24T23:58:21.402665+00:00",
+  "preceding_final_cleanup_sha256": "f326d6cf3045f27d36b82bbf39ed81d21c02c3f3a04522966413e59e9338dd9b",
+  "changes": [
+    {
+      "path": "private/a/state.json",
+      "action": "REMOVE_ONLY_DUPLICATED_PASSWORD_KEEP_OPERATION_AND_STORAGE_CURSOR"
+    },
+    {
+      "path": "private/a-create-01/5.request.json",
+      "action": "DELETE_EXACT_FINISHED_CREATE_REQUEST"
+    },
+    {
+      "path": "private/b/state-before-placement-restart.json",
+      "action": "REMOVE_ONLY_DUPLICATED_PASSWORD_KEEP_OPERATION_AND_STORAGE_CURSOR"
+    },
+    {
+      "path": "private/b/state.json",
+      "action": "REMOVE_ONLY_DUPLICATED_PASSWORD_KEEP_OPERATION_AND_STORAGE_CURSOR"
+    },
+    {
+      "path": "private/b-create-01/5.request.json",
+      "action": "DELETE_EXACT_FINISHED_CREATE_REQUEST"
+    },
+    {
+      "path": "private/b-native-04/restart-generation-candidate.private.json",
+      "action": "REMOVE_ONLY_DUPLICATED_PASSWORD_KEEP_OPERATION_AND_STORAGE_CURSOR"
+    }
+  ],
+  "original_credential_reference_preserved": true,
+  "new_backups_or_credential_copies": 0,
+  "credential_values_or_hashes_exported": false,
+  "windows_source_services_cluster_api_pg_mutations": 0,
+  "heavy_lock_released": true
+}

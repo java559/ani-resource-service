@@ -1,0 +1,5 @@
+{
+  "result": "FAIL_BEFORE_ANY_SERVICE_CHANGE",
+  "failure_type": "ParserError",
+  "original_is_json": true
+}

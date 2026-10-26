@@ -1,0 +1,46 @@
+--- FAIL: TestNativeWindowsDomainStartFillsMissingOnlyAndIsIdempotent (0.00s)
+    windows_domain_test.go:95: legacy Windows profile not completed without overriding other fields: features got=map[hyperv:map[relaxed:map[enabled:true]] smm:map[enabled:true]] want=map[acpi:map[enabled:true] apic:map[enabled:true] hyperv:map[relaxed:map[enabled:true] spinlocks:map[enabled:true spinlocks:8191] vapic:map[enabled:true]] smm:map[enabled:true]]
+--- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts (0.03s)
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/acpi-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/apic-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/relaxed-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/vapic-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/spinlocks-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/spinlocks-other-retries (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/hyperv-passthrough (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/timezone (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/utc-offset (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/hpet-enabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/pit-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/pit-other-policy (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/rtc-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/rtc-other-policy (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/hypervclock-disabled (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsExplicitConflicts/malformed-clock (0.00s)
+        windows_domain_test.go:173: explicit Windows profile conflict was not rejected before native power <nil> 1
+--- FAIL: TestNativeWindowsDomainStartRequiresOwnedStoppedIdentity (0.01s)
+    --- FAIL: TestNativeWindowsDomainStartRequiresOwnedStoppedIdentity/missing-rv (0.00s)
+        windows_domain_test.go:221: unsafe Windows profile migration or native Start accepted missing-rv <nil> 1
+--- FAIL: TestNativeWindowsDomainStartRejectsConcurrentUIDOrRVChange (0.00s)
+    --- FAIL: TestNativeWindowsDomainStartRejectsConcurrentUIDOrRVChange/uid (0.00s)
+        windows_domain_test.go:253: concurrent Windows UID/RV replacement bypassed CAS <nil> 1
+    --- FAIL: TestNativeWindowsDomainStartRejectsConcurrentUIDOrRVChange/resourceVersion (0.00s)
+        windows_domain_test.go:253: concurrent Windows UID/RV replacement bypassed CAS <nil> 1
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.055s
+FAIL

@@ -1,0 +1,20 @@
+{
+  "automatic_copy_retries": 0,
+  "copy_attempts": 1,
+  "deployments": 0,
+  "metadata": {
+    "archive_sha256": "b465b5cc097e26b81a3ba3283e6b641d0972ceae4658a5e142c17b1287fcfd34",
+    "artifact_receipt_sha256": "6c979f1670eed3d32cc8c73638c703cd44bcc4bae1a06d75253a79045f168b23",
+    "destination": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+    "manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+    "service": "governance",
+    "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+    "source_tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+  },
+  "plan_sha256": "9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/governance.json",
+  "registry_logins": 0,
+  "result": "PUBLISHED_DIGEST_VERIFIED",
+  "transport": "strict-tls",
+  "verified_at": "2026-10-24T10:08:00.839839+00:00"
+}

@@ -1,0 +1,135 @@
+{
+  "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/ani-resource-service-vm-mvp-4cc56c8fc598-01a168ce.oci.tar",
+  "archive_bytes": 35556864,
+  "archive_sha256": "91453ff9781e0865c80d6c1e29119b5bb80ce1ae66ae6a91005dc82df830cc6c",
+  "artifact_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/resource-oci-built.json",
+  "artifact_receipt_sha256": "0791f15e88f51b07b869ed499b10d5105b6fdcc038da13821c07940dbbbb69c2",
+  "binary_recompiled": false,
+  "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+  "binary_sha256_inside_oci": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+  "binary_version_retained": "vm-mvp-candidate22-01a168ce",
+  "deployments": 0,
+  "expected_manifest_digest": "sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+  "full_verification": "NOT_RERUN; reuse actual8589 full gates plus candidate22 target PG/Restart/List and build receipts",
+  "future_command_not_executed": [
+    "/usr/bin/skopeo",
+    "copy",
+    "--preserve-digests",
+    "--retry-times=0",
+    "--dest-tls-verify=true",
+    "--dest-cert-dir",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+    "--dest-authfile",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+    "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/ani-resource-service-vm-mvp-4cc56c8fc598-01a168ce.oci.tar:vm-mvp-4cc56c8fc598-01a168ce",
+    "docker://172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce"
+  ],
+  "image_pushes": 0,
+  "local_image_tag": "ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+  "local_oci_packaging": "PASS",
+  "manifest": {
+    "config": {
+      "digest": "sha256:df6d9e9fa3fa8dacc25a5f2b2fa1cdedbb612fa760e156520b31488461f21602",
+      "mediaType": "application/vnd.oci.image.config.v1+json",
+      "size": 3582
+    },
+    "layers": [
+      {
+        "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 88276
+      },
+      {
+        "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 12760
+      },
+      {
+        "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 475570
+      },
+      {
+        "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 29309
+      },
+      {
+        "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 75
+      },
+      {
+        "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 197
+      },
+      {
+        "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 132
+      },
+      {
+        "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 168
+      },
+      {
+        "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 91
+      },
+      {
+        "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 361
+      },
+      {
+        "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 320
+      },
+      {
+        "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 144572
+      },
+      {
+        "digest": "sha256:19ff75d82d9bf268af8199b8867ac5f1c94c650f7d2cf2ca680b015ec88c6851",
+        "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+        "size": 34783557
+      }
+    ],
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "schemaVersion": 2
+  },
+  "manifest_digest": "sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+  "prepared_at": "2026-10-24T18:00:20.818551+00:00",
+  "proposed_destination_tag": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+  "registry": {
+    "auth_file_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+    "ca_file": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs/ca.crt",
+    "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+    "endpoint": "172.16.101.10:30003",
+    "head_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/head-preflight.json",
+    "head_receipt_sha256": "25ea76cdb0747c48038316f09bf30a14e9146ef05e9bdcdaafef4ba633711856",
+    "project": "icn-01a15337-release",
+    "readonly_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-4cc56c8f-01/publication-readonly.json",
+    "readonly_receipt_sha256": "1de2cc07ba2f0f853dd6181ed422cfbc508093e7deab69f4cac3802dfc10caf3",
+    "reason": "strict HTTPS authenticated exact repository/tag HEAD returned404 without reading body; original GET timeout retained",
+    "tag_absence_verification": "PASS_AUTHENTICATED_HEAD404",
+    "target_absent": true,
+    "transport": "strict-https"
+  },
+  "required_before_single_future_copy": [
+    "Root Goal section4 explicit approval of exact plan and publisher SHA",
+    "heavy lock, exclusive new tag window, fresh exact artifact/CA/auth identity and tag absence guards",
+    "single copy attempt, no automatic retry, exact digest readback; never replace an existing tag"
+  ],
+  "result": "PREPARED_NOT_PUSHED_REQUIRES_GOAL_SECTION4_APPROVAL",
+  "service": "resource",
+  "service_changes": 0,
+  "source_commit": "4cc56c8fc5985033dd4da59c60ed06ae962cff57",
+  "source_map_sha256": "dd02373be6c582a06ca7b653d13468f95c2bc138049276ebf4fffde1d0164688",
+  "source_tree": "9b0aab90edcd74967d1fcde7334fa71b65549f31"
+}

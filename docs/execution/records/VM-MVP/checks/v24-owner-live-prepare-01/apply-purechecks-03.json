@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "source_sha256": "4a0a7608f2adcffc222c42f829a79db5432af2dc53295fdf4a73e28711417c8d",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "py_compile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/apply-owner-clients-attempt03.py"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/apply-owner-clients-attempt03.py",
+        "self-test"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"result\": \"PASS\", \"pure_guards\": 14, \"instance_terminal_pending_unknown_cases\": 3, \"helper_imports\": 0, \"api_calls\": 0, \"secret_reads\": 0, \"service_restarts\": 0}"
+    }
+  ],
+  "seconds": 0.263,
+  "api_calls": 0,
+  "secret_reads": 0,
+  "service_changes": 0
+}

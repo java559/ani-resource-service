@@ -1,0 +1,388 @@
+{
+  "state": "PASS_NORMAL_API_READ-READY",
+  "step": "read-ready",
+  "started_at": "2026-10-24T10:32:56.849027+00:00",
+  "sql_writes": 0,
+  "vm_mutations": 0,
+  "plan2_consumers": [
+    {
+      "id": 1,
+      "code": "vm-mvp-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    },
+    {
+      "id": 2,
+      "code": "vm-isolation-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    }
+  ],
+  "permission_matches": {
+    "instance:create": [
+      {
+        "id": 37,
+        "code": "instance:create",
+        "status": "ON",
+        "apiIds": [
+          290
+        ]
+      }
+    ],
+    "instance:list": [
+      {
+        "id": 38,
+        "code": "instance:list",
+        "status": "ON",
+        "apiIds": [
+          289
+        ]
+      }
+    ],
+    "instance:read": [
+      {
+        "id": 39,
+        "code": "instance:read",
+        "status": "ON",
+        "apiIds": [
+          296,
+          302
+        ]
+      }
+    ],
+    "instance:delete": [
+      {
+        "id": 40,
+        "code": "instance:delete",
+        "status": "ON",
+        "apiIds": [
+          292
+        ]
+      }
+    ],
+    "instance:exec": [
+      {
+        "id": 41,
+        "code": "instance:exec",
+        "status": "ON",
+        "apiIds": [
+          293
+        ]
+      }
+    ],
+    "instance:operation:read": [
+      {
+        "id": 42,
+        "code": "instance:operation:read",
+        "status": "ON",
+        "apiIds": [
+          288
+        ]
+      }
+    ],
+    "instance:preset:read": [
+      {
+        "id": 43,
+        "code": "instance:preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ],
+    "image:space:enable": [
+      {
+        "id": 44,
+        "code": "image:space:enable",
+        "status": "ON",
+        "apiIds": [
+          270
+        ]
+      }
+    ],
+    "image:space:get": [
+      {
+        "id": 45,
+        "code": "image:space:get",
+        "status": "ON",
+        "apiIds": [
+          269
+        ]
+      }
+    ],
+    "image:registration:get": [
+      {
+        "id": 46,
+        "code": "image:registration:get",
+        "status": "ON",
+        "apiIds": [
+          266
+        ]
+      }
+    ],
+    "image:registration:list": [
+      {
+        "id": 47,
+        "code": "image:registration:list",
+        "status": "ON",
+        "apiIds": [
+          264
+        ]
+      }
+    ],
+    "modeldev:compute-preset:read": [
+      {
+        "id": 48,
+        "code": "modeldev:compute-preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ],
+    "inference:compute-preset:read": [
+      {
+        "id": 49,
+        "code": "inference:compute-preset:read",
+        "status": "ON",
+        "apiIds": [
+          259
+        ]
+      }
+    ]
+  },
+  "plan2_modules": [
+    {
+      "id": 3,
+      "planId": 2,
+      "module": "DASHBOARD"
+    },
+    {
+      "id": 4,
+      "planId": 2,
+      "module": "OPM"
+    },
+    {
+      "id": 5,
+      "planId": 2,
+      "module": "NETWORK"
+    },
+    {
+      "id": 6,
+      "planId": 2,
+      "module": "VIRTUAL_MACHINE"
+    },
+    {
+      "id": 7,
+      "planId": 2,
+      "module": "INSTANCE"
+    },
+    {
+      "id": 8,
+      "planId": 2,
+      "module": "IMAGE"
+    },
+    {
+      "id": 9,
+      "planId": 2,
+      "module": "MODEL"
+    },
+    {
+      "id": 10,
+      "planId": 2,
+      "module": "INFERENCE"
+    }
+  ],
+  "quota_definitions": {
+    "items": [
+      {
+        "code": "api.calls",
+        "displayName": "API \u8c03\u7528\u91cf",
+        "unit": "request",
+        "accountingKind": "COUNTER",
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "code": "gpu.count",
+        "displayName": "GPU \u5360\u7528",
+        "unit": "gpu",
+        "accountingKind": "CONCURRENT",
+        "enforcement": "LAB_ONLY"
+      },
+      {
+        "code": "gpu.physical.count",
+        "displayName": "Physical GPU count",
+        "unit": "gpu",
+        "accountingKind": "CONCURRENT",
+        "enforcement": "ENFORCED"
+      },
+      {
+        "code": "gpu.shared_memory_mib",
+        "displayName": "Shared GPU memory",
+        "unit": "MiB",
+        "accountingKind": "CONCURRENT",
+        "enforcement": "ENFORCED"
+      },
+      {
+        "code": "storage.bytes",
+        "displayName": "\u5b58\u50a8\u7a7a\u95f4",
+        "unit": "byte",
+        "accountingKind": "CONCURRENT",
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "code": "user.count",
+        "displayName": "\u7528\u6237\u6570\u4e0a\u9650",
+        "unit": "user",
+        "accountingKind": "CONCURRENT",
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      }
+    ],
+    "total": "6"
+  },
+  "quota_accounts": {
+    "tenantId": 1,
+    "items": [
+      {
+        "quotaCode": "api.calls",
+        "unit": "request",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "quotaCode": "gpu.count",
+        "unit": "gpu",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LAB_ONLY"
+      },
+      {
+        "quotaCode": "gpu.physical.count",
+        "unit": "gpu",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "ENFORCED"
+      },
+      {
+        "quotaCode": "gpu.shared_memory_mib",
+        "unit": "MiB",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "ENFORCED"
+      },
+      {
+        "quotaCode": "storage.bytes",
+        "unit": "byte",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "quotaCode": "user.count",
+        "unit": "user",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      }
+    ]
+  },
+  "plan2_quotas": [],
+  "current_role_permission_ids": [
+    1,
+    3,
+    10,
+    12,
+    15,
+    20,
+    29,
+    30,
+    36,
+    11,
+    21,
+    23,
+    14,
+    17,
+    18,
+    19,
+    22,
+    24,
+    25,
+    8,
+    9,
+    13,
+    16,
+    26,
+    27,
+    28,
+    37,
+    38,
+    39,
+    41,
+    45,
+    48,
+    44,
+    46,
+    49,
+    40,
+    47,
+    43,
+    42
+  ],
+  "missing_permissions": [],
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/tenants?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles/3",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/plan-modules?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/quota-definitions?noPaging=true",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/tenants/1/quota-accounts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/plan-quotas?noPaging=true",
+      "status": 200
+    }
+  ],
+  "finished_at": "2026-10-24T10:32:57.239793+00:00"
+}

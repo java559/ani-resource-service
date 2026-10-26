@@ -1,0 +1,13 @@
+{
+  "pod_uid": "a0f686e2-d1c8-4066-a2a7-f1d4f669ffa8",
+  "node": "ani-03",
+  "container": "workspace",
+  "sanitized_last_lines": [
+    "Traceback (most recent call last):",
+    "  File \"/opt/ani/start.py\", line 5, in <module>",
+    "[sensitive diagnostic line omitted]",
+    "[sensitive diagnostic line omitted]"
+  ],
+  "private_raw_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/cpu-workspace-first-failure.log",
+  "mutations": 0
+}

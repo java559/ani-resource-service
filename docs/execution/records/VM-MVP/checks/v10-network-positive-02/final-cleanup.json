@@ -1,0 +1,128 @@
+{
+  "result": "PASS_SCOPED_NORMAL_DELETE_NATIVE_ROOT_CSI_AND_ATTACHMENT_CLEANUP",
+  "at": "2026-10-24T23:53:27.515790+00:00",
+  "members": {
+    "a": {
+      "vm_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+      "delete_operation_id": "092f746e-e4a3-4d0a-82a2-58fd09591b18",
+      "delete_state": "succeeded",
+      "send_attempts": 1,
+      "current": {
+        "id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+        "name": "vm-mvp-v10-positive-02-a-01a168ce",
+        "version": "2",
+        "desiredState": "Deleted",
+        "observedState": "Deleted",
+        "reason": "",
+        "lastOperationId": "092f746e-e4a3-4d0a-82a2-58fd09591b18",
+        "closing": true
+      },
+      "frozen_native_object_count": 8,
+      "remaining_original_objects": [],
+      "root_family": [
+        {
+          "name": "csi-vol-97fb090a-6d85-4663-b83d-0b5c1ab53112",
+          "original_image_id": "26b3a622a1b913",
+          "current_result": "ABSENT",
+          "matching_trash": []
+        },
+        {
+          "name": "csi-vol-97fb090a-6d85-4663-b83d-0b5c1ab53112-temp",
+          "original_image_id": "26b3a6319c05fd",
+          "current_result": "ABSENT",
+          "matching_trash": []
+        }
+      ],
+      "attachment": [
+        {
+          "id": "att_e2b57b855fdf41c7b9628dbf9e11064a",
+          "state": "released",
+          "blocked": false
+        }
+      ],
+      "protected": {
+        "windows_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "windows_vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+        "windows_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+        "windows_pvc_uids": [
+          "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+          "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+          "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+          "752a82db-f998-488b-b580-c112f986e067",
+          "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        ],
+        "source_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+        "source_content_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+        "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+        "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+        "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+      },
+      "normal_session_revoked": true,
+      "receipt": "a-cleanup-02.json",
+      "receipt_sha256": "9d47926d97713edf04d4b3f2bea27c0eb2e5589b69d78c58c2526a934df9581a"
+    },
+    "b": {
+      "vm_id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "delete_operation_id": "e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "delete_state": "succeeded",
+      "send_attempts": 1,
+      "current": {
+        "id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+        "name": "vm-mvp-v10-positive-02-b-01a168ce",
+        "version": "3",
+        "desiredState": "Deleted",
+        "observedState": "Deleted",
+        "reason": "",
+        "lastOperationId": "e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+        "closing": true
+      },
+      "frozen_native_object_count": 8,
+      "remaining_original_objects": [],
+      "root_family": [
+        {
+          "name": "csi-vol-ebebda4c-d31f-4b0b-8b4d-30ca8e87179d",
+          "original_image_id": "26b3a6f9cc0bf5",
+          "current_result": "ABSENT",
+          "matching_trash": []
+        },
+        {
+          "name": "csi-vol-ebebda4c-d31f-4b0b-8b4d-30ca8e87179d-temp",
+          "original_image_id": "26b3a615415b07",
+          "current_result": "ABSENT",
+          "matching_trash": []
+        }
+      ],
+      "attachment": [
+        {
+          "id": "att_83a0a325386041b7a5b0b16d262abba1",
+          "state": "released",
+          "blocked": false
+        }
+      ],
+      "protected": {
+        "windows_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "windows_vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+        "windows_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+        "windows_pvc_uids": [
+          "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+          "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+          "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+          "752a82db-f998-488b-b580-c112f986e067",
+          "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        ],
+        "source_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+        "source_content_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+        "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+        "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+        "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+      },
+      "normal_session_revoked": true,
+      "receipt": "b-cleanup-02.json",
+      "receipt_sha256": "564244f44e9fe26e2fb8cc396b8ad352fd66d6276f7b75e069620ae33174e35d"
+    }
+  },
+  "extra_cluster_api_or_sql_queries": 0,
+  "backend_writes": 0,
+  "credential_values_or_private_state_hashes_public": false,
+  "windows_source_nad_protected": true
+}

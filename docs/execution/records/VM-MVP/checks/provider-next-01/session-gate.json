@@ -1,0 +1,108 @@
+{
+  "source_tree": "407609f776a718d61b74ec95e296ba2db0bb38ad",
+  "parent": "fb354938978250506cb22409e6ce8545d779ab4f",
+  "source_files": 91,
+  "source_manifest_sha256": "6bfc70ee4b6082d6226a695a6c251e90251360d9b6b2da5bac985dbe40d2f48f",
+  "snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+  "gowork": "off",
+  "pg_environment": "UNSET_NO_PG_TAGS_NO_BUSINESS_DB",
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.008
+    },
+    {
+      "argv": [
+        "/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf",
+        "--version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.032
+    },
+    {
+      "argv": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-stage-01/.bin/protoc-gen-go",
+        "--version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.124
+    },
+    {
+      "argv": [
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/sg-stage-01/.bin/protoc-gen-go-grpc",
+        "--version"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.033
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.215
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session/api",
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.065
+    },
+    {
+      "argv": [
+        "make",
+        "check"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/provider-next-01/session",
+      "timeout_seconds": 240,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 78.892
+    }
+  ],
+  "started_at": "2026-10-24T05:12:37.524075+00:00",
+  "tmpdir": {
+    "path": "/tmp/avp-sl7_2d7w",
+    "uid": 1000,
+    "inode": 2005188,
+    "device": 38,
+    "mode": "0700",
+    "removed": true
+  },
+  "git_network_pushes": 0,
+  "business_api_calls": 0,
+  "runtime_changed": false,
+  "source_unchanged": true,
+  "result": "PASS",
+  "finished_at": "2026-10-24T05:13:56.911183+00:00",
+  "log_sha256": "1449e290a8fb359ba1a999d276e68c33581f160174ffe1a95b942f7abdb653ba"
+}

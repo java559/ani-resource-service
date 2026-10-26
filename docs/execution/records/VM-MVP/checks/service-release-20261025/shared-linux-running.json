@@ -1,0 +1,97 @@
+{
+  "phase": "observe",
+  "label": "observe-created-01",
+  "result": "ORIGINAL_OPERATION_AND_VM_OBSERVED_NOT_GUEST_OR_PHYSICAL_ACCEPTANCE",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "started_at": "2026-10-24T22:03:08.975379+00:00",
+  "plan_sha256": "4ac179676437e6de39b22e4e9461169b57f4dcf55dbb76f64413edd2f3ea3cb4",
+  "runner_sha256": "72fc487d06441fab4cda98ffd3edaf6f57d2bed86635478d843b72942b382301",
+  "root_release_sha256": "937ef9d44638b3e3c82536fdde45a90e534a11a23e07d4ea4f1e2107952d0fca",
+  "gov_tenant_id": 14,
+  "calls": [
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/login.request.json",
+      "seconds": 2.529,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/login.response.json"
+    },
+    {
+      "name": "original-operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad/operations/def1bfce-ee2f-4fd1-9007-5424337187b8",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 0.659,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/original-operation.response.json"
+    },
+    {
+      "name": "original-vm",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 0.57,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/original-vm.response.json"
+    },
+    {
+      "name": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/logout.request.json",
+      "seconds": 0.046,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-created-01/logout.response.json"
+    }
+  ],
+  "guest_actions": 0,
+  "cluster_or_database_calls": 0,
+  "lifecycle_posts": 0,
+  "secret_values_or_hashes_public": false,
+  "auto_retry": false,
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "basis_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/create.json",
+  "basis_sha256": "f5e945294038520e4ff1ce8373ecbe89b248691bf6149c371efd99a47a250e8f",
+  "operation_id": "def1bfce-ee2f-4fd1-9007-5424337187b8",
+  "operation": {
+    "id": "def1bfce-ee2f-4fd1-9007-5424337187b8",
+    "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intent_version": "1",
+    "state": "succeeded",
+    "reason": "",
+    "observed_at": "2026-10-24T22:02:50.474463517Z"
+  },
+  "vm": {
+    "id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "name": "vm-mvp-shared-01a168ce-linux-01",
+    "version": "1",
+    "desired_state": "Running",
+    "observed_state": "Running",
+    "reason": "",
+    "last_operation_id": "def1bfce-ee2f-4fd1-9007-5424337187b8",
+    "preset_id": "61b5207d-8cbb-40b8-adfa-14977373e7f4",
+    "system_disk_size_gb": "20",
+    "source_kind": "DISK_IMAGE",
+    "media_key": "ubuntu-24.04",
+    "closing": false
+  },
+  "disk_observation": [
+    {
+      "disk_id": "69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "role": "system",
+      "size_gb": "20",
+      "volume_name": "disk-69bfe3b4cbf75a14942377e5171cdd3b",
+      "serial": "69bfe3b4-cbf7-5a14-9423-77e5171cdd3b"
+    }
+  ],
+  "session_revoked": true,
+  "finished_at": "2026-10-24T22:03:12.790012+00:00",
+  "heavy_lock_released": true
+}

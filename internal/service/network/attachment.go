@@ -11,7 +11,11 @@ func (s *NetworkService) PrepareAttachment(ctx context.Context, r *networkv1.Pre
 	if s.attachments == nil {
 		return nil, rpcError(biz.Fail(biz.DependencyUnavailable, "attachment service unavailable"))
 	}
-	a, e := s.attachments.Prepare(ctx, biz.PrepareAttachment{TenantID: r.GetTenantId(), InstanceID: r.GetInstanceId(), SubnetID: r.GetSubnetId(), VPCID: r.GetVpcId(), Slot: r.GetSlot(), RequestKey: r.GetRequestKey(), SubmissionID: r.GetSubmissionId(), Generation: r.GetGeneration(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), WorkloadMode: r.GetWorkloadMode()})
+	var expectation *biz.VMNetworkExpectation
+	if x := r.GetVmExpectation(); x != nil {
+		expectation = &biz.VMNetworkExpectation{NADName: x.NadName, NADUID: x.NadUid, NADConfigDigest: x.NadConfigDigest}
+	}
+	a, e := s.attachments.Prepare(ctx, biz.PrepareAttachment{TenantID: r.GetTenantId(), InstanceID: r.GetInstanceId(), SubnetID: r.GetSubnetId(), VPCID: r.GetVpcId(), Slot: r.GetSlot(), RequestKey: r.GetRequestKey(), SubmissionID: r.GetSubmissionId(), Generation: r.GetGeneration(), ClusterID: r.GetClusterId(), Namespace: r.GetNamespace(), WorkloadMode: r.GetWorkloadMode(), VMExpectation: expectation})
 	v, e := wireAttachment(a, e)
 	if e != nil {
 		return nil, e
@@ -59,6 +63,12 @@ func wireAttachment(a biz.Attachment, e error) (*networkv1.Attachment, error) {
 	if a.Plan != nil {
 		p := a.Plan
 		v.PodPrimary = &networkv1.PodPrimaryPlan{FormatVersion: p.FormatVersion, Namespace: p.Namespace, SubnetAnnotation: p.PrimaryNetworkRef, Labels: &networkv1.AttachmentLabels{TenantId: p.TenantID, InstanceId: p.InstanceID, AttachmentId: p.AttachmentID, SubmissionId: p.SubmissionID, Generation: p.Generation}}
+	}
+	if p := a.VMPrimary; p != nil {
+		v.VmPrimary = &networkv1.VMPrimaryPlan{FormatVersion: p.FormatVersion, Namespace: p.Namespace, NadName: p.NADName, NadUid: p.NADUID, NadConfigDigest: p.NADConfigDigest, KcnSubnetRef: p.KCNSubnetRef, Labels: &networkv1.AttachmentLabels{TenantId: p.TenantID, InstanceId: p.InstanceID, AttachmentId: p.AttachmentID, SubmissionId: p.SubmissionID, Generation: p.Generation}}
+	}
+	for _, a := range a.VMCurrentAddresses {
+		v.VmCurrentAddresses = append(v.VmCurrentAddresses, &networkv1.VMCurrentAddress{NicName: a.NICName, Address: a.Address, LauncherPodUid: a.LauncherPodUID, VmiUid: a.VMIUID})
 	}
 	return v, nil
 }

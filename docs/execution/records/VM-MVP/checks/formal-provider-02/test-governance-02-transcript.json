@@ -1,0 +1,22 @@
+{
+  "at_recorded": "2026-10-24T08:09:25.732766+00:00",
+  "phase": "test",
+  "repo": "governance",
+  "host": "fedora",
+  "result": "TIMED_OUT",
+  "timeout_seconds": 60,
+  "owned_group_normal_term": true,
+  "tool_session": 59168,
+  "command": [
+    "go",
+    "test",
+    "-mod=readonly",
+    "./app/admin/service/internal/service",
+    "-run",
+    "^TestVM",
+    "-count=1"
+  ],
+  "candidate_processes_changed": false,
+  "receipt_write": "FileExistsError preserved prior test-governance.json; new receipt reconstructed only from tool transcript, captured Go output unavailable",
+  "go_compiler_or_test_failure_observed": false
+}

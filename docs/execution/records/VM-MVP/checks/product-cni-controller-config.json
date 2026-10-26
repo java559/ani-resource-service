@@ -1,0 +1,19 @@
+[
+  {
+    "pod": "kcn-controller-77cf4dfdbc-b9rcj",
+    "uid": "672bc56b-a2de-4259-a00b-aad518667b0f",
+    "lines": [
+      "2026-10-23T23:56:18+08:00\tERROR\tPodReconciler\tFailed to set up vnic resources on pod create\t{\"controller\": \"core-pod\", \"namespace\": \"tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c\", \"name\": \"virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf\", \"reconcileID\": \"48c8e147-7efe-49b6-a9d7-1887b81bff2e\", \"error\": \"Falied to load config of net-attach-def tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vm-mvp-main: Invalid Configuration; server_socket is required in cni.conf, &{NetConf:{CNIVersion:0.3.1 Name:kc-networking Type: Capabilities:map[] IPAM:{Type:} DNS:{Nameservers:[] Domain: Search:[] Options:[]} RawPrevResult:map[] PrevResult:<nil> ValidAttachments:[]} ServerSocket: SriovType: DeviceID:}\"}"
+    ]
+  },
+  {
+    "pod": "kcn-controller-77cf4dfdbc-bksfw",
+    "uid": "a42ec5d0-cc00-49e9-b21a-fae75f9c037f",
+    "lines": []
+  },
+  {
+    "pod": "kcn-controller-77cf4dfdbc-c4kwl",
+    "uid": "92fb0d38-ef01-4f6b-a869-254d4fba740f",
+    "lines": []
+  }
+]

@@ -1,0 +1,90 @@
+{
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "tool_pod": {
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce",
+    "container": "rook-ceph-tools"
+  },
+  "pool": "ani-block-pool",
+  "known": [
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87722fb94d",
+      "name": "csi-vol-bd0d8d56-b339-425c-83c7-34a69d7b406c",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-online-a-cleanup.json",
+      "producer_sha256": "b62935b1589ee76d93228a71f9a433f75d6a12a191a7bbb24349b7cc096a8fc6",
+      "group": "online"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87aee0c1a2",
+      "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b-temp",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-online-a-cleanup.json",
+      "producer_sha256": "b62935b1589ee76d93228a71f9a433f75d6a12a191a7bbb24349b7cc096a8fc6",
+      "group": "online"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87b6ad580d",
+      "name": "csi-vol-e83a62f0-4113-4320-aa79-1a1e36fb955b",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-online-a-cleanup.json",
+      "producer_sha256": "b62935b1589ee76d93228a71f9a433f75d6a12a191a7bbb24349b7cc096a8fc6",
+      "group": "online"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87eb1f1684",
+      "name": "csi-vol-c982b4c2-cc3a-4867-be32-a079e6336e45",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-online-a-cleanup.json",
+      "producer_sha256": "b62935b1589ee76d93228a71f9a433f75d6a12a191a7bbb24349b7cc096a8fc6",
+      "group": "online"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc8745a90f2",
+      "name": "csi-vol-a3d6301e-fcc4-4e3a-93c3-9d2f0759e153",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-offline-a-cleanup.json",
+      "producer_sha256": "2c32559f30bf29786b77955edf4fcafc4621589460864c640c0e433364982b16",
+      "group": "offline"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87a9c8f3e5",
+      "name": "csi-vol-f7658b37-e5cb-4b67-b0a3-5651bb4e2210",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-offline-a-cleanup.json",
+      "producer_sha256": "2c32559f30bf29786b77955edf4fcafc4621589460864c640c0e433364982b16",
+      "group": "offline"
+    },
+    {
+      "pool": "ani-block-pool",
+      "id": "20cc87f045052c",
+      "name": "csi-vol-adf22929-9670-4870-a4c3-42addd2afc79",
+      "producer": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-offline-a-cleanup.json",
+      "producer_sha256": "2c32559f30bf29786b77955edf4fcafc4621589460864c640c0e433364982b16",
+      "group": "offline"
+    }
+  ],
+  "sources": [
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-online-a-cleanup.json",
+      "sha256": "b62935b1589ee76d93228a71f9a433f75d6a12a191a7bbb24349b7cc096a8fc6",
+      "producer_driver_sha256": "33111b43a148b29264067cd9366da2c5d6421b912c4b96759586aac115076253"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/evidence/gov-linux-snapshot-v3-offline-a-cleanup.json",
+      "sha256": "2c32559f30bf29786b77955edf4fcafc4621589460864c640c0e433364982b16",
+      "producer_driver_sha256": "26f1472dc01946a071bb93e9cc993b93b8bf68ec6c04538f9d221b2cc695e48c"
+    }
+  ],
+  "exact_id_trash_query_capability": {
+    "supported": false,
+    "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/import-delete-backend-v3-result/gov-import-delete-backend-v3-rbd-help.json",
+    "sha256": "3be673a9ed7881b7581e5ce57ba0d77b291c0d2c79e8aacfa4ebca5ddff519f2"
+  },
+  "list_once_timeout_seconds": 10,
+  "stdout_limit_bytes": 2097152,
+  "no_metadata_rechecks": true,
+  "backend_writes": 0,
+  "retries": 0
+}

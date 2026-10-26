@@ -1,0 +1,38 @@
+{
+  "state": "EXISTING_POST_LOOPBACK_RESPONSES_ONLY",
+  "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/transport-loopback-01/gov-loopback.log",
+  "sanitized_log_fields": [
+    {
+      "time": "time=2026-10-24T20:21:21.199+08:00",
+      "patterns": [
+        "code=404",
+        "code = 404",
+        "reason=NOT_FOUND",
+        "reason = NOT_FOUND"
+      ]
+    }
+  ],
+  "private_response_shapes": [
+    {
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "response_type": "NoneType",
+      "keys": [],
+      "lists": null,
+      "length": null
+    },
+    {
+      "route": "/api/v1/models",
+      "response_type": "dict",
+      "keys": [
+        "items",
+        "total"
+      ],
+      "lists": {
+        "items": 0
+      },
+      "length": null
+    }
+  ],
+  "new_requests": 0,
+  "at": "2026-10-24T12:22:01.990618+00:00"
+}

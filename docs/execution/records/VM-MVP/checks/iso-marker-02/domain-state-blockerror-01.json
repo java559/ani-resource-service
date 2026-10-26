@@ -1,0 +1,64 @@
+{
+  "result": "READONLY_NATIVE_STATE_ERROR_SAMPLE",
+  "started_at": "2026-10-25T02:41:01.225864+00:00",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "domain": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-96575d3e-185d-4939-a01f-b82562d7af08",
+  "libvirt_uri": "qemu+unix:///session?socket=/var/run/libvirt/virtqemud-sock",
+  "domain_identity_source": "Original successful boot-activity domain name inside exact current VMI-owned compute launcher; no XML VM-UID assumption",
+  "calls": [
+    {
+      "label": "get:namespace",
+      "exit_code": 0
+    },
+    {
+      "label": "get:virtualmachines.kubevirt.io",
+      "exit_code": 0
+    },
+    {
+      "label": "get:virtualmachineinstances.kubevirt.io",
+      "exit_code": 0
+    },
+    {
+      "label": "get:pod",
+      "exit_code": 0
+    }
+  ],
+  "domain_reads": [
+    {
+      "command": "domstate",
+      "attempts": 1,
+      "exit_code": 0,
+      "stdout": "running (booted)",
+      "stderr": "",
+      "elapsed_seconds": 0.192519
+    },
+    {
+      "command": "domblkerror",
+      "attempts": 1,
+      "exit_code": 0,
+      "stdout": "No errors found",
+      "stderr": "",
+      "elapsed_seconds": 0.198996
+    }
+  ],
+  "Guest_actions": 0,
+  "VM_or_disk_mutations": 0,
+  "backend_writes": 0,
+  "other_domains_read": 0,
+  "heavy_lock_released": true,
+  "stage": "DONE",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "identity": {
+    "vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+    "vmi_uid": "27550850-b1fc-4fe9-99fb-6e08ef7d5a24",
+    "launcher_name": "virt-launcher-vm-96575d3e-185d-4939-a01f-b82562d7af08-578mb",
+    "launcher_uid": "e1f4c8f8-7c13-429a-9fb2-60f1a100283c",
+    "node": "ani-02",
+    "container": "compute",
+    "owner_chain_verified": true
+  },
+  "finished_at": "2026-10-25T02:41:07.085677+00:00",
+  "elapsed_seconds": 5.859804,
+  "causal_conclusion": "Single read-only native state/error sample; not an installer or storage root-cause determination"
+}

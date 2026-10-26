@@ -1,0 +1,89 @@
+{
+  "result": "PASS_ONLINE_RESTORE_THREE_A_GUEST_BROWSER_NOT_FULL_WINDOWS_MATRIX",
+  "observed_at": "2026-10-25T02:14:57.985436+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "native_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+  "launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+  "business_version": "18",
+  "original_start_id": "8ec49269-6ee4-490c-afe3-3cdea8300640",
+  "snapshot_id": "15e53288-6b6a-5278-83ad-5703e15303e1",
+  "mapping_receipt_sha256": "919766395d7adceba7c1cad1b9bd537f0c9f57bf595556c86a2982ac0922af9d",
+  "d3_mapping_readonly_receipt_sha256": "d5bd340912948b8325956420ee836c7a22b61f0dc648e909d043854b85d2b83f",
+  "readback_command_context": "Original Windows OOBE diagnostic shell, existing Shift+F10; persistent PowerShell prompt observed. This is not human account login acceptance.",
+  "final_readonly_command": "$files='C:\\vm-mvp-01a168ce-root.marker','T:\\vm-mvp-data3.marker','U:\\vm-mvp-data4.marker';foreach($file in $files){Get-Content -LiteralPath $file;Get-FileHash -LiteralPath $file|fl Hash,Path}",
+  "markers": [
+    {
+      "disk": "root",
+      "path": "C:\\vm-mvp-01a168ce-root.marker",
+      "text": "VM_MVP_WINDOWS_ROOT_A_01a168ce",
+      "sha256": "FDFD39B10F605F3A9E5571C04B04B3B8ECD6E8F9BD8294E1A08376A9BBD7F650"
+    },
+    {
+      "disk": "D3",
+      "path": "T:\\vm-mvp-data3.marker",
+      "text": "VM_MVP_WINDOWS_DATA3_A_01a168ce",
+      "sha256": "95AC87CEDA7A842D2A15506B7AC2336F3CADF96B193683D42BB5B4DD20B45E9D"
+    },
+    {
+      "disk": "D4",
+      "path": "U:\\vm-mvp-data4.marker",
+      "text": "VM_MVP_WINDOWS_DATA4_A_01a168ce",
+      "sha256": "656D2A600248E2E52165C419341DA30145679B529015E7A9F67618AC6AE5E760"
+    }
+  ],
+  "all_three_fulltext_and_full_sha256_equal_original_a": true,
+  "marker_writes": 0,
+  "guest_initialize_or_format": 0,
+  "guest_account_or_product_key_actions": 0,
+  "manual_login": "DEFERRED_BY_USER",
+  "business_api_mutations": 0,
+  "native_mutations": 0,
+  "d3_guest_state": {
+    "number": 1,
+    "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+    "size": 3221225472,
+    "partition_style": "GPT",
+    "is_boot": false,
+    "is_system": false,
+    "before": {
+      "offline": true,
+      "readonly": true,
+      "T_mounted": false
+    },
+    "single_actual_guest_change": "Set-Disk -IsOffline $false guarded by exact serial/size/GPT/nonboot/nonsystem/offline/readonly",
+    "after": {
+      "offline": false,
+      "readonly": true,
+      "T_mounted": true,
+      "basic_partition_number": 2,
+      "basic_partition_size": 3204382720,
+      "drive_letter_code": 84
+    },
+    "mount_assignment_calls": 0,
+    "why_mount_command_stopped": "By the time the guarded Add-PartitionAccessPath command evaluated, Windows had automatically restored T (code84). Unassigned-letter guard correctly stopped before Add-PartitionAccessPath. No guard weakening or letter reassignment.",
+    "initial_direct_read_failure": "ERROR_FILE_NOT_FOUND at original T path; root and D4 had matched. Native provenance was verified separately; no data-loss conclusion or A rewrite.",
+    "query_observations": "Initial Get-Disk enumeration had no result and was cancelled. fsutil/vol/dir/mountvol initially had no visible output; Ctrl+C was sent and subsequent view showed volume/mount output and prompt. Targeted Get-Disk Number1 later returned the exact offline/readonly identity.",
+    "connection_boundary": "First online command result was unobserved during natural VNC expiration; normal same-scope SG renewal and normal Gov login recovered the existing result, command not replayed."
+  },
+  "current_sg": {
+    "pid": 406110,
+    "start_ticks": 75879667,
+    "expires_at": "2026-10-25T02:58:21Z"
+  },
+  "scope_limits": [
+    "Does not prove Windows login or QGA acceptance",
+    "Does not prove post-online-restore hot loop or offline snapshot/restore",
+    "No new snapshot or power/volume API operation sent",
+    "Ceph health sample does not establish latency cause; domblkerror collector stopped before sampling"
+  ],
+  "screenshots_sha256": {
+    "a-partial.jpg": "3af051ec46ca2e2dcd0cbad84fe5d257fc888b051044598501e3cb2387f7bd2c",
+    "mountvol.jpg": "d5a4f9934be8cfd691cde1c802dfb0738d917818b878d95e89d4f975360b0e56",
+    "d3-offline-readonly.jpg": "1a890f4136de0edf633e1c6aa573a77f24ac6673e09ef2e53bc8fc4ab12ef101",
+    "d3-online-readonly.jpg": "6123c44df1d8259c114a6dce8e55690b0935c3e9bdfd6d8e16cfd09d82487219",
+    "d3-mount-guard-stop.jpg": "cf15ba358ec2f004fbc6074338e8c28b458e20ebb85cebdd9908631bd86443e5",
+    "d3-auto-T.jpg": "2f7fc878ba3e42f627bb186eedfcfd18c423e9b72a7809835cf7f795b0fb1a5a",
+    "three-a-pass.jpg": "274962d48fe7f2089dd7455d368919a59af7d335ac7a5c21fbd6b794183d6324"
+  }
+}

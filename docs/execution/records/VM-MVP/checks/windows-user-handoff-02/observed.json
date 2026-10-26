@@ -1,0 +1,50 @@
+{
+  "result": "PASS_FRESH_NATIVE_VNC_FRAMES_USER_VISIBILITY_AND_MANUAL_ACTION_PENDING",
+  "recorded_at": "2026-10-25T06:21:21Z",
+  "user_feedback_before_recovery": "User reported that neither Windows desktop nor Linux account page was visible",
+  "browser_recovery": {
+    "browser_id": "2",
+    "old_tabs": ["1", "4"],
+    "actual_old_tab_observation": "Tab 1 no longer belonged to the current browser session; current-session tab listing was empty",
+    "app_panel_open_requests": "queued; not counted as confirmed visible to the user",
+    "fresh_tabs_created_with_visible_true": ["5", "6"],
+    "fresh_native_vnc_frames_observed": true,
+    "user_visibility_feedback": "PENDING"
+  },
+  "windows": {
+    "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "version": 22,
+    "browser_tab_id": "5",
+    "actual_frame": "Existing logged-in Windows desktop with wallpaper, icons and taskbar; diagnostic command, Task Manager and old terminal windows closed through normal UI",
+    "new_credentials_entered": 0,
+    "qga_installer_run": false,
+    "old_hash_split_command": "The unsubmitted command was visible on reconnect; no Enter was sent. Its console was then closed normally",
+    "proof": "windows-current-user-handoff-20261025.jpg",
+    "proof_sha256": "663146d744d3225009c103a81d312547f9017a416855031de23d8db5ab3673dd",
+    "manual_final_acceptance": "PENDING_USER_FEEDBACK"
+  },
+  "linux_iso": {
+    "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+    "version": 5,
+    "browser_tab_id": "6",
+    "actual_frame": "About You first-run account form, all four fields blank, Next disabled",
+    "required_human_action": "User must enter and confirm the new credentials and submit the account form personally; requested username aniuser",
+    "proof": "linux-current-user-handoff-20261025.jpg",
+    "proof_sha256": "4e57c035142af78b7f41d67b18c1d25c2426e0bba9d49f86556e909727b66031",
+    "postboot_marker_read": "NOT_RUN_PENDING_HUMAN_ACCOUNT"
+  },
+  "candidate_runtime": {
+    "resource_pid": 753410,
+    "resource_start_ticks": 77325161,
+    "code_commit": "6a162dae5948390a84f75f1bcf28d2f1c65a4445",
+    "profile_live_freeze_sha256": "9ec54085db3a65c86cdfb43321a642a26ec6da7b2e0ecd95ab4a0bb6bf1237e3",
+    "normal_stop_start_sent": false,
+    "windows_profile_applied_to_existing_vm": false,
+    "performance_effectiveness": "NOT_VERIFIED"
+  },
+  "current_handoff": "Both connections preserved for human use; no VM power, disk or snapshot actions during this handoff",
+  "business_mutations": 0,
+  "guest_marker_writes": 0,
+  "guest_new_credentials_entered_by_agent": 0,
+  "temporary_frontend_business_integration": false
+}

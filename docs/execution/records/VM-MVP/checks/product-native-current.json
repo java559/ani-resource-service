@@ -1,0 +1,217 @@
+{
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "virtualmachines": [
+    {
+      "name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "uid": "e410ff56-d0d9-416c-8caf-49fe12de4969",
+      "owners": [],
+      "node": null,
+      "phase": null,
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-23T15:49:48Z",
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "Guest VM is not reported as running",
+          "reason": "GuestNotRunning",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "All of the VMI's DVs are bound and ready",
+          "reason": "AllDVsReady",
+          "status": "True",
+          "type": "DataVolumesReady"
+        }
+      ],
+      "init": [],
+      "containers": []
+    }
+  ],
+  "virtualmachineinstances": [
+    {
+      "name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+      "uid": "caeb592d-b86c-4536-bd3b-cc062058fd41",
+      "owners": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachine",
+          "name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+          "uid": "e410ff56-d0d9-416c-8caf-49fe12de4969"
+        }
+      ],
+      "node": null,
+      "phase": "Scheduling",
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-23T15:49:48Z",
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "Guest VM is not reported as running",
+          "reason": "GuestNotRunning",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": null,
+          "message": "All of the VMI's DVs are bound and ready",
+          "reason": "AllDVsReady",
+          "status": "True",
+          "type": "DataVolumesReady"
+        }
+      ],
+      "init": [],
+      "containers": []
+    }
+  ],
+  "pods": [
+    {
+      "name": "virt-launcher-vm-db174e19-7269-42ff-9c22-57190c66535b-d29kf",
+      "uid": "df1cd6f6-3d29-4483-b4dc-168229bfc890",
+      "owners": [
+        {
+          "apiVersion": "kubevirt.io/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "VirtualMachineInstance",
+          "name": "vm-db174e19-7269-42ff-9c22-57190c66535b",
+          "uid": "caeb592d-b86c-4536-bd3b-cc062058fd41"
+        }
+      ],
+      "node": "ani-02",
+      "phase": "Pending",
+      "conditions": [
+        {
+          "lastProbeTime": "2026-10-23T15:49:48Z",
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "the virtual machine is not paused",
+          "reason": "NotPaused",
+          "status": "True",
+          "type": "kubevirt.io/virtual-machine-unpaused"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "observedGeneration": 1,
+          "status": "False",
+          "type": "PodReadyToStartContainers"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "containers with incomplete status: [guest-console-log]",
+          "observedGeneration": 1,
+          "reason": "ContainersNotInitialized",
+          "status": "False",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "containers with unready status: [guest-console-log compute]",
+          "observedGeneration": 1,
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "message": "containers with unready status: [guest-console-log compute]",
+          "observedGeneration": 1,
+          "reason": "ContainersNotReady",
+          "status": "False",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-23T15:49:48Z",
+          "observedGeneration": 1,
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "init": [
+        {
+          "image": "172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0",
+          "imageID": "",
+          "lastState": {},
+          "name": "guest-console-log",
+          "ready": false,
+          "restartCount": 0,
+          "started": false,
+          "state": {
+            "waiting": {
+              "reason": "PodInitializing"
+            }
+          },
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/kubevirt-private",
+              "name": "private",
+              "readOnly": true,
+              "recursiveReadOnly": "Disabled"
+            }
+          ]
+        }
+      ],
+      "containers": [
+        {
+          "image": "172.16.101.10:5000/kubevirt/virt-launcher:v1.9.0",
+          "imageID": "",
+          "lastState": {},
+          "name": "compute",
+          "ready": false,
+          "restartCount": 0,
+          "started": false,
+          "state": {
+            "waiting": {
+              "reason": "PodInitializing"
+            }
+          },
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/kubevirt-private",
+              "name": "private"
+            },
+            {
+              "mountPath": "/var/run/kubevirt",
+              "name": "public"
+            },
+            {
+              "mountPath": "/var/run/kubevirt-ephemeral-disks",
+              "name": "ephemeral-disks"
+            },
+            {
+              "mountPath": "/var/run/libvirt",
+              "name": "libvirt-runtime"
+            },
+            {
+              "mountPath": "/var/run/kubevirt/sockets",
+              "name": "sockets"
+            },
+            {
+              "mountPath": "/var/run/kubevirt-private/secret/guest-initialization/userdata",
+              "name": "guest-initialization-udata",
+              "readOnly": true,
+              "recursiveReadOnly": "Disabled"
+            },
+            {
+              "mountPath": "/var/run/kubevirt-private/secret/guest-initialization/userData",
+              "name": "guest-initialization-udata",
+              "readOnly": true,
+              "recursiveReadOnly": "Disabled"
+            },
+            {
+              "mountPath": "/var/run/kubevirt/hotplug-disks",
+              "name": "hotplug-disks"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

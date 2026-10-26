@@ -1,0 +1,464 @@
+{
+  "authorization": "Root explicitly approved same-source/cache/context continuation for 300s after first normalTERM timeout",
+  "base_cached_before_build": {
+    "id": "sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+    "repo_digests": [
+      "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+    ]
+  },
+  "binary_sha256": "3d81b0e864a93693ff4ba68ffc14cfcdc71375bc1413c716e162499180411168",
+  "build_environment": {
+    "CGO_ENABLED": "0",
+    "GOARCH": "amd64",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": "2",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "SOURCE_DATE_EPOCH": "1792829794"
+  },
+  "business_api_calls": 0,
+  "commands": [
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.116,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-base-inspect.log",
+      "log_sha256": "bbd4f0ddbe88c70bc2ee38834d2074aa0d19e5c09597e8986be79726e35db11e",
+      "stage": "base-inspect",
+      "timeout_seconds": 298.947
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.033,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-tag-absence.log",
+      "log_sha256": "00d869b30102a6a9acfcdb68ad4cce7bc20eaf87d44b905d7f0874954f60f5ba",
+      "stage": "tag-absence",
+      "timeout_seconds": 298.829
+    },
+    {
+      "argv": [
+        "docker",
+        "container",
+        "inspect",
+        "vm-mvp-governance-oci-check-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.265,
+      "exit_code": 1,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-check-container-absence.log",
+      "log_sha256": "fed6cfb85039de6ee1b5993694b26c51591b38f75d67f63e1c86465ae1c84609",
+      "stage": "check-container-absence",
+      "timeout_seconds": 298.794
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-v",
+        "-trimpath",
+        "-buildvcs=false",
+        "-ldflags",
+        "-X main.version=vm-mvp-a64e0ab8ed6b-01a168ce",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/context/gov-server",
+        "./app/admin/service/cmd/server"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source",
+      "elapsed_seconds": 67.715,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-compile.log",
+      "log_sha256": "3f9babf0839898dfc2bf32c4cd449059f7b9ed80da9d8a317c8277a3f95cb591",
+      "stage": "compile",
+      "timeout_seconds": 298.526
+    },
+    {
+      "argv": [
+        "file",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/context/gov-server"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.123,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-binary-file.log",
+      "log_sha256": "d14f0ab3037a2d3f7888420b3edbe4b46af00b318c0165dad8ab7f99a78c866f",
+      "stage": "binary-file",
+      "timeout_seconds": 229.978
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "version",
+        "-m",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/context/gov-server"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.032,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-binary-build-info.log",
+      "log_sha256": "c4a5e6cd94ca85a9f359dcbfc8f86494476be5f6fc37194fd8f6ced2df7db494",
+      "stage": "binary-build-info",
+      "timeout_seconds": 229.852
+    },
+    {
+      "argv": [
+        "docker",
+        "build",
+        "--pull=false",
+        "--network=none",
+        "--platform=linux/amd64",
+        "--iidfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/image.id",
+        "--tag",
+        "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "--file",
+        "Dockerfile",
+        "."
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/context",
+      "elapsed_seconds": 25.169,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-docker-build.log",
+      "log_sha256": "8d90079230e40f998e779c6a904e87bdb06aeca838fcc741d9663670aa4e3e4f",
+      "stage": "docker-build",
+      "timeout_seconds": 229.083
+    },
+    {
+      "argv": [
+        "docker",
+        "run",
+        "--rm",
+        "--name",
+        "vm-mvp-governance-oci-check-01a168ce",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "-h"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 4.181,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-help-only.log",
+      "log_sha256": "8da24f514d0b04a934447d91638d81a4c973c2646f9ca8df762587af4ef223f9",
+      "stage": "help-only",
+      "timeout_seconds": 203.912
+    },
+    {
+      "argv": [
+        "docker",
+        "image",
+        "inspect",
+        "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 0.116,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-image-inspect.log",
+      "log_sha256": "9f26f8d89bc21ab2ae425135d6ab38c3ff8784316fe8207be656042fa8dd8855",
+      "stage": "image-inspect",
+      "timeout_seconds": 199.728
+    },
+    {
+      "argv": [
+        "skopeo",
+        "copy",
+        "docker-daemon:ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance",
+      "elapsed_seconds": 9.403,
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/attempt02-oci-export.log",
+      "log_sha256": "296a1680d2b178b74543df24406c9e0e9da9a19b671a4ecde4b845a50715868a",
+      "stage": "oci-export",
+      "timeout_seconds": 199.609
+    }
+  ],
+  "context": {
+    ".dockerignore": {
+      "bytes": 65,
+      "sha256": "dc56c6daa631889d0410ac9990afe623a7412bab3d7d9c65f363d7de6bfdde93"
+    },
+    "Dockerfile": {
+      "bytes": 571,
+      "sha256": "173ed6b98c19d6c17a60eae8b7bbb94aa748c7e38b3b5441d7882e4d090ce65c"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "bytes": 1758,
+      "sha256": "034427cc6d4a30a6a3ce980340b50ada31570de7b1ff54eae1e83620401a1028"
+    },
+    "gov-server": {
+      "bytes": 213747393,
+      "sha256": "3d81b0e864a93693ff4ba68ffc14cfcdc71375bc1413c716e162499180411168"
+    }
+  },
+  "context_before": {
+    ".dockerignore": {
+      "bytes": 65,
+      "sha256": "dc56c6daa631889d0410ac9990afe623a7412bab3d7d9c65f363d7de6bfdde93"
+    },
+    "Dockerfile": {
+      "bytes": 571,
+      "sha256": "173ed6b98c19d6c17a60eae8b7bbb94aa748c7e38b3b5441d7882e4d090ce65c"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "bytes": 1758,
+      "sha256": "034427cc6d4a30a6a3ce980340b50ada31570de7b1ff54eae1e83620401a1028"
+    }
+  },
+  "deployments": 0,
+  "docker_image": {
+    "config": {
+      "Entrypoint": [
+        "/app/bin/server"
+      ],
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt"
+      ],
+      "Labels": {
+        "org.opencontainers.image.revision": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+        "org.opencontainers.image.source": "https://github.com/zhangzhe-ctrl/ani-governance",
+        "org.opencontainers.image.version": "vm-mvp-a64e0ab8ed6b-01a168ce"
+      },
+      "User": "65532:65532",
+      "WorkingDir": "/app"
+    },
+    "id": "sha256:d5b013b033da6db84e47f7940c728a4cd1aa43acec7e3f8560a751d2495bce75",
+    "rootfs": {
+      "Layers": [
+        "sha256:7223ea1323e8c1159ec17f07d35acc27bdd1cc2bc3ed425b44ef21dac9915db0",
+        "sha256:8fa10c0194df9b7c054c90dbe482585f768a54428fc90a5b78a0066a123b1bba",
+        "sha256:35b5ba6e08cdd034b8d1920f9c7203e5d66f258e1915f164a01de0af14f34710",
+        "sha256:114dde0fefebbca13165d0da9c500a66190e497a82a53dcaabc3172d630be1e9",
+        "sha256:4d049f83d9cf21d1f5cc0e11deaf36df02790d0e60c1a3829538fb4b61685368",
+        "sha256:af5aa97ebe6ce1604747ec1e21af7136ded391bcabe4acef882e718a87c86bcc",
+        "sha256:6f1cdceb6a3146f0ccb986521156bef8a422cdbb0863396f7f751f575ba308f4",
+        "sha256:bd3cdfae1d3fdd83a2231d608969b38b82349777c2fff9a7c12d54f8ac5c9b38",
+        "sha256:4cde6b0bb6f50a5f255eef7b2a42162c661cf776b803225dcac9a659e396bb6b",
+        "sha256:ad51d0769d16ba578106a177987dfe3d2e02c1668c852b795b2f6b024068242a",
+        "sha256:6e7fbcf090d09b73a4aa85f9dce690d0ace73877c150b7c56955487b6e7a822a",
+        "sha256:5904c32f457c96a16c8c68f5ccdf518c8138cd9e5971de9ce6d564fc481af222",
+        "sha256:e8f73a945f74b378c2f17635f1fccbd6e00fea9ff374e6d53d8791171a6f300b",
+        "sha256:4d86375e9c7559383ba6c009b62626aac73ab54cbb61371de78695b253f8367a",
+        "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+      ],
+      "Type": "layers"
+    },
+    "tag": "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+  },
+  "elapsed_seconds": 111.737,
+  "finished_at": "2026-10-24T08:37:32.826987+00:00",
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "oci": {
+    "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar",
+    "archive_sha256": "b465b5cc097e26b81a3ba3283e6b641d0972ceae4658a5e142c17b1287fcfd34",
+    "bytes": 83010048,
+    "index": {
+      "manifests": [
+        {
+          "annotations": {
+            "org.opencontainers.image.ref.name": "vm-mvp-a64e0ab8ed6b-01a168ce"
+          },
+          "digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+          "mediaType": "application/vnd.oci.image.manifest.v1+json",
+          "size": 2573
+        }
+      ],
+      "mediaType": "application/vnd.oci.image.index.v1+json",
+      "schemaVersion": 2
+    },
+    "manifest": {
+      "config": {
+        "digest": "sha256:e3c2a4c4496d0a3b24354e7d15b3cb7c03169a58886ff36299d23fc7b62714de",
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "size": 3877
+      },
+      "layers": [
+        {
+          "digest": "sha256:c1f4ff7724f7f15a187d5ec633a1d59cfcd376d636ba58704475c09c7d00f0dc",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 88276
+        },
+        {
+          "digest": "sha256:12b98db1f9a3daa07eca266140274100405e2ba33684a9cfed19227d8214a491",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 12760
+        },
+        {
+          "digest": "sha256:156feddf55001fe5c9fe753ad7ab8fea1f84e95b1d2e589ff3c8b0b55dee25b7",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 475570
+        },
+        {
+          "digest": "sha256:864c4fb7c1f3a443ce0386a9cb14c81e4a029660e0e844e278b707839c73a5f2",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 29309
+        },
+        {
+          "digest": "sha256:02c91f6b395a6b06d17b8985a2db90aef7b09feedff77eff1f7c269161263a9b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 75
+        },
+        {
+          "digest": "sha256:ffdf8cfdbafeabe2762d2dde33e36f1b87dfa967ae34811ff5342ebe8233eb4b",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 197
+        },
+        {
+          "digest": "sha256:818beb2a6ac52d3cfb90a96d84cff5123ade753aac5adc2dd8f43347f6fa74eb",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 132
+        },
+        {
+          "digest": "sha256:a0ce62815afcb344f5e245b1fe8026bef515df1fa3446ecc272057ba74be8bed",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 168
+        },
+        {
+          "digest": "sha256:83717d7c33ed99f82afbd90b8a13fe29f05c433b7c55c2d7e1f2c2df18dfd5d5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 91
+        },
+        {
+          "digest": "sha256:88d89c9f554ae39742eb60ef19cc0198899514f6c95ebf216d7fc3249973e680",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 361
+        },
+        {
+          "digest": "sha256:4eb6e32233edf636593de3be3c09079eb36e5bc5d405f77f6a943dc65834d8c5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 320
+        },
+        {
+          "digest": "sha256:752c3ee82ca8986fc2f87501573e664789781c520de5f6b630728b7537e8ff94",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 144572
+        },
+        {
+          "digest": "sha256:e0418c64cc9c6fa3803ee32605857e42322f4b9f03cc4be36a704f3338cb47e5",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 82232591
+        },
+        {
+          "digest": "sha256:8e6659b05dd021544b99cde8012f6c486b45d5ba7dcb1688338a5fb4138a389c",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 1226
+        },
+        {
+          "digest": "sha256:bd9ddc54bea929a22b334e73e026d4136e5b73f5cc29942896c72e4ece69b13d",
+          "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+          "size": 34
+        }
+      ],
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "schemaVersion": 2
+    },
+    "manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222"
+  },
+  "phase": "COMPLETE",
+  "prepared_sha256": "325ac27ab5d71fe44484d79cd9ec579dfb05c3d1c8091bbe0bdbb691b8e6770c",
+  "prior_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/oci-built.json",
+  "prior_receipt_sha256": "b773ac425ce7563bfd21e50130713f57329ed6f62848317f27adc9d17913885e",
+  "result": "PASS_LOCAL_OCI_BUILT_NOT_PUBLISHED",
+  "service": "governance",
+  "service_restarts": 0,
+  "source": {
+    "archive": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source.tar.gz",
+    "archive_bytes": 3387197,
+    "archive_sha256": "bba9834610be2b376480f0ee75d9fb2e87e96bf2d3a8e4acaa5a636c56630ec8",
+    "commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+    "file_count": 1487,
+    "manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/source-manifest.json",
+    "manifest_sha256": "90c7d09ea7e15ea6c0f1d379095924dcc58702a28541b74bd38a3f7361e0e6f4",
+    "parent": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "repository": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-governance",
+    "runtime_embed_inputs": [
+      {
+        "go_source": "app/admin/service/cmd/server/assets/assets.go",
+        "pattern": "app/admin/service/cmd/server/assets/openapi.yaml",
+        "selected_inputs": [
+          "app/admin/service/cmd/server/assets/openapi.yaml"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/rbac_with_domains.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/abac.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/acl.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull.conf"
+        ]
+      },
+      {
+        "go_source": "pkg/localdeps/kratos-authz/engine/casbin/assets/assets.go",
+        "pattern": "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf",
+        "selected_inputs": [
+          "pkg/localdeps/kratos-authz/engine/casbin/assets/restfull_with_role.conf"
+        ]
+      },
+      {
+        "go_source": "sql/bootstrap/bootstrap.go",
+        "pattern": "sql/bootstrap/001_initial.sql",
+        "selected_inputs": [
+          "sql/bootstrap/001_initial.sql"
+        ]
+      }
+    ],
+    "source_date_epoch": 1792829794,
+    "tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+  },
+  "source_driver_sha256": "e594acc97f31158beec50164a4105ba1aa76a1a4b08b6ec116a9cff4f9a56b27",
+  "source_reextractions": 0,
+  "source_unchanged": true,
+  "started_at": "2026-10-24T08:35:41.090096+00:00",
+  "startup_check": "HELP_ONLY_NOT_READINESS",
+  "vm_mutations": 0
+}

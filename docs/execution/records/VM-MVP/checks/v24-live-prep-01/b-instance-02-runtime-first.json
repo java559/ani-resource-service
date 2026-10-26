@@ -1,0 +1,73 @@
+{
+  "observed_at": "2026-10-24T10:55:18.171676+00:00",
+  "instance": {
+    "id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "name": "vm-mvp-v24-cpu-01a168ce-02",
+    "version": "1",
+    "desiredState": "running",
+    "observedState": "running",
+    "reason": "",
+    "imageId": "img_d238746701ee4e9aa149a3beba8a3e49",
+    "imageDigest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "createOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "lastOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "computeCleaned": false,
+    "workspaceCleaned": false,
+    "quotaReturned": false,
+    "instance_kind": "container",
+    "compute_type": "cpu",
+    "cpu": "1500m",
+    "memory": "2048Mi",
+    "createdAt": "2026-10-24T10:53:50.400184Z",
+    "workspaceSize": "1Gi",
+    "preset_name": "VM MVP 1500m 2048MiB",
+    "preset_code": "vm-mvp-01a168ce",
+    "gpu_summary": null,
+    "scheduling": {
+      "pod_placement": "NONE"
+    },
+    "networkState": "attached",
+    "networkReason": "",
+    "networkCleaned": false,
+    "volumeReferencesReleased": true
+  },
+  "runtime": {
+    "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "version": "1",
+    "observedAt": "2026-10-24T10:55:19.525063456Z",
+    "pod": {
+      "name": "instance-049db72b-c288-4993-94eb-07fa666a7ac2-0",
+      "uid": "8b4d9b12-61bc-4302-a474-1239e52a9701",
+      "nodeName": "ani-03",
+      "podIp": "10.83.1.11",
+      "phase": "Running",
+      "ready": true,
+      "reason": "",
+      "message": "",
+      "environmentSources": [
+        {
+          "name": "ANI_INSTANCE_POD_UID",
+          "sourceType": "downwardAPI"
+        },
+        {
+          "name": "NB_PREFIX",
+          "sourceType": "literal"
+        }
+      ],
+      "mounts": [
+        {
+          "name": "workspace",
+          "volumeType": "persistentVolumeClaim",
+          "mountPath": "/workspace",
+          "readOnly": false
+        }
+      ]
+    },
+    "statefulSet": {
+      "desiredReplicas": 1,
+      "readyReplicas": 1
+    }
+  },
+  "websocket_client_available": false
+}

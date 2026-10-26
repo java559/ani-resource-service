@@ -1,0 +1,37 @@
+{
+  "result": "FAIL",
+  "host": "fedora/172.16.101.31",
+  "driver_sha256": "f99ce6766c1cb745447207857ad5b081a18f670995d2f01aed1e8397107c2fac",
+  "plan_sha256": "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+  "elapsed_seconds": 0.442,
+  "registry_requests": 0,
+  "registry_writes": 0,
+  "registry_logins": 0,
+  "container_load_pull_build_run": 0,
+  "commands": [
+    {
+      "stage": "syntax",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/syntax.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "stage": "help",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/help.log",
+      "log_sha256": "e31e6ffbc28cd94bae350ca6961a1452229182af32c6b7c1b9b6eddc889d08f1"
+    },
+    {
+      "stage": "pure-guards",
+      "exit_code": 0,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/pure-guards.log",
+      "log_sha256": "1bd36de81b47ccc19203ba8591624de684b9b7c8b2e8fb905a78c04b197e6e96"
+    },
+    {
+      "stage": "resource-local-inputs",
+      "exit_code": 73,
+      "log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/resource-local-inputs.log",
+      "log_sha256": "cd28e14622d81cdb91e8a6582eb59fab46df73b725c1c632dde71e8ca4277738"
+    }
+  ]
+}

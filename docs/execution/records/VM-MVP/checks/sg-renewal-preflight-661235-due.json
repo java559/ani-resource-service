@@ -1,0 +1,36 @@
+{
+  "active_samples": [
+    0.0
+  ],
+  "actual_pid": 661235,
+  "actual_startticks": 76911546,
+  "binary_sha256": "7b58275ea629a0c3572d4224e5f07b7e05057a97d661a4d1062dd19a13612dfd",
+  "expected_pid": 661235,
+  "expected_startticks": 76911546,
+  "full_environment_sha256": "5157ebbef0d7254de47f5ece862cb8455e0307cef40c396c10fd2af53ba83ea1",
+  "heavy_lock_released": true,
+  "leases": 0,
+  "namespace_count": 2,
+  "old_token_expires_at": "2026-10-25T05:50:19Z",
+  "owned_listeners": [
+    39182,
+    39185
+  ],
+  "prior_readonly_stop": {
+    "path": "evidence/sg-renewal-preflight-661235.json",
+    "reason": "Not yet within original ten-minute renewal window; same timing guard retained.",
+    "sha256": "eda8c610c78c7872b88123ffea15f01ed0008f40248f0da59fa17fbd262fca3e"
+  },
+  "rbac_object_count": 7,
+  "rbac_scope_fingerprint_sha256": "87266d55cca9eb216a1a5e007af32fd2edd4309affc3dcb7e1329999603d0db2",
+  "rbac_writes": 0,
+  "redis_db": 1,
+  "requested_future_ttl_seconds": 3600,
+  "result": "PASS_READONLY_FRESH_PID_SCOPE_ACTIVE0_LEASE0_NO_TOKEN_REQUEST",
+  "runner_sha256": "1733da34d19814b1cfe004378d229d53c5e98f440bd897528a04a001d24262b2",
+  "runtime_env_subset_matches": true,
+  "sampled_at": "2026-10-25T05:40:37.363414+00:00",
+  "service_changes": 0,
+  "term_calls": 0,
+  "token_requests": 0
+}

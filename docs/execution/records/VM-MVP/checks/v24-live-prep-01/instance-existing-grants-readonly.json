@@ -1,0 +1,106 @@
+{
+  "observed_at": "2026-10-24T09:56:26.615594+00:00",
+  "result": "NO_INSTANCE_SCHEMA_OR_GRANT_DELTA_REQUIRED",
+  "schema_versions_match_8589": true,
+  "actual": {
+    "database": "vm_resource_candidate_01a168ce",
+    "runtime_role": "vm_res_candidate_runtime_01a168ce",
+    "instance_schema_usage": true,
+    "instance_schema_create": false,
+    "tables": [
+      {
+        "name": "borrowed_volume_references",
+        "oid": "33063",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "gpu_cutover_audit",
+        "oid": "33043",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "instance_operations",
+        "oid": "32906",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "instance_quota_release_outbox",
+        "oid": "32979",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "instance_work",
+        "oid": "32934",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "instances",
+        "oid": "32884",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "network_submissions",
+        "oid": "33091",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "schema_version",
+        "oid": "32875",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "workspace_bindings",
+        "oid": "32957",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      }
+    ]
+  },
+  "source_receipt": "b-private-pg-prepared.json",
+  "database_writes": 0,
+  "instance_migration_rerun": false
+}

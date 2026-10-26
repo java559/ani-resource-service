@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-23T22:38:16.798177+00:00",
+  "scope": "EXACT_CURRENT_WINDOWS_LIBVIRT_READ_ONLY_INPUT_PROJECTION",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7"
+  },
+  "launcher": {
+    "kind": "Pod",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+    "uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1"
+  },
+  "vmi_inputs": [
+    {
+      "bus": "usb",
+      "name": "console-tablet",
+      "type": "tablet"
+    }
+  ],
+  "domain_name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+  "domain_uuid": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "inputs": [
+    {
+      "type": "tablet",
+      "bus": "usb",
+      "alias": "ua-console-tablet",
+      "address": {
+        "type": "usb",
+        "bus": "0",
+        "port": "1"
+      }
+    },
+    {
+      "type": "mouse",
+      "bus": "ps2",
+      "alias": "input1",
+      "address": null
+    },
+    {
+      "type": "keyboard",
+      "bus": "ps2",
+      "alias": "input2",
+      "address": null
+    }
+  ],
+  "usb_controllers": [
+    {
+      "type": "usb",
+      "index": "0",
+      "model": "qemu-xhci"
+    }
+  ],
+  "graphics_types": [
+    "vnc"
+  ],
+  "absolute_usb_tablet_present": true,
+  "managed_alias_present": true,
+  "xml_saved_or_printed": false,
+  "native_mutations": 0,
+  "gui_mouse_effect": "NOT_PROVEN_BY_DEVICE_PROJECTION",
+  "bounded_inference": "A present USB absolute tablet resolves the previous missing-device condition only. noVNC/CUA pointer coordinates, focus, and button delivery remain possible until an actual guest pointer/click result is observed."
+}

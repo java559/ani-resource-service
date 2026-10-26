@@ -37,6 +37,7 @@ sql:
       - migrations/0016_virtual_switches.sql
       - migrations/0017_legacy_device_retirement.sql
       - migrations/0018_default_vpc_egress.sql
+      - migrations/0019_vm_networks.sql
     queries: internal/data/network/queries
     gen:
       go:

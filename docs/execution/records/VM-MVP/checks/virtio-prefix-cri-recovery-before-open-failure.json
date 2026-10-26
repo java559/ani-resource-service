@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-24T06:58:17.560053+00:00",
+  "byte_limit": 65536,
+  "elapsed_seconds": 5.108,
+  "exact_node": "ani-03/172.16.101.12",
+  "exact_path": "/var/log/pods/vm-mvp-probe-01a168ce_vm-mvp-virtio-prefix-01a168ce_45b270c9-8873-42b2-acf1-b1eadba59c1e/verify/0.log",
+  "exact_pod_uid": "45b270c9-8873-42b2-acf1-b1eadba59c1e",
+  "exit": 1,
+  "mutations": 0,
+  "one_attempt_only": true,
+  "original_receipt_sha256": "dd5c3db8361d885a8d8ccce148bd951367fadaea265cae5b58d72e4a09191c98",
+  "raw_response": "",
+  "result": "NOT_MEASURED_EXACT_LOG_READ_FAILED",
+  "source_reads": 0,
+  "stderr": "  File \"<string>\", line 5\n    except FileNotFoundError: print(json.dumps({'exists':False,'status':'EXACT_'/var/log/pods/vm-mvp-probe-01a168ce_vm-mvp-virtio-prefix-01a168ce_45b270c9-8873-42b2-acf1-b1eadba59c1e/verify/0.log'_NOT_FOUND'}))\n                                                                                                           ^\nSyntaxError: leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers\n",
+  "timeout_seconds": 10
+}

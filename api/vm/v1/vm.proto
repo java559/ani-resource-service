@@ -1,0 +1,203 @@
+syntax = "proto3";
+package vm.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1;vmv1";
+
+import "compute/v1/compute.proto";
+import "vm/console/v1/console.proto";
+
+// Trusted Governance gRPC only. Public callers cannot supply frozen identities.
+service VMService {
+  rpc ResolveCreateSpec(ResolveCreateSpecRequest) returns (ResolveCreateSpecResponse);
+  rpc AcceptCreate(AcceptCreateRequest) returns (Acceptance);
+  rpc AcceptDelete(AcceptDeleteRequest) returns (Acceptance);
+  rpc ListVMs(ListVMsRequest) returns (ListVMsResponse);
+  rpc GetVM(GetVMRequest) returns (VirtualMachine);
+  rpc GetOperation(GetOperationRequest) returns (Operation);
+  // Pure lookup before the Governance delete fence; never accepts new work.
+  rpc LookupCommandReplay(LookupCommandReplayRequest) returns (Operation);
+  rpc Start(ChangeVMRequest) returns (Operation);
+  rpc Stop(ChangeVMRequest) returns (Operation);
+  rpc ForceStop(ForceStopRequest) returns (Operation);
+  rpc Restart(ChangeVMRequest) returns (Operation);
+  rpc ListDisks(GetVMRequest) returns (ListDisksResponse);
+  rpc CreateDisk(CreateDiskRequest) returns (Operation);
+  rpc AttachDisk(DiskChangeRequest) returns (Operation);
+  rpc DetachDisk(DiskChangeRequest) returns (Operation);
+  rpc DeleteDisk(DiskChangeRequest) returns (Operation);
+  rpc SetMedia(SetMediaRequest) returns (Operation);
+  rpc EjectMedia(EjectMediaRequest) returns (Operation);
+  rpc SetBootDevice(SetBootDeviceRequest) returns (Operation);
+  rpc ListMedia(ListMediaRequest) returns (ListMediaResponse);
+  rpc GetDNSDefaults(GetDNSDefaultsRequest) returns (DNSDefaults);
+  rpc ListSnapshots(GetVMRequest) returns (ListSnapshotsResponse);
+  rpc GetSnapshot(GetSnapshotRequest) returns (Snapshot);
+  rpc CreateSnapshot(SnapshotCreateRequest) returns (Operation);
+  rpc DeleteSnapshot(SnapshotChangeRequest) returns (Operation);
+  rpc PreviewRestore(PreviewRestoreRequest) returns (RestorePreview);
+  rpc RestoreSnapshot(RestoreSnapshotRequest) returns (Operation);
+  rpc ResolveConsoleTarget(ResolveConsoleTargetRequest) returns (vm.console.v1.VMConsoleBinding);
+}
+
+message NetworkSelection { string vpc_id = 1; string subnet_id = 2; }
+message InitialDataDisk { string client_disk_key = 1; string name = 2; int64 size_gb = 3; }
+message CreateVMData {
+  string name = 1;
+  string preset_id = 2;
+  string source_kind = 3;
+  string media_key = 4;
+  int64 system_disk_size_gb = 5;
+  repeated InitialDataDisk data_disks = 6;
+  NetworkSelection network = 7;
+  optional bool start_after_create = 8;
+  GuestInitialization guest_initialization = 9;
+  DNSSelection dns = 10;
+}
+// Omitted/empty mode means PLATFORM_DEFAULT. CUSTOM accepts IP addresses only.
+message DNSSelection { string mode = 1; repeated string nameservers = 2; }
+// Addresses are normalized and frozen at creation; later platform changes do not apply.
+message FrozenDNS { string mode = 1; repeated string nameservers = 2; }
+// Password is write-only and travels separately from this audited intent.
+message GuestInitialization {
+  string method = 1; string username = 2; string ssh_public_key = 3;
+  bool password_set = 4; string credential_intent_digest = 5;
+}
+message GuestCredentials { string password = 1; }
+message MediaReference {
+  string media_key = 1; string name = 2; string kind = 3;
+  string cluster_id = 4; string namespace = 5; string pvc_name = 6; string pvc_uid = 7;
+  string checksum = 8; string volume_mode = 9; string content_type = 10;
+  int64 virtual_capacity_bytes = 11; int64 requested_bytes = 12;
+  string os_family = 13; string os_version = 14; string architecture = 15;
+  string firmware = 16; string root_bus = 17; string data_bus = 18; string nic_model = 19;
+  bool persistent_tpm = 20; bool persistent_uefi = 21; string driver_media_key = 22;
+  string initialization_capability = 23; bool initialization_verified = 24;
+}
+message StoragePolicy {
+  string storage_class = 1; string storage_class_uid = 2;
+  string volume_mode = 3; repeated string access_modes = 4;
+  string backend_storage_class = 5; string media_storage_class = 6;
+}
+message FrozenNetwork {
+  string vpc_id = 1; string subnet_id = 2;
+  string nad_name = 3; string nad_uid = 4; string nad_config_digest = 5;
+}
+message CreateSpec {
+  CreateVMData intent = 1;
+  compute.v1.ComputeSelection compute = 2;
+  string cluster_id = 3; string namespace = 4; string namespace_uid = 5;
+  string service_account = 6;
+  StoragePolicy storage = 7;
+  MediaReference media = 8;
+  MediaReference driver_media = 9;
+  FrozenNetwork network = 10;
+  uint32 sockets = 11; uint32 cores = 12; uint32 threads = 13;
+  string boot_device = 14;
+  FrozenDNS dns = 15;
+}
+message ResolveCreateSpecRequest {
+  string tenant_id = 1; CreateVMData data = 2;
+  string namespace = 3; string namespace_uid = 4; uint32 vm_contract_version = 5;
+}
+message ResolveCreateSpecResponse {
+  CreateSpec create_spec = 1; uint32 vm_contract_version = 2;
+  string selection_digest = 3; string vm_create_digest = 4;
+}
+message CommandContext {
+  string tenant_id = 1; string resource_id = 2; string operation_id = 3; string request_digest = 4;
+}
+message AcceptCreateRequest {
+  CommandContext context = 1; uint32 vm_contract_version = 2;
+  CreateSpec create_spec = 3; string vm_create_digest = 4;
+  // Never returned by any query or included in the canonical CreateSpec.
+  GuestCredentials guest_credentials = 5;
+}
+message AcceptDeleteRequest {
+  CommandContext context = 1; string create_operation_id = 2;
+  int64 expected_version = 3; uint32 vm_contract_version = 4;
+}
+message Acceptance { string operation_id = 1; string resource_id = 2; bool accepted = 3; }
+message GetVMRequest { string tenant_id = 1; string vm_id = 2; }
+message ListVMsRequest { string tenant_id = 1; uint32 page = 2; uint32 page_size = 3; }
+message ListVMsResponse { repeated VirtualMachine items = 1; int64 total = 2; }
+message GetOperationRequest { string tenant_id = 1; string vm_id = 2; string operation_id = 3; }
+message ChangeVMRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+}
+message ForceStopRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+  bool destructive_confirmation = 5;
+}
+message CreateDiskRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+  string name = 5; int64 size_gb = 6;
+}
+message DiskChangeRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+  string disk_id = 5; bool guest_prepared_confirmation = 6;
+}
+message SetMediaRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+  string slot = 5; string media_key = 6;
+}
+message EjectMediaRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4; string slot = 5;
+}
+message SetBootDeviceRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4; string boot_device = 5;
+}
+message ListMediaRequest { string tenant_id = 1; }
+message ListMediaResponse { repeated MediaReference items = 1; }
+message GetDNSDefaultsRequest { string tenant_id = 1; }
+message DNSDefaults { repeated string nameservers = 1; }
+message SnapshotCreateRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4; string name = 5;
+}
+message SnapshotChangeRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4; string snapshot_id = 5;
+}
+message GetSnapshotRequest { string tenant_id = 1; string vm_id = 2; string snapshot_id = 3; }
+message PreviewRestoreRequest { string tenant_id = 1; string vm_id = 2; string snapshot_id = 3; }
+message RestoreSnapshotRequest {
+  string tenant_id = 1; string vm_id = 2; string idempotency_key = 3; int64 expected_version = 4;
+  string snapshot_id = 5; string preview_digest = 6; bool destructive_confirmation = 7;
+}
+message ResolveConsoleTargetRequest { string tenant_id = 1; string vm_id = 2; int64 expected_version = 3; }
+message LookupCommandReplayRequest {
+  string tenant_id = 1; string vm_id = 2; string action = 3;
+  string idempotency_key = 4; bytes canonical_intent = 5;
+}
+message CurrentAddress { string nic_name = 1; string address = 2; string observed_at = 3; }
+message VirtualMachine {
+  string id = 1; string name = 2; int64 version = 3; string os_family = 4; string os_version = 5;
+  CreateSpec frozen_spec = 6; string desired_state = 7; string observed_state = 8;
+  string reason = 9; string observed_at = 10; repeated CurrentAddress addresses = 11;
+  string last_operation_id = 12; bool closing = 13; repeated Disk disks = 14;
+  repeated MediaState media = 15; string boot_device = 16;
+}
+message Operation {
+  string id = 1; string vm_id = 2; string action = 3; int64 intent_version = 4;
+  string state = 5; string reason = 6; string observed_at = 7;
+}
+message Disk {
+  string disk_id = 1; string role = 2; string name = 3; int64 size_gb = 4;
+  int64 requested_bytes = 5; int64 observed_capacity_bytes = 6;
+  string volume_name = 7; string serial = 8; bool attached = 9;
+  string preparation_state = 10; string reason = 11;
+}
+message ListDisksResponse { repeated Disk items = 1; }
+message MediaState {
+  string slot = 1; string desired_media = 2; string observed_media = 3;
+  bool effective_now = 4; bool pending_restart = 5;
+}
+message Snapshot {
+  string snapshot_id = 1; string source_vm_id = 2; string source_vm_uid = 3;
+  bool ready = 4; string completeness = 5; repeated string included = 6;
+  repeated string excluded = 7; repeated string indications = 8;
+  repeated Disk disks = 9; string observed_at = 10; string reason = 11;
+}
+message ListSnapshotsResponse { repeated Snapshot items = 1; }
+message RestoreDiskImpact { string disk_id = 1; string action = 2; string reason = 3; }
+message RestorePreview {
+  int64 version = 1; string snapshot_id = 2; string snapshot_uid = 3;
+  repeated RestoreDiskImpact disks = 4; string preview_digest = 5;
+}

@@ -1,0 +1,95 @@
+{
+  "actual_task_pre_push_guard": {
+    "commit": "660fdcd2a20d76591465cd69fe36ea476aca9b8b",
+    "credentials_or_value_hashes_public": false,
+    "new_exemptions": 0,
+    "ref": "refs/heads/codex/vm-mvp-installer-snapshot-delete-20261025",
+    "remote_expected_oid": "0000000000000000000000000000000000000000",
+    "result": "PASS_EXACT_NEW_REF_AND_FIVE_FILE_SECRET_GUARD",
+    "scanned_files": 5
+  },
+  "changed_files": 5,
+  "changed_paths": [
+    "kubekey/builtin/core/roles/ani/snapshot-controller/templates/classes.yaml",
+    "kubekey/builtin/core/roles/ani/snapshot-controller/templates/connection.md",
+    "kubekey/builtin/core/roles/ani/snapshot-controller/templates/prereq.sh",
+    "kubekey/builtin/core/roles/ani/snapshot-controller/templates/verify.sh",
+    "kubekey/pkg/ani/b04_snapshot_test.go"
+  ],
+  "commit": "660fdcd2a20d76591465cd69fe36ea476aca9b8b",
+  "completed_at": "2026-10-24T22:29:18.762492+00:00",
+  "deployment_main_PR_tag_release_changes": false,
+  "excluded_sixth_template": "deployment/ani-replica/templates/foundation/snapshot-controller/classes.json",
+  "existing_hooks": {
+    "configured_hooks_path": null,
+    "enabled_existing_hooks": [],
+    "existing_hooks": "ABSENT",
+    "hooks_bypassed": false
+  },
+  "five_file_diff_sha256": "b9a3e4c8996e29cad36040801bc4fc6c1862ac5c81358c1ff9fac103a6c142a3",
+  "independent_ls_remote_matches": true,
+  "new_secret_waivers": 0,
+  "original_dirty_state_unchanged": true,
+  "original_identity_after": {
+    "HEAD": "0f377f6ed7655c42d37e7da8777f92448311814d",
+    "branch": "release",
+    "raw_index_sha256": "14d1cf2b2941184683f79d6d78fe232c84bbbb76138789bfb67d8017241e2191"
+  },
+  "original_identity_preserved": true,
+  "original_index_staged": false,
+  "parent": "0f377f6ed7655c42d37e7da8777f92448311814d",
+  "pre_push_hook_sha256": "9b9696343b30c60508372d89288f07b8092426eac9cfe9bcfb8778f8aa8bb1c0",
+  "push_exit": 0,
+  "push_send_attempts": 1,
+  "ref": "refs/heads/codex/vm-mvp-installer-snapshot-delete-20261025",
+  "remote_oid": "660fdcd2a20d76591465cd69fe36ea476aca9b8b",
+  "remote_old_ref": "ABSENT",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-installer.git",
+  "result": "PASS_EXACT_FIVE_FILE_NEW_BRANCH_SSH443",
+  "secret_guard_sha256": "8db432496f2eb03c49fbad340e0d4a3bd43f398a1216596e04453800c5489c70",
+  "selected_files": [
+    {
+      "blob": "e9c18098a176c2d2917de5f11d9825b0e56f2b6e",
+      "bytes": 795,
+      "mode": "100644",
+      "path": "kubekey/builtin/core/roles/ani/snapshot-controller/templates/classes.yaml",
+      "sha256": "123925a563b80b4f8719b0d4323f72b020221c25949c9a3244c3e02f3bbce347"
+    },
+    {
+      "blob": "e5b877f414c25fe31967dd0554f16ec3921c2ce1",
+      "bytes": 862,
+      "mode": "100644",
+      "path": "kubekey/builtin/core/roles/ani/snapshot-controller/templates/connection.md",
+      "sha256": "37970200f295cb44f590a0ad443fc205b55ab98c18ecde336f9cf36109df0cf7"
+    },
+    {
+      "blob": "dbf5511414710c0ed3b88f1fe1c29041494eff5d",
+      "bytes": 2496,
+      "mode": "100644",
+      "path": "kubekey/builtin/core/roles/ani/snapshot-controller/templates/prereq.sh",
+      "sha256": "3b0d466180bd48bf0a724539b31df5b675f25104765ab16854473925abc923f1"
+    },
+    {
+      "blob": "00bc137ab834e34bc3ffb8475430b611359e4dc7",
+      "bytes": 6768,
+      "mode": "100644",
+      "path": "kubekey/builtin/core/roles/ani/snapshot-controller/templates/verify.sh",
+      "sha256": "bd2c9953bd3d223f5b27dfd266bd268682d2250507653388a8c666aaee8b1127"
+    },
+    {
+      "blob": "9f3ba4bbb625968c7dc7e81b8e7d8451ec3e976d",
+      "bytes": 2921,
+      "mode": "100644",
+      "path": "kubekey/pkg/ani/b04_snapshot_test.go",
+      "sha256": "08b08303f5648c79a2208d6a6f9d848e8fd76d2d199542c915ff05a73cdc82ec"
+    }
+  ],
+  "test_reuse": {
+    "B04_receipt_sha256": "d3c25f72404501b29a1f50b36c2ad9a4056ad5a5d1f2e7f1b0190411536f926e",
+    "doc_only_receipt_sha256": "c09a3a28d6bf981a2a55a54ecdbcdd656e88cc3be37a74360fd3320f1d5567ae",
+    "source_manifest_sha256": "9b31e1b36553fbfa78acaf961f58c44c4383d22a8fc8fdd064ce098cbeb44804"
+  },
+  "tests_builds_generation_rerun": false,
+  "tree": "b03c967a70bb7051ab56c6dee7280c8fed334858",
+  "worktree_file_writes": 0
+}

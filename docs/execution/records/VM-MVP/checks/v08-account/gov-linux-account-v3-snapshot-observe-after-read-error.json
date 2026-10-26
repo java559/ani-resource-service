@@ -1,0 +1,13 @@
+{
+  "result": "READ_ERROR",
+  "error_type": "ProductAPIError",
+  "status": 503,
+  "calls_failed": [
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/55099440-c47b-4f81-afc5-7d8e740d14dc/snapshots",
+      "status": 503,
+      "error_type": "ProductAPIError"
+    }
+  ]
+}

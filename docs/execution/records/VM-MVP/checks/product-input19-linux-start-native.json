@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-23T22:24:44.034092+00:00",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e"
+  },
+  "vmi_phase": "Running",
+  "node": "ani-02",
+  "launchers": [
+    {
+      "ref": {
+        "kind": "Pod",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-s6dnp",
+        "uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78"
+      },
+      "phase": "Running",
+      "node": "ani-02"
+    }
+  ],
+  "template_inputs": [
+    {
+      "bus": "usb",
+      "name": "console-tablet",
+      "type": "tablet"
+    }
+  ],
+  "vmi_inputs": [
+    {
+      "bus": "usb",
+      "name": "console-tablet",
+      "type": "tablet"
+    }
+  ],
+  "only_inputs_changed": true,
+  "native_mutations_in_observer": 0,
+  "storage_chain_rescanned": false,
+  "windows_started": false
+}

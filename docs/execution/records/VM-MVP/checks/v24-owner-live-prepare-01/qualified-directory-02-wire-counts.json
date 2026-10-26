@@ -1,0 +1,37 @@
+{
+  "scope": "QUALIFICATION02_ACTUAL_HTTP_HISTORY_COUNTS_ONLY",
+  "original_public_receipt_sha256": "24ee8f2f1aaf9fdac2a1ec5fef6392358bbe3ad9260ae52da8db95f3ae5e3f80",
+  "private_history_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/qualification-02/responses.json",
+  "actual_corrected_gets": [
+    {
+      "route": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&compute_type=gpu&page=1&pageSize=100",
+      "attempt_count": 1,
+      "statuses": [
+        200
+      ]
+    },
+    {
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "attempt_count": 1,
+      "statuses": [
+        504
+      ]
+    },
+    {
+      "route": "/api/v1/admin/tenants/1/quota-accounts",
+      "attempt_count": 1,
+      "statuses": [
+        200
+      ]
+    },
+    {
+      "route": "/api/v1/models",
+      "attempt_count": 1,
+      "statuses": [
+        503
+      ]
+    }
+  ],
+  "public_error_event_double_append_is_projection_only": true,
+  "new_requests": 0
+}

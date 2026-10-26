@@ -1,0 +1,431 @@
+{
+  "at": "2026-10-24T05:19:00.632389+00:00",
+  "phase": "PRODUCT_NATIVE_GC_DONE_BOTTOM_STORAGE_PENDING",
+  "name": "vm-mvp-import-delete-backend-v3-01a168ce",
+  "plan_sha256": "aa34de5b5374b175a0a27a4aeb0e197898b67f6eaca844eff81e995c2448588c",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/import-delete-backend-v3.json",
+  "create": {
+    "body": {
+      "data": {
+        "name": "vm-mvp-import-delete-backend-v3-01a168ce",
+        "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+        "sourceKind": "DISK_IMAGE",
+        "mediaKey": "ubuntu-24.04",
+        "systemDiskSizeGb": "12",
+        "idempotencyKey": "284ffc1d-5fc6-448c-b9b2-c099f689f760",
+        "startAfterCreate": false,
+        "network": {
+          "vpcId": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "subnetId": "subnet_fbd064f6018040dab6a8d909b7afb87f"
+        }
+      }
+    },
+    "send_attempts": 1,
+    "outcome": "acknowledged",
+    "last_send_at": "2026-10-24T05:15:41.704084+00:00",
+    "operation_id": "0ba08c44-cbd2-4950-8c3d-925f3607ba27",
+    "ack": {
+      "operationId": "0ba08c44-cbd2-4950-8c3d-925f3607ba27",
+      "resourceId": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+      "replayed": false,
+      "result": "ACCEPTED"
+    }
+  },
+  "delete": {
+    "idempotency_key": "3a57648e-fa8f-49c6-bbc6-0c688b3c196a",
+    "send_attempts": 1,
+    "outcome": "acknowledged",
+    "expected_version": 1,
+    "body": {
+      "data": {
+        "idempotencyKey": "3a57648e-fa8f-49c6-bbc6-0c688b3c196a",
+        "expectedVersion": "1"
+      }
+    },
+    "last_send_at": "2026-10-24T05:16:13.283940+00:00",
+    "operation_id": "bb9fa9c1-1b79-4059-bb8f-ffcde66db765",
+    "ack": {
+      "operationId": "bb9fa9c1-1b79-4059-bb8f-ffcde66db765",
+      "resourceId": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+      "replayed": false,
+      "result": "QUEUED_FOR_OWNER"
+    }
+  },
+  "vm_id": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+  "create_operation_id": "0ba08c44-cbd2-4950-8c3d-925f3607ba27",
+  "native_before_delete": {
+    "at": "2026-10-24T05:16:12.740565+00:00",
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+      "uid": "e68780ed-ac20-4c6e-b278-cfcceb4daf55"
+    },
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "uid": "98ae973a-101f-4bc5-ab99-75a421e620da"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724"
+    },
+    "dv_phase": "CSICloneInProgress",
+    "final_owner_chain_verified": true
+  },
+  "last_native": {
+    "at": "2026-10-24T05:15:53.940353+00:00",
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+      "uid": "e68780ed-ac20-4c6e-b278-cfcceb4daf55"
+    },
+    "vmi": null,
+    "run_strategy": "Manual",
+    "attachment_id": "att_2d4c5147833843cb8c3b0edc1462525c",
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "uid": "98ae973a-101f-4bc5-ab99-75a421e620da"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724"
+    },
+    "pv": null,
+    "dv_phase": "CSICloneInProgress",
+    "dv_status": {
+      "claimName": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "conditions": [
+        {
+          "lastHeartbeatTime": "2026-10-24T05:15:31Z",
+          "lastTransitionTime": "2026-10-24T05:15:28Z",
+          "message": "target PVC vd-bf5daaf5-a34e-52f3-a08e-e68f16631575 Pending and Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+          "reason": "Pending",
+          "status": "False",
+          "type": "Bound"
+        },
+        {
+          "lastHeartbeatTime": "2026-10-24T05:15:31Z",
+          "lastTransitionTime": "2026-10-24T05:15:28Z",
+          "reason": "TransferRunning",
+          "status": "False",
+          "type": "Ready"
+        },
+        {
+          "lastHeartbeatTime": "2026-10-24T05:15:28Z",
+          "lastTransitionTime": "2026-10-24T05:15:28Z",
+          "reason": "Populator is running",
+          "status": "True",
+          "type": "Running"
+        }
+      ],
+      "phase": "CSICloneInProgress",
+      "progress": "N/A"
+    },
+    "dv_spec": {
+      "contentType": "kubevirt",
+      "source": {
+        "pvc": {
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce"
+        }
+      },
+      "storage": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "12G"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      }
+    },
+    "pvc_phase": "Pending",
+    "pvc_spec": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "dataSource": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+      },
+      "dataSourceRef": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+      },
+      "resources": {
+        "requests": {
+          "storage": "12G"
+        }
+      },
+      "storageClassName": "ani-block",
+      "volumeMode": "Block"
+    },
+    "backend": {
+      "related_claims": [
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+          "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+          "owners": [
+            {
+              "apiVersion": "cdi.kubevirt.io/v1beta1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "DataVolume",
+              "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+              "uid": "98ae973a-101f-4bc5-ab99-75a421e620da"
+            }
+          ],
+          "owned_by_target_uid": null,
+          "spec": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "dataSource": {
+              "apiGroup": "cdi.kubevirt.io",
+              "kind": "VolumeCloneSource",
+              "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+            },
+            "dataSourceRef": {
+              "apiGroup": "cdi.kubevirt.io",
+              "kind": "VolumeCloneSource",
+              "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+            },
+            "resources": {
+              "requests": {
+                "storage": "12G"
+              }
+            },
+            "storageClassName": "ani-block",
+            "volumeMode": "Block"
+          },
+          "phase": "Pending"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+          "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+          "owners": [],
+          "owned_by_target_uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+          "spec": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "dataSource": {
+              "apiGroup": null,
+              "kind": "PersistentVolumeClaim",
+              "name": "vm-mvp-ubuntu-2404-source"
+            },
+            "dataSourceRef": {
+              "apiGroup": null,
+              "kind": "PersistentVolumeClaim",
+              "name": "vm-mvp-ubuntu-2404-source"
+            },
+            "resources": {
+              "requests": {
+                "storage": "8Gi"
+              }
+            },
+            "storageClassName": "ani-block",
+            "volumeMode": "Block"
+          },
+          "phase": "Pending"
+        }
+      ],
+      "pvs": [],
+      "mappings": [
+        {
+          "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+          "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+          "pool": "ani-block-pool",
+          "image": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+          "directory": "csi.volumes.default",
+          "key": "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+          "reverse_object": "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+          "reverse_request_verified": true,
+          "claim": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+            "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+          }
+        }
+      ],
+      "physical_images": [
+        {
+          "name": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+          "result": "ABSENT",
+          "pool": "ani-block-pool",
+          "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+          "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc"
+        }
+      ],
+      "measurable": false,
+      "source": "NOT_CAPTURED_BEFORE_DELETE",
+      "volume_clone_source": {
+        "kind": "VolumeCloneSource",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da",
+        "uid": "3a70a6e3-ad8d-4818-ba52-6001c137716f",
+        "owners": [],
+        "owned_by_target_uid": null,
+        "spec": {
+          "source": {
+            "kind": "PersistentVolumeClaim",
+            "name": "vm-mvp-ubuntu-2404-source"
+          }
+        },
+        "phase": null
+      }
+    }
+  },
+  "cdi_unready_observed": true,
+  "unready_window": "CAPTURED_CDI_UNREADY_BEFORE_DELETE",
+  "cleanup": {
+    "delete_operation": {
+      "id": "bb9fa9c1-1b79-4059-bb8f-ffcde66db765",
+      "vmId": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+      "action": "/vm.v1.VMService/AcceptDelete",
+      "intentVersion": "2",
+      "state": "succeeded",
+      "reason": "",
+      "observedAt": "2026-10-24T05:17:00.316964341Z"
+    },
+    "remaining_original_native_objects": [],
+    "attachment": [
+      {
+        "id": "att_2d4c5147833843cb8c3b0edc1462525c",
+        "state": "released",
+        "blocked": false,
+        "released_at": "2026-10-24T05:16:57.460413+00:00"
+      }
+    ],
+    "no_implicit_start_observed": true,
+    "pv_absence": "NOT_MEASURED_OR_NOT_ABSENT",
+    "rbd": "NOT_MEASURED",
+    "trash": "NOT_MEASURED"
+  },
+  "implicit_start_observed": false,
+  "delete_association_verified": true,
+  "bottom_storage": {
+    "rbd": "NOT_MEASURED",
+    "trash": "NOT_MEASURED"
+  },
+  "vm_posts_other_than_this_probe": 0,
+  "backend_before_delete": null,
+  "related_claims_history": [
+    {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+      "uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "owners": [
+        {
+          "apiVersion": "cdi.kubevirt.io/v1beta1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "DataVolume",
+          "name": "vd-bf5daaf5-a34e-52f3-a08e-e68f16631575",
+          "uid": "98ae973a-101f-4bc5-ab99-75a421e620da"
+        }
+      ],
+      "owned_by_target_uid": null,
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "dataSource": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeCloneSource",
+          "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+        },
+        "dataSourceRef": {
+          "apiGroup": "cdi.kubevirt.io",
+          "kind": "VolumeCloneSource",
+          "name": "volume-clone-source-98ae973a-101f-4bc5-ab99-75a421e620da"
+        },
+        "resources": {
+          "requests": {
+            "storage": "12G"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      },
+      "phase": "Pending"
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+      "owners": [],
+      "owned_by_target_uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "dataSource": {
+          "apiGroup": null,
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-ubuntu-2404-source"
+        },
+        "dataSourceRef": {
+          "apiGroup": null,
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-mvp-ubuntu-2404-source"
+        },
+        "resources": {
+          "requests": {
+            "storage": "8Gi"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      },
+      "phase": "Pending"
+    }
+  ],
+  "backend_result": {
+    "result": "NOT_MEASURED",
+    "reason": "no owned physical image captured before unready DELETE"
+  },
+  "capture_window": {
+    "maximum_seconds": 30,
+    "absolute_deadline": 684232.737132454,
+    "result": "TIMED_OUT_NOT_MEASURED",
+    "error_type": "TimeoutExpired",
+    "elapsed_seconds": 30.011861893930472
+  },
+  "policy_correction": {
+    "root_authorization": "Root explicitly approved the original c732 plan/body8d1265 on 2026-10-24, then required one absolute 30s capture deadline, remaining-time subprocess bounds, and same-key normal DELETE after timeout/missing/ready; no new resource or CREATE body.",
+    "original_approved_plan_sha256": "c732585292b6e1f61e5231afd18be72a0a1281d098d8b5312f2456039b44a3d1",
+    "shared_absolute_capture_deadline_seconds": 30,
+    "remaining_time_bounds_all_capture_subprocesses": true,
+    "timeout_missing_ready": "normal same-key Gov DELETE; measurement/unready PASS forbidden",
+    "final_reads": "fresh VM/DV/PVC UID/owner and DV phase only; no slow backend rescan",
+    "unknown_ack": "observe only; no automatic or explicit replay in this task",
+    "additional_v3_authorization": "Root explicitly approved only one additional backend-v3 after v2 normal cleanup on 2026-10-24: same source UID/hash, 12GB, startfalse/noinit/0VMI; only new unique name/key; fix exact rados stdout NoSuchKey, retain strict 30s/unready gate, normal DELETE, and no fourth case.",
+    "authorized_create_changes_from_v2": [
+      "name",
+      "idempotencyKey"
+    ]
+  },
+  "historical_run": "UNCHANGED_NOT_MEASURED"
+}

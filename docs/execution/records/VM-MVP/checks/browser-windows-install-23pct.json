@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-10-24T05:30Z",
+  "kind": "BROWSER_POINT_IN_TIME_NOT_INSTALL_COMPLETION",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vm_version": 3,
+  "guest_install_progress_percent": 23,
+  "screenshot": "vm-windows-server2025-install-23pct.png",
+  "screenshot_sha256": "63c0ae1c44dd83050f06ff8b06951f851687e194e22796cd40e90491e1cdcb45",
+  "normal_gov_login_and_vnc_reconnected": true,
+  "guest_mutation": false,
+  "installation_completion": "NOT_VERIFIED",
+  "windows_firstboot": "NOT_RUN"
+}

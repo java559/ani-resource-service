@@ -1,0 +1,42 @@
+{
+  "jobs": [
+    {
+      "name": "netrel-20261023-atlas-status",
+      "uid": "94ca1500-5612-45a0-9914-ef15576f82f3",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-admin-check",
+      "uid": "d9c6de06-6ee1-40ad-91b5-39c280dcc6c5",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-api-dry",
+      "uid": "92e9c05b-150d-40b2-ba11-e9d3710f376b",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-api-sync",
+      "uid": "05c3bb89-18cc-4c50-b201-b8e9b5d3c013",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-atlas-apply",
+      "uid": "2b43040f-db83-4255-83f4-aa5a73fda6b9",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-atlas-dry",
+      "uid": "1ae01b2b-d4df-46d2-8674-a878d35f12cc",
+      "delete_requested": true
+    },
+    {
+      "name": "netrel-20261023-r2-atlas-status",
+      "uid": "eaa3a6d4-da65-4187-936d-67c4d348e8dc",
+      "delete_requested": true
+    }
+  ],
+  "fresh_registry_authfile_removed": true,
+  "jobs_absent": true,
+  "pods_absent": true
+}

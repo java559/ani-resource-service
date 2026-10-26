@@ -1,0 +1,9 @@
+OVERLAY16D_VERIFIED
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/native-completed
+=== RUN   TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/lost-checkpoint
+--- PASS: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint (1.59s)
+    --- PASS: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/native-completed (0.76s)
+    --- PASS: TestSnapshotPostgresDeleteBeforeMappingAndLostCheckpoint/lost-checkpoint (0.83s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	1.603s

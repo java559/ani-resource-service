@@ -1,0 +1,35 @@
+
+Successfully connected to vm-mvp-ani-02 console. Press Ctrl+] or Ctrl+5 to exit console.
+
+vm-mvp-ani-02 login: vmprobe
+Password: 
+Welcome to Ubuntu 24.04.5 LTS (GNU/Linux 6.8.0-147-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Oct 23 15:14:19 UTC 2026
+
+  System load: 0.15              Memory usage: 17%   Processes:       106
+  Usage of /:  23.7% of 6.71GB   Swap usage:   0%    Users logged in: 0
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+$ sudo -n python3 -c 'import json,subprocess,os; d=json.loads(subprocess.check_output(["lsblk","-J","-o","NAME,SERIAL,TYPE"]))["blockdevices"]; p=next(x["name"] for x in d if x.get("serial")=="vmdata-probe" and x["type"]=="disk"); print(json.dumps({"root":open("/var/lib/vm-mvp-root-marker").read().strip(),"data":open("/dev/"+p,"rb").read(512).rstrip(bytes([0,10])).decode(),"disk":p,"username":os.environ.get("SUDO_USER"),"datasource":open("/var/lib/cloud/instance/datasource").read().strip(),"nocloud_instance_id":open("/var/lib/cloud/data/instance-id").read().strip(),"firmware_uuid":open("/sys/class/dmi/id/product_uuid").read().strip(),"boot_id":open("/proc/sys/kernel/random/boot_id").read().strip(),"os_release":open("/etc/os-release").read()}))'
+{"root": "VM_BLOCK_PROBE_01a168ce_ani-02", "data": "VM_BLOCK_PROBE_01a168ce_ani-02", "disk": "sda", "username": "vmprobe", "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]", "nocloud_instance_id": "f2e37469-aa32-4b08-a41b-4edef074fe5e", "firmware_uuid": "f2e37469-aa32-4b08-a41b-4edef074fe5e", "boot_id": "7ef3e558-cbb1-46db-b832-e456f74416c7", "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n"}
+$ 

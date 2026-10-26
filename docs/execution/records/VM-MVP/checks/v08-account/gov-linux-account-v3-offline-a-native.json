@@ -1,0 +1,204 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "intent": "offline-a-native",
+  "driver_sha256": "895dea6b6efa6e85a2826dc6526a15f9da2a4c8e36e5f5c3a4de5ff3f214afa4",
+  "snapshot_helper_sha256": "2faf4a60c7ec44cccb9663172167debc5dce9c1799385ac4c1b9bd38e3289b7b",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-account-persistence-v3.json",
+  "phase": "READ_ONLY_NATIVE_SNAPSHOT",
+  "snapshot_id": "cb8710d2-76a0-5ac8-ab99-f959075594b2",
+  "operation_id": "b9c9a55c-71f3-4d2f-9e4e-84bef8194bfa",
+  "snapshot": {
+    "kind": "VirtualMachineSnapshot",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-snap-cb8710d2-76a0-5ac8-ab99-f959075594b2",
+    "uid": "8706d234-5ab0-4114-b72e-95102d057017",
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T07:00:02Z",
+          "reason": "Operation complete",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T07:00:02Z",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "creationTime": "2026-10-24T07:00:02Z",
+      "phase": "Succeeded",
+      "readyToUse": true,
+      "snapshotVolumes": {
+        "excludedVolumes": [
+          "guest-initialization"
+        ],
+        "includedVolumes": [
+          "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        ]
+      },
+      "sourceUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "virtualMachineSnapshotContentName": "vmsnapshot-content-8706d234-5ab0-4114-b72e-95102d057017"
+    }
+  },
+  "content": {
+    "kind": "VirtualMachineSnapshotContent",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vmsnapshot-content-8706d234-5ab0-4114-b72e-95102d057017",
+    "uid": "049e4a37-8750-461b-8e0f-4d7f80273b77",
+    "status": {
+      "creationTime": "2026-10-24T07:00:02Z",
+      "readyToUse": true,
+      "volumeSnapshotStatus": [
+        {
+          "creationTime": "2026-10-24T06:59:26Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21"
+        },
+        {
+          "creationTime": "2026-10-24T06:59:17Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6"
+        },
+        {
+          "creationTime": "2026-10-24T06:59:23Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        }
+      ]
+    }
+  },
+  "volumes": [
+    {
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "volume_name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+      "source_pvc": {
+        "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "6ccafb95-7738-48ed-be5a-cef65ca8609c"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "uid": "e823fe1b-d35a-4704-8335-89f6b214aaa1",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
+          "creationTime": "2026-10-24T06:59:17Z",
+          "readyToUse": true,
+          "restoreSize": "4Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-e823fe1b-d35a-4704-8335-89f6b214aaa1",
+        "uid": "6dd9fcfa-c6b2-4c1d-a0bb-34110fbb08ad",
+        "status": {
+          "creationTime": 1792825157203634160,
+          "readyToUse": true,
+          "restoreSize": 4294967296,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-0dbc55f0-6e9c-4e09-9dae-2eb64ee5859d"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    },
+    {
+      "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "volume_name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+      "source_pvc": {
+        "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "741c8be2-a016-4297-8ed2-469f7b539fcb"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "uid": "de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+          "creationTime": "2026-10-24T06:59:26Z",
+          "readyToUse": true,
+          "restoreSize": "12Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-de2ed829-d2f9-4c6c-84a6-1c320899aa2f",
+        "uid": "848d1e62-3c5e-485f-965a-02e65caf5dda",
+        "status": {
+          "creationTime": 1792825166352440652,
+          "readyToUse": true,
+          "restoreSize": 12884901888,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-d0403f2f-e729-4685-881a-da4f14db41a2"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    },
+    {
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "volume_name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+      "source_pvc": {
+        "name": "restore-acd48b56-2ca4-46e4-91c7-b9637355100b-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "12745c61-5e03-4db7-9708-c64eee206977"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-8706d234-5ab0-4114-b72e-95102d057017-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "uid": "98b926e4-441b-492d-9cb8-c0472e600ebb",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+          "creationTime": "2026-10-24T06:59:23Z",
+          "readyToUse": true,
+          "restoreSize": "3Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-98b926e4-441b-492d-9cb8-c0472e600ebb",
+        "uid": "d9625ccf-1b4e-45eb-90b7-216c81eea997",
+        "status": {
+          "creationTime": 1792825163106368254,
+          "readyToUse": true,
+          "restoreSize": 3221225472,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-c61438a1-c2a1-4867-985e-e982365349f3"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    }
+  ],
+  "consistency": "OFFLINE_STOPPED",
+  "business_mutations": 0
+}

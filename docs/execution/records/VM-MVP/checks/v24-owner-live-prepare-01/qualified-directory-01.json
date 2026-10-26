@@ -1,0 +1,74 @@
+{
+  "state": "STOPPED_PRESERVE_ORIGINAL_API_ACKS_NO_AUTOMATIC_RETRY",
+  "started_at": "2026-10-24T12:04:20.382411+00:00",
+  "source_sha256": "71487c987e1c617bd137835e8d75f2d7cc4dfedeb582e620afda141153a8ae88",
+  "sql_writes": 0,
+  "new_quota_definitions_values_prices": 0,
+  "workload_creates": 0,
+  "gpu_allocations": 0,
+  "model_imports": 0,
+  "operations": [],
+  "gets": [
+    {
+      "method": "GET",
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "module not allowed"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/models",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "unauthorized access"
+      }
+    }
+  ],
+  "plan2_consumers": [
+    {
+      "id": 1,
+      "code": "vm-mvp-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    },
+    {
+      "id": 2,
+      "code": "vm-isolation-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    }
+  ],
+  "before_denials": [
+    {
+      "method": "GET",
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "module not allowed"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/models",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "unauthorized access"
+      }
+    }
+  ],
+  "phase": "canonical-source-and-current-qualification",
+  "failure_type": "AssertionError",
+  "file": "qualify-read.py",
+  "line": 61,
+  "finished_at": "2026-10-24T12:04:22.093702+00:00"
+}

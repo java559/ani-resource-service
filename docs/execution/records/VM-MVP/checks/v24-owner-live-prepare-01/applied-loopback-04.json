@@ -1,0 +1,574 @@
+{
+  "state": "TRANSPORT_APPLIED_NORMAL_READS_RECORDED_NO_CREATE",
+  "started_at": "2026-10-24T12:21:00.941481+00:00",
+  "source_sha256": "da0244051b05a1070500c5a0b5633444eb9a891e86c49fd9c8aa50256c8b2b71",
+  "resource_restarts": 0,
+  "sg_restarts": 0,
+  "vm_mutations": 0,
+  "shared_changes": 0,
+  "new_workload_creates": 0,
+  "gpu_allocations": 0,
+  "model_imports": 0,
+  "quota_writes": 0,
+  "normal_directory_gets": [
+    {
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 404,
+      "reason": "NOT_FOUND"
+    },
+    {
+      "route": "/api/v1/models",
+      "http": 200
+    }
+  ],
+  "port_forwards": [
+    {
+      "pid": 3465113,
+      "start_ticks": 70972802,
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "-n",
+        "ani-system",
+        "port-forward",
+        "--address=127.0.0.1",
+        "pod/ani-accelerator-service-6965d5bbc7-qdzm2",
+        "43941:19090"
+      ],
+      "cwd": "/home/chabking",
+      "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+      "service": {
+        "name": "ani-accelerator-service",
+        "namespace": "ani-system",
+        "uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+        "cluster_ip": "10.96.58.69",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/name": "ani-accelerator-service"
+        }
+      },
+      "selected_pod": {
+        "name": "ani-accelerator-service-6965d5bbc7-qdzm2",
+        "namespace": "ani-system",
+        "uid": "7a7bb25a-582d-4040-9f15-15253fd8edfc"
+      },
+      "replicaset": {
+        "name": "ani-accelerator-service-6965d5bbc7",
+        "uid": "cf39e475-c8b8-4548-ab82-42ea6dc75cb8"
+      },
+      "deployment": {
+        "name": "ani-accelerator-service",
+        "uid": "b47a695d-50d8-4231-a786-6cb6c6b01804"
+      },
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/transport-loopback-01/acc-port-forward.log",
+      "listen": "127.0.0.1:43941",
+      "target_port": 19090,
+      "ready": true
+    },
+    {
+      "pid": 3465194,
+      "start_ticks": 70972900,
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "-n",
+        "ani-system",
+        "port-forward",
+        "--address=127.0.0.1",
+        "pod/ani-model-service-7544d6db94-lgft8",
+        "43942:19090"
+      ],
+      "cwd": "/home/chabking",
+      "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+      "service": {
+        "name": "ani-model-grpc",
+        "namespace": "ani-system",
+        "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "cluster_ip": "10.96.44.130",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/name": "ani-model-service"
+        }
+      },
+      "selected_pod": {
+        "name": "ani-model-service-7544d6db94-lgft8",
+        "namespace": "ani-system",
+        "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0"
+      },
+      "replicaset": {
+        "name": "ani-model-service-7544d6db94",
+        "uid": "4750b70f-24a4-445b-96de-8048a8c12d4c"
+      },
+      "deployment": {
+        "name": "ani-model-service",
+        "uid": "f358e30f-842d-419a-9b25-4178caabda0f"
+      },
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/transport-loopback-01/model-port-forward.log",
+      "listen": "127.0.0.1:43942",
+      "target_port": 19090,
+      "ready": true
+    },
+    {
+      "pid": 3465246,
+      "start_ticks": 70972976,
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "-n",
+        "ani-system",
+        "port-forward",
+        "--address=127.0.0.1",
+        "pod/ani-inference-service-7fcb4c5cc-f8lsc",
+        "43943:19090"
+      ],
+      "cwd": "/home/chabking",
+      "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+      "service": {
+        "name": "ani-inference-grpc",
+        "namespace": "ani-system",
+        "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "cluster_ip": "10.96.166.234",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/instance": "ani-inference",
+          "app.kubernetes.io/name": "ani-inference"
+        }
+      },
+      "selected_pod": {
+        "name": "ani-inference-service-7fcb4c5cc-f8lsc",
+        "namespace": "ani-system",
+        "uid": "d6edfe43-903c-4a9a-8bc2-8ec4607ec713"
+      },
+      "replicaset": {
+        "name": "ani-inference-service-7fcb4c5cc",
+        "uid": "861e2eea-1bf0-4717-bedf-5e83e7b02385"
+      },
+      "deployment": {
+        "name": "ani-inference-service",
+        "uid": "9efe7f65-4ccb-4bb9-b841-874851b78b21"
+      },
+      "log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/transport-loopback-01/inference-port-forward.log",
+      "listen": "127.0.0.1:43943",
+      "target_port": 19090,
+      "ready": true
+    }
+  ],
+  "rollback": {},
+  "phase": "normal-own-directory-get-once",
+  "old_process": {
+    "pid": 3424470,
+    "start_ticks": 70793927,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "sessions_before": {
+    "pid": 3440937,
+    "start_ticks": 70865255,
+    "active": 0,
+    "leases": 0,
+    "unchanged": true
+  },
+  "pending_before": {
+    "resource": {
+      "database": "vm_resource_candidate_01a168ce",
+      "pending_operation_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 0,
+        "vm.operations": 0
+      },
+      "assigned_cidrs": [
+        {
+          "kind": "vpc",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "cidr": "10.83.0.0/16",
+          "state": "available"
+        },
+        {
+          "kind": "subnet",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "cidr": "10.83.1.0/24",
+          "state": "available"
+        }
+      ],
+      "original_legacy_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 4,
+        "vm.operations": 0
+      },
+      "instance_exact_terminal_observation": {
+        "pending": 0,
+        "states": [
+          {
+            "state": "superseded",
+            "count": 1
+          },
+          {
+            "state": "completed",
+            "count": 3
+          }
+        ],
+        "known_operations": [
+          {
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "delete",
+            "state": "completed"
+          },
+          {
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "create",
+            "state": "superseded"
+          },
+          {
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "create",
+            "state": "completed"
+          },
+          {
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "delete",
+            "state": "completed"
+          }
+        ]
+      }
+    },
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    }
+  },
+  "protected_before": [
+    {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "47",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+      "launcher_uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646"
+    },
+    {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": "7",
+      "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+      "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+      "launcher_uid": "3af15e13-84bb-4ad6-87cc-accad5b9854b"
+    },
+    {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": "9",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+      "launcher_uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+    }
+  ],
+  "only_environment_delta": {
+    "ANI_ACCELERATOR_ADDR": "127.0.0.1:43941",
+    "ANI_MODEL_ADDR": "127.0.0.1:43942",
+    "ANI_INFERENCE_ADDR": "127.0.0.1:43943"
+  },
+  "server_names_certificates_other_client_fields_unchanged": true,
+  "selected_targets": [
+    {
+      "label": "ACC",
+      "service": {
+        "name": "ani-accelerator-service",
+        "namespace": "ani-system",
+        "uid": "db4d1538-554b-415a-a4f1-fdc490a86947",
+        "cluster_ip": "10.96.58.69",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/name": "ani-accelerator-service"
+        }
+      },
+      "pod": {
+        "name": "ani-accelerator-service-6965d5bbc7-qdzm2",
+        "namespace": "ani-system",
+        "uid": "7a7bb25a-582d-4040-9f15-15253fd8edfc"
+      },
+      "replicaset": {
+        "name": "ani-accelerator-service-6965d5bbc7",
+        "uid": "cf39e475-c8b8-4548-ab82-42ea6dc75cb8"
+      },
+      "deployment": {
+        "name": "ani-accelerator-service",
+        "uid": "b47a695d-50d8-4231-a786-6cb6c6b01804"
+      },
+      "environment_key": "ANI_ACCELERATOR_ADDR",
+      "loopback_port": 43941
+    },
+    {
+      "label": "MODEL",
+      "service": {
+        "name": "ani-model-grpc",
+        "namespace": "ani-system",
+        "uid": "2f75fd16-c191-4446-ba1a-8d57b189986c",
+        "cluster_ip": "10.96.44.130",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/name": "ani-model-service"
+        }
+      },
+      "pod": {
+        "name": "ani-model-service-7544d6db94-lgft8",
+        "namespace": "ani-system",
+        "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0"
+      },
+      "replicaset": {
+        "name": "ani-model-service-7544d6db94",
+        "uid": "4750b70f-24a4-445b-96de-8048a8c12d4c"
+      },
+      "deployment": {
+        "name": "ani-model-service",
+        "uid": "f358e30f-842d-419a-9b25-4178caabda0f"
+      },
+      "environment_key": "ANI_MODEL_ADDR",
+      "loopback_port": 43942
+    },
+    {
+      "label": "INFERENCE",
+      "service": {
+        "name": "ani-inference-grpc",
+        "namespace": "ani-system",
+        "uid": "6240c73a-b1a3-470e-8258-162dfc067e8c",
+        "cluster_ip": "10.96.166.234",
+        "port": 19090,
+        "selector": {
+          "app.kubernetes.io/instance": "ani-inference",
+          "app.kubernetes.io/name": "ani-inference"
+        }
+      },
+      "pod": {
+        "name": "ani-inference-service-7fcb4c5cc-f8lsc",
+        "namespace": "ani-system",
+        "uid": "d6edfe43-903c-4a9a-8bc2-8ec4607ec713"
+      },
+      "replicaset": {
+        "name": "ani-inference-service-7fcb4c5cc",
+        "uid": "861e2eea-1bf0-4717-bedf-5e83e7b02385"
+      },
+      "deployment": {
+        "name": "ani-inference-service",
+        "uid": "9efe7f65-4ccb-4bb9-b841-874851b78b21"
+      },
+      "environment_key": "ANI_INFERENCE_ADDR",
+      "loopback_port": 43943
+    }
+  ],
+  "pending_pre_term": {
+    "resource": {
+      "database": "vm_resource_candidate_01a168ce",
+      "pending_operation_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 0,
+        "vm.operations": 0
+      },
+      "assigned_cidrs": [
+        {
+          "kind": "vpc",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "cidr": "10.83.0.0/16",
+          "state": "available"
+        },
+        {
+          "kind": "subnet",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "cidr": "10.83.1.0/24",
+          "state": "available"
+        }
+      ],
+      "original_legacy_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 4,
+        "vm.operations": 0
+      },
+      "instance_exact_terminal_observation": {
+        "pending": 0,
+        "states": [
+          {
+            "state": "superseded",
+            "count": 1
+          },
+          {
+            "state": "completed",
+            "count": 3
+          }
+        ],
+        "known_operations": [
+          {
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "delete",
+            "state": "completed"
+          },
+          {
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "create",
+            "state": "superseded"
+          },
+          {
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "create",
+            "state": "completed"
+          },
+          {
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "delete",
+            "state": "completed"
+          }
+        ]
+      }
+    },
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    }
+  },
+  "old_normal_term": true,
+  "new_process": {
+    "pid": 3465703,
+    "start_ticks": 70973412,
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c"
+  },
+  "pending_after": {
+    "resource": {
+      "database": "vm_resource_candidate_01a168ce",
+      "pending_operation_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 0,
+        "vm.operations": 0
+      },
+      "assigned_cidrs": [
+        {
+          "kind": "vpc",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "cidr": "10.83.0.0/16",
+          "state": "available"
+        },
+        {
+          "kind": "subnet",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "cidr": "10.83.1.0/24",
+          "state": "available"
+        }
+      ],
+      "original_legacy_counts": {
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_operations": 0,
+        "instance.instance_operations": 4,
+        "vm.operations": 0
+      },
+      "instance_exact_terminal_observation": {
+        "pending": 0,
+        "states": [
+          {
+            "state": "superseded",
+            "count": 1
+          },
+          {
+            "state": "completed",
+            "count": 3
+          }
+        ],
+        "known_operations": [
+          {
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "delete",
+            "state": "completed"
+          },
+          {
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "action": "create",
+            "state": "superseded"
+          },
+          {
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "create",
+            "state": "completed"
+          },
+          {
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "action": "delete",
+            "state": "completed"
+          }
+        ]
+      }
+    },
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    }
+  },
+  "protected_after": [
+    {
+      "id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": "47",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+      "launcher_uid": "bbed24fb-9f64-42e4-a1b4-20c3075b0646"
+    },
+    {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": "7",
+      "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+      "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+      "launcher_uid": "3af15e13-84bb-4ad6-87cc-accad5b9854b"
+    },
+    {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "version": "9",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vmi_uid": "4a9a6859-832e-42d1-8b21-b21a7b208891",
+      "launcher_uid": "557f6711-fc0f-44c3-925e-483973cee51d"
+    }
+  ],
+  "protected_unchanged": true,
+  "same_binary_config_other_env_budget": true,
+  "new_private_cleanup_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/transport-loopback-01",
+  "profiles": [],
+  "own_models": [],
+  "own_versions": [],
+  "finished_at": "2026-10-24T12:21:21.642616+00:00"
+}

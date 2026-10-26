@@ -1,0 +1,1 @@
+type C:\vm-mvp-01a168ce-root.marker & certutil -hashfile C:\vm-mvp-01a168ce-root.marker SHA256 & type T:\vm-mvp-data3.marker & certutil -hashfile T:\vm-mvp-data3.marker SHA256 & type U:\vm-mvp-data4.marker & certutil -hashfile U:\vm-mvp-data4.marker SHA256

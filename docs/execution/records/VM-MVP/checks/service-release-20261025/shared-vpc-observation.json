@@ -1,0 +1,163 @@
+{
+  "auth_logins": 0,
+  "binding": {
+    "binding_id": "5ed334fc-cee4-4da8-839b-bdee1f7a5376",
+    "cluster_id": "0fcdb8b1-22bf-4528-af59-82843dc88f21",
+    "create_dispatched": true,
+    "namespace": "tenant-a893c319-d6d8-4609-a340-3f222964d00f",
+    "pending_action": "",
+    "provider_name": "vpc-ebe24085d6e84c01a2433a5017b47e5b",
+    "provider_uid": "f9a0ce0a-d20f-42cb-ba27-510ffa0658ae"
+  },
+  "business_posts": 0,
+  "finished_at": "2026-10-24T21:52:40.209993+00:00",
+  "heavy_lock_released": true,
+  "host": "fedora",
+  "identity": {
+    "deployment_generation": 35,
+    "deployment_uid": "e17f1f9e-e406-452f-838d-85062a6e860a",
+    "image_id": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service@sha256:3a147dcb64a332e3e3b845292657357373b8ccb4cc0deaa9d342800b289c0c3a",
+    "kube_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "pod_name": "ani-resource-service-5878d6cd95-zv2w4",
+    "pod_started_at": "2026-10-24T20:43:41Z",
+    "pod_uid": "247e5c0f-6bdd-47b0-aa82-f9fddc2c85d7",
+    "ready": true,
+    "restart_count": 0
+  },
+  "network_database": {
+    "credential_saved_or_output": false,
+    "name": "ani_resource_network",
+    "runtime_role": "ani_resource_network_runtime",
+    "secret_uid": "144fc361-48d7-4ae2-ae7e-11c5587cb8db"
+  },
+  "operation": {
+    "attempt": 2,
+    "completed_at": "2026-10-24T21:39:38.20025+00:00",
+    "execution_epoch": 2,
+    "next_attempt_at": null,
+    "operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+    "reason_code": "",
+    "state": "succeeded",
+    "updated_at": "2026-10-24T21:39:38.20025+00:00"
+  },
+  "operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+  "pg_now": "2026-10-24T21:52:19.06379+00:00",
+  "queries": [
+    {
+      "exit": 0,
+      "label": "physical-cluster",
+      "seconds": 0.197
+    },
+    {
+      "exit": 0,
+      "label": "exact-shared-Resource",
+      "seconds": 0.114
+    },
+    {
+      "exit": 0,
+      "label": "exact-shared-Resource-Pod",
+      "seconds": 0.124
+    },
+    {
+      "exit": 0,
+      "label": "existing-PG",
+      "seconds": 0.107
+    },
+    {
+      "exit": 0,
+      "label": "original-Network-app-DSN",
+      "seconds": 0.114
+    },
+    {
+      "exit": 0,
+      "label": "one-target-PG-row",
+      "seconds": 0.269
+    },
+    {
+      "exit": 0,
+      "label": "selected-network-worker-config",
+      "seconds": 0.095
+    },
+    {
+      "exit": 0,
+      "label": "last3min-bounded-Resource-logs",
+      "seconds": 0.34
+    }
+  ],
+  "recent_logs": {
+    "byte_budget": 262144,
+    "bytes": 47005,
+    "lines": 67,
+    "original_vpc_lines": 0,
+    "private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-observation-01/private-continued/resource-last3min.log",
+    "sqlstate_counts": {},
+    "window": "3m",
+    "worker_error_classes": {
+      "ambiguous_column": 0,
+      "bind_failure": 0,
+      "claim_failure": 0,
+      "deadline": 0,
+      "lease_failure": 0,
+      "permission": 0,
+      "relation_missing": 0
+    },
+    "worker_error_lines": 0,
+    "worker_lines": 13
+  },
+  "reconciliation": {
+    "eip_id": null,
+    "evidence_applied_at": "2026-10-24T21:52:10.586971+00:00",
+    "evidence_hash": "28327111483a5a4c4b0e4b8df024dfe4b8ddbb509e53354e50d7d3a54503b5b7",
+    "lb_id": null,
+    "lease_epoch": 38,
+    "lease_owner": null,
+    "lease_until": null,
+    "next_run_at": "2026-10-24T21:52:20.586968+00:00",
+    "processed_generation": 26,
+    "reconciliation_id": "ff24a985-1c78-431d-821f-85e28466d643",
+    "requested_generation": 26,
+    "retired": false,
+    "retry_not_before": "1970-01-01T00:00:00+00:00",
+    "snat_id": null,
+    "subnet_id": null,
+    "tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "vpc_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b"
+  },
+  "result": "PASS_ONE_BOUNDED_READONLY_SAMPLE_RECORDED",
+  "shared_or_pg_writes": 0,
+  "started_at": "2026-10-24T21:52:38.822405+00:00",
+  "tenant_mapping": {
+    "gov_numeric_tenant": 14,
+    "resource_tenant_uuid": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "source": "unique original shared network_vpcs row joined to exact original op/reconciliation/binding"
+  },
+  "vm_guest_operations": 0,
+  "vpc": {
+    "created_at": "2026-10-24T21:38:54.599463+00:00",
+    "last_operation_id": "b0c897f5-eb04-438a-89e3-856f2c248bbb",
+    "observed_at": "2026-10-24T21:51:59.768568+00:00",
+    "reason_code": "",
+    "state": "available",
+    "tenant_id": "a893c319-d6d8-4609-a340-3f222964d00f",
+    "updated_at": "2026-10-24T21:52:10.586134+00:00",
+    "version": 39,
+    "vpc_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b"
+  },
+  "vpc_id": "vpc_ebe24085d6e84c01a2433a5017b47e5b",
+  "worker_config": {
+    "network_mode_env": [
+      "full"
+    ],
+    "secret_resource_version": "54051062",
+    "secret_uid": "73c854a5-8cdc-4f66-8027-6682c2e66916",
+    "worker": {
+      "lease": "90s",
+      "observe_every": "${WORKER_OBSERVE_EVERY:10s}",
+      "poll_interval": "${WORKER_POLL_INTERVAL:0.1s}",
+      "request_timeout": "25s",
+      "retry_max": "${WORKER_RETRY_MAX:60s}",
+      "retry_min": "${WORKER_RETRY_MIN:1s}",
+      "stale_after": "${WORKER_STALE_AFTER:60s}"
+    }
+  }
+}

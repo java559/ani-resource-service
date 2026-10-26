@@ -1,0 +1,148 @@
+{
+  "artifact_boundary": "Three local OCI files only. SG expected missing-config exit1 and Gov help exit0 are not runtime readiness or LIVE business acceptance.",
+  "deployments": 0,
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "images": [
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar",
+      "archive_bytes": 35553280,
+      "archive_sha256": "5e42813305610864db0d17cb366386156946b359f91e9bb069a48ebc8dbbb800",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/resource-oci-built.json",
+      "artifact_receipt_sha256": "4923e4d3f1281ad3d256f61626ff464106b229f33df1c6057c6677f584eff622",
+      "expected_manifest_digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--retry-times=0",
+        "--dest-tls-verify=true",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar:vm-mvp-8589b66f1370-01a168ce",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-8589b66f1370-01a168ce"
+      ],
+      "local_image_tag": "ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+      "service": "resource",
+      "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+      "source_tree": "e51622e689476c524ddd29776d1b217738822a21"
+    },
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar",
+      "archive_bytes": 34860032,
+      "archive_sha256": "e59153de4d8f59bd50f82fae285d710cc0694ee0128e9a0427050a81bd116b69",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/oci-built.json",
+      "artifact_receipt_sha256": "f7ba77ec32758dba3c0b9080e4d24a46aea1410c9bc6071233256a0fcd11c7bf",
+      "expected_manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--retry-times=0",
+        "--dest-tls-verify=true",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar:vm-mvp-c485419ab879-01a168ce",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-session-gateway:vm-mvp-c485419ab879-01a168ce"
+      ],
+      "local_image_tag": "ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:30003/icn-01a15337-release/ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+      "service": "session",
+      "source_commit": "c485419ab879fed9a2fad3a064fd328d829a2671",
+      "source_tree": "a793407819bc7eaea34348f0962175cbeecc3463"
+    },
+    {
+      "archive": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar",
+      "archive_bytes": 83010048,
+      "archive_sha256": "b465b5cc097e26b81a3ba3283e6b641d0972ceae4658a5e142c17b1287fcfd34",
+      "artifact_receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/oci-built-attempt02.json",
+      "artifact_receipt_sha256": "6c979f1670eed3d32cc8c73638c703cd44bcc4bae1a06d75253a79045f168b23",
+      "expected_manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+      "future_command_not_executed": [
+        "skopeo",
+        "copy",
+        "--preserve-digests",
+        "--retry-times=0",
+        "--dest-tls-verify=true",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce"
+      ],
+      "local_image_tag": "ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+      "proposed_destination_tag": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+      "service": "governance",
+      "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+      "source_tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+    }
+  ],
+  "registry": {
+    "authfile_exists_now": false,
+    "ca_public_source": "Fedora:/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/harbor-certs/ca.crt",
+    "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+    "cert_dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "endpoint": "172.16.101.10:30003",
+    "exact_new_repo_push_scope": "NOT_FRESHLY_CHECKED; authenticated read-only pull,push scope proof required before write",
+    "existing_identity_source": {
+      "credential_values_read_in_this_prepare": false,
+      "namespace": "ani-system",
+      "resource_version_metadata_only": "42355378",
+      "secret": "icn-01a15337-release-pull",
+      "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46"
+    },
+    "historical_authority": "Same Secret identity had pull,push in multiple repositories of this exact project; four 20261023 skopeo pushes exited0.",
+    "historical_task_authfiles_cleaned": true,
+    "planned_private_authfile": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+    "project": "icn-01a15337-release",
+    "transport": "strict HTTPS only"
+  },
+  "registry_logins": 0,
+  "required_before_execution": [
+    "Root review of exact Harbor v2 destinations and driver hash; existing user authorization is to reuse prior publication channel.",
+    "Fresh same cluster identity and exact existing Secret UID; only explicitly authorized credential materialization to the planned 0600 private authfile, no credential output.",
+    "Strict HTTPS with pinned CA; current exact new-repository pull,push scope proof must pass without registry mutation.",
+    "Exact new task tag absence and exclusive publication window; no overwrite or automatic copy retry.",
+    "Preserve each OCI manifest digest and independently read destination digest.",
+    "No service/shared registry/configuration/runtime changes, deployment, merge, tag/release, or image rebuild."
+  ],
+  "retained_history": {
+    "classification": "First300s compile timeout/normalTERM retained; same-source approved attempt02 completed.",
+    "governance_first_attempt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/oci-built.json"
+  },
+  "service_restarts": 0,
+  "state": "HARBOR_V2_PREPARED_NOT_PUBLISHED_IDENTITY_MATERIALIZATION_AND_SCOPE_PREFLIGHT_PENDING",
+  "supersedes_destination_only": {
+    "changes": [
+      {
+        "new_destination": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+        "old_destination": "172.16.101.10:5000/ani/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+        "service": "resource",
+        "source_archive_and_manifest_unchanged": true
+      },
+      {
+        "new_destination": "172.16.101.10:30003/icn-01a15337-release/ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+        "old_destination": "172.16.101.10:5000/ani/ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+        "service": "session",
+        "source_archive_and_manifest_unchanged": true
+      },
+      {
+        "new_destination": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "old_destination": "172.16.101.10:5000/ani/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce",
+        "service": "governance",
+        "source_archive_and_manifest_unchanged": true
+      }
+    ],
+    "original_plan_sha256": "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+    "original_plan_unchanged": true,
+    "reason": "Use existing successful writable HTTPS Harbor channel; Hauler shared switch/restart is not authorized."
+  },
+  "vm_mutations": 0
+}

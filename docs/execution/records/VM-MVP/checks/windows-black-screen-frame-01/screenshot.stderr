@@ -1,0 +1,3 @@
+error: could not take a screenshot of tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d
+error: operation forbidden: read only access prevents virDomainScreenshot
+command terminated with exit code 1

@@ -1,0 +1,655 @@
+{
+  "state": "API_AND_NATIVE_SYSTEM_DISK_RUNNING_GUEST_BROWSER_NEXT",
+  "at": "2026-10-24T03:58:03.619320+00:00",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+  "installed_screenshot": {
+    "local_path": "/home/chabking/.codex/visualizations/2026/10/23/01a168ce-29f8-77b2-aa8e-b980545b6113/vm-fedora44-iso-v2-installed.png",
+    "sha256": "8f4580134022fab066157481010211675cc7f67b8be5b9306d026c644edc0dda",
+    "observed": "Successfully installed, exact VM068d... version3"
+  },
+  "current": {
+    "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "name": "vm-mvp-fedora44-iso-v2",
+    "version": "3",
+    "osFamily": "linux",
+    "osVersion": "44",
+    "desiredState": "Running",
+    "observedState": "Running",
+    "reason": "",
+    "observedAt": "2026-10-23T22:24:30.570020518Z",
+    "addresses": [
+      {
+        "nicName": "default",
+        "address": "10.83.1.2",
+        "observedAt": "2026-10-23T22:24:30.570020518Z"
+      }
+    ],
+    "lastOperationId": "ae8bc09f-64d2-4c92-af5d-90a01b0acee4",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "48",
+        "requestedBytes": "48000000000",
+        "observedCapacityBytes": "48318382080",
+        "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "fedora-44-iso",
+        "observedMedia": "fedora-44-iso",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "INSTALL_MEDIA",
+    "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+    "cpuMillis": "2000",
+    "memoryMib": "4096",
+    "systemDiskSizeGb": "48",
+    "sourceKind": "INSTALL_ISO",
+    "mediaKey": "fedora-44-iso"
+  },
+  "native": {
+    "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+    "vmi_uid": "d823dd3f-7d22-497a-b77c-48c07fa2d54e",
+    "launcher_uid": "ab03acfc-c1ef-42e4-bab2-d70da41eac78",
+    "node": "ani-02",
+    "vm_disks": [
+      {
+        "bootOrder": 2,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+      },
+      {
+        "bootOrder": 1,
+        "cdrom": {
+          "bus": "sata",
+          "readonly": true,
+          "tray": "closed"
+        },
+        "name": "media-install"
+      }
+    ],
+    "vm_volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8"
+      },
+      {
+        "name": "media-install",
+        "persistentVolumeClaim": {
+          "claimName": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547"
+        }
+      }
+    ],
+    "vmi_disks": [
+      {
+        "bootOrder": 2,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+      },
+      {
+        "bootOrder": 1,
+        "cdrom": {
+          "bus": "sata",
+          "readonly": true,
+          "tray": "closed"
+        },
+        "name": "media-install"
+      }
+    ],
+    "vmi_volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8"
+      },
+      {
+        "name": "media-install",
+        "persistentVolumeClaim": {
+          "claimName": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547"
+        }
+      }
+    ]
+  },
+  "volumes": [
+    {
+      "pvc": {
+        "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+      },
+      "mode": "Block",
+      "storage_class": "ani-block",
+      "pv": {
+        "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+        "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92",
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-1105c973-54e5-4671-a283-d90bf8da7e78"
+      },
+      "phase": "Bound"
+    },
+    {
+      "pvc": {
+        "name": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "e05404bb-1b25-4ff5-acad-0dafa840d08b"
+      },
+      "mode": "Filesystem",
+      "storage_class": "ani-block",
+      "pv": {
+        "name": "pvc-0fa38872-656c-4932-ada6-0ff05cd67620",
+        "uid": "04032b72-35ba-410e-8aca-51f26cda67a0",
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1"
+      },
+      "phase": "Bound"
+    }
+  ],
+  "operations": [
+    {
+      "intent": "installed-stop-fedora44-v2",
+      "action": "stop",
+      "expected_version": 3,
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761/stop",
+      "body": {
+        "data": {
+          "idempotencyKey": "e1186859-d253-4133-acb1-c302badaa14e",
+          "expectedVersion": "3"
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "operation_id": "84f1ebbe-d726-4c6c-b58c-b0d19ae07ca0",
+      "accepted": {
+        "id": "84f1ebbe-d726-4c6c-b58c-b0d19ae07ca0",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "stop",
+        "intentVersion": "4",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "operation": {
+        "id": "84f1ebbe-d726-4c6c-b58c-b0d19ae07ca0",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "stop",
+        "intentVersion": "4",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T03:59:36.380367093Z"
+      },
+      "current": {
+        "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "name": "vm-mvp-fedora44-iso-v2",
+        "version": "4",
+        "osFamily": "linux",
+        "osVersion": "44",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-24T03:59:34.984876663Z",
+        "addresses": [],
+        "lastOperationId": "84f1ebbe-d726-4c6c-b58c-b0d19ae07ca0",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "48",
+            "requestedBytes": "48000000000",
+            "observedCapacityBytes": "48318382080",
+            "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+            "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "fedora-44-iso",
+            "observedMedia": "",
+            "effectiveNow": false,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "INSTALL_MEDIA",
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "cpuMillis": "2000",
+        "memoryMib": "4096",
+        "systemDiskSizeGb": "48",
+        "sourceKind": "INSTALL_ISO",
+        "mediaKey": "fedora-44-iso"
+      }
+    },
+    {
+      "intent": "installed-eject-install-fedora44-v2",
+      "action": "eject-media",
+      "expected_version": 4,
+      "method": "DELETE",
+      "route": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761/media/INSTALL",
+      "body": {
+        "data": {
+          "idempotencyKey": "4c6c1ca7-9ccf-467c-a120-cc004c0d6ea3",
+          "expectedVersion": "4",
+          "slot": "INSTALL"
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "operation_id": "77f91fb1-e0d3-43c7-9a25-47f4564ada45",
+      "accepted": {
+        "id": "77f91fb1-e0d3-43c7-9a25-47f4564ada45",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "eject-media",
+        "intentVersion": "5",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "operation": {
+        "id": "77f91fb1-e0d3-43c7-9a25-47f4564ada45",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "eject-media",
+        "intentVersion": "5",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T04:00:23.269352519Z"
+      },
+      "current": {
+        "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "name": "vm-mvp-fedora44-iso-v2",
+        "version": "5",
+        "osFamily": "linux",
+        "osVersion": "44",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-24T03:59:34.984876663Z",
+        "addresses": [],
+        "lastOperationId": "77f91fb1-e0d3-43c7-9a25-47f4564ada45",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "48",
+            "requestedBytes": "48000000000",
+            "observedCapacityBytes": "48318382080",
+            "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+            "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "INSTALL_MEDIA",
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "cpuMillis": "2000",
+        "memoryMib": "4096",
+        "systemDiskSizeGb": "48",
+        "sourceKind": "INSTALL_ISO",
+        "mediaKey": "fedora-44-iso"
+      }
+    },
+    {
+      "intent": "installed-system-boot-fedora44-v2",
+      "action": "set-boot",
+      "expected_version": 5,
+      "method": "PUT",
+      "route": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761/boot",
+      "body": {
+        "data": {
+          "idempotencyKey": "38b53230-c58d-4ac7-b412-ad4ce615af9d",
+          "expectedVersion": "5",
+          "bootDevice": "SYSTEM_DISK"
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "operation_id": "bc51742d-755e-47b5-813e-3f7a48ad3269",
+      "accepted": {
+        "id": "bc51742d-755e-47b5-813e-3f7a48ad3269",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "set-boot",
+        "intentVersion": "6",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "operation": {
+        "id": "bc51742d-755e-47b5-813e-3f7a48ad3269",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "set-boot",
+        "intentVersion": "6",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T04:00:34.459504614Z"
+      },
+      "current": {
+        "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "name": "vm-mvp-fedora44-iso-v2",
+        "version": "6",
+        "osFamily": "linux",
+        "osVersion": "44",
+        "desiredState": "Stopped",
+        "observedState": "Stopped",
+        "reason": "",
+        "observedAt": "2026-10-24T03:59:34.984876663Z",
+        "addresses": [],
+        "lastOperationId": "bc51742d-755e-47b5-813e-3f7a48ad3269",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "48",
+            "requestedBytes": "48000000000",
+            "observedCapacityBytes": "48318382080",
+            "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+            "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "cpuMillis": "2000",
+        "memoryMib": "4096",
+        "systemDiskSizeGb": "48",
+        "sourceKind": "INSTALL_ISO",
+        "mediaKey": "fedora-44-iso"
+      }
+    },
+    {
+      "intent": "installed-first-system-start-fedora44-v2",
+      "action": "start",
+      "expected_version": 6,
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761/start",
+      "body": {
+        "data": {
+          "idempotencyKey": "a4ac8733-b6f6-4b67-ba2a-af1ff429b854",
+          "expectedVersion": "6"
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "operation_id": "4dc0161a-3e88-40eb-81a0-d6d819936f49",
+      "accepted": {
+        "id": "4dc0161a-3e88-40eb-81a0-d6d819936f49",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "start",
+        "intentVersion": "7",
+        "state": "accepted",
+        "reason": "",
+        "observedAt": ""
+      },
+      "operation": {
+        "id": "4dc0161a-3e88-40eb-81a0-d6d819936f49",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "start",
+        "intentVersion": "7",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T04:01:59.428586888Z"
+      },
+      "current": {
+        "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "name": "vm-mvp-fedora44-iso-v2",
+        "version": "7",
+        "osFamily": "linux",
+        "osVersion": "44",
+        "desiredState": "Running",
+        "observedState": "Running",
+        "reason": "",
+        "observedAt": "2026-10-24T04:01:54.817749877Z",
+        "addresses": [
+          {
+            "nicName": "default",
+            "address": "10.83.1.4",
+            "observedAt": "2026-10-24T04:01:54.817749877Z"
+          }
+        ],
+        "lastOperationId": "4dc0161a-3e88-40eb-81a0-d6d819936f49",
+        "closing": false,
+        "disks": [
+          {
+            "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "role": "system",
+            "name": "system",
+            "sizeGb": "48",
+            "requestedBytes": "48000000000",
+            "observedCapacityBytes": "48318382080",
+            "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+            "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+            "attached": true,
+            "preparationState": "Bound",
+            "reason": ""
+          }
+        ],
+        "media": [
+          {
+            "slot": "INSTALL",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          },
+          {
+            "slot": "DRIVER",
+            "desiredMedia": "",
+            "observedMedia": "",
+            "effectiveNow": true,
+            "pendingRestart": false
+          }
+        ],
+        "bootDevice": "SYSTEM_DISK",
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "cpuMillis": "2000",
+        "memoryMib": "4096",
+        "systemDiskSizeGb": "48",
+        "sourceKind": "INSTALL_ISO",
+        "mediaKey": "fedora-44-iso"
+      }
+    }
+  ],
+  "guest_login": "NOT_RUN_ROOT_BROWSER_NEXT",
+  "stop_native_observation": {
+    "at": "2026-10-24T03:59:47.860015+00:00",
+    "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+    "vm_state_change_requests": [],
+    "vm_printable_status": "Stopped",
+    "vmi": {
+      "not_found": true
+    },
+    "owned_launcher_pods": []
+  },
+  "before_start_native": {
+    "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+    "disks": [
+      {
+        "bootOrder": 1,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+      }
+    ],
+    "volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8"
+      }
+    ],
+    "install_media_references_absent": true
+  },
+  "stop_transient_history": {
+    "operation_id": "84f1ebbe-d726-4c6c-b58c-b0d19ae07ca0",
+    "state": "running",
+    "reason": "ATTACHMENT_CONFLICT: Pod is not current in consumer snapshot",
+    "observedAt": "2026-10-24T03:59:00.581654028Z",
+    "resolution": "Original operation naturally succeeded at 03:59:36Z; send_attempts remained 1."
+  },
+  "latest_native": {
+    "at": "2026-10-24T04:03:14.630737+00:00",
+    "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+    "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+    "vmi_phase": "Running",
+    "node": "ani-02",
+    "active_pods": {
+      "3af15e13-84bb-4ad6-87cc-accad5b9854b": "ani-02"
+    },
+    "vm_disks": [
+      {
+        "bootOrder": 1,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+      }
+    ],
+    "vm_volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8"
+      }
+    ],
+    "vmi_disks": [
+      {
+        "bootOrder": 1,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+        "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+      }
+    ],
+    "vmi_volumes": [
+      {
+        "dataVolume": {
+          "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8"
+        },
+        "name": "disk-08b2c432e3d55000ab1d6bc2450eced8"
+      }
+    ],
+    "install_media_references_absent": true
+  },
+  "volumes_after": [
+    {
+      "pvc": {
+        "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+      },
+      "pv": {
+        "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+        "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92",
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-1105c973-54e5-4671-a283-d90bf8da7e78"
+      },
+      "phase": "Bound",
+      "mode": "Block",
+      "unchanged": true
+    },
+    {
+      "pvc": {
+        "name": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "e05404bb-1b25-4ff5-acad-0dafa840d08b"
+      },
+      "pv": {
+        "name": "pvc-0fa38872-656c-4932-ada6-0ff05cd67620",
+        "uid": "04032b72-35ba-410e-8aca-51f26cda67a0",
+        "volume_handle": "0001-0009-rook-ceph-0000000000000004-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1"
+      },
+      "phase": "Bound",
+      "mode": "Filesystem",
+      "unchanged": true
+    }
+  ],
+  "shared_source_unchanged": {
+    "mediaKey": "fedora-44-iso",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "pvcName": "vm-mvp-fedora44-http-source",
+    "pvcUid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+    "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+  },
+  "media_copy_retained_unreferenced": true,
+  "native_or_guest_mutations": 0
+}

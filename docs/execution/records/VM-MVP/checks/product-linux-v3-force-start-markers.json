@@ -1,0 +1,52 @@
+{
+  "result": "PASS",
+  "at": "2026-10-23T19:39:21.871322+00:00",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "vmi_uid": "e2a77112-b36c-446e-b6fa-0ec9753a4c58",
+  "scope": "Original markers and same PVC/PV identities read after explicit ForceStop and Start",
+  "force_stop_operation_id": "90f8d452-550a-4cf4-91d0-ec226f7f0983",
+  "start_operation_id": "ee4c83f4-c422-4446-98bc-a197161a7993",
+  "disk_evidence": [
+    {
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "marker": "VM_MVP_V3_DATA3_A_01a168ce",
+      "boot_id": "adf5620e-cb9d-4f6f-a6dd-6735c8f86c45",
+      "pvc": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+        "kind": "PersistentVolumeClaim"
+      },
+      "pv": {
+        "namespace": "",
+        "name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+        "uid": "7d05469e-ea85-46ab-b534-c94408f34663",
+        "kind": "PersistentVolume"
+      },
+      "initial_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792777715149274616.json",
+      "read_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792784243779707897.json"
+    },
+    {
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "marker": "VM_MVP_V3_DATA4_A_01a168ce",
+      "boot_id": "adf5620e-cb9d-4f6f-a6dd-6735c8f86c45",
+      "pvc": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+        "kind": "PersistentVolumeClaim"
+      },
+      "pv": {
+        "namespace": "",
+        "name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+        "uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b",
+        "kind": "PersistentVolume"
+      },
+      "initial_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792777763388998726.json",
+      "read_guest_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792784306165542039.json"
+    }
+  ],
+  "first_read_failure_preserved": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-guest/data-disk-1792783629463166894.json",
+  "first_read_failure_sha256": "1fe1faccc29e0ecabf3aef95d28e51136e580c7aef2b881cfe20254f4b5058ca",
+  "first_read_failure_stage": "waiting for serial login while guest booting; marker command not executed"
+}

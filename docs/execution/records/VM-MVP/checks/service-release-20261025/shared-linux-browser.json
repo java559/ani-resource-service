@@ -1,0 +1,26 @@
+{
+  "result": "PASS_SHARED_NATIVE_VNC_PIXELS_KEYBOARD_AND_NORMAL_DISCONNECT",
+  "at": "2026-10-24T22:11:13.420006+00:00",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "gov_tenant_id": 14,
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "real_origin": "http://localhost:5173",
+  "original_session_receipt_sha256": "7308caae387192ac75916fef1e7d337cf037db5d37a8555dcfea8a57df71b63e",
+  "normal_gov_console_http_status": 202,
+  "ws_url_or_origin_rewritten": false,
+  "protocol": "ani.vnc.v1",
+  "observed_os": "Ubuntu 24.04.5 LTS",
+  "observed_hostname": "vm-a704da75-2520-4df2-beaf-f163709ae4ad",
+  "console": "tty1 login prompt",
+  "keyboard": "browser Enter produced another real Guest login prompt",
+  "ui_disconnect_confirmed": true,
+  "browser_guest_login": "NOT_RUN; authenticated Guest login/marker is a separate serial phase",
+  "session_lease_reclaimed": "NOT_YET_MEASURED; UI normal disconnect only",
+  "temporary_server_and_new_local_transfer": "exact same task argv/VM/console path guards then normal SIGTERM; original39188 transfer unchanged",
+  "first_console": "original ticket expired while resolving SSH direct-TCP forward failure; local helper returned410 without connecting; second explicit normal console session used a new key",
+  "transport": "existing SSH-exec socat transfer pattern; local transport only, HTTP/VNC server on Fedora",
+  "screenshots": {
+    "browser-connected.png": "729bb90ea6d2833a803f4265dca080bfdf9817c694026bb76842a1a744a9f4a5",
+    "browser-keyboard.png": "15e78f526c512b32314771ee148c4e8f837b727f050be43b3df4113fd230c9d0"
+  }
+}

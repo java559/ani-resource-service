@@ -1,0 +1,21 @@
+{
+  "state": "PASS_FIXED_SOURCE_COPIED_TO_OWNED_PROJECT",
+  "step": "copy",
+  "started_at": "2026-10-24T10:51:25.526922+00:00",
+  "default_command_override": false,
+  "source_layer_downloads_to_fedora": 0,
+  "source_writes": 0,
+  "tag_writes": 0,
+  "curl_exit": 0,
+  "status": 201,
+  "send_attempts": 1,
+  "artifact": {
+    "id": 67,
+    "project_id": 18,
+    "repository_name": "vm-mvp-v24-platform-01a168ce/workspace-candidate-02",
+    "digest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "type": "IMAGE",
+    "size": 2359452
+  },
+  "finished_at": "2026-10-24T10:51:29.613531+00:00"
+}

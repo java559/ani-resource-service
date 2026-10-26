@@ -1,0 +1,641 @@
+{
+  "vm_id": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+  "operation_id": "76f7f888-5311-4d56-bfc8-7b98615914d3",
+  "operation": {
+    "id": "76f7f888-5311-4d56-bfc8-7b98615914d3",
+    "vmId": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intentVersion": "1",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-24T12:49:43.334854567Z"
+  },
+  "current": {
+    "id": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+    "name": "vm-mvp-v10-crossnode-01a168ce",
+    "version": "2",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Deleted",
+    "observedState": "Deleted",
+    "reason": "",
+    "observedAt": "2026-10-24T12:53:28.893165388Z",
+    "addresses": [],
+    "lastOperationId": "1f02ffdd-960d-4127-96cc-625f63043c72",
+    "closing": true,
+    "disks": [],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "native": {
+    "vm_id": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+    "current": {
+      "id": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+      "name": "vm-mvp-v10-crossnode-01a168ce",
+      "version": "1",
+      "osFamily": "linux",
+      "osVersion": "24.04.5 LTS (Noble Numbat)",
+      "desiredState": "Running",
+      "observedState": "Running",
+      "reason": "",
+      "observedAt": "2026-10-24T12:49:40.122318007Z",
+      "addresses": [
+        {
+          "nicName": "default",
+          "address": "10.83.1.13",
+          "observedAt": "2026-10-24T12:49:40.122318007Z"
+        }
+      ],
+      "lastOperationId": "76f7f888-5311-4d56-bfc8-7b98615914d3",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "12",
+          "requestedBytes": "12000000000",
+          "observedCapacityBytes": "12884901888",
+          "volumeName": "disk-4b7dd1bf291f5eaba4c69721fb1ee27e",
+          "serial": "4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "SYSTEM_DISK",
+      "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+      "cpuMillis": "1500",
+      "memoryMib": "2048",
+      "systemDiskSizeGb": "12",
+      "sourceKind": "DISK_IMAGE",
+      "mediaKey": "ubuntu-24.04"
+    },
+    "attachment": [
+      {
+        "id": "att_de8b20c3a12d4b6f9ff82f8b60d82a6f",
+        "state": "attached",
+        "blocked": false
+      }
+    ],
+    "objects": [
+      {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-8cbf4457-687b-4ef4-9a22-342c05998e85",
+        "uid": "1f206a8a-7ff5-4677-bf5a-4dd7831c2d3b"
+      },
+      {
+        "kind": "DataVolume",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+        "uid": "a913dfe5-f84d-441b-9f50-09a6c491c69b"
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+        "uid": "084b865e-21e3-43a1-b08b-221d5fb5f7f1"
+      },
+      {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-cd134936-50a7-4207-adf3-e962db3d3f34",
+        "uid": "936c6e3d-0dc4-4b7e-99c4-9a7f8f70b6e8"
+      },
+      {
+        "kind": "VolumeAttachment",
+        "namespace": "",
+        "name": "csi-2ffbce69d35da0b8d7e3b52e2b8243b01c5f9c888a71c86cf09b4f04a9f07fd3",
+        "uid": "357cae52-0194-4e3a-84d7-b76cd5cf948f"
+      },
+      {
+        "kind": "Secret",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-init-8cbf4457-687b-4ef4-9a22-342c05998e85",
+        "uid": "71a86b7c-aa24-48fc-8254-19cc22916e6a"
+      },
+      {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-8cbf4457-687b-4ef4-9a22-342c05998e85",
+        "uid": "f167d1df-98d3-41b4-af98-538299e72c44"
+      },
+      {
+        "kind": "Pod",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "virt-launcher-vm-8cbf4457-687b-4ef4-9a22-342c05998e85-pqv5q",
+        "uid": "fdb908f9-2d79-426d-bfca-21c06052a377"
+      }
+    ],
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-8cbf4457-687b-4ef4-9a22-342c05998e85",
+      "uid": "1f206a8a-7ff5-4677-bf5a-4dd7831c2d3b"
+    },
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+      "uid": "a913dfe5-f84d-441b-9f50-09a6c491c69b"
+    },
+    "dv_phase": "Succeeded",
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e",
+      "uid": "084b865e-21e3-43a1-b08b-221d5fb5f7f1"
+    },
+    "pvc_phase": "Bound",
+    "requested_storage": "12G",
+    "pv": {
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-cd134936-50a7-4207-adf3-e962db3d3f34",
+      "uid": "936c6e3d-0dc4-4b7e-99c4-9a7f8f70b6e8"
+    },
+    "pv_csi": {
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "volumeHandle": "0001-0009-rook-ceph-0000000000000004-ce1adee1-22c0-446b-adc4-4f3607212801",
+      "pool": "ani-block-pool",
+      "image": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801"
+    },
+    "volume_attachments": [
+      {
+        "kind": "VolumeAttachment",
+        "namespace": "",
+        "name": "csi-2ffbce69d35da0b8d7e3b52e2b8243b01c5f9c888a71c86cf09b4f04a9f07fd3",
+        "uid": "357cae52-0194-4e3a-84d7-b76cd5cf948f"
+      }
+    ],
+    "nocloud_secret": {
+      "kind": "Secret",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-init-8cbf4457-687b-4ef4-9a22-342c05998e85",
+      "uid": "71a86b7c-aa24-48fc-8254-19cc22916e6a"
+    },
+    "vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-8cbf4457-687b-4ef4-9a22-342c05998e85",
+      "uid": "f167d1df-98d3-41b4-af98-538299e72c44"
+    },
+    "phase": "Running",
+    "node": "ani-02",
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2026-10-24T12:49:16Z",
+        "status": "True",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "All of the VMI's DVs are bound and ready",
+        "reason": "AllDVsReady",
+        "status": "True",
+        "type": "DataVolumesReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "message": "cannot migrate VMI: PVC vd-4b7dd1bf-291f-5eab-a4c6-9721fb1ee27e is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+        "reason": "DisksNotLiveMigratable",
+        "status": "False",
+        "type": "LiveMigratable"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": null,
+        "status": "True",
+        "type": "StorageLiveMigratable"
+      }
+    ],
+    "interfaces": [
+      {
+        "infoSource": "domain",
+        "ipAddress": "10.83.1.13",
+        "ipAddresses": [
+          "10.83.1.13"
+        ],
+        "linkState": "up",
+        "mac": "fa:00:35:b0:bc:e0",
+        "name": "default",
+        "podInterfaceName": "eth0",
+        "queueCount": 1
+      }
+    ],
+    "launcher": {
+      "kind": "Pod",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "virt-launcher-vm-8cbf4457-687b-4ef4-9a22-342c05998e85-pqv5q",
+      "uid": "fdb908f9-2d79-426d-bfca-21c06052a377"
+    },
+    "launcher_phase": "Running",
+    "launcher_waiting": [
+      null
+    ]
+  },
+  "family": [
+    {
+      "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801",
+      "id": "20cc8743f6bde5",
+      "parent": {
+        "pool": "ani-block-pool",
+        "pool_namespace": "",
+        "image": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801-temp",
+        "id": "20cc877c6136a5",
+        "snapshot": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801",
+        "trash": false,
+        "overlap": 8589934592
+      },
+      "size": 12884901888,
+      "result": "PRESENT"
+    },
+    {
+      "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801-temp",
+      "id": "20cc877c6136a5",
+      "parent": {
+        "pool": "ani-block-pool",
+        "pool_namespace": "",
+        "image": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+        "id": "20cc8740729bdb",
+        "snapshot": "c20340b7-f849-4aba-9780-bff347aa2376",
+        "trash": false,
+        "overlap": 8589934592
+      },
+      "size": 8589934592,
+      "result": "PRESENT"
+    }
+  ],
+  "delete": {
+    "key": "5b10bc80-8a1d-5aa6-92ef-c7816e08fc76",
+    "body": {
+      "data": {
+        "idempotencyKey": "5b10bc80-8a1d-5aa6-92ef-c7816e08fc76",
+        "expectedVersion": "1"
+      }
+    },
+    "send_attempts": 1,
+    "outcome": "ACK_PERSISTED",
+    "operation_id": "1f02ffdd-960d-4127-96cc-625f63043c72",
+    "operation": {
+      "id": "1f02ffdd-960d-4127-96cc-625f63043c72",
+      "vmId": "8cbf4457-687b-4ef4-9a22-342c05998e85",
+      "action": "/vm.v1.VMService/AcceptDelete",
+      "intentVersion": "2",
+      "state": "succeeded",
+      "reason": "",
+      "observedAt": "2026-10-24T12:53:28.89479815Z"
+    }
+  },
+  "cleanup": {
+    "result": "PASS",
+    "remaining_original_objects": [],
+    "rbd_family": [
+      {
+        "original": {
+          "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801",
+          "id": "20cc8743f6bde5",
+          "parent": {
+            "pool": "ani-block-pool",
+            "pool_namespace": "",
+            "image": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801-temp",
+            "id": "20cc877c6136a5",
+            "snapshot": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801",
+            "trash": false,
+            "overlap": 8589934592
+          },
+          "size": 12884901888,
+          "result": "PRESENT"
+        },
+        "current": {
+          "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801",
+          "result": "ABSENT"
+        },
+        "matching_trash": []
+      },
+      {
+        "original": {
+          "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801-temp",
+          "id": "20cc877c6136a5",
+          "parent": {
+            "pool": "ani-block-pool",
+            "pool_namespace": "",
+            "image": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+            "id": "20cc8740729bdb",
+            "snapshot": "c20340b7-f849-4aba-9780-bff347aa2376",
+            "trash": false,
+            "overlap": 8589934592
+          },
+          "size": 8589934592,
+          "result": "PRESENT"
+        },
+        "current": {
+          "name": "csi-vol-ce1adee1-22c0-446b-adc4-4f3607212801-temp",
+          "result": "ABSENT"
+        },
+        "matching_trash": []
+      }
+    ],
+    "attachment": [
+      {
+        "id": "att_de8b20c3a12d4b6f9ff82f8b60d82a6f",
+        "state": "released",
+        "blocked": false
+      }
+    ],
+    "protected": {
+      "sources": [
+        {
+          "key": "ubuntu-24.04",
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "name": "vm-mvp-ubuntu-2404-source",
+            "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+          },
+          "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4"
+        },
+        {
+          "key": "virtio-win-0.1.271",
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "name": "vm-mvp-virtio-http-source",
+            "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3"
+          },
+          "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5"
+        },
+        {
+          "key": "fedora-44-iso",
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "name": "vm-mvp-fedora44-http-source",
+            "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00"
+          },
+          "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+        },
+        {
+          "key": "windows-server-2025-iso",
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "name": "vm-mvp-windows2025-http-source",
+            "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+          },
+          "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c"
+        }
+      ],
+      "networks": [
+        {
+          "ns": {
+            "kind": "Namespace",
+            "namespace": "",
+            "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+          },
+          "nad": {
+            "kind": "NetworkAttachmentDefinition",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-mvp-main-v2",
+            "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f"
+          },
+          "digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30"
+        },
+        {
+          "ns": {
+            "kind": "Namespace",
+            "namespace": "",
+            "name": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+            "uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404"
+          },
+          "nad": {
+            "kind": "NetworkAttachmentDefinition",
+            "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+            "name": "vm-mvp-tenant2-01a168ce",
+            "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc"
+          },
+          "digest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30"
+        }
+      ],
+      "vms": [
+        {
+          "vm": {
+            "kind": "VirtualMachine",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "uid": "7bca4671-89dd-4925-bad9-17e77401729d"
+          },
+          "vmi": {
+            "kind": "VirtualMachineInstance",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb"
+          },
+          "vm_spec_sha256": "00e5488f41cb8d110996b9d005473b3d5044268236632aec9d748169135f4791",
+          "refs": [
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+              "uid": "198d300b-8af1-4093-aa4a-5af45e50f95a"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-198d300b-8af1-4093-aa4a-5af45e50f95a",
+              "uid": "cd111ccf-bba4-45dc-8409-2ae0079ad13d"
+            },
+            {
+              "kind": "Secret",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc",
+              "uid": "96fcf82c-16d7-4361-9109-179efad82b3f"
+            },
+            {
+              "kind": "Secret",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc",
+              "uid": "96fcf82c-16d7-4361-9109-179efad82b3f"
+            },
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-5dbc2c93986554f98413f198f5e9c1a6",
+              "uid": "cc14cc58-b0d5-48bb-ab27-444ee02de318"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-cc14cc58-b0d5-48bb-ab27-444ee02de318",
+              "uid": "ffbbd286-291b-45c5-b6ea-cfccfdf86ab8"
+            },
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "restore-3f6ea4ee-f04e-4e99-9f5f-4774d9cf4fd1-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+              "uid": "8beddace-a96e-4630-a976-a2557d0ad1ba"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-8beddace-a96e-4630-a976-a2557d0ad1ba",
+              "uid": "3922eb1f-ea52-499d-9df8-cabf96b5ccd9"
+            }
+          ]
+        },
+        {
+          "vm": {
+            "kind": "VirtualMachine",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+          },
+          "vmi": {
+            "kind": "VirtualMachineInstance",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+            "uid": "4976b0da-fb59-44a7-a18a-482c504674a3"
+          },
+          "vm_spec_sha256": "8534e185010097d1c4fd221a0f27da8b3bf87fd1962be39bf828c184e4e7aef2",
+          "refs": [
+            {
+              "kind": "DataVolume",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+              "uid": "6170e9a5-ba07-4ac8-b1ca-1f95aea74250"
+            },
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+              "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+              "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92"
+            }
+          ]
+        },
+        {
+          "vm": {
+            "kind": "VirtualMachine",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+            "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+          },
+          "vmi": {
+            "kind": "VirtualMachineInstance",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+            "uid": "4a9a6859-832e-42d1-8b21-b21a7b208891"
+          },
+          "vm_spec_sha256": "72632395069235fc9e83463b666dd558e17d894e7f4ed55661828c3645f04359",
+          "refs": [
+            {
+              "kind": "DataVolume",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+              "uid": "3589a026-a717-4dc2-91bb-6d3439ce644f"
+            },
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+              "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+              "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+            },
+            {
+              "kind": "PersistentVolumeClaim",
+              "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+              "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+              "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+            },
+            {
+              "kind": "PersistentVolume",
+              "namespace": "",
+              "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+              "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+            }
+          ]
+        }
+      ]
+    },
+    "normal_gov_delete_only": true,
+    "manual_backend_delete": false,
+    "old_v22": "UNCHANGED_NOT_MEASURED"
+  },
+  "http": {
+    "result": "NOT_RUN_SAME_NODE_NORMAL_SCHEDULER",
+    "v3": {
+      "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+      "node": "ani-02",
+      "current_ip": "10.83.1.9"
+    },
+    "new": {
+      "current_ip": "10.83.1.13",
+      "node": "ani-02",
+      "vmi_uid": "f167d1df-98d3-41b4-af98-538299e72c44"
+    },
+    "server_starts": 0
+  },
+  "phase": "CLEANED",
+  "driver_sha256": "73c02ba25cfa2349c148f929cbc2551d1ddbd6e215140e1a559494e9df8a7ec7",
+  "helper_pins": {
+    "vm-product-cloudinit-ssh.py": "e071866126d6e30ee2c2ccbee7b7ea8ff5919906f60e70d7d7839cc13020ed3f",
+    "vm-product-second-tenant-vm.py": "821a8ab88a8a14d9f13fc2b1a194623645123097a7d164e8671f5d2469b2308f",
+    "vm-product-network-v3.py": "024584529f86787dd9eee8ba9d8feac132db5ee9c6d72eda64708e631de6a0cd"
+  },
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v10-crossnode-01/state.json",
+  "business_create_sends": 1
+}

@@ -1,0 +1,13 @@
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/session	0.006s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/store	(cached)
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/store/memory	(cached)
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/store/redis	1.939s
+?   	github.com/zhangzhe-ctrl/ani-session-gateway/internal/store/storetest	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/runtime/kubevirt	0.052s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/runtime/resource	0.008s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/transport/grpc	0.016s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/transport/websocket	0.164s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/transport/websocket/connectedsession	0.056s
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/observability	(cached)
+ok  	github.com/zhangzhe-ctrl/ani-session-gateway/internal/deployment	0.013s
+?   	github.com/zhangzhe-ctrl/ani-session-gateway/cmd/session-gateway	[no test files]

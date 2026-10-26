@@ -1,0 +1,254 @@
+{
+  "phase": "PREPARED_NO_DISK_POST",
+  "at": "2026-10-24T06:02:21.532664+00:00",
+  "plan": {
+    "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+    "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "initial_version": 3,
+    "commands": [
+      {
+        "label": "data3",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/disks",
+        "body": {
+          "data": {
+            "name": "vm-mvp-windows-data3-01a168ce",
+            "sizeGb": "3",
+            "expectedVersion": "3",
+            "idempotencyKey": "faf1a97d-de3c-549e-90ac-e127ea40e110"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      },
+      {
+        "label": "data4",
+        "method": "POST",
+        "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/disks",
+        "body": {
+          "data": {
+            "name": "vm-mvp-windows-data4-01a168ce",
+            "sizeGb": "4",
+            "expectedVersion": "4",
+            "idempotencyKey": "e5931a98-0d76-5f71-9abb-92c0e6ce90aa"
+          }
+        },
+        "send_attempts": 0,
+        "ack_unknown": false
+      }
+    ],
+    "disk_mode": "Block",
+    "disk_access_modes": [
+      "ReadWriteOnce"
+    ],
+    "initially_attached": false,
+    "total_decimal_gb": 7,
+    "additional_compute": 0,
+    "platform_defaults": {
+      "bus": "scsi",
+      "serial": "stable Resource logical disk ID",
+      "hotpluggable": true
+    },
+    "protection": {
+      "vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+      },
+      "vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+      "template_sha256": "e9fceada9791159decfe9712d9585df1211630c7c2154fb3b51f6653f1a73f9b",
+      "boot": "INSTALL_MEDIA",
+      "volumes": [
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+            "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+            "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+          },
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97",
+          "mode": "Block",
+          "requested_storage": "80G"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+            "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+            "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+          },
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-d3bfa10a-4061-4fff-90de-9cf135eb7857",
+          "mode": "Filesystem",
+          "requested_storage": "2120723989"
+        },
+        {
+          "pvc": {
+            "kind": "PersistentVolumeClaim",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+            "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+          },
+          "pv": {
+            "kind": "PersistentVolume",
+            "namespace": "",
+            "name": "pvc-21096268-968f-4e03-9b24-d2f435ed448c",
+            "uid": "becd670c-c761-4b70-987c-236e6e336a8b"
+          },
+          "volume_handle": "0001-0009-rook-ceph-0000000000000004-26c451cf-6e28-4e1d-8684-bde96e3ea665",
+          "mode": "Filesystem",
+          "requested_storage": "12721009460"
+        }
+      ],
+      "datavolumes": [
+        {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "uid": "3589a026-a717-4dc2-91bb-6d3439ce644f"
+        },
+        {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+          "uid": "770799a5-eefe-4607-990a-3ed6b452bc2e"
+        },
+        {
+          "kind": "DataVolume",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "uid": "cf75cf37-a1a1-4205-92ec-36e4efff1632"
+        }
+      ]
+    },
+    "public_vm_before": {
+      "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "name": "vm-mvp-windows2025-iso",
+      "version": "3",
+      "osFamily": "windows",
+      "osVersion": "2025",
+      "desiredState": "Running",
+      "observedState": "Running",
+      "reason": "",
+      "observedAt": "2026-10-23T22:26:27.307845717Z",
+      "addresses": [
+        {
+          "nicName": "default",
+          "address": "10.83.1.3",
+          "observedAt": "2026-10-23T22:26:27.307845717Z"
+        }
+      ],
+      "lastOperationId": "9ec1d54c-b7fa-4081-a42c-addca0689706",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "80",
+          "requestedBytes": "80000000000",
+          "observedCapacityBytes": "80530636800",
+          "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+          "attached": true,
+          "preparationState": "Bound",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "windows-server-2025-iso",
+          "observedMedia": "windows-server-2025-iso",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "virtio-win-0.1.271",
+          "observedMedia": "virtio-win-0.1.271",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "INSTALL_MEDIA",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "systemDiskSizeGb": "80",
+      "sourceKind": "INSTALL_ISO",
+      "mediaKey": "windows-server-2025-iso"
+    },
+    "public_disks_before": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "last_operation_before": {
+      "id": "9ec1d54c-b7fa-4081-a42c-addca0689706",
+      "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "action": "start",
+      "intentVersion": "3",
+      "state": "succeeded",
+      "reason": "",
+      "observedAt": "2026-10-23T22:26:32.320733061Z"
+    },
+    "second_prerequisite": "first original operation succeeded, first new logical disk captured and still unattached; same VM/version+1 and original root/ISO/native guards",
+    "unknown_ack": "persist original key/body before any future POST; observe original intent, never send a new key or blindly retry",
+    "cleanup": "normal Gov DeleteDisk for these exact unattached logical disk IDs at fresh version, or final normal VM Delete; exact DV/PVC/PV/backend reclamation; preserve root, two ISO copies and their source media",
+    "helper_source_sha256": "0c91b6aa33f4fa86c653ce97396e01f872af8a28ea9529e6a506d761a25b6252",
+    "driver_source_sha256": "284773a5c85cc538daf0959de7b56f6f401989978804d4e724723d673264ce68"
+  },
+  "plan_sha256": "0afd5ee4d2d5109a47106a608156a57071766d2e99efd05f64140030e390c303",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/windows-data-disks-plan.json",
+  "create_disk_posts": 0,
+  "attach_posts": 0,
+  "guest_commands": 0,
+  "api_events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/disks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/operations/9ec1d54c-b7fa-4081-a42c-addca0689706",
+      "status": 200
+    }
+  ]
+}

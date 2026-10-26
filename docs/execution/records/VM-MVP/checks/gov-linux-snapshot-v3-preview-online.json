@@ -1,0 +1,43 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "intent": "preview-online",
+  "driver_sha256": "999f2a3de59c7e61a459465b746aec029b50fd98812e273afa2d092c92553533",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-snapshots-v3.json",
+  "phase": "READ_ONLY_PREVIEW",
+  "preview": {
+    "version": "28",
+    "snapshotId": "cdb5b37c-d829-5731-a44d-7c6b4693fef2",
+    "snapshotUid": "41652e30-6c88-4da8-936c-d07730935420",
+    "disks": [
+      {
+        "diskId": "45d5a224-42b7-526d-90eb-239577d2262a",
+        "action": "delete-added-attached",
+        "reason": "disk added after snapshot is removed after successful restore"
+      },
+      {
+        "diskId": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+        "action": "restore-deleted",
+        "reason": "snapshot disk was deleted; restore its original logical identity"
+      },
+      {
+        "diskId": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+        "action": "restore-attached",
+        "reason": "replace current contents and physical volume"
+      },
+      {
+        "diskId": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+        "action": "restore-detached",
+        "reason": "restore and attach the disk recorded by the snapshot"
+      },
+      {
+        "diskId": "dd773137-07f9-5b7a-9511-fda3dcf09001",
+        "action": "retain-detached",
+        "reason": "disk outside snapshot remains owned and detached"
+      }
+    ],
+    "previewDigest": "5e1d8212aef5403cfcac0abeffb9ce8d5dc579818628721b62e63aacd5ecc236"
+  },
+  "five_sets_checked": true,
+  "business_mutations": 0
+}

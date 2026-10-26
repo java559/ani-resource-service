@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "scope": "PURE_CAPTURE_AND_PUBLIC_SERIALIZATION_SENTINEL",
+  "executed_driver_sha256_before": "4d58eb1c5d2c59ef4aa20c60ca77b3630e32f1b7a46df3ab37c1fd559ead79d2",
+  "executed_driver_sha256_after": "4d58eb1c5d2c59ef4aa20c60ca77b3630e32f1b7a46df3ab37c1fd559ead79d2",
+  "confirmed_annotation_keys": [
+    "cdi.kubevirt.io/storage.clone.token",
+    "cdi.kubevirt.io/storage.extended.clone.token"
+  ],
+  "fixture_paths": 4,
+  "public_sentinel_absent": true,
+  "original_private_object_unchanged": true,
+  "private_recovery_mode": "0600",
+  "public_native_ref_spec_status_preserved": true,
+  "business_calls": 0,
+  "public_receipt_exact_key_paths": [],
+  "existing_public_receipt_sha256": "089b9c93e3a0fd7c0b3f049914a14545326ea7751a7037c51a7d1a3958826b00"
+}

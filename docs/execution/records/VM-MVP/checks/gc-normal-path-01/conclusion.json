@@ -1,0 +1,272 @@
+{
+  "additional_polling_or_retries": "NONE after the one corrected three-image attempt; no repeated version/task/schedule probes",
+  "at": "2026-10-24T19:01:38.048530+00:00",
+  "authority": "read-only; no cluster/backend/credential/CSI/schedule/service mutations",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "effective_schedule": {
+    "ani_block_pool_list_including_parent_inheritance": {},
+    "exit_codes": [
+      0,
+      0
+    ],
+    "global_list": {},
+    "installed_inheritance_source": "schedule.py397-426 loads global plus pools;555-581 chooses nearest parent and children in list output.",
+    "interpretation": "No effective global/pool periodic purge schedule was returned; this is independent of the existing per-image task queue. The old CLI exit2 and mgr.a caps failure are retained and are not used as absence proof.",
+    "rook_namespace_cronjobs": [],
+    "same_existing_identity": "client.admin using original tools /etc/ceph/ceph.conf and /etc/ceph/keyring; credential values and hashes not public"
+  },
+  "installed_source_sha256": {
+    "module.py": "625ad4707b4faa5221b9be82d965b228d1ae8ce85b4d3be72f6916747042edc6",
+    "schedule.py": "425b1b3d6a5b1ed44c05f283722f9449b9ede5fce9da07ac133f317e1de292f9",
+    "task.py": "3144a80ad4ae8dc8ec246107d329fc7276a0ca57d23004051bc3585824319680",
+    "trash_purge_schedule.py": "34a2df303b33dec7a799a6bc0174aa627ff20fdd996181af733e9447dce567f6"
+  },
+  "known_impact": {
+    "D3_old_image": "20cc87b511820b / csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+    "D4_old_image": "20cc87987d1f99 / csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+    "historical_basis": "linux-final-cleanup-01/inventory.json references checks/v08-account/gov-linux-account-v3-before-restore-native.json; original Restore95852ec0 CleanupCompleted true does not prove later RBD trash dependencies removed.",
+    "root_old_image": "20cc87c1cde11d / csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+    "scope_exclusions": "No Windows retained volume/snapshot/source/NAD or other tenant object was opened or modified."
+  },
+  "next_safe_prerequisite": "Before requesting any storage write, establish exact namespace/type/owner of D3 snapshot52 against the already known V08/CSI records and obtain successful read-only metadata for the two timed-out original image IDs through an existing trusted storage-management path. Only an exact owned dependency with a reviewed removal mechanism could support a subsequent specific approval. Do not infer removal authority from USER/name/no-children; no shared fix or purge is prepared or executed. Additional purge scheduling is not established as a remedy for errno39.",
+  "normal_path": {
+    "CSI": "DeleteVolume cleans its temp image, moves image to trash with Trash(0), submits rbd task add trash remove; successful ACK can precede physical removal. USER source does not distinguish a non-CSI origin.",
+    "blocked_original_V08_tasks": [
+      {
+        "id": "d07c31c0-aba3-4fc4-9e5c-1c15a3266fcc",
+        "message": "Removing image ani-block-pool/20cc87987d1f99 from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc87987d1f99",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "retry_attempts": 100,
+        "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+        "retry_time": "2026-10-24T18:53:04.844048",
+        "sequence": 48
+      },
+      {
+        "id": "48b67700-6821-4fb7-b06e-bea141507033",
+        "message": "Removing image ani-block-pool/20cc87c1cde11d from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc87c1cde11d",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "retry_attempts": 100,
+        "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+        "retry_time": "2026-10-24T18:53:05.918252",
+        "sequence": 49
+      },
+      {
+        "id": "f88fdfd9-03ad-45a0-bab8-4cba74de18d1",
+        "message": "Removing image ani-block-pool/20cc87b511820b from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc87b511820b",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "retry_attempts": 100,
+        "retry_message": "[errno 39] RBD image has snapshots (error deleting image from trash)",
+        "retry_time": "2026-10-24T18:53:06.707256",
+        "sequence": 50
+      }
+    ],
+    "executor": "active mgr.a; always-on rbd_support TaskHandler invokes librbd trash_remove",
+    "nine_matching_task_count": 9,
+    "other_task_objects_not_expanded": 22,
+    "queue_semantics": "Installed task.py203-214 selects due tasks, skips future retry_time and executes them serially in sequence. Three retry waits do not themselves block the six other tasks. A synchronous in-flight call can delay following work, but this sample does not identify such a call; absence of retry fields is not proof of a stuck worker.",
+    "retry_policy": "task.py52-53,451-456:30s multiplied by attempt count, capped at300s; captured three tasks each had100 attempts and errno39 image has snapshots.",
+    "six_other_known_queued_tasks": [
+      {
+        "id": "ffd7b995-706c-4871-9b7b-47169f8bc9a6",
+        "message": "Removing image ani-block-pool/20cc871b8dd7ad from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc871b8dd7ad",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 83
+      },
+      {
+        "id": "8c31142b-872e-4e6c-91a7-616c94e7cb86",
+        "message": "Removing image ani-block-pool/20cc87fb4134b9 from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc87fb4134b9",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 84
+      },
+      {
+        "id": "7e631c0f-6b33-4e30-b3f1-0afec9f10b8f",
+        "message": "Removing image ani-block-pool/20cc878795a82b from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc878795a82b",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 91
+      },
+      {
+        "id": "3ebb5d85-1e03-4655-9dc8-f060d7809228",
+        "message": "Removing image ani-block-pool/20cc878c626cb3 from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc878c626cb3",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 92
+      },
+      {
+        "id": "aadaf80b-3b32-4b23-ab98-05488db0bf71",
+        "message": "Removing image ani-block-pool/20cc8795a861a0 from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc8795a861a0",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 93
+      },
+      {
+        "id": "371d4166-c28e-44c6-825c-0d0206f3cd6d",
+        "message": "Removing image ani-block-pool/20cc87eb4a360b from trash",
+        "refs": {
+          "action": "trash remove",
+          "image_id": "20cc87eb4a360b",
+          "pool_name": "ani-block-pool",
+          "pool_namespace": ""
+        },
+        "sequence": 94
+      }
+    ],
+    "tasks_observed_at": "2026-10-24T18:49:59.345995+00:00"
+  },
+  "official_versioned_sources": [
+    {
+      "claim": "cleanupRBDImage -> DeleteTempImage -> rbdVol.Delete -> reservation cleanup",
+      "url": "https://github.com/ceph/ceph-csi/blob/v3.17.1/internal/rbd/controllerserver.go#L1024"
+    },
+    {
+      "claim": "Trash(0), then trashRemoveImage/AddTrashRemove; fallback only for unsupported command/access-denied path",
+      "url": "https://github.com/ceph/ceph-csi/blob/v3.17.1/internal/rbd/rbd_util.go#L749"
+    },
+    {
+      "claim": "AddTrashRemove sends the mgr asynchronous trash-remove command",
+      "url": "https://github.com/ceph/ceph-csi/blob/v3.17.1/vendor/github.com/ceph/go-ceph/rbd/admin/task.go#L91"
+    }
+  ],
+  "physical_cleanup": "NOT_PASS",
+  "references": {
+    "actual_read_driver": {
+      "relative_path": "read-three.py",
+      "sha256": "7d8b233b72fa385029a2499b992269376b6c621dd2b294be7d76acb0a1fa9bae"
+    },
+    "actual_three_image_read": {
+      "relative_path": "three-snap-readonly.json",
+      "sha256": "18f88e92c3e08e9fb936a59709423a688496e68d488030a5bf3336589acddafb"
+    },
+    "identity_versions_tasks_installed_source": {
+      "relative_path": "readonly.json",
+      "sha256": "9a2d19e3ff7e3519866ee1e81c1c7263d5718209dbe7a3e8defbdfca37216b82"
+    }
+  },
+  "result": "NORMAL_GC_TASK_PATH_ACTIVE_WITH_SNAPSHOT_DEPENDENCY_BLOCKERS",
+  "three_readonly_dependency_observations": {
+    "api": "rbd.Image(ioctx,image_id=exact_original_id,read_only=True)",
+    "elapsed_seconds": 26.728,
+    "finished_at": "2026-10-24T18:58:11.660319+00:00",
+    "ownership_boundary": "Image ownership is the existing V08 before-restore old root/D3/D4 mapping supplied in the task inventory. D3 snapshot52 UUID fa982c55-5644-4369-8602-acf612d6547c was not established as any of the nine frozen CSI snapshot handles. No origin/protection/permission to remove is inferred from a name, USER source, or empty children result.",
+    "prior_collector_error": "readonly.json/three_snapshot_dependencies: a None __doc__ caused TypeError before any Ceph connection/image open. That failed collector is not evidence of denied permissions or unsupported readonly-open API. The one actual bounded read then took26.728s: root/D4 returned actual errno110 opening by image_id, D3 succeeded.",
+    "receipt": {
+      "relative_path": "three-snap-readonly.json",
+      "sha256": "18f88e92c3e08e9fb936a59709423a688496e68d488030a5bf3336589acddafb"
+    },
+    "rows": [
+      {
+        "disk": "root",
+        "elapsed_seconds": 11.851,
+        "exit": 0,
+        "historical_image_name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "image_id": "20cc87c1cde11d",
+        "read": {
+          "error": "[errno 110] RBD operation timeout (error opening image b'20cc87c1cde11d' at snapshot None)",
+          "error_class": "Timeout",
+          "image_id": "20cc87c1cde11d",
+          "read_only": true,
+          "result": "READONLY_OPEN_OR_READ_FAILED",
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      },
+      {
+        "disk": "D3",
+        "elapsed_seconds": 9.761,
+        "exit": 0,
+        "historical_image_name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "image_id": "20cc87b511820b",
+        "read": {
+          "image_id": "20cc87b511820b",
+          "read_only": true,
+          "result": "READONLY_SNAP_LIST_COMPLETE",
+          "snapshot_count_at_most13": 1,
+          "snapshots": [
+            {
+              "children": [],
+              "children_api": "list_children",
+              "children_bound_exceeded": false,
+              "id": 52,
+              "name": "fa982c55-5644-4369-8602-acf612d6547c",
+              "read_view": "set_snap_by_id",
+              "size": 3221225472
+            }
+          ],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      },
+      {
+        "disk": "D4",
+        "elapsed_seconds": 5.117,
+        "exit": 0,
+        "historical_image_name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "image_id": "20cc87987d1f99",
+        "read": {
+          "error": "[errno 110] RBD operation timeout (error opening image b'20cc87987d1f99' at snapshot None)",
+          "error_class": "Timeout",
+          "image_id": "20cc87987d1f99",
+          "read_only": true,
+          "result": "READONLY_OPEN_OR_READ_FAILED",
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      }
+    ],
+    "scope": "three original V08 images only; list_snaps and one-level list_children; no child image opens, no trash_get",
+    "started_at": "2026-10-24T18:57:44.931878+00:00"
+  },
+  "versions": {
+    "CSI_image_digest": "sha256:e1122fc768ddb7bd5c5cdca9feab0a9eafd1d994d0edf9c204c89ef2707e2aa9",
+    "Ceph": "20.2.4 / 7f793731f1b39eb4f465e960113d2363c311b964",
+    "Ceph_CSI": "3.17.1",
+    "Rook": "1.20.7"
+  },
+  "writes": {
+    "backend": 0,
+    "cluster": 0,
+    "credential_cap_RBAC": 0,
+    "schedules": 0,
+    "services": 0,
+    "source_or_Root_docs": 0
+  }
+}

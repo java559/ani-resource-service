@@ -1,0 +1,243 @@
+{
+  "result": "PASS_EXPLICIT_MEMBER_PHASE_ORIGINAL_OUTCOME_RECORDED",
+  "phase": "delete",
+  "member": "b",
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "started_at": "2026-10-24T23:50:58.077517+00:00",
+  "runner_sha256": "8759da3114713987d6069bafdab8f75302a7d557b34125ba0c8bd5411f984282",
+  "plan_sha256": "d876c2bd7a6776edd79b4c5243c026aca07e93931c788c47a7ff8c31c3259907",
+  "calls": [
+    {
+      "n": 1,
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 2,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 3,
+      "method": "DELETE",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "outcome": "RESPONDED",
+      "http_status": 202
+    },
+    {
+      "n": 4,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 5,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 6,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 7,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 8,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 9,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 10,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 11,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 12,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 13,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 14,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 15,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 16,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 17,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 18,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 19,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 20,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 21,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 22,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 23,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 24,
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e43cf28a-ca4e-4115-af66-a14332c827cf/operations/e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 25,
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    }
+  ],
+  "helper_events": [
+    {
+      "phase": "ORIGINAL_DELETE_OBSERVED",
+      "vm_id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+      "operation_id": "5d126854-9c40-424c-9017-d5acad1bd7ef",
+      "current": {
+        "id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+        "name": "vm-mvp-v10-positive-02-b-01a168ce",
+        "version": "2",
+        "desiredState": "Running",
+        "observedState": "Running",
+        "reason": "",
+        "lastOperationId": "6215e488-0493-49c0-9ccc-98099ef35c8f",
+        "closing": false
+      },
+      "delete": {
+        "key": "faab7743-733b-5999-b59b-165df54f5f0e",
+        "send_attempts": 1,
+        "outcome": "ACK_PERSISTED",
+        "operation_id": "e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8"
+      },
+      "delete_operation": {
+        "id": "e39ac5dc-6ddd-4eb4-a01f-c35b96c4c3d8",
+        "vmId": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+        "state": "running",
+        "reason": ""
+      }
+    }
+  ],
+  "business_send_attempts": 1,
+  "guest_actions": 0,
+  "placement_mutations": 0,
+  "service_changes": 0,
+  "new_PG_or_fixture": false,
+  "credentials_or_hashes_public": false,
+  "protected_before": {
+    "windows_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "windows_vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "windows_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "windows_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "source_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "source_content_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+    "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "vm_id": "e43cf28a-ca4e-4115-af66-a14332c827cf",
+  "operation_id": "5d126854-9c40-424c-9017-d5acad1bd7ef",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T23:51:22.928084+00:00",
+  "heavy_lock_released": true
+}

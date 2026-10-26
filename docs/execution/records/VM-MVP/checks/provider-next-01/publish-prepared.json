@@ -1,0 +1,122 @@
+{
+  "state": "TWO_API_PROVIDER_COMMITS_PREPARED_NOT_PUSHED",
+  "prepared_at": "2026-10-24T05:18:26.187149+00:00",
+  "provider": {
+    "resource": {
+      "commit": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+      "tree": "f2897b347e69cfd7e9cfae0867c1003ad040eb37",
+      "parent": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+      "branch": "refs/heads/codex/vm-mvp-resource-vm-sdk-20261023",
+      "commit_utc": "2026-10-24T05:12:01Z",
+      "module": "github.com/zhangzhe-ctrl/ani-resource-service",
+      "candidate_go_version": "v0.0.0-20261024051201-01c079f1787f",
+      "file_count": 14,
+      "files": [
+        "api/compute/v1/compute.proto",
+        "api/compute/v1/compute.pb.go",
+        "api/network/v1/network.proto",
+        "api/network/v1/network.pb.go",
+        "api/vm/v1/vm.proto",
+        "api/vm/v1/vm.pb.go",
+        "api/vm/v1/vm_grpc.pb.go",
+        "api/vm/v1/business.go",
+        "api/vm/v1/business_test.go",
+        "go.mod",
+        "go.sum",
+        "Makefile",
+        "scripts/verify-source",
+        "scripts/generate-vm-api"
+      ],
+      "gate": {
+        "command": "make verify",
+        "result": "PASS",
+        "elapsed_seconds": 168.919,
+        "gowork": "off",
+        "source_unchanged": true,
+        "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/resource-gate.json",
+        "receipt_sha256": "d66f7cd851dbea3800570d51731be843a91e8d463fa7679e80f1cf1f2186e97f"
+      },
+      "remote_absence": {
+        "at": "2026-10-24T05:16:43.661497+00:00",
+        "repo": "/home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service",
+        "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+        "ref": "refs/heads/codex/vm-mvp-resource-vm-sdk-20261023",
+        "exit_code": 0,
+        "stdout": "",
+        "target_branch_absent": true,
+        "core_hooks_path_configured": false,
+        "default_pre_push_path": "/home/chabking/workspace/ani-resource-service/.git/hooks/pre-push",
+        "default_pre_push_exists": false,
+        "git_network": "SSH443/read-only",
+        "pushes": 0
+      },
+      "api_only_diff": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/resource-api-only.diff",
+      "api_only_diff_sha256": "64000730a3217544ec853b4fe96159582bc66458ebfca9d5be1f35b2a13bde4f",
+      "create_only_hook": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/resource-push-hooks/pre-push",
+      "create_only_hook_sha256": "86a05caa436915121530765af815573bb13b7049ffebdec66053fad056bcb768",
+      "prepared_push_command": "git -C /home/chabking/.codex/worktrees/vm-mvp-20261023/ani-resource-service -c core.hooksPath=/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/resource-push-hooks push --porcelain ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git 01c079f1787f301c547bf9d0d050fb19ca49ff84:refs/heads/codex/vm-mvp-resource-vm-sdk-20261023",
+      "pushes": 0
+    },
+    "session": {
+      "commit": "811cc383924460a99cae5b209ca5db97a83d42f4",
+      "tree": "407609f776a718d61b74ec95e296ba2db0bb38ad",
+      "parent": "fb354938978250506cb22409e6ce8545d779ab4f",
+      "branch": "refs/heads/codex/vm-mvp-session-api-20261023",
+      "commit_utc": "2026-10-24T05:15:40Z",
+      "module": "github.com/zhangzhe-ctrl/ani-session-gateway/api",
+      "candidate_go_version": "v0.1.1-0.20261024051540-811cc3839244",
+      "file_count": 11,
+      "files": [
+        "api/proto/session/v1/session.proto",
+        "api/gen/session/v1/session.pb.go",
+        "api/gen/session/v1/session_grpc.pb.go",
+        "api/openapi/session-v1.yaml",
+        "api/go.mod",
+        "api/go.sum",
+        "Makefile",
+        "scripts/check-generated.sh",
+        "scripts/proto.sh",
+        "go.mod",
+        "go.sum"
+      ],
+      "gate": {
+        "command": "root/API strict tidy + make check (lint,contract,generated,manifests,test,race,vet,build,diff-check)",
+        "result": "PASS",
+        "elapsed_seconds": 78.892,
+        "gowork": "off",
+        "source_unchanged": true,
+        "receipt": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/session-gate.json",
+        "receipt_sha256": "df9cc89f4bd93723c63cee0b71e0427ad9fa2ed89d77c4f8a2024d880bc8a447"
+      },
+      "remote_absence": {
+        "at": "2026-10-24T05:16:43Z",
+        "repo": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway",
+        "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-session-gateway.git",
+        "ref": "refs/heads/codex/vm-mvp-session-api-20261023",
+        "exit_code": 0,
+        "target_branch_absent": true,
+        "remote_api_tags": [
+          "b2188212c736cbc8b91c937b98b1427e1876a866\trefs/tags/api/v0.1.0",
+          "d86a40d33369b128aabc680d4ea0b3f790ac0bb6\trefs/tags/api/v0.1.0^{}"
+        ],
+        "canonical_api_tag": "api/v0.1.0",
+        "api_tag_object_and_commit_match_local": true,
+        "core_hooks_path_configured": false,
+        "default_pre_push_path": "/home/chabking/workspace/ani-session-gateway/.git/hooks/pre-push",
+        "default_pre_push_exists": false,
+        "git_network": "SSH443/read-only",
+        "pushes": 0,
+        "projection_note": "Original successful SSH response normalized for annotated-tag peel; initial wrapper projection failure retained separately"
+      },
+      "api_only_diff": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/session-api-only.diff",
+      "api_only_diff_sha256": "5e4e1d890dc73c268def8c101f94518b9b220c41ab45cd8a1af2a6e86c1f6643",
+      "create_only_hook": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/session-push-hooks/pre-push",
+      "create_only_hook_sha256": "d6dbf8bee02fedd65353c374751456f5ad51e5b8988d1563b8aae50d904f2d26",
+      "prepared_push_command": "git -C /home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway -c core.hooksPath=/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/provider-next-01/session-push-hooks push --porcelain ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-session-gateway.git 811cc383924460a99cae5b209ca5db97a83d42f4:refs/heads/codex/vm-mvp-session-api-20261023",
+      "pushes": 0
+    }
+  },
+  "transport": "Explicit SSH443; existing repository remotes/config remain unchanged",
+  "authority": "No push authorization for these two branches yet. Requires specific approval; fresh checks must repeat immediately before any approved push. No force flags, main, tags, PR, merge, image or deployment.",
+  "shared_runtime_changed": false
+}

@@ -1,0 +1,52 @@
+{
+  "Guest_actions": 0,
+  "VM_or_disk_mutations": 0,
+  "backend_writes": 0,
+  "calls": [
+    {
+      "exit_code": 0,
+      "label": "get:ns"
+    },
+    {
+      "exit_code": 0,
+      "label": "get:virtualmachineinstances.kubevirt.io"
+    },
+    {
+      "exit_code": 0,
+      "label": "get:pods"
+    },
+    {
+      "exit_code": 0,
+      "label": "dumpxml"
+    }
+  ],
+  "causal_conclusion": "Single native error sample only; not a cause determination",
+  "ceph_scans": 0,
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "domain": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+  "domain_identity_source": "existing boot-activity.py namespace_VM convention, plus exact current-VMI XML metadata UID",
+  "domblkerror_attempts": 0,
+  "domstats_attempts": 0,
+  "elapsed_seconds": 1.296436,
+  "error_type": "AssertionError",
+  "expected_launcher_uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec",
+  "finished_at": "2026-10-25T01:56:49.870132+00:00",
+  "guest_agent_calls": 0,
+  "heavy_lock_released": true,
+  "launcher": {
+    "container": "compute",
+    "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-5qxps",
+    "uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+  },
+  "libvirt_uri": "qemu+unix:///session?socket=/var/run/libvirt/virtqemud-sock",
+  "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+  "new_tools_or_pods": 0,
+  "node": "ani-01",
+  "reason": "domain name/current-VMI metadata UID mismatch",
+  "result": "NOT_VERIFIED",
+  "sampled_at": "2026-10-25T01:56:48.573700+00:00",
+  "stopped_stage": "EXACT_DOMAIN_XML",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a"
+}

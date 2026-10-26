@@ -1,0 +1,258 @@
+{
+  "result": "PUBLIC_LOG_EXPORT",
+  "credential_values_or_hashes_exported": false,
+  "raw_private_state_exported": false,
+  "commands": [
+    {
+      "stage": "target-absence",
+      "started_at": "2026-10-24T10:06:55.586421+00:00",
+      "finished_at": "2026-10-24T10:06:55.709894+00:00",
+      "exit_code": 1,
+      "elapsed_seconds": 0.121,
+      "timeout_seconds": 25,
+      "service": "resource",
+      "stdout": {
+        "path": "public-command-logs/resource-target-absence.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/resource-target-absence.stderr",
+        "sha256": "0a3cb0a0f624be15d343ecc61b4400a435c70549fe8d160e4793ad3b90b6f45c",
+        "bytes": 365,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "copy-once",
+      "started_at": "2026-10-24T10:06:55.849809+00:00",
+      "finished_at": "2026-10-24T10:07:13.977946+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 18.126,
+      "timeout_seconds": 125,
+      "service": "resource",
+      "stdout": {
+        "path": "public-command-logs/resource-copy-once.stdout",
+        "sha256": "d1f45a6637c831e1dd156b60ba0f49dfa61fb0ca227ddc2cbb8db4280c78981b",
+        "bytes": 1262,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/resource-copy-once.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "independent-manifest-read",
+      "started_at": "2026-10-24T10:07:13.982330+00:00",
+      "finished_at": "2026-10-24T10:07:14.206747+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.221,
+      "timeout_seconds": 25,
+      "service": "resource",
+      "stdout": {
+        "path": "public-command-logs/resource-independent-manifest-read.stdout",
+        "sha256": "f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+        "bytes": 2265,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/resource-independent-manifest-read.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "target-absence",
+      "started_at": "2026-10-24T10:07:14.483880+00:00",
+      "finished_at": "2026-10-24T10:07:14.602317+00:00",
+      "exit_code": 1,
+      "elapsed_seconds": 0.115,
+      "timeout_seconds": 25,
+      "service": "session",
+      "stdout": {
+        "path": "public-command-logs/session-target-absence.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/session-target-absence.stderr",
+        "sha256": "ce9d2c716705541fadd9be2c3009736aea616e2013d5a91935252dbb730ba9fb",
+        "bytes": 362,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "copy-once",
+      "started_at": "2026-10-24T10:07:14.743284+00:00",
+      "finished_at": "2026-10-24T10:07:33.928829+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 19.183,
+      "timeout_seconds": 125,
+      "service": "session",
+      "stdout": {
+        "path": "public-command-logs/session-copy-once.stdout",
+        "sha256": "0135dac21391b0f61c3fac03f55853a1e052be88a9202ec0157b333ab4dad460",
+        "bytes": 1262,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/session-copy-once.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "independent-manifest-read",
+      "started_at": "2026-10-24T10:07:33.934241+00:00",
+      "finished_at": "2026-10-24T10:07:34.172877+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.236,
+      "timeout_seconds": 25,
+      "service": "session",
+      "stdout": {
+        "path": "public-command-logs/session-independent-manifest-read.stdout",
+        "sha256": "70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+        "bytes": 2265,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/session-independent-manifest-read.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "target-absence",
+      "started_at": "2026-10-24T10:07:34.614688+00:00",
+      "finished_at": "2026-10-24T10:07:34.807202+00:00",
+      "exit_code": 1,
+      "elapsed_seconds": 0.19,
+      "timeout_seconds": 25,
+      "service": "governance",
+      "stdout": {
+        "path": "public-command-logs/governance-target-absence.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/governance-target-absence.stderr",
+        "sha256": "398e051854e58e69a7c8977a0360ed72e5fc95c0cd576e3502995781aa7778f3",
+        "bytes": 347,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "copy-once",
+      "started_at": "2026-10-24T10:07:35.103998+00:00",
+      "finished_at": "2026-10-24T10:08:00.618330+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 25.511,
+      "timeout_seconds": 125,
+      "service": "governance",
+      "stdout": {
+        "path": "public-command-logs/governance-copy-once.stdout",
+        "sha256": "a1b7c5ce29d1ac5d14706fb54b648c83f91869dd5ece3ba5f47b9d43b9f15117",
+        "bytes": 1432,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/governance-copy-once.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    },
+    {
+      "stage": "independent-manifest-read",
+      "started_at": "2026-10-24T10:08:00.622389+00:00",
+      "finished_at": "2026-10-24T10:08:00.837489+00:00",
+      "exit_code": 0,
+      "elapsed_seconds": 0.211,
+      "timeout_seconds": 25,
+      "service": "governance",
+      "stdout": {
+        "path": "public-command-logs/governance-independent-manifest-read.stdout",
+        "sha256": "271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+        "bytes": 2573,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      },
+      "stderr": {
+        "path": "public-command-logs/governance-independent-manifest-read.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0,
+        "redacted": false,
+        "byte_identical_to_original_when_not_redacted": true
+      }
+    }
+  ],
+  "historical_error_bodies": [
+    {
+      "path": "public-command-logs/historical-http-1.body",
+      "sha256": "43118c21ac1612fc261bf74c1f272f1d854e9be6d0a78211976620bc4c37f9f1",
+      "bytes": 56,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    },
+    {
+      "path": "public-command-logs/historical-authority-preflight-continued-http-4.body",
+      "sha256": "188c09b234778d917eed6110de192923eb93cdd0c9497d0d84dde3e8602c98f4",
+      "bytes": 109,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    },
+    {
+      "path": "public-command-logs/historical-authority-preflight-ready-http-2.body",
+      "sha256": "7d809362495d6f88509067c821e6594df3bc3b8f085be865d835e9eb33b711e1",
+      "bytes": 108,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    },
+    {
+      "path": "public-command-logs/historical-authority-preflight-ready-http-4.body",
+      "sha256": "9ace20b5735d3854d5dfd951b5be3eb37b7f1ab752ac1649a70a3aea30f7c779",
+      "bytes": 103,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    },
+    {
+      "path": "public-command-logs/historical-skopeo-resource-absence.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    },
+    {
+      "path": "public-command-logs/historical-skopeo-resource-absence.stderr",
+      "sha256": "667214c8329c9b425fb14824f28080a866a349c749b0d21a42600e02773d76af",
+      "bytes": 365,
+      "redacted": false,
+      "byte_identical_to_original_when_not_redacted": true
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "at": "2026-10-23T13:01:01.682790+00:00",
+  "server": "https://172.16.101.10:6443",
+  "context": "kubernetes-admin@ani-lab",
+  "kube_system_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "credential_reference": "/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "addresses": [
+        {
+          "address": "172.16.101.10",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-01",
+          "type": "Hostname"
+        }
+      ],
+      "info": {
+        "architecture": "amd64",
+        "bootID": "112f8e20-f762-42b0-bca4-5881710b7ecf",
+        "containerRuntimeVersion": "containerd://2.3.4",
+        "kernelVersion": "6.8.0-147-generic",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.8",
+        "machineID": "cd933c2ed43e460986560541fa038e54",
+        "operatingSystem": "linux",
+        "osImage": "Ubuntu 24.04.4 LTS",
+        "systemUUID": "215e4d56-e067-ab62-a80d-ed15c7e2f021"
+      }
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "addresses": [
+        {
+          "address": "172.16.101.11",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-02",
+          "type": "Hostname"
+        }
+      ],
+      "info": {
+        "architecture": "amd64",
+        "bootID": "f3db1f85-491b-4328-9e38-b210761c2e2f",
+        "containerRuntimeVersion": "containerd://2.3.4",
+        "kernelVersion": "6.8.0-147-generic",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.8",
+        "machineID": "ff15e43d9efa48ffa63ab0c8878b6566",
+        "operatingSystem": "linux",
+        "osImage": "Ubuntu 24.04.4 LTS",
+        "systemUUID": "df284d56-a9a2-e1cb-37b8-83b1ad1a5a0f"
+      }
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "addresses": [
+        {
+          "address": "172.16.101.12",
+          "type": "InternalIP"
+        },
+        {
+          "address": "ani-03",
+          "type": "Hostname"
+        }
+      ],
+      "info": {
+        "architecture": "amd64",
+        "bootID": "6644a471-edb6-4261-8328-f5a5a02fc2f0",
+        "containerRuntimeVersion": "containerd://2.3.4",
+        "kernelVersion": "6.8.0-147-generic",
+        "kubeProxyVersion": "",
+        "kubeletVersion": "v1.35.8",
+        "machineID": "2e5cc7ce6b9c4666a1943a6fa65c1858",
+        "operatingSystem": "linux",
+        "osImage": "Ubuntu 24.04.4 LTS",
+        "systemUUID": "7d684d56-3a85-6705-eaeb-649365e93245"
+      }
+    }
+  ]
+}

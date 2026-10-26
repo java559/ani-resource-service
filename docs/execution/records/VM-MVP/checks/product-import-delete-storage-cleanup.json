@@ -1,0 +1,183 @@
+{
+  "at": "2026-10-23T20:39:53.165630+00:00",
+  "scope": "one bounded exact V23 import-delete storage measurement; no mutations",
+  "result": "NATIVE_ABSENCE_PASS_BACKEND_NOT_MEASURED",
+  "original": {
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-c41e610f-92e5-44cc-a2c3-06221de66bbb",
+      "uid": "58cebfe0-9bce-4bfa-a8ea-02efc3b9df5e"
+    },
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+      "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+      "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+    },
+    "pv": null,
+    "dv_phase": "CSICloneInProgress",
+    "dv_spec": {
+      "contentType": "kubevirt",
+      "source": {
+        "pvc": {
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce"
+        }
+      },
+      "storage": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "12G"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      }
+    },
+    "pvc_spec": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "dataSource": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "dataSourceRef": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "resources": {
+        "requests": {
+          "storage": "12G"
+        }
+      },
+      "storageClassName": "ani-block",
+      "volumeMode": "Block"
+    }
+  },
+  "cdi_cross_namespace_clone": {
+    "source": {
+      "name": "vm-mvp-ubuntu-2404-source",
+      "namespace": "vm-mvp-probe-01a168ce"
+    },
+    "temporary_pvc": {
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+      "uid": "2f35960c-b9dc-46ed-918a-199101304bcc",
+      "uid_basis": "original namespace Provisioning event UID and source-name association"
+    },
+    "volume_clone_source": {
+      "apiGroup": "cdi.kubevirt.io",
+      "kind": "VolumeCloneSource",
+      "name": "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+    },
+    "current_target_namespace_related_objects": {
+      "pvc": [],
+      "datavolumes.cdi.kubevirt.io": [],
+      "volumeclonesources.cdi.kubevirt.io": [],
+      "pods": []
+    },
+    "current_source_namespace_clone_related_objects": {
+      "pvc": [],
+      "datavolumes.cdi.kubevirt.io": [],
+      "volumeclonesources.cdi.kubevirt.io": [],
+      "pods": []
+    },
+    "current_object_transfers": [],
+    "current_related_pvs_excluding_protected_source": []
+  },
+  "protected_source": {
+    "pvc_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "pv_name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+    "pv_uid": "7e550d01-dd3d-4f24-9df1-5e29e39fc85b",
+    "phase": "Bound",
+    "unchanged_from_frozen_source_identity": true
+  },
+  "csi_log_query": {
+    "pod": {
+      "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg",
+      "uid": "997474bf-2ada-42c8-a7b2-89e67cdf048f"
+    },
+    "containers": [
+      "csi-provisioner",
+      "csi-rbdplugin"
+    ],
+    "window": "2026-10-23T20:21:20Z..2026-10-23T20:22:10Z",
+    "exact_uids": [
+      "2be382eb-8d98-4728-a4de-53f1b201b136",
+      "2f35960c-b9dc-46ed-918a-199101304bcc",
+      "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+    ],
+    "create_delete_volume_handle_or_image_name_found": false,
+    "last_temp_claim_record": {
+      "at": "2026-10-23T20:22:04.795785388Z",
+      "message_classification": "claim in work queue no longer exists",
+      "uid": "2f35960c-b9dc-46ed-918a-199101304bcc"
+    }
+  },
+  "current_csi_reservation_journal": {
+    "at": "2026-10-23T20:38:22.085444+00:00",
+    "reader": {
+      "name": "rook-ceph-tools-68d6bc7cc7-2z8tk",
+      "namespace": "rook-ceph",
+      "uid": "d144f419-df30-43d0-aa23-fcbcda6e01ce"
+    },
+    "journal": [
+      {
+        "object": "csi.volumes.default",
+        "key": "csi.volume.pvc-2f35960c-b9dc-46ed-918a-199101304bcc",
+        "exit": 1,
+        "result": "ABSENT",
+        "reservation_uuid": null,
+        "stdout_classification": "No such key"
+      },
+      {
+        "object": "csi.volumes.default",
+        "key": "csi.volume.pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+        "exit": 1,
+        "result": "ABSENT",
+        "reservation_uuid": null,
+        "stdout_classification": "No such key"
+      }
+    ],
+    "csi_source_matches": []
+  },
+  "backend": {
+    "result": "NOT_MEASURED",
+    "volume_handle": null,
+    "image_name": null,
+    "rbd_info": "NOT_MEASURED_NO_AUTHORITATIVE_HANDLE",
+    "matching_rbd_trash": "NOT_MEASURED_NO_AUTHORITATIVE_HANDLE",
+    "limitation": "Target PVC was Pending with no PV, but a real temporary PVC was provisioned. Current absence and journal NoKey do not prove no historical allocation. No authoritative historical PV/CSI handle found in bounded UID log/event query; no global Ceph scan or inferred image name."
+  },
+  "measurements": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-import-delete-product.json",
+      "sha256": "089b9c93e3a0fd7c0b3f049914a14545326ea7751a7037c51a7d1a3958826b00"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-import-delete-storage-inventory.json",
+      "sha256": "4d008d1e5e0982e8b54913ddbc2ef61c9a53080eabd07cf60ae9c72a96d4326d"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-import-delete-csi-relationship.json",
+      "sha256": "5e11684e95cfae6d0d977c68948cba58bf87bf737fb3a6b6bcf8d49e12447f8e"
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-import-delete-backend-journal.json",
+      "sha256": "9aeadaa2d9f27052eb20b6758c7d35ac1be07582dd2995ba42f8733ecd3269a9"
+    }
+  ]
+}

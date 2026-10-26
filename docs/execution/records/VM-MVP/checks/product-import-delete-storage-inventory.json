@@ -1,0 +1,557 @@
+{
+  "at": "2026-10-23T20:36:53.029984+00:00",
+  "scope": "single read-only V23 CDI temporary and prime relationship inventory",
+  "original_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-import-delete-product.json",
+  "original": {
+    "vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-c41e610f-92e5-44cc-a2c3-06221de66bbb",
+      "uid": "58cebfe0-9bce-4bfa-a8ea-02efc3b9df5e"
+    },
+    "dv": {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+      "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+    },
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+      "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+    },
+    "pv": null,
+    "dv_phase": "CSICloneInProgress",
+    "dv_spec": {
+      "contentType": "kubevirt",
+      "source": {
+        "pvc": {
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce"
+        }
+      },
+      "storage": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "12G"
+          }
+        },
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      }
+    },
+    "pvc_spec": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "dataSource": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "dataSourceRef": {
+        "apiGroup": "cdi.kubevirt.io",
+        "kind": "VolumeCloneSource",
+        "name": "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "resources": {
+        "requests": {
+          "storage": "12G"
+        }
+      },
+      "storageClassName": "ani-block",
+      "volumeMode": "Block"
+    }
+  },
+  "namespaces": {
+    "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c": {
+      "pvc": [],
+      "datavolumes.cdi.kubevirt.io": [],
+      "volumeclonesources.cdi.kubevirt.io": [],
+      "pods": []
+    },
+    "vm-mvp-probe-01a168ce": {
+      "pvc": [
+        {
+          "kind": "PersistentVolumeClaim",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ubuntu-2404-source",
+          "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+          "owners": [
+            {
+              "apiVersion": "cdi.kubevirt.io/v1beta1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "DataVolume",
+              "name": "vm-mvp-ubuntu-2404-source",
+              "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561"
+            }
+          ],
+          "deletionTimestamp": null,
+          "relationship_annotations": {
+            "cdi.kubevirt.io/storage.condition.running.reason": "Completed",
+            "cdi.kubevirt.io/storage.contentType": "kubevirt"
+          },
+          "spec": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "dataSource": {
+              "apiGroup": "cdi.kubevirt.io",
+              "kind": "VolumeUploadSource",
+              "name": "volume-upload-source-36f658cd-0663-4fed-8aba-cb0116f5f561"
+            },
+            "dataSourceRef": {
+              "apiGroup": "cdi.kubevirt.io",
+              "kind": "VolumeUploadSource",
+              "name": "volume-upload-source-36f658cd-0663-4fed-8aba-cb0116f5f561"
+            },
+            "resources": {
+              "requests": {
+                "storage": "8G"
+              }
+            },
+            "storageClassName": "ani-block",
+            "volumeMode": "Block",
+            "volumeName": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7"
+          },
+          "status": {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "capacity": {
+              "storage": "8Gi"
+            },
+            "phase": "Bound"
+          }
+        }
+      ],
+      "datavolumes.cdi.kubevirt.io": [
+        {
+          "kind": "DataVolume",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "name": "vm-mvp-ubuntu-2404-source",
+          "uid": "36f658cd-0663-4fed-8aba-cb0116f5f561",
+          "owners": [],
+          "deletionTimestamp": null,
+          "relationship_annotations": {},
+          "spec": {
+            "source": {
+              "upload": {}
+            },
+            "storage": {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "resources": {
+                "requests": {
+                  "storage": "8G"
+                }
+              },
+              "storageClassName": "ani-block",
+              "volumeMode": "Block"
+            }
+          },
+          "status": {
+            "claimName": "vm-mvp-ubuntu-2404-source",
+            "conditions": [
+              {
+                "lastHeartbeatTime": "2026-10-23T14:07:28Z",
+                "lastTransitionTime": "2026-10-23T14:07:28Z",
+                "message": "PVC vm-mvp-ubuntu-2404-source Bound",
+                "reason": "Bound",
+                "status": "True",
+                "type": "Bound"
+              },
+              {
+                "lastHeartbeatTime": "2026-10-23T14:07:28Z",
+                "lastTransitionTime": "2026-10-23T14:07:28Z",
+                "status": "True",
+                "type": "Ready"
+              },
+              {
+                "lastHeartbeatTime": "2026-10-23T14:07:26Z",
+                "lastTransitionTime": "2026-10-23T14:07:26Z",
+                "message": "Upload Complete",
+                "reason": "Completed",
+                "status": "False",
+                "type": "Running"
+              }
+            ],
+            "phase": "Succeeded",
+            "progress": "N/A"
+          }
+        }
+      ],
+      "volumeclonesources.cdi.kubevirt.io": [],
+      "pods": []
+    }
+  },
+  "pv": [
+    {
+      "kind": "PersistentVolume",
+      "namespace": null,
+      "name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+      "uid": "7e550d01-dd3d-4f24-9df1-5e29e39fc85b",
+      "owners": [],
+      "deletionTimestamp": null,
+      "relationship_annotations": {},
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "capacity": {
+          "storage": "8Gi"
+        },
+        "claimRef": {
+          "name": "vm-mvp-ubuntu-2404-source",
+          "namespace": "vm-mvp-probe-01a168ce",
+          "resourceVersion": "59022929",
+          "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1"
+        },
+        "csi": {
+          "controllerExpandSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "controllerPublishSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "nodeStageSecretRef": {
+            "name": "rook-csi-rbd-node",
+            "namespace": "rook-ceph"
+          },
+          "volumeAttributes": {
+            "clusterID": "rook-ceph",
+            "imageFeatures": "layering",
+            "imageFormat": "2",
+            "imageName": "csi-vol-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a",
+            "journalPool": "ani-block-pool",
+            "pool": "ani-block-pool",
+            "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+          },
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-0c6f1f97-d348-4cdd-bdb6-5ae1e713c43a"
+        },
+        "persistentVolumeReclaimPolicy": "Delete",
+        "storageClassName": "ani-block",
+        "volumeMode": "Block"
+      },
+      "status": {
+        "lastPhaseTransitionTime": "2026-10-23T13:25:43Z",
+        "phase": "Bound"
+      }
+    }
+  ],
+  "events": [
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "NotFound",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110395",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "No PVC found",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "CloneScheduled",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110399",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "Cloning from vm-mvp-probe-01a168ce/vm-mvp-ubuntu-2404-source into tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-26460f75-7d52-5c08-bc70-614ecf7d21a5 scheduled",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "ProvisioningFailed",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110406",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "Error saving claim: Operation cannot be fulfilled on persistentvolumeclaims \"vd-26460f75-7d52-5c08-bc70-614ecf7d21a5\": the object has been modified; please apply your changes to the latest version and try again",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "persistentvolume-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Pending",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110412",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "PVC vd-26460f75-7d52-5c08-bc70-614ecf7d21a5 Pending",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Pending",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110412",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "Clone Pending",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Pending",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110426",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "target PVC vd-26460f75-7d52-5c08-bc70-614ecf7d21a5 Pending and Error saving claim: Operation cannot be fulfilled on persistentvolumeclaims \"vd-26460f75-7d52-5c08-bc70-614ecf7d21a5\": the object has been modified; please apply your changes to the latest version and try again",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "ExternalProvisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110416",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "[tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136] : Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "clone-populator"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Provisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110416",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "[tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136] : External provisioner is provisioning volume for claim \"vm-mvp-probe-01a168ce/tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136\"",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "clone-populator"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "CSICloneInProgress",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110440",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "CSI Volume clone in progress (for pvc vm-mvp-probe-01a168ce/vm-mvp-ubuntu-2404-source)",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Pending",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110443",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "target PVC vd-26460f75-7d52-5c08-bc70-614ecf7d21a5 Pending and [tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136] : Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Provisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110567",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "External provisioner is provisioning volume for claim \"tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vd-26460f75-7d52-5c08-bc70-614ecf7d21a5\"",
+      "first": "2026-10-23T20:21:31Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_7c6cb30b-39b0-4854-9f9f-619a3ea42ee3"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Provisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110567",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "Assuming an external populator will provision the volume",
+      "first": "2026-10-23T20:21:31Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "external-provisioner"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "ExternalProvisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110567",
+        "uid": "2be382eb-8d98-4728-a4de-53f1b201b136"
+      },
+      "message": "Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+      "first": "2026-10-23T20:21:31Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "persistentvolume-controller"
+      }
+    },
+    {
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "reason": "Pending",
+      "object": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "DataVolume",
+        "name": "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "resourceVersion": "60110580",
+        "uid": "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+      },
+      "message": "target PVC vd-26460f75-7d52-5c08-bc70-614ecf7d21a5 Pending and Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+      "first": "2026-10-23T20:21:31Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "datavolume-pvc-clone-controller"
+      }
+    },
+    {
+      "namespace": "vm-mvp-probe-01a168ce",
+      "reason": "Provisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "resourceVersion": "60110431",
+        "uid": "2f35960c-b9dc-46ed-918a-199101304bcc"
+      },
+      "message": "External provisioner is provisioning volume for claim \"vm-mvp-probe-01a168ce/tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136\"",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:28Z",
+      "source": {
+        "component": "rook-ceph.rbd.csi.ceph.com_rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg_7c6cb30b-39b0-4854-9f9f-619a3ea42ee3"
+      }
+    },
+    {
+      "namespace": "vm-mvp-probe-01a168ce",
+      "reason": "ExternalProvisioning",
+      "object": {
+        "apiVersion": "v1",
+        "kind": "PersistentVolumeClaim",
+        "name": "tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "resourceVersion": "60110431",
+        "uid": "2f35960c-b9dc-46ed-918a-199101304bcc"
+      },
+      "message": "Waiting for a volume to be created either by the external provisioner 'rook-ceph.rbd.csi.ceph.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.",
+      "first": "2026-10-23T20:21:28Z",
+      "last": "2026-10-23T20:21:31Z",
+      "source": {
+        "component": "persistentvolume-controller"
+      }
+    }
+  ],
+  "object_transfers": [],
+  "discovered_uids": [
+    "2be382eb-8d98-4728-a4de-53f1b201b136",
+    "36f658cd-0663-4fed-8aba-cb0116f5f561",
+    "58cebfe0-9bce-4bfa-a8ea-02efc3b9df5e",
+    "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+  ],
+  "discovered_names": [
+    "prime-2be382eb-8d98-4728-a4de-53f1b201b136",
+    "tmp-pvc-2be382eb-8d98-4728-a4de-53f1b201b136",
+    "vd-26460f75-7d52-5c08-bc70-614ecf7d21a5",
+    "vm-c41e610f-92e5-44cc-a2c3-06221de66bbb",
+    "vm-mvp-ubuntu-2404-source",
+    "volume-clone-source-d7a0ef5d-d8b1-409c-88c3-0772a9fb84c8"
+  ]
+}

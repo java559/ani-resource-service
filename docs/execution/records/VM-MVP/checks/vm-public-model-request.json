@@ -1,0 +1,175 @@
+{
+  "observed_at": "2026-10-24T03:39:36.402717+00:00",
+  "identity": {
+    "deployment": {
+      "namespace": "ani-system",
+      "name": "ani-model-service",
+      "uid": "f358e30f-842d-419a-9b25-4178caabda0f",
+      "resourceVersion": "59122452",
+      "deletionTimestamp": ""
+    },
+    "replicaset": {
+      "namespace": "ani-system",
+      "name": "ani-model-service-7544d6db94",
+      "uid": "4750b70f-24a4-445b-96de-8048a8c12d4c",
+      "resourceVersion": "59122450",
+      "deletionTimestamp": ""
+    },
+    "pod": {
+      "namespace": "ani-system",
+      "name": "ani-model-service-7544d6db94-lgft8",
+      "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0",
+      "resourceVersion": "59122444",
+      "deletionTimestamp": ""
+    },
+    "node": "ani-03",
+    "pod_ip": "10.16.1.218",
+    "container": "model",
+    "image": "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165",
+    "vnic": {
+      "namespace": "ani-system",
+      "name": "auto-ani-model-service-7544d6db94-lgft8-vnic-kzb7w",
+      "uid": "3afcb9c3-344c-4422-9b96-88369e6c11db",
+      "resourceVersion": "54755721",
+      "deletionTimestamp": ""
+    },
+    "vnic_gateway": "kcn-system/kcn-cluster",
+    "native_subnet": {
+      "namespace": "kcn-system",
+      "name": "kcn-default",
+      "uid": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0",
+      "resourceVersion": "60691646",
+      "deletionTimestamp": ""
+    },
+    "shared_default_egress": {
+      "eips": {
+        "ref": {
+          "namespace": "kcn-system",
+          "name": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+          "uid": "e7c59daf-6b28-467e-b270-b043c96be9cc",
+          "resourceVersion": "54374155",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "ipAddress": "172.16.102.192",
+          "ipVersion": "IPv4",
+          "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+        },
+        "status": {
+          "boundResource": {
+            "disabled": false,
+            "nodeName": "ani-01",
+            "observedGeneration": 1,
+            "resource": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+            "resourceType": "Snat",
+            "vpc": "kcn-system/kcn-cluster"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-22T11:16:35Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-22T11:16:35Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+          "phase": "Bound"
+        }
+      },
+      "snats": {
+        "ref": {
+          "namespace": "kcn-system",
+          "name": "ani-default-snat-36b8b4bcec3d4396ae3d5e03dea9466b",
+          "uid": "3a886f1d-03f3-4241-b739-aae2c88f8a62",
+          "resourceVersion": "54374157",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "disable": false,
+          "eip": "ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b",
+          "vpc": "kcn-cluster"
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-22T11:17:01Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "eipAddress": "172.16.102.192",
+          "phase": "Bound"
+        }
+      },
+      "vpcs": {
+        "ref": {
+          "namespace": "kcn-system",
+          "name": "kcn-cluster",
+          "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f",
+          "resourceVersion": "54374158",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "allowedNamespaces": {
+            "from": "All"
+          },
+          "ipVersion": "IPv4"
+        },
+        "status": {
+          "boundResources": {
+            "chassisNode": "ani-01",
+            "router": "vpc.kcn-system.kcn-cluster"
+          },
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-09T04:38:41Z",
+              "message": "",
+              "reason": "Ready",
+              "status": "True",
+              "type": "Ready"
+            }
+          ],
+          "default": true,
+          "eips": {
+            "kcn-system/ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b": "172.16.102.192"
+          },
+          "observedGeneration": 1,
+          "subnets": {
+            "kcn-system/kcn-default": "10.16.0.0/16"
+          }
+        }
+      }
+    }
+  },
+  "tool_exit_code": 1,
+  "tool_version": null,
+  "request_attempts": 0,
+  "mutations": 0,
+  "source_or_placement_changes": false,
+  "temporary_193": "ALREADY_CLEANED_NOT_RECREATED",
+  "result": "NOT_RUN_EXISTING_CURL_UNAVAILABLE"
+}

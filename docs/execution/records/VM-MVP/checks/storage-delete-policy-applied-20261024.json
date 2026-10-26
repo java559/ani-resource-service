@@ -1,0 +1,236 @@
+{
+  "started_at": "2026-10-24T03:33:03.821463+00:00",
+  "state": "CONFIG_APPLIED_VERIFIED",
+  "prepared_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-delete-policy-prepared-20261024.json",
+  "prepared_sha256": "9673571564570077318766effb367d99a860d782e5b823e7e193839b1770ed2b",
+  "selected_proposal_index": 1,
+  "scope": "whole fixed cluster RBD and CephFS future snapshots",
+  "send_attempts": 2,
+  "patches": [
+    {
+      "name": "ani-rbd-retain",
+      "uid": "a1568367-0da2-4ede-86c0-f32ea790772d",
+      "old_resourceVersion": "7994",
+      "guarded_json_patch": [
+        {
+          "op": "test",
+          "path": "/metadata/uid",
+          "value": "a1568367-0da2-4ede-86c0-f32ea790772d"
+        },
+        {
+          "op": "test",
+          "path": "/metadata/resourceVersion",
+          "value": "7994"
+        },
+        {
+          "op": "test",
+          "path": "/deletionPolicy",
+          "value": "Retain"
+        },
+        {
+          "op": "replace",
+          "path": "/deletionPolicy",
+          "value": "Delete"
+        }
+      ],
+      "attempts": 1,
+      "ack_state": "ACKED",
+      "exit_code": 0,
+      "raw_ack": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-delete-policy-ani-rbd-retain-ack-20261024.json",
+      "raw_ack_sha256": "6c1d4c23dfc074ce5865dcb9ceca0388ed31d4d471850f8b40a91828e1c1a316",
+      "new_resourceVersion": "61190187",
+      "policy": "Delete",
+      "all_semantic_nonpolicy_fields_unchanged": true
+    },
+    {
+      "name": "ani-cephfs-retain",
+      "uid": "8275fb3f-c50b-4fc4-93c6-70c1231062c9",
+      "old_resourceVersion": "7996",
+      "guarded_json_patch": [
+        {
+          "op": "test",
+          "path": "/metadata/uid",
+          "value": "8275fb3f-c50b-4fc4-93c6-70c1231062c9"
+        },
+        {
+          "op": "test",
+          "path": "/metadata/resourceVersion",
+          "value": "7996"
+        },
+        {
+          "op": "test",
+          "path": "/deletionPolicy",
+          "value": "Retain"
+        },
+        {
+          "op": "replace",
+          "path": "/deletionPolicy",
+          "value": "Delete"
+        }
+      ],
+      "attempts": 1,
+      "ack_state": "ACKED",
+      "exit_code": 0,
+      "raw_ack": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-delete-policy-ani-cephfs-retain-ack-20261024.json",
+      "raw_ack_sha256": "16bc6719a7e280fe35fc97b75ab2d481d12d666aaa4c19b98dba09209c9efabb",
+      "new_resourceVersion": "61190197",
+      "policy": "Delete",
+      "all_semantic_nonpolicy_fields_unchanged": true
+    }
+  ],
+  "permanent_user_policy": true,
+  "rollback_on_goal_cleanup": false,
+  "real_csi_new_snapshot_delete_restore": "NOT_RUN",
+  "other_resource_writes": 0,
+  "fresh_guards": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "nodes": [
+      {
+        "name": "ani-01",
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "internalIPs": [
+          "172.16.101.10"
+        ],
+        "ready": true
+      },
+      {
+        "name": "ani-02",
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "internalIPs": [
+          "172.16.101.11"
+        ],
+        "ready": true
+      },
+      {
+        "name": "ani-03",
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "internalIPs": [
+          "172.16.101.12"
+        ],
+        "ready": true
+      }
+    ],
+    "all_prepared_sc_profile_classes_exact_match": true,
+    "volume_snapshot_count": 5,
+    "volume_snapshot_content_count": 5,
+    "protected_content": [
+      {
+        "name": "snapcontent-02d4f8a9-86d3-4c75-9123-e818c2d11f9f",
+        "uid": "24cfa0b3-dcde-4eff-8c95-bb2abbb0372b",
+        "deletionTimestamp": null,
+        "deletionPolicy": "Retain",
+        "class": "ani-rbd-retain",
+        "ref": {
+          "apiVersion": "snapshot.storage.k8s.io/v1",
+          "kind": "VolumeSnapshot",
+          "name": "ani-snap-rbd-20261003164821-55666",
+          "namespace": "ani-platform",
+          "resourceVersion": "8117",
+          "uid": "02d4f8a9-86d3-4c75-9123-e818c2d11f9f"
+        },
+        "source_sha256": "e21f843e3a00482fbcd4985c56017cc42b099ea9ec760584c126539c5261ec71",
+        "snapshot_handle_sha256": "f88c7cef708ac3a899854e32b7b6b45386dcbfc781909dbe7a2935ffd900a1f6"
+      },
+      {
+        "name": "snapcontent-6a8df750-9197-47ee-97b3-89ac8fe250fc",
+        "uid": "93fbe3de-8217-47bd-9c2e-181d0849efa0",
+        "deletionTimestamp": null,
+        "deletionPolicy": "Retain",
+        "class": "ani-rbd-retain",
+        "ref": {
+          "apiVersion": "snapshot.storage.k8s.io/v1",
+          "kind": "VolumeSnapshot",
+          "name": "modeldev-v21-zz-test-before-delete-01a15f47",
+          "namespace": "tenant-46936e6b-3a3b-4868-8d88-6833665abb70",
+          "resourceVersion": "52042854",
+          "uid": "6a8df750-9197-47ee-97b3-89ac8fe250fc"
+        },
+        "source_sha256": "158e37be1816ee080957e4064d2b38bec44390b3387c7639cd721e8965c0d260",
+        "snapshot_handle_sha256": "2f4eddb1886ac6537b08197a1b6a1c253324be8c7246382b74a448f7f4085d7e"
+      },
+      {
+        "name": "snapcontent-8bd2aebf-70a1-4d62-9754-81f392043c8d",
+        "uid": "187faaf2-9220-4f6a-a2a8-fc84ac248f34",
+        "deletionTimestamp": null,
+        "deletionPolicy": "Retain",
+        "class": "ani-cephfs-retain",
+        "ref": {
+          "apiVersion": "snapshot.storage.k8s.io/v1",
+          "kind": "VolumeSnapshot",
+          "name": "ani-snap-cephfs-20261003171818-161946",
+          "namespace": "ani-platform",
+          "resourceVersion": "23123",
+          "uid": "8bd2aebf-70a1-4d62-9754-81f392043c8d"
+        },
+        "source_sha256": "062c75863d8c0cc29e92a9c3da15133ad81b8498b9112484e58cda5b167ccf2d",
+        "snapshot_handle_sha256": "9b71c9899db737e3cff44cf7cb52b4a4bfbd8feb5fb6ad6787fc8bed91ed4766"
+      },
+      {
+        "name": "snapcontent-a2d6cdef-d390-48c9-92c7-91588c6c21a9",
+        "uid": "1922e043-cff7-4261-b539-734678b726f0",
+        "deletionTimestamp": null,
+        "deletionPolicy": "Retain",
+        "class": "ani-rbd-retain",
+        "ref": {
+          "apiVersion": "snapshot.storage.k8s.io/v1",
+          "kind": "VolumeSnapshot",
+          "name": "ani-snap-rbd-20261003171745-161946",
+          "namespace": "ani-platform",
+          "resourceVersion": "22724",
+          "uid": "a2d6cdef-d390-48c9-92c7-91588c6c21a9"
+        },
+        "source_sha256": "2164f2af8c3cec8c531872b9966a83466e9c2e33d193304b8bb46af5975719a7",
+        "snapshot_handle_sha256": "c766c6e4b2a46623f6a6299e91567616462f3279d282b564afff4d2b5c09f19b"
+      },
+      {
+        "name": "snapcontent-ec94a73e-5e55-425a-8eb5-9c4fe3b559fb",
+        "uid": "db365426-d5b3-473a-a3a9-7f6ef82f1b90",
+        "deletionTimestamp": null,
+        "deletionPolicy": "Retain",
+        "class": "ani-cephfs-retain",
+        "ref": {
+          "apiVersion": "snapshot.storage.k8s.io/v1",
+          "kind": "VolumeSnapshot",
+          "name": "ani-snap-cephfs-20261003164903-55666",
+          "namespace": "ani-platform",
+          "resourceVersion": "8374",
+          "uid": "ec94a73e-5e55-425a-8eb5-9c4fe3b559fb"
+        },
+        "source_sha256": "6d3271f6887171a42ebf29a0d7b6b0bd400159d574265cae818d94347ca992db",
+        "snapshot_handle_sha256": "38871b30c0e7aa9d8c3e4aec6c25c940f8635a9e56e0c0b24374bd8fee74d733"
+      }
+    ],
+    "vm_snapshot_content_restore_counts": [
+      0,
+      0,
+      0
+    ]
+  },
+  "class_readback": [
+    {
+      "name": "ani-rbd-retain",
+      "uid": "a1568367-0da2-4ede-86c0-f32ea790772d",
+      "resourceVersion": "61190187",
+      "deletionPolicy": "Delete"
+    },
+    {
+      "name": "ani-cephfs-retain",
+      "uid": "8275fb3f-c50b-4fc4-93c6-70c1231062c9",
+      "resourceVersion": "61190197",
+      "deletionPolicy": "Delete"
+    }
+  ],
+  "protected": {
+    "old_content_count": 5,
+    "old_content_same_uids_sources_handles_policy_retain_and_not_deleting": true,
+    "old_volume_snapshot_count": 5,
+    "old_volume_snapshot_uids_unchanged_and_not_deleting": true,
+    "storageclasses_and_profiles_full_objects_unchanged": true,
+    "class_nonpolicy_fields_and_default_annotations_unchanged": true
+  },
+  "new_components_or_vm_disk_writes": 0,
+  "service_restarts": 0,
+  "classes_created": 0,
+  "storageclasses_created": 0,
+  "finished_at": "2026-10-24T03:33:07.152602+00:00"
+}

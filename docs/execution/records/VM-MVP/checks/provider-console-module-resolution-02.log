@@ -1,0 +1,19 @@
+{
+	"Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+	"Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+	"Info": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.info",
+	"GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+	"Zip": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.zip",
+	"Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+	"Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+	"GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8=",
+	"Origin": {
+		"VCS": "git",
+		"URL": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+		"Subdir": "api/vm/console",
+		"Hash": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+		"Ref": "refs/heads/codex/vm-mvp-console-api-20261023"
+	}
+}
+
+--- git/Go stderr ---

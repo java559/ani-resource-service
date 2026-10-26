@@ -1,0 +1,58 @@
+[
+  {
+    "identity": {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "namespace": "cdi",
+      "name": "cdi-apiserver",
+      "uid": "0def38ec-da7c-471b-96ac-6ec2b911f950"
+    },
+    "keys": [],
+    "spec": null,
+    "images": [
+      "172.16.101.10:5000/kubevirt/cdi-apiserver:v1.66.1"
+    ]
+  },
+  {
+    "identity": {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "namespace": "cdi",
+      "name": "cdi-deployment",
+      "uid": "9c9d0be9-ba9c-49e5-a529-7974184e7d30"
+    },
+    "keys": [],
+    "spec": null,
+    "images": [
+      "172.16.101.10:5000/kubevirt/cdi-controller:v1.66.1"
+    ]
+  },
+  {
+    "identity": {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "namespace": "cdi",
+      "name": "cdi-operator",
+      "uid": "691c6b70-aa27-4e6d-820d-274b71b4521d"
+    },
+    "keys": [],
+    "spec": null,
+    "images": [
+      "172.16.101.10:5000/kubevirt/cdi-operator:v1.66.1"
+    ]
+  },
+  {
+    "identity": {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "namespace": "cdi",
+      "name": "cdi-uploadproxy",
+      "uid": "c8e1a4f8-11ab-420f-aa85-2833c96fb0db"
+    },
+    "keys": [],
+    "spec": null,
+    "images": [
+      "172.16.101.10:5000/kubevirt/cdi-uploadproxy:v1.66.1"
+    ]
+  }
+]

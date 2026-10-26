@@ -1,0 +1,30 @@
+{
+  "step": "init-platform",
+  "state": "PASS",
+  "started_at": "2026-10-24T10:19:13.100411+00:00",
+  "service_or_vm_changes": 0,
+  "source_mutations": 0,
+  "layer_downloads": 0,
+  "tag_writes": 0,
+  "exit": 0,
+  "private_raw_stdout_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/image-init-platform.stdout",
+  "private_raw_stderr_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/image-init-platform.stderr",
+  "result": {
+    "ID": "6def126d-1f1d-4af6-8f09-57369e5a511a",
+    "TenantID": "",
+    "InstallationID": "01a168ce-29f8-77b2-aa8e-b980545b6113",
+    "ProjectName": "vm-mvp-v24-platform-01a168ce",
+    "RegistryAuthority": "172.16.101.10:30003",
+    "State": "available",
+    "Scope": "platform",
+    "Reason": "",
+    "ProjectID": 18,
+    "Version": 3,
+    "PullCredentialGeneration": 0,
+    "CreatedAt": "2026-10-24T18:19:13.674793+08:00",
+    "UpdatedAt": "2026-10-24T18:19:15.720274+08:00"
+  },
+  "idempotency_key": "8e01602e-0179-4e85-9e60-f8f84d31d40d",
+  "send_attempts": 1,
+  "finished_at": "2026-10-24T10:19:15.760277+00:00"
+}

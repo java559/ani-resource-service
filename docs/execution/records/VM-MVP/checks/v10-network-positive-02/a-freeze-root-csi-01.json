@@ -1,0 +1,70 @@
+{
+  "result": "PASS_EXPLICIT_MEMBER_PHASE_ORIGINAL_OUTCOME_RECORDED",
+  "phase": "freeze-root-csi",
+  "member": "a",
+  "task_name": "vm-mvp-v10-positive-02-01a168ce",
+  "started_at": "2026-10-24T23:41:43.054257+00:00",
+  "runner_sha256": "8759da3114713987d6069bafdab8f75302a7d557b34125ba0c8bd5411f984282",
+  "plan_sha256": "d876c2bd7a6776edd79b4c5243c026aca07e93931c788c47a7ff8c31c3259907",
+  "calls": [
+    {
+      "n": 1,
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "n": 2,
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "outcome": "RESPONDED",
+      "http_status": 200
+    }
+  ],
+  "helper_events": [
+    {
+      "phase": "ROOT_BACKEND_FROZEN",
+      "vm_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+      "operation_id": "b833020e-26a7-4d0c-92b1-67ecb8546904",
+      "current": {
+        "id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+        "name": "vm-mvp-v10-positive-02-a-01a168ce",
+        "version": "1",
+        "desiredState": "Running",
+        "observedState": "Running",
+        "reason": "",
+        "lastOperationId": "b833020e-26a7-4d0c-92b1-67ecb8546904",
+        "closing": false
+      }
+    }
+  ],
+  "business_send_attempts": 0,
+  "guest_actions": 0,
+  "placement_mutations": 0,
+  "service_changes": 0,
+  "new_PG_or_fixture": false,
+  "credentials_or_hashes_public": false,
+  "protected_before": {
+    "windows_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "windows_vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "windows_vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "windows_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "source_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+    "source_content_sha256": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+    "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "nad_config_sha256": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "vm_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+  "operation_id": "b833020e-26a7-4d0c-92b1-67ecb8546904",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T23:41:52.721015+00:00",
+  "heavy_lock_released": true
+}

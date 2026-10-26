@@ -1,0 +1,1 @@
+{"result": "PASS", "api_calls": 0, "native_calls": 0, "ceph_calls": 0, "checks": ["target-UID-owned-cross-namespace-clone", "foreign-source-rejected", "PV-claim-UID-and-name-namespace", "bidirectional-reservation", "foreign-pool-rejected", "missing-handle-not-measured", "final-ready-not-unready", "public-no-clone-auth-private-unchanged"]}

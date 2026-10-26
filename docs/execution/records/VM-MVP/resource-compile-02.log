@@ -1,0 +1,56 @@
+source manifest verified
+test "$(/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf --version)" = "1.60.0"
+test "$(go version -m /home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf | awk '$1 == "mod" {print $2 "@" $3; exit}')" = "github.com/bufbuild/buf@v1.60.0"
+/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf lint
+/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf build
+/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf generate --template buf.gen.yaml
+BUF=/home/chabking/workspace/ani-resource-service-runs/rsmod-20260921T1640Z/baseline/.tools/bin/buf TMPDIR=${TMPDIR:-/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-02/.work} ./scripts/generate-instance-api
+go: downloading k8s.io/apimachinery v0.36.0
+go: downloading k8s.io/client-go v0.36.0
+go: downloading gopkg.in/evanphx/json-patch.v4 v4.13.0
+go: downloading github.com/go-kratos/kratos/contrib/otel/v3 v3.0.0-20260515082355-1ddb58e407c5
+go: downloading github.com/go-kratos/kratos/v3 v3.0.0
+go: downloading github.com/prometheus/client_golang v1.24.1
+go: downloading go.opentelemetry.io/otel v1.45.0
+go: downloading go.opentelemetry.io/otel/exporters/prometheus v0.66.0
+go: downloading go.opentelemetry.io/otel/metric v1.45.0
+go: downloading go.opentelemetry.io/otel/sdk/metric v1.45.0
+go: downloading go.opentelemetry.io/otel/sdk v1.45.0
+go: downloading github.com/zhangzhe-ctrl/ani-governance/api/quota v0.0.0-20261017184327-1c605c793b88
+go: downloading go.uber.org/automaxprocs v1.6.0
+go: downloading k8s.io/klog/v2 v2.140.0
+go: downloading k8s.io/utils v0.0.0-20260210185600-b8788abfbbc2
+go: downloading k8s.io/kube-openapi v0.0.0-20260317180543-43fb72c5454a
+go: downloading sigs.k8s.io/structured-merge-diff/v6 v6.3.2
+go: downloading github.com/spf13/pflag v1.0.9
+go: downloading go.yaml.in/yaml/v2 v2.4.4
+go: downloading go.opentelemetry.io/otel/trace v1.45.0
+go: downloading github.com/gorilla/mux v1.8.1
+go: downloading google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa
+go: downloading github.com/prometheus/common v0.70.1
+go: downloading github.com/prometheus/procfs v0.21.1
+go: downloading github.com/prometheus/otlptranslator v1.0.0
+go: downloading k8s.io/api v0.36.0
+go: downloading github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
+go: downloading github.com/go-playground/form/v4 v4.3.0
+go: downloading github.com/go-openapi/jsonreference v0.20.2
+go: downloading github.com/go-openapi/swag v0.23.0
+go: downloading github.com/mailru/easyjson v0.7.7
+go: downloading github.com/go-openapi/jsonpointer v0.21.0
+go: downloading github.com/josharian/intern v1.0.0
+go: downloading github.com/emicklei/go-restful/v3 v3.13.0
+?   	github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	[no test files]
+?   	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	[no test files]
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/compute	0.004s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/compute	0.008s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network	0.015s
+--- FAIL: TestVMManagedNADRequiresTrustedIdentityAndCanonicalConfig (0.00s)
+    kc_attachment_vm_test.go:98: trusted NAD plan {0          0} network provider: temporary
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network	0.152s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/network	0.007s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/server	2.263s
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/cmd/ani-resource-service	0.038s
+FAIL

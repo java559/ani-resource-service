@@ -1,0 +1,104 @@
+{
+  "actual_push_exit": 0,
+  "after": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_path": "/home/chabking/workspace/ani-resource-service/.git/worktrees/ani-resource-service3/index",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76",
+    "local_ref": "8589b66f1370d8811777a87f3b02f6acba144818",
+    "status_porcelain_sha256": "8a53d9ed940692dcc03bf72376e3f18e42b3ab6d612c50c9f135e603e32bfdfd"
+  },
+  "at": "2026-10-24T07:34:55.641864+00:00",
+  "authorization": "User permits future non-main code pushes without reapproval; Root explicitly authorized this exact commit/ref",
+  "before": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "index_path": "/home/chabking/workspace/ani-resource-service/.git/worktrees/ani-resource-service3/index",
+    "index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76",
+    "local_ref": "8589b66f1370d8811777a87f3b02f6acba144818",
+    "status_porcelain_sha256": "8a53d9ed940692dcc03bf72376e3f18e42b3ab6d612c50c9f135e603e32bfdfd"
+  },
+  "business_or_test_commands": 0,
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "ls-remote",
+        "--refs",
+        "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+        "refs/heads/codex/vm-mvp-resource-runtime-20261023"
+      ],
+      "elapsed_seconds": 6.164,
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stage": "remote-before",
+      "stderr": "",
+      "stdout": ""
+    },
+    {
+      "argv": [
+        "git",
+        "-c",
+        "core.hooksPath=/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-runtime-publish-01/hooks",
+        "push",
+        "--porcelain",
+        "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+        "refs/heads/codex/vm-mvp-resource-runtime-20261023:refs/heads/codex/vm-mvp-resource-runtime-20261023"
+      ],
+      "elapsed_seconds": 7.625,
+      "exit": 0,
+      "log_sha256": "94dc643c3326c9c4b77723e60ae927cc887f6a85332c9154d8fab0c4895c7e5c",
+      "stage": "push",
+      "stderr": "TASK_PRE_PUSH_PASS exact one-ref/create-only/SSH443/SHA/tree/parent\nremote: \nremote: Create a pull request for 'codex/vm-mvp-resource-runtime-20261023' on GitHub by visiting:        \nremote:      https://github.com/zhangzhe-ctrl/ani-resource-service/pull/new/codex/vm-mvp-resource-runtime-20261023        \nremote: \n",
+      "stdout": "To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git\n*\trefs/heads/codex/vm-mvp-resource-runtime-20261023:refs/heads/codex/vm-mvp-resource-runtime-20261023\t[new branch]\nDone\n"
+    },
+    {
+      "argv": [
+        "git",
+        "ls-remote",
+        "--refs",
+        "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+        "refs/heads/codex/vm-mvp-resource-runtime-20261023"
+      ],
+      "elapsed_seconds": 6.022,
+      "exit": 0,
+      "log_sha256": "4089da5a22a2151dee46adc0e947b138a616ba0f1e62e888ce537ff0a4c863c2",
+      "stage": "remote-after",
+      "stderr": "",
+      "stdout": "8589b66f1370d8811777a87f3b02f6acba144818\trefs/heads/codex/vm-mvp-resource-runtime-20261023\n"
+    }
+  ],
+  "commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "dirty_name_status_unchanged": true,
+  "existing_hook_directory": "/home/chabking/workspace/ani-resource-service/.git/hooks",
+  "existing_hooks_modified": false,
+  "finished_at": "2026-10-24T07:35:15.551057+00:00",
+  "force": false,
+  "head_unchanged": true,
+  "independent_remote_oid_verified": true,
+  "index_unchanged": true,
+  "local_ref_unchanged": true,
+  "main_merge_tag_release_image_push_deploy": false,
+  "parent": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+  "push_send_count": 1,
+  "ref": "refs/heads/codex/vm-mvp-resource-runtime-20261023",
+  "result": "PUBLISHED_EXACT_SHA",
+  "reused_gate_sources": [
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/full-runtime-gate-01/resource-gate.json",
+      "sha256": "f80e1471ea7a4d2604db04c58eea74097e18e9976d4385c95d34c4b2c5813539"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/resource-oci-built.json",
+      "sha256": "4923e4d3f1281ad3d256f61626ff464106b229f33df1c6057c6677f584eff622"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-runtime-candidate-01/runtime-local-commit.json",
+      "sha256": "f77bd3bb9bb5b5453e9a8d18b1c01a527d2aac42dcec52f8940d3997329dafd6"
+    }
+  ],
+  "scope": "one exact Resource runtime commit/ref over SSH443 only",
+  "task_hook_path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/resource-runtime-publish-01/hooks/pre-push",
+  "task_hook_sha256": "e40d878342fb78cb81a181e1547260f8d7ddce0800e8098593ff21bbb9bfd030",
+  "tree": "e51622e689476c524ddd29776d1b217738822a21",
+  "url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "worktree_writes": 0
+}

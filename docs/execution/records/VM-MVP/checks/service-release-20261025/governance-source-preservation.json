@@ -1,0 +1,1297 @@
+{
+  "candidate": {
+    "commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+    "parent": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "parent_is_old_base_not_integrated_runtime": true,
+    "tree": "6f5b9bb431b9c6f66217d359638a2da3ee6ac93f"
+  },
+  "created_at": "2026-10-24T19:56:38.912387+00:00",
+  "finding": {
+    "deleted_production_files": [
+      "app/admin/service/internal/commandcontract/modeldev.go",
+      "app/admin/service/internal/data/modeldev_gpu_delivery.go",
+      "app/admin/service/internal/data/modeldev_gpu_quota.go",
+      "app/admin/service/internal/data/modeldev_registration_client.go",
+      "app/admin/service/internal/data/modeldev_registration_source.go",
+      "app/admin/service/internal/server/modeldev_registration_http.go",
+      "app/admin/service/internal/service/modeldev_registration_service.go"
+    ],
+    "direct_rollout_allowed": false,
+    "exact_reverted_overlay_file_count": 43,
+    "lost_behavior": [
+      "ResumeModelRegistration HTTP/RPC and client/source/service registration recovery path",
+      "ModelDev GPU quota acceptance/delivery and managed ModelDev stored command support",
+      "Persisted model registration and execution history response fields",
+      "Bounded ModelDev/Model-import-specific HTTP budgets; candidate falls back to ordinary timeout path"
+    ],
+    "shared_vm_overlay_overlap_count": 5,
+    "summary": "a64 is based on a1dcdd, omitting the ModelDev0715 integration already present in deployed Gov. This is a concrete non-VM behavior regression, not an expected VM/module-pin-only delta.",
+    "unchanged_overlay_file_count": 0
+  },
+  "fixed_diff_classification": {
+    "all_compared_overlay_files": [
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "763128f275fa26264423047cb4d0b34300c372fc1c220471be26166f40ce60b5",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "8654655d335cbaa19501e567a5127d3c354abe9fe7670332e3060a5d1bc25b92",
+        "path": "api/gen/go/admin/service/v1/i_modeldev.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "060c493e90e0b484c44600b5388da04958a09de40648787cc5f16f2169366cbe",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "3c331bd1557f34835bd8f519e94fad60608baef5829065af64a22a07a23814f5",
+        "path": "api/gen/go/admin/service/v1/i_modeldev_grpc.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "7c0a878776500128ae7b27aa9b8b68c6b8b3bac2ff3013bfcd3c1a0ca7751929",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "c15e486a20473adfeb73e46dfc8ad11fedb2079264d7e6caaa3151de48cc634d",
+        "path": "api/gen/go/admin/service/v1/i_modeldev_http.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "367482f13545b7dcdb5125718d5a75009edcd8e944f9f02b65e841b7d505b801",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "2cf29046845a7d2a591f92f3f353bc342c970f978ae6ea4c124ee015754f8918",
+        "path": "api/gen/go/modeldev/service/v1/execution.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "63d38b322b28961ed89d968e2dc6c5e02eb17b0a75b409be4a50057fb7460fe0",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "604b6215e08e431e3a1a16ee431ddd21f4a83874e0dee8eb4a7698998fdeb82d",
+        "path": "api/protos/admin/service/v1/i_modeldev.proto"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "faa922598d987c9c04d108b320cd196dc4257567f4c9fb8bb4fb98a94bf71d46",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "6908282b6fe51bfbc6cc828afd560c6b645e8ddff8fa38d07e4d7531b2d12951",
+        "path": "api/protos/modeldev/service/v1/execution.proto"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "453791b9ebef904263f87952e7d552eab8da71148c7fb0cda9f49353aee253c0",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "0e740cef87bf768bbfa089ae3a95ec87f558c34bcb93faa286dfd2087361e90f",
+        "path": "app/admin/service/cmd/server/assets/openapi.yaml"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "cd3ce7d0e6398ad640166dd0e432c65208bf1dfcd09f6b9e1a0029dfac74b7da",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "54472e761204a1be4a746e67a6ed6b9fdd935b9b691096e7a9867f988f44942e",
+        "path": "app/admin/service/cmd/server/wiring_ent.go"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "6c6fcd682b230c9cc32eecc0dee58e94905895d294d896ba4ec93883f952d019",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "f97b8f46dab64c3e85a584dc5f738cde1cf439b4b93a7df8c6117d15b340abd6",
+        "path": "app/admin/service/internal/commandcontract/contract.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "917a830c5517fff63ea16abbbffe8ed13c470ba31e0975a78c2d9311a546ffe7",
+        "path": "app/admin/service/internal/commandcontract/modeldev.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d7b9d111a4736c36dbe8215db0ed6febb99c65e3f091099e5f20311d8ed83250",
+        "path": "app/admin/service/internal/commandcontract/modeldev_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "3f87f8c431bfce91952d05bec138677bc96b2c85c37821c5252c54d422e06434",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "69e8e9688fcc36a899662234f37334f308ba7b7c30e38c9006888ecca3fe29e6",
+        "path": "app/admin/service/internal/data/model_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "ae903457ac1cb80266edf7545be73f33983b756cc12646f75da9bc763a88da1b",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "5777019afe9e0b5b62b143cce17a645453650fe514a4a26ec702282e4cf3b388",
+        "path": "app/admin/service/internal/data/model_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "df0d8666f198c846115f1448eaae247646a1fc64f611e966904169da018dc4ad",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "d698f6eb27aa5615a5e40faad1c91deeab8d708be61aaa173b9e343e67ad285e",
+        "path": "app/admin/service/internal/data/modeldev_acceptance_repo.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "62bd2d6fa98b9ae8175667d5c49fb7efb9da68845d4fcfb3202573343a225b4b",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "967f03a0c2602d88398be7919c19cc6ded21a01b277170b2485c631a7cd9dd78",
+        "path": "app/admin/service/internal/data/modeldev_authorization.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "295618d368b6fda982a2972260b898177a63be4ff36bd0c0463463ff23639ffe",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "e197d4af4e2694771f002ddfd59a033603b760cd7a6a6a469c9aa5647d1d7311",
+        "path": "app/admin/service/internal/data/modeldev_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d1de888e546f6558bfc21be1521b8719444616ecd27cae5734fb44162c8c48f5",
+        "path": "app/admin/service/internal/data/modeldev_client_gpu_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "65577ed016f41df9706b166e449094ea33f2359bbd3fe21395efe7d65ec1598c",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "b3dfd0449464a069f43edaa2f988ab734e40bad034e6c3288ff73bd2b6311329",
+        "path": "app/admin/service/internal/data/modeldev_dispatch_repo.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "d609e8f1f1a647d7e5288398e9ab3beaf08006788f9be339796780e2cf762311",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "420f917f245f7b8317ef8fd6ce329aef87d9439562f08d01becee49c924f9e79",
+        "path": "app/admin/service/internal/data/modeldev_finetuning_authorization_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "1ae27513d523b1e703bf5d03bca63b89ca897e5126552a110ab60abef935245e",
+        "path": "app/admin/service/internal/data/modeldev_gpu_acceptance_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "25b279aa8675bb0911fc3bcab5f64c885cc03fbc68afc7df2c587257cf71f71f",
+        "path": "app/admin/service/internal/data/modeldev_gpu_delivery.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "eb96270c5d4a106ef18f752dd7d8399e6b24ea04a07ef8d88f1f662ba01617f1",
+        "path": "app/admin/service/internal/data/modeldev_gpu_quota.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "3d7655cfc799590754723c58d38b95a9bc590c7ec22ef70dca7c6d7bc15b697c",
+        "path": "app/admin/service/internal/data/modeldev_gpu_quota_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "976bdcd77003994041035d00d12be36cd3a365545e6c3362e01a5d5355e47ba6",
+        "path": "app/admin/service/internal/data/modeldev_history_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "1632d0951bfd6c2cd1d695e92037737b49b97d9d8ea4cd28989f05883733da8f",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "1f4b1076e9c375ae8cfa19b4835501a4bf10cd8199a0c074160287d1b98d72c0",
+        "path": "app/admin/service/internal/data/modeldev_query_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "648e2b22c4f57628b2ab6d0b1bb37103062e560ab32a327671f903c757c2ccb8",
+        "path": "app/admin/service/internal/data/modeldev_registration_authorization_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "7625ac460a1dae26b990e29c3aefa7eefabbb5f8b9f421bf0ac6649d20483512",
+        "path": "app/admin/service/internal/data/modeldev_registration_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "70bcd0eba08dc2aa75538070966904be47a003a12791fb4133dece427e4bf74a",
+        "path": "app/admin/service/internal/data/modeldev_registration_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d9f80cc399ea693697cf48dd8b8ab5d283fa37b16b8731e4d7ebc95432f28c87",
+        "path": "app/admin/service/internal/data/modeldev_registration_source.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "3bc2b6ac257c39ba22a44dd06ecfd7b483b1aa1c1911e093732a4fc74f0737fa",
+        "path": "app/admin/service/internal/data/modeldev_registration_source_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "9397d62ce9cb4a44518333b31acfa50f31094a1fe57c23d6ef500b4a6f7cdb59",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "5388bab2b035477edc5fe12dc887a52de2ffadfc19310c98dad33745ac9e3a29",
+        "path": "app/admin/service/internal/data/quota_ent.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "455729211b61409822dcde21b327ed5b793fb9a06eb674db9e96931012b24ea7",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "45165cd0fb10e51d1efbf6af55189d30adb0f8a79a3b5c2bbf9db453f7b986ad",
+        "path": "app/admin/service/internal/server/instance_timeout.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "40e13f045720f99f5747a958371aee89f30c6db21e84ebfaeb3b20857203e4ad",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "535b34daee7386e9cd1772d059d3b7eb049bca7471f4af44ae60ca805be2dca6",
+        "path": "app/admin/service/internal/server/instance_timeout_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "20a10721249e7bc63c7eee82032d8a9a5c57b57f79418baa97aee80fd2a12dfd",
+        "path": "app/admin/service/internal/server/modeldev_artifact_only_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "eb20e658e3883d05dfe0ed557cfd736fe13f0934cb79c711bd9407c883898e82",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "2dce4d8e2260fe41eab3263bd69a4c8bbf34a07efdfe4fec990f792bc41e31d3",
+        "path": "app/admin/service/internal/server/modeldev_http.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "2a2bff1cc03226748d6b95e534d6998a3665dbc8036a4c4377b6331525dc02ef",
+        "path": "app/admin/service/internal/server/modeldev_registration_http.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "45d42abde4ab43b4f305bd2b776cc180a2c8c320a853336a86b15f5961c2952d",
+        "path": "app/admin/service/internal/server/modeldev_registration_http_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "88ef8f56787b79f630cbb8122549530eac001b9462cbcf9fd8e5cfaca5d0ee4a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "b95889d20444e79d16595856062416bef6a451331fb5840c5c163fb40da2f8a8",
+        "path": "app/admin/service/internal/server/quota_fixture_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "cd72b7cd958521ad62e6dba3b738520c3cad7a20e62b90532a8ca6c5d4edeeea",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "0f360c8177631201a5730d77259d1aae4cefa2cfcbe62bfc4c422cafa8516431",
+        "path": "app/admin/service/internal/server/quota_internal_server.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "fae36f4494f6a898bb01c989c28d39ef3b815db40c114b15b242493cb4bca62f",
+        "path": "app/admin/service/internal/server/quota_modeldev_config_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "e9fe46cef0ea82739590f9e83d39128ca7d7714ce54657991da883841c1d3ab8",
+        "path": "app/admin/service/internal/server/quota_modeldev_mtls_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "e39aef81b147590c5d6105097292367e9d2d456415ef4c2899422ba5e646b039",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "8e55ad66f6605ad964cbf3c9da8e166f8132a61d945ae462438ef247a2322603",
+        "path": "app/admin/service/internal/server/rest_server.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "334bbd099851a50e3d350ea15a5824c2fa4781afabb7c65512eb2bd0c5718877",
+        "path": "app/admin/service/internal/service/modeldev_gpu_usage_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "af372575bce4ec2556399471276933e4b40a2a9cbee01c2516d40c791c9a7a1a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "572167cb03a6c10352b596a934a83eaf82cba12eacd049b3bec595940f60ce4c",
+        "path": "app/admin/service/internal/service/modeldev_query_service.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "c23ffb5aa3e14dbacaa7dae2ce2cae0875cb62b9e2960bf1d898a50e710ec5fc",
+        "path": "app/admin/service/internal/service/modeldev_registration_service.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "3f52620072111e926c7070d01f127c5d2876b118558b7f7d1fa771fa5e5b9d46",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "3a268e77291c8e6d39410145646be30ceac4e021aac5759690a46c2007168c8c",
+        "path": "app/admin/service/internal/service/modeldev_service.go"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "d83a6886f50b27dc20f743ae037ed34acd810f6a3a01321633703afc75471454",
+        "path": "go.mod"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "a7e4f7c8868e2d6df1073a31b7b3a8672f87c6c593b3761e2c9365721bf06754",
+        "path": "go.sum"
+      }
+    ],
+    "expected_vm_module_pin_delta": [
+      "ani-resource-service root13fa2b465960 ->01c079f1787f",
+      "add ani-resource-service/api/vm/console0a53b99c8d9f",
+      "ani-session-gateway/api d889f9490b84 ->811cc3839244"
+    ],
+    "goal_vm_increment_from_a1dcdd": {
+      "file_count": 72,
+      "interpretation": "Existing exact VM commit delta; shared paths listed separately below must be rebased onto preserved integration, not replaced wholesale",
+      "paths": [
+        "api/gen/go/admin/service/v1/i_vm.pb.go",
+        "api/gen/go/admin/service/v1/i_vm_grpc.pb.go",
+        "api/gen/go/admin/service/v1/i_vm_http.pb.go",
+        "api/gen/go/compute/service/v1/compute.pb.go",
+        "api/gen/go/identity/service/v1/module.pb.go",
+        "api/gen/go/vm/service/v1/vm.pb.go",
+        "api/gen/go/vm/service/v1/vm.pb.redact.go",
+        "api/protos/admin/service/v1/i_vm.proto",
+        "api/protos/compute/service/v1/compute.proto",
+        "api/protos/identity/service/v1/module.proto",
+        "api/protos/vm/service/v1/vm.proto",
+        "app/admin/service/cmd/server/assets/modeldev_openapi_test.go",
+        "app/admin/service/cmd/server/assets/openapi.yaml",
+        "app/admin/service/cmd/server/wiring_ent.go",
+        "app/admin/service/internal/commandcontract/actions.go",
+        "app/admin/service/internal/commandcontract/contract.go",
+        "app/admin/service/internal/commandcontract/vm.go",
+        "app/admin/service/internal/data/compute_client.go",
+        "app/admin/service/internal/data/ent/api/api.go",
+        "app/admin/service/internal/data/ent/migrate/schema.go",
+        "app/admin/service/internal/data/ent/planmodule/planmodule.go",
+        "app/admin/service/internal/data/ent/quotaoperation/quotaoperation.go",
+        "app/admin/service/internal/data/ent/schema/api.go",
+        "app/admin/service/internal/data/ent/schema/plan_module.go",
+        "app/admin/service/internal/data/ent/schema/quota_operation.go",
+        "app/admin/service/internal/data/instance_client.go",
+        "app/admin/service/internal/data/instance_session_client.go",
+        "app/admin/service/internal/data/quota_ledger_repo.go",
+        "app/admin/service/internal/data/resource_clients.go",
+        "app/admin/service/internal/data/tenant_access_checker.go",
+        "app/admin/service/internal/data/tenant_access_checker_sqlite_test.go",
+        "app/admin/service/internal/data/vm_authorization.go",
+        "app/admin/service/internal/data/vm_client.go",
+        "app/admin/service/internal/data/vm_delete_guard.go",
+        "app/admin/service/internal/server/compute_http_test.go",
+        "app/admin/service/internal/server/instance_input.go",
+        "app/admin/service/internal/server/vm_http.go",
+        "app/admin/service/internal/server/vm_http_test.go",
+        "app/admin/service/internal/service/command_contract.go",
+        "app/admin/service/internal/service/compute_catalog_test.go",
+        "app/admin/service/internal/service/gpu_acceptance.go",
+        "app/admin/service/internal/service/gpu_acceptance_test.go",
+        "app/admin/service/internal/service/gpu_use_authorization.go",
+        "app/admin/service/internal/service/instance_service.go",
+        "app/admin/service/internal/service/quota_dispatch_worker.go",
+        "app/admin/service/internal/service/resource_adapter.go",
+        "app/admin/service/internal/service/vm_binding.go",
+        "app/admin/service/internal/service/vm_binding_test.go",
+        "app/admin/service/internal/service/vm_delete.go",
+        "app/admin/service/internal/service/vm_guest.go",
+        "app/admin/service/internal/service/vm_guest_pg_test.go",
+        "app/admin/service/internal/service/vm_pg_test.go",
+        "app/admin/service/internal/service/vm_service.go",
+        "go.mod",
+        "go.sum",
+        "pkg/constants/module_mapping.go",
+        "pkg/constants/module_mapping_test.go",
+        "pkg/crypto/vm_guest.go",
+        "pkg/crypto/vm_guest_test.go",
+        "pkg/middleware/logging/api_audit_log.go",
+        "pkg/middleware/logging/instance_redaction_test.go",
+        "pkg/middleware/logging/logging.go",
+        "pkg/permcode/capability_gen.go",
+        "pkg/permcode/compute_catalog.go",
+        "pkg/permcode/permcode_test.go",
+        "scripts/finalize-aksk-openapi.py",
+        "scripts/ops/sql/register-vm-permissions.sql",
+        "scripts/tests/test_finalize_aksk_openapi.py",
+        "sql/bootstrap/catalog_test.go",
+        "tests/imagecontract/contract_test.go",
+        "tools/localdeps/gow/internal/pkg/module_inspector.go",
+        "tools/localdeps/gow/internal/pkg/module_inspector_test.go"
+      ]
+    },
+    "inference_specific_files": {
+      "compared_count": 47,
+      "limit": "Source-specific equality only; shared command/client/module changes are classified above; no runtime behavior acceptance claimed",
+      "paths": [
+        "api/gen/go/admin/service/v1/i_inference.pb.go",
+        "api/gen/go/admin/service/v1/i_inference_diagnostics.pb.go",
+        "api/gen/go/admin/service/v1/i_inference_diagnostics_grpc.pb.go",
+        "api/gen/go/admin/service/v1/i_inference_diagnostics_http.pb.go",
+        "api/gen/go/admin/service/v1/i_inference_grpc.pb.go",
+        "api/gen/go/admin/service/v1/i_inference_http.pb.go",
+        "api/gen/go/inference/service/v1/diagnostics.pb.go",
+        "api/gen/go/inference/service/v1/owner.pb.go",
+        "api/gen/go/inference/service/v1/service_policy.pb.go",
+        "api/gen/go/inference/view/v1/view.pb.go",
+        "api/protos/admin/service/v1/i_inference.proto",
+        "api/protos/admin/service/v1/i_inference_diagnostics.proto",
+        "api/protos/inference/service/v1/diagnostics.proto",
+        "api/protos/inference/service/v1/owner.proto",
+        "api/protos/inference/service/v1/service_policy.proto",
+        "api/protos/inference/view/v1/view.proto",
+        "app/admin/service/internal/commandcontract/inference.go",
+        "app/admin/service/internal/data/inference_authorization.go",
+        "app/admin/service/internal/data/inference_client.go",
+        "app/admin/service/internal/data/inference_diagnostics.go",
+        "app/admin/service/internal/data/inference_metrics.go",
+        "app/admin/service/internal/data/inference_metrics_test.go",
+        "app/admin/service/internal/data/inference_policy.go",
+        "app/admin/service/internal/server/deferred_inference_routes_test.go",
+        "app/admin/service/internal/server/inference_compute_joint_pg_test.go",
+        "app/admin/service/internal/server/inference_diagnostics.go",
+        "app/admin/service/internal/server/inference_diagnostics_query_test.go",
+        "app/admin/service/internal/server/inference_http.go",
+        "app/admin/service/internal/server/inference_http_test.go",
+        "app/admin/service/internal/server/inference_policy_http.go",
+        "app/admin/service/internal/server/inference_policy_http_test.go",
+        "app/admin/service/internal/server/model_inference_flat_request_test.go",
+        "app/admin/service/internal/service/inference_compute_binding.go",
+        "app/admin/service/internal/service/inference_contract_test.go",
+        "app/admin/service/internal/service/inference_delete.go",
+        "app/admin/service/internal/service/inference_diagnostics.go",
+        "app/admin/service/internal/service/inference_dispatch.go",
+        "app/admin/service/internal/service/inference_gpu_pg_test.go",
+        "app/admin/service/internal/service/inference_log_level.go",
+        "app/admin/service/internal/service/inference_log_level_test.go",
+        "app/admin/service/internal/service/inference_metrics.go",
+        "app/admin/service/internal/service/inference_policy.go",
+        "app/admin/service/internal/service/inference_policy_test.go",
+        "app/admin/service/internal/service/inference_queries.go",
+        "app/admin/service/internal/service/inference_service.go",
+        "app/admin/service/internal/service/inference_service_test.go",
+        "app/admin/service/internal/service/inference_view_test.go"
+      ],
+      "result": "BYTE_IDENTICAL_OLD_INTEGRATED_TO_A64"
+    },
+    "module_pins": {
+      "candidate": {
+        "github.com/zhangzhe-ctrl/ani-accelerator-service": "v0.0.0-20261022031933-4a682ac73da1",
+        "github.com/zhangzhe-ctrl/ani-governance/api/quota": "v0.0.0-20261017184327-1c605c793b88",
+        "github.com/zhangzhe-ctrl/ani-modeldev-service": "v0.0.0-20261021184454-44188466290f",
+        "github.com/zhangzhe-ctrl/ani-observability-service/api": "v0.1.1",
+        "github.com/zhangzhe-ctrl/ani-resource-service": "v0.0.0-20261024051201-01c079f1787f",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal": "v0.0.0-20261013075021-0937f5aa9c6c",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console": "v0.0.0-20261023185414-0a53b99c8d9f",
+        "github.com/zhangzhe-ctrl/ani-session-gateway/api": "v0.1.1-0.20261024051540-811cc3839244"
+      },
+      "old_runtime": {
+        "github.com/zhangzhe-ctrl/ani-accelerator-service": "v0.0.0-20261022031933-4a682ac73da1",
+        "github.com/zhangzhe-ctrl/ani-governance/api/quota": "v0.0.0-20261017184327-1c605c793b88",
+        "github.com/zhangzhe-ctrl/ani-modeldev-service": "v0.0.0-20261022185239-0814ae3ef0b7",
+        "github.com/zhangzhe-ctrl/ani-observability-service/api": "v0.1.1",
+        "github.com/zhangzhe-ctrl/ani-resource-service": "v0.0.0-20261022081320-13fa2b465960",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/instance/terminal": "v0.0.0-20261013075021-0937f5aa9c6c",
+        "github.com/zhangzhe-ctrl/ani-session-gateway/api": "v0.1.1-0.20261013075651-d889f9490b84"
+      }
+    },
+    "non_vm_overlay_reverted_to_a1dcdd": [
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "763128f275fa26264423047cb4d0b34300c372fc1c220471be26166f40ce60b5",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "8654655d335cbaa19501e567a5127d3c354abe9fe7670332e3060a5d1bc25b92",
+        "path": "api/gen/go/admin/service/v1/i_modeldev.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "060c493e90e0b484c44600b5388da04958a09de40648787cc5f16f2169366cbe",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "3c331bd1557f34835bd8f519e94fad60608baef5829065af64a22a07a23814f5",
+        "path": "api/gen/go/admin/service/v1/i_modeldev_grpc.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "7c0a878776500128ae7b27aa9b8b68c6b8b3bac2ff3013bfcd3c1a0ca7751929",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "c15e486a20473adfeb73e46dfc8ad11fedb2079264d7e6caaa3151de48cc634d",
+        "path": "api/gen/go/admin/service/v1/i_modeldev_http.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "367482f13545b7dcdb5125718d5a75009edcd8e944f9f02b65e841b7d505b801",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "2cf29046845a7d2a591f92f3f353bc342c970f978ae6ea4c124ee015754f8918",
+        "path": "api/gen/go/modeldev/service/v1/execution.pb.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "63d38b322b28961ed89d968e2dc6c5e02eb17b0a75b409be4a50057fb7460fe0",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "604b6215e08e431e3a1a16ee431ddd21f4a83874e0dee8eb4a7698998fdeb82d",
+        "path": "api/protos/admin/service/v1/i_modeldev.proto"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "faa922598d987c9c04d108b320cd196dc4257567f4c9fb8bb4fb98a94bf71d46",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "6908282b6fe51bfbc6cc828afd560c6b645e8ddff8fa38d07e4d7531b2d12951",
+        "path": "api/protos/modeldev/service/v1/execution.proto"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "917a830c5517fff63ea16abbbffe8ed13c470ba31e0975a78c2d9311a546ffe7",
+        "path": "app/admin/service/internal/commandcontract/modeldev.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d7b9d111a4736c36dbe8215db0ed6febb99c65e3f091099e5f20311d8ed83250",
+        "path": "app/admin/service/internal/commandcontract/modeldev_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "3f87f8c431bfce91952d05bec138677bc96b2c85c37821c5252c54d422e06434",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "69e8e9688fcc36a899662234f37334f308ba7b7c30e38c9006888ecca3fe29e6",
+        "path": "app/admin/service/internal/data/model_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "ae903457ac1cb80266edf7545be73f33983b756cc12646f75da9bc763a88da1b",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "5777019afe9e0b5b62b143cce17a645453650fe514a4a26ec702282e4cf3b388",
+        "path": "app/admin/service/internal/data/model_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "df0d8666f198c846115f1448eaae247646a1fc64f611e966904169da018dc4ad",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "d698f6eb27aa5615a5e40faad1c91deeab8d708be61aaa173b9e343e67ad285e",
+        "path": "app/admin/service/internal/data/modeldev_acceptance_repo.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "62bd2d6fa98b9ae8175667d5c49fb7efb9da68845d4fcfb3202573343a225b4b",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "967f03a0c2602d88398be7919c19cc6ded21a01b277170b2485c631a7cd9dd78",
+        "path": "app/admin/service/internal/data/modeldev_authorization.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "295618d368b6fda982a2972260b898177a63be4ff36bd0c0463463ff23639ffe",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "e197d4af4e2694771f002ddfd59a033603b760cd7a6a6a469c9aa5647d1d7311",
+        "path": "app/admin/service/internal/data/modeldev_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d1de888e546f6558bfc21be1521b8719444616ecd27cae5734fb44162c8c48f5",
+        "path": "app/admin/service/internal/data/modeldev_client_gpu_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "65577ed016f41df9706b166e449094ea33f2359bbd3fe21395efe7d65ec1598c",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "b3dfd0449464a069f43edaa2f988ab734e40bad034e6c3288ff73bd2b6311329",
+        "path": "app/admin/service/internal/data/modeldev_dispatch_repo.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "d609e8f1f1a647d7e5288398e9ab3beaf08006788f9be339796780e2cf762311",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "420f917f245f7b8317ef8fd6ce329aef87d9439562f08d01becee49c924f9e79",
+        "path": "app/admin/service/internal/data/modeldev_finetuning_authorization_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "1ae27513d523b1e703bf5d03bca63b89ca897e5126552a110ab60abef935245e",
+        "path": "app/admin/service/internal/data/modeldev_gpu_acceptance_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "25b279aa8675bb0911fc3bcab5f64c885cc03fbc68afc7df2c587257cf71f71f",
+        "path": "app/admin/service/internal/data/modeldev_gpu_delivery.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "eb96270c5d4a106ef18f752dd7d8399e6b24ea04a07ef8d88f1f662ba01617f1",
+        "path": "app/admin/service/internal/data/modeldev_gpu_quota.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "3d7655cfc799590754723c58d38b95a9bc590c7ec22ef70dca7c6d7bc15b697c",
+        "path": "app/admin/service/internal/data/modeldev_gpu_quota_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "976bdcd77003994041035d00d12be36cd3a365545e6c3362e01a5d5355e47ba6",
+        "path": "app/admin/service/internal/data/modeldev_history_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "1632d0951bfd6c2cd1d695e92037737b49b97d9d8ea4cd28989f05883733da8f",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "1f4b1076e9c375ae8cfa19b4835501a4bf10cd8199a0c074160287d1b98d72c0",
+        "path": "app/admin/service/internal/data/modeldev_query_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "648e2b22c4f57628b2ab6d0b1bb37103062e560ab32a327671f903c757c2ccb8",
+        "path": "app/admin/service/internal/data/modeldev_registration_authorization_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "7625ac460a1dae26b990e29c3aefa7eefabbb5f8b9f421bf0ac6649d20483512",
+        "path": "app/admin/service/internal/data/modeldev_registration_client.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "70bcd0eba08dc2aa75538070966904be47a003a12791fb4133dece427e4bf74a",
+        "path": "app/admin/service/internal/data/modeldev_registration_client_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "d9f80cc399ea693697cf48dd8b8ab5d283fa37b16b8731e4d7ebc95432f28c87",
+        "path": "app/admin/service/internal/data/modeldev_registration_source.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "3bc2b6ac257c39ba22a44dd06ecfd7b483b1aa1c1911e093732a4fc74f0737fa",
+        "path": "app/admin/service/internal/data/modeldev_registration_source_pg_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "9397d62ce9cb4a44518333b31acfa50f31094a1fe57c23d6ef500b4a6f7cdb59",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "5388bab2b035477edc5fe12dc887a52de2ffadfc19310c98dad33745ac9e3a29",
+        "path": "app/admin/service/internal/data/quota_ent.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "455729211b61409822dcde21b327ed5b793fb9a06eb674db9e96931012b24ea7",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "45165cd0fb10e51d1efbf6af55189d30adb0f8a79a3b5c2bbf9db453f7b986ad",
+        "path": "app/admin/service/internal/server/instance_timeout.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "40e13f045720f99f5747a958371aee89f30c6db21e84ebfaeb3b20857203e4ad",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "535b34daee7386e9cd1772d059d3b7eb049bca7471f4af44ae60ca805be2dca6",
+        "path": "app/admin/service/internal/server/instance_timeout_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "20a10721249e7bc63c7eee82032d8a9a5c57b57f79418baa97aee80fd2a12dfd",
+        "path": "app/admin/service/internal/server/modeldev_artifact_only_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "eb20e658e3883d05dfe0ed557cfd736fe13f0934cb79c711bd9407c883898e82",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "2dce4d8e2260fe41eab3263bd69a4c8bbf34a07efdfe4fec990f792bc41e31d3",
+        "path": "app/admin/service/internal/server/modeldev_http.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "2a2bff1cc03226748d6b95e534d6998a3665dbc8036a4c4377b6331525dc02ef",
+        "path": "app/admin/service/internal/server/modeldev_registration_http.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "45d42abde4ab43b4f305bd2b776cc180a2c8c320a853336a86b15f5961c2952d",
+        "path": "app/admin/service/internal/server/modeldev_registration_http_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "88ef8f56787b79f630cbb8122549530eac001b9462cbcf9fd8e5cfaca5d0ee4a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "b95889d20444e79d16595856062416bef6a451331fb5840c5c163fb40da2f8a8",
+        "path": "app/admin/service/internal/server/quota_fixture_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "cd72b7cd958521ad62e6dba3b738520c3cad7a20e62b90532a8ca6c5d4edeeea",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "0f360c8177631201a5730d77259d1aae4cefa2cfcbe62bfc4c422cafa8516431",
+        "path": "app/admin/service/internal/server/quota_internal_server.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "fae36f4494f6a898bb01c989c28d39ef3b815db40c114b15b242493cb4bca62f",
+        "path": "app/admin/service/internal/server/quota_modeldev_config_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "e9fe46cef0ea82739590f9e83d39128ca7d7714ce54657991da883841c1d3ab8",
+        "path": "app/admin/service/internal/server/quota_modeldev_mtls_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "e39aef81b147590c5d6105097292367e9d2d456415ef4c2899422ba5e646b039",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "8e55ad66f6605ad964cbf3c9da8e166f8132a61d945ae462438ef247a2322603",
+        "path": "app/admin/service/internal/server/rest_server.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "334bbd099851a50e3d350ea15a5824c2fa4781afabb7c65512eb2bd0c5718877",
+        "path": "app/admin/service/internal/service/modeldev_gpu_usage_test.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "af372575bce4ec2556399471276933e4b40a2a9cbee01c2516d40c791c9a7a1a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "572167cb03a6c10352b596a934a83eaf82cba12eacd049b3bec595940f60ce4c",
+        "path": "app/admin/service/internal/service/modeldev_query_service.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "D",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": null,
+        "old_integrated_change": "A",
+        "old_runtime_sha256": "c23ffb5aa3e14dbacaa7dae2ce2cae0875cb62b9e2960bf1d898a50e710ec5fc",
+        "path": "app/admin/service/internal/service/modeldev_registration_service.go"
+      },
+      {
+        "also_modified_by_vm_commit": false,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": true,
+        "candidate_sha256": "3f52620072111e926c7070d01f127c5d2876b118558b7f7d1fa771fa5e5b9d46",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "3a268e77291c8e6d39410145646be30ceac4e021aac5759690a46c2007168c8c",
+        "path": "app/admin/service/internal/service/modeldev_service.go"
+      }
+    ],
+    "shared_paths_changed_by_both_old_integration_and_vm": [
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "453791b9ebef904263f87952e7d552eab8da71148c7fb0cda9f49353aee253c0",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "0e740cef87bf768bbfa089ae3a95ec87f558c34bcb93faa286dfd2087361e90f",
+        "path": "app/admin/service/cmd/server/assets/openapi.yaml"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "cd3ce7d0e6398ad640166dd0e432c65208bf1dfcd09f6b9e1a0029dfac74b7da",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "54472e761204a1be4a746e67a6ed6b9fdd935b9b691096e7a9867f988f44942e",
+        "path": "app/admin/service/cmd/server/wiring_ent.go"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "6c6fcd682b230c9cc32eecc0dee58e94905895d294d896ba4ec93883f952d019",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "f97b8f46dab64c3e85a584dc5f738cde1cf439b4b93a7df8c6117d15b340abd6",
+        "path": "app/admin/service/internal/commandcontract/contract.go"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "b3db872d91e0df396f6a460e0cb95dcc8e91ccfb4d4a33c6f835ec53adac1671",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "d83a6886f50b27dc20f743ae037ed34acd810f6a3a01321633703afc75471454",
+        "path": "go.mod"
+      },
+      {
+        "also_modified_by_vm_commit": true,
+        "candidate_change_vs_old": "M",
+        "candidate_equals_a1dcdd_baseline": false,
+        "candidate_sha256": "b4c364a3617f2a9954971553e5228781d06f2f6efdc78e1d0b613e389c5d361a",
+        "old_integrated_change": "M",
+        "old_runtime_sha256": "a7e4f7c8868e2d6df1073a31b7b3a8672f87c6c593b3761e2c9365721bf06754",
+        "path": "go.sum"
+      }
+    ],
+    "unexpected_modeldev_pin_regression": "ani-modeldev-service0814ae3ef0b7 ->44188466290f"
+  },
+  "minimal_source_references": [
+    {
+      "matches": [
+        {
+          "line": 51,
+          "text": "func ManagedOwner(owner string) bool {"
+        },
+        {
+          "line": 60,
+          "text": "case ModelDevOwner:"
+        },
+        {
+          "line": 106,
+          "text": "case ModelDevOwner:"
+        }
+      ],
+      "path": "app/admin/service/internal/commandcontract/contract.go",
+      "source": "old_runtime"
+    },
+    {
+      "matches": [
+        {
+          "line": 52,
+          "text": "func ManagedOwner(owner string) bool { return owner == InstanceOwner || owner == InferenceOwner }"
+        },
+        {
+          "line": 54,
+          "text": "definition, ok := LookupAction(in.Owner, in.Action)"
+        },
+        {
+          "line": 98,
+          "text": "case ResourceKindInference:"
+        }
+      ],
+      "path": "app/admin/service/internal/commandcontract/contract.go",
+      "source": "candidate"
+    },
+    {
+      "matches": [
+        {
+          "line": 134,
+          "text": "message ResumeModelRegistrationRequest { string execution_id = 1 [json_name = \"execution_id\"]; }"
+        },
+        {
+          "line": 190,
+          "text": "ModelRegistrationView model_registration = 27 [json_name = \"model_registration\"];"
+        },
+        {
+          "line": 191,
+          "text": "ExecutionHistoryView history = 28;"
+        },
+        {
+          "line": 219,
+          "text": "message ModelRegistrationView {"
+        },
+        {
+          "line": 259,
+          "text": "message ExecutionHistoryView {"
+        }
+      ],
+      "path": "api/protos/modeldev/service/v1/execution.proto",
+      "source": "old_runtime"
+    },
+    {
+      "matches": [],
+      "path": "api/protos/modeldev/service/v1/execution.proto",
+      "source": "candidate"
+    },
+    {
+      "matches": [
+        {
+          "line": 214,
+          "text": "modeldevConfig, err := data.ModelDevConfigFromEnv()"
+        },
+        {
+          "line": 218,
+          "text": "modelConfig, err := data.ModelConfigFromEnv()"
+        },
+        {
+          "line": 222,
+          "text": "srv, err := rpc.CreateRestServerWithFilters(streamConfig, []http.FilterFunc{instanceHTTPTimeoutFilter(ordinaryTimeout, modeldevConfig.Timeout, modelConfig.Timeout), auth.ImageHTTPFilter, auth.NetworkHTTPFilter, acceleratorInitializationHTTPFilter, modelQueryHTTPFilter},"
+        }
+      ],
+      "path": "app/admin/service/internal/server/rest_server.go",
+      "source": "old_runtime"
+    },
+    {
+      "matches": [
+        {
+          "line": 214,
+          "text": "srv, err := rpc.CreateRestServerWithFilters(streamConfig, []http.FilterFunc{instanceHTTPTimeoutFilter(ordinaryTimeout), auth.ImageHTTPFilter, auth.NetworkHTTPFilter, acceleratorInitializationHTTPFilter, modelQueryHTTPFilter},"
+        }
+      ],
+      "path": "app/admin/service/internal/server/rest_server.go",
+      "source": "candidate"
+    },
+    {
+      "matches": [
+        {
+          "line": 17,
+          "text": "server.Route(\"/\").POST(data.ModelDevResumeModelRegistrationPath, func(ctx khttp.Context) error {"
+        }
+      ],
+      "path": "app/admin/service/internal/server/modeldev_registration_http.go",
+      "source": "old_runtime"
+    },
+    {
+      "matches": [
+        {
+          "line": 29,
+          "text": "registerModelDevRegistrationHTTP(server, modeldev)"
+        }
+      ],
+      "path": "app/admin/service/internal/server/modeldev_http.go",
+      "source": "old_runtime"
+    },
+    {
+      "matches": [],
+      "path": "app/admin/service/internal/server/modeldev_http.go",
+      "source": "candidate"
+    }
+  ],
+  "next_safe_action": "Do not roll out published a64 directly. Prepare a source integration preserving the actual old ModelDev overlay and all a64 VM changes, resolve only overlap paths and retain current ModelDev dependency lineage; build/test/publish only under Root follow-up scope. No fix prepared or executed by this check.",
+  "old_shared_runtime": {
+    "actual_manifest": {
+      "build_final_manifest_sha256": "2b1cfd4a690d4b9afca4f0739b5dc4adf52beea534e4c5837e08fd68d7893a48",
+      "build_governance_binary_sha256": "d7bf193f8f9a56cde77d70031174ff03983095ddceb90c91361c7b188996217c",
+      "build_receipt_sha256": "d451fc0c7b1fd27fc0956206d0a0fa984c647b4970381d6561ae17895fe6bb87",
+      "build_status": "PASS",
+      "build_version": "a1dcdd5+md0715fbb-network-release-20261023",
+      "manifest_entries": 2413,
+      "path": "/home/chabking/workspace/ani-resource-service-runs/network-stack-release-20261023/integrated-final-manifest.json",
+      "sha256": "2b1cfd4a690d4b9afca4f0739b5dc4adf52beea534e4c5837e08fd68d7893a48"
+    },
+    "actual_manifest_matches_all_compared_non_vm_overlay_files": true,
+    "base_commit": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "integrated_tree": "0b53c5cd4ed69f1fb6591a95bcb8ad24fad7a917",
+    "live_identity_reference": "Root/windows_domain fresh preflight confirms old network-release d81eb0c4 remains deployed; not re-read here",
+    "matched_overlay_files": 48,
+    "preserved_modeldev_commit": "0715fbbf564c95f2ab8120958318b0456be11edc"
+  },
+  "out_of_scope": "Source DSL/RPC authority handled by service_gov_prepare; no duplication",
+  "preservation_patch": {
+    "apply_or_test_executed": false,
+    "base_commit": "a1dcdd5f14ee607e25131ce8816ff8d0a85faa76",
+    "binary_full_index": true,
+    "bytes": 279547,
+    "direction": "a1dcdd baseline -> exact oldprod integrated tree0b53; overlay to preserve while applying a64 VM increment",
+    "docs_and_unrelated_changes_excluded": true,
+    "exact_paths": [
+      "api/gen/go/admin/service/v1/i_modeldev.pb.go",
+      "api/gen/go/admin/service/v1/i_modeldev_grpc.pb.go",
+      "api/gen/go/admin/service/v1/i_modeldev_http.pb.go",
+      "api/gen/go/modeldev/service/v1/execution.pb.go",
+      "api/protos/admin/service/v1/i_modeldev.proto",
+      "api/protos/modeldev/service/v1/execution.proto",
+      "app/admin/service/cmd/server/assets/openapi.yaml",
+      "app/admin/service/cmd/server/wiring_ent.go",
+      "app/admin/service/internal/commandcontract/contract.go",
+      "app/admin/service/internal/commandcontract/modeldev.go",
+      "app/admin/service/internal/commandcontract/modeldev_test.go",
+      "app/admin/service/internal/data/model_client.go",
+      "app/admin/service/internal/data/model_client_test.go",
+      "app/admin/service/internal/data/modeldev_acceptance_repo.go",
+      "app/admin/service/internal/data/modeldev_authorization.go",
+      "app/admin/service/internal/data/modeldev_client.go",
+      "app/admin/service/internal/data/modeldev_client_gpu_test.go",
+      "app/admin/service/internal/data/modeldev_dispatch_repo.go",
+      "app/admin/service/internal/data/modeldev_finetuning_authorization_test.go",
+      "app/admin/service/internal/data/modeldev_gpu_acceptance_pg_test.go",
+      "app/admin/service/internal/data/modeldev_gpu_delivery.go",
+      "app/admin/service/internal/data/modeldev_gpu_quota.go",
+      "app/admin/service/internal/data/modeldev_gpu_quota_pg_test.go",
+      "app/admin/service/internal/data/modeldev_history_client_test.go",
+      "app/admin/service/internal/data/modeldev_query_client.go",
+      "app/admin/service/internal/data/modeldev_registration_authorization_pg_test.go",
+      "app/admin/service/internal/data/modeldev_registration_client.go",
+      "app/admin/service/internal/data/modeldev_registration_client_test.go",
+      "app/admin/service/internal/data/modeldev_registration_source.go",
+      "app/admin/service/internal/data/modeldev_registration_source_pg_test.go",
+      "app/admin/service/internal/data/quota_ent.go",
+      "app/admin/service/internal/server/instance_timeout.go",
+      "app/admin/service/internal/server/instance_timeout_test.go",
+      "app/admin/service/internal/server/modeldev_artifact_only_test.go",
+      "app/admin/service/internal/server/modeldev_http.go",
+      "app/admin/service/internal/server/modeldev_registration_http.go",
+      "app/admin/service/internal/server/modeldev_registration_http_test.go",
+      "app/admin/service/internal/server/quota_fixture_test.go",
+      "app/admin/service/internal/server/quota_internal_server.go",
+      "app/admin/service/internal/server/quota_modeldev_config_test.go",
+      "app/admin/service/internal/server/quota_modeldev_mtls_test.go",
+      "app/admin/service/internal/server/rest_server.go",
+      "app/admin/service/internal/service/modeldev_gpu_usage_test.go",
+      "app/admin/service/internal/service/modeldev_query_service.go",
+      "app/admin/service/internal/service/modeldev_registration_service.go",
+      "app/admin/service/internal/service/modeldev_service.go",
+      "go.mod",
+      "go.sum"
+    ],
+    "git_common_directory": "/home/chabking/workspace/ani-governance/.git",
+    "object_repository": "/home/chabking/workspace/ani-governance",
+    "oldprod_tree": "0b53c5cd4ed69f1fb6591a95bcb8ad24fad7a917",
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/service-release-20261025/governance-prod-preservation.patch",
+    "selected_files": 48,
+    "sha256": "1ff5d1f11acec3cc7c808c2e3900c798df45606b9ecc4d7fac8d1a3eec532cca"
+  },
+  "result": "BLOCK_DIRECT_A64_ROLLOUT_NON_VM_MODELDEV_RUNTIME_REGRESSION",
+  "schema_migration_preservation": {
+    "candidate_shared_ent_schema_changes_from_vm_commit": [
+      "app/admin/service/internal/data/ent/api/api.go",
+      "app/admin/service/internal/data/ent/migrate/schema.go",
+      "app/admin/service/internal/data/ent/planmodule/planmodule.go",
+      "app/admin/service/internal/data/ent/quotaoperation/quotaoperation.go",
+      "app/admin/service/internal/data/ent/schema/api.go",
+      "app/admin/service/internal/data/ent/schema/plan_module.go",
+      "app/admin/service/internal/data/ent/schema/quota_operation.go"
+    ],
+    "instruction": "Retain a64 VM enum/schema additions together with inherited a1 ModelDev schema/migrations. The oldprod overlay has no additional schema/migration delta to drop.",
+    "migrations_tree_identical_all_three": true,
+    "migrations_tree_oid": "1b669395a63c3c4319c9a1413d5e0ddda6cd876f",
+    "old_integration_overlay_changes_under_migrations_or_ent_schema": []
+  },
+  "schema_version": 1,
+  "scope": "Fixed old actual-build manifest and integrated Git tree versus published a64; no code edits, API, PG, build, test, deployment or full runtime review",
+  "work_performed": {
+    "api_calls": 0,
+    "builds": 0,
+    "deployments": 0,
+    "existing_old_manifest_metadata_read_via_ssh_fedora": true,
+    "fixed_git_object_reads": true,
+    "new_clones": 0,
+    "pg_calls": 0,
+    "source_edits": 0,
+    "tests": 0
+  }
+}

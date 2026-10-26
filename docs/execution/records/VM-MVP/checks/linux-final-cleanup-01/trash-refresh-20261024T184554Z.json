@@ -1,0 +1,411 @@
+{
+  "at": "2026-10-24T18:45:54.022824+00:00",
+  "scope": "new round fixed nine trash IDs; original operations/minimum protected identities",
+  "native_writes": 0,
+  "backend_writes": 0,
+  "business_delete_sends": 0,
+  "previous_sample": "exact-trash-get-wait-facts-01.json",
+  "previous_sample_at": "2026-10-24T18:37:03.981445+00:00",
+  "collector_correction": {
+    "original_error": "server does not have resource type NetworkAttachmentDefinition",
+    "correct_resource": "network-attachment-definitions.k8s.cni.cncf.io",
+    "production_or_approved_runner_changes": 0
+  },
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "nodes": [
+    {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "internal_ips": [
+        "172.16.101.10"
+      ]
+    },
+    {
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+      "internal_ips": [
+        "172.16.101.11"
+      ]
+    },
+    {
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+      "internal_ips": [
+        "172.16.101.12"
+      ]
+    }
+  ],
+  "minimum_protected_identities": {
+    "result": "PASS",
+    "checks": [
+      {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "expected_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "uid": "9a751320-5f97-4e56-af6a-30964610321b",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "expected_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+        "uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "VirtualMachineSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-snap-15e53288-6b6a-5278-83ad-5703e15303e1",
+        "expected_uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57",
+        "uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "Vpc",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vpc-e413becb1f4a46468f058e32f33a6305",
+        "expected_uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+        "uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "expected_uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+        "uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-89317f205600510abc65e40402c83abb",
+        "expected_uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+        "uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-cca2005bd9365327a5ded8236385b9ba",
+        "expected_uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+        "uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-media-driver",
+        "expected_uid": "752a82db-f998-488b-b580-c112f986e067",
+        "uid": "752a82db-f998-488b-b580-c112f986e067",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+        "expected_uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c",
+        "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "network-attachment-definitions.k8s.cni.cncf.io",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-main-v2",
+        "expected_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+        "uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "network-attachment-definitions.k8s.cni.cncf.io",
+        "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+        "name": "vm-mvp-tenant2-01a168ce",
+        "expected_uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+        "uid": "c744fbb9-fdff-46b9-8ba9-0c75cfb8e9dc",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "network-attachment-definitions.k8s.cni.cncf.io",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-main",
+        "expected_uid": "ac77bddd-82a3-48b9-9916-fbef18f35610",
+        "uid": "ac77bddd-82a3-48b9-9916-fbef18f35610",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-ubuntu-2404-source",
+        "expected_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+        "uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-virtio-http-source",
+        "expected_uid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+        "uid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-fedora44-http-source",
+        "expected_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+        "uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+        "deleting": false,
+        "matches": true
+      },
+      {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "vm-mvp-probe-01a168ce",
+        "name": "vm-mvp-windows2025-http-source",
+        "expected_uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+        "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+        "deleting": false,
+        "matches": true
+      }
+    ]
+  },
+  "original_operations": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "send_attempts": 1,
+      "operation": {
+        "id": "de650c92-04db-4789-a117-9ef2d6b6ed2b",
+        "vmId": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "intentVersion": "48",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T18:18:39.087721663Z"
+      }
+    },
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "send_attempts": 1,
+      "operation": {
+        "id": "af8043c1-4d21-4bac-8e8d-cb17eee9c7ac",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "intentVersion": "8",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-24T18:07:31.748941117Z"
+      }
+    }
+  ],
+  "reader": {
+    "namespace": "rook-ceph",
+    "name": "rook-ceph-mgr-a-67c776d466-tr6nz",
+    "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+    "container": "mgr",
+    "identity": "mgr.a"
+  },
+  "budgets": {
+    "process_seconds": 40,
+    "connection_io_seconds": 5
+  },
+  "trash_get": {
+    "at": "2026-10-24T18:45:37.286351+00:00",
+    "rows": [
+      {
+        "result": "PRESENT",
+        "id": "20cc871b8dd7ad",
+        "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:01:48+00:00",
+        "deferment_end_time": "2026-10-24T18:01:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878795a82b",
+        "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:12:44+00:00",
+        "deferment_end_time": "2026-10-24T18:12:44+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc878c626cb3",
+        "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:04+00:00",
+        "deferment_end_time": "2026-10-24T18:14:04+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc8795a861a0",
+        "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:35+00:00",
+        "deferment_end_time": "2026-10-24T18:14:35+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87987d1f99",
+        "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:20+00:00",
+        "deferment_end_time": "2026-10-24T07:22:20+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87b511820b",
+        "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:48+00:00",
+        "deferment_end_time": "2026-10-24T07:22:48+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87c1cde11d",
+        "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "source": "USER",
+        "deletion_time": "2026-10-24T07:22:36+00:00",
+        "deferment_end_time": "2026-10-24T07:22:36+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87eb4a360b",
+        "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:14:43+00:00",
+        "deferment_end_time": "2026-10-24T18:14:43+00:00"
+      },
+      {
+        "result": "PRESENT",
+        "id": "20cc87fb4134b9",
+        "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+        "source": "USER",
+        "deletion_time": "2026-10-24T18:02:44+00:00",
+        "deferment_end_time": "2026-10-24T18:02:44+00:00"
+      }
+    ],
+    "result": "COMPLETE",
+    "elapsed_seconds": 4.011
+  },
+  "comparison_to_1837": [
+    {
+      "id": "20cc871b8dd7ad",
+      "name": "csi-vol-1105c973-54e5-4671-a283-d90bf8da7e78",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc878795a82b",
+      "name": "csi-vol-285f7a7d-abdc-4659-8422-a41beb85220a",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc878c626cb3",
+      "name": "csi-vol-4aff6ce9-16ca-43ad-8d18-4acc259f9ead",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc8795a861a0",
+      "name": "csi-vol-dbc9f552-2ab6-4fc6-8623-3ba9cba929a1",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc87987d1f99",
+      "name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc87b511820b",
+      "name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc87c1cde11d",
+      "name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc87eb4a360b",
+      "name": "csi-vol-13f69f66-a318-4c7d-830f-1db8e2800943",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    },
+    {
+      "id": "20cc87fb4134b9",
+      "name": "csi-vol-9e72ff8c-1d0a-46fd-8d50-3b48b966dca1",
+      "prior_result": "PRESENT",
+      "current_result": "PRESENT",
+      "changed": false,
+      "fields_unchanged": true
+    }
+  ],
+  "remaining_exact_ids": [
+    "20cc871b8dd7ad",
+    "20cc878795a82b",
+    "20cc878c626cb3",
+    "20cc8795a861a0",
+    "20cc87987d1f99",
+    "20cc87b511820b",
+    "20cc87c1cde11d",
+    "20cc87eb4a360b",
+    "20cc87fb4134b9"
+  ],
+  "finished_at": "2026-10-24T18:47:15.704416+00:00",
+  "reader_fresh_owner_ready": {
+    "at": "2026-10-24T18:47:15.415574+00:00",
+    "uid": "a55b16b7-fb00-465e-b084-320fceb2c663",
+    "phase": "Running",
+    "ready": true,
+    "controller_owner": {
+      "kind": "ReplicaSet",
+      "name": "rook-ceph-mgr-a-67c776d466",
+      "uid": "88d60d2a-b0c1-4c62-959a-02c844737931"
+    }
+  },
+  "windows_minimum_product_observation": {
+    "at": "2026-10-24T18:47:15.704385+00:00",
+    "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "version": "18",
+    "observedState": "Running",
+    "closing": false,
+    "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "native_uid_basis": "matching fresh minimum_protected_identities check in this receipt"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "phase": "THREE_B_FLUSHED_AND_READ_AFTER_ONLINE_A_READY_BEFORE_RESTORE",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "product_version": "14",
+  "snapshot_id": "15e53288-6b6a-5278-83ad-5703e15303e1",
+  "snapshot_ready_receipt": "../windows-online-snapshot-a-01/native-ready.json",
+  "command": "windows-write-b-command.txt",
+  "screenshot": "windows-three-b-before-online-restore.png",
+  "markers": [
+    {
+      "path": "C:\\vm-mvp-01a168ce-root.marker",
+      "text": "VM_MVP_WINDOWS_ROOT_B_01a168ce",
+      "sha256": "64B90F02EEDAC8B2EE44B4C7D8511EC10C035292E2D545C183AE3079B2EE8CBE"
+    },
+    {
+      "path": "T:\\vm-mvp-data3.marker",
+      "text": "VM_MVP_WINDOWS_DATA3_B_01a168ce",
+      "sha256": "C9A308CF751EA2C94DD7054B3302F9FB8EDED6FC3C14F722B94E0D28DCCCE657"
+    },
+    {
+      "path": "U:\\vm-mvp-data4.marker",
+      "text": "VM_MVP_WINDOWS_DATA4_B_01a168ce",
+      "sha256": "630FBB9F697C70EBCD6E18C076327C28B5BD52536C747B76EB76EF89407CF794"
+    }
+  ],
+  "durability": "Existing marker A content guarded, FileMode.Truncate only on existing marker files, FileStream.Flush(true), finally Dispose. All B contents and full hashes actually read before normal Stop authorization.",
+  "historical_input_failure": "First command attempt was converted by the Guest Chinese IME and did not execute the intended command. Esc and one input-mode switch were followed by a successful short English echo before the successful guarded B command. No Restore was authorized on the failed attempt.",
+  "account_login": "NOT_RUN_USER_UNAVAILABLE",
+  "new_credentials_entered": false,
+  "restore_readback": "NOT_RUN_AT_THIS_CHECKPOINT"
+}

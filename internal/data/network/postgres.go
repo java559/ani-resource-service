@@ -28,6 +28,8 @@ type Placement struct {
 }
 
 type Postgres struct {
+	vmNetworks           biz.VMNetworkResolver
+	vmAddressFreshness   time.Duration
 	vpcCIDRPresets       *biz.VPCCIDRPresets
 	platformCIDRFacts    biz.PlatformCIDRFacts
 	baseFreshness        time.Duration

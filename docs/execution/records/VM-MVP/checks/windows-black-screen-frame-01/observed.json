@@ -1,0 +1,191 @@
+{
+  "started_at": "2026-10-24T11:00:41.941868+00:00",
+  "execution_host": "fedora/172.16.101.31",
+  "result": "READ_ONLY_SCREENSHOT_REJECTED",
+  "commands": [
+    {
+      "stage": "cluster",
+      "argv": [
+        "get",
+        "namespace",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.105
+    },
+    {
+      "stage": "namespace",
+      "argv": [
+        "get",
+        "namespace",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.102
+    },
+    {
+      "stage": "native VM",
+      "argv": [
+        "get",
+        "virtualmachine",
+        "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "-n",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.093
+    },
+    {
+      "stage": "VMI",
+      "argv": [
+        "get",
+        "virtualmachineinstance",
+        "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "-n",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.142
+    },
+    {
+      "stage": "primary launcher",
+      "argv": [
+        "get",
+        "pod",
+        "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+        "-n",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.134
+    },
+    {
+      "stage": "node",
+      "argv": [
+        "get",
+        "node",
+        "ani-01",
+        "-o",
+        "json"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.144
+    },
+    {
+      "stage": "installed screenshot help",
+      "argv": [
+        "exec",
+        "-n",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+        "-c",
+        "compute",
+        "--",
+        "virsh",
+        "-r",
+        "-q",
+        "help",
+        "screenshot"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.207
+    },
+    {
+      "stage": "single read-only screenshot",
+      "argv": [
+        "exec",
+        "-n",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+        "-c",
+        "compute",
+        "--",
+        "virsh",
+        "-r",
+        "-q",
+        "screenshot",
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+        "/dev/stdout",
+        "--screen",
+        "0"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.311
+    }
+  ],
+  "identity": {
+    "cluster": {
+      "name": "kube-system",
+      "uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "resource_version": "3111514"
+    },
+    "namespace": {
+      "name": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "resource_version": "59197776"
+    },
+    "native VM": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "resource_version": "60459934"
+    },
+    "VMI": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+      "resource_version": "60459933"
+    },
+    "primary launcher": {
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-dg4kq",
+      "uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1",
+      "resource_version": "60459806"
+    },
+    "node": {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "resource_version": "62432887"
+    }
+  },
+  "screenshot_attempts": 1,
+  "guest_commands": 0,
+  "guest_input": 0,
+  "cluster_writes": 0,
+  "vm_or_service_changes": 0,
+  "pod_temporary_files_created": 0,
+  "connection": "existing default libvirt URI with virsh -r",
+  "limitations": [
+    "A native frame is diagnostic evidence only; it does not prove installation or guest acceptance.",
+    "Read-only screenshot failed; no read-write connection, QMP fallback or additional frame request was attempted."
+  ],
+  "compute": {
+    "containerID": "containerd://dc46deb5fe845314a14f9ded77390a410cdcc342ef374c23f4aa0975e079a757",
+    "imageID": "172.16.101.10:5000/kubevirt/virt-launcher@sha256:2a47dceaa6ed4176175f58f4f7d927064f55d935fdd56e3999ac4dbe7d3a8e6a",
+    "ready": true,
+    "restartCount": 0
+  },
+  "screenshot": {
+    "exit_code": 1,
+    "stdout_bytes": 0,
+    "stderr": "error: could not take a screenshot of tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c_vm-fc154879-8a40-4b18-967c-215f5cf5992d\nerror: operation forbidden: read only access prevents virDomainScreenshot\ncommand terminated with exit code 1\n",
+    "target": "/dev/stdout (stream only; no Pod file)",
+    "screen": 0,
+    "stdout": ""
+  },
+  "elapsed_seconds": 1.239,
+  "finished_at": "2026-10-24T11:00:43.181181+00:00",
+  "cleanup": {
+    "pod_temporary_files_created": 0,
+    "pod_temporary_files_remaining": 0,
+    "cluster_resources_created": 0,
+    "method": "stdout stream only"
+  }
+}

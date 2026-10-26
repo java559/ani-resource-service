@@ -1,0 +1,41 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 669B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d
+#2 DONE 1.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 164B done
+#3 DONE 0.0s
+
+#4 [1/4] FROM gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d
+#4 resolve gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d 0.0s done
+#4 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 213.80MB 1.9s done
+#5 DONE 1.9s
+
+#6 [2/4] COPY --chown=65532:65532 --chmod=0555 gov-server /app/bin/server
+#6 DONE 2.3s
+
+#7 [3/4] COPY --chown=65532:65532 --chmod=0444 THIRD_PARTY_NOTICES.md /app/THIRD_PARTY_NOTICES.md
+#7 DONE 1.3s
+
+#8 [4/4] WORKDIR /app
+#8 DONE 0.4s
+
+#9 exporting to image
+#9 exporting layers
+#9 exporting layers 11.8s done
+#9 exporting manifest sha256:6ca25a4814e4a2f6d99e69a79fdfedbed53d48b1397c8699fee617c522f04b45 0.0s done
+#9 exporting config sha256:dc2651d7a92a6c5269e03f8a5d36d44885a5b4e9f5ea701b360cf103fbd40443 0.0s done
+#9 exporting attestation manifest sha256:d996595df29d0bd429c4b5ba3b185bf6bdce93ebaa21faa6077d9c657bbec9f6 0.0s done
+#9 exporting manifest list sha256:d5b013b033da6db84e47f7940c728a4cd1aa43acec7e3f8560a751d2495bce75 0.0s done
+#9 naming to docker.io/library/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce done
+#9 unpacking to docker.io/library/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce
+#9 unpacking to docker.io/library/ani-governance:vm-mvp-a64e0ab8ed6b-01a168ce 2.7s done
+#9 DONE 14.7s

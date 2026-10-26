@@ -1,0 +1,11 @@
+{
+  "source_tree": "d5e3a1742a8a47f85ccfcbdd339c1427e7400b8a",
+  "source_files": 2472,
+  "archive_sha256": "56ac38e3a1a2c59b1370e0e9a0bbf959f0f0dd266feddd8c6e340f4f35b49abf",
+  "manifest_sha256": "4fd9b6a5a935b9e18b4a2f77c296c47843a929d3772c82734f3208a18d84580c",
+  "credential_paths_included": [],
+  "vm_base": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "old_prod_tree": "0b53c5cd4ed69f1fb6591a95bcb8ad24fad7a917",
+  "delta_files_vs_vm": 49,
+  "overlap_resolution": "ModelDev create added to finite owner/action registry; original separate ModelDev delivery retained. Existing ModelDev test Usage calls adapted to two-argument registry interface; all VM paths and formal SDK pins retained."
+}

@@ -1,0 +1,166 @@
+{
+  "at": "2026-10-24T09:15:07.648792+00:00",
+  "plan_sha256": "749e7122bc97a8bc4ea55aab67578dc2575d1bdd1c59324698709784bf804302",
+  "source_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "attempt": 3,
+  "original_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/pg-executed.json",
+  "original_receipt_sha256": "a5e444ec68bb32988fa4a76f5956e89e7d94bbf3105d50f8acac6bdb3ce8acef",
+  "runner_sha256": "a8fc8742f74fb6dc887412acc444c792292442e3b53d4809bc9f2940e63e1b7c",
+  "databases": [
+    {
+      "database": "vm_v24data01_01a168ce",
+      "owner": "vm_v24data01_owner_01a168ce",
+      "runtime": "vm_v24data01_runtime_01a168ce",
+      "dsn_references": {
+        "vm_v24data01_owner_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_owner_01a168ce.dsn",
+        "vm_v24data01_runtime_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24data01_runtime_01a168ce.dsn"
+      },
+      "runtime_guards": {
+        "database": "vm_v24data01_01a168ce",
+        "user": "vm_v24data01_runtime_01a168ce",
+        "superuser": false,
+        "createdb": false,
+        "createrole": false,
+        "bypassrls": false,
+        "inherit": false,
+        "owner_membership": false,
+        "schema_create": false,
+        "temp": false,
+        "dml": true
+      },
+      "database_oid": "105518",
+      "owner_oid": "105516",
+      "runtime_oid": "105517"
+    },
+    {
+      "database": "vm_v24svc01_01a168ce",
+      "owner": "vm_v24svc01_owner_01a168ce",
+      "runtime": "vm_v24svc01_runtime_01a168ce",
+      "dsn_references": {
+        "vm_v24svc01_owner_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24svc01_owner_01a168ce.dsn",
+        "vm_v24svc01_runtime_01a168ce": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/vm_v24svc01_runtime_01a168ce.dsn"
+      },
+      "runtime_guards": {
+        "database": "vm_v24svc01_01a168ce",
+        "user": "vm_v24svc01_runtime_01a168ce",
+        "superuser": false,
+        "createdb": false,
+        "createrole": false,
+        "bypassrls": false,
+        "inherit": false,
+        "owner_membership": false,
+        "schema_create": false,
+        "temp": false,
+        "dml": true
+      },
+      "database_oid": "107090",
+      "owner_oid": "107088",
+      "runtime_oid": "107089"
+    }
+  ],
+  "tests": [
+    {
+      "group": "data",
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-tags",
+        "quota_pg",
+        "-count=1",
+        "-timeout=180s",
+        "./app/admin/service/internal/data",
+        "-run",
+        "^(TestQuotaPostgresInstanceCPUCommands|TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract|TestQuotaGpuProductionEntComposition|TestQuotaResourceReleasedOriginalLedgerAndEventFence)$"
+      ],
+      "exit_code": 0,
+      "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/data-attempt03-tests.jsonl",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaPostgresInstanceConcurrentAdmissionUsesCurrentContract",
+          "Action": "pass",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaGpuProductionEntComposition/false",
+          "Action": "pass",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaGpuProductionEntComposition/true",
+          "Action": "pass",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaGpuProductionEntComposition",
+          "Action": "pass",
+          "Elapsed": 0.07
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaResourceReleasedOriginalLedgerAndEventFence",
+          "Action": "pass",
+          "Elapsed": 0.07
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/data",
+          "Test": "TestQuotaPostgresInstanceCPUCommands",
+          "Action": "pass",
+          "Elapsed": 0.07
+        }
+      ]
+    },
+    {
+      "group": "service",
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "-json",
+        "-tags",
+        "quota_pg",
+        "-count=1",
+        "-timeout=180s",
+        "./app/admin/service/internal/service",
+        "-run",
+        "^(TestInferenceGPUAdmissionAndPublicReplay|TestInferenceCPUActorsRemainTrusted)$"
+      ],
+      "exit_code": 1,
+      "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-pg-01/service-attempt03-tests.jsonl",
+      "named_results": [
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestInferenceGPUAdmissionAndPublicReplay",
+          "Action": "fail",
+          "Elapsed": 0.04
+        },
+        {
+          "Package": "go-wind-admin/app/admin/service/internal/service",
+          "Test": "TestInferenceCPUActorsRemainTrusted",
+          "Action": "pass",
+          "Elapsed": 0.05
+        }
+      ]
+    }
+  ],
+  "candidate_or_cluster_changes": false,
+  "business_api_calls": 0,
+  "new_services_or_containers": 0,
+  "source_manifest_sha256": "952b4024015936b63d15df0e343d1c0df8d677c6e0c394212049e7266398124e",
+  "source_files_verified": 2452,
+  "build_tmpdir": {
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-coverage-01/go-tmp",
+    "uid": 1000,
+    "mode": "0700",
+    "inode": 26516247,
+    "device": 53,
+    "env": "GOTMPDIR only; TMPDIR remains unset"
+  },
+  "result": "INCOMPLETE_RETAIN_EXCLUSIVE_FIXTURE",
+  "error_type": "AssertionError",
+  "error": "private logs/fixture retained; no candidate database or service changed",
+  "seconds": 112.798
+}

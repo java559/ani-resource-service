@@ -1,0 +1,89 @@
+{
+  "state": "HISTORICAL_PUBLICATION_MODE_CONFIRMED_NO_EXECUTION",
+  "endpoint": "172.16.101.10:5000",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "exact_current_deployed_refs_matched": [
+    "172.16.101.10:5000/ani/modeldev-service-execution-v21@sha256:23c9d3ca69a2b26cc59dae83e2d9ee8a7066971a535f1f5ee7fdd630c12ea3ff",
+    "172.16.101.10:5000/ani/modeldev-accelerator-owner-v21@sha256:c78ee7451e1ff046793eb600b2cf16715d159b262ed13097f4926c0463109d51"
+  ],
+  "historical_transport": "plain HTTP for this exact endpoint only; per-command tls-verify=false, never global TLS change",
+  "historical_auth_evidence": {
+    "registry_auth_file_reference": null,
+    "write_client": "Readable successful historical publisher invokes podman push without auth-file/creds; it does not record an explicit no-creds flag.",
+    "readback": "urllib.request uses only Accept header, no Authorization; plain HTTP raw manifests read back successfully.",
+    "server": "Exact direct Hauler service command has no auth/TLS options and runs port5000; node SSH password in owner helper is service-maintenance authentication, not registry credentials.",
+    "current_mode_to_request_from_root": "explicit anonymous via empty task-private auth file and skopeo --dest-no-creds/--no-creds; no credential reuse/login"
+  },
+  "historical_shared_service_window": {
+    "node": {
+      "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "node_internal_ip": "172.16.101.10",
+      "node_machine_id": "cd933c2ed43e460986560541fa038e54",
+      "node_name": "ani-01",
+      "node_uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+      "task_owner": "modeldev-execution-v2.1-20261022-01a15f47"
+    },
+    "unit": "ani-image-registry.service",
+    "unit_sha256": "599642ae7fb4b9628fec2ade787df7d7f553b6aac34580834bc0bbe54084d06b",
+    "binary_sha256": "4eaf2d370feb3fe26ad58863e79e49c8c7f4579b675dc42a46a798c437e03a61",
+    "original": "active --readonly=true, no runtime drop-in",
+    "open": "task-owned /run/systemd/system/ani-image-registry.service.d/90-modeldev-v21-owner-window-21.conf; daemon-reload + exact service restart --readonly=false",
+    "close": "remove exact task-owned drop-in; daemon-reload + service restart; independent --readonly=true/active/no-dropin observed",
+    "opened_at": "2026-10-22T20:02:44.698220+00:00",
+    "restored_at": "2026-10-22T20:03:09.565444+00:00",
+    "automatic_restore_seconds": 1800,
+    "current_service_state": "NOT_FRESHLY_READ_BY_THIS_LOOKUP"
+  },
+  "cli_delta_for_current_prepared_executor": {
+    "historical_readable_cli": "podman push --tls-verify=false --digestfile TASKFILE EXACT_IMAGE_ID docker://EXACT_TASK_REF",
+    "current_local_tools": "skopeo1.22.2 and podman5.8.4 already verified available on Fedora",
+    "current_exact_archives": "Three :path:tag sources already passed actual skopeo inspect --raw; no layers decoded or load/pull.",
+    "proposed_cli": "existing reviewed skopeo copy --preserve-digests --retry-times=0 --dest-tls-verify=false --dest-no-creds --dest-authfile EMPTY_TASK_0600_FILE EXACT_OCI_SOURCE docker://EXACT_NEW_TASK_TAG",
+    "program_delta_required": "None for HTTP/anonymous image copy; existing dormant explicit-http and anonymous-authorized switches cover it. Shared registry write-window execution is separate, not implemented by publisher."
+  },
+  "pending_root_decision": [
+    "review these historical sources and allow exact three task tags using explicit HTTP/anonymous",
+    "fresh exact unit/binary/node/read-only state and protected image/VM guards before any shared write window",
+    "concrete bounded shared registry write window, exact cleanup/finally and read-only restoration, not yet prepared/executed here"
+  ],
+  "immutable_original_publish_plan_sha256": "59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096",
+  "historical_files": [
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/publish-cutoff-service.py",
+      "sha256": "002f9290a91430f24e4bca04a3ea3fbe13fbab40232a0ed3c6776274170c9879"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry-owner-window-21-close_requested.json",
+      "sha256": "16099538a8cc8d89729e5ae1746d727dcccdc585e4c5fb9cc04084478ff470b5"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry-owner-window-21-readonly_restored.json",
+      "sha256": "29d0609856ef402848a9be67682a1b8daaea267c883b440a855270ee1acd3d16"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry-owner-window-21-snapshot.json",
+      "sha256": "412e76341cf2f60ca1fba217e392e9357748d9e48a5613f9b25e17ec5e4f90ad"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry-owner-window-21-write_window_open.json",
+      "sha256": "52bf31e5191a618a6b71d4bcc21154e5010756f0b25b8f1b45ebfeb02975c1f9"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry-owner-window-21.py",
+      "sha256": "4396671dd8948d6a976a1e55a7cc8286b8a8ebb8f85481a8ecea7118f297bac3"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry18-modeldev-receipt.json",
+      "sha256": "57ea81d380089e3a34b52e5b21cdf7dcc7baea4ed03faa9252f340d11668a2eb"
+    },
+    {
+      "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/historical-mode/registry21-final-receipt.json",
+      "sha256": "ede2775913e8a4e35dfbbf2a96cff8fe675a33fc9ae04e06ffe99151e1d3b0bf"
+    }
+  ],
+  "new_registry_requests": 0,
+  "new_registry_writes": 0,
+  "new_logins": 0,
+  "service_mutations": 0,
+  "deployments": 0
+}

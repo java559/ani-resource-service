@@ -1,0 +1,13 @@
+{
+  "task": "vm-mvp-shared-01a168ce",
+  "phase": "delete-nad",
+  "host": "fedora",
+  "result": "PASS_TASK_NAD_DELETED",
+  "wire_cleanup_sha256": "6f959b84e39616bd4a737d0eb3985f3aeef5b37e2c20a5a185e68be338b79a14",
+  "calls": [],
+  "mutation_attempts": 1,
+  "started_at": "2026-10-24T22:39:09.491208+00:00",
+  "egress_probes": 0,
+  "finished_at": "2026-10-24T22:39:10.906286+00:00",
+  "heavy_lock_released": true
+}

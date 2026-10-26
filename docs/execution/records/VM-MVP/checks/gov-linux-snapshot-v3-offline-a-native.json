@@ -1,0 +1,203 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+  "intent": "offline-a-native",
+  "driver_sha256": "a9b8541742a4ea4bf9cb2396050d9822d0f3944d1a7722111a47d7f9a85f07df",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-snapshots-v3.json",
+  "phase": "READ_ONLY_NATIVE_SNAPSHOT",
+  "snapshot_id": "3d068268-d8d0-5583-810f-9f187e0b05d1",
+  "operation_id": "9a0bd0c4-850e-4f09-a658-16b0882abe13",
+  "snapshot": {
+    "kind": "VirtualMachineSnapshot",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-snap-3d068268-d8d0-5583-810f-9f187e0b05d1",
+    "uid": "b7685143-956b-4ce8-9994-7f3b7edb9a06",
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T05:12:45Z",
+          "reason": "Operation complete",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T05:12:45Z",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "creationTime": "2026-10-24T05:12:45Z",
+      "phase": "Succeeded",
+      "readyToUse": true,
+      "snapshotVolumes": {
+        "excludedVolumes": [
+          "guest-initialization"
+        ],
+        "includedVolumes": [
+          "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+          "disk-5dbc2c93986554f98413f198f5e9c1a6",
+          "disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        ]
+      },
+      "sourceUID": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "virtualMachineSnapshotContentName": "vmsnapshot-content-b7685143-956b-4ce8-9994-7f3b7edb9a06"
+    }
+  },
+  "content": {
+    "kind": "VirtualMachineSnapshotContent",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vmsnapshot-content-b7685143-956b-4ce8-9994-7f3b7edb9a06",
+    "uid": "9a560416-b04e-4dba-9a65-b0d16c870080",
+    "status": {
+      "creationTime": "2026-10-24T05:12:45Z",
+      "readyToUse": true,
+      "volumeSnapshotStatus": [
+        {
+          "creationTime": "2026-10-24T05:12:13Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21"
+        },
+        {
+          "creationTime": "2026-10-24T05:11:58Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dbc2c93986554f98413f198f5e9c1a6"
+        },
+        {
+          "creationTime": "2026-10-24T05:12:00Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9"
+        }
+      ]
+    }
+  },
+  "volumes": [
+    {
+      "disk_id": "5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+      "volume_name": "disk-5dbc2c93986554f98413f198f5e9c1a6",
+      "source_pvc": {
+        "name": "restore-0ea35872-2fda-4dfe-bc71-b4f61ba4b3c8-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "26005de1-3722-4d9e-8c3f-cf131ed46385"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dbc2c93986554f98413f198f5e9c1a6",
+        "uid": "0f98ac51-2971-40b2-9161-72ffc13a0d06",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-0f98ac51-2971-40b2-9161-72ffc13a0d06",
+          "creationTime": "2026-10-24T05:11:58Z",
+          "readyToUse": true,
+          "restoreSize": "4Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-0f98ac51-2971-40b2-9161-72ffc13a0d06",
+        "uid": "be57a98a-b928-42ff-9fa1-0dfbf211cc3e",
+        "status": {
+          "creationTime": 1792818718598045776,
+          "readyToUse": true,
+          "restoreSize": 4294967296,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-24e4fe7a-f32b-4920-b5a0-c85a59cfd413"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    },
+    {
+      "disk_id": "5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+      "volume_name": "disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+      "source_pvc": {
+        "name": "restore-0ea35872-2fda-4dfe-bc71-b4f61ba4b3c8-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "65d78c38-6d2b-4aa9-ac5f-9ecaedc6df49"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-5dcd6eeee30c5dd2b72bf7d0d5699d21",
+        "uid": "df765f1a-2038-46cf-b6df-c11df699980d",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-df765f1a-2038-46cf-b6df-c11df699980d",
+          "creationTime": "2026-10-24T05:12:13Z",
+          "readyToUse": true,
+          "restoreSize": "12Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-df765f1a-2038-46cf-b6df-c11df699980d",
+        "uid": "f43dd8f0-2bd7-4ee6-a9e2-893bd3b15e06",
+        "status": {
+          "creationTime": 1792818733427047034,
+          "readyToUse": true,
+          "restoreSize": 12884901888,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-9449963a-101a-4e6b-86c3-908cb8b511dc"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    },
+    {
+      "disk_id": "d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+      "volume_name": "disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+      "source_pvc": {
+        "name": "restore-0ea35872-2fda-4dfe-bc71-b4f61ba4b3c8-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "93832ba5-be82-488d-aa58-1e747238030a"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-b7685143-956b-4ce8-9994-7f3b7edb9a06-volume-disk-d296c9f62e765756bb4cdef2d0f8f2f9",
+        "uid": "e08c5773-d300-45ee-b9b2-e80ffabeae38",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-e08c5773-d300-45ee-b9b2-e80ffabeae38",
+          "creationTime": "2026-10-24T05:12:00Z",
+          "readyToUse": true,
+          "restoreSize": "3Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-e08c5773-d300-45ee-b9b2-e80ffabeae38",
+        "uid": "9b61937c-3d14-41bf-8fc9-255c720be7f1",
+        "status": {
+          "creationTime": 1792818720194298944,
+          "readyToUse": true,
+          "restoreSize": 3221225472,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-0dabd5b9-59e3-4c80-932e-50b1003b9a38"
+        }
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com"
+      }
+    }
+  ],
+  "consistency": "OFFLINE_STOPPED",
+  "business_mutations": 0
+}

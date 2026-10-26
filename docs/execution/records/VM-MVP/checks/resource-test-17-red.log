@@ -1,0 +1,29 @@
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/running
+    console_test.go:73: console depended on unavailable storage: {VM:{Kind:VirtualMachine Namespace:tenant-console Name:vm-6e43991a-712f-446f-b0dd-7401feb5a33c UID:d30ea9ab-d3f7-4a45-93ef-cf61d78bb0b1} VMI:0x7981ff2b480 Launcher:<nil> Running:true Stopped:false Deleted:false State:Running Reason: Volumes:[] BackendStates:[] StateChangeRequests:[]} VM_OBJECT_OWNERSHIP_CONFLICT
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers
+    console_test.go:69: ambiguous launcher accepted: VM_OBJECT_OWNERSHIP_CONFLICT
+=== RUN   TestConsoleIdentityObservationDoesNotDependOnStorage/not-running
+    console_test.go:73: console depended on unavailable storage: {VM:{Kind:VirtualMachine Namespace:tenant-console Name:vm-f5cae595-cc6e-4f28-85c1-9c97b2d85a99 UID:06cb6f95-0cf4-4b8f-b6ab-f6a9d2b0b68d} VMI:0x7981ff2b9c0 Launcher:<nil> Running:false Stopped:false Deleted:false State:Pending Reason: Volumes:[] BackendStates:[] StateChangeRequests:[]} VM_OBJECT_OWNERSHIP_CONFLICT
+--- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage (0.00s)
+    --- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage/running (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vm (0.00s)
+    --- PASS: TestConsoleIdentityObservationDoesNotDependOnStorage/wrong-vmi-owner (0.00s)
+    --- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage/two-launchers (0.00s)
+    --- FAIL: TestConsoleIdentityObservationDoesNotDependOnStorage/not-running (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.010s
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running
+    console_test.go:52: console read unrelated storage or lost second version check: VM_DEPENDENCY_NOT_READY &{NativePort:<nil> full:1 identity:0}
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version
+=== RUN   TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing
+--- FAIL: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences (0.00s)
+    --- FAIL: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/running (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/version (0.00s)
+    --- PASS: TestConsoleUsesRuntimeIdentityAndKeepsVersionClosingFences/closing (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm	0.007s
+FAIL

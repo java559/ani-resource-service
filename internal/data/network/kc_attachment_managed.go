@@ -38,6 +38,10 @@ func workloadIdentity(o *unstructured.Unstructured) biz.WorkloadReference {
 func (p *KCProvider) getWorkload(ctx context.Context, r biz.WorkloadReference) (*unstructured.Unstructured, error) {
 	gvr := schema.GroupVersionResource{}
 	switch r.Kind {
+	case "VirtualMachine":
+		gvr = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "virtualmachines"}
+	case "VirtualMachineInstance":
+		gvr = schema.GroupVersionResource{Group: "kubevirt.io", Version: "v1", Resource: "virtualmachineinstances"}
 	case "Notebook":
 		gvr = schema.GroupVersionResource{Group: "kubeflow.org", Version: "v1", Resource: "notebooks"}
 	case "StatefulSet":
@@ -48,6 +52,9 @@ func (p *KCProvider) getWorkload(ctx context.Context, r biz.WorkloadReference) (
 	return p.client.Resource(gvr).Namespace(r.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
 }
 func (p *KCProvider) verifyManagedPod(ctx context.Context, w biz.AttachmentWork, pod *unstructured.Unstructured, track func(attachmentRelation)) (bool, bool, error) {
+	if w.Attachment.WorkloadMode == "vm_managed" {
+		return p.verifyVMPod(ctx, w, pod, track)
+	}
 	conflict := func() (bool, bool, error) { return false, false, &biz.ProviderError{Kind: biz.ProviderConflict} }
 	setRef, ok := workloadController(pod, "apps/v1", "StatefulSet")
 	if !ok {
@@ -128,8 +135,11 @@ func (p *KCProvider) managedControllersExist(ctx context.Context, w biz.Attachme
 		return false, readFailure(err)
 	}
 	for _, r := range prior {
-		if r.Kind == "Notebook" || r.Kind == "StatefulSet" {
+		if r.Kind == "Notebook" || r.Kind == "StatefulSet" || (w.Attachment.WorkloadMode == "vm_managed" && (r.Kind == "VirtualMachine" || r.Kind == "VirtualMachineInstance")) {
 			api := "kubeflow.org/v1"
+			if r.Kind == "VirtualMachine" || r.Kind == "VirtualMachineInstance" {
+				api = "kubevirt.io/v1"
+			}
 			if r.Kind == "StatefulSet" {
 				api = "apps/v1"
 			}

@@ -1,0 +1,20 @@
+=== RUN   TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly
+    media_test.go:66: native optical render: host_readOnly=false dedicated_claim=vm-media-60494830-7404-54ae-9a36-a9acc965bdbd guest_readonly=true guest_bus=sata
+=== RUN   TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/writable
+=== RUN   TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/default
+=== RUN   TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/legacy-readonly
+--- PASS: TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly (0.00s)
+    --- PASS: TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/writable (0.00s)
+    --- PASS: TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/default (0.00s)
+    --- PASS: TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly/legacy-readonly (0.00s)
+=== RUN   TestMediaNativeDedicatedReadonlyCopySourceRecheckAndUIDFence
+--- PASS: TestMediaNativeDedicatedReadonlyCopySourceRecheckAndUIDFence (0.00s)
+=== RUN   TestMediaPersistentOnlyUpdateReportsActualOldVMIAndAllowsNextStart
+--- PASS: TestMediaPersistentOnlyUpdateReportsActualOldVMIAndAllowsNextStart (0.00s)
+=== RUN   TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone
+--- PASS: TestMediaRestoredPVCOnlyAndClosingAbsenceNeverReclone (0.00s)
+=== RUN   TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization
+--- PASS: TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization (0.01s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.020s
+{"result": "CODE_PASS_LIVE_NOT_RUN", "base_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-17", "source_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-18", "overlay_files": {"internal/data/vm/media.go": "c0a5b082a1594127f1ee10be52e69c7ad8b78f7ba90172915ab2fa7a04ab4c2e", "internal/data/vm/media_test.go": "a38896e4932aec4bf0e41ae098e753a47cbc04fec53afc899ed1799c12a618e6"}, "source_manifest_sha256": "11d5cb0e8529e80f3e66d1faeceeebe7cd947c895b478304182d179c5daa1e89", "file_count": 754, "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18", "binary_sha256": "e6b885178a330fb3c478804156ec3bb73d3f56cea53ae1cc1ba1fc410ea1fd57", "go_work": "task validation workspace only; no formal dependency publication", "red_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-media18-red.log", "green_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-media18-green.log", "runtime_replaced": false, "live_retest": "NOT_RUN"}

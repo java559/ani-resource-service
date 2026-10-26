@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-25T07:11:18.038444+00:00",
+  "result": "PASS_ORIGINAL_WINDOWS_ACCOUNT_LOGIN_AND_DESKTOP_AFTER_PROFILE_STOP_START",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "24",
+  "native_vmi_uid": "d3cc1de1-bd43-4b91-93f1-cfdca333dbd0",
+  "launcher_uid": "5ee91577-65df-455b-bb38-45526e88cc02",
+  "profile_start_reference": "windows-domain-profile-live-01/verified-start.json",
+  "profile_start_sha256": "93b66dffd08bca8c7d1e75109b9d95b93e5b754ecfc1066d55c6aaaa31af2757",
+  "account": "Administrator",
+  "authentication": "normal_existing_password",
+  "new_credentials": 0,
+  "credential_values_or_hashes_persisted": false,
+  "actual_frame": "Windows installed desktop with Recycle Bin/Edge after existing-password logon",
+  "startup_and_logon": "SLOW_OBSERVED",
+  "performance_improvement": "NOT_PROVEN",
+  "disk_content_readback": "PENDING",
+  "qga_installation": "NOT_RUN",
+  "screenshot": {
+    "path": "windows-profile-start-desktop-20261025.jpg",
+    "sha256": "0fa286131ea9888566cf9acf3bb17d8953269af44cc561644d40aac004986157"
+  }
+}

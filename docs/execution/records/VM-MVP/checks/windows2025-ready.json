@@ -1,0 +1,59 @@
+{
+  "datavolume": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "DataVolume",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-windows2025-http-source",
+    "uid": "44a9edbb-ce27-4278-806a-7b02f6d04fec"
+  },
+  "pvc": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "namespace": "vm-mvp-probe-01a168ce",
+    "name": "vm-mvp-windows2025-http-source",
+    "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+  },
+  "pv": {
+    "apiVersion": "v1",
+    "kind": "PersistentVolume",
+    "namespace": "",
+    "name": "pvc-40e77734-194b-49fc-8f63-d16a61a5b6a8",
+    "uid": "4b2eb6e4-9a47-48b4-9b62-c9291f555be9"
+  },
+  "csi": {
+    "controllerExpandSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "controllerPublishSecretRef": {
+      "name": "rook-csi-rbd-provisioner",
+      "namespace": "rook-ceph"
+    },
+    "driver": "rook-ceph.rbd.csi.ceph.com",
+    "fsType": "ext4",
+    "nodeStageSecretRef": {
+      "name": "rook-csi-rbd-node",
+      "namespace": "rook-ceph"
+    },
+    "volumeAttributes": {
+      "clusterID": "rook-ceph",
+      "imageFeatures": "layering",
+      "imageFormat": "2",
+      "imageName": "csi-vol-12889a81-33c5-4251-b274-da5377f1674a",
+      "journalPool": "ani-block-pool",
+      "pool": "ani-block-pool",
+      "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+    },
+    "volumeHandle": "0001-0009-rook-ceph-0000000000000004-12889a81-33c5-4251-b274-da5377f1674a"
+  },
+  "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+  "source_file_sha256": "33b9980c5aaa5bc40aedf20cf9d15f32edafcb6ed883049255713535a61cc40b",
+  "source_file_bytes": 8726618112,
+  "actual_disk_file_bytes": 11845763072,
+  "mode": "Filesystem",
+  "content_type": "kubevirt",
+  "read_only_hash": true,
+  "original_iso_prefix_verified": true,
+  "iso_proof": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/windows2025-onepass.json",
+  "guest_mount_or_install": "NOT_RUN"
+}

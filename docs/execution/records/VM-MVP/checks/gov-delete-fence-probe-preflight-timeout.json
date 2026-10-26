@@ -1,0 +1,17 @@
+{
+  "observed_at": "2026-10-24T00:13:09.351060+00:00",
+  "result": "BLOCKED_READ_ONLY_PREFLIGHT",
+  "attempts": 2,
+  "step": "freeze_native/base_RBD_info",
+  "failure": "subprocess.TimeoutExpired after unchanged 8-second limit",
+  "image": "ani-block-pool/csi-vol-71297c1c-fa32-4f1e-9827-83c700262691",
+  "probe_acl_journal_exists": false,
+  "probe_fence_state_exists": false,
+  "initial_native_sha256": "9b78909fd8a1e006ad98891012d4ab9d7ff7df8a2238ed5040fd728ba79e606a",
+  "driver_sha256": "2aa084dc4375f2138f090effecb0f3b10bb00a71620472a80e4a42e2457f324d",
+  "console_issue_count": 0,
+  "delete_admission_count": 0,
+  "acl_mutations": 0,
+  "third_retry": false,
+  "vm_preserved": true
+}

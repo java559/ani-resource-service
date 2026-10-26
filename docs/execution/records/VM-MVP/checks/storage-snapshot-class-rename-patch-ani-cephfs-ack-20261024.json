@@ -1,0 +1,61 @@
+{
+  "apiVersion": "cdi.kubevirt.io/v1beta1",
+  "kind": "StorageProfile",
+  "metadata": {
+    "creationTimestamp": "2026-10-03T16:53:04Z",
+    "generation": 2,
+    "labels": {
+      "app": "containerized-data-importer",
+      "app.kubernetes.io/component": "storage",
+      "app.kubernetes.io/managed-by": "cdi-controller",
+      "cdi.kubevirt.io": ""
+    },
+    "name": "ani-cephfs",
+    "ownerReferences": [
+      {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "blockOwnerDeletion": true,
+        "controller": true,
+        "kind": "CDI",
+        "name": "cdi",
+        "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+      }
+    ],
+    "resourceVersion": "61237746",
+    "uid": "49bbc971-fc2d-4543-b7a7-02ccd13aac99"
+  },
+  "spec": {
+    "snapshotClass": "ani-cephfs-delete"
+  },
+  "status": {
+    "claimPropertySets": [
+      {
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "volumeMode": "Filesystem"
+      },
+      {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "volumeMode": "Filesystem"
+      }
+    ],
+    "cloneStrategy": "csi-clone",
+    "conditions": [
+      {
+        "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+        "lastTransitionTime": "2026-10-03T16:53:04Z",
+        "message": "Provisioner is recognized",
+        "reason": "RecognizedProvisioner",
+        "status": "True",
+        "type": "Recognized"
+      }
+    ],
+    "dataImportCronSourceFormat": "pvc",
+    "provisioner": "rook-ceph.cephfs.csi.ceph.com",
+    "snapshotClass": "ani-cephfs-delete",
+    "storageClass": "ani-cephfs"
+  }
+}

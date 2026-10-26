@@ -1,0 +1,517 @@
+{
+  "vm_id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+  "create_operation_id": "c7157a1a-f7cb-408e-9fc1-62138d81d2d9",
+  "action": "restart",
+  "operation_id": "928b248c-35ce-4d60-8975-4a7495ca8a0f",
+  "expected_version": 3,
+  "admission_send_attempts": 1,
+  "operation": {
+    "id": "928b248c-35ce-4d60-8975-4a7495ca8a0f",
+    "vmId": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "action": "restart",
+    "intentVersion": "4",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T17:06:49.452333403Z"
+  },
+  "current": {
+    "id": "e1b3403b-178c-40c2-a4d5-53a37756039c",
+    "name": "vm-mvp-linux-main-v2",
+    "version": "4",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Running",
+    "observedState": "Running",
+    "reason": "",
+    "observedAt": "2026-10-23T17:06:47.640608066Z",
+    "addresses": [],
+    "lastOperationId": "928b248c-35ce-4d60-8975-4a7495ca8a0f",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-b18440e088c35bd492c6b667f2e69a1e",
+        "serial": "b18440e0-88c3-5bd4-92c6-b667f2e69a1e",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "cpuMillis": "1500",
+    "memoryMib": "2048",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/restart",
+      "status": 202
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c/operations/928b248c-35ce-4d60-8975-4a7495ca8a0f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/e1b3403b-178c-40c2-a4d5-53a37756039c",
+      "status": 200
+    }
+  ],
+  "private_command_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-lifecycle-v2.json"
+}

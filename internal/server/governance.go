@@ -272,7 +272,8 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 		_, instanceMethod := instanceGovernanceMethods[info.FullMethod]
 		_, computeMethod := computeGovernanceMethods[info.FullMethod]
 		_, storageMethod := storageGovernanceMethods[info.FullMethod]
-		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod && !computeMethod && !storageMethod {
+		_, vmMethod := vmGovernanceMethods[info.FullMethod]
+		if _, ok := governanceReadMethods[info.FullMethod]; !ok && !imageMethod && !platformMethod && !instanceMethod && !computeMethod && !storageMethod && !vmMethod {
 			return nil, status.Error(codes.PermissionDenied, "governance credential does not permit this method")
 		}
 		r, ok := req.(proto.Message)
@@ -280,6 +281,13 @@ func governanceUnary(readOnly bool) grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.PermissionDenied, "governance requests must be proto messages")
 		}
 		ctx = context.WithValue(ctx, governancePrincipalKey{}, p)
+		if vmMethod {
+			ctx, err = withVMGovernanceScope(ctx, p, r, info.FullMethod)
+			if err != nil {
+				return nil, err
+			}
+			return next(ctx, req)
+		}
 		if computeMethod || computePlatformMethod {
 			ctx, err = withComputeGovernanceScope(ctx, p, r, info.FullMethod)
 			if err != nil {

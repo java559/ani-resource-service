@@ -1,0 +1,41 @@
+--- Harbor-v2-3a376
++++ Harbor-v2-exact-NOT_FOUND
+@@ -128,7 +128,15 @@
+     # Skopeo wraps the registry error in a timestamped fatal message. Match its
+     # complete final cause, not arbitrary appearances of "unknown" or HTTP 404.
+     tail = re.search(re.escape(prefix) + r'(manifest unknown|name unknown)(?:[ :][^"\n]*)?"?\s*$', text)
+-    return tail is not None
++    if tail is not None:
++        return True
++    # Harbor's authenticated, exact-repository HTTP404 was captured as
++    # NOT_FOUND and skopeo renders that cause as "unknown: repository ... not found".
++    # Do not accept generic 404s, partial paths, arbitrary suffixes, or auth errors.
++    if not repository.startswith(ENDPOINT + '/' + PROJECT + '/'):
++        return False
++    missing = prefix + 'unknown: repository ' + repository[len(ENDPOINT) + 1:] + ' not found'
++    return re.search(re.escape(missing) + r'"?\s*$', text) is not None
+ 
+ 
+ def approvals(args):
+@@ -276,6 +284,12 @@
+     require(not confirmed_absent(1, b'', b'HTTP 404 from proxy', image), 'generic 404 accepted')
+     require(not confirmed_absent(0, b'{}', b'', image), 'existing target accepted')
+     require(not confirmed_absent(-15, b'', absent, image), 'timeout accepted')
++    harbor_image = {'proposed_destination_tag': ENDPOINT + '/' + PROJECT + '/example:vm-task'}
++    harbor_missing = ('reading manifest vm-task in ' + ENDPOINT + '/' + PROJECT +
++                      '/example: unknown: repository ' + PROJECT + '/example not found"\n').encode()
++    require(confirmed_absent(1, b'', harbor_missing, harbor_image), 'exact Harbor repository absence rejected')
++    require(not confirmed_absent(1, b'', harbor_missing.replace(b'/example not found', b'/other not found'), harbor_image),
++            'wrong missing repository accepted')
+     base = dict(root_authorized=True, approved_plan_sha256=PLAN_SHA,
+                 approved_driver_sha256=file_sha(Path(__file__)), exclusive_new_task_tags=True,
+                 transport='strict-tls', approved_insecure_endpoint=None, auth_file=None,
+@@ -288,7 +302,7 @@
+         except RuntimeError:
+             continue
+         raise RuntimeError('unauthorized registry guard unexpectedly accepted')
+-    print(json.dumps({'result': 'PASS', 'pure_guard_cases': 11, 'registry_requests': 0}))
++    print(json.dumps({'result': 'PASS', 'pure_guard_cases': 13, 'registry_requests': 0}))
+ 
+ 
+ def main():

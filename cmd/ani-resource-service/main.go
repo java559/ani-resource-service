@@ -30,6 +30,7 @@ var (
 	flagImageMigrate    bool
 	flagInstanceMigrate bool
 	flagComputeRestore  bool
+	flagVMMigrate       bool
 	flagNodeFacts       bool
 	id, _               = os.Hostname()
 )
@@ -40,6 +41,7 @@ func init() {
 	flag.BoolVar(&flagMigrate, "migrate", false, "apply Network migrations using explicit owner environment")
 	flag.BoolVar(&flagImageMigrate, "image-migrate", false, "apply Image migrations using explicit owner secret file")
 	flag.BoolVar(&flagInstanceMigrate, "instance-migrate", false, "apply Instance migrations using explicit owner secret file")
+	flag.BoolVar(&flagVMMigrate, "vm-migrate", false, "apply VM migrations using explicit owner secret file")
 	flag.BoolVar(&flagComputeRestore, "compute-restore", false, "restore pre-compute metadata with all readers stopped using explicit owner secret file")
 }
 
@@ -53,6 +55,12 @@ func main() {
 	logger := newRuntimeLogger(logOutput)
 	log.SetDefault(logger)
 	execute := func() error {
+		if flagVMMigrate {
+			if flagComputeRestore || flagInstanceMigrate || flagMigrate || flagImageMigrate || flagNodeFacts || imageAdminAction != "" || baseConnectivityAction != "" {
+				return fmt.Errorf("VM migration is exclusive with other command modes")
+			}
+			return runVMMigration()
+		}
 		if flagComputeRestore {
 			if flagInstanceMigrate || flagMigrate || flagImageMigrate || flagNodeFacts || imageAdminAction != "" || baseConnectivityAction != "" {
 				return fmt.Errorf("compute recovery is exclusive with other command modes")

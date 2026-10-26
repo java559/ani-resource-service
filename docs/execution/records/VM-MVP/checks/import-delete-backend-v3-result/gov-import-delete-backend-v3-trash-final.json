@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-24T05:51:01.091764+00:00",
+  "vm_id": "737c01f4-bec8-4f4e-88ed-4bbe5ef07853",
+  "original_target_pvc_uid": "7b52e613-e25e-4c0a-84aa-e67fe6828724",
+  "source_temp_pvc_uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+  "attribution": {
+    "request": "pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reservation_uuid": "ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "pool": "ani-block-pool",
+    "image": "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "directory": "csi.volumes.default",
+    "key": "csi.volume.pvc-a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc",
+    "reverse_object": "csi.volume.ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "reverse_request_verified": true,
+    "claim": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "tmp-pvc-7b52e613-e25e-4c0a-84aa-e67fe6828724",
+      "uid": "a67097c3-aa3f-4c1a-800f-fc52d8a1f6bc"
+    }
+  },
+  "known_image_ids": [
+    "20cc87108566ef",
+    "20cc87ab6aaa20"
+  ],
+  "known_image_names": [
+    "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc",
+    "csi-vol-ba5df142-14bc-49a9-9153-377a83acb7dc-temp"
+  ],
+  "timeline": {
+    "delete_succeeded_observed_at": "2026-10-24T05:17:00.316964341Z",
+    "post_delete_PRESENT_measurement_started_at": "2026-10-24T05:22:12.055929+00:00",
+    "post_delete_PRESENT_receipt_last_saved_at": "2026-10-24T05:22:35.692541+00:00",
+    "subsequent_image_and_journal_ABSENT_measurement_started_at": "2026-10-24T05:31:51.653218+00:00",
+    "subsequent_measurement_elapsed_seconds": 6.146,
+    "fresh_trash_completed_at": "2026-10-24T05:51:02.944737+00:00"
+  },
+  "image_and_journal_absence_receipt": "evidence/gov-import-delete-backend-v3-exact-recheck.json",
+  "image_and_journal_absence_receipt_sha256": "6d744bccc82f62e704073b8a64b51402aff959601607abf8480c3620cf6758e1",
+  "prior_native_receipt": "evidence/gov-import-delete-backend-v3-final-cleanup.json",
+  "prior_native_receipt_sha256": "e17558a1bdffaf16fe046959b6042bd91d4e05f6b6727d58411b68c8981166ff",
+  "installed_help_receipt_sha256": "3be673a9ed7881b7581e5ce57ba0d77b291c0d2c79e8aacfa4ebca5ddff519f2",
+  "exact_id_trash_info_supported": false,
+  "scope": "one fresh read-only trash list filtered by the already attributed exact image IDs/names; no repeated native/API/image checks",
+  "timeout_seconds": 45,
+  "result": "NORMAL_DELAYED_GC_CONFIRMED",
+  "historical_v1_v2": "UNCHANGED_NOT_MEASURED",
+  "pre_delete_actual_image_id_observed": false,
+  "argv": [
+    "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+    "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+    "exec",
+    "-n",
+    "rook-ceph",
+    "rook-ceph-tools-68d6bc7cc7-2z8tk",
+    "--",
+    "rbd",
+    "trash",
+    "ls",
+    "ani-block-pool",
+    "--format=json"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 1.852,
+  "stdout_sha256": "50e5894af0da0902f2196ca86357041c26ad3fa7ac19d36fe29c9b77d56f6230",
+  "stderr": "",
+  "raw_stdout_private_reference": "private/v22v3-trash-final.stdout",
+  "matches": [],
+  "finished_at": "2026-10-24T05:51:02.944737+00:00"
+}

@@ -1,0 +1,124 @@
+{
+  "at": "2026-10-23T21:50:12.254068+00:00",
+  "scope": "READ_ONLY_PINNED_VM_VMI_PHASE",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+    "uid": "1b6caed4-4c29-4d2d-af11-59fbacda2622"
+  },
+  "vmi_phase": "Running",
+  "vmi_reason": null,
+  "vmi_conditions": [
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-23T21:48:27Z",
+      "status": "True",
+      "type": "Ready"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "message": "All of the VMI's DVs are bound and ready",
+      "reason": "AllDVsReady",
+      "status": "True",
+      "type": "DataVolumesReady"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "message": "cannot migrate VMI: PVC vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+      "reason": "DisksNotLiveMigratable",
+      "status": "False",
+      "type": "LiveMigratable"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "status": "True",
+      "type": "StorageLiveMigratable"
+    }
+  ],
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "operation": {
+    "id": "89507e68-a739-4b29-b712-37edd0361833",
+    "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "intentVersion": "1",
+    "state": "succeeded",
+    "reason": "",
+    "observedAt": "2026-10-23T21:49:01.53458998Z"
+  },
+  "current": {
+    "id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "name": "vm-mvp-windows2025-iso",
+    "version": "1",
+    "osFamily": "windows",
+    "osVersion": "2025",
+    "desiredState": "Running",
+    "observedState": "Running",
+    "reason": "",
+    "observedAt": "2026-10-23T21:48:56.126660253Z",
+    "addresses": [
+      {
+        "nicName": "default",
+        "address": "10.83.1.14",
+        "observedAt": "2026-10-23T21:48:56.126660253Z"
+      }
+    ],
+    "lastOperationId": "89507e68-a739-4b29-b712-37edd0361833",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "windows-server-2025-iso",
+        "observedMedia": "windows-server-2025-iso",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "virtio-win-0.1.271",
+        "observedMedia": "virtio-win-0.1.271",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "INSTALL_MEDIA",
+    "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+    "cpuMillis": "2000",
+    "memoryMib": "4096",
+    "systemDiskSizeGb": "80",
+    "sourceKind": "INSTALL_ISO",
+    "mediaKey": "windows-server-2025-iso"
+  },
+  "send_attempts": 1,
+  "native_mutations": 0,
+  "storage_chain_rescanned": false
+}

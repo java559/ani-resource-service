@@ -23,7 +23,11 @@ func attachment(row sqlcgen.NetworkAttachment) (biz.Attachment, error) {
 		a.WorkloadMode = "single_pod"
 	}
 	if a.State == biz.Reserved || a.State == biz.Attached {
-		a.Plan = &plan
+		if a.WorkloadMode == "vm_managed" {
+			a.VMPrimary = plan.VMPrimary
+		} else {
+			a.Plan = &plan
+		}
 	}
 	return a, nil
 }
@@ -100,12 +104,35 @@ func (p *Postgres) PrepareAttachment(ctx context.Context, r biz.PrepareAttachmen
 		return biz.Attachment{}, biz.Fail(biz.NetworkNotReady, "subnet binding identity is unavailable")
 	}
 	id := "att_" + strings.ReplaceAll(uuid.NewString(), "-", "")
-	plan, _ := json.Marshal(biz.PodPrimaryPlan{FormatVersion: 1, WorkloadMode: r.WorkloadMode, Namespace: b.Namespace, PrimaryNetworkRef: b.Namespace + "/" + b.ProviderName, TenantID: r.TenantID, InstanceID: r.InstanceID, AttachmentID: id, SubmissionID: r.SubmissionID, Generation: r.Generation})
+	delivery := biz.PodPrimaryPlan{FormatVersion: 1, WorkloadMode: r.WorkloadMode, Namespace: b.Namespace, PrimaryNetworkRef: b.Namespace + "/" + b.ProviderName, TenantID: r.TenantID, InstanceID: r.InstanceID, AttachmentID: id, SubmissionID: r.SubmissionID, Generation: r.Generation}
+	if r.WorkloadMode == "vm_managed" {
+		if p.vmNetworks == nil || r.VMExpectation == nil {
+			return biz.Attachment{}, biz.Fail(biz.DependencyUnavailable, "managed VM network is not configured")
+		}
+		vmPlan, err := p.vmNetworks.ResolveVMNetwork(ctx, biz.VMNetworkSelection{TenantID: r.TenantID, VPCID: s.VpcID, SubnetID: s.SubnetID, ClusterID: b.ClusterID, Namespace: b.Namespace, BindingRevision: b.BindingID + ":" + b.ProviderUid, KCNSubnetRef: delivery.PrimaryNetworkRef}, *r.VMExpectation)
+		if err != nil {
+			return biz.Attachment{}, err
+		}
+		if vmPlan.Namespace != b.Namespace || vmPlan.KCNSubnetRef != delivery.PrimaryNetworkRef || vmPlan.NADName != r.VMExpectation.NADName || vmPlan.NADUID != r.VMExpectation.NADUID || vmPlan.NADConfigDigest != r.VMExpectation.NADConfigDigest {
+			return biz.Attachment{}, biz.Fail(biz.AttachmentConflict, "VM network resolver returned a different frozen dependency")
+		}
+		vmPlan.FormatVersion = 1
+		vmPlan.TenantID = r.TenantID
+		vmPlan.InstanceID = r.InstanceID
+		vmPlan.AttachmentID = id
+		vmPlan.SubmissionID = r.SubmissionID
+		vmPlan.Generation = r.Generation
+		delivery.VMPrimary = &vmPlan
+	}
+	plan, e := json.Marshal(delivery)
+	if e != nil {
+		return biz.Attachment{}, databaseFailure(e)
+	}
 	row, e := q.InsertAttachment(ctx, sqlcgen.InsertAttachmentParams{TenantID: r.TenantID, AttachmentID: id, VpcID: s.VpcID, SubnetID: s.SubnetID, BindingID: b.BindingID, InstanceID: r.InstanceID, Slot: r.Slot, RequestKey: r.RequestKey, SubmissionID: r.SubmissionID, Generation: r.Generation, Fingerprint: r.Fingerprint(), ClusterID: b.ClusterID, Namespace: b.Namespace, BindingRevision: b.BindingID + ":" + b.ProviderUid, Plan: plan})
 	if e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	if r.WorkloadMode == "controller_managed" {
+	if r.WorkloadMode == "controller_managed" || r.WorkloadMode == "vm_managed" {
 		if _, e = tx.Exec(ctx, `INSERT INTO network_attachment_consumer_snapshots(tenant_id,attachment_id) VALUES($1,$2)`, r.TenantID, id); e != nil {
 			return biz.Attachment{}, databaseFailure(e)
 		}
@@ -123,7 +150,17 @@ func (p *Postgres) GetAttachment(ctx context.Context, t, id string) (biz.Attachm
 	if e != nil {
 		return biz.Attachment{}, databaseFailure(e)
 	}
-	return managedAttachment(ctx, p.pool, row)
+	a, err := managedAttachment(ctx, p.pool, row)
+	if err != nil {
+		return biz.Attachment{}, err
+	}
+	if a.WorkloadMode == "vm_managed" {
+		a.VMCurrentAddresses = p.vmCurrentAddresses(ctx, a, row.ProviderRelations)
+		if a.State == biz.Attached && a.Reason == "" && len(a.VMCurrentAddresses) == 0 {
+			a.Reason = biz.Reason("VM_NETWORK_ADDRESS_NOT_CURRENT")
+		}
+	}
+	return a, nil
 }
 func lockAttachmentParents(ctx context.Context, q *sqlcgen.Queries, t, id string) (sqlcgen.NetworkAttachment, error) {
 	initial, e := q.GetAttachment(ctx, sqlcgen.GetAttachmentParams{TenantID: t, AttachmentID: id})
@@ -156,7 +193,7 @@ func (p *Postgres) ConfirmAttachment(ctx context.Context, r biz.ConfirmAttachmen
 	if e != nil {
 		return biz.Attachment{}, e
 	}
-	if mode.WorkloadMode == "controller_managed" {
+	if mode.WorkloadMode == "controller_managed" || mode.WorkloadMode == "vm_managed" {
 		return p.confirmManagedAttachment(ctx, tx, q, row, r)
 	}
 	// Immutable identity replay precedes mutable version and state checks, also

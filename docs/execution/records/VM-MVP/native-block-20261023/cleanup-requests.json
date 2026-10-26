@@ -1,0 +1,132 @@
+[
+  {
+    "object": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-blank-probe",
+      "uid": "cc272909-1e70-4173-85a0-2eaf131a4995"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-device-ani-01",
+      "uid": "4d923cdf-cbed-43fe-8bce-c01231669cbd"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-device-ani-02",
+      "uid": "5b6cea03-b563-4e46-8fee-6e3c61441bd4"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-device-ani-03",
+      "uid": "5e891cb5-8a46-4d2f-b220-65bf5e730390"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Pod",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-source-hash",
+      "uid": "74bc0237-45ac-42e8-a79b-d9602b04936a"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-03",
+      "uid": "4dda4bb5-fc08-46da-aed7-fc6fc1ab7de4"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-03-root",
+      "uid": "80580389-3f68-443c-afe6-a8845c8567bb"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-03-data",
+      "uid": "cc17b824-010f-48b4-98e9-5c7787cba0e8"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-03-cloudinit",
+      "uid": "fe2e31f9-09e7-4d03-b36d-7f5a491d6423"
+    },
+    "result": "absent"
+  },
+  {
+    "object": {
+      "apiVersion": "kubevirt.io/v1",
+      "kind": "VirtualMachine",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-02",
+      "uid": "e0321646-9164-4166-8281-b7ab2a1dbbba"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-02-root",
+      "uid": "ea5a0602-0076-4709-bd20-c05d4cb9c0f3"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-02-data",
+      "uid": "06d6bfd2-85f4-4054-b33c-97328f3df029"
+    },
+    "result": "delete_requested"
+  },
+  {
+    "object": {
+      "apiVersion": "v1",
+      "kind": "Secret",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-ani-02-cloudinit",
+      "uid": "7dde16f2-23e9-4244-a3ad-389ef74772d1"
+    },
+    "result": "absent"
+  }
+]

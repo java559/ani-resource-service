@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-24T07:35:07.046404+00:00",
+  "remote_url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-resource-service.git",
+  "local_ref": "refs/heads/codex/vm-mvp-resource-runtime-20261023",
+  "local_oid": "8589b66f1370d8811777a87f3b02f6acba144818",
+  "remote_ref": "refs/heads/codex/vm-mvp-resource-runtime-20261023",
+  "remote_old_oid": "0000000000000000000000000000000000000000",
+  "commit_tree": "e51622e689476c524ddd29776d1b217738822a21",
+  "parent": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+  "result": "PASS_EXACT_CREATE_ONLY"
+}

@@ -1,0 +1,25 @@
+{
+  "result": "IN_PROGRESS_DRACUT_PRESENT_NOT_INSTALL_COMPLETE",
+  "recorded_at": "2026-10-25T02:49:59.963829+00:00",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "native_vm_uid": "68f92d12-8d14-4d73-ba97-996d328c23f9",
+  "vmi_uid": "27550850-b1fc-4fe9-99fb-6e08ef7d5a24",
+  "version": "1",
+  "actual_browser": "Original installed software copy Completed; system configuration Installing boot loader, finalization pending. Original liveuser tty3 login reached shell; actual ps output contains anaconda, python3, dracut-rescu and dracut. No terminal installer completion or error observed. exit sent once; terminal cleared, getty login prompt not reverified before switching VNC.",
+  "readonly_guest_command": "ps -eo pid,ppid,stat,etime,comm | grep -E 'PID|anaconda|dracut|grub|mkinit|rsync|cp$|rpm|python'",
+  "guest_marker_writes": 0,
+  "power_eject_boot_operations": 0,
+  "server_restarts": 0,
+  "temporary_ui_index_sha256": "16e5ee89ffea7a93c4a2ac2aa3c2148c39ea6c6b1016355bdb97f736b6cd9b88",
+  "evidence": [
+    {
+      "path": "browser-dracut-process-01.jpg",
+      "sha256": "4c521afbea0b0ad7a9dff754a70f0c769f3ebd4e7f0819b5ac1c8605728fbce5"
+    },
+    {
+      "path": "domain-state-blockerror-01.json",
+      "sha256": "9d47813a4f25eecce75e108aeae27ea7862f49a093a2d2ec214eafb635abc472"
+    }
+  ],
+  "limitations": "Presence of dracut and one running/no-blockerror sample do not prove progress rate, root cause, completion, marker persistence or installed-system boot."
+}

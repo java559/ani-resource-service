@@ -1,0 +1,15 @@
+{
+  "session_id": "f39d9cc1-3383-40b6-9ad4-ff19d33b3b10",
+  "started_at": "2026-10-23T17:06:50.856754+00:00",
+  "expires_at": "2026-10-23T17:07:12.641Z",
+  "remaining_ms": 21784,
+  "attempts": 1,
+  "credential_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/unused-console-restart-v2.json",
+  "result": "STALE_BINDING_REJECTED",
+  "http_status": 101,
+  "first_opcode": 8,
+  "first_payload_bytes": 24,
+  "close_code": 1008,
+  "close_reason": "console target changed",
+  "ended_at": "2026-10-23T17:06:50.927769+00:00"
+}

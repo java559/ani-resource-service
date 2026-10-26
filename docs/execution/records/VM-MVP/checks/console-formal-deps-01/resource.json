@@ -1,0 +1,96 @@
+{
+  "step": "resource",
+  "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-formal-deps-01/src/resource",
+  "gowork": "off",
+  "toolchain": "go1.26.10",
+  "source_manifest_sha256": "3cc35dbf57031dcd81775c0357370ca3759fde0d87f13d0e052e02a50f631f52",
+  "before_mod_sum": {
+    "resource/go.mod": "130c566e4d7db51017f83d536e17b76953b4b004029dedea644f2fb7ea1e9872",
+    "resource/go.sum": "4dcc9b0983bf83e0e04d58ad6758307a7e94f3ae9618e303351e08dfb35eaeef",
+    "session/api/go.mod": "cb0da045b65e71091e42420447c742df4ac86bcd7129e7bf94edd81f9ad05d93",
+    "session/api/go.sum": "c6caaebcd7e01e1898597a5ec2168daab6dc728dee709b44bbf1bd2c92118b61",
+    "session/go.mod": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+    "session/go.sum": "5ba74cd53e18486ccc04258cfa9e2b3f2be4107bae3b4a0a2f5ff4d7f1b657e1",
+    "governance/go.mod": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+    "governance/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673"
+  },
+  "started_at": "2026-10-24T04:43:07.546593+00:00",
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy"
+      ],
+      "timeout_seconds": 45,
+      "exit_code": 0,
+      "elapsed_seconds": 0.349,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "tidy",
+        "-diff"
+      ],
+      "timeout_seconds": 25,
+      "exit_code": 0,
+      "elapsed_seconds": 0.116,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "list",
+        "-m",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console"
+      ],
+      "timeout_seconds": 15,
+      "exit_code": 0,
+      "elapsed_seconds": 0.006,
+      "timed_out": false
+    },
+    {
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-mod=readonly",
+        "./api/vm/v1",
+        "./internal/service/vm",
+        "./internal/data/vm",
+        "./internal/server"
+      ],
+      "timeout_seconds": 90,
+      "exit_code": 0,
+      "elapsed_seconds": 5.151,
+      "timed_out": false
+    }
+  ],
+  "running_candidate_changed": false,
+  "business_api_calls": 0,
+  "formal_console_module": {
+    "Path": "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console",
+    "Version": "v0.0.0-20261023185414-0a53b99c8d9f",
+    "Time": "2026-10-23T18:54:14Z",
+    "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console@v0.0.0-20261023185414-0a53b99c8d9f",
+    "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/@v/v0.0.0-20261023185414-0a53b99c8d9f.mod",
+    "GoVersion": "1.26.9",
+    "Sum": "h1:dC5v8SPszcnt5W0pl5rBOSCL85nDJnQJkjy1YcWFZLs=",
+    "GoModSum": "h1:aFsjlMnejbYpMPxuooE0xAmyzwcjyDRjZAjS2YoroE8="
+  },
+  "after_mod_sum": {
+    "resource/go.mod": "41152b583c720153bbdf215ae63f6e366de9986f8f465eb309dcfc3d368b4e6e",
+    "resource/go.sum": "b4130ec594f543e4b73e0e4c38abccf2f6eb1138e64fd46748a6fe450f09d3e1",
+    "session/api/go.mod": "cb0da045b65e71091e42420447c742df4ac86bcd7129e7bf94edd81f9ad05d93",
+    "session/api/go.sum": "c6caaebcd7e01e1898597a5ec2168daab6dc728dee709b44bbf1bd2c92118b61",
+    "session/go.mod": "42e701975ead080bd2df247c7de7bbd03cb6db4e72d48802e899bcc9ce92bcf2",
+    "session/go.sum": "5ba74cd53e18486ccc04258cfa9e2b3f2be4107bae3b4a0a2f5ff4d7f1b657e1",
+    "governance/go.mod": "38d1d7623d92a8e9a73d84827a4f59277792947e6b7b0dad43d18b4234e6a7f6",
+    "governance/go.sum": "4136d0758c85b666f112f10ddab77a227307388f0dbd046f0a57c06edded4673"
+  },
+  "finished_at": "2026-10-24T04:43:13.408370+00:00",
+  "result": "PASS",
+  "log_sha256": "9251b743ec24862f93686d68a003c1bb410c67ac17f8d1a1b2f0dfeb73ab5835"
+}

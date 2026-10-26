@@ -1,0 +1,73 @@
+{
+  "result": "INSTALLATION_IN_PROGRESS_NOT_V14_PASS",
+  "task_name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "native_receipt_sha256": "bd28c5d1fc50f1be0225569f288e042c87e35d958dcabb03627a31356c576c1a",
+  "media_self_check": "ESC_REQUESTED_AT_EXPLICIT_OPTIONAL_SKIP_PROMPT_NOT_A_SELF_CHECK_PASS",
+  "live_desktop_reached": true,
+  "installer": "Fedora Linux 44 KDE Plasma Desktop Edition official interactive installer",
+  "target": {
+    "device": "/dev/vda",
+    "model": "Virtio Block Device",
+    "capacity_gb_displayed": 48.3,
+    "requested_gb": 48,
+    "layout_review": {
+      "vda1": "629MB EFI /boot/efi",
+      "vda2": "2.15GB ext4 /boot",
+      "vda3": "45.5GB btrfs subvolumes / and /home"
+    },
+    "preexisting_task_blank_root": true,
+    "data_disks": 0
+  },
+  "current_stage": "Storage configuration Completed; Software installation In progress",
+  "installation_completed": false,
+  "root_marker_written": false,
+  "system_disk_controls_executed": false,
+  "new_credentials_entered": false,
+  "live_diagnostic": {
+    "account": "vendor built-in liveuser",
+    "tty3_login_succeeded": true,
+    "tty3_normal_logout_confirmed": true,
+    "temporary_graphical_konsole_closed_with_exit": true,
+    "sudo_n_tail": "PASSWORD_REQUIRED_NO_RETRY_OR_NEW_CREDENTIAL",
+    "ordinary_tail": "PERMISSION_DENIED",
+    "ordinary_ps_and_free": "OBSERVED",
+    "memory_mib": {
+      "total": 3934,
+      "used": 2022,
+      "free": 118,
+      "available": 1806
+    },
+    "swap_mib": {
+      "total": 3833,
+      "used": 2559,
+      "free": 1274
+    },
+    "sustained_vnc_fault": "NOT_ESTABLISHED; same stream subsequently rendered new installer states",
+    "duplicate_launch_notice": "Installer already running; dismissed; original installer continued"
+  },
+  "screenshots": [
+    {
+      "file": "browser-review-01.jpg",
+      "format": "JPEG",
+      "sha256": "9eddf9e49d296934230071de77b462f7b080704b8e93f5f83edebc7603f0122a",
+      "captured_at": "2026-10-25T01:02:04.494642+00:00"
+    },
+    {
+      "file": "browser-installing-01.jpg",
+      "format": "JPEG",
+      "sha256": "d16cbc3b9e3388cad64d4a688b43cb5c87cc2622d49052b4dd38896fa4b9beea",
+      "captured_at": "2026-10-25T01:07:07.097273+00:00"
+    },
+    {
+      "file": "browser-live-diagnostic-01.jpg",
+      "format": "JPEG",
+      "sha256": "12c962498218d6f745063a8c9365b8434adba65e5b29ec8afdcbe69bd8627d53",
+      "captured_at": "2026-10-25T00:55:19.971461+00:00"
+    }
+  ],
+  "sg_routine_refresh": "../sg-task-token-renewal-259124.json",
+  "Windows_mutations": 0,
+  "public_or_office_probes": 0,
+  "browser_task_session_still_live_for_iso": true
+}

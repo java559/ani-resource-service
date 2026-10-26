@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+cd "$(dirname "$0")/.."
+BUF=${BUF:?set verified buf v1.60.0}
+[[ $("$BUF" --version) == 1.60.0 ]]
+module=github.com/zhangzhe-ctrl/ani-accelerator-service
+go mod download "$module"
+upstream=$(go list -m -f '{{.Dir}}' "$module")
+work=$(mktemp -d "${TMPDIR:?task-owned TMPDIR}/vm-api.XXXXXX")
+trap 'rm -rf -- "$work"' EXIT
+mkdir -p "$work/api/vm" "$work/api/compute" "$work/upstream"
+cp -R api/compute/v1 "$work/api/compute/"
+cp -R api/vm/v1 api/vm/console "$work/api/vm/"
+cp -R "$upstream/api/protos" "$work/upstream/accelerator"
+chmod -R u+w "$work/upstream"
+cp go.mod go.sum "$work/"
+cat > "$work/buf.yaml" <<'EOF'
+version: v2
+modules:
+  - path: api
+  - path: upstream/accelerator
+EOF
+cat > "$work/buf.gen.yaml" <<'EOF'
+version: v2
+inputs:
+  - directory: .
+    paths: [api/compute/v1/compute.proto, api/vm/v1/vm.proto]
+plugins:
+  - local: [go, run, google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11]
+    out: .
+    opt: [paths=import, module=github.com/zhangzhe-ctrl/ani-resource-service]
+  - local: [go, run, google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1]
+    out: .
+    opt: [paths=import, module=github.com/zhangzhe-ctrl/ani-resource-service]
+EOF
+(cd "$work" && "$BUF" build && "$BUF" generate)
+cp "$work/api/vm/v1/"*.pb.go api/vm/v1/
+cp "$work/api/compute/v1/"*.pb.go api/compute/v1/

@@ -1,0 +1,822 @@
+{
+  "state": "CONFIG_APPLIED_VERIFIED",
+  "started_at": "2026-10-24T03:49:22.819561+00:00",
+  "approved_prepared_sha256": "8c83f55caca36d1faa25d32c0adbf012cedfa9643985952da93ce4d4ce3c45e9",
+  "write_sends": [
+    {
+      "operation": "CREATE",
+      "kind": "volumesnapshotclass",
+      "name": "ani-rbd-delete"
+    },
+    {
+      "operation": "CREATE",
+      "kind": "volumesnapshotclass",
+      "name": "ani-cephfs-delete"
+    },
+    {
+      "operation": "PATCH",
+      "kind": "storageprofile",
+      "name": "ani-block"
+    },
+    {
+      "operation": "PATCH",
+      "kind": "storageprofile",
+      "name": "ani-block"
+    },
+    {
+      "operation": "PATCH",
+      "kind": "storageprofile",
+      "name": "ani-cephfs"
+    },
+    {
+      "operation": "DELETE",
+      "kind": "volumesnapshotclass",
+      "name": "ani-rbd-retain"
+    },
+    {
+      "operation": "DELETE",
+      "kind": "volumesnapshotclass",
+      "name": "ani-cephfs-retain"
+    }
+  ],
+  "ack_files": [
+    {
+      "operation": "CREATE",
+      "name": "ani-rbd-delete",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-create-ani-rbd-delete-ack-20261024.json",
+      "sha256": "27c9004aab479b86028df31e76c171042be32d7dd0adf7b6f70f3fd435471f8b"
+    },
+    {
+      "operation": "CREATE",
+      "name": "ani-cephfs-delete",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-create-ani-cephfs-delete-ack-20261024.json",
+      "sha256": "1f731d5797458e15f0d3d3fd0d31d89368bfce8a23b83a9f55e32cd4e831ff31"
+    },
+    {
+      "operation": "PATCH",
+      "name": "ani-block",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-patch-ani-block-ack-20261024.json",
+      "sha256": "db9e6006f76ed729e7acea723b08cc28b1c67cb6cbbd0a5a89e00ddb5483a860"
+    },
+    {
+      "operation": "PATCH",
+      "name": "ani-cephfs",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-patch-ani-cephfs-ack-20261024.json",
+      "sha256": "d0d3b5aaf70189dbff782723683129aa3f4aff4f42864c21395a3feae951ce8e"
+    },
+    {
+      "operation": "DELETE",
+      "name": "ani-rbd-retain",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-delete-ani-rbd-retain-ack-20261024.json",
+      "sha256": "72260edb405a74d8fde74590cc3eb485bd8ace5e29eebe791399b03bdf3e96f9"
+    },
+    {
+      "operation": "DELETE",
+      "name": "ani-cephfs-retain",
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-delete-ani-cephfs-retain-ack-20261024.json",
+      "sha256": "e528d0248572e1415c3044e0b65505b51f7451e30cf074681f3d68f19f59642f"
+    }
+  ],
+  "real_snapshot_restore_or_delete_test": "NOT_RUN",
+  "permanent_user_configuration": true,
+  "fresh_before": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "ready_nodes": [
+      {
+        "name": "ani-01",
+        "namespace": null,
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "resourceVersion": "61231137",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      },
+      {
+        "name": "ani-02",
+        "namespace": null,
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "resourceVersion": "61228742",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      },
+      {
+        "name": "ani-03",
+        "namespace": null,
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "resourceVersion": "61231390",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      }
+    ],
+    "protected": {
+      "VS": 5,
+      "Content": 5,
+      "ready_bound_pairs": 5,
+      "creating_or_deleting": 0
+    },
+    "protected_hashes": {
+      "classes": "6aa1f1c7e043522d88831a00fcd86913baccc7a719a383da0fb71a0d8f300e12",
+      "profiles": "26ae38640306d33d1169a47584b92198b695bd2b46ac470f9ab966e0cbfc35a8",
+      "storage_classes": "57078197f0ac7f4fe7b188c170d0c0fb2f2425f07a49cbd168619d9ce86be7de",
+      "volume_snapshots": "c0fcf322b423b4fd58709b46c4d034717dfb92024796ed2db71e617a5b43d405",
+      "volume_snapshot_contents": "9481b07173f2810fe80827b6b4009a9ef7618150345b0f48fc1ec0b86c4f33e5"
+    }
+  },
+  "error": "{\"args\": [\"patch\", \"storageprofile\", \"ani-block\", \"--type=json\", \"-p\", \"[{\\\"op\\\": \\\"test\\\", \\\"path\\\": \\\"/metadata/uid\\\", \\\"value\\\": \\\"83354750-8885-41e0-9c6d-5334ffdd4bcb\\\"}, {\\\"op\\\": \\\"test\\\", \\\"path\\\": \\\"/metadata/resourceVersion\\\", \\\"value\\\": \\\"10613\\\"}, {\\\"op\\\": \\\"test\\\", \\\"path\\\": \\\"/spec\\\", \\\"value\\\": {}}, {\\\"op\\\": \\\"add\\\", \\\"path\\\": \\\"/spec/snapshotClass\\\", \\\"value\\\": \\\"ani-rbd-delete\\\"}]\", \"-o\", \"json\"], \"exit\": 1, \"stderr\": \"The request is invalid: the server rejected our request due to an error in our request\\n\"}",
+  "unknown_write_exact_get": {
+    "apiVersion": "cdi.kubevirt.io/v1beta1",
+    "kind": "StorageProfile",
+    "metadata": {
+      "creationTimestamp": "2026-10-03T16:53:04Z",
+      "generation": 1,
+      "labels": {
+        "app": "containerized-data-importer",
+        "app.kubernetes.io/component": "storage",
+        "app.kubernetes.io/managed-by": "cdi-controller",
+        "cdi.kubevirt.io": ""
+      },
+      "name": "ani-block",
+      "ownerReferences": [
+        {
+          "apiVersion": "cdi.kubevirt.io/v1beta1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "CDI",
+          "name": "cdi",
+          "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+        }
+      ],
+      "resourceVersion": "61232193",
+      "uid": "83354750-8885-41e0-9c6d-5334ffdd4bcb"
+    },
+    "spec": {},
+    "status": {
+      "claimPropertySets": [
+        {
+          "accessModes": [
+            "ReadWriteMany"
+          ],
+          "volumeMode": "Block"
+        },
+        {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "volumeMode": "Block"
+        },
+        {
+          "accessModes": [
+            "ReadWriteOnce"
+          ],
+          "volumeMode": "Filesystem"
+        }
+      ],
+      "cloneStrategy": "csi-clone",
+      "conditions": [
+        {
+          "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+          "lastTransitionTime": "2026-10-03T16:53:04Z",
+          "message": "Provisioner is recognized",
+          "reason": "RecognizedProvisioner",
+          "status": "True",
+          "type": "Recognized"
+        }
+      ],
+      "dataImportCronSourceFormat": "snapshot",
+      "provisioner": "rook-ceph.rbd.csi.ceph.com",
+      "snapshotClass": "ani-rbd-delete",
+      "storageClass": "ani-block"
+    }
+  },
+  "finished_at": "2026-10-24T03:51:26.456776+00:00",
+  "guard_refresh_continuation": {
+    "started_at": "2026-10-24T03:51:22.577418+00:00",
+    "prior_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/storage-snapshot-class-rename-applied-before-guard-refresh-20261024.json",
+    "prior_sha256": "eff6435b2e10cd04a4a52ebed7e1725f253244e783fd737db60f76cf88429f20",
+    "reason": "Explicit rejected old RV test after CDI naturally updated status; fresh same UID/spec and other status guards approved.",
+    "fresh_profile_patches": [
+      {
+        "name": "ani-block",
+        "patch": [
+          {
+            "op": "test",
+            "path": "/metadata/uid",
+            "value": "83354750-8885-41e0-9c6d-5334ffdd4bcb"
+          },
+          {
+            "op": "test",
+            "path": "/metadata/resourceVersion",
+            "value": "61232193"
+          },
+          {
+            "op": "test",
+            "path": "/spec",
+            "value": {}
+          },
+          {
+            "op": "add",
+            "path": "/spec/snapshotClass",
+            "value": "ani-rbd-delete"
+          }
+        ]
+      },
+      {
+        "name": "ani-cephfs",
+        "patch": [
+          {
+            "op": "test",
+            "path": "/metadata/uid",
+            "value": "49bbc971-fc2d-4543-b7a7-02ccd13aac99"
+          },
+          {
+            "op": "test",
+            "path": "/metadata/resourceVersion",
+            "value": "61232200"
+          },
+          {
+            "op": "test",
+            "path": "/spec",
+            "value": {}
+          },
+          {
+            "op": "add",
+            "path": "/spec/snapshotClass",
+            "value": "ani-cephfs-delete"
+          }
+        ]
+      }
+    ]
+  },
+  "continuation_fresh_before": {
+    "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+    "ready_nodes": [
+      {
+        "name": "ani-01",
+        "namespace": null,
+        "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111",
+        "resourceVersion": "61235753",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      },
+      {
+        "name": "ani-02",
+        "namespace": null,
+        "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245",
+        "resourceVersion": "61234669",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      },
+      {
+        "name": "ani-03",
+        "namespace": null,
+        "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2",
+        "resourceVersion": "61236944",
+        "deletionTimestamp": null,
+        "ownerReferences": null,
+        "finalizers": null
+      }
+    ],
+    "protected": {
+      "VS": 5,
+      "Content": 5,
+      "ready_bound_pairs": 5,
+      "creating_or_deleting": 0
+    },
+    "protected_hashes": {
+      "classes": "6aa1f1c7e043522d88831a00fcd86913baccc7a719a383da0fb71a0d8f300e12",
+      "profiles": "26ae38640306d33d1169a47584b92198b695bd2b46ac470f9ab966e0cbfc35a8",
+      "storage_classes": "57078197f0ac7f4fe7b188c170d0c0fb2f2425f07a49cbd168619d9ce86be7de",
+      "volume_snapshots": "c0fcf322b423b4fd58709b46c4d034717dfb92024796ed2db71e617a5b43d405",
+      "volume_snapshot_contents": "9481b07173f2810fe80827b6b4009a9ef7618150345b0f48fc1ec0b86c4f33e5"
+    }
+  },
+  "final": {
+    "classes": [
+      {
+        "apiVersion": "snapshot.storage.k8s.io/v1",
+        "deletionPolicy": "Delete",
+        "driver": "rook-ceph.cephfs.csi.ceph.com",
+        "kind": "VolumeSnapshotClass",
+        "metadata": {
+          "creationTimestamp": "2026-10-24T03:49:06Z",
+          "generation": 1,
+          "labels": {
+            "ani.io/managed-by": "ani-lab"
+          },
+          "name": "ani-cephfs-delete",
+          "resourceVersion": "61232199",
+          "uid": "b1ab26b4-58d2-4ea5-bce2-88263be02728"
+        },
+        "parameters": {
+          "clusterID": "rook-ceph",
+          "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-cephfs-provisioner",
+          "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+        }
+      },
+      {
+        "apiVersion": "snapshot.storage.k8s.io/v1",
+        "deletionPolicy": "Delete",
+        "driver": "rook-ceph.rbd.csi.ceph.com",
+        "kind": "VolumeSnapshotClass",
+        "metadata": {
+          "creationTimestamp": "2026-10-24T03:49:06Z",
+          "generation": 1,
+          "labels": {
+            "ani.io/managed-by": "ani-lab"
+          },
+          "name": "ani-rbd-delete",
+          "resourceVersion": "61232191",
+          "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e"
+        },
+        "parameters": {
+          "clusterID": "rook-ceph",
+          "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-rbd-provisioner",
+          "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+        }
+      }
+    ],
+    "profiles": {
+      "ani-block": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "StorageProfile",
+        "metadata": {
+          "creationTimestamp": "2026-10-03T16:53:04Z",
+          "generation": 2,
+          "labels": {
+            "app": "containerized-data-importer",
+            "app.kubernetes.io/component": "storage",
+            "app.kubernetes.io/managed-by": "cdi-controller",
+            "cdi.kubevirt.io": ""
+          },
+          "name": "ani-block",
+          "ownerReferences": [
+            {
+              "apiVersion": "cdi.kubevirt.io/v1beta1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "CDI",
+              "name": "cdi",
+              "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+            }
+          ],
+          "resourceVersion": "61237721",
+          "uid": "83354750-8885-41e0-9c6d-5334ffdd4bcb"
+        },
+        "spec": {
+          "snapshotClass": "ani-rbd-delete"
+        },
+        "status": {
+          "claimPropertySets": [
+            {
+              "accessModes": [
+                "ReadWriteMany"
+              ],
+              "volumeMode": "Block"
+            },
+            {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "volumeMode": "Block"
+            },
+            {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "volumeMode": "Filesystem"
+            }
+          ],
+          "cloneStrategy": "csi-clone",
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+              "lastTransitionTime": "2026-10-03T16:53:04Z",
+              "message": "Provisioner is recognized",
+              "reason": "RecognizedProvisioner",
+              "status": "True",
+              "type": "Recognized"
+            }
+          ],
+          "dataImportCronSourceFormat": "snapshot",
+          "provisioner": "rook-ceph.rbd.csi.ceph.com",
+          "snapshotClass": "ani-rbd-delete",
+          "storageClass": "ani-block"
+        }
+      },
+      "ani-cephfs": {
+        "apiVersion": "cdi.kubevirt.io/v1beta1",
+        "kind": "StorageProfile",
+        "metadata": {
+          "creationTimestamp": "2026-10-03T16:53:04Z",
+          "generation": 2,
+          "labels": {
+            "app": "containerized-data-importer",
+            "app.kubernetes.io/component": "storage",
+            "app.kubernetes.io/managed-by": "cdi-controller",
+            "cdi.kubevirt.io": ""
+          },
+          "name": "ani-cephfs",
+          "ownerReferences": [
+            {
+              "apiVersion": "cdi.kubevirt.io/v1beta1",
+              "blockOwnerDeletion": true,
+              "controller": true,
+              "kind": "CDI",
+              "name": "cdi",
+              "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+            }
+          ],
+          "resourceVersion": "61237746",
+          "uid": "49bbc971-fc2d-4543-b7a7-02ccd13aac99"
+        },
+        "spec": {
+          "snapshotClass": "ani-cephfs-delete"
+        },
+        "status": {
+          "claimPropertySets": [
+            {
+              "accessModes": [
+                "ReadWriteMany"
+              ],
+              "volumeMode": "Filesystem"
+            },
+            {
+              "accessModes": [
+                "ReadWriteOnce"
+              ],
+              "volumeMode": "Filesystem"
+            }
+          ],
+          "cloneStrategy": "csi-clone",
+          "conditions": [
+            {
+              "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+              "lastTransitionTime": "2026-10-03T16:53:04Z",
+              "message": "Provisioner is recognized",
+              "reason": "RecognizedProvisioner",
+              "status": "True",
+              "type": "Recognized"
+            }
+          ],
+          "dataImportCronSourceFormat": "pvc",
+          "provisioner": "rook-ceph.cephfs.csi.ceph.com",
+          "snapshotClass": "ani-cephfs-delete",
+          "storageClass": "ani-cephfs"
+        }
+      }
+    },
+    "old_classes_not_found": {
+      "ani-rbd-retain": {
+        "not_found": true
+      },
+      "ani-cephfs-retain": {
+        "not_found": true
+      }
+    },
+    "protected": {
+      "volume_snapshots": [
+        {
+          "metadata": {
+            "name": "ani-snap-cephfs-20261003164903-55666",
+            "namespace": "ani-platform",
+            "uid": "ec94a73e-5e55-425a-8eb5-9c4fe3b559fb",
+            "resourceVersion": "8385",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection"
+            ]
+          },
+          "spec": {
+            "source": {
+              "persistentVolumeClaimName": "ani-snap-cephfs-src-20261003164903-55666"
+            },
+            "volumeSnapshotClassName": "ani-cephfs-retain"
+          },
+          "status": {
+            "boundVolumeSnapshotContentName": "snapcontent-ec94a73e-5e55-425a-8eb5-9c4fe3b559fb",
+            "creationTime": "2026-10-03T16:49:20Z",
+            "readyToUse": true,
+            "restoreSize": "1Gi"
+          }
+        },
+        {
+          "metadata": {
+            "name": "ani-snap-cephfs-20261003171818-161946",
+            "namespace": "ani-platform",
+            "uid": "8bd2aebf-70a1-4d62-9754-81f392043c8d",
+            "resourceVersion": "23135",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection"
+            ]
+          },
+          "spec": {
+            "source": {
+              "persistentVolumeClaimName": "ani-snap-cephfs-src-20261003171818-161946"
+            },
+            "volumeSnapshotClassName": "ani-cephfs-retain"
+          },
+          "status": {
+            "boundVolumeSnapshotContentName": "snapcontent-8bd2aebf-70a1-4d62-9754-81f392043c8d",
+            "creationTime": "2026-10-03T17:18:37Z",
+            "readyToUse": true,
+            "restoreSize": "1Gi"
+          }
+        },
+        {
+          "metadata": {
+            "name": "ani-snap-rbd-20261003164821-55666",
+            "namespace": "ani-platform",
+            "uid": "02d4f8a9-86d3-4c75-9123-e818c2d11f9f",
+            "resourceVersion": "8139",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection"
+            ]
+          },
+          "spec": {
+            "source": {
+              "persistentVolumeClaimName": "ani-snap-rbd-src-20261003164821-55666"
+            },
+            "volumeSnapshotClassName": "ani-rbd-retain"
+          },
+          "status": {
+            "boundVolumeSnapshotContentName": "snapcontent-02d4f8a9-86d3-4c75-9123-e818c2d11f9f",
+            "creationTime": "2026-10-03T16:48:41Z",
+            "readyToUse": true,
+            "restoreSize": "1Gi"
+          }
+        },
+        {
+          "metadata": {
+            "name": "ani-snap-rbd-20261003171745-161946",
+            "namespace": "ani-platform",
+            "uid": "a2d6cdef-d390-48c9-92c7-91588c6c21a9",
+            "resourceVersion": "22751",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection"
+            ]
+          },
+          "spec": {
+            "source": {
+              "persistentVolumeClaimName": "ani-snap-rbd-src-20261003171745-161946"
+            },
+            "volumeSnapshotClassName": "ani-rbd-retain"
+          },
+          "status": {
+            "boundVolumeSnapshotContentName": "snapcontent-a2d6cdef-d390-48c9-92c7-91588c6c21a9",
+            "creationTime": "2026-10-03T17:17:57Z",
+            "readyToUse": true,
+            "restoreSize": "1Gi"
+          }
+        },
+        {
+          "metadata": {
+            "name": "modeldev-v21-zz-test-before-delete-01a15f47",
+            "namespace": "tenant-46936e6b-3a3b-4868-8d88-6833665abb70",
+            "uid": "6a8df750-9197-47ee-97b3-89ac8fe250fc",
+            "resourceVersion": "52044425",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshot-as-source-protection"
+            ]
+          },
+          "spec": {
+            "source": {
+              "persistentVolumeClaimName": "workspace-59423463-191d-435e-92f7-8a27a035c22b"
+            },
+            "volumeSnapshotClassName": "ani-rbd-retain"
+          },
+          "status": {
+            "boundVolumeSnapshotContentName": "snapcontent-6a8df750-9197-47ee-97b3-89ac8fe250fc",
+            "creationTime": "2026-10-21T21:34:23Z",
+            "readyToUse": true,
+            "restoreSize": "1Gi"
+          }
+        }
+      ],
+      "volume_snapshot_contents": [
+        {
+          "metadata": {
+            "name": "snapcontent-02d4f8a9-86d3-4c75-9123-e818c2d11f9f",
+            "namespace": null,
+            "uid": "24cfa0b3-dcde-4eff-8c95-bb2abbb0372b",
+            "resourceVersion": "8137",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+            ]
+          },
+          "spec": {
+            "deletionPolicy": "Retain",
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "source": {
+              "volumeHandle": "0001-0009-rook-ceph-0000000000000004-e89361b0-2891-4272-9b58-b7aab623c044"
+            },
+            "sourceVolumeMode": "Filesystem",
+            "volumeSnapshotClassName": "ani-rbd-retain",
+            "volumeSnapshotRef": {
+              "apiVersion": "snapshot.storage.k8s.io/v1",
+              "kind": "VolumeSnapshot",
+              "name": "ani-snap-rbd-20261003164821-55666",
+              "namespace": "ani-platform",
+              "resourceVersion": "8117",
+              "uid": "02d4f8a9-86d3-4c75-9123-e818c2d11f9f"
+            }
+          },
+          "status": {
+            "creationTime": 1791046121099269532,
+            "readyToUse": true,
+            "restoreSize": 1073741824,
+            "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-c38fa6dd-f368-44dc-b50a-fefe609c444f"
+          },
+          "annotations": {
+            "snapshot.storage.kubernetes.io/deletion-secret-name": "rook-csi-rbd-provisioner",
+            "snapshot.storage.kubernetes.io/deletion-secret-namespace": "rook-ceph"
+          }
+        },
+        {
+          "metadata": {
+            "name": "snapcontent-6a8df750-9197-47ee-97b3-89ac8fe250fc",
+            "namespace": null,
+            "uid": "93fbe3de-8217-47bd-9c2e-181d0849efa0",
+            "resourceVersion": "52044420",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+            ]
+          },
+          "spec": {
+            "deletionPolicy": "Retain",
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "source": {
+              "volumeHandle": "0001-0009-rook-ceph-0000000000000004-599ac21f-a7d7-4e94-ba04-1dc890a6d560"
+            },
+            "sourceVolumeMode": "Filesystem",
+            "volumeSnapshotClassName": "ani-rbd-retain",
+            "volumeSnapshotRef": {
+              "apiVersion": "snapshot.storage.k8s.io/v1",
+              "kind": "VolumeSnapshot",
+              "name": "modeldev-v21-zz-test-before-delete-01a15f47",
+              "namespace": "tenant-46936e6b-3a3b-4868-8d88-6833665abb70",
+              "resourceVersion": "52042854",
+              "uid": "6a8df750-9197-47ee-97b3-89ac8fe250fc"
+            }
+          },
+          "status": {
+            "creationTime": 1792618463289369468,
+            "readyToUse": true,
+            "restoreSize": 1073741824,
+            "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-66329c87-a42d-4c38-84b1-20a6a44a7e40"
+          },
+          "annotations": {
+            "snapshot.storage.kubernetes.io/deletion-secret-name": "rook-csi-rbd-provisioner",
+            "snapshot.storage.kubernetes.io/deletion-secret-namespace": "rook-ceph"
+          }
+        },
+        {
+          "metadata": {
+            "name": "snapcontent-8bd2aebf-70a1-4d62-9754-81f392043c8d",
+            "namespace": null,
+            "uid": "187faaf2-9220-4f6a-a2a8-fc84ac248f34",
+            "resourceVersion": "23133",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+            ]
+          },
+          "spec": {
+            "deletionPolicy": "Retain",
+            "driver": "rook-ceph.cephfs.csi.ceph.com",
+            "source": {
+              "volumeHandle": "0001-0009-rook-ceph-0000000000000001-021e322d-ae03-4d37-98bf-37e80df80b83"
+            },
+            "sourceVolumeMode": "Filesystem",
+            "volumeSnapshotClassName": "ani-cephfs-retain",
+            "volumeSnapshotRef": {
+              "apiVersion": "snapshot.storage.k8s.io/v1",
+              "kind": "VolumeSnapshot",
+              "name": "ani-snap-cephfs-20261003171818-161946",
+              "namespace": "ani-platform",
+              "resourceVersion": "23123",
+              "uid": "8bd2aebf-70a1-4d62-9754-81f392043c8d"
+            }
+          },
+          "status": {
+            "creationTime": 1791047917498064000,
+            "readyToUse": true,
+            "restoreSize": 1073741824,
+            "snapshotHandle": "0001-0009-rook-ceph-0000000000000001-0e8c2bf0-422f-42ff-817c-9706de89599f"
+          },
+          "annotations": {
+            "snapshot.storage.kubernetes.io/deletion-secret-name": "rook-csi-cephfs-provisioner",
+            "snapshot.storage.kubernetes.io/deletion-secret-namespace": "rook-ceph"
+          }
+        },
+        {
+          "metadata": {
+            "name": "snapcontent-a2d6cdef-d390-48c9-92c7-91588c6c21a9",
+            "namespace": null,
+            "uid": "1922e043-cff7-4261-b539-734678b726f0",
+            "resourceVersion": "22749",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+            ]
+          },
+          "spec": {
+            "deletionPolicy": "Retain",
+            "driver": "rook-ceph.rbd.csi.ceph.com",
+            "source": {
+              "volumeHandle": "0001-0009-rook-ceph-0000000000000004-428e6e4b-35ce-415a-874b-cbca7e6e677e"
+            },
+            "sourceVolumeMode": "Filesystem",
+            "volumeSnapshotClassName": "ani-rbd-retain",
+            "volumeSnapshotRef": {
+              "apiVersion": "snapshot.storage.k8s.io/v1",
+              "kind": "VolumeSnapshot",
+              "name": "ani-snap-rbd-20261003171745-161946",
+              "namespace": "ani-platform",
+              "resourceVersion": "22724",
+              "uid": "a2d6cdef-d390-48c9-92c7-91588c6c21a9"
+            }
+          },
+          "status": {
+            "creationTime": 1791047877879266061,
+            "readyToUse": true,
+            "restoreSize": 1073741824,
+            "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-a3474f21-5723-461b-9ee0-0520e3fd3340"
+          },
+          "annotations": {
+            "snapshot.storage.kubernetes.io/deletion-secret-name": "rook-csi-rbd-provisioner",
+            "snapshot.storage.kubernetes.io/deletion-secret-namespace": "rook-ceph"
+          }
+        },
+        {
+          "metadata": {
+            "name": "snapcontent-ec94a73e-5e55-425a-8eb5-9c4fe3b559fb",
+            "namespace": null,
+            "uid": "db365426-d5b3-473a-a3a9-7f6ef82f1b90",
+            "resourceVersion": "8383",
+            "deletionTimestamp": null,
+            "ownerReferences": null,
+            "finalizers": [
+              "snapshot.storage.kubernetes.io/volumesnapshotcontent-bound-protection"
+            ]
+          },
+          "spec": {
+            "deletionPolicy": "Retain",
+            "driver": "rook-ceph.cephfs.csi.ceph.com",
+            "source": {
+              "volumeHandle": "0001-0009-rook-ceph-0000000000000001-acd97bd9-63b1-48bf-a506-0c2bcff2c7a6"
+            },
+            "sourceVolumeMode": "Filesystem",
+            "volumeSnapshotClassName": "ani-cephfs-retain",
+            "volumeSnapshotRef": {
+              "apiVersion": "snapshot.storage.k8s.io/v1",
+              "kind": "VolumeSnapshot",
+              "name": "ani-snap-cephfs-20261003164903-55666",
+              "namespace": "ani-platform",
+              "resourceVersion": "8374",
+              "uid": "ec94a73e-5e55-425a-8eb5-9c4fe3b559fb"
+            }
+          },
+          "status": {
+            "creationTime": 1791046160750457000,
+            "readyToUse": true,
+            "restoreSize": 1073741824,
+            "snapshotHandle": "0001-0009-rook-ceph-0000000000000001-41f2e042-a976-42f4-96d2-5d67ed9d0395"
+          },
+          "annotations": {
+            "snapshot.storage.kubernetes.io/deletion-secret-name": "rook-csi-cephfs-provisioner",
+            "snapshot.storage.kubernetes.io/deletion-secret-namespace": "rook-ceph"
+          }
+        }
+      ],
+      "counts": {
+        "VS": 5,
+        "Content": 5,
+        "ready_bound_pairs": 5,
+        "creating_or_deleting": 0
+      }
+    },
+    "storage_classes_hash_unchanged": true,
+    "all_other_profile_spec_status_unchanged": true,
+    "default_annotations_absent_preserved": true,
+    "components_vm_pvc_pv_runtime_writes": 0
+  }
+}

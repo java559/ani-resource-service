@@ -1,0 +1,255 @@
+{
+  "task_name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+  "phase": "native",
+  "stage": "physical-identity",
+  "runner_sha256": "4233ef8ed7275b9dac1a995a0d9b8a5a1b1bc406d0824ae002330e56d1393274",
+  "started_at": "2026-10-25T00:11:37.331106+00:00",
+  "business_send_attempts": 0,
+  "cluster_writes": 0,
+  "PG_calls": 0,
+  "Guest_actions": 0,
+  "Windows_mutations": 0,
+  "preset_or_media_writes": 0,
+  "calls": [
+    {
+      "label": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "label": "principal",
+      "method": "GET",
+      "path": "/api/v1/admin/me",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "label": "windows-product",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "label": "operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/96575d3e-185d-4939-a01f-b82562d7af08/operations/f9299104-142c-4696-b729-07aaac5da896",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "label": "current",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/96575d3e-185d-4939-a01f-b82562d7af08",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    },
+    {
+      "label": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "send_attempts": 1,
+      "outcome": "RESPONDED",
+      "http_status": 200
+    }
+  ],
+  "credential_values_or_value_hashes_public": false,
+  "protected_before": {
+    "task_processes": {
+      "governance": {
+        "pid": 35161,
+        "start_ticks": 74249534,
+        "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+        "argv": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+          "-c",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+        ],
+        "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+        "listen_ports": [
+          39180,
+          39187
+        ]
+      },
+      "resource": {
+        "pid": 3881653,
+        "start_ticks": 72749000,
+        "binary_sha256": "a83260360bee7f5453f7266c4ce52f07e971548e2e71bb95fd89fdc43d091aeb",
+        "argv": [
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-start-before-vmi-01/resource-server.candidate22",
+          "-conf",
+          "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs-v2"
+        ],
+        "cwd": "/home/chabking",
+        "listen_ports": [
+          39181,
+          39183,
+          39184
+        ]
+      }
+    },
+    "windows": {
+      "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+      "vm_spec_sha256": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+      "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+      "node": "ani-01",
+      "pvc_refs": [
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-89317f205600510abc65e40402c83abb",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "4845491e-8dad-48f5-b16b-c59def6d9dc6"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-cca2005bd9365327a5ded8236385b9ba",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "a65c5a84-bdec-4427-a5a3-f489235dfdda"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-media-driver",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "752a82db-f998-488b-b580-c112f986e067"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vm-media-4b535ad4-ceb9-5b93-8471-d189e7ad9801",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "uid": "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+        }
+      ]
+    },
+    "source": {
+      "media_key": "fedora-44-iso",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "pvc_name": "vm-mvp-fedora44-http-source",
+      "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+      "dv_uid": "739fbaee-e8ed-4162-861f-34617ad9856a",
+      "pv_name": "pvc-4ccc186a-5569-4d78-b849-63714f636df1",
+      "pv_uid": "16713980-2ae0-40d7-922e-a92f069ec089",
+      "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912"
+    },
+    "network": {
+      "TenantID": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "VPCID": "vpc_e413becb1f4a46468f058e32f33a6305",
+      "SubnetID": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+      "ClusterID": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "Namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "NamespaceUID": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac",
+      "NADName": "vm-mvp-main-v2",
+      "NADUID": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+      "NADConfigDigest": "bb5bb6d1ad273609354486dfa052bf46236c47583fdb6a228bab4b75fb902d30",
+      "KCNSubnetRef": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f"
+    },
+    "namespace_uid": "09e58ecb-fe20-454f-bc7b-2da3c406f0ac"
+  },
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "operation_id": "f9299104-142c-4696-b729-07aaac5da896",
+  "operation": {
+    "id": "f9299104-142c-4696-b729-07aaac5da896",
+    "vmId": "96575d3e-185d-4939-a01f-b82562d7af08",
+    "action": "/vm.v1.VMService/AcceptCreate",
+    "state": "succeeded",
+    "reason": ""
+  },
+  "current": {
+    "id": "96575d3e-185d-4939-a01f-b82562d7af08",
+    "name": "vm-mvp-fedora44-iso-marker-02-01a168ce",
+    "version": "1",
+    "observedState": "Running",
+    "closing": false,
+    "lastOperationId": "f9299104-142c-4696-b729-07aaac5da896"
+  },
+  "native": {
+    "vm": {
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "uid": "68f92d12-8d14-4d73-ba97-996d328c23f9"
+    },
+    "vmi": {
+      "name": "vm-96575d3e-185d-4939-a01f-b82562d7af08",
+      "uid": "27550850-b1fc-4fe9-99fb-6e08ef7d5a24",
+      "phase": "Running",
+      "node": "ani-02"
+    },
+    "volumes": [
+      {
+        "role": "root",
+        "volume": "disk-17c22fdb263e5543a12df369cac39298",
+        "dv": {
+          "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+          "uid": "f3a0fd69-4859-4378-90ba-d98ace3bb82e"
+        },
+        "pvc": {
+          "name": "vd-17c22fdb-263e-5543-a12d-f369cac39298",
+          "uid": "59e413b6-6fca-4af5-a523-a65687eb2e6b"
+        },
+        "pv": {
+          "name": "pvc-0bc0df20-82a5-4c15-a37a-a35d4d3d2e46",
+          "uid": "b9d7095f-26d7-497f-af4a-124307b228f7"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-6c7a4256-7705-4e62-844d-58ddbd63524d"
+        }
+      },
+      {
+        "role": "installer",
+        "volume": "media-install",
+        "dv": {
+          "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+          "uid": "3a8fb059-be2e-4783-b324-c2ab7c31f7c7"
+        },
+        "pvc": {
+          "name": "vm-media-174e2482-7816-5b23-9fb4-540792d3c177",
+          "uid": "f9a08b79-528b-4c1f-8061-1897bfbd7dc9"
+        },
+        "pv": {
+          "name": "pvc-98a29fab-bc65-40c8-895b-206599976ab5",
+          "uid": "35e8b694-b4fc-4cc2-b7e8-94b67352570d"
+        },
+        "csi": {
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-b768c669-b6fc-45fd-9cf9-132a7356a7c1"
+        }
+      }
+    ],
+    "domain_disks": [
+      {
+        "bootOrder": 2,
+        "disk": {
+          "bus": "virtio"
+        },
+        "name": "disk-17c22fdb263e5543a12df369cac39298",
+        "serial": "17c22fdb-263e-5543-a12d-f369cac39298"
+      },
+      {
+        "bootOrder": 1,
+        "cdrom": {
+          "bus": "sata",
+          "readonly": true,
+          "tray": "closed"
+        },
+        "name": "media-install"
+      }
+    ]
+  },
+  "result": "PASS_EXACT_NEW_ISO_NATIVE_IDENTITY",
+  "session_revoked": true,
+  "finished_at": "2026-10-25T00:11:43.553399+00:00",
+  "heavy_lock_released": true
+}

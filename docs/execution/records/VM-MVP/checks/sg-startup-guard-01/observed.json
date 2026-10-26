@@ -1,0 +1,143 @@
+{
+  "at": "2026-10-24T13:08:26.035132+00:00",
+  "execution_host": "fedora",
+  "result": "PASS_OFFLINE_GUARD_ONLY",
+  "fixtures": [
+    {
+      "case": "startup-exact-two-redis-samples",
+      "expected_allow": true,
+      "actual_allow": true,
+      "active_before": [],
+      "active_after": [
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "case": "active-zero",
+      "expected_allow": true,
+      "actual_allow": true,
+      "active_before": [
+        0.0
+      ],
+      "active_after": [
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "case": "active-one",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [
+        1.0
+      ],
+      "active_after": [
+        1.0
+      ],
+      "pass": true
+    },
+    {
+      "case": "mixed-active-zero-and-one",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [
+        0.0,
+        1.0
+      ],
+      "active_after": [
+        0.0,
+        1.0
+      ],
+      "pass": true
+    },
+    {
+      "case": "startup-create-event-without-active",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    },
+    {
+      "case": "startup-claim-event-without-active",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    },
+    {
+      "case": "startup-missing-store-info",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    },
+    {
+      "case": "startup-degraded-one",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    },
+    {
+      "case": "garbage",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    },
+    {
+      "case": "startup-extra-session-sample",
+      "expected_allow": false,
+      "actual_allow": false,
+      "active_before": [],
+      "active_after": [],
+      "pass": true
+    }
+  ],
+  "fixture_count": 10,
+  "wrapper_source_sha256": "5daf4a7e6e80153799dc42df555b98d48488b29e4ff37f5095ba11323c5a0650",
+  "helper_source_sha256": "4cc8177e7ecd69c65e6aa22893daabf66178a144d8fb205f059adf1044179d2d",
+  "test_source_sha256": "1a048deaf4de3e116b5dbea47509d6b68fa4f20a1aaabbf5eb5935cc894369cf",
+  "wrapper_replacement_line": 34,
+  "wrapper_original_assertion_line": 33,
+  "helper_active_regex_line": 17,
+  "extracted_active_regex": "^ani_session_active\\{[^}]*\\} ([0-9.eE+-]+)$",
+  "extracted_replacement": "samples=[line for line in metrics.splitlines() if line.startswith('ani_session_')]\nnever_streamed=(not active and set(samples)=={'ani_session_store_degraded 0','ani_session_store_info{mode=\"redis\"} 1'})\nassert (active and all(value==0 for value in active)) or never_streamed,'task SG active or unproven startup metrics'\nif never_streamed: active=[0.0]\n",
+  "metrics_source_reference": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway/internal/observability/metrics.go",
+    "sha256": "2527b4a066f501baf809b700748620851f133772053e9dee940876fe51ffc583",
+    "lines": {
+      "constructors_and_registration": [
+        19,
+        30
+      ],
+      "active_gaugevec_constructor": [
+        22,
+        22
+      ],
+      "create_and_claim_series_materialization": [
+        39,
+        48
+      ],
+      "active_series_materialization": [
+        51,
+        61
+      ]
+    },
+    "scope": "Source reference for GaugeVec lazy label materialization: constructor does not call WithLabelValues; Connected/Closed do. No runtime or source change."
+  },
+  "whole_maintenance_scripts_executed": false,
+  "executed_fragment": "Only AST-extracted, AST-whitelisted metrics predicate; artificial metric strings.",
+  "api_calls": 0,
+  "redis_calls": 0,
+  "service_or_token_changes": 0,
+  "rbac_tests": 0,
+  "runtime_acceptance": false,
+  "elapsed_seconds": 0.008753
+}

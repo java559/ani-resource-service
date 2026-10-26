@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-24T07:39:26.882373+00:00",
+  "host": "fedora",
+  "gowork": "off",
+  "fresh_task_modcache": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+  "previous_cache_unchanged_by_this_step": true,
+  "transport": "command-scoped SSH443 through approved task-loopback 127.0.0.1:43144; existing strict task known_hosts",
+  "modules": [
+    {
+      "expected": {
+        "name": "resource",
+        "commit": "01c079f1787f301c547bf9d0d050fb19ca49ff84",
+        "module": "github.com/zhangzhe-ctrl/ani-resource-service",
+        "version": "v0.0.0-20261024051201-01c079f1787f",
+        "subdir": "",
+        "gomod_sha256": "b40af31c9c40205f6e4e6975a40f6adb6aba0d492749a533ffd5e76c049ca6d4",
+        "branch": "refs/heads/codex/vm-mvp-resource-vm-sdk-20261023"
+      },
+      "command": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "mod",
+        "download",
+        "-json",
+        "github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\n\t\"Path\": \"github.com/zhangzhe-ctrl/ani-resource-service\",\n\t\"Version\": \"v0.0.0-20261024051201-01c079f1787f\",\n\t\"Info\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.info\",\n\t\"GoMod\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.mod\",\n\t\"Zip\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.zip\",\n\t\"Dir\": \"/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f\",\n\t\"Sum\": \"h1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=\",\n\t\"GoModSum\": \"h1:cgx1BbE7BtNXjEHoWThNBdWTw5+e7slcCFneCl88Sp0=\",\n\t\"Origin\": {\n\t\t\"VCS\": \"git\",\n\t\t\"URL\": \"https://github.com/zhangzhe-ctrl/ani-resource-service\",\n\t\t\"Hash\": \"01c079f1787f301c547bf9d0d050fb19ca49ff84\"\n\t}\n}\n",
+      "download": {
+        "Path": "github.com/zhangzhe-ctrl/ani-resource-service",
+        "Version": "v0.0.0-20261024051201-01c079f1787f",
+        "Info": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.info",
+        "GoMod": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.mod",
+        "Zip": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/cache/download/github.com/zhangzhe-ctrl/ani-resource-service/@v/v0.0.0-20261024051201-01c079f1787f.zip",
+        "Dir": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod/github.com/zhangzhe-ctrl/ani-resource-service@v0.0.0-20261024051201-01c079f1787f",
+        "Sum": "h1:GXeHnyrnb98cucVbqj9xmNb+pjtOiyxIhGDwJW4NyEw=",
+        "GoModSum": "h1:cgx1BbE7BtNXjEHoWThNBdWTw5+e7slcCFneCl88Sp0=",
+        "Origin": {
+          "VCS": "git",
+          "URL": "https://github.com/zhangzhe-ctrl/ani-resource-service",
+          "Hash": "01c079f1787f301c547bf9d0d050fb19ca49ff84"
+        }
+      }
+    }
+  ],
+  "elapsed_seconds": 21.714
+}

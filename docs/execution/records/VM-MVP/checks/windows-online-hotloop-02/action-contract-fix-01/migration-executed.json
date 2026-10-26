@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-25T03:09:19.289251+00:00",
+  "result": "TASK_JOURNAL_DRIVER_SHA_ONLY_MIGRATED_NO_BUSINESS_CALL",
+  "old_driver_sha256": "9188512fa8222287dcc6192fc3a83e6ebc6e6ca1c0557d07fbf1c5dd1c3444c4",
+  "new_driver_sha256": "66a256cf4b7fb029ad422db4bf652beb79a759c4a917f11801deb0f7b9edfd45",
+  "old_state_sha256": "0cdfe8fd24abc65752577595abee3db150255ac37cef3f17743138fd91de04f7",
+  "new_state_sha256": "1417fd76e444974472ac5157aed3efc598d3309e19e2ab9730d55714809f44a1",
+  "only_changed_field": "driver_sha256",
+  "all_other_state_bytes_equal": true,
+  "commands_keys_bodies_send_counts_ACK_operations_verified_initial_unchanged": true,
+  "driver_file_written_by_this_script": false,
+  "business_calls": 0,
+  "native_calls": 0,
+  "PG_calls": 0,
+  "Guest_commands": 0
+}

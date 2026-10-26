@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-23T21:18:50.266471+00:00",
+  "result": "PASS",
+  "vm_id": "cd8bfd49-de9b-4a68-8607-15638452d9d7",
+  "remaining": [],
+  "volumes": [
+    {
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vd-e62eeaee-e4a9-53a6-960e-15399ec82860",
+        "uid": "c657d09f-f5d0-41f9-833d-47412699c72c"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-12ebed59-b6e6-415c-9e52-f88ed8115369",
+        "uid": "2c29b86b-0dca-4351-802b-ce31f7bbe773"
+      },
+      "pv_gone": true,
+      "backend": {
+        "result": "ABSENT",
+        "exit_code": 2,
+        "stderr": "rbd: error opening image csi-vol-80b4b186-a4c3-4162-80fe-2847103fcc8a: (2) No such file or directory\ncommand terminated with exit code 2\n"
+      },
+      "matching_trash": []
+    },
+    {
+      "pvc": {
+        "kind": "PersistentVolumeClaim",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-media-0cc62ea5-f52e-56c8-b4a2-416f0818ccf2",
+        "uid": "0aa0c08e-539a-4b47-8346-b009f7496d8c"
+      },
+      "pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-84d33d3f-36c1-4e1a-8a16-a4400b830b23",
+        "uid": "9bb64a54-0843-48b5-9934-61bfb358a21b"
+      },
+      "pv_gone": true,
+      "backend": {
+        "result": "ABSENT",
+        "exit_code": 2,
+        "stderr": "rbd: error opening image csi-vol-4330cf87-796a-43b6-bbf3-af78bea855e7: (2) No such file or directory\ncommand terminated with exit code 2\n"
+      },
+      "matching_trash": []
+    }
+  ],
+  "protected_unchanged": true,
+  "remaining_volumeattachments": [],
+  "supplemental_old_nad_unchanged": true,
+  "force_or_manual_backend_delete": false
+}

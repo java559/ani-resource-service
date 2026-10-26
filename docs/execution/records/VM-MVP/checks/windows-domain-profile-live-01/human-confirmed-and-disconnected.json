@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-25T06:37:30Z",
+  "result": "USER_CONFIRMED_BOTH_LOGINS_AND_RELEASED_AUTOMATION",
+  "windows_vm": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "linux_iso_vm": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "windows_manual_login": "USER_ACCEPTED_MANUALLY",
+  "linux_iso_manual_login": "USER_ACCEPTED_MANUALLY",
+  "linux_username": "zz-test",
+  "credentials_persisted": false,
+  "root_cua_normal_disconnect": {
+    "windows_tab": 5,
+    "linux_tab": 6,
+    "both_actual_DOM": "已断开; buttons disabled"
+  },
+  "automatic_power_disk_snapshot_continuation": "USER_AUTHORIZED"
+}

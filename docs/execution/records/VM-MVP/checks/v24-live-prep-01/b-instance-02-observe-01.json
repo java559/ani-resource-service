@@ -1,0 +1,182 @@
+{
+  "state": "OBSERVED_ORIGINAL_CPU_CREATE",
+  "step": "observe",
+  "started_at": "2026-10-24T10:54:24.591759+00:00",
+  "sql_writes": 0,
+  "protected_vm_mutations": 0,
+  "operation": {
+    "id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "instanceId": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "action": "create",
+    "intentVersion": "1",
+    "state": "accepted",
+    "reason": "WAITING_FOR_NETWORK"
+  },
+  "instance": {
+    "id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+    "name": "vm-mvp-v24-cpu-01a168ce-02",
+    "version": "1",
+    "desiredState": "running",
+    "observedState": "pending",
+    "reason": "WAITING_FOR_NETWORK",
+    "imageId": "img_d238746701ee4e9aa149a3beba8a3e49",
+    "imageDigest": "sha256:3251a23a608a8ade7e9183f983aa1aa41c841a9b445ed363152f8b8ebe7ec488",
+    "presetId": "1baf221e-bdd3-49f9-b69f-597bb3695c47",
+    "createOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "lastOperationId": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+    "computeCleaned": false,
+    "workspaceCleaned": false,
+    "quotaReturned": false,
+    "instance_kind": "container",
+    "compute_type": "cpu",
+    "cpu": "1500m",
+    "memory": "2048Mi",
+    "createdAt": "2026-10-24T10:53:50.400184Z",
+    "workspaceSize": "1Gi",
+    "preset_name": "VM MVP 1500m 2048MiB",
+    "preset_code": "vm-mvp-01a168ce",
+    "gpu_summary": null,
+    "scheduling": {
+      "pod_placement": "NONE"
+    },
+    "networkState": "reserved",
+    "networkReason": "",
+    "networkCleaned": false,
+    "volumeReferencesReleased": true
+  },
+  "ledger": [
+    {
+      "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resource_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+      "create_operation_id": null,
+      "owner_service": "ani-resource-service",
+      "action": "/instance.v1.InstanceService/AcceptCreate",
+      "idempotency_key": "1806b5de-bf51-4d3e-8b40-2e2d01bb8c7d",
+      "request_hash": "f0d1da9325ea1325206c800ac066ac5e6fb25c3e30b1e15dd3ae980975ccfee6",
+      "instance_contract_version": 2,
+      "canonical_schema": "instance-cpu-v1",
+      "dispatch_state": "ACKED",
+      "attempt_count": 1,
+      "charge_count": 0
+    }
+  ],
+  "events": [
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instance-operations/8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/instances/049db72b-c288-4993-94eb-07fa666a7ac2",
+      "status": 200
+    }
+  ],
+  "finished_at": "2026-10-24T10:54:45.540490+00:00"
+}

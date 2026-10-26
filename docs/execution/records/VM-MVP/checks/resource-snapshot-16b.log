@@ -1,0 +1,21 @@
+OVERLAY16B_VERIFIED
+=== RUN   TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping
+--- PASS: TestRestoreDurableCheckpointsResumeWithoutRepeatingNativeOrRollingBackMapping (0.01s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm	0.012s
+=== RUN   TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup
+--- PASS: TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup (0.00s)
+=== RUN   TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization
+--- PASS: TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization (0.00s)
+=== RUN   TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID
+--- PASS: TestRetiredVolumeCapturesLatePVAndRejectsReplacementUID (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.014s
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/cleanup-checkpoint
+=== RUN   TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/delete-takeover
+--- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints (1.50s)
+    --- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/cleanup-checkpoint (0.73s)
+    --- PASS: TestSnapshotPostgresInventoryVersionFencesAndRestoreCheckpoints/delete-takeover (0.77s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	1.513s

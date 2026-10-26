@@ -1,0 +1,6 @@
+--- FAIL: TestNativeWindowsDomainCreateProjection (0.00s)
+    --- FAIL: TestNativeWindowsDomainCreateProjection/windows (0.00s)
+        windows_domain_test.go:55: Windows features missing the v1.9 minimum profile: got=map[] want=map[acpi:map[enabled:true] apic:map[enabled:true] hyperv:map[relaxed:map[enabled:true] spinlocks:map[enabled:true spinlocks:8191] vapic:map[enabled:true]]] err=<nil>
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.009s
+FAIL

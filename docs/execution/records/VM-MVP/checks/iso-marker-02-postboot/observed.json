@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-25T06:49:14.750925+00:00",
+  "result": "PASS_ACTUAL_SYSTEM_DISK_POSTBOOT_MARKER_GUEST_AND_BROWSER",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "version": "5",
+  "login": {
+    "method": "normal_existing_tty_password",
+    "user": "zz-test",
+    "uid": 1000,
+    "gid": 1000,
+    "password_persisted": false,
+    "manual_login": "USER_ACCEPTED_MANUALLY",
+    "automatic_current_login": "PASS"
+  },
+  "root": {
+    "findmnt_source": "/dev/vda3[/root]",
+    "filesystem": "btrfs",
+    "subvolume": "/root",
+    "serial_observed_20_chars": "17c22fdb-263e-5543-a",
+    "expected_serial": "17c22fdb-263e-5543-a12d-f369cac39298",
+    "native_current_reference": "iso-marker-02-controls/after-start-native.json"
+  },
+  "marker": {
+    "path": "/var/tmp/ani-vm-mvp-iso-marker-02-477516c6d35e56fa6fc26195.txt",
+    "full_text": "ANI_VM_MVP_ISO_MARKER_02\nVM=96575d3e-185d-4939-a01f-b82562d7af08\nROOT_SERIAL=17c22fdb-263e-5543-a12d-f369cac39298\nUNIQUE=477516c6d35e56fa6fc26195\n",
+    "sha256": "334d701c0adf9003eb24d9dfb65b99337bce4643d727cc9cbfded3489ea7d5a5",
+    "sha256sum_c_guest_output": "/var/tmp/ani-vm-mvp-iso-marker-02-477516c6d35e56fa6fc26195.txt: OK",
+    "rewrites": 0
+  },
+  "browser_screenshot": {
+    "path": "/home/chabking/.codex/visualizations/2026/10/23/01a168ce-29f8-77b2-aa8e-b980545b6113/linux-iso-postboot-marker-pass-20261025.jpg",
+    "sha256": "0059e571d84de843a4d21e1bdc2ed5f66f3a5b568829e2a4bf60a5d8637d3f64"
+  },
+  "guest_writes": 0,
+  "business_mutations": 0,
+  "new_credentials": 0,
+  "no_new_vm": true,
+  "guest_logout": "OBSERVED_TTY_LOGIN_PROMPT",
+  "browser_vnc_disconnect": "OBSERVED_DISCONNECTED_DISABLED_CONTROLS"
+}

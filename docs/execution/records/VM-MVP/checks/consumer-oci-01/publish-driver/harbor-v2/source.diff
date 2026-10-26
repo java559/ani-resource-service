@@ -1,0 +1,80 @@
+--- publisher-f99ce676-original
++++ publisher-harbor-v2
+@@ -20,9 +20,11 @@
+ import time
+ 
+ RUN = Path('/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce')
+-DIRECTORY = RUN / 'consumer-oci-01/publish-driver'
+-PLAN_SHA = '59054e929b454b8af8cfaeec428d7c3f9e8ec334503899df961f9b8bab85b096'
+-ENDPOINT = '172.16.101.10:5000'
++DIRECTORY = RUN / 'consumer-oci-01/publish-driver/harbor-v2'
++PLAN_SHA = '9895ba779bcdaca828e25b7059af7b4070a09342e1e49e9c5f216c886fb7bb07'
++ENDPOINT = '172.16.101.10:30003'
++PROJECT = 'icn-01a15337-release'
++CERT_SHA = 'ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20'
+ SKOPEO = '/usr/bin/skopeo'
+ SERVICES = ('resource', 'session', 'governance')
+ 
+@@ -103,7 +105,7 @@
+         require(json.loads(raw)['mediaType'] == 'application/vnd.oci.image.manifest.v1+json',
+                 'single OCI image manifest required')
+     destination = image['proposed_destination_tag']
+-    require(destination.startswith(ENDPOINT + '/ani/') and destination.endswith(':' + tag),
++    require(destination.startswith(ENDPOINT + '/' + PROJECT + '/') and destination.endswith(':' + tag),
+             'exact task destination required')
+     require(image['future_command_not_executed'][-2:] == [
+         'oci-archive:' + str(archive) + ':' + tag, 'docker://' + destination],
+@@ -153,8 +155,19 @@
+                 'explicit anonymous authorization or approved auth file required')
+ 
+ 
++def certificate_guard():
++    cert_dir = DIRECTORY / 'certs'
++    require(not cert_dir.is_symlink() and cert_dir.is_dir(), 'exact certificate directory required')
++    require(sorted(p.name for p in cert_dir.iterdir()) == ['ca.crt'], 'unexpected client certificate/key input')
++    regular(cert_dir / 'ca.crt')
++    require(file_sha(cert_dir / 'ca.crt') == CERT_SHA, 'pinned Harbor CA changed')
++
++
+ def registry_action(args, image, metadata):
+     approvals(args)
++    require(args.transport == 'strict-tls' and not args.approved_insecure_endpoint, 'Harbor strictly requires verified HTTPS')
++    require(args.auth_file == str(DIRECTORY / 'private/harbor-auth.json') and not args.anonymous_authorized, 'exact approved Harbor private authfile required')
++    certificate_guard()
+     private = DIRECTORY / 'private'
+     private.mkdir(mode=0o700, exist_ok=True)
+     require(not private.is_symlink() and stat.S_IMODE(private.stat().st_mode) == 0o700,
+@@ -188,6 +201,7 @@
+ 
+     def run(stage, argv, timeout):
+         require(file_sha(auth) == state['auth']['sha256'], 'approved auth file changed')
++        certificate_guard()
+         event = {'stage': stage, 'started_at': timestamp(), 'timeout_seconds': timeout}
+         state['events'].append(event)
+         atomic(state_path, state)
+@@ -217,7 +231,7 @@
+ 
+     def inspect(stage):
+         return run(stage, [SKOPEO, '--command-timeout', '20s', 'inspect', '--raw', '--no-tags',
+-                   '--retry-times=0', '--tls-verify=' + tls] + inspect_auth +
++                   '--retry-times=0', '--tls-verify=' + tls, '--cert-dir', str(DIRECTORY / 'certs')] + inspect_auth +
+                    ['docker://' + image['proposed_destination_tag']], 25)
+ 
+     if args.action == 'publish':
+@@ -229,7 +243,7 @@
+         atomic(state_path, state)  # durable before any registry write
+         command = [SKOPEO, '--command-timeout', str(args.copy_timeout) + 's', 'copy',
+                    '--preserve-digests', '--retry-times=0', '--image-parallel-copies=2',
+-                   '--dest-tls-verify=' + tls] + copy_auth + image['future_command_not_executed'][-2:]
++                   '--dest-tls-verify=' + tls, '--dest-cert-dir', str(DIRECTORY / 'certs')] + copy_auth + image['future_command_not_executed'][-2:]
+         code, stdout, stderr, event = run('copy-once', command, args.copy_timeout + 5)
+         state['copy_outcome'] = 'EXIT_ZERO_AWAITING_INDEPENDENT_READ' if code == 0 else 'UNKNOWN_RECONCILE_ONLY'
+         atomic(state_path, state)
+@@ -308,6 +322,7 @@
+             print('LOCK_BUSY')
+             return 73
+         image = load_plan(DIRECTORY)[args.service]
++        certificate_guard()
+         metadata = local_metadata(DIRECTORY, image)
+         if args.action == 'local-check':
+             print(json.dumps({'result': 'LOCAL_INPUTS_VERIFIED', 'metadata': metadata, 'registry_requests': 0}))

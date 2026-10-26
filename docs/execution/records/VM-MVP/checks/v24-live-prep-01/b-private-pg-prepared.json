@@ -1,0 +1,682 @@
+{
+  "state": "PASS_B_PRIVATE_AND_ISOLATED_IMAGE_PG_PREPARED_NOT_CONNECTED",
+  "stage": "final-readonly-protection",
+  "started_at": "2026-10-24T09:54:58.385628+00:00",
+  "selected_image_option": "B",
+  "harbor_requests": 0,
+  "application_api_calls": 0,
+  "service_restarts": 0,
+  "rbac_writes": 0,
+  "vm_mutations": 0,
+  "shared_database_or_secret_writes": 0,
+  "instance_migration_performed": false,
+  "shared_secret_sources": [
+    {
+      "name": "resource-runtime-private",
+      "namespace": "ani-system",
+      "uid": "144fc361-48d7-4ae2-ae7e-11c5587cb8db",
+      "resource_version": "3085824"
+    },
+    {
+      "name": "resource-configs",
+      "namespace": "ani-system",
+      "uid": "73c854a5-8cdc-4f66-8027-6682c2e66916",
+      "resource_version": "54051062"
+    },
+    {
+      "name": "resource-accelerator-node-agent-bc-client",
+      "namespace": "ani-system",
+      "uid": "db90de3d-329c-4413-94c8-2de8d71fda05",
+      "resource_version": "49687559"
+    }
+  ],
+  "private_projected_fields": [
+    "resource-runtime-private:harbor-ca.pem",
+    "resource-runtime-private:harbor-password",
+    "resource-configs:config.yaml/image.harbor_username",
+    "resource-accelerator-node-agent-bc-client:ca.crt,tls.crt,tls.key"
+  ],
+  "forbidden_material_not_read": [
+    "shared Image DSN",
+    "shared Image keyring",
+    "shared Image cursor key",
+    "shared database owner",
+    "shared CA private key",
+    "existing Instance signer"
+  ],
+  "new_private_material": {
+    "instance_signer_raw_bytes": 64,
+    "image_aes_key_bytes": 32,
+    "cursor_key_bytes": 32,
+    "independent_keys": true,
+    "user_ssh_keys_generated": false,
+    "quota_leafs": [
+      {
+        "certificate_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/gov-quota-server.crt",
+        "key_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/gov-quota-server.key",
+        "dns_san": "ani-governance",
+        "purpose": "serverAuth",
+        "expiry": "notAfter=Oct 25 09:55:07 2026 GMT"
+      },
+      {
+        "certificate_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/resource-quota.crt",
+        "key_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/pki/resource-quota.key",
+        "dns_san": "ani-resource-service",
+        "purpose": "clientAuth",
+        "expiry": "notAfter=Oct 25 09:55:07 2026 GMT"
+      }
+    ],
+    "existing_task_ca_unchanged": true
+  },
+  "image_database": {
+    "database": "vm_image_v24_01a168ce",
+    "oid": "108794",
+    "owner": "vm_image_v24_owner_01a168ce",
+    "runtime": {
+      "role": "vm_image_v24_runtime_01a168ce",
+      "oid": "108793",
+      "login": true,
+      "superuser": false,
+      "createdb": false,
+      "createrole": false,
+      "replication": false,
+      "inherit": false,
+      "bypassrls": false
+    },
+    "runtime_membership_count": 0,
+    "database_create": false,
+    "database_temp": false,
+    "image_schema_create": false,
+    "image_schema_usage": true,
+    "public_schema_create": false,
+    "versions": [
+      {
+        "version": 1,
+        "checksum": "f0d4ee3b6a368166c2821da159dddc75fc57b2b67b456be09605af309efa68f5"
+      }
+    ],
+    "tables": [
+      {
+        "name": "commands",
+        "owner": "vm_image_v24_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "credentials",
+        "owner": "vm_image_v24_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "registrations",
+        "owner": "vm_image_v24_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "schema_version",
+        "owner": "vm_image_v24_owner_01a168ce",
+        "select": true,
+        "insert": false,
+        "update": false,
+        "delete": false,
+        "truncate": false
+      },
+      {
+        "name": "spaces",
+        "owner": "vm_image_v24_owner_01a168ce",
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": false,
+        "truncate": false
+      }
+    ]
+  },
+  "image_migration": {
+    "binary_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+    "binary_sha256": "44917bf322d45b058c43db236f7795e1ff499044469bf9ea98a930e58ad00aa1",
+    "source_commit": "8589b66f1370d8811777a87f3b02f6acba144818",
+    "migration_source_sha256": "f0d4ee3b6a368166c2821da159dddc75fc57b2b67b456be09605af309efa68f5",
+    "argv_without_secrets": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+      "-image-migrate"
+    ],
+    "exit": 0,
+    "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/image-migrate.log"
+  },
+  "instance_current_database_readonly": {
+    "database": "vm_resource_candidate_01a168ce",
+    "database_owner": "vm_res_candidate_owner_01a168ce",
+    "schemas": [
+      {
+        "name": "compute",
+        "owner": "vm_res_candidate_owner_01a168ce"
+      },
+      {
+        "name": "instance",
+        "owner": "vm_res_candidate_owner_01a168ce"
+      },
+      {
+        "name": "vm",
+        "owner": "vm_res_candidate_owner_01a168ce"
+      }
+    ],
+    "objects": [
+      {
+        "schema": "compute",
+        "name": "presets",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33000"
+      },
+      {
+        "schema": "compute",
+        "name": "presets_code_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33033"
+      },
+      {
+        "schema": "compute",
+        "name": "presets_listing",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33035"
+      },
+      {
+        "schema": "compute",
+        "name": "presets_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33031"
+      },
+      {
+        "schema": "compute",
+        "name": "schema_version",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33125"
+      },
+      {
+        "schema": "compute",
+        "name": "schema_version_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33132"
+      },
+      {
+        "schema": "instance",
+        "name": "borrowed_volume_references",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33063"
+      },
+      {
+        "schema": "instance",
+        "name": "borrowed_volume_references_active",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33090"
+      },
+      {
+        "schema": "instance",
+        "name": "borrowed_volume_references_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33083"
+      },
+      {
+        "schema": "instance",
+        "name": "gpu_cutover_audit",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33043"
+      },
+      {
+        "schema": "instance",
+        "name": "gpu_cutover_audit_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33053"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_operations",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32906"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_operations_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32925"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_operations_tenant_id_instance_id_action_idempotenc_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32927"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_quota_release_outbox",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32979"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_quota_release_outbox_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32991"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_quota_release_outbox_tenant_id_event_id_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32993"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_work",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32934"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_work_due",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32956"
+      },
+      {
+        "schema": "instance",
+        "name": "instance_work_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32949"
+      },
+      {
+        "schema": "instance",
+        "name": "instances",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32884"
+      },
+      {
+        "schema": "instance",
+        "name": "instances_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32902"
+      },
+      {
+        "schema": "instance",
+        "name": "instances_tenant_id_create_operation_id_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32904"
+      },
+      {
+        "schema": "instance",
+        "name": "network_submissions",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33091"
+      },
+      {
+        "schema": "instance",
+        "name": "network_submissions_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33115"
+      },
+      {
+        "schema": "instance",
+        "name": "network_submissions_tenant_id_submission_id_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33117"
+      },
+      {
+        "schema": "instance",
+        "name": "schema_version",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32875"
+      },
+      {
+        "schema": "instance",
+        "name": "schema_version_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32882"
+      },
+      {
+        "schema": "instance",
+        "name": "workspace_bindings",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32957"
+      },
+      {
+        "schema": "instance",
+        "name": "workspace_bindings_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32970"
+      },
+      {
+        "schema": "instance",
+        "name": "workspace_bindings_tenant_id_namespace_pvc_name_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "32972"
+      },
+      {
+        "schema": "vm",
+        "name": "disks",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33169"
+      },
+      {
+        "schema": "vm",
+        "name": "disks_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33180"
+      },
+      {
+        "schema": "vm",
+        "name": "disks_tenant_id_vm_id_volume_name_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33182"
+      },
+      {
+        "schema": "vm",
+        "name": "guest_initializations",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33238"
+      },
+      {
+        "schema": "vm",
+        "name": "guest_initializations_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33247"
+      },
+      {
+        "schema": "vm",
+        "name": "operations",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33189"
+      },
+      {
+        "schema": "vm",
+        "name": "operations_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33212"
+      },
+      {
+        "schema": "vm",
+        "name": "operations_tenant_id_vm_id_action_idempotency_key_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33214"
+      },
+      {
+        "schema": "vm",
+        "name": "schema_version",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33136"
+      },
+      {
+        "schema": "vm",
+        "name": "schema_version_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33143"
+      },
+      {
+        "schema": "vm",
+        "name": "snapshots",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33222"
+      },
+      {
+        "schema": "vm",
+        "name": "snapshots_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33231"
+      },
+      {
+        "schema": "vm",
+        "name": "virtual_machines",
+        "kind": "r",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33145"
+      },
+      {
+        "schema": "vm",
+        "name": "virtual_machines_pkey",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33165"
+      },
+      {
+        "schema": "vm",
+        "name": "virtual_machines_tenant_id_create_operation_id_key",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33167"
+      },
+      {
+        "schema": "vm",
+        "name": "vm_work",
+        "kind": "i",
+        "owner": "vm_res_candidate_owner_01a168ce",
+        "oid": "33221"
+      }
+    ],
+    "runtime": {
+      "role": "vm_res_candidate_runtime_01a168ce",
+      "oid": "30460",
+      "superuser": false,
+      "createdb": false,
+      "createrole": false,
+      "bypassrls": false
+    },
+    "versions": {
+      "compute": [
+        {
+          "version": 1,
+          "checksum": "e4f285ae359b7c7bb4871759cde4f3b485484b370551eeeb7f2334a97dbdd5e2"
+        }
+      ],
+      "vm": [
+        {
+          "version": 1,
+          "checksum": "3910788606c101c80672ca4e0eb90d3f862f0415b63aedc44d80d712ef391c52"
+        },
+        {
+          "version": 2,
+          "checksum": "75516940785913e8665b39cfd3345897f84a428715fee079f7756177146211b3"
+        }
+      ],
+      "instance": [
+        {
+          "version": 1,
+          "checksum": "a378e32c43cd593f38c1715f64cb65bc587ae78ec4a6f1692f85a63a2aa52861"
+        },
+        {
+          "version": 2,
+          "checksum": "50295b545315ab2e5a1ab1e8f5b544b6df17a41680bbb4d7a0fc82dd1b53d085"
+        },
+        {
+          "version": 3,
+          "checksum": "f5ef30d562575624098836cf666b825afe29d5dc21ef76a28e811c771b93f4e7"
+        },
+        {
+          "version": 4,
+          "checksum": "27ac8c04f735986f3fd40f9cce742ec0c714aac0ec2323c71a73aec3d3a9221d"
+        },
+        {
+          "version": 5,
+          "checksum": "005462c6e2148aa6e9be519a8778599a4a07619e3a05c5d998001627e9cea3a1"
+        },
+        {
+          "version": 6,
+          "checksum": "8e37316f2a3bf71851a038bf979c98fa472cbbac34bdb88402fa1dd994eaba54"
+        }
+      ]
+    }
+  },
+  "instance_required_delta_not_applied": {
+    "source_files": [
+      {
+        "path": "migrations/instance/001_instance.sql",
+        "sha256": "a378e32c43cd593f38c1715f64cb65bc587ae78ec4a6f1692f85a63a2aa52861"
+      },
+      {
+        "path": "migrations/instance/002_compute_presets.sql",
+        "sha256": "50295b545315ab2e5a1ab1e8f5b544b6df17a41680bbb4d7a0fc82dd1b53d085"
+      },
+      {
+        "path": "migrations/instance/003_whole_gpu_quantity.sql",
+        "sha256": "f5ef30d562575624098836cf666b825afe29d5dc21ef76a28e811c771b93f4e7"
+      },
+      {
+        "path": "migrations/instance/004_gpu_execution.sql",
+        "sha256": "27ac8c04f735986f3fd40f9cce742ec0c714aac0ec2323c71a73aec3d3a9221d"
+      },
+      {
+        "path": "migrations/instance/005_instance_configuration.sql",
+        "sha256": "005462c6e2148aa6e9be519a8778599a4a07619e3a05c5d998001627e9cea3a1"
+      },
+      {
+        "path": "migrations/instance/006_instance_network_submissions.sql",
+        "sha256": "8e37316f2a3bf71851a038bf979c98fa472cbbac34bdb88402fa1dd994eaba54"
+      }
+    ],
+    "runtime_role_to_grant_after_review": "vm_res_candidate_runtime_01a168ce",
+    "database": "vm_resource_candidate_01a168ce",
+    "owner": "vm_res_candidate_owner_01a168ce",
+    "current_instance_versions": [
+      {
+        "version": 1,
+        "checksum": "a378e32c43cd593f38c1715f64cb65bc587ae78ec4a6f1692f85a63a2aa52861"
+      },
+      {
+        "version": 2,
+        "checksum": "50295b545315ab2e5a1ab1e8f5b544b6df17a41680bbb4d7a0fc82dd1b53d085"
+      },
+      {
+        "version": 3,
+        "checksum": "f5ef30d562575624098836cf666b825afe29d5dc21ef76a28e811c771b93f4e7"
+      },
+      {
+        "version": 4,
+        "checksum": "27ac8c04f735986f3fd40f9cce742ec0c714aac0ec2323c71a73aec3d3a9221d"
+      },
+      {
+        "version": 5,
+        "checksum": "005462c6e2148aa6e9be519a8778599a4a07619e3a05c5d998001627e9cea3a1"
+      },
+      {
+        "version": 6,
+        "checksum": "8e37316f2a3bf71851a038bf979c98fa472cbbac34bdb88402fa1dd994eaba54"
+      }
+    ],
+    "action": "Only a later Root-reviewed explicit Instance owner migration/grant; no change performed now"
+  },
+  "protected": {
+    "three_vm_and_vmi_identities_unchanged": true,
+    "source_pvcs_unchanged": true,
+    "original_config_and_process_unchanged": true,
+    "compute_vm_instance_schema_unchanged": true,
+    "native_before_after": {
+      "vms": [
+        {
+          "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+          "vm_uid": "03906ba4-36d4-4c11-b4c5-312c9c734274",
+          "vmi_uid": "4976b0da-fb59-44a7-a18a-482c504674a3",
+          "vmi_phase": "Running",
+          "vm_spec_sha256": "e4c9912ee587cb372047a10fc0897882e716345f77043f136947bb750edffb8e",
+          "vmi_spec_sha256": "dfdace9d23c57f933c55ebe92787134b6c7eba3ee97b281fa10b0c5212e98173"
+        },
+        {
+          "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+          "vmi_uid": "571c6ec3-a565-47ac-ac6f-2e50962f36cb",
+          "vmi_phase": "Running",
+          "vm_spec_sha256": "37c660cae2023bcc5ad18e3245990c926be3b48c448f0e70957bfa3a4c68cac0",
+          "vmi_spec_sha256": "1b4409b1b3613d661e0fe05a551ebeb4e607b48aa4379e9e99df02568c0e65b0"
+        },
+        {
+          "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+          "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+          "vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+          "vmi_phase": "Running",
+          "vm_spec_sha256": "e4a774b6fdc229bb270633be9733276f3605a1b16c4066a741240b6955108e2b",
+          "vmi_spec_sha256": "8e0f9a4eb024e24f929c6897249f39e4e4250dd6c5d95cf91253f0b9383729c4"
+        }
+      ],
+      "sources": [
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "pvc_name": "vm-mvp-ubuntu-2404-source",
+          "pvc_uid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+          "pv_name": "pvc-3a8ea11e-5d4d-4a37-b51c-8a64fefb48b7",
+          "phase": "Bound"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "pvc_name": "vm-mvp-virtio-http-source",
+          "pvc_uid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+          "pv_name": "pvc-140ccff9-19af-4b78-9122-b08ee4c7bb8a",
+          "phase": "Bound"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "pvc_name": "vm-mvp-fedora44-http-source",
+          "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+          "pv_name": "pvc-4ccc186a-5569-4d78-b849-63714f636df1",
+          "phase": "Bound"
+        },
+        {
+          "namespace": "vm-mvp-probe-01a168ce",
+          "pvc_name": "vm-mvp-windows2025-http-source",
+          "pvc_uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+          "pv_name": "pvc-40e77734-194b-49fc-8f63-d16a61a5b6a8",
+          "phase": "Bound"
+        }
+      ]
+    }
+  },
+  "finished_at": "2026-10-24T09:55:11.022977+00:00"
+}

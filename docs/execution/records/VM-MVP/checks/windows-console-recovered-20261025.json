@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-24T17:50:55.934923+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "version": "18",
+  "observed_state": "Running",
+  "new_sg_pid": 3925313,
+  "new_sg_startticks": 72938159,
+  "new_sg_token_expires_at": "2026-10-24T18:47:35Z",
+  "business_console_attempts_after_sg_refresh": 1,
+  "observed_ui": [
+    "Gov login succeeded",
+    "VM version 18 Running",
+    "Gov ticket obtained",
+    "Native VNC connected",
+    "Windows boot logo visible",
+    "Normal disconnect completed"
+  ],
+  "browser": "PASS_CONSOLE_CONNECT_AND_FRAME",
+  "guest_acceptance": "DEFERRED_BY_USER",
+  "guest_commands": 0,
+  "guest_inputs": 0,
+  "vm_or_disk_mutations": 0,
+  "screenshot_sha256": "07ef1b82750f57c50ffa3bd6176739be7907d4ac62203ec41ad2079fb17c2dd8",
+  "original_503": "SG pre-issue VM validation returns generic unavailable; Redis attribution withdrawn. Original underlying gRPC error was not captured.",
+  "recovery_scope": "Same binary/config/permissions/SA/TTL SG credential refresh and process/connection rebuild; one real console recovery verified, precise original cause unconfirmed."
+}

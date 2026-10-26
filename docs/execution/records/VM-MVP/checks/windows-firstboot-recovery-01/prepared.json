@@ -1,0 +1,383 @@
+{
+  "at": "2026-10-24T11:09:30.568174+00:00",
+  "state": "COMMANDS_PREPARED_SEND0_AWAIT_ROOT_REVIEW",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "native_vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+  "initial_vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+  "initial_launcher_uid": "059f02b2-d425-4fa5-8698-17a6b7a576d1",
+  "driver": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+  "driver_source_sha256": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+  "driver_modified": false,
+  "new_driver": false,
+  "initial_required_product_state": {
+    "version": "5",
+    "observedState": "Running",
+    "last_operation": "succeeded",
+    "closing": false
+  },
+  "handoff_meaning": {
+    "installation_complete_flag": "base installation files reached actual firstboot product-key page; not V15/OOBE/account/login acceptance",
+    "normal_stop": "normal product Stop only; may eventually terminate after grace; does not prove graceful Guest shutdown"
+  },
+  "preconditions": [
+    "Root confirms these exact commands before execution.",
+    "Gov task client maintenance has completed, no related pending operation; agents explicitly hand over heavy lock.",
+    "Fresh cluster/namespace/current product v5/native VM/VMI/launcher/root UID guards and original 3-VM protected baseline.",
+    "Existing lifecycle state has no unresolved original intent; prepared send0 body/key is persisted before execute.",
+    "Each step must succeed on its original operation before fresh preparing the next; conditional versions are never substituted after drift."
+  ],
+  "steps": [
+    {
+      "action": "stop",
+      "intent": "firstboot-recovery-01-stop",
+      "conditional_expected_version": 5,
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/stop",
+      "body_shape": {
+        "data": {
+          "expectedVersion": "5",
+          "idempotencyKey": "generated once and durably frozen by this existing prepare"
+        }
+      },
+      "prepare_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "prepare",
+        "--action",
+        "stop",
+        "--intent",
+        "firstboot-recovery-01-stop",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-stop; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--root-evidence",
+        "browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json",
+        "--installation-complete"
+      ],
+      "execute_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "execute",
+        "--action",
+        "stop",
+        "--intent",
+        "firstboot-recovery-01-stop",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-stop; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--execute-authorized",
+        "--wait-seconds",
+        "20"
+      ],
+      "original_operation_observe_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "observe",
+        "--intent",
+        "firstboot-recovery-01-stop",
+        "--wait-seconds",
+        "20"
+      ]
+    },
+    {
+      "action": "eject-install",
+      "intent": "firstboot-recovery-01-eject-install",
+      "conditional_expected_version": 6,
+      "method": "DELETE",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/media/INSTALL",
+      "body_shape": {
+        "data": {
+          "expectedVersion": "6",
+          "idempotencyKey": "generated once and durably frozen by this existing prepare",
+          "slot": "INSTALL"
+        }
+      },
+      "prepare_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "prepare",
+        "--action",
+        "eject-install",
+        "--intent",
+        "firstboot-recovery-01-eject-install",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-eject-install; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--root-evidence",
+        "browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json",
+        "--installation-complete"
+      ],
+      "execute_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "execute",
+        "--action",
+        "eject-install",
+        "--intent",
+        "firstboot-recovery-01-eject-install",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-eject-install; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--execute-authorized",
+        "--wait-seconds",
+        "20"
+      ],
+      "original_operation_observe_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "observe",
+        "--intent",
+        "firstboot-recovery-01-eject-install",
+        "--wait-seconds",
+        "20"
+      ]
+    },
+    {
+      "action": "boot-system",
+      "intent": "firstboot-recovery-01-boot-system",
+      "conditional_expected_version": 7,
+      "method": "PUT",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/boot",
+      "body_shape": {
+        "data": {
+          "expectedVersion": "7",
+          "idempotencyKey": "generated once and durably frozen by this existing prepare",
+          "bootDevice": "SYSTEM_DISK"
+        }
+      },
+      "prepare_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "prepare",
+        "--action",
+        "boot-system",
+        "--intent",
+        "firstboot-recovery-01-boot-system",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-boot-system; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--root-evidence",
+        "browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json",
+        "--installation-complete"
+      ],
+      "execute_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "execute",
+        "--action",
+        "boot-system",
+        "--intent",
+        "firstboot-recovery-01-boot-system",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-boot-system; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--execute-authorized",
+        "--wait-seconds",
+        "20"
+      ],
+      "original_operation_observe_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "observe",
+        "--intent",
+        "firstboot-recovery-01-boot-system",
+        "--wait-seconds",
+        "20"
+      ]
+    },
+    {
+      "action": "start",
+      "intent": "firstboot-recovery-01-start",
+      "conditional_expected_version": 8,
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/start",
+      "body_shape": {
+        "data": {
+          "expectedVersion": "8",
+          "idempotencyKey": "generated once and durably frozen by this existing prepare"
+        }
+      },
+      "prepare_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "prepare",
+        "--action",
+        "start",
+        "--intent",
+        "firstboot-recovery-01-start",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-start; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--root-evidence",
+        "browser-windows-setup-first-reboot.json#firstboot_product_key_observation; windows-black-screen-frame-02/observed.json"
+      ],
+      "execute_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "execute",
+        "--action",
+        "start",
+        "--intent",
+        "firstboot-recovery-01-start",
+        "--root-handoff",
+        "Root approves firstboot-recovery-01-start; base install reached firstboot product-key page; OOBE/account/login incomplete",
+        "--execute-authorized",
+        "--wait-seconds",
+        "20"
+      ],
+      "original_operation_observe_argv": [
+        "python3",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py",
+        "observe",
+        "--intent",
+        "firstboot-recovery-01-start",
+        "--wait-seconds",
+        "20"
+      ]
+    }
+  ],
+  "root_protection": {
+    "pvc": {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+      "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+    },
+    "pv": {
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+      "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+    },
+    "csi": {
+      "controllerExpandSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "controllerPublishSecretRef": {
+        "name": "rook-csi-rbd-provisioner",
+        "namespace": "rook-ceph"
+      },
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "nodeStageSecretRef": {
+        "name": "rook-csi-rbd-node",
+        "namespace": "rook-ceph"
+      },
+      "volumeAttributes": {
+        "clusterID": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "imageName": "csi-vol-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97",
+        "journalPool": "ani-block-pool",
+        "pool": "ani-block-pool",
+        "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+      },
+      "volumeHandle": "0001-0009-rook-ceph-0000000000000004-45e7aaa8-9581-4e7d-8cd7-1c8ce8174f97"
+    }
+  },
+  "unattached_data_protection": [
+    {
+      "disk_id": "89317f20-5600-510a-bc65-e40402c83abb",
+      "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+      "must_remain_unattached": true,
+      "pvc": {
+        "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "771d2a7a-5c05-4ea6-8443-e9d818fcc4d6",
+        "phase": "Bound",
+        "requested_storage": "3G"
+      },
+      "pv": {
+        "name": "pvc-184cf5be-3de0-4a70-bfdf-db3d9f2d0030",
+        "uid": "b15ca31b-1a33-4c65-bdaa-28f6b5e48951",
+        "claim_ref": {
+          "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "resourceVersion": "61626927",
+          "uid": "771d2a7a-5c05-4ea6-8443-e9d818fcc4d6"
+        },
+        "csi": {
+          "controllerExpandSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "controllerPublishSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "nodeStageSecretRef": {
+            "name": "rook-csi-rbd-node",
+            "namespace": "rook-ceph"
+          },
+          "volumeAttributes": {
+            "clusterID": "rook-ceph",
+            "imageFeatures": "layering",
+            "imageFormat": "2",
+            "imageName": "csi-vol-51298c93-c1c4-43e3-bfae-06fe4d1fc3d6",
+            "journalPool": "ani-block-pool",
+            "pool": "ani-block-pool",
+            "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+          },
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-51298c93-c1c4-43e3-bfae-06fe4d1fc3d6"
+        },
+        "reclaim_policy": "Delete"
+      }
+    },
+    {
+      "disk_id": "cca2005b-d936-5327-a5de-d8236385b9ba",
+      "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+      "must_remain_unattached": true,
+      "pvc": {
+        "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "4f0405d6-7c19-43c5-b270-e4767891921a",
+        "phase": "Bound",
+        "requested_storage": "4G"
+      },
+      "pv": {
+        "name": "pvc-f3d5361c-0069-469e-8292-4c05c3f6c818",
+        "uid": "ae053171-463a-41d9-b1c6-6a424fda4160",
+        "claim_ref": {
+          "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "resourceVersion": "61639664",
+          "uid": "4f0405d6-7c19-43c5-b270-e4767891921a"
+        },
+        "csi": {
+          "controllerExpandSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "controllerPublishSecretRef": {
+            "name": "rook-csi-rbd-provisioner",
+            "namespace": "rook-ceph"
+          },
+          "driver": "rook-ceph.rbd.csi.ceph.com",
+          "nodeStageSecretRef": {
+            "name": "rook-csi-rbd-node",
+            "namespace": "rook-ceph"
+          },
+          "volumeAttributes": {
+            "clusterID": "rook-ceph",
+            "imageFeatures": "layering",
+            "imageFormat": "2",
+            "imageName": "csi-vol-efe292d3-850c-426c-aaf9-20490dbbd698",
+            "journalPool": "ani-block-pool",
+            "pool": "ani-block-pool",
+            "storage.kubernetes.io/csiProvisionerIdentity": "1792585151812-7859-rook-ceph.rbd.csi.ceph.com"
+          },
+          "volumeHandle": "0001-0009-rook-ceph-0000000000000004-efe292d3-850c-426c-aaf9-20490dbbd698"
+        },
+        "reclaim_policy": "Delete"
+      }
+    }
+  ],
+  "all_three_vm_ids": [
+    "55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "fc154879-8a40-4b18-967c-215f5cf5992d"
+  ],
+  "final_readback": [
+    "Original Windows VM UID and root PVC/PV/CSI unchanged; original VMI/launcher gone.",
+    "New VMI belongs to original VM and includes original root as sole boot order 1; INSTALL absent from VM/VMI.",
+    "DRIVER media/copy and both unattached data disk UIDs/physical volumes unchanged.",
+    "Other two protected VMs/root/source/NAD identity and templates unchanged; no Guest command/input/new credential/EULA."
+  ],
+  "mutations_so_far": 0,
+  "api_requests_so_far": 0,
+  "status_or_handoff_modified": false
+}

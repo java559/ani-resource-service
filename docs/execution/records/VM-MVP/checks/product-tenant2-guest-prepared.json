@@ -1,0 +1,31 @@
+{
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+  "namespace_uid": "fa138fd5-1f35-4fa2-b561-db3d136b2404",
+  "node": {
+    "kind": "Node",
+    "namespace": "",
+    "name": "ani-01",
+    "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+  },
+  "ip": "10.84.1.2",
+  "mac": "fa:00:75:19:33:88",
+  "marker_path": "/home/aniuser/vm-mvp-tenant2-marker",
+  "marker": "vm-mvp-01a168ce-tenant2-linux-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "http": {
+    "task": "vm-mvp-20261023-01a168ce",
+    "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+    "port": 39192,
+    "path": "/vm-mvp-01a168ce-tenant2/ef51fbf518e815b1ec825a35",
+    "body": "ANI_VM_GUEST2_HTTP_01a168ce_ef51fbf518e815b1ec825a35\n",
+    "receipt": "/home/aniuser/.vm-mvp-01a168ce-http.json"
+  },
+  "http_script": "/home/aniuser/vm-mvp-01a168ce-tenant2-http.py",
+  "http_source_sha256": "23895a5e2c856bd6fc1806cf287864ec30228f82da0f1b16a831174b38bbbdb9",
+  "http_body_sha256": "da38569533185e14be28597b55e6309ccf3f8584504598335351d4f701939b2d",
+  "executed": false,
+  "credential_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-credentials.json",
+  "private_plan_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-linux-guest-test.json",
+  "scope": "prepared Guest2 native serial identity, one fsynced marker and exact-path unprivileged guest HTTP service; no execution"
+}

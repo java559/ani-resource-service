@@ -1,0 +1,434 @@
+{
+  "scope": "LIVE_GOV_DURABLE_DELETE_BEFORE_OWNER_DISPATCH",
+  "vm_id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+  "create_operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+  "expected_version": 2,
+  "before": {
+    "gov": [
+      {
+        "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+        "create_operation_id": null,
+        "action": "/vm.v1.VMService/AcceptCreate",
+        "dispatch_state": "ACKED",
+        "attempt_count": 1,
+        "lease_generation": 1
+      }
+    ],
+    "resource": {
+      "operations": [
+        {
+          "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d",
+          "action": "start",
+          "state": "succeeded"
+        },
+        {
+          "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+          "action": "/vm.v1.VMService/AcceptCreate",
+          "state": "succeeded"
+        }
+      ],
+      "vm": {
+        "id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+        "version": 2,
+        "closing": false
+      }
+    }
+  },
+  "new_intents": [
+    {
+      "action": "start",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/start",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "stop",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/stop",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "restart",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/restart",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "force-stop",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/force-stop",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "create-disk",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/disks",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "attach-disk",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/disks/3e9419e9-18ac-4920-934c-f7e238a03639/attach",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "detach-disk",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/disks/3e9419e9-18ac-4920-934c-f7e238a03639/detach",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "delete-disk",
+      "method": "DELETE",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/disks/3e9419e9-18ac-4920-934c-f7e238a03639",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "set-media",
+      "method": "PUT",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/media/INSTALL",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "eject-media",
+      "method": "DELETE",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/media/INSTALL",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "set-boot",
+      "method": "PUT",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/boot",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "create-snapshot",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/snapshots",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "delete-snapshot",
+      "method": "DELETE",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/snapshots/2bd55733-261d-4c44-b1d5-4a4e1c3ce340",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "restore-snapshot",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/snapshots/2bd55733-261d-4c44-b1d5-4a4e1c3ce340/restore",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    },
+    {
+      "action": "console",
+      "method": "POST",
+      "route": "/api/v1/virtual-machines/1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0/console-sessions",
+      "status": 409,
+      "reason": "VM_OPERATION_CONFLICT"
+    }
+  ],
+  "old_replays": [
+    {
+      "label": "start",
+      "status": 202,
+      "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d"
+    }
+  ],
+  "queries": [
+    {
+      "status": 200,
+      "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512"
+    },
+    {
+      "status": 200,
+      "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8"
+    },
+    {
+      "status": 200,
+      "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d"
+    }
+  ],
+  "pass": true,
+  "business_sql_writes": false,
+  "acl_restore": {
+    "action": "restore",
+    "phase": "restored",
+    "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-delete-fence-probe-acl.json",
+    "business_row_writes": false
+  },
+  "acl_pause": {
+    "action": "pause",
+    "phase": "paused",
+    "receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-delete-fence-probe-acl.json",
+    "business_row_writes": false
+  },
+  "delete_operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+  "console_replay": {
+    "status": 202,
+    "session_id": "d7b4b960-58be-4f28-9e3f-cac1da94a15f",
+    "expires_at": "2026-10-24T00:33:18.009Z",
+    "same_ticket_url": true,
+    "same_expiry": true,
+    "issued_unclaimed_before_and_after": true,
+    "unexpired_at_replay": true,
+    "sg_issue_metrics_before": [
+      "ani_session_create_total{mode=\"vnc\",result=\"success\"} 2"
+    ],
+    "sg_issue_metrics_after": [
+      "ani_session_create_total{mode=\"vnc\",result=\"success\"} 2"
+    ],
+    "no_new_issue": true,
+    "no_new_resolve": {
+      "resolve_console_target_log_records": 0,
+      "request_log_files_checked": 16
+    },
+    "websocket_opened": false
+  },
+  "paused_before_requests": {
+    "gov": [
+      {
+        "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+        "create_operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "dispatch_state": "QUEUED",
+        "attempt_count": 0,
+        "lease_generation": 0
+      },
+      {
+        "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+        "create_operation_id": null,
+        "action": "/vm.v1.VMService/AcceptCreate",
+        "dispatch_state": "ACKED",
+        "attempt_count": 1,
+        "lease_generation": 1
+      }
+    ],
+    "resource": {
+      "operations": [
+        {
+          "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d",
+          "action": "start",
+          "state": "succeeded"
+        },
+        {
+          "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+          "action": "/vm.v1.VMService/AcceptCreate",
+          "state": "succeeded"
+        }
+      ],
+      "vm": {
+        "id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+        "version": 2,
+        "closing": false
+      }
+    }
+  },
+  "owner_not_closing_product_read": {
+    "id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+    "name": "vm-fence-01a168ce",
+    "version": "2",
+    "osFamily": "linux",
+    "osVersion": "24.04.5 LTS (Noble Numbat)",
+    "desiredState": "Running",
+    "observedState": "Running",
+    "reason": "",
+    "observedAt": "2026-10-24T00:06:46.386798731Z",
+    "addresses": [],
+    "lastOperationId": "02109158-f636-443b-8fff-c42c766c2b7d",
+    "closing": false,
+    "disks": [
+      {
+        "diskId": "ce5e2bca-a33d-55a3-8509-9625f0f02a16",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "12",
+        "requestedBytes": "12000000000",
+        "observedCapacityBytes": "12884901888",
+        "volumeName": "disk-ce5e2bcaa33d55a385099625f0f02a16",
+        "serial": "ce5e2bca-a33d-55a3-8509-9625f0f02a16",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "media": [
+      {
+        "slot": "INSTALL",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      },
+      {
+        "slot": "DRIVER",
+        "desiredMedia": "",
+        "observedMedia": "",
+        "effectiveNow": true,
+        "pendingRestart": false
+      }
+    ],
+    "bootDevice": "SYSTEM_DISK",
+    "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+    "cpuMillis": "2000",
+    "memoryMib": "4096",
+    "systemDiskSizeGb": "12",
+    "sourceKind": "DISK_IMAGE",
+    "mediaKey": "ubuntu-24.04"
+  },
+  "create_replay": {
+    "status": 202,
+    "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+    "replayed": true
+  },
+  "delete_replay": {
+    "status": 202,
+    "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+    "replayed": true
+  },
+  "paused_after_requests": {
+    "gov": [
+      {
+        "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+        "create_operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+        "action": "/vm.v1.VMService/AcceptDelete",
+        "dispatch_state": "QUEUED",
+        "attempt_count": 0,
+        "lease_generation": 0
+      },
+      {
+        "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+        "create_operation_id": null,
+        "action": "/vm.v1.VMService/AcceptCreate",
+        "dispatch_state": "ACKED",
+        "attempt_count": 1,
+        "lease_generation": 1
+      }
+    ],
+    "resource": {
+      "operations": [
+        {
+          "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d",
+          "action": "start",
+          "state": "succeeded"
+        },
+        {
+          "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+          "action": "/vm.v1.VMService/AcceptCreate",
+          "state": "succeeded"
+        }
+      ],
+      "vm": {
+        "id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+        "version": 2,
+        "closing": false
+      }
+    }
+  },
+  "sg_before": {
+    "all_key_hashes": [
+      "1ba19be2d322677dc7703b519c9bd6a6188569c51a7c5ca03c5e9c6f29743622",
+      "224e3f206d29e795faaca8a48bc2594a1b938a0673bcfd1c1f8255b676e8af9f",
+      "31256085f998b706fc1d7ecd2196a75a2eb16772e161c108955680f2c7f919c7",
+      "62304d024a8776552bbe05d5eafcc20577fd5d0584dd99b5298632a68c4c8aee",
+      "90c9c55880ba90fadbace2cd6c0a86c5c7923d8aca379f179bb707f545cc3968",
+      "b934070d93f9edbab7f7ec2f0ec96fe2f35386318d5b74268ad1ef5630caef15",
+      "d41adf621b4e394b07e36409f89543f1ac88c4552837afde806f51a78dbe27dc",
+      "fc6e99e5188506d710b35aab40d4ff9e08dc7ca91f2b331e9ad81aa20be6553e"
+    ],
+    "vm_session_key_hashes": [
+      "62304d024a8776552bbe05d5eafcc20577fd5d0584dd99b5298632a68c4c8aee"
+    ],
+    "issued_session": {
+      "id": "d7b4b960-58be-4f28-9e3f-cac1da94a15f",
+      "state": "issued",
+      "ticket_expires_at_unix_ms": 1792801998009,
+      "ticket_ciphertext_sha256": "920c32395a3dd998b86db14c9f25b9f3beb63cd509585df5f9bff886556d539e"
+    }
+  },
+  "sg_after": {
+    "all_key_hashes": [
+      "1ba19be2d322677dc7703b519c9bd6a6188569c51a7c5ca03c5e9c6f29743622",
+      "224e3f206d29e795faaca8a48bc2594a1b938a0673bcfd1c1f8255b676e8af9f",
+      "31256085f998b706fc1d7ecd2196a75a2eb16772e161c108955680f2c7f919c7",
+      "62304d024a8776552bbe05d5eafcc20577fd5d0584dd99b5298632a68c4c8aee",
+      "90c9c55880ba90fadbace2cd6c0a86c5c7923d8aca379f179bb707f545cc3968",
+      "b934070d93f9edbab7f7ec2f0ec96fe2f35386318d5b74268ad1ef5630caef15",
+      "d41adf621b4e394b07e36409f89543f1ac88c4552837afde806f51a78dbe27dc",
+      "fc6e99e5188506d710b35aab40d4ff9e08dc7ca91f2b331e9ad81aa20be6553e"
+    ],
+    "vm_session_key_hashes": [
+      "62304d024a8776552bbe05d5eafcc20577fd5d0584dd99b5298632a68c4c8aee"
+    ]
+  },
+  "no_new_owner_operations": true,
+  "no_new_console_sessions": true,
+  "fence_checks_pass": true,
+  "exact_acl_restored": true,
+  "paused_window_seconds": 3.738,
+  "original_delete_continued": {
+    "owner_operation": {
+      "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+      "action": "/vm.v1.VMService/AcceptDelete",
+      "state": "running"
+    },
+    "identity_snapshot": {
+      "gov": [
+        {
+          "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+          "create_operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+          "action": "/vm.v1.VMService/AcceptDelete",
+          "dispatch_state": "ACKED",
+          "attempt_count": 1,
+          "lease_generation": 1
+        },
+        {
+          "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+          "create_operation_id": null,
+          "action": "/vm.v1.VMService/AcceptCreate",
+          "dispatch_state": "ACKED",
+          "attempt_count": 1,
+          "lease_generation": 1
+        }
+      ],
+      "resource": {
+        "operations": [
+          {
+            "operation_id": "02109158-f636-443b-8fff-c42c766c2b7d",
+            "action": "start",
+            "state": "succeeded"
+          },
+          {
+            "operation_id": "45367d9e-6351-4859-b21d-80173735fdf8",
+            "action": "/vm.v1.VMService/AcceptDelete",
+            "state": "running"
+          },
+          {
+            "operation_id": "e3edf188-ba5c-4750-9c25-6ee0a97ad512",
+            "action": "/vm.v1.VMService/AcceptCreate",
+            "state": "succeeded"
+          }
+        ],
+        "vm": {
+          "id": "1cd0fd91-12ce-4d22-ad4b-7b52bfe0a0a0",
+          "version": 3,
+          "closing": true
+        }
+      }
+    }
+  },
+  "result": "PASS"
+}

@@ -1,0 +1,13 @@
+  NAME
+    screenshot - take a screenshot of a current domain console and store it into a file
+
+  SYNOPSIS
+    screenshot <domain> [--file <string>] [--screen <number>]
+
+  DESCRIPTION
+    screenshot of a current domain console
+
+  OPTIONS
+    [--domain] <string>  domain name, id or uuid
+    --file <string>  where to store the screenshot
+    --screen <number>  ID of a screen to take screenshot of

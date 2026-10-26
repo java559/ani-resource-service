@@ -1,0 +1,425 @@
+{
+  "auth_login_posts": 1,
+  "business_posts": 0,
+  "credentials_or_value_hashes_public": false,
+  "current_child_pid": 35161,
+  "finished_at": "2026-10-24T21:27:22.154625+00:00",
+  "gov_term_attempts": 1,
+  "gpu_inference_tests": 0,
+  "heavy_lock_released": true,
+  "leaf_actions": [
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/ca.crt",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.crt",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-acc/tls.key",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/ca.crt",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.crt",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    },
+    {
+      "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-owner-clients-01/governance-model-inference/tls.key",
+      "state": "UNLINK_VERIFIED",
+      "unlink_attempts": 1
+    }
+  ],
+  "new_process": {
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-server-guest",
+      "-c",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/config"
+    ],
+    "binary_sha256": "ce21216e60b78eae0eb56a27e76082e9438c8c1f961b96f66e4b7439d027752c",
+    "cwd": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/gov-stage-01",
+    "pid": 35161,
+    "start_ticks": 74249534
+  },
+  "old_gov_normal_term_gone": true,
+  "original_private_backups_preserved": true,
+  "pending_after": {
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    },
+    "resource": {
+      "assigned_cidrs": [
+        {
+          "cidr": "10.83.0.0/16",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "kind": "vpc",
+          "state": "available"
+        },
+        {
+          "cidr": "10.83.1.0/24",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "kind": "subnet",
+          "state": "available"
+        }
+      ],
+      "database": "vm_resource_candidate_01a168ce",
+      "instance_exact_terminal_observation": {
+        "known_operations": [
+          {
+            "action": "delete",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "state": "completed"
+          },
+          {
+            "action": "create",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "state": "superseded"
+          },
+          {
+            "action": "create",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "state": "completed"
+          },
+          {
+            "action": "delete",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "state": "completed"
+          }
+        ],
+        "pending": 0,
+        "states": [
+          {
+            "count": 1,
+            "state": "superseded"
+          },
+          {
+            "count": 3,
+            "state": "completed"
+          }
+        ]
+      },
+      "original_legacy_counts": {
+        "instance.instance_operations": 4,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      },
+      "pending_operation_counts": {
+        "instance.instance_operations": 0,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      }
+    }
+  },
+  "pending_before": {
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    },
+    "resource": {
+      "assigned_cidrs": [
+        {
+          "cidr": "10.83.0.0/16",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "kind": "vpc",
+          "state": "available"
+        },
+        {
+          "cidr": "10.83.1.0/24",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "kind": "subnet",
+          "state": "available"
+        }
+      ],
+      "database": "vm_resource_candidate_01a168ce",
+      "instance_exact_terminal_observation": {
+        "known_operations": [
+          {
+            "action": "delete",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "state": "completed"
+          },
+          {
+            "action": "create",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "state": "superseded"
+          },
+          {
+            "action": "create",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "state": "completed"
+          },
+          {
+            "action": "delete",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "state": "completed"
+          }
+        ],
+        "pending": 0,
+        "states": [
+          {
+            "count": 1,
+            "state": "superseded"
+          },
+          {
+            "count": 3,
+            "state": "completed"
+          }
+        ]
+      },
+      "original_legacy_counts": {
+        "instance.instance_operations": 4,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      },
+      "pending_operation_counts": {
+        "instance.instance_operations": 0,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      }
+    }
+  },
+  "pending_pre_term": {
+    "governance": {
+      "database": "vm_govlive_01a168ce",
+      "pending_all": 0,
+      "pending_vm": 0,
+      "unknown_states": 0
+    },
+    "resource": {
+      "assigned_cidrs": [
+        {
+          "cidr": "10.83.0.0/16",
+          "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "kind": "vpc",
+          "state": "available"
+        },
+        {
+          "cidr": "10.83.1.0/24",
+          "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+          "kind": "subnet",
+          "state": "available"
+        }
+      ],
+      "database": "vm_resource_candidate_01a168ce",
+      "instance_exact_terminal_observation": {
+        "known_operations": [
+          {
+            "action": "delete",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "586c42f4-f52e-4121-a993-71c2cf23e614",
+            "state": "completed"
+          },
+          {
+            "action": "create",
+            "instance_id": "64413d16-05df-4623-a545-0e2f226c6006",
+            "operation_id": "c8740a66-ce43-47de-bfc7-4771a177e94c",
+            "state": "superseded"
+          },
+          {
+            "action": "create",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "8c43dfa6-06fc-4949-9ee1-7c0deed620ce",
+            "state": "completed"
+          },
+          {
+            "action": "delete",
+            "instance_id": "049db72b-c288-4993-94eb-07fa666a7ac2",
+            "operation_id": "001de62a-5cc3-44f8-a6b5-e1f24131feee",
+            "state": "completed"
+          }
+        ],
+        "pending": 0,
+        "states": [
+          {
+            "count": 1,
+            "state": "superseded"
+          },
+          {
+            "count": 3,
+            "state": "completed"
+          }
+        ]
+      },
+      "original_legacy_counts": {
+        "instance.instance_operations": 4,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      },
+      "pending_operation_counts": {
+        "instance.instance_operations": 0,
+        "public.network_default_vpc_egress_operations": 0,
+        "public.network_operations": 0,
+        "public.network_platform_operations": 0,
+        "public.network_virtual_switch_operations": 0,
+        "vm.operations": 0
+      }
+    }
+  },
+  "phase": "complete",
+  "plan_sha256": "476edd1de4a181b0ed8ffab2607fe5f1c16e744f8520ef877cc25697add0e299",
+  "port_forward_actions": [
+    {
+      "original_process": {
+        "argv": [
+          "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+          "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+          "-n",
+          "ani-system",
+          "port-forward",
+          "--address=127.0.0.1",
+          "pod/ani-accelerator-service-6965d5bbc7-qdzm2",
+          "43941:19090"
+        ],
+        "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+        "cwd": "/home/chabking",
+        "pid": 3465113,
+        "start_ticks": 70972802
+      },
+      "state_after": "NORMAL_TERM_ORIGINAL_GONE",
+      "state_before": "EXACT_LIVE",
+      "term_attempts": 1
+    },
+    {
+      "original_process": {
+        "argv": [
+          "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+          "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+          "-n",
+          "ani-system",
+          "port-forward",
+          "--address=127.0.0.1",
+          "pod/ani-model-service-7544d6db94-lgft8",
+          "43942:19090"
+        ],
+        "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+        "cwd": "/home/chabking",
+        "pid": 3465194,
+        "start_ticks": 70972900
+      },
+      "state_after": "NORMAL_TERM_ORIGINAL_GONE",
+      "state_before": "EXACT_LIVE",
+      "term_attempts": 1
+    },
+    {
+      "original_process": {
+        "argv": [
+          "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+          "--kubeconfig=/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+          "-n",
+          "ani-system",
+          "port-forward",
+          "--address=127.0.0.1",
+          "pod/ani-inference-service-7fcb4c5cc-f8lsc",
+          "43943:19090"
+        ],
+        "binary_sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+        "cwd": "/home/chabking",
+        "pid": 3465246,
+        "start_ticks": 70972976
+      },
+      "state_after": "NORMAL_TERM_ORIGINAL_GONE",
+      "state_before": "EXACT_LIVE",
+      "term_attempts": 1
+    }
+  ],
+  "protected_after": {
+    "disk_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "source_pvc_uids": [
+      "914b03ec-44a7-4ceb-8817-1626898a59c3",
+      "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+    ],
+    "vm_spec": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "windows_version": 18
+  },
+  "protected_before": {
+    "disk_pvc_uids": [
+      "6ea1f70f-4cfb-47ef-9573-3a51e604f4f3",
+      "4845491e-8dad-48f5-b16b-c59def6d9dc6",
+      "a65c5a84-bdec-4427-a5a3-f489235dfdda",
+      "752a82db-f998-488b-b580-c112f986e067",
+      "fcecf9ab-4dbe-4c62-9349-85ee8e39d94c"
+    ],
+    "nad_uid": "8f366897-8905-4f2a-9d6b-4ace4e18a41f",
+    "source_pvc_uids": [
+      "914b03ec-44a7-4ceb-8817-1626898a59c3",
+      "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+    ],
+    "vm_spec": "f0f093c4d1efc244645b72bcf23e7e6a9e895a618ebd7f145009b4033ceae06d",
+    "vm_uid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "vmi_uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a",
+    "windows_version": 18
+  },
+  "resource_restarts": 0,
+  "rollback": {},
+  "runner_sha256": "f63303ed3380eed37a8ea3c955f4282aa0399e74ba82121b99a2a6d299ed33e2",
+  "same_binary_other_env_config_budget": true,
+  "sessions_before": {
+    "active": 0,
+    "lease_clears": 0,
+    "leases": 0,
+    "pid": 3925313,
+    "start_ticks": 72938159,
+    "token_renewals": 0,
+    "token_validity_not_required": true
+  },
+  "sessions_pre_term": {
+    "active": 0,
+    "lease_clears": 0,
+    "leases": 0,
+    "pid": 3925313,
+    "start_ticks": 72938159,
+    "token_renewals": 0,
+    "token_validity_not_required": true
+  },
+  "sg_restarts": 0,
+  "shared_changes": 0,
+  "started_at": "2026-10-24T21:27:03.189230+00:00",
+  "state": "PASS_TASKGOV_17_KEYS_RESTORED_3_ORIGINAL_PFS_TERMINAL_6_UNUSED_LEAVES_REMOVED",
+  "vm_native_pg_writes": 0
+}

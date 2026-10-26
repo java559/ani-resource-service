@@ -1,0 +1,27 @@
+{
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "before_version": "17",
+  "original_vmi": {
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-55099440-c47b-4f81-afc5-7d8e740d14dc",
+    "uid": "769e5a06-e948-49d1-bc91-8f0b6256a1f8",
+    "kind": "VirtualMachineInstance"
+  },
+  "cases": [
+    {
+      "confirmation": "missing",
+      "status": 400,
+      "reason": "VM_INVALID_REQUEST"
+    },
+    {
+      "confirmation": "false",
+      "status": 400,
+      "reason": "VM_INVALID_REQUEST"
+    }
+  ],
+  "result": "PASS",
+  "after_version": "17",
+  "same_running_vmi": true,
+  "private_intent_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/linux-force-stop-negative-v3.json",
+  "at": "2026-10-23T19:15:01.690532+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "state": "GUARD_FAILED_NO_CHANGE",
+  "phase": "fresh-guards",
+  "started_at": "2026-10-24T10:26:27.010573+00:00",
+  "service_restarts": [],
+  "vm_mutations": 0,
+  "shared_changes": 0,
+  "rbac_writes": 0,
+  "rollback": {},
+  "failure_type": "AssertionError",
+  "private_failure_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/maintenance-failure-3301951.log"
+}

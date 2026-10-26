@@ -1,0 +1,131 @@
+{
+  "phase": "observed",
+  "task": "vm-mvp-20261023-01a168ce",
+  "plan_generation": "fedora44-v2",
+  "private_plan_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/iso-plans-fedora44-v2.json",
+  "source_kind": "INSTALL_ISO",
+  "guest_initialization": "OMITTED",
+  "compute_code": "vm-mvp-iso-01a168ce",
+  "compute_preset_id": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+  "compute_admission_send_attempts": 1,
+  "compute_vm_usage_selectable": true,
+  "expected_media_keys_only_not_readiness": {
+    "fedora44": "fedora-44-iso",
+    "windows2025": "windows-server-2025-iso",
+    "virtio": "virtio-win-0.1.271"
+  },
+  "systems": {
+    "fedora44": {
+      "name": "vm-mvp-fedora44-iso-v2",
+      "root_size_gb": 48,
+      "os_family": "linux",
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "create_operation_id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0"
+    }
+  },
+  "bound_media": {
+    "fedora44": {
+      "media_key": "fedora-44-iso",
+      "pvc_uid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+      "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912",
+      "proof_basis": "PASS_ORIGINAL_ISO_PRESERVED",
+      "prefix_bytewise_sha256_status": "PASS_ORIGINAL_PREFIX_SHA256",
+      "guest_driver_recognition": "NOT_RUN",
+      "catalog_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/gov-iso-fedora44-v2-catalog-01.json",
+      "source_readiness_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/fedora44-ready.json"
+    }
+  },
+  "command": {
+    "intent": "create-fedora44-v2",
+    "action": "create",
+    "method": "POST",
+    "route": "/api/v1/virtual-machines",
+    "body": {
+      "data": {
+        "idempotencyKey": "4ef9940e-0b22-42f2-ad49-e5a1dc518348",
+        "name": "vm-mvp-fedora44-iso-v2",
+        "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+        "sourceKind": "INSTALL_ISO",
+        "mediaKey": "fedora-44-iso",
+        "systemDiskSizeGb": "48",
+        "startAfterCreate": true,
+        "network": {
+          "vpcId": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "subnetId": "subnet_fbd064f6018040dab6a8d909b7afb87f"
+        }
+      }
+    },
+    "send_attempts": 1,
+    "ack_unknown": false,
+    "operation_id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+    "operation": {
+      "id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+      "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "action": "/vm.v1.VMService/AcceptCreate",
+      "intentVersion": "1",
+      "state": "running",
+      "reason": "Operation cannot be fulfilled on virtualmachine.kubevirt.io \"vm-068d56dd-d4fc-4ca8-8430-16c36bad0761\": VM is already running",
+      "observedAt": "2026-10-23T21:34:54.824272931Z"
+    },
+    "current": {
+      "id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "name": "vm-mvp-fedora44-iso-v2",
+      "version": "1",
+      "osFamily": "linux",
+      "osVersion": "44",
+      "desiredState": "Running",
+      "observedState": "Pending",
+      "reason": "",
+      "observedAt": "2026-10-23T21:34:49.589488369Z",
+      "addresses": [],
+      "lastOperationId": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+      "closing": false,
+      "disks": [
+        {
+          "diskId": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+          "role": "system",
+          "name": "system",
+          "sizeGb": "48",
+          "requestedBytes": "48000000000",
+          "observedCapacityBytes": "0",
+          "volumeName": "disk-08b2c432e3d55000ab1d6bc2450eced8",
+          "serial": "08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+          "attached": true,
+          "preparationState": "Pending",
+          "reason": ""
+        }
+      ],
+      "media": [
+        {
+          "slot": "INSTALL",
+          "desiredMedia": "fedora-44-iso",
+          "observedMedia": "fedora-44-iso",
+          "effectiveNow": true,
+          "pendingRestart": false
+        },
+        {
+          "slot": "DRIVER",
+          "desiredMedia": "",
+          "observedMedia": "",
+          "effectiveNow": true,
+          "pendingRestart": false
+        }
+      ],
+      "bootDevice": "INSTALL_MEDIA",
+      "presetId": "27165f6b-5ba3-448d-a6c5-e808da16206a",
+      "cpuMillis": "2000",
+      "memoryMib": "4096",
+      "systemDiskSizeGb": "48",
+      "sourceKind": "INSTALL_ISO",
+      "mediaKey": "fedora-44-iso"
+    },
+    "body_sha256": "3c15e828e9d69a42fa6aeb1bcd4f65d05cf61738468b6c03e615c4f4c3fa87be",
+    "source_readiness": "NOT_ASSERTED_BY_PREPARATION",
+    "media_contract": {
+      "root": "48GB blank writable Block/RWO",
+      "install": "Dedicated VM-owned ISO copy mounted read-only SATA CD-ROM",
+      "initial_boot": "INSTALL_MEDIA",
+      "installation_automation": false
+    }
+  }
+}

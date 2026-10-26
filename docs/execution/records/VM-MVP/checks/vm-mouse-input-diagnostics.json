@@ -1,0 +1,20 @@
+{
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "vmi_uid": "fcacf24b-ed2a-468c-a503-ce19ffb95be7",
+  "screenshot_jpeg": {
+    "width": 763,
+    "height": 658
+  },
+  "events": "{\"type\":\"mousedown\",\"button\":0,\"buttons\":1,\"clientX\":321,\"clientY\":584,\"isTrusted\":true,\"canvasRect\":{\"left\":68.375,\"top\":398.20001220703125,\"right\":694.8250122070312,\"bottom\":868.0375061035156,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mouseup\",\"button\":0,\"buttons\":0,\"clientX\":321,\"clientY\":584,\"isTrusted\":false,\"canvasRect\":{\"left\":68.375,\"top\":398.20001220703125,\"right\":694.8250122070312,\"bottom\":868.0375061035156,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mousemove\",\"button\":0,\"buttons\":0,\"clientX\":327,\"clientY\":596,\"isTrusted\":true,\"canvasRect\":{\"left\":68.375,\"top\":398.20001220703125,\"right\":694.8250122070312,\"bottom\":868.0375061035156,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mousedown\",\"button\":0,\"buttons\":1,\"clientX\":327,\"clientY\":596,\"isTrusted\":true,\"canvasRect\":{\"left\":68.375,\"top\":398.20001220703125,\"right\":694.8250122070312,\"bottom\":868.0375061035156,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mouseup\",\"button\":0,\"buttons\":0,\"clientX\":327,\"clientY\":596,\"isTrusted\":false,\"canvasRect\":{\"left\":68.375,\"top\":398.20001220703125,\"right\":694.8250122070312,\"bottom\":868.0375061035156,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mousemove\",\"button\":0,\"buttons\":0,\"clientX\":542,\"clientY\":313,\"isTrusted\":true,\"canvasRect\":{\"left\":68.375,\"top\":-65.80000305175781,\"right\":694.8250122070312,\"bottom\":404.03749084472656,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mousedown\",\"button\":0,\"buttons\":1,\"clientX\":542,\"clientY\":313,\"isTrusted\":true,\"canvasRect\":{\"left\":68.375,\"top\":-65.80000305175781,\"right\":694.8250122070312,\"bottom\":404.03749084472656,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}\n{\"type\":\"mouseup\",\"button\":0,\"buttons\":0,\"clientX\":542,\"clientY\":313,\"isTrusted\":false,\"canvasRect\":{\"left\":68.375,\"top\":-65.80000305175781,\"right\":694.8250122070312,\"bottom\":404.03749084472656,\"width\":626.4500122070312,\"height\":469.8374938964844},\"canvasIntrinsic\":{\"width\":1024,\"height\":768}}",
+  "viewport": {
+    "dpr": 1.25,
+    "height": 671,
+    "width": 778
+  },
+  "observations": [
+    "Original unscaled click selected Core row; corrected CSS coordinates 327,596 selected Standard Desktop Experience row",
+    "Mouse Next at CSS 542,313 advanced edition page to Preparing",
+    "No DOM event mutation, synthesis, custom RFB injection or noVNC source edit"
+  ],
+  "result": "MOUSE_SELECTION_AND_NEXT_PASS_INSTALL_PENDING"
+}

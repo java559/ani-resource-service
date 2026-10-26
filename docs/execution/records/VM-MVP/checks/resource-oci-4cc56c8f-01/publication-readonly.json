@@ -1,0 +1,54 @@
+{
+  "auth_file_mode": "0600",
+  "auth_file_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+  "ca_file": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs/ca.crt",
+  "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+  "cluster_calls": 0,
+  "credential_values_or_hashes_public": false,
+  "current_stage": "new exact4cc tag absence",
+  "driver_sha256": "f51d1e404530b355052bf5bbaa6057721a071322f14fad593e93e033aeff5692",
+  "elapsed_seconds": 15.032,
+  "error_class": "TimeoutError",
+  "existing_identity_reference": {
+    "namespace": "ani-system",
+    "resource_version": "42355378",
+    "secret": "icn-01a15337-release-pull",
+    "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46"
+  },
+  "finished_at": "2026-10-24T18:00:20.817926+00:00",
+  "granted_actions": [
+    "pull",
+    "push"
+  ],
+  "heavy_lock_retained": false,
+  "image_pushes": 0,
+  "reason": "readonly request failed; absence not established; no automatic retry",
+  "registry_logins": 0,
+  "registry_writes": 0,
+  "requests": [
+    {
+      "elapsed_seconds": 0.027,
+      "http_status": 200,
+      "method": "GET",
+      "stage": "original exact repository scope",
+      "started_at": "2026-10-24T18:00:05.786099+00:00",
+      "timeout_seconds": 15.0
+    },
+    {
+      "method": "GET",
+      "stage": "new exact4cc tag absence",
+      "started_at": "2026-10-24T18:00:05.813674+00:00",
+      "timeout_seconds": 14.972
+    }
+  ],
+  "result": "STOPPED_NO_PUSH",
+  "retained_original_build_receipt_sha256": "0791f15e88f51b07b869ed499b10d5105b6fdcc038da13821c07940dbbbb69c2",
+  "same_original_private_authority": true,
+  "scope_or_identity_changes": 0,
+  "service_changes": 0,
+  "started_at": "2026-10-24T18:00:05.783213+00:00",
+  "strict_tls": true,
+  "target": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-4cc56c8fc598-01a168ce",
+  "target_absent": false,
+  "total_readonly_budget_seconds": 15
+}

@@ -1,0 +1,70 @@
+{
+  "result": "PASS",
+  "layer": "GUEST",
+  "browser": "NOT_RUN",
+  "public_network": "NOT_RUN",
+  "vm_id": "4ac86e32-0f5c-4dc1-9005-859d840962f2",
+  "vm": {
+    "kind": "VirtualMachine",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "uid": "93268ba2-7920-4f7f-abec-ae1923d33d8b"
+  },
+  "vmi": {
+    "kind": "VirtualMachineInstance",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "uid": "294e3cbf-4928-4595-9a7b-4bbb1a02970c"
+  },
+  "proxy": {
+    "kind": "Pod",
+    "namespace": "tenant-d87c4dbd-04fa-4066-9ef6-c6fa4217f316",
+    "name": "vm-mvp-ssh-proxy-01a168ce",
+    "uid": "ba3f345a-765e-42ca-9814-ea4960fb39fc"
+  },
+  "serial_identity": {
+    "username": "aniuser",
+    "instance_id": "4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "datasource": "DataSourceNoCloud: DataSourceNoCloud [seed=/dev/vdb]",
+    "firmware_uuid": "4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "boot_id": "647f30b0-8d84-4e08-b2a1-dd67aa6b98c5",
+    "authorized_fingerprints": [
+      "256",
+      "SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w",
+      "chabking@foxmail.com",
+      "(ED25519)"
+    ]
+  },
+  "host_key_fingerprint": "SHA256:mLoxcPimOKd53HDPxK8m3cF+24SHF6csIaRtaiwewvU",
+  "key_fingerprint": "SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w",
+  "driver_sha256": "ffe1699d7de5a0a4cd997fd4ee644156d9ffd9a9bf4cc7cdd96219412149c232",
+  "transport": "existing Fedora SSH identity signs through nonroot ordinary same-VPC Pod, no private-key transfer",
+  "original_portforward": "INCONCLUSIVE_BANNER_TIMEOUT_BEFORE_KEY_AUTH",
+  "ssh_exit": 0,
+  "guest_proof": {
+    "username": "aniuser",
+    "marker_path": "/home/aniuser/vm-mvp-cloudinit-ssh-marker",
+    "marker": "vm-mvp-01a168ce-cloudinit-ssh-4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "marker_created_fsynced": true,
+    "instance_id": "4ac86e32-0f5c-4dc1-9005-859d840962f2",
+    "boot_id": "647f30b0-8d84-4e08-b2a1-dd67aa6b98c5",
+    "authorized_fingerprints": [
+      "256",
+      "SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w",
+      "chabking@foxmail.com",
+      "(ED25519)"
+    ]
+  },
+  "authentication": "publickey",
+  "strict_host_key_checking": true,
+  "password_authentication_attempted": false,
+  "existing_identity_only": true,
+  "client_authentication_evidence": {
+    "selected_debug_lines": [
+      "debug1: Host 'vm-cloudinit-ssh-4ac86e32-0f5c-4dc1-9005-859d840962f2' is known and matches the ED25519 host key.",
+      "debug1: Server accepts key: /home/chabking/.ssh/id_ed25519 ED25519 SHA256:HbWe63OglHojcu+O7ovQK2dQWaEBuKzE2qAP4hq7j4w explicit",
+      "Authenticated to vm-cloudinit-ssh-4ac86e32-0f5c-4dc1-9005-859d840962f2 (via proxy) using \"publickey\"."
+    ],
+    "full_private_client_log_sha256": "5366809e9e7b15c3f1496389cd339e2f64bf3f1ab8dc369e8ae320efaacbb506"
+  }
+}

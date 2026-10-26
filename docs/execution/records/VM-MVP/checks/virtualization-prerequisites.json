@@ -1,0 +1,249 @@
+{
+  "at": "2026-10-23T16:35:19.842331+00:00",
+  "scope": "read-only feature prerequisites; no shared object changed",
+  "kubevirt": [
+    {
+      "namespace": "kubevirt",
+      "name": "kubevirt",
+      "uid": "a3f905a6-9829-42d2-8f18-5ff30192ffc8",
+      "configuration": {
+        "developerConfiguration": {},
+        "imagePullPolicy": "IfNotPresent",
+        "virtTemplateDeployment": {
+          "enabled": false
+        }
+      },
+      "phase": "Deployed",
+      "observedKubeVirtVersion": "v1.9.0"
+    }
+  ],
+  "storageclasses": [
+    {
+      "name": "ani-block",
+      "uid": "e7813a57-3d1c-47e4-a298-86212a59e51e",
+      "provisioner": "rook-ceph.rbd.csi.ceph.com",
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "Immediate",
+      "allowVolumeExpansion": true,
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/controller-expand-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/controller-publish-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/controller-publish-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/fstype": "ext4",
+        "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-rbd-node",
+        "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/provisioner-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+        "imageFeatures": "layering",
+        "imageFormat": "2",
+        "pool": "ani-block-pool"
+      }
+    },
+    {
+      "name": "ani-cephfs",
+      "uid": "686c6115-7307-4db9-8fff-5a82f772b324",
+      "provisioner": "rook-ceph.cephfs.csi.ceph.com",
+      "reclaimPolicy": "Delete",
+      "volumeBindingMode": "Immediate",
+      "allowVolumeExpansion": true,
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/controller-expand-secret-name": "rook-csi-cephfs-provisioner",
+        "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/controller-publish-secret-name": "rook-csi-cephfs-provisioner",
+        "csi.storage.k8s.io/controller-publish-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-cephfs-node",
+        "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+        "csi.storage.k8s.io/provisioner-secret-name": "rook-csi-cephfs-provisioner",
+        "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+        "fsName": "ani-fs",
+        "pool": "ani-fs-replicated"
+      }
+    }
+  ],
+  "snapshotclasses": [
+    {
+      "name": "ani-cephfs-retain",
+      "uid": "8275fb3f-c50b-4fc4-93c6-70c1231062c9",
+      "driver": "rook-ceph.cephfs.csi.ceph.com",
+      "deletionPolicy": "Retain",
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-cephfs-provisioner",
+        "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+      }
+    },
+    {
+      "name": "ani-rbd-retain",
+      "uid": "a1568367-0da2-4ede-86c0-f32ea790772d",
+      "driver": "rook-ceph.rbd.csi.ceph.com",
+      "deletionPolicy": "Retain",
+      "parameters": {
+        "clusterID": "rook-ceph",
+        "csi.storage.k8s.io/snapshotter-secret-name": "rook-csi-rbd-provisioner",
+        "csi.storage.k8s.io/snapshotter-secret-namespace": "rook-ceph"
+      }
+    }
+  ],
+  "csidrivers": [
+    {
+      "name": "rook-ceph.cephfs.csi.ceph.com",
+      "uid": "36182c4c-e012-4e19-b684-272391d925cf",
+      "spec": {
+        "attachRequired": true,
+        "fsGroupPolicy": "File",
+        "podInfoOnMount": false,
+        "requiresRepublish": false,
+        "seLinuxMount": true,
+        "storageCapacity": false,
+        "volumeLifecycleModes": [
+          "Persistent"
+        ]
+      }
+    },
+    {
+      "name": "rook-ceph.rbd.csi.ceph.com",
+      "uid": "2ae28da8-4244-4e16-ac6c-cafb1338b6d9",
+      "spec": {
+        "attachRequired": true,
+        "fsGroupPolicy": "File",
+        "podInfoOnMount": false,
+        "requiresRepublish": false,
+        "seLinuxMount": true,
+        "storageCapacity": false,
+        "volumeLifecycleModes": [
+          "Persistent"
+        ]
+      }
+    }
+  ],
+  "storageprofile_at": "2026-10-23T16:50:23.599474+00:00",
+  "storageprofiles": {
+    "ani-block": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "StorageProfile",
+      "metadata": {
+        "creationTimestamp": "2026-10-03T16:53:04Z",
+        "generation": 1,
+        "labels": {
+          "app": "containerized-data-importer",
+          "app.kubernetes.io/component": "storage",
+          "app.kubernetes.io/managed-by": "cdi-controller",
+          "cdi.kubevirt.io": ""
+        },
+        "name": "ani-block",
+        "ownerReferences": [
+          {
+            "apiVersion": "cdi.kubevirt.io/v1beta1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "CDI",
+            "name": "cdi",
+            "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+          }
+        ],
+        "resourceVersion": "10613",
+        "uid": "83354750-8885-41e0-9c6d-5334ffdd4bcb"
+      },
+      "spec": {},
+      "status": {
+        "claimPropertySets": [
+          {
+            "accessModes": [
+              "ReadWriteMany"
+            ],
+            "volumeMode": "Block"
+          },
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Block"
+          },
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Filesystem"
+          }
+        ],
+        "cloneStrategy": "csi-clone",
+        "conditions": [
+          {
+            "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+            "lastTransitionTime": "2026-10-03T16:53:04Z",
+            "message": "Provisioner is recognized",
+            "reason": "RecognizedProvisioner",
+            "status": "True",
+            "type": "Recognized"
+          }
+        ],
+        "dataImportCronSourceFormat": "snapshot",
+        "provisioner": "rook-ceph.rbd.csi.ceph.com",
+        "snapshotClass": "ani-rbd-retain",
+        "storageClass": "ani-block"
+      }
+    },
+    "ani-cephfs": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "StorageProfile",
+      "metadata": {
+        "creationTimestamp": "2026-10-03T16:53:04Z",
+        "generation": 1,
+        "labels": {
+          "app": "containerized-data-importer",
+          "app.kubernetes.io/component": "storage",
+          "app.kubernetes.io/managed-by": "cdi-controller",
+          "cdi.kubevirt.io": ""
+        },
+        "name": "ani-cephfs",
+        "ownerReferences": [
+          {
+            "apiVersion": "cdi.kubevirt.io/v1beta1",
+            "blockOwnerDeletion": true,
+            "controller": true,
+            "kind": "CDI",
+            "name": "cdi",
+            "uid": "4f9c62da-a503-48e0-bbed-9bfd2509e542"
+          }
+        ],
+        "resourceVersion": "10612",
+        "uid": "49bbc971-fc2d-4543-b7a7-02ccd13aac99"
+      },
+      "spec": {},
+      "status": {
+        "claimPropertySets": [
+          {
+            "accessModes": [
+              "ReadWriteMany"
+            ],
+            "volumeMode": "Filesystem"
+          },
+          {
+            "accessModes": [
+              "ReadWriteOnce"
+            ],
+            "volumeMode": "Filesystem"
+          }
+        ],
+        "cloneStrategy": "csi-clone",
+        "conditions": [
+          {
+            "lastHeartbeatTime": "2026-10-03T16:53:04Z",
+            "lastTransitionTime": "2026-10-03T16:53:04Z",
+            "message": "Provisioner is recognized",
+            "reason": "RecognizedProvisioner",
+            "status": "True",
+            "type": "Recognized"
+          }
+        ],
+        "dataImportCronSourceFormat": "pvc",
+        "provisioner": "rook-ceph.cephfs.csi.ceph.com",
+        "snapshotClass": "ani-cephfs-retain",
+        "storageClass": "ani-cephfs"
+      }
+    }
+  }
+}

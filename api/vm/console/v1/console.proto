@@ -1,0 +1,20 @@
+syntax = "proto3";
+package vm.console.v1;
+option go_package = "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/console/v1;consolev1";
+
+service VMConsoleService {
+  rpc ValidateConsoleSession(VMConsoleBinding) returns (ConsoleSessionValidation);
+}
+message VMConsoleBinding {
+  string tenant_id = 1;
+  string vm_id = 2;
+  int64 version = 3;
+  string cluster_id = 4;
+  string namespace = 5;
+  string vm_name = 6;
+  string vm_uid = 7;
+  string vmi_name = 8;
+  string vmi_uid = 9;
+  string namespace_uid = 10;
+}
+message ConsoleSessionValidation { bool valid = 1; }

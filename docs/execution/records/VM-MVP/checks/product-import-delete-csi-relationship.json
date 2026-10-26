@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-23T20:37:28.519953+00:00",
+  "pod": {
+    "name": "rook-ceph.rbd.csi.ceph.com-ctrlplugin-67bf845986-jjtzg",
+    "uid": "997474bf-2ada-42c8-a7b2-89e67cdf048f"
+  },
+  "matches": {
+    "csi-rbdplugin": {
+      "exit": 0,
+      "rows": []
+    },
+    "csi-provisioner": {
+      "exit": 0,
+      "rows": [
+        {
+          "timestamp": "2026-10-24T04:21:28.904466676+08:00",
+          "claim_uids": [
+            "2be382eb-8d98-4728-a4de-53f1b201b136"
+          ],
+          "rbd_images": [],
+          "pv_names": [
+            "pvc-2be382eb-8d98-4728-a4de-53f1b201b136"
+          ],
+          "request_ids": [],
+          "classification": []
+        },
+        {
+          "timestamp": "2026-10-24T04:21:31.381767304+08:00",
+          "claim_uids": [
+            "2be382eb-8d98-4728-a4de-53f1b201b136"
+          ],
+          "rbd_images": [],
+          "pv_names": [],
+          "request_ids": [
+            "\"2be382eb-8d98-4728-a4de-53f1b201b136\","
+          ],
+          "classification": []
+        },
+        {
+          "timestamp": "2026-10-24T04:21:31.440402317+08:00",
+          "claim_uids": [
+            "2be382eb-8d98-4728-a4de-53f1b201b136"
+          ],
+          "rbd_images": [],
+          "pv_names": [],
+          "request_ids": [
+            "\"2be382eb-8d98-4728-a4de-53f1b201b136\","
+          ],
+          "classification": []
+        },
+        {
+          "timestamp": "2026-10-24T04:21:31.450289406+08:00",
+          "claim_uids": [
+            "2be382eb-8d98-4728-a4de-53f1b201b136"
+          ],
+          "rbd_images": [],
+          "pv_names": [],
+          "request_ids": [
+            "\"2be382eb-8d98-4728-a4de-53f1b201b136\","
+          ],
+          "classification": []
+        },
+        {
+          "timestamp": "2026-10-24T04:22:04.795785388+08:00",
+          "claim_uids": [
+            "2f35960c-b9dc-46ed-918a-199101304bcc"
+          ],
+          "rbd_images": [],
+          "pv_names": [],
+          "request_ids": [],
+          "classification": []
+        }
+      ]
+    }
+  }
+}

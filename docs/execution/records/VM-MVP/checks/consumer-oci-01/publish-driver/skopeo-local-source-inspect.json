@@ -1,0 +1,39 @@
+{
+  "result": "PASS",
+  "registry_requests": 0,
+  "layer_extractions": 0,
+  "loads": 0,
+  "source_syntax_delta": null,
+  "results": [
+    {
+      "service": "resource",
+      "source": "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/ani-resource-service-vm-mvp-8589b66f1370.oci.tar:vm-mvp-8589b66f1370-01a168ce",
+      "exit_code": 0,
+      "raw_bytes": 2265,
+      "actual_manifest_digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+      "expected_manifest_digest": "sha256:f322e8f965f7f9373d33b35dd460c6312a2ce06c95a9573737e1516ff4d9f9b1",
+      "elapsed_seconds": 0.221,
+      "stderr": ""
+    },
+    {
+      "service": "session",
+      "source": "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/session/session-gateway-c485419ab879.oci.tar:vm-mvp-c485419ab879-01a168ce",
+      "exit_code": 0,
+      "raw_bytes": 2265,
+      "actual_manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+      "expected_manifest_digest": "sha256:70bee379aa6410c6b5fb6e8dede3fd98ceeb0af7ad0d8c6b9baf386f14bd4773",
+      "elapsed_seconds": 0.132,
+      "stderr": ""
+    },
+    {
+      "service": "governance",
+      "source": "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/governance/gov-server-a64e0ab8ed6b.oci.tar:vm-mvp-a64e0ab8ed6b-01a168ce",
+      "exit_code": 0,
+      "raw_bytes": 2573,
+      "actual_manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+      "expected_manifest_digest": "sha256:271575fe4c397175a070acf57ca49d949a9fd83a24f0eae920f025f27e65d222",
+      "elapsed_seconds": 0.307,
+      "stderr": ""
+    }
+  ]
+}

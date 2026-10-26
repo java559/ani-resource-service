@@ -1,0 +1,356 @@
+{
+  "at": "2026-10-24T15:02:05.179056+00:00",
+  "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+  "intent": "native-ready",
+  "source_sha256": "5cbe02057d84c956a00f6d1699ea4c177b3c102e5cb431119a9c382fb724bd4a",
+  "helper_pins": {
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-windows-lifecycle.py": "a5197f719d0dbfaf4ba1a2f5c16d09bc866919ad9f566bc0327204f612e0d3ab",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-firstboot-recovery-01/storage-stopstart-01/driver.py": "6ada827bd06c01812ea041f14468b5089deec753308758f7611df95bb65de591",
+    "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/vm-product-snapshot-linux.py": "2faf4a60c7ec44cccb9663172167debc5dce9c1799385ac4c1b9bd38e3289b7b"
+  },
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-online-snapshot-a-01/state-private.json",
+  "guest_commands": 0,
+  "phase": "ONLINE_SNAPSHOT_READY_NATIVE_COMPLETE",
+  "snapshot_id": "15e53288-6b6a-5278-83ad-5703e15303e1",
+  "operation_id": "b3e7920f-6fe8-4579-a1ea-9d726f1d1fe9",
+  "snapshot_api": {
+    "snapshotId": "15e53288-6b6a-5278-83ad-5703e15303e1",
+    "sourceVmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+    "sourceVmUid": "9a751320-5f97-4e56-af6a-30964610321b",
+    "ready": true,
+    "completeness": "COMPLETE",
+    "included": [
+      "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+      "disk-89317f205600510abc65e40402c83abb",
+      "disk-cca2005bd9365327a5ded8236385b9ba",
+      "media-driver"
+    ],
+    "excluded": [],
+    "indications": [
+      "NoGuestAgent",
+      "Online"
+    ],
+    "disks": [
+      {
+        "diskId": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "role": "system",
+        "name": "system",
+        "sizeGb": "80",
+        "requestedBytes": "80000000000",
+        "observedCapacityBytes": "80530636800",
+        "volumeName": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "serial": "76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "89317f20-5600-510a-bc65-e40402c83abb",
+        "role": "data",
+        "name": "vm-mvp-windows-data3-01a168ce",
+        "sizeGb": "3",
+        "requestedBytes": "3000000000",
+        "observedCapacityBytes": "3221225472",
+        "volumeName": "disk-89317f205600510abc65e40402c83abb",
+        "serial": "89317f20-5600-510a-bc65-e40402c83abb",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      },
+      {
+        "diskId": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "role": "data",
+        "name": "vm-mvp-windows-data4-01a168ce",
+        "sizeGb": "4",
+        "requestedBytes": "4000000000",
+        "observedCapacityBytes": "4294967296",
+        "volumeName": "disk-cca2005bd9365327a5ded8236385b9ba",
+        "serial": "cca2005b-d936-5327-a5de-d8236385b9ba",
+        "attached": true,
+        "preparationState": "Bound",
+        "reason": ""
+      }
+    ],
+    "observedAt": "2026-10-24T15:00:50.607069259Z",
+    "reason": ""
+  },
+  "native_snapshot": {
+    "kind": "VirtualMachineSnapshot",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vm-snap-15e53288-6b6a-5278-83ad-5703e15303e1",
+    "uid": "fc2f726f-e66f-4fc6-8691-a41c0dd3bf57",
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T14:58:54Z",
+          "reason": "Operation complete",
+          "status": "False",
+          "type": "Progressing"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2026-10-24T14:58:54Z",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "creationTime": "2026-10-24T14:58:54Z",
+      "indications": [
+        "NoGuestAgent",
+        "Online"
+      ],
+      "phase": "Succeeded",
+      "readyToUse": true,
+      "snapshotVolumes": {
+        "includedVolumes": [
+          "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+          "media-driver",
+          "disk-89317f205600510abc65e40402c83abb",
+          "disk-cca2005bd9365327a5ded8236385b9ba"
+        ]
+      },
+      "sourceIndications": [
+        {
+          "indication": "NoGuestAgent",
+          "message": "Guest agent was not available. Snapshot is crash-consistent and may not be application-consistent."
+        },
+        {
+          "indication": "Online",
+          "message": "Snapshot taken while the VM was running. Consistency depends on guest-agent quiescing."
+        }
+      ],
+      "sourceUID": "9a751320-5f97-4e56-af6a-30964610321b",
+      "virtualMachineSnapshotContentName": "vmsnapshot-content-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57"
+    }
+  },
+  "content": {
+    "kind": "VirtualMachineSnapshotContent",
+    "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+    "name": "vmsnapshot-content-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57",
+    "uid": "b3176a43-dfc8-444e-90cc-fab382d77186",
+    "status": {
+      "creationTime": "2026-10-24T14:58:54Z",
+      "readyToUse": true,
+      "volumeSnapshotStatus": [
+        {
+          "creationTime": "2026-10-24T14:55:24Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-89317f205600510abc65e40402c83abb"
+        },
+        {
+          "creationTime": "2026-10-24T14:55:39Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-cca2005bd9365327a5ded8236385b9ba"
+        },
+        {
+          "creationTime": "2026-10-24T14:55:24Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5"
+        },
+        {
+          "creationTime": "2026-10-24T14:55:37Z",
+          "readyToUse": true,
+          "volumeSnapshotName": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-media-driver"
+        }
+      ]
+    }
+  },
+  "volumes": [
+    {
+      "volume_name": "disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+      "role": "system",
+      "source_pvc": {
+        "name": "vd-76c43f30-e8b8-5b1b-b19f-fbb7c04459b5",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "cdae1a49-240f-4dcf-8e80-d011402eec28"
+      },
+      "source_pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-fc1d62d9-de56-4b7c-9bda-46bd26707d76",
+        "uid": "0cd775c4-13dc-433e-9273-9c519fff46c8"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-76c43f30e8b85b1bb19ffbb7c04459b5",
+        "uid": "5b05ebe7-e274-4ae8-ae81-8bfd7e67cdea",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-5b05ebe7-e274-4ae8-ae81-8bfd7e67cdea",
+          "creationTime": "2026-10-24T14:55:24Z",
+          "readyToUse": true,
+          "restoreSize": "75Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-5b05ebe7-e274-4ae8-ae81-8bfd7e67cdea",
+        "uid": "e317caa9-c1ce-4489-ab9b-fed6953a749f",
+        "status": {
+          "creationTime": 1792853724759773795,
+          "readyToUse": true,
+          "restoreSize": 80530636800,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-ec2892a6-113e-47d8-8301-b824b263b5c6"
+        },
+        "deletion_policy": "Delete"
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete"
+      }
+    },
+    {
+      "volume_name": "disk-89317f205600510abc65e40402c83abb",
+      "role": "data",
+      "source_pvc": {
+        "name": "vd-89317f20-5600-510a-bc65-e40402c83abb",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "771d2a7a-5c05-4ea6-8443-e9d818fcc4d6"
+      },
+      "source_pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-184cf5be-3de0-4a70-bfdf-db3d9f2d0030",
+        "uid": "b15ca31b-1a33-4c65-bdaa-28f6b5e48951"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-89317f205600510abc65e40402c83abb",
+        "uid": "50524e75-7451-42c0-b330-e81f7baa5c2c",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-50524e75-7451-42c0-b330-e81f7baa5c2c",
+          "creationTime": "2026-10-24T14:55:24Z",
+          "readyToUse": true,
+          "restoreSize": "3Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-50524e75-7451-42c0-b330-e81f7baa5c2c",
+        "uid": "6bbe5986-c976-49d7-9191-4757551fc908",
+        "status": {
+          "creationTime": 1792853724749636025,
+          "readyToUse": true,
+          "restoreSize": 3221225472,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-48cf176b-b508-451b-95a7-39c9a7192740"
+        },
+        "deletion_policy": "Delete"
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete"
+      }
+    },
+    {
+      "volume_name": "disk-cca2005bd9365327a5ded8236385b9ba",
+      "role": "data",
+      "source_pvc": {
+        "name": "vd-cca2005b-d936-5327-a5de-d8236385b9ba",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "4f0405d6-7c19-43c5-b270-e4767891921a"
+      },
+      "source_pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-f3d5361c-0069-469e-8292-4c05c3f6c818",
+        "uid": "ae053171-463a-41d9-b1c6-6a424fda4160"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-disk-cca2005bd9365327a5ded8236385b9ba",
+        "uid": "c935ccac-e807-46db-bf99-71590e649156",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-c935ccac-e807-46db-bf99-71590e649156",
+          "creationTime": "2026-10-24T14:55:39Z",
+          "readyToUse": true,
+          "restoreSize": "4Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-c935ccac-e807-46db-bf99-71590e649156",
+        "uid": "ab56415e-dae7-479e-b703-cb1d457c55ee",
+        "status": {
+          "creationTime": 1792853739668764472,
+          "readyToUse": true,
+          "restoreSize": 4294967296,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-11cc223f-b5c8-4b56-b63f-635e829b9e92"
+        },
+        "deletion_policy": "Delete"
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete"
+      }
+    },
+    {
+      "volume_name": "media-driver",
+      "role": "media",
+      "source_pvc": {
+        "name": "vm-media-05f4d05d-1d5f-56f5-84d3-650a82e321a3",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "uid": "06fe36dc-da3b-481c-a1e6-7a1e08db2c7c"
+      },
+      "source_pv": {
+        "kind": "PersistentVolume",
+        "namespace": "",
+        "name": "pvc-14898421-4753-48eb-816c-5786c188bd91",
+        "uid": "361a5fdb-9d5e-4926-9f0a-a86a041b94f0"
+      },
+      "volume_snapshot": {
+        "kind": "VolumeSnapshot",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vmsnapshot-fc2f726f-e66f-4fc6-8691-a41c0dd3bf57-volume-media-driver",
+        "uid": "f851cbb0-fc1c-4c14-83a5-c0825bbe5ac4",
+        "status": {
+          "boundVolumeSnapshotContentName": "snapcontent-f851cbb0-fc1c-4c14-83a5-c0825bbe5ac4",
+          "creationTime": "2026-10-24T14:55:37Z",
+          "readyToUse": true,
+          "restoreSize": "2Gi"
+        }
+      },
+      "volume_snapshot_content": {
+        "kind": "VolumeSnapshotContent",
+        "namespace": "",
+        "name": "snapcontent-f851cbb0-fc1c-4c14-83a5-c0825bbe5ac4",
+        "uid": "4c74cfa3-e39e-42dd-ba04-0cf95e18e9b4",
+        "status": {
+          "creationTime": 1792853737845693272,
+          "readyToUse": true,
+          "restoreSize": 2147483648,
+          "snapshotHandle": "0001-0009-rook-ceph-0000000000000004-521eab5a-84be-46dc-bfeb-03ec63a32fe5"
+        },
+        "deletion_policy": "Delete"
+      },
+      "snapshot_class": {
+        "kind": "VolumeSnapshotClass",
+        "namespace": "",
+        "name": "ani-rbd-delete",
+        "uid": "4ef77654-dcae-4cca-b709-0d570426cf4e",
+        "deletion_policy": "Delete"
+      }
+    }
+  ],
+  "consistency": "ONLINE_NO_GUEST_AGENT_CRASH_CONSISTENT",
+  "quiesce_proven": false,
+  "business_disk_contents": 3,
+  "existing_readonly_media_contents": 1,
+  "original_storage_vmi_others_sources_nad_equal": true,
+  "business_mutations": 0
+}

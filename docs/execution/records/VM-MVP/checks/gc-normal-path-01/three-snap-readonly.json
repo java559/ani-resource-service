@@ -1,0 +1,83 @@
+{
+  "backend_writes": 0,
+  "cluster_writes": 0,
+  "fresh_cluster_or_version_or_task_or_schedule_queries": 0,
+  "kubectl_exit": 0,
+  "prior_preconnection_collector_error_retained_in": "readonly.json/three_snapshot_dependencies",
+  "result": {
+    "child_image_open_calls": 0,
+    "elapsed_seconds": 26.728,
+    "finished_at": "2026-10-24T18:58:11.660319+00:00",
+    "identity_reference": "original client.admin /etc/ceph/ceph.conf and /etc/ceph/keyring",
+    "per_image_budget_seconds": 15,
+    "pool": "ani-block-pool",
+    "result": "THREE_BOUNDED_READONLY_ATTEMPTS_COMPLETE",
+    "rows": [
+      {
+        "disk": "root",
+        "elapsed_seconds": 11.851,
+        "exit": 0,
+        "historical_image_name": "csi-vol-27cbaa0a-050c-49ac-be04-e413fd724a00",
+        "image_id": "20cc87c1cde11d",
+        "read": {
+          "error": "[errno 110] RBD operation timeout (error opening image b'20cc87c1cde11d' at snapshot None)",
+          "error_class": "Timeout",
+          "image_id": "20cc87c1cde11d",
+          "read_only": true,
+          "result": "READONLY_OPEN_OR_READ_FAILED",
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      },
+      {
+        "disk": "D3",
+        "elapsed_seconds": 9.761,
+        "exit": 0,
+        "historical_image_name": "csi-vol-0c9aca8f-bcc4-47bb-a120-013d90d690ac",
+        "image_id": "20cc87b511820b",
+        "read": {
+          "image_id": "20cc87b511820b",
+          "read_only": true,
+          "result": "READONLY_SNAP_LIST_COMPLETE",
+          "snapshot_count_at_most13": 1,
+          "snapshots": [
+            {
+              "children": [],
+              "children_api": "list_children",
+              "children_bound_exceeded": false,
+              "id": 52,
+              "name": "fa982c55-5644-4369-8602-acf612d6547c",
+              "read_view": "set_snap_by_id",
+              "size": 3221225472
+            }
+          ],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      },
+      {
+        "disk": "D4",
+        "elapsed_seconds": 5.117,
+        "exit": 0,
+        "historical_image_name": "csi-vol-d7a7fc2f-419d-44ab-bec3-815631c460f5",
+        "image_id": "20cc87987d1f99",
+        "read": {
+          "error": "[errno 110] RBD operation timeout (error opening image b'20cc87987d1f99' at snapshot None)",
+          "error_class": "Timeout",
+          "image_id": "20cc87987d1f99",
+          "read_only": true,
+          "result": "READONLY_OPEN_OR_READ_FAILED",
+          "snapshots": [],
+          "writes": 0
+        },
+        "timeout_seconds": 15
+      }
+    ],
+    "started_at": "2026-10-24T18:57:44.931878+00:00",
+    "total_budget_seconds": 45,
+    "trash_get_calls": 0,
+    "writes": 0
+  },
+  "source_sha256": "7d8b233b72fa385029a2499b992269376b6c621dd2b294be7d76acb0a1fa9bae"
+}

@@ -1,0 +1,18 @@
+{
+  "phase": "guest-logout-confirm-01",
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "runner_sha256": "b40641bd24f2308f4fdd18bca9191f3a466592f9b610755f6253bc546ff16b37",
+  "read_receipt_sha256": "ed19951c0eaf49d3076c7ac037817d24154a844626353ada143f808c211b675c",
+  "started_at": "2026-10-24T22:29:59.210729+00:00",
+  "guest_login_attempts": 0,
+  "password_submissions": 0,
+  "marker_reads": 0,
+  "marker_writes": 0,
+  "logout_commands": 0,
+  "serial_budget_seconds": 20,
+  "credential_values_or_hashes_public": false,
+  "result": "PASS_ORIGINAL_GUEST_ALREADY_AT_LOGIN_PROMPT",
+  "guest_logout_confirmed": true,
+  "heavy_lock_released": true,
+  "finished_at": "2026-10-24T22:30:00.106110+00:00"
+}

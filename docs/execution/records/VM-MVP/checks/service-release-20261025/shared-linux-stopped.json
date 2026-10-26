@@ -1,0 +1,97 @@
+{
+  "phase": "observe",
+  "label": "observe-stopped-02",
+  "result": "ORIGINAL_OPERATION_AND_VM_OBSERVED_NOT_GUEST_OR_PHYSICAL_ACCEPTANCE",
+  "task_name": "vm-mvp-shared-01a168ce",
+  "started_at": "2026-10-24T22:24:57.592909+00:00",
+  "plan_sha256": "4ac179676437e6de39b22e4e9461169b57f4dcf55dbb76f64413edd2f3ea3cb4",
+  "runner_sha256": "72fc487d06441fab4cda98ffd3edaf6f57d2bed86635478d843b72942b382301",
+  "root_release_sha256": "eb67c84b662f24b9d98acd592e3b514e23b3b621e9a33adee3e9d902c3b4b98b",
+  "gov_tenant_id": 14,
+  "calls": [
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/v1/auth/password/login",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/login.request.json",
+      "seconds": 0.975,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/login.response.json"
+    },
+    {
+      "name": "original-operation",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad/operations/cf05dba0-fbd2-43c3-a19b-53a4135872b3",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 0.522,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/original-operation.response.json"
+    },
+    {
+      "name": "original-vm",
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/a704da75-2520-4df2-beaf-f163709ae4ad",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": null,
+      "seconds": 0.589,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/original-vm.response.json"
+    },
+    {
+      "name": "logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "http_status": 200,
+      "outcome": "RESPONDED",
+      "private_request": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/logout.request.json",
+      "seconds": 0.053,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/private/observe-stopped-02/logout.response.json"
+    }
+  ],
+  "guest_actions": 0,
+  "cluster_or_database_calls": 0,
+  "lifecycle_posts": 0,
+  "secret_values_or_hashes_public": false,
+  "auto_retry": false,
+  "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+  "basis_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/shared-vm-live-01/stop.json",
+  "basis_sha256": "cd7ba661ebedf687e6b992d390938358f5b11f5c0746e767902b79af1665827f",
+  "operation_id": "cf05dba0-fbd2-43c3-a19b-53a4135872b3",
+  "operation": {
+    "id": "cf05dba0-fbd2-43c3-a19b-53a4135872b3",
+    "vm_id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "action": "stop",
+    "intent_version": "2",
+    "state": "succeeded",
+    "reason": "",
+    "observed_at": "2026-10-24T22:23:42.951350329Z"
+  },
+  "vm": {
+    "id": "a704da75-2520-4df2-beaf-f163709ae4ad",
+    "name": "vm-mvp-shared-01a168ce-linux-01",
+    "version": "2",
+    "desired_state": "Stopped",
+    "observed_state": "Stopped",
+    "reason": "",
+    "last_operation_id": "cf05dba0-fbd2-43c3-a19b-53a4135872b3",
+    "preset_id": "61b5207d-8cbb-40b8-adfa-14977373e7f4",
+    "system_disk_size_gb": "20",
+    "source_kind": "DISK_IMAGE",
+    "media_key": "ubuntu-24.04",
+    "closing": false
+  },
+  "disk_observation": [
+    {
+      "disk_id": "69bfe3b4-cbf7-5a14-9423-77e5171cdd3b",
+      "role": "system",
+      "size_gb": "20",
+      "volume_name": "disk-69bfe3b4cbf75a14942377e5171cdd3b",
+      "serial": "69bfe3b4-cbf7-5a14-9423-77e5171cdd3b"
+    }
+  ],
+  "session_revoked": true,
+  "finished_at": "2026-10-24T22:24:59.739995+00:00",
+  "heavy_lock_released": true
+}

@@ -1,0 +1,12 @@
+{
+  "vm_id": "ba329ec8-ffe3-4883-a499-48c16e1ef911",
+  "vmi_uid": "e95b53e8-1ca2-4170-af6b-666da94593b8",
+  "reason": "Abort only the exact task-owned credential preparation from original v3 failure stage; no unknown Guest process",
+  "new_login": 0,
+  "password_sends": 0,
+  "http": 0,
+  "own_preparation_interrupts": 1,
+  "user_shell_confirmed": true,
+  "result": "PASS_KNOWN_PREPARATION_ABORTED_TO_ORIGINAL_USER_SHELL",
+  "public_projection_omits_tty": true
+}

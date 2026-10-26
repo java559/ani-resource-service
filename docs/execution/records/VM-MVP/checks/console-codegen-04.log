@@ -1,0 +1,12 @@
+
+> ani-console@0.1.0 codegen
+> bash scripts/codegen.sh
+
+→ Services OpenAPI → src/api/schema.d.ts
+✨ openapi-typescript 7.13.0
+🚀 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-stage-01/openapi/services/v1.yaml → /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-stage-01/frontends/console/src/api/schema.d.ts [259.2ms]
+→ Core OpenAPI → src/api/core-schema.d.ts
+✨ openapi-typescript 7.13.0
+🚀 /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-stage-01/frontends/console/.cache/core-openapi.normalized.yaml → /home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/console-stage-01/frontends/console/src/api/core-schema.d.ts [599.4ms]
+✅ Core API types → src/api/core-schema.d.ts
+✅ Console API types generated

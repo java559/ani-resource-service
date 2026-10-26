@@ -1,0 +1,157 @@
+{
+  "result": "PASS_CODE_BOUNDARY_TESTS_BUILD_ONLY",
+  "base_commit": "f018c53373bb66a16b5e423100412a5fe5b9e9c2",
+  "source_sha256": "e2b9988ded4c7986e418efa5e70786f3257280c5adc619b2045071f36bee9189",
+  "source_manifest_sha256": "7c65825c7e4ff1634ff72fff545f95152b6956017e754f36129446ddfd85f6b7",
+  "diff_sha256": "c407e8f4c48e77241d3c266b52698627ca421bc3eafd6415054782f4ae30df9d",
+  "exact_changed_files": {
+    "internal/data/vm/native.go": {
+      "mode": "0644",
+      "sha256": "54b6b7136fbff1ef73f537408f5816ef1fdce513dc5d27dd9ff0550ed11d6844"
+    },
+    "internal/data/vm/windows_domain.go": {
+      "mode": "0644",
+      "sha256": "1ea5e02ac1cba70600038d815ddcda03e375c082799395c36f7952476bc8a5cf"
+    },
+    "internal/data/vm/windows_domain_test.go": {
+      "mode": "0644",
+      "sha256": "72c2ba56033827335d3480587160344be5c39f5c11c9e1bb1da7997302560629"
+    }
+  },
+  "native_full_package_integration_tags_enabled": false,
+  "all_generation_formatting_tests_vet_build_host": "fedora",
+  "GOWORK": "off",
+  "GOPROXY": "off",
+  "no_replace": true,
+  "original_infra_setup_failure": "PRESERVED_NOT_COUNTED_RED",
+  "phases": {
+    "red-create-cached": {
+      "result": "RED_EXPECTED_FAIL",
+      "exit_code": 1,
+      "elapsed_seconds": 11.068,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "./internal/data/vm",
+        "-run",
+        "^TestNativeWindowsDomainCreateProjection$",
+        "-count=1",
+        "-timeout=90s"
+      ],
+      "receipt_sha256": "928ade72e696309153b466d2b88f2374f5660b3871c686d8876cf34421a28aa0",
+      "log_sha256": "9b2202b016c58466263a76b6d2ede4388effab17cf4dd0b46ef9827d00f1a4e6"
+    },
+    "green-create": {
+      "result": "GREEN_PASS",
+      "exit_code": 0,
+      "elapsed_seconds": 3.146,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "./internal/data/vm",
+        "-run",
+        "^TestNativeWindowsDomainCreateProjection$",
+        "-count=1",
+        "-timeout=90s"
+      ],
+      "receipt_sha256": "d83b7d6263dfa521c1f922294c9fa920da73f572cf958396895728b510f6d007",
+      "log_sha256": "b315a0a8fbb23112ab072729657763ecb3b8882d6783942768f17ba501f51fe1"
+    },
+    "red-start": {
+      "result": "RED_EXPECTED_FAIL",
+      "exit_code": 1,
+      "elapsed_seconds": 3.129,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "./internal/data/vm",
+        "-run",
+        "^TestNativeWindowsDomain",
+        "-count=1",
+        "-timeout=90s"
+      ],
+      "receipt_sha256": "087d69713393eca074b9cc8d74ac71038e07d7bff757648f8bd01a9d2f1f18dd",
+      "log_sha256": "d1e88923885019a3fcd3035c219c367063155f4b7a47ccc0b0cbc72766d4cab3"
+    },
+    "green-start": {
+      "result": "GREEN_PASS",
+      "exit_code": 0,
+      "elapsed_seconds": 2.976,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "./internal/data/vm",
+        "-run",
+        "^TestNativeWindowsDomain",
+        "-count=1",
+        "-timeout=90s"
+      ],
+      "receipt_sha256": "d730ae21296f4fc47be9ebbe3fff7f4a87fceed81a1131ebaecac9d7dfed5216",
+      "log_sha256": "c48b2e6cefd35fff59938df1e7072406bef2482e05bff342ef1db9a98c9bcc49"
+    },
+    "package": {
+      "result": "PASS",
+      "exit_code": 0,
+      "elapsed_seconds": 1.42,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "test",
+        "./internal/data/vm",
+        "-count=1",
+        "-timeout=90s"
+      ],
+      "receipt_sha256": "b4df7977bc102bb19d2a79c04f131cf1e72539ba52947d35fd9159d1423c653a",
+      "log_sha256": "a63e077e08364731ad5838ce2d9b57f45222dd5d6ae972e271901c3d860a102d"
+    },
+    "vet": {
+      "result": "PASS",
+      "exit_code": 0,
+      "elapsed_seconds": 5.107,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "vet",
+        "./internal/data/vm"
+      ],
+      "receipt_sha256": "e86940120f5cb29c1a3cea057fc028f179cfb664af43c685387e6be8f7460c7d",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "build": {
+      "result": "PASS",
+      "exit_code": 0,
+      "elapsed_seconds": 17.264,
+      "argv": [
+        "/home/chabking/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.10.linux-amd64/bin/go",
+        "build",
+        "-trimpath",
+        "-buildvcs=false",
+        "-ldflags",
+        "-X main.Name=ani-resource-service -X main.Version=vm-mvp-windows-domain-profile-01a168ce",
+        "-o",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/resource-server.windows-domain-profile",
+        "./cmd/ani-resource-service"
+      ],
+      "receipt_sha256": "12be8143bbfa997a21198a4a8ddd89543d7fd500274298c1f306722697b09aa8",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "binary": {
+    "bytes": 78671694,
+    "path": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/windows-domain-profile-01/resource-server.windows-domain-profile",
+    "sha256": "b08aadf7b8acd17d3e6c921ce0b35c84bf1c0bfcc6cb4c8d38b14b507f8fc96e"
+  },
+  "build_receipt_sha256": "12be8143bbfa997a21198a4a8ddd89543d7fd500274298c1f306722697b09aa8",
+  "official_profile_reference": "https://github.com/kubevirt/kubevirt/blob/v1.9.0/examples/vmi-windows.yaml#L10-L35",
+  "original_worktree_after": {
+    "head": "0a53b99c8d9f126fd02e6cdde2841c8fbea9046b",
+    "raw_index_sha256": "e0c038ed7373292305e13f09b0ff1f9c3677aab5bb613023fda11c576f21be76"
+  },
+  "original_head_and_raw_index_unchanged": true,
+  "worktree_source_writes": 0,
+  "Guest_actions": 0,
+  "running_native_or_business_API_writes": 0,
+  "deployments": 0,
+  "git_commits_or_pushes": 0,
+  "images": 0,
+  "performance_causality": "NOT_VERIFIED_REQUIRES_ACTUAL_GUEST_ACCEPTANCE",
+  "heavy_lock_released": true
+}

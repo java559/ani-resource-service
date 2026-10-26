@@ -1,0 +1,177 @@
+{
+  "at": "2026-10-24T08:45:42.470801+00:00",
+  "auth_references": [
+    {
+      "exists": false,
+      "path": "/home/chabking/.docker/config.json"
+    },
+    {
+      "exists": false,
+      "path": "/home/chabking/.config/containers/auth.json"
+    },
+    {
+      "exists": false,
+      "path": "/run/user/1000/containers/auth.json"
+    }
+  ],
+  "ca_references": [
+    {
+      "exists": false,
+      "path": "/etc/docker/certs.d/172.16.101.10:5000/ca.crt"
+    },
+    {
+      "exists": false,
+      "path": "/etc/containers/certs.d/172.16.101.10:5000/ca.crt"
+    }
+  ],
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "commands": [
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig",
+        "/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=5s",
+        "get",
+        "namespace",
+        "kube-system",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.173,
+      "exit_code": 0,
+      "stage": "cluster-identity"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig",
+        "/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=5s",
+        "get",
+        "nodes",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.172,
+      "exit_code": 0,
+      "stage": "nodes-identity"
+    },
+    {
+      "argv": [
+        "/home/chabking/ani-four-service-deploy-20261012/tools/kubectl",
+        "--kubeconfig",
+        "/home/chabking/ani-four-service-deploy-20261012/private/kubeconfig",
+        "--request-timeout=5s",
+        "get",
+        "deployments",
+        "-n",
+        "ani-system",
+        "-o",
+        "json"
+      ],
+      "elapsed_seconds": 0.138,
+      "exit_code": 0,
+      "stage": "existing-deployment-image-references"
+    },
+    {
+      "argv": [
+        "docker",
+        "info",
+        "--format",
+        "{{json .RegistryConfig.IndexConfigs}}"
+      ],
+      "elapsed_seconds": 0.463,
+      "exit_code": 0,
+      "stage": "fedora-existing-docker-registry-config"
+    }
+  ],
+  "credential_values_recorded": false,
+  "deployments": 0,
+  "elapsed_seconds": 1.062,
+  "endpoint": "172.16.101.10:5000",
+  "existing_docker_registry_config": null,
+  "existing_registry_references": [
+    {
+      "images": [
+        "172.16.101.10:5000/ani/modeldev-accelerator-owner-v21@sha256:c78ee7451e1ff046793eb600b2cf16715d159b262ed13097f4926c0463109d51"
+      ],
+      "name": "ani-accelerator-service",
+      "namespace": "ani-system",
+      "uid": "b47a695d-50d8-4231-a786-6cb6c6b01804"
+    },
+    {
+      "images": [
+        "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165"
+      ],
+      "name": "ani-model-service",
+      "namespace": "ani-system",
+      "uid": "f358e30f-842d-419a-9b25-4178caabda0f"
+    },
+    {
+      "images": [
+        "172.16.101.10:5000/ani/modeldev-service-execution-v21@sha256:23c9d3ca69a2b26cc59dae83e2d9ee8a7066971a535f1f5ee7fdd630c12ea3ff"
+      ],
+      "name": "ani-modeldev",
+      "namespace": "ani-system",
+      "uid": "9469a1f8-218b-44cb-b540-949b62811d48"
+    },
+    {
+      "images": [
+        "172.16.101.10:5000/ani/modeldev-webhook-execution-v21@sha256:251fb879a15e5c5b1009a3840cd795d7273319b4dcac2c810efa3faea7ef818e"
+      ],
+      "name": "ani-modeldev-webhook-v21",
+      "namespace": "ani-system",
+      "uid": "8aa03e15-693c-4086-b2ac-d00b35f72dbf"
+    },
+    {
+      "images": [
+        "172.16.101.10:5000/ani-observability-service:phase2-netmetrics-20261021"
+      ],
+      "name": "ani-observability-service",
+      "namespace": "ani-system",
+      "uid": "e299044b-d2c8-40c7-b470-a8a2b629d46f"
+    }
+  ],
+  "image_pulls": 0,
+  "image_pushes": 0,
+  "logins": 0,
+  "nodes": [
+    {
+      "internal_ips": [
+        "172.16.101.10"
+      ],
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    },
+    {
+      "internal_ips": [
+        "172.16.101.11"
+      ],
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+    },
+    {
+      "internal_ips": [
+        "172.16.101.12"
+      ],
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+    }
+  ],
+  "registry_requests": 1,
+  "result": "READ_ONLY_PREPARED_TLS_ENDPOINT_UNVERIFIED",
+  "service_restarts": 0,
+  "strict_https_v2": {
+    "ca_reference": "curl system trust store",
+    "elapsed_seconds": 0.112,
+    "exit_code": 35,
+    "http_fallback_attempted": false,
+    "http_status": 0,
+    "stderr": "curl: (35) TLS connect error: error:0A00010B:SSL routines::wrong version number\n",
+    "stdout": "\nHTTP_STATUS=000\n",
+    "url": "https://172.16.101.10:5000/v2/"
+  },
+  "tls_verification_disabled": false,
+  "vm_mutations": 0
+}

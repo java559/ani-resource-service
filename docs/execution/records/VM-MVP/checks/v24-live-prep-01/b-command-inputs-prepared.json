@@ -1,0 +1,59 @@
+{
+  "state": "PRIVATE_INPUTS_PREPARED_ZERO_SEND",
+  "configuration_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/candidate-configs/config.yaml",
+  "instance_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/instance.json",
+  "operator_configuration_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs/config.yaml",
+  "operator_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+  "image_runtime_dsn_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/isolated-image/image-runtime.dsn",
+  "init_intent": {
+    "idempotency_key": "8e01602e-0179-4e85-9e60-f8f84d31d40d"
+  },
+  "registration_intent": {
+    "idempotency_key": "a1a53373-b13f-475d-91ad-dbb8940b1ec6",
+    "image_reference": "172.16.101.10:30003/vm-mvp-v24-platform-01a168ce/workspace-candidate@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "display_name": "V24 task workspace",
+    "description": "Fixed existing workspace artifact; task-only Instance regression",
+    "purposes": [
+      "container"
+    ],
+    "accelerator": "undeclared"
+  },
+  "copy_intent": {
+    "send_attempts": 0,
+    "method": "POST",
+    "path": "/api/v2.0/projects/vm-mvp-v24-platform-01a168ce/repositories/workspace-candidate/artifacts",
+    "from": "ani-kf-manual-20261009/ani/kubeflow-jupyter@sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "destination_digest": "sha256:8a8d9a3eb0f4ed63702e873ba9658c49fa2e147c8f927a3fba196768f5d8e712",
+    "tag": null
+  },
+  "commands_not_executed": {
+    "init-platform": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs",
+      "-image-operator-config",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+      "-image-admin-input",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/init-platform.json",
+      "-image-admin",
+      "init-platform"
+    ],
+    "register-platform": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-oci-8589b66f-01/context/ani-resource-service",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator-configs",
+      "-image-operator-config",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/operator.json",
+      "-image-admin-input",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/v24-instance-01/register-platform.json",
+      "-image-admin",
+      "register-platform"
+    ]
+  },
+  "original_configuration_prefix_preserved": true,
+  "credential_values_or_hashes_exported": false,
+  "harbor_requests": 0,
+  "database_calls": 0,
+  "application_calls": 0,
+  "service_restarts": 0
+}

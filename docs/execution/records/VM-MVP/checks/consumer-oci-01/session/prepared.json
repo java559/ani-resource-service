@@ -1,0 +1,65 @@
+{
+  "base": "gcr.io/distroless/static-debian12@sha256:52dcfbabb7457ea47c82f6e13af8c8a4a1d9f7b0145142b3ecab20f2b888411d",
+  "build_environment": {
+    "CGO_ENABLED": "0",
+    "GOARCH": "amd64",
+    "GOCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/cache/go-build",
+    "GOFLAGS": "-mod=readonly -p=2",
+    "GOMAXPROCS": "2",
+    "GOMEMLIMIT": "1536MiB",
+    "GOMODCACHE": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/formal-provider-02/go-mod",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local",
+    "GOWORK": "off",
+    "SOURCE_DATE_EPOCH": "1792829794"
+  },
+  "business_api_calls": 0,
+  "check_container_name": "vm-mvp-session-oci-check-01a168ce",
+  "context_files": [
+    "Dockerfile",
+    ".dockerignore",
+    "session-gateway"
+  ],
+  "deployments": 0,
+  "gate_reuse": {
+    "bundle": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/formal-provider-02/consumer-validated.tar",
+    "bundle_sha256": "45f826fb4da8b93c443b652bf7b8577eca346d91bcaf834c7ca47863b544907c",
+    "receipt_names": [
+      "pin-session.json",
+      "test-session.json",
+      "build-session-02.json"
+    ],
+    "source_owner": "vm_gov supplied exact implementation commit with formal consumer pins"
+  },
+  "image_pushes": 0,
+  "maximum_segment_seconds": 240,
+  "packaging_hashes": {
+    ".dockerignore": "caf3fad61d04f43f6dd5d49514dbe2775a5106c649d5a9a9c053c5f87abd0d8d",
+    "Dockerfile": "1101b1ccca2dfa7102e33986b4c64305f6feb8c0c0d84dfbd00b8c6996a45357"
+  },
+  "result_boundary": "Local OCI only; SG missing-config negative check / Gov help are not readiness or business tests.",
+  "runner": {
+    "path": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/build-once.py",
+    "sha256": "38fcb0b6987f5953be1661bf85e4865f48745cc82097a9764cbac0fe03e648b4"
+  },
+  "service": "session",
+  "source": {
+    "archive": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source.tar.gz",
+    "archive_bytes": 60996,
+    "archive_sha256": "e7acc865179ff6b0fce8dad1b26122c4957f62999022941345691091d6adb171",
+    "commit": "c485419ab879fed9a2fad3a064fd328d829a2671",
+    "file_count": 29,
+    "manifest": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/consumer-oci-01/session/source-manifest.json",
+    "manifest_sha256": "2c2510c8370d80cca292c129beaf4b4d4b08df00bf65b75523c873614ecd0d27",
+    "parent": "811cc383924460a99cae5b209ca5db97a83d42f4",
+    "repository": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/worktrees/ani-session-gateway",
+    "runtime_embed_inputs": [],
+    "source_date_epoch": 1792829794,
+    "tree": "a793407819bc7eaea34348f0962175cbeecc3463"
+  },
+  "state": "PREPARED_EXACT_FINAL_SOURCE_WAIT_ROOT_BUILD_APPROVAL",
+  "tag": "ani-session-gateway:vm-mvp-c485419ab879-01a168ce",
+  "version": "vm-mvp-c485419ab879-01a168ce"
+}

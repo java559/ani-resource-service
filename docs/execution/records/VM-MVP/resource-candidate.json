@@ -1,0 +1,12 @@
+{
+  "database": "vm_resource_candidate_01a168ce",
+  "owner_role": "vm_res_candidate_owner_01a168ce",
+  "runtime_role": "vm_res_candidate_runtime_01a168ce",
+  "cluster_id": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "configs_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs",
+  "runtime_env_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/runtime.env",
+  "vm_config_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/vm.json",
+  "native_network_policy": "10.83.0.0/16 candidate; normal product admission still validates live platform ranges",
+  "source": "resource-stage-05",
+  "stage": "schemas and empty trusted catalog; VM creation remains dependency-unavailable until verified media/NAD supplied"
+}

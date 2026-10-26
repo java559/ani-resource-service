@@ -1,0 +1,1 @@
+{"phase": "ORIGINAL_OPERATION_OBSERVED", "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d", "intent": "firstboot-recovery-01-start", "operation_id": "e1b70f80-5e84-4715-ae8f-831fe6e86b01", "state": "succeeded", "version": "9", "expected_version": "8"}

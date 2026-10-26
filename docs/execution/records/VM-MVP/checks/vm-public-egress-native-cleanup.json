@@ -1,0 +1,156 @@
+{
+  "observed_at": "2026-10-24T03:07:19.522619+00:00",
+  "phase": "CLEANED",
+  "plan_sha256": "bbf2d4a8462816c0afbc5a19b71f07e69133ae20888a1d18f38fc05ebbf4dc74",
+  "scope": "PUBLIC_ONLY; task tenant1 native EIP+Snat; NOT Gov/Resource Network API acceptance",
+  "entries": {
+    "eip": {
+      "attempts": 1,
+      "ack_unknown": false,
+      "request_sha256": "a720689f83d0cacc84ed0e8bc3c94825fd056b05897b650d00b8060f662a5b2d",
+      "sent_at": "2026-10-24T02:54:20.699935+00:00",
+      "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+      "ack": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-01a168ce-public-eip",
+        "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+        "resourceVersion": "61106130",
+        "deletionTimestamp": ""
+      },
+      "current": {
+        "ref": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-mvp-01a168ce-public-eip",
+          "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+          "resourceVersion": "61106137",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "ipAddress": "172.16.102.193",
+          "ipVersion": "IPv4",
+          "subnet": "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d"
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-24T02:54:03Z",
+              "message": "",
+              "reason": "Initialized",
+              "status": "True",
+              "type": "Initialized"
+            },
+            {
+              "lastTransitionTime": "2026-10-24T02:54:03Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+          "phase": "Available"
+        }
+      },
+      "address": "172.16.102.193"
+    },
+    "snat": {
+      "attempts": 1,
+      "ack_unknown": false,
+      "request_sha256": "1707f6431d2f7635d4442834bb6da2aec97025f6259ce9b1f7dec141067d56cc",
+      "sent_at": "2026-10-24T02:54:21.374082+00:00",
+      "uid": "29d922a5-1f3c-4a05-9522-ea86a33d89ad",
+      "ack": {
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-mvp-01a168ce-public-snat",
+        "uid": "29d922a5-1f3c-4a05-9522-ea86a33d89ad",
+        "resourceVersion": "61106172",
+        "deletionTimestamp": ""
+      },
+      "current": {
+        "ref": {
+          "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "name": "vm-mvp-01a168ce-public-snat",
+          "uid": "29d922a5-1f3c-4a05-9522-ea86a33d89ad",
+          "resourceVersion": "61106191",
+          "deletionTimestamp": ""
+        },
+        "spec": {
+          "cidrs": [
+            "10.83.1.0/24"
+          ],
+          "disable": false,
+          "eip": "vm-mvp-01a168ce-public-eip",
+          "vpc": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vpc-e413becb1f4a46468f058e32f33a6305"
+        },
+        "status": {
+          "conditions": [
+            {
+              "lastTransitionTime": "2026-10-24T02:54:04Z",
+              "message": "",
+              "reason": "Valid",
+              "status": "True",
+              "type": "Valid"
+            }
+          ],
+          "eipAddress": "172.16.102.193",
+          "phase": "Bound"
+        }
+      }
+    }
+  },
+  "deletions": {
+    "snat": {
+      "attempts": 1,
+      "ack_unknown": false,
+      "request": {
+        "apiVersion": "v1",
+        "kind": "DeleteOptions",
+        "propagationPolicy": "Background",
+        "preconditions": {
+          "uid": "29d922a5-1f3c-4a05-9522-ea86a33d89ad",
+          "resourceVersion": "61106191"
+        }
+      },
+      "sent_at": "2026-10-24T03:07:11.580575+00:00",
+      "gone": true
+    },
+    "eip": {
+      "attempts": 1,
+      "ack_unknown": false,
+      "request": {
+        "apiVersion": "v1",
+        "kind": "DeleteOptions",
+        "propagationPolicy": "Background",
+        "preconditions": {
+          "uid": "144954ba-6aa3-4197-a15a-3cdd78af7588",
+          "resourceVersion": "61138267"
+        }
+      },
+      "sent_at": "2026-10-24T03:07:13.350626+00:00",
+      "gone": true
+    }
+  },
+  "controller_cleanup": {
+    "ovn": {
+      "lr-route-list": "",
+      "lr-policy-list": "",
+      "lr-nat-list": "",
+      "lrp-list": "5d633add-6dfa-46dc-9a8e-9fc48fff884a (vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.subnet-fbd064f6018040dab6a8d909b7afb87f)\n"
+    },
+    "pool_allocation": {
+      "v4availableIPs": 15,
+      "v4availableIPrange": "172.16.102.193-172.16.102.207",
+      "v4usingIPs": 1,
+      "v4usingIPrange": "172.16.102.192"
+    },
+    "temporary_nat_gone": true,
+    "temporary_policy_gone": true,
+    "temporary_uplink_gone": true,
+    "address_193_returned": true,
+    "direct_ovn_mutations": 0
+  },
+  "protected_unchanged": true,
+  "api_acceptance": "NOT_RUN_NATIVE_ONLY",
+  "guest_public_egress": "NOT_RUN",
+  "shared_mutations": 0
+}

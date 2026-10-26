@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-24T21:08:49.356209+00:00",
+  "host": "fedora",
+  "calls": [
+    {
+      "label": "platform-login",
+      "method": "POST",
+      "path": "/api/v1/auth/platform/password/login",
+      "status": 200,
+      "elapsed_seconds": 1.277,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-retry01-private/platform-login.json",
+      "top_level_keys": [
+        "access_token",
+        "expires_in",
+        "issued_at"
+      ]
+    },
+    {
+      "label": "virtual-switches",
+      "method": "GET",
+      "path": "/api/v1/admin/networks/virtual-switches?page=1&pageSize=20",
+      "status": 200,
+      "elapsed_seconds": 1.404,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-retry01-private/virtual-switches.json",
+      "top_level_keys": [
+        "items",
+        "total"
+      ],
+      "item_count": 1
+    },
+    {
+      "label": "network-capabilities",
+      "method": "GET",
+      "path": "/api/v1/admin/networks/capabilities",
+      "status": 200,
+      "elapsed_seconds": 0.312,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-retry01-private/network-capabilities.json",
+      "top_level_keys": [
+        "base_connectivity",
+        "base_connectivity_ready",
+        "load_balancer",
+        "load_balancer_ready",
+        "public_address",
+        "public_address_ready"
+      ]
+    },
+    {
+      "label": "platform-logout",
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "status": "revoked",
+      "elapsed_seconds": 0.182,
+      "private_response": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/shared-smoke-retry01-private/platform-logout.json",
+      "top_level_keys": [
+        "session_revoked",
+        "status"
+      ],
+      "session_revoked": true
+    }
+  ],
+  "vm_writes": 0,
+  "guest_operations": 0,
+  "egress_probes": 0,
+  "result": "PASS_AUTHENTICATED_DEPLOYMENT_DIRECTORY_SMOKE",
+  "session_revoked": true,
+  "finished_at": "2026-10-24T21:08:52.933970+00:00"
+}

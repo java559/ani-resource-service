@@ -24,6 +24,7 @@ enum Usage {
   CONTAINER_INSTANCE = 1;
   TRAINING = 2;
   INFERENCE = 3;
+  VIRTUAL_MACHINE = 4;
 }
 
 // Trusted, managed reference; never accepted directly from public JSON.

@@ -1,0 +1,11 @@
+=== RUN   TestNativeConsoleTabletRenderForBothOS
+=== RUN   TestNativeConsoleTabletRenderForBothOS/linux
+    input_test.go:59: native VNC has no driver-independent absolute USB tablet [] <nil>
+=== RUN   TestNativeConsoleTabletRenderForBothOS/windows
+    input_test.go:59: native VNC has no driver-independent absolute USB tablet [] <nil>
+--- FAIL: TestNativeConsoleTabletRenderForBothOS (0.00s)
+    --- FAIL: TestNativeConsoleTabletRenderForBothOS/linux (0.00s)
+    --- FAIL: TestNativeConsoleTabletRenderForBothOS/windows (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.011s
+FAIL

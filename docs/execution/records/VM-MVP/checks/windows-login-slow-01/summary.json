@@ -1,0 +1,195 @@
+{
+  "result": "EXACT_READ_ONLY_SAMPLE_COMPLETE_NO_CAUSE_INFERENCE",
+  "started_at": "2026-10-25T04:42:35.035348+00:00",
+  "finished_at": "2026-10-25T04:42:42.893569+00:00",
+  "elapsed_seconds": 7.858,
+  "identity": {
+    "cluster": {
+      "name": "kube-system",
+      "uid": "5277649d-e28d-4a0a-ae76-8354365c63bc"
+    },
+    "vm": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "9a751320-5f97-4e56-af6a-30964610321b"
+    },
+    "vmi": {
+      "name": "vm-fc154879-8a40-4b18-967c-215f5cf5992d",
+      "uid": "a425ddb0-85c5-4123-a3f6-c1f2a5ab963a"
+    },
+    "launcher": {
+      "name": "virt-launcher-vm-fc154879-8a40-4b18-967c-215f5cf5992d-5qxps",
+      "uid": "2bd0e41a-40ac-497e-84c8-93d1ba42a0ec"
+    },
+    "node": {
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    }
+  },
+  "domain": {
+    "type": "kvm",
+    "state": "running",
+    "block_error": "No errors found",
+    "seconds": 5.4108,
+    "cpu_seconds": 3.76,
+    "mean_cores": 0.6949128068685602,
+    "root_delta": {
+      "rd.bytes": 6736384,
+      "wr.bytes": 4096,
+      "rd.reqs": 101,
+      "wr.reqs": 1,
+      "fl.reqs": 0,
+      "rd.times": 13578147593,
+      "wr.times": 2669405942
+    },
+    "root_raw_counters": {
+      "rd.reqs": {
+        "first": 95457,
+        "second": 95558
+      },
+      "rd.times": {
+        "first": 27792122251674,
+        "second": 27805700399267
+      },
+      "wr.reqs": {
+        "first": 39966,
+        "second": 39967
+      },
+      "wr.times": {
+        "first": 34635182564638,
+        "second": 34637851970580
+      }
+    },
+    "root_avg_read_ms": 134.43710488118813,
+    "root_avg_write_ms": 2669.405942,
+    "other_disk_deltas": [
+      {
+        "name": "sdb",
+        "path": "/var/run/kubevirt/hotplug-disks/disk-89317f205600510abc65e40402c83abb",
+        "delta": {
+          "rd.bytes": 0,
+          "wr.bytes": 0,
+          "rd.reqs": 0,
+          "wr.reqs": 0,
+          "fl.reqs": 0,
+          "rd.times": 0,
+          "wr.times": 0
+        }
+      },
+      {
+        "name": "sdc",
+        "path": "/var/run/kubevirt/hotplug-disks/disk-cca2005bd9365327a5ded8236385b9ba",
+        "delta": {
+          "rd.bytes": 0,
+          "wr.bytes": 0,
+          "rd.reqs": 0,
+          "wr.reqs": 0,
+          "fl.reqs": 0,
+          "rd.times": 0,
+          "wr.times": 0
+        }
+      },
+      {
+        "name": "sdd",
+        "path": "/var/run/kubevirt-private/vmi-disks/media-driver/disk.img",
+        "delta": {
+          "rd.bytes": 0,
+          "wr.bytes": 0,
+          "rd.reqs": 0,
+          "wr.reqs": 0,
+          "fl.reqs": 0,
+          "rd.times": 0,
+          "wr.times": 0
+        }
+      }
+    ]
+  },
+  "vmi_phase": "Running",
+  "vmi_conditions": [
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": "2026-10-24T17:24:55Z",
+      "status": "True",
+      "type": "Ready"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "message": "cannot migrate VMI: PVC restore-fcb81da8-a94e-47e1-8234-4359a08c20ad-disk-76c43f30e8b85b1bb19ffbb7c04459b5 is not shared, live migration requires that all PVCs must be shared (using ReadWriteMany access mode)",
+      "reason": "DisksNotLiveMigratable",
+      "status": "False",
+      "type": "LiveMigratable"
+    },
+    {
+      "lastProbeTime": null,
+      "lastTransitionTime": null,
+      "status": "True",
+      "type": "StorageLiveMigratable"
+    }
+  ],
+  "compute": [
+    {
+      "name": "compute",
+      "ready": true,
+      "restartCount": 0,
+      "state": {
+        "running": {
+          "startedAt": "2026-10-24T17:24:54Z"
+        }
+      },
+      "lastState": {}
+    }
+  ],
+  "node": {
+    "capacity": {
+      "cpu": "16",
+      "memory": "32911724Ki"
+    },
+    "allocatable": {
+      "cpu": "15600m",
+      "memory": "31492237083"
+    },
+    "metrics": {
+      "timestamp": "2026-10-25T04:42:03Z",
+      "window": "10.435s",
+      "usage": {
+        "cpu": "6822616195n",
+        "memory": "21928580Ki"
+      }
+    },
+    "pressure_conditions": [
+      {
+        "lastHeartbeatTime": "2026-10-25T04:37:54Z",
+        "lastTransitionTime": "2026-10-09T04:38:50Z",
+        "message": "kubelet has sufficient memory available",
+        "reason": "KubeletHasSufficientMemory",
+        "status": "False",
+        "type": "MemoryPressure"
+      },
+      {
+        "lastHeartbeatTime": "2026-10-25T04:37:54Z",
+        "lastTransitionTime": "2026-10-09T04:38:50Z",
+        "message": "kubelet has no disk pressure",
+        "reason": "KubeletHasNoDiskPressure",
+        "status": "False",
+        "type": "DiskPressure"
+      },
+      {
+        "lastHeartbeatTime": "2026-10-25T04:37:54Z",
+        "lastTransitionTime": "2026-10-09T04:38:50Z",
+        "message": "kubelet has sufficient PID available",
+        "reason": "KubeletHasSufficientPID",
+        "status": "False",
+        "type": "PIDPressure"
+      }
+    ],
+    "psi": "NOT_MEASURED_NO_EXISTING_PSI_METRIC_SELECTED",
+    "cpu_cores": 6.822616195,
+    "memory_GiB": 20.912723541259766
+  },
+  "original_receipt_sha256": "f3c4d7e03acaaa35a492a8e983fe1d695eab030e97017b58f32bf101855d959b",
+  "Guest_actions": 0,
+  "native_mutations": 0,
+  "API_mutations": 0,
+  "Ceph_calls": 0,
+  "limitation": "One short sample; high root latency is observed but does not establish a causal layer or the cause of slow login."
+}

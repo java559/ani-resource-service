@@ -1,0 +1,329 @@
+{
+  "pod": {
+    "namespace": "ani-system",
+    "name": "ani-model-service-7544d6db94-lgft8",
+    "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0",
+    "resourceVersion": "59122444",
+    "deletionTimestamp": ""
+  },
+  "container": "model",
+  "image": "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165",
+  "tool_checks": [
+    {
+      "command": [
+        "curl",
+        "--version"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec \"9572bd18d5826f2fa296bee0dbf8a8df9d60913aa45ae677ef23fdc76a80662a\": OCI runtime exec failed: exec failed: unable to start container process: exec: \"curl\": executable file not found in $PATH\n"
+    },
+    {
+      "command": [
+        "sh",
+        "-c",
+        "for t in curl wget python3 python busybox; do command -v \"$t\" || true; done"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec \"26c67c956b950b5f2e8537634190c8ccab9a180b1748cdc0cf241fe25dc132c9\": OCI runtime exec failed: exec failed: unable to start container process: exec: \"sh\": executable file not found in $PATH\n"
+    },
+    {
+      "command": [
+        "wget",
+        "--help"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec \"7456d4a87734b5fd23286c7a81948643c387e0b5e58c4a2ecf7d521643412dd9\": OCI runtime exec failed: exec failed: unable to start container process: exec: \"wget\": executable file not found in $PATH\n"
+    },
+    {
+      "command": [
+        "python3",
+        "--version"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec \"e63d841cdafd7264118e35244791114de39d9ffc7d7fdc7c877bfab1c27d34d5\": OCI runtime exec failed: exec failed: unable to start container process: exec: \"python3\": executable file not found in $PATH\n"
+    },
+    {
+      "command": [
+        "busybox",
+        "--help"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: Internal error occurred: Internal error occurred: error executing command in container: failed to exec in container: failed to start exec \"1f218c79e494ffe453d81e253b3fce48da90289da992b454b0df57a1138fcaeb\": OCI runtime exec failed: exec failed: unable to start container process: exec: \"busybox\": executable file not found in $PATH\n"
+    }
+  ],
+  "http_requests": 0,
+  "mutations": 0,
+  "existing_ani_system_candidates": [
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-accelerator-service-6965d5bbc7-qdzm2",
+        "uid": "7a7bb25a-582d-4040-9f15-15253fd8edfc",
+        "resourceVersion": "61191743",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.2.79",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "accelerator",
+          "image": "172.16.101.10:5000/ani/modeldev-accelerator-owner-v21@sha256:c78ee7451e1ff046793eb600b2cf16715d159b262ed13097f4926c0463109d51"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-boss-console-6c967f9667-b4cc5",
+        "uid": "32f2df1f-2af7-4cdd-852e-481f3cae0194",
+        "resourceVersion": "59122246",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.0.246",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "console",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-boss@sha256:bb9250be70df3e1603897aa10563e2698193cdf687969e4ca8d41cd97c49d88f"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-console-65ddbd45b7-8tkr9",
+        "uid": "0de41fe9-254c-477f-9b60-7bf3ca03bf07",
+        "resourceVersion": "59122665",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.0.247",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "console",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-console@sha256:d058b399dd467358900e6080c15c1c1a3123787f9a1ac78e362173ef80e436d9"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-governance-564c8c959f-ztftn",
+        "uid": "68f41619-c02e-4aa7-950f-138a6792143c",
+        "resourceVersion": "58362722",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.0.254",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-gov@sha256:d81eb0c4b843c0a1fc506105dabcb8ac07a8198fb701af93e8fe44593b14e6f4"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-inference-service-7fcb4c5cc-f8lsc",
+        "uid": "d6edfe43-903c-4a9a-8bc2-8ec4607ec713",
+        "resourceVersion": "50121868",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.1.37",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "inference",
+          "image": "172.16.101.10:30003/ani-platform-images/ani-inference-service:7dd76ec9f197-20261020@sha256:8a0bf0df5e1ed2dea9c8da9f3f7625a6a8090326b5cc6c609f7820f4fed14419"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-model-service-7544d6db94-lgft8",
+        "uid": "9a39a8a0-4475-41e5-a9a6-0232b11476d0",
+        "resourceVersion": "59122444",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.1.218",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "model",
+          "image": "172.16.101.10:5000/ani/modeldev-model-owner-v21@sha256:5027f54077a6e90f2ce5dde80773496a9ea466ca336056ea9ccdc282355d3165"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-modeldev-7887bbfcff-vwxm6",
+        "uid": "0336aca9-a156-41b8-8fb2-dfeed9fff434",
+        "resourceVersion": "61191731",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.2.107",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "modeldev",
+          "image": "172.16.101.10:5000/ani/modeldev-service-execution-v21@sha256:23c9d3ca69a2b26cc59dae83e2d9ee8a7066971a535f1f5ee7fdd630c12ea3ff"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-modeldev-exit-retention-69fbd7df4c-hrsq6",
+        "uid": "56ae22b1-8939-43a0-bc3a-6f3eabf4fe7d",
+        "resourceVersion": "61174531",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.0.97",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "admission",
+          "image": "localhost/ani-cpu03@sha256:53f1200cc679ad827aaad9306310d5577e89c26e6876de6d61800655c07b5040"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-modeldev-webhook-v21-5586d68b5b-csmb9",
+        "uid": "784495bd-2010-444b-9417-2d89e461570f",
+        "resourceVersion": "61191814",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-03",
+      "ip": "10.16.2.108",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "webhook",
+          "image": "172.16.101.10:5000/ani/modeldev-webhook-execution-v21@sha256:251fb879a15e5c5b1009a3840cd795d7273319b4dcac2c810efa3faea7ef818e"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-modeldev-webhook-v21-5586d68b5b-wtjpz",
+        "uid": "6bded4e2-e865-454d-b4ad-7e46356d8672",
+        "resourceVersion": "57279345",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.2.109",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "webhook",
+          "image": "172.16.101.10:5000/ani/modeldev-webhook-execution-v21@sha256:251fb879a15e5c5b1009a3840cd795d7273319b4dcac2c810efa3faea7ef818e"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-observability-service-6d88bfcf48-hztmd",
+        "uid": "27abfc0d-f323-457e-8a3a-3f5bae76bb49",
+        "resourceVersion": "50003879",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.1.5",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "observability",
+          "image": "172.16.101.10:5000/ani-observability-service:phase2-netmetrics-20261021"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-resource-service-5d859b7976-cnldn",
+        "uid": "a9899ae3-5d77-4ef9-8566-7df32abb38a3",
+        "resourceVersion": "61202357",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-01",
+      "ip": "10.16.0.218",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "server",
+          "image": "172.16.101.10:30003/icn-01a15337-release/network-release-res@sha256:9a3d22813b20d0cc7c3b1382a42640a97ed8e0b22ffba5344c33a53da52f494e"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "ani-session-gateway-85744bb67d-pkkmr",
+        "uid": "c5c71013-68c7-4616-947e-92d0bbc0ae84",
+        "resourceVersion": "61191946",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-02",
+      "ip": "10.16.0.76",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "server",
+          "image": "localhost/ani-session-gateway:fb35493-terminal-20261019-static1"
+        }
+      ]
+    },
+    {
+      "ref": {
+        "namespace": "ani-system",
+        "name": "compute-cpu-8c16g-20261020-predictor-767f954db4-lxvkw",
+        "uid": "33e798f9-76a5-4bc7-a7a7-dd8ba80f7d89",
+        "resourceVersion": "52079932",
+        "deletionTimestamp": ""
+      },
+      "phase": "Running",
+      "node": "ani-02",
+      "ip": "10.16.0.180",
+      "host_network": false,
+      "containers": [
+        {
+          "name": "kserve-container",
+          "image": "172.16.101.10:30003/ani-platform-images/vllm-openai-cpu@sha256:827ef38187f9b52f2bb838695ef815ec5b65f4bf3e4c061b002b2b0a19cb0701"
+        }
+      ]
+    }
+  ]
+}

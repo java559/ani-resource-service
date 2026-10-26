@@ -1,0 +1,370 @@
+{
+  "state": "QUALIFIED_CORRECTED_READS_RECORDED_NO_CREATE",
+  "started_at": "2026-10-24T12:07:24.424027+00:00",
+  "source_sha256": "b8a60d9e381c25803ebe073987b29914f738ee6e0a8dbf64601adbfa737316c0",
+  "sql_writes": 0,
+  "new_quota_definitions_values_prices": 0,
+  "workload_creates": 0,
+  "gpu_allocations": 0,
+  "model_imports": 0,
+  "operations": [
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "body": {
+        "data": {
+          "name": "accelerator:profile:list",
+          "code": "accelerator:profile:list",
+          "status": "ON",
+          "apiIds": [
+            3
+          ]
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/permissions",
+      "body": {
+        "data": {
+          "name": "model:service:read",
+          "code": "model:service:read",
+          "status": "ON",
+          "apiIds": [
+            306,
+            318,
+            327
+          ]
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/plan-modules",
+      "body": {
+        "data": {
+          "planId": 2,
+          "module": "ACCELERATOR"
+        }
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/admin/roles/3",
+      "body": {
+        "data": {
+          "tenantId": 1,
+          "permissions": [
+            1,
+            3,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            52,
+            53
+          ]
+        },
+        "updateMask": "permissions"
+      },
+      "send_attempts": 1,
+      "ack_unknown": false,
+      "status": 200,
+      "ack_received": true
+    }
+  ],
+  "gets": [
+    {
+      "method": "GET",
+      "route": "/api/v1/compute-presets?usage=CONTAINER_INSTANCE&compute_type=gpu&page=1&pageSize=100",
+      "http": 200
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 504,
+      "body": {
+        "code": 504,
+        "reason": "ACCELERATOR_ERROR",
+        "message": "accelerator request failed"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 504,
+      "body": {
+        "code": 504,
+        "reason": "ACCELERATOR_ERROR",
+        "message": "accelerator request failed"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/admin/tenants/1/quota-accounts",
+      "http": 200
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/models",
+      "http": 503,
+      "body": {
+        "code": 503,
+        "reason": "MODEL_UNAVAILABLE",
+        "message": "Model service unavailable"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/models",
+      "http": 503,
+      "body": {
+        "code": 503,
+        "reason": "MODEL_UNAVAILABLE",
+        "message": "Model service unavailable"
+      }
+    }
+  ],
+  "plan2_consumers": [
+    {
+      "id": 1,
+      "code": "vm-mvp-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    },
+    {
+      "id": 2,
+      "code": "vm-isolation-01a168ce",
+      "planId": 2,
+      "status": "ON"
+    }
+  ],
+  "before_denials": [
+    {
+      "method": "GET",
+      "route": "/api/v1/accelerator/profiles?cluster_id=5277649d-e28d-4a0a-ae76-8354365c63bc",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "module not allowed"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/models",
+      "http": 403,
+      "body": {
+        "code": 403,
+        "reason": "FORBIDDEN",
+        "message": "unauthorized access"
+      }
+    }
+  ],
+  "before_denials_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/v24-owner-live-prepare-01/qualified-directory-01.json",
+  "before_denials_probe_repeated": false,
+  "qualification": {
+    "role_id": 3,
+    "tenant_id": 1,
+    "permission_codes": {
+      "accelerator:profile:list": 52,
+      "model:service:read": 53,
+      "instance:preset:read": 43
+    },
+    "old_permission_ids": [
+      1,
+      3,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "union_permission_ids": [
+      1,
+      3,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      52,
+      53
+    ],
+    "all_old_permissions_preserved": true,
+    "plan2_only_known_task_consumers": true
+  },
+  "catalogs": {
+    "gpu_presets": [],
+    "gpu_profiles": null,
+    "tenant1_quota": [
+      {
+        "quotaCode": "api.calls",
+        "unit": "request",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "quotaCode": "gpu.count",
+        "unit": "gpu",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LAB_ONLY"
+      },
+      {
+        "quotaCode": "gpu.physical.count",
+        "unit": "gpu",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "ENFORCED"
+      },
+      {
+        "quotaCode": "gpu.shared_memory_mib",
+        "unit": "MiB",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "ENFORCED"
+      },
+      {
+        "quotaCode": "storage.bytes",
+        "unit": "byte",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      },
+      {
+        "quotaCode": "user.count",
+        "unit": "user",
+        "limit": "0",
+        "occupied": "0",
+        "available": "0",
+        "overLimit": false,
+        "enforcement": "LEGACY_CONFIG_ONLY"
+      }
+    ],
+    "own_models": null
+  },
+  "own_versions": [],
+  "ready_model_version": null,
+  "finished_at": "2026-10-24T12:08:00.899942+00:00"
+}

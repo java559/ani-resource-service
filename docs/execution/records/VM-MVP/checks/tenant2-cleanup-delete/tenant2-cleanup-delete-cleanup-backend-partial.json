@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-24T08:50:00.003618+00:00",
+  "phase": "cleanup-backend-partial",
+  "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+  "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+  "plan_sha256": "fd629d556c1b99140e46e6c959ab2888285f5eadf1a05f4ef5f4557b5d4c569f",
+  "driver_sha256": "926b83d7995f17e3929fde05f7f38ba192f1deb9818893a8c0addeb17921c7ba",
+  "private_state_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/gov-candidate/tenant2-cleanup-delete-live.json",
+  "principal": {
+    "id": 3,
+    "tenantId": 2,
+    "username": "vm_isolation_01a168ce",
+    "roleId": null,
+    "roleIds": [
+      4
+    ]
+  },
+  "authorization": "Root approved exact version7 Restore and original version8 Delete at observed cleanup gate",
+  "guest_content_writes": 0,
+  "shared_changes": 0,
+  "result": "NOT_MEASURED",
+  "images": [
+    {
+      "original": {
+        "name": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-c2fcf9ba-a31e-4ecc-b9ee-3138693259fb",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-c2fcf9ba-a31e-4ecc-b9ee-3138693259fb",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-eb5ddebd-1a9c-43e8-ac75-4997b4d3c923",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-eb5ddebd-1a9c-43e8-ac75-4997b4d3c923",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-28672ed4-148f-4223-9ab8-436582321692",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-28672ed4-148f-4223-9ab8-436582321692",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-c59326d7-85ad-4d21-877a-3ad923834bb7",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-c59326d7-85ad-4d21-877a-3ad923834bb7",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-8111f169-7bf8-4ca6-a61b-609fbc84a7af",
+        "basis": "frozen exact owned PVC/PV/CSI handle"
+      },
+      "current": {
+        "name": "csi-vol-8111f169-7bf8-4ca6-a61b-609fbc84a7af",
+        "result": "ABSENT"
+      }
+    },
+    {
+      "original": {
+        "name": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp",
+        "id": "20cc871b765f9e",
+        "basis": {
+          "base": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9",
+          "temp": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp",
+          "temp_image_id": "20cc871b765f9e",
+          "reference": "/home/chabking/.codex/tasks/vm-mvp-20261023-01a168ce/final-source-cleanup-read-01/observed.json",
+          "not_attributed_to_historical_import_delete": true
+        }
+      },
+      "current": {
+        "name": "csi-vol-016ddb5e-363a-4557-9b14-858beafe6fe9-temp",
+        "result": "ABSENT"
+      }
+    }
+  ],
+  "trash_measured": false,
+  "manual_backend_writes": 0
+}

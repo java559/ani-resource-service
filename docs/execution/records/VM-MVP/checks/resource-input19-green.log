@@ -1,0 +1,67 @@
+=== RUN   TestNativeBlockCapacityIsObservedNotAssumed
+--- PASS: TestNativeBlockCapacityIsObservedNotAssumed (0.00s)
+=== RUN   TestNativePowerUsesKubeVirtSubresource
+--- PASS: TestNativePowerUsesKubeVirtSubresource (0.00s)
+=== RUN   TestNativeColdDiskReferencesWFFCAndStableIdentity
+--- PASS: TestNativeColdDiskReferencesWFFCAndStableIdentity (0.00s)
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/beta-default
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/beta-disabled
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/enable-precedence
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/legacy-precedence
+=== RUN   TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/unknown-version
+--- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults (0.00s)
+    --- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/beta-default (0.00s)
+    --- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/beta-disabled (0.00s)
+    --- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/enable-precedence (0.00s)
+    --- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/legacy-precedence (0.00s)
+    --- PASS: TestNativeDeclarativeHotplugUsesPinnedVersionDefaults/unknown-version (0.00s)
+=== RUN   TestNativeNoCloudUsesOneOwnedUserAndDHCPSecret
+--- PASS: TestNativeNoCloudUsesOneOwnedUserAndDHCPSecret (0.00s)
+=== RUN   TestNativeConsoleTabletRenderForBothOS
+=== RUN   TestNativeConsoleTabletRenderForBothOS/linux
+=== RUN   TestNativeConsoleTabletRenderForBothOS/windows
+--- PASS: TestNativeConsoleTabletRenderForBothOS (0.00s)
+    --- PASS: TestNativeConsoleTabletRenderForBothOS/linux (0.00s)
+    --- PASS: TestNativeConsoleTabletRenderForBothOS/windows (0.00s)
+=== RUN   TestNativeStartAddsTabletWithUIDRVFenceAndPreservesTemplate
+--- PASS: TestNativeStartAddsTabletWithUIDRVFenceAndPreservesTemplate (0.00s)
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/running-vmi
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/old-launcher
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/native-pending
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/namespace-replaced
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/tenant-label
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/vm-replaced
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/managed-name-conflict
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/missing-rv
+=== RUN   TestNativeStartTabletRequiresOwnedStoppedVM/closing
+--- PASS: TestNativeStartTabletRequiresOwnedStoppedVM (0.01s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/running-vmi (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/old-launcher (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/native-pending (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/namespace-replaced (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/tenant-label (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/vm-replaced (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/managed-name-conflict (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/missing-rv (0.00s)
+    --- PASS: TestNativeStartTabletRequiresOwnedStoppedVM/closing (0.00s)
+=== RUN   TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange
+=== RUN   TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange/uid
+=== RUN   TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange/resourceVersion
+--- PASS: TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange (0.00s)
+    --- PASS: TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange/uid (0.00s)
+    --- PASS: TestNativeStartTabletPatchRejectsConcurrentUIDOrRVChange/resourceVersion (0.00s)
+=== RUN   TestNativeExistingUSBTabletDoesNotDuplicate
+--- PASS: TestNativeExistingUSBTabletDoesNotDuplicate (0.00s)
+=== RUN   TestNativeIndependentBlockVolumesAndUIDOwnership
+--- PASS: TestNativeIndependentBlockVolumesAndUIDOwnership (0.00s)
+=== RUN   TestNativeGuestInitializationSecretRetryAndOwnership
+--- PASS: TestNativeGuestInitializationSecretRetryAndOwnership (0.00s)
+=== RUN   TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup
+--- PASS: TestNativeSnapshotInventoryCompletenessUIDFencesAndControllerCleanup (0.00s)
+=== RUN   TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization
+--- PASS: TestNativeRestoreUsesSameVMPoliciesAndAcceptsPendingPVCWithoutPowerOrInitialization (0.00s)
+PASS
+ok  	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.039s
+{"result": "CODE_PASS_LIVE_NOT_RUN", "base_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-18b", "source_snapshot": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-stage-19", "overlay_files": {"internal/data/vm/native.go": "3c32f7c2ddc7093927cfede3bfb240fcbde191f1466d92439b15c1516c263cff", "internal/data/vm/input.go": "f8ef2c9e5e73cc9e02f4085130ffec43d8ea515d6342bdd396f5dfbed36283f0", "internal/data/vm/input_test.go": "e94495f1cbf7b885d286404f336a7f37ad78c7d73951da329c7093dbf640dea3", "internal/data/vm/control_test.go": "29a1a9e79b00ec87a0ffa80c305dd8ac3ef16711069609147f27d9da1a87e5a7"}, "source_manifest_sha256": "596d4c7add64d72b6c5432107cb12e67192b212c6fc1fc4276f54ed4b07dea6f", "file_count": 756, "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.input19", "binary_sha256": "9e5f6b0ed545757ca53957bf8d5a530f1220ce472f6f501097ecca353d4acc49", "go_work": "task validation only; no formal dependency publication", "red_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-input19-red.log", "green_log": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/resource-input19-green.log", "runtime_replaced": false, "live_test": "NOT_RUN", "worker_or_contract_changed": false}

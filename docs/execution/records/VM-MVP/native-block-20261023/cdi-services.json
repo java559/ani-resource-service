@@ -1,0 +1,102 @@
+[
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "namespace": "cdi",
+      "name": "cdi-api",
+      "uid": "177e2ee8-7643-47fa-bdfc-2a6b5bdc9bd6"
+    },
+    "keys": [],
+    "spec": {
+      "clusterIP": "10.96.235.227",
+      "clusterIPs": [
+        "10.96.235.227"
+      ],
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": [
+        "IPv4"
+      ],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "port": 443,
+          "protocol": "TCP",
+          "targetPort": 8443
+        }
+      ],
+      "selector": {
+        "cdi.kubevirt.io": "cdi-apiserver"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+    }
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "namespace": "cdi",
+      "name": "cdi-prometheus-metrics",
+      "uid": "3113c2d3-8ff1-427a-8f24-7791de70fb97"
+    },
+    "keys": [],
+    "spec": {
+      "clusterIP": "10.96.182.233",
+      "clusterIPs": [
+        "10.96.182.233"
+      ],
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": [
+        "IPv4"
+      ],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "name": "metrics",
+          "port": 8443,
+          "protocol": "TCP",
+          "targetPort": "metrics"
+        }
+      ],
+      "selector": {
+        "prometheus.cdi.kubevirt.io": "true"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+    }
+  },
+  {
+    "identity": {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "namespace": "cdi",
+      "name": "cdi-uploadproxy",
+      "uid": "0fd6a511-e23c-4d45-80a3-a034ea6aa49a"
+    },
+    "keys": [],
+    "spec": {
+      "clusterIP": "10.96.231.195",
+      "clusterIPs": [
+        "10.96.231.195"
+      ],
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": [
+        "IPv4"
+      ],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "port": 443,
+          "protocol": "TCP",
+          "targetPort": 8443
+        }
+      ],
+      "selector": {
+        "cdi.kubevirt.io": "cdi-uploadproxy"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+    }
+  }
+]

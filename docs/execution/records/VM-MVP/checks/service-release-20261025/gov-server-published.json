@@ -1,0 +1,143 @@
+{
+  "archive_sha256": "60bd0b1f65ac53059c6445d193c694c59c0a6da1ef179e46d55691e1db9adf80",
+  "ca_sha256": "ef63348103252c5b2db646745a29239b39952e8ae03fd497cfdfb8e90ad38b20",
+  "cluster_uid": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+  "cluster_writes": 0,
+  "commands": [
+    {
+      "elapsed_seconds": 0.127,
+      "exit": 0,
+      "stage": "cluster identity"
+    },
+    {
+      "elapsed_seconds": 0.147,
+      "exit": 0,
+      "stage": "three node identity"
+    },
+    {
+      "elapsed_seconds": 0.093,
+      "exit": 0,
+      "stage": "original Harbor identity metadata"
+    },
+    {
+      "argv": [
+        "/usr/bin/skopeo",
+        "copy",
+        "--preserve-digests",
+        "--retry-times=0",
+        "--dest-tls-verify=true",
+        "--dest-cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--dest-authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "oci-archive:/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/ani-governance-server-vm-mvp-2c4172f6eed8-01a168ce.oci.tar:vm-mvp-2c4172f6eed8-01a168ce",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "elapsed_seconds": 22.334,
+      "exit": 0,
+      "finished_at": "2026-10-24T20:26:39.630797+00:00",
+      "stage": "copy-once",
+      "started_at": "2026-10-24T20:26:17.292422+00:00",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/publish-server-01/publish-final-private/copy-once-4.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/publish-server-01/publish-final-private/copy-once-4.stdout",
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "/usr/bin/skopeo",
+        "--command-timeout",
+        "20s",
+        "inspect",
+        "--raw",
+        "--no-tags",
+        "--retry-times=0",
+        "--tls-verify=true",
+        "--cert-dir",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/certs",
+        "--authfile",
+        "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+        "docker://172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-2c4172f6eed8-01a168ce"
+      ],
+      "elapsed_seconds": 0.207,
+      "exit": 0,
+      "finished_at": "2026-10-24T20:26:39.845813+00:00",
+      "stage": "independent-manifest-read",
+      "started_at": "2026-10-24T20:26:39.636625+00:00",
+      "stderr_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/publish-server-01/publish-final-private/independent-manifest-read-5.stderr",
+      "stdout_private_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/service-release-20261025/gov-oci-01/publish-server-01/publish-final-private/independent-manifest-read-5.stdout",
+      "timeout_seconds": 25
+    }
+  ],
+  "copy_attempts": 1,
+  "copy_outcome": "EXIT_ZERO_AWAITING_INDEPENDENT_READ",
+  "credential_values_or_hashes_public": false,
+  "deployments": 0,
+  "expected_manifest_digest": "sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+  "finished_at": "2026-10-24T20:26:39.849343+00:00",
+  "fresh_authenticated_head404": true,
+  "granted_actions": [
+    "pull",
+    "push"
+  ],
+  "heavy_lock_acquired": true,
+  "heavy_lock_released": true,
+  "independent_manifest_sha256": "13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+  "nodes": [
+    {
+      "internal_ip": "172.16.101.10",
+      "name": "ani-01",
+      "uid": "201e41ac-c50d-4c77-b118-72d1ed93e111"
+    },
+    {
+      "internal_ip": "172.16.101.11",
+      "name": "ani-02",
+      "uid": "73564fa7-98ad-45d4-9576-be59f6d5d245"
+    },
+    {
+      "internal_ip": "172.16.101.12",
+      "name": "ani-03",
+      "uid": "af992ed9-cbe1-4f64-8fac-7433808bfab2"
+    }
+  ],
+  "old_tags_untouched": true,
+  "plan_sha256": "861e9f1d8485d74046f1c08d6c6482b9365f4bba8582575747d72a57d892d691",
+  "plan_unchanged": true,
+  "publisher_sha256": "6ed125268aa89f64da8685901b843884bdb19041b37859369b2a7e1e03cca6b0",
+  "registry_writes_attempted": 1,
+  "remote_manifest_digest": "sha256:13959fe54636bd9ed2cc38e6c6de8f6ac04f3a35ddaaa2d557bd523334180b69",
+  "requests": [
+    {
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.101,
+      "http_status": 200,
+      "method": "GET",
+      "stage": "original exact repo authorization",
+      "started_at": "2026-10-24T20:26:17.158759+00:00",
+      "timeout_seconds": 5
+    },
+    {
+      "docker_content_digest": null,
+      "elapsed_seconds": 0.018,
+      "http_status": 404,
+      "method": "HEAD",
+      "stage": "fresh exact new-tag absence",
+      "started_at": "2026-10-24T20:26:17.265974+00:00",
+      "timeout_seconds": 15
+    }
+  ],
+  "result": "PASS_PRESERVED_GOV_SERVER_OCI_PUBLISHED_AND_INDEPENDENT_DIGEST_VERIFIED",
+  "same_original_auth_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/consumer-oci-01/publish-driver/harbor-v2/private/harbor-auth.json",
+  "same_original_identity": {
+    "namespace": "ani-system",
+    "resource_version": "42355378",
+    "secret": "icn-01a15337-release-pull",
+    "uid": "bfd0b923-2098-44bd-bb29-45e79af08b46"
+  },
+  "scope_or_identity_changes": 0,
+  "service_changes": 0,
+  "source_commit": "2c4172f6eed8cc8a06a65c1785d6c3bbad9ae648",
+  "started_at": "2026-10-24T20:26:16.594885+00:00",
+  "strict_https": true,
+  "tag_overwritten": false,
+  "target": "172.16.101.10:30003/icn-01a15337-release/ani-governance:vm-mvp-2c4172f6eed8-01a168ce"
+}

@@ -1,0 +1,572 @@
+{
+  "approved_plan_sha256": "a2dd4f5d69b14920c989f2e3039f210b2dbb50c672539aa98d121745104683fa",
+  "phase": "VERIFIED",
+  "config_applied": true,
+  "task_only": true,
+  "shared_configuration_changed": false,
+  "binary_rebuilt": false,
+  "steps": [
+    "only exact task Resource PID exited after normal TERM"
+  ],
+  "rollback": {
+    "needed": false
+  },
+  "linux_v2_before": {
+    "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+    "version": 1,
+    "observed_state": "Running",
+    "closing": false,
+    "create_operation": {
+      "id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+      "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "action": "/vm.v1.VMService/AcceptCreate",
+      "intentVersion": "1",
+      "state": "succeeded",
+      "reason": "",
+      "observedAt": "2026-10-23T21:35:35.23964409Z"
+    },
+    "native_vm": {
+      "kind": "VirtualMachine",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+    },
+    "native_vmi": {
+      "kind": "VirtualMachineInstance",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "uid": "2f9e7340-9f53-4dc0-903f-81759767f3a3"
+    },
+    "native_vmi_phase": "Running",
+    "native_template_sha256": "09e4b72c02367e18195d18ea36fd87f488c3ea2b08166a392d116ec784960fd8",
+    "native_identity_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-fedora44-iso-v2-native.json"
+  },
+  "linux_storage_before": [
+    {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+      "uid": "6170e9a5-ba07-4ac8-b1ca-1f95aea74250"
+    },
+    {
+      "kind": "DataVolume",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547",
+      "uid": "5e9cb943-7141-4075-9fe9-6134924dbced"
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vd-08b2c432-e3d5-5000-ab1d-6bc2450eced8",
+      "uid": "242547c2-fbc6-4060-a1f5-d1e497d90349"
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "vm-media-c247e96f-281f-5d8e-bafd-1d4d396ae547",
+      "uid": "e05404bb-1b25-4ff5-acad-0dafa840d08b"
+    },
+    {
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-5b7e5d77-7dec-49a0-86b7-80d90b41ffa0",
+      "uid": "fb765c1f-e742-4473-a2b0-095ccb82bd92"
+    },
+    {
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-0fa38872-656c-4932-ada6-0ff05cd67620",
+      "uid": "04032b72-35ba-410e-8aca-51f26cda67a0"
+    },
+    {
+      "kind": "Pod",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "name": "virt-launcher-vm-068d56dd-d4fc-4ca8-8430-16c36bad0761-v4x7t",
+      "uid": "9aa44691-b767-4e83-9a35-9eb77718fd75"
+    }
+  ],
+  "fresh_database": {
+    "database": "vm_resource_candidate_01a168ce",
+    "pending_operation_counts": {
+      "public.network_default_vpc_egress_operations": 0,
+      "public.network_virtual_switch_operations": 0,
+      "public.network_platform_operations": 0,
+      "public.network_operations": 0,
+      "instance.instance_operations": 0,
+      "vm.operations": 0
+    },
+    "assigned_cidrs": [
+      {
+        "kind": "vpc",
+        "id": "vpc_c44c262a220748aab0e4b20558849409",
+        "cidr": "10.84.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "vpc",
+        "id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "cidr": "10.83.0.0/16",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "cidr": "10.83.1.0/24",
+        "state": "available"
+      },
+      {
+        "kind": "subnet",
+        "id": "subnet_ea6b62fc625349bcad46ce56ce60f90d",
+        "cidr": "10.84.1.0/24",
+        "state": "available"
+      }
+    ]
+  },
+  "fresh_governance_outbox": {
+    "database": "vm_govlive_01a168ce",
+    "pending_all": 0,
+    "pending_vm": 0,
+    "unknown_states": 0
+  },
+  "fresh_source": {
+    "ready_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/windows2025-ready.json",
+    "ready_receipt_sha256": "df46b62f95cbbe83c7f357c348de99f008df5a9024bd4c3b1da6267cab020a8f",
+    "proof_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/media-http-source/windows2025-onepass.json",
+    "proof_receipt_sha256": "f49dfaa27d6044614b33ac49dcc69c439348d13d7a4635ff1d638c5561ee7578",
+    "namespace_uid": "92ab28f6-ec74-47a0-a08e-88c599a85189",
+    "datavolume": {
+      "apiVersion": "cdi.kubevirt.io/v1beta1",
+      "kind": "DataVolume",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-windows2025-http-source",
+      "uid": "44a9edbb-ce27-4278-806a-7b02f6d04fec"
+    },
+    "pvc": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolumeClaim",
+      "namespace": "vm-mvp-probe-01a168ce",
+      "name": "vm-mvp-windows2025-http-source",
+      "uid": "af707df5-8c91-41b8-b9d5-7c5db54311b1"
+    },
+    "pv": {
+      "apiVersion": "v1",
+      "kind": "PersistentVolume",
+      "namespace": "",
+      "name": "pvc-40e77734-194b-49fc-8f63-d16a61a5b6a8",
+      "uid": "4b2eb6e4-9a47-48b4-9b62-c9291f555be9"
+    },
+    "storage_class": "ani-block",
+    "storage_class_uid": "e7813a57-3d1c-47e4-a298-86212a59e51e",
+    "volume_mode": "Filesystem",
+    "access_modes": [
+      "ReadWriteOnce"
+    ],
+    "native_dv_succeeded_pvc_pv_bound": true,
+    "full_target_sha256": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+    "target_bytes": 11845763072,
+    "input_sha256": "33b9980c5aaa5bc40aedf20cf9d15f32edafcb6ed883049255713535a61cc40b",
+    "input_bytes": 8726618112,
+    "original_prefix_bytewise_verified": true,
+    "pvd_and_root_identical": true,
+    "volume_label": "SSS_X64FRE_ZH-CN_DV9",
+    "iso9660_root_entries": [
+      {
+        "name": "README.TXT",
+        "directory": false
+      }
+    ],
+    "guest_mount_or_install": "NOT_RUN"
+  },
+  "before": [
+    {
+      "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+      "version": 20,
+      "state": "Running",
+      "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+      "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+      "launcher_uid": "ceb39733-dba1-4a98-bb60-27bdf2090452",
+      "node": "ani-02",
+      "native_template_sha256": "de2c18907fce7df04d92bf19046f993ed03023c4b83c63d45938c759214a48c3",
+      "direct_native_references": [
+        {
+          "kind": "DataVolume",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+          "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12",
+          "pv_name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+          "pv_uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+        },
+        {
+          "kind": "Secret",
+          "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc",
+          "uid": "96fcf82c-16d7-4361-9109-179efad82b3f"
+        },
+        {
+          "kind": "DataVolume",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "3ae1521e-ca25-468c-94e4-0e621c68f5c6",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+          "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+          "pv_name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+          "pv_uid": "7d05469e-ea85-46ab-b534-c94408f34663"
+        },
+        {
+          "kind": "DataVolume",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "cfb1a6a6-ff1c-4ea5-88a2-2a6c101e40c8",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+          "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+          "pv_name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+          "pv_uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b"
+        }
+      ],
+      "cidr_presets": [
+        "10.83.0.0/16",
+        "10.84.0.0/16"
+      ]
+    },
+    {
+      "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+      "version": 1,
+      "state": "Running",
+      "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+      "native_vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+      "launcher_uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79",
+      "node": "ani-01",
+      "native_template_sha256": "7dc51d053dba4c5aadce9be521fb6702775d9e50d4ba39bc8ddc255c39124e1e",
+      "direct_native_references": [
+        {
+          "kind": "DataVolume",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae",
+          "phase": "Succeeded"
+        },
+        {
+          "kind": "PersistentVolumeClaim",
+          "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+          "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00",
+          "pv_name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+          "pv_uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+        },
+        {
+          "kind": "Secret",
+          "name": "vm-init-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+          "uid": "b0341eb0-5c60-4f50-8a0f-9fcee847b92d"
+        }
+      ],
+      "cidr_presets": [
+        "10.83.0.0/16",
+        "10.84.0.0/16"
+      ]
+    }
+  ],
+  "original_process": {
+    "pid": 2123645,
+    "start_ticks": "65651145",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18b",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "dcd745c912972b3ff8fe06ea75ad63e46417d3dfaac735ee09214bed41a40850",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    }
+  },
+  "launched_applied": {
+    "pid": 2138275,
+    "start_ticks": "65709464",
+    "argv": [
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.iso18b",
+      "-conf",
+      "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/configs"
+    ],
+    "cwd": "/home/chabking",
+    "binary_sha256": "dcd745c912972b3ff8fe06ea75ad63e46417d3dfaac735ee09214bed41a40850",
+    "budget": {
+      "GOMAXPROCS": "2",
+      "GOMEMLIMIT": "1024MiB"
+    },
+    "private_log_reference": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/private/resource-candidate/server-windows-applied.log"
+  },
+  "after": {
+    "existing_business_vm_guards": [
+      {
+        "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+        "version": 20,
+        "state": "Running",
+        "native_vm_uid": "7bca4671-89dd-4925-bad9-17e77401729d",
+        "native_vmi_uid": "257f1a0d-2abc-4eaf-b14f-ec49a29431b0",
+        "launcher_uid": "ceb39733-dba1-4a98-bb60-27bdf2090452",
+        "node": "ani-02",
+        "native_template_sha256": "de2c18907fce7df04d92bf19046f993ed03023c4b83c63d45938c759214a48c3",
+        "direct_native_references": [
+          {
+            "kind": "DataVolume",
+            "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "uid": "085932be-1f4a-410a-b2f6-45b5b1d312e9",
+            "phase": "Succeeded"
+          },
+          {
+            "kind": "PersistentVolumeClaim",
+            "name": "vd-5dcd6eee-e30c-5dd2-b72b-f7d0d5699d21",
+            "uid": "3ac943cb-54cd-49b7-ad88-d8ac0815ff12",
+            "pv_name": "pvc-8ea52429-65b4-452a-af1b-a545321b0e33",
+            "pv_uid": "7684003b-4d9e-41dc-9d3f-18eaddf7eba4"
+          },
+          {
+            "kind": "Secret",
+            "name": "vm-init-55099440-c47b-4f81-afc5-7d8e740d14dc",
+            "uid": "96fcf82c-16d7-4361-9109-179efad82b3f"
+          },
+          {
+            "kind": "DataVolume",
+            "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "uid": "3ae1521e-ca25-468c-94e4-0e621c68f5c6",
+            "phase": "Succeeded"
+          },
+          {
+            "kind": "PersistentVolumeClaim",
+            "name": "vd-d296c9f6-2e76-5756-bb4c-def2d0f8f2f9",
+            "uid": "7b6da1bd-9b40-45c9-a6e4-231b8844b58d",
+            "pv_name": "pvc-57fc1f03-b4f1-409c-9ba8-29cdbffde2ff",
+            "pv_uid": "7d05469e-ea85-46ab-b534-c94408f34663"
+          },
+          {
+            "kind": "DataVolume",
+            "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "uid": "cfb1a6a6-ff1c-4ea5-88a2-2a6c101e40c8",
+            "phase": "Succeeded"
+          },
+          {
+            "kind": "PersistentVolumeClaim",
+            "name": "vd-5dbc2c93-9865-54f9-8413-f198f5e9c1a6",
+            "uid": "2f1c7791-0078-411a-9d59-1cbe1a9bc86e",
+            "pv_name": "pvc-d258db6a-ee7a-44d3-a175-d33db240d272",
+            "pv_uid": "05dd179b-08bf-4c38-93d5-8817da4ec38b"
+          }
+        ],
+        "cidr_presets": [
+          "10.83.0.0/16",
+          "10.84.0.0/16"
+        ]
+      },
+      {
+        "vm_id": "e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+        "version": 1,
+        "state": "Running",
+        "native_vm_uid": "fde3b420-6bde-4169-9eb1-ed025c60a1a6",
+        "native_vmi_uid": "a96282ef-44f8-49a0-ac54-09fa94c1dbe7",
+        "launcher_uid": "7d886b6b-026f-4f6e-87d5-2d861a6a1c79",
+        "node": "ani-01",
+        "native_template_sha256": "7dc51d053dba4c5aadce9be521fb6702775d9e50d4ba39bc8ddc255c39124e1e",
+        "direct_native_references": [
+          {
+            "kind": "DataVolume",
+            "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+            "uid": "33497874-e0c4-4428-8ea1-2c296e8086ae",
+            "phase": "Succeeded"
+          },
+          {
+            "kind": "PersistentVolumeClaim",
+            "name": "vd-2e1b4214-937a-5c45-b5b0-0d400a553d4c",
+            "uid": "ad15d3fc-2474-4f0a-8397-7f406a7bfc00",
+            "pv_name": "pvc-ae23b088-835e-4e7d-9c6e-72fd7f5460bc",
+            "pv_uid": "b6d93bcc-1338-4fcc-aed9-f374ecd719ff"
+          },
+          {
+            "kind": "Secret",
+            "name": "vm-init-e3c11c5a-cf12-4630-a8f9-f907048ffdfc",
+            "uid": "b0341eb0-5c60-4f50-8a0f-9fcee847b92d"
+          }
+        ],
+        "cidr_presets": [
+          "10.83.0.0/16",
+          "10.84.0.0/16"
+        ]
+      }
+    ],
+    "linux_iso_v2": {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "version": 1,
+      "observed_state": "Running",
+      "closing": false,
+      "create_operation": {
+        "id": "ad9903ce-3894-41e8-adf1-e24a5c7824f0",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "/vm.v1.VMService/AcceptCreate",
+        "intentVersion": "1",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T21:35:35.23964409Z"
+      },
+      "native_vm": {
+        "kind": "VirtualMachine",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "uid": "03906ba4-36d4-4c11-b4c5-312c9c734274"
+      },
+      "native_vmi": {
+        "kind": "VirtualMachineInstance",
+        "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+        "name": "vm-068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "uid": "2f9e7340-9f53-4dc0-903f-81759767f3a3"
+      },
+      "native_vmi_phase": "Running",
+      "native_template_sha256": "09e4b72c02367e18195d18ea36fd87f488c3ea2b08166a392d116ec784960fd8",
+      "native_identity_receipt": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/evidence/product-fedora44-iso-v2-native.json"
+    },
+    "linux_storage_unchanged": true,
+    "resource_media_catalog": {
+      "actor": "governance:user:2",
+      "elapsed_seconds": 0.007065384,
+      "endpoint": "127.0.0.1:39181",
+      "expected_media_keys_present": {
+        "fedora-44-iso": true,
+        "virtio-win-0.1.271": true,
+        "windows-server-2025-iso": true
+      },
+      "mutation_calls": 0,
+      "observed_at": "2026-10-23T21:44:04.245058742Z",
+      "request_id": "17ee718b-16e7-479c-846d-a86fd54e9541",
+      "resource_tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "response": {
+        "items": [
+          {
+            "mediaKey": "ubuntu-24.04",
+            "name": "Ubuntu 24.04.5 LTS",
+            "kind": "DISK_IMAGE",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-ubuntu-2404-source",
+            "pvcUid": "8b235154-fae1-47ed-8f96-06af02a18ce1",
+            "checksum": "61f58093344ae5c84e22f1be07a904b0e2a15f7b6f18e45ef4549e52833c69c4",
+            "volumeMode": "Block",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "3758096384",
+            "requestedBytes": "8000000000",
+            "osFamily": "linux",
+            "osVersion": "24.04.5 LTS (Noble Numbat)",
+            "architecture": "amd64",
+            "firmware": "bios",
+            "rootBus": "virtio",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "",
+            "initializationCapability": "CLOUD_INIT_NOCLOUD",
+            "initializationVerified": true
+          },
+          {
+            "mediaKey": "virtio-win-0.1.271",
+            "name": "VirtIO Windows 0.1.271",
+            "kind": "DRIVER_ISO",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-virtio-http-source",
+            "pvcUid": "914b03ec-44a7-4ceb-8817-1626898a59c3",
+            "checksum": "763a4ac4dfd4e3b4b6c2c1b3ae0b4060704231b752e414a535c9094d793f6be5",
+            "volumeMode": "Filesystem",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "1908408320",
+            "requestedBytes": "2000000000",
+            "osFamily": "windows",
+            "osVersion": "0.1.271",
+            "architecture": "amd64",
+            "firmware": "bios",
+            "rootBus": "scsi",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "",
+            "initializationCapability": "NONE",
+            "initializationVerified": false
+          },
+          {
+            "mediaKey": "fedora-44-iso",
+            "name": "Fedora KDE 44 installation ISO",
+            "kind": "INSTALL_ISO",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-fedora44-http-source",
+            "pvcUid": "44e1ab85-5e0e-4fc7-b23b-94760d1b3f00",
+            "checksum": "75748d952733951fd4e9754b854197aa574c361521e7c1b75e15bd3acc90d912",
+            "volumeMode": "Filesystem",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "4886364160",
+            "requestedBytes": "5000000000",
+            "osFamily": "linux",
+            "osVersion": "44",
+            "architecture": "amd64",
+            "firmware": "uefi",
+            "rootBus": "virtio",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "",
+            "initializationCapability": "NONE",
+            "initializationVerified": false
+          },
+          {
+            "mediaKey": "windows-server-2025-iso",
+            "name": "Windows Server 2025 May 2026 installation ISO",
+            "kind": "INSTALL_ISO",
+            "clusterId": "5277649d-e28d-4a0a-ae76-8354365c63bc",
+            "namespace": "vm-mvp-probe-01a168ce",
+            "pvcName": "vm-mvp-windows2025-http-source",
+            "pvcUid": "af707df5-8c91-41b8-b9d5-7c5db54311b1",
+            "checksum": "78b87425a7c4c2dd3692b25a2e641292d8c72cfa9df408315499b5280412e63c",
+            "volumeMode": "Filesystem",
+            "contentType": "kubevirt",
+            "virtualCapacityBytes": "11845763072",
+            "requestedBytes": "12000000000",
+            "osFamily": "windows",
+            "osVersion": "2025",
+            "architecture": "amd64",
+            "firmware": "bios",
+            "rootBus": "scsi",
+            "dataBus": "scsi",
+            "nicModel": "virtio",
+            "persistentTpm": false,
+            "persistentUefi": false,
+            "driverMediaKey": "virtio-win-0.1.271",
+            "initializationCapability": "NONE",
+            "initializationVerified": false
+          }
+        ]
+      },
+      "result": "PASS",
+      "rpc": "/vm.v1.VMService/ListMedia",
+      "rpc_calls": 1,
+      "source_readiness": "NOT_MEASURED_BY_LIST_MEDIA",
+      "tls_server_name": "ani-network-service"
+    },
+    "gov_media_keys": [
+      "ubuntu-24.04",
+      "virtio-win-0.1.271",
+      "fedora-44-iso",
+      "windows-server-2025-iso"
+    ]
+  },
+  "result": "PASS",
+  "new_pid": 2138275,
+  "services_restarted": true
+}

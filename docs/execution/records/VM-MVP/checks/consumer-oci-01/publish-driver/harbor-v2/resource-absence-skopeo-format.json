@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "exact_reference": "172.16.101.10:30003/icn-01a15337-release/ani-resource-service:vm-mvp-8589b66f1370-01a168ce",
+  "stdout_bytes": 0,
+  "stderr_exact_repository_not_found": true,
+  "safe_final_cause": "reading manifest vm-mvp-8589b66f1370-01a168ce in 172.16.101.10:30003/icn-01a15337-release/ani-resource-service: unknown: repository icn-01a15337-release/ani-resource-service not found\"",
+  "registry_writes": 0
+}

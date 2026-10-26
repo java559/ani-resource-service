@@ -1,0 +1,12 @@
+A microservice server application
+
+Usage:
+  server [flags]
+
+Flags:
+  -s, --chost string   config server host, eg: -chost 127.0.0.1:8500 (default "127.0.0.1:8500")
+  -c, --conf string    config path, eg: -conf ../../configs (default "../../configs")
+  -t, --ctype string   config server type, eg: -ctype consul (default "consul")
+  -d, --daemon         run app as a daemon with -d or --daemon
+  -e, --env string     runtime environment, eg: -env dev (default "dev")
+  -h, --help           help for server

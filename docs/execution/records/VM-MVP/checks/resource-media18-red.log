@@ -1,0 +1,6 @@
+=== RUN   TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly
+    media_test.go:61: VM-owned Filesystem ISO copy prevents KubeVirt directory ownership initialization: read-only file system
+--- FAIL: TestMediaNativeFilesystemCopyHostInitializationAndGuestReadonly (0.00s)
+FAIL
+FAIL	github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm	0.008s
+FAIL

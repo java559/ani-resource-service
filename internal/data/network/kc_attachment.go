@@ -82,7 +82,8 @@ func ownerUID(o unstructured.Unstructured, kind string, ids map[string]bool) (st
 }
 func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork, list func(context.Context, schema.GroupVersionResource) ([]unstructured.Unstructured, error)) (biz.AttachmentObservation, error) {
 	a, plan := w.Attachment, w.Plan
-	managed := a.WorkloadMode == "controller_managed"
+	vmManaged := a.WorkloadMode == "vm_managed"
+	managed := a.WorkloadMode == "controller_managed" || vmManaged
 	identityKey := func(kind, namespace, name, uid string) string {
 		key := relationKey(kind, namespace, name)
 		if managed {
@@ -99,6 +100,19 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 	}
 	if b.ClusterID != a.ClusterID || b.ClusterID != p.repository.placement.ClusterID || b.Namespace != a.Namespace || b.BindingID+":"+b.ProviderUid != a.BindingRevision || plan.PrimaryNetworkRef != b.Namespace+"/"+b.ProviderName {
 		return conflict()
+	}
+	if vmManaged && w.ConsumerSnapshot != nil {
+		vp := plan.VMPrimary
+		if vp == nil {
+			return conflict()
+		}
+		// Closure still proves the exact frozen NAD identity and bytes. A
+		// historical config which cannot run must not prevent its cleanup.
+		runnable := w.ConsumerSnapshot.State == "open" && w.ConsumerSnapshot.DesiredRunState == "running"
+		_, err := p.resolveVMNetwork(ctx, biz.VMNetworkSelection{TenantID: a.TenantID, VPCID: a.VPCID, SubnetID: a.SubnetID, ClusterID: a.ClusterID, Namespace: a.Namespace, BindingRevision: a.BindingRevision, KCNSubnetRef: plan.PrimaryNetworkRef}, biz.VMNetworkExpectation{NADName: vp.NADName, NADUID: vp.NADUID, NADConfigDigest: vp.NADConfigDigest}, runnable)
+		if err != nil {
+			return biz.AttachmentObservation{}, readFailure(err)
+		}
 	}
 	tracked := map[string]attachmentRelation{}
 	var prior []attachmentRelation
@@ -138,6 +152,9 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 		if !candidate {
 			continue
 		}
+		if vmManaged && labels["kubevirt.io"] == "hotplug-disk" {
+			continue
+		}
 		if (!managed && pod != nil) || o.GetKind() != "Pod" || o.GetAPIVersion() != "v1" || o.GetNamespace() != a.Namespace || o.GetUID() == "" || o.GetResourceVersion() == "" || labels[tenantLabel] != a.TenantID || labels[instanceLabel] != a.InstanceID || labels[attachmentLabel] != a.ID || labels[submissionLabel] != a.SubmissionID || labels[generationLabel] != strconv.FormatInt(a.Generation, 10) || o.GetAnnotations()[subnetAnnotation] != plan.PrimaryNetworkRef || (!managed && a.PodUID != "" && a.PodUID != string(o.GetUID())) {
 			return conflict()
 		}
@@ -162,6 +179,9 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 				}
 			}
 			owner, _ := workloadController(&copy, "apps/v1", "StatefulSet")
+			if vmManaged {
+				owner, _ = workloadController(&copy, "kubevirt.io/v1", "VirtualMachineInstance")
+			}
 			tracked[identityKey("Pod", o.GetNamespace(), o.GetName(), string(o.GetUID()))] = attachmentRelation{Kind: "Pod", Namespace: o.GetNamespace(), Name: o.GetName(), UID: string(o.GetUID()), OwnerUID: owner.UID, Current: verified}
 			if !verified {
 				continue
@@ -230,6 +250,14 @@ func (p *KCProvider) observeAttachment(ctx context.Context, w biz.AttachmentWork
 		podIP := ""
 		if pod != nil {
 			podIP, _, _ = unstructured.NestedString(pod.Object, "status", "podIP")
+		}
+		if vmManaged {
+			podIP = ""
+			for _, relation := range tracked {
+				if relation.Kind == "VirtualMachineInstance" && relation.Current {
+					podIP = relation.Address
+				}
+			}
 		}
 		eligible = eligible && address != "" && podIP == address
 		tracked[key] = attachmentRelation{Kind: "VNicIP", Namespace: o.GetNamespace(), Name: o.GetName(), UID: string(o.GetUID()), OwnerUID: owner, Address: address, Current: o.GetDeletionTimestamp() == nil, AddressEligible: eligible}

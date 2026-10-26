@@ -1,0 +1,56 @@
+{
+  "result": "TERMINAL",
+  "targets": [
+    {
+      "vm_id": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+      "operation": {
+        "id": "ae8bc09f-64d2-4c92-af5d-90a01b0acee4",
+        "vmId": "068d56dd-d4fc-4ca8-8430-16c36bad0761",
+        "action": "start",
+        "intentVersion": "3",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T22:24:32.229127623Z"
+      },
+      "current_state": "Running",
+      "version": "3",
+      "send_attempts": 1
+    },
+    {
+      "vm_id": "fc154879-8a40-4b18-967c-215f5cf5992d",
+      "operation": {
+        "id": "9ec1d54c-b7fa-4081-a42c-addca0689706",
+        "vmId": "fc154879-8a40-4b18-967c-215f5cf5992d",
+        "action": "start",
+        "intentVersion": "3",
+        "state": "succeeded",
+        "reason": "",
+        "observedAt": "2026-10-23T22:26:32.320733061Z"
+      },
+      "current_state": "Running",
+      "version": "3",
+      "send_attempts": 1
+    }
+  ],
+  "normal_auth_logins": 1,
+  "business_requests": [
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761/operations/ae8bc09f-64d2-4c92-af5d-90a01b0acee4"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/068d56dd-d4fc-4ca8-8430-16c36bad0761"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d/operations/9ec1d54c-b7fa-4081-a42c-addca0689706"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/virtual-machines/fc154879-8a40-4b18-967c-215f5cf5992d"
+    }
+  ],
+  "business_mutations": 0,
+  "native_or_storage_queries": 0
+}

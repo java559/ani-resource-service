@@ -1,0 +1,867 @@
+{
+  "at": "2026-10-23T16:48:05.356874+00:00",
+  "scope": "read-only task VPC/Subnet product egress diagnosis",
+  "subnet": {
+    "apiVersion": "networking.kubercloud.com/v1",
+    "kind": "Subnet",
+    "metadata": {
+      "creationTimestamp": "2026-10-23T15:10:51Z",
+      "finalizers": [
+        "networking.kubercloud.com/finalizer"
+      ],
+      "generation": 1,
+      "labels": {
+        "network.ani.io/binding-id": "90a54b61-cb77-4f25-888c-933f1a6ceb1b",
+        "network.ani.io/managed-by": "ani-network-service",
+        "network.ani.io/resource-id": "subnet_fbd064f6018040dab6a8d909b7afb87f",
+        "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      "name": "subnet-fbd064f6018040dab6a8d909b7afb87f",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resourceVersion": "59414145",
+      "uid": "c24a983c-f9f4-403d-9807-8164004000a3"
+    },
+    "spec": {
+      "allowedNamespaces": {
+        "from": "Same"
+      },
+      "cidrBlock": "10.83.1.0/24",
+      "gateway": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/vpc-e413becb1f4a46468f058e32f33a6305",
+      "gatewayIP": "10.83.1.1",
+      "ipVersion": "IPv4",
+      "type": "VPC"
+    },
+    "status": {
+      "boundResources": {
+        "gatewayPort": "vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.subnet-fbd064f6018040dab6a8d909b7afb87f",
+        "switch": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.subnet-fbd064f6018040dab6a8d909b7afb87f"
+      },
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-23T15:10:51Z",
+          "message": "",
+          "reason": "Initialized",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:10:51Z",
+          "message": "",
+          "reason": "Valid",
+          "status": "True",
+          "type": "Valid"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:10:51Z",
+          "message": "",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "gatewayMac": "fa:00:a9:b8:4c:fd",
+      "observedGeneration": 1,
+      "v4availableIPrange": "10.83.1.3-10.83.1.254",
+      "v4availableIPs": 252,
+      "v4usingIPrange": "10.83.1.2",
+      "v4usingIPs": 1
+    }
+  },
+  "vpc": {
+    "apiVersion": "networking.kubercloud.com/v1",
+    "kind": "VPC",
+    "metadata": {
+      "creationTimestamp": "2026-10-23T15:09:13Z",
+      "finalizers": [
+        "networking.kubercloud.com/finalizer"
+      ],
+      "generation": 1,
+      "labels": {
+        "network.ani.io/binding-id": "63336afd-419c-47ea-8664-70df2957a512",
+        "network.ani.io/managed-by": "ani-network-service",
+        "network.ani.io/resource-id": "vpc_e413becb1f4a46468f058e32f33a6305",
+        "network.ani.io/tenant-id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c"
+      },
+      "name": "vpc-e413becb1f4a46468f058e32f33a6305",
+      "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+      "resourceVersion": "59202700",
+      "uid": "f7ae3b4e-2b90-4fec-bb90-67673780a83a"
+    },
+    "spec": {
+      "allowedNamespaces": {
+        "from": "Same"
+      },
+      "cidrBlock": "10.83.0.0/16",
+      "ipVersion": "IPv4"
+    },
+    "status": {
+      "boundResources": {
+        "chassisNode": "",
+        "router": "vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305"
+      },
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Valid",
+          "status": "True",
+          "type": "Valid"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Initialized",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastTransitionTime": "2026-10-23T15:09:13Z",
+          "message": "",
+          "reason": "Ready",
+          "status": "True",
+          "type": "Ready"
+        }
+      ],
+      "observedGeneration": 1,
+      "subnets": {
+        "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f": "10.83.1.0/24"
+      }
+    }
+  },
+  "task_namespace_resources": {
+    "eips": {
+      "apiVersion": "v1",
+      "items": [],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "snats": {
+      "apiVersion": "v1",
+      "items": [],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "vpcattachments": {
+      "apiVersion": "v1",
+      "items": [],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "routetables": {
+      "apiVersion": "v1",
+      "items": [],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "vnics": {
+      "apiVersion": "v1",
+      "items": [
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "VNic",
+          "metadata": {
+            "annotations": {
+              "networking.kubercloud.com/allocate_ip_with_dhcp": "false",
+              "networking.kubercloud.com/allocated_vnicip": "auto-virt-launcher-vm-e1b3403b-178c-40c2-a4-vnic-xp8fn",
+              "pod.networking.kubercloud.com/virt-launcher-vm-e1b3403b-178c-40c2-a4d5-53a37756039c-dmjv4": "ani-02/eth0"
+            },
+            "creationTimestamp": "2026-10-23T16:23:38Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 2,
+            "labels": {
+              "node.networking.kubercloud.com/ani-02": ""
+            },
+            "name": "auto-virt-launcher-vm-e1b3403b-178c-40c2-a4-vnic-xp8fn",
+            "namespace": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+            "ownerReferences": [
+              {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "virt-launcher-vm-e1b3403b-178c-40c2-a4d5-53a37756039c-dmjv4",
+                "uid": "1f109392-bafd-4656-9290-2aca7bad1fd9"
+              }
+            ],
+            "resourceVersion": "59414521",
+            "uid": "37a526a7-6e44-4b02-8170-24b149c85ff8"
+          },
+          "spec": {
+            "macAddress": "fa:00:a4:e5:82:c7",
+            "subnet": "tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c/subnet-fbd064f6018040dab6a8d909b7afb87f",
+            "type": "VETH"
+          },
+          "status": {
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-23T16:23:39Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              },
+              {
+                "lastTransitionTime": "2026-10-23T16:23:39Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-23T16:23:39Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              }
+            ],
+            "dstNic": "",
+            "gateway": "",
+            "ips": {
+              "auto-virt-launcher-vm-e1b3403b-178c-40c2-a4-vnic-xp8fn": "10.83.1.2"
+            },
+            "nic": "kcn-system/nic-tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c-virt-laun-tkjt4",
+            "nodeName": "ani-02",
+            "primaryIP": "10.83.1.2"
+          }
+        }
+      ],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "vnicipaddresses": {
+      "error": "error: the server doesn't have a resource type \"vnicipaddresses\"\n",
+      "exit": 1
+    }
+  },
+  "candidate_pg_at": "2026-10-23T16:50:22.340167+00:00",
+  "candidate_pg_prior_query_error": {
+    "exit": 3,
+    "snapshot": null,
+    "error": "ERROR:  column \"cluster_id\" does not exist\nLINE 2: ...e(json_agg(t),'[]') FROM (SELECT tenant_id,vpc_id,cluster_id...\n                                                             ^"
+  },
+  "candidate_pg_readonly": {
+    "exit": 0,
+    "snapshot": {
+      "task_vpc": [
+        {
+          "tenant_id": "b3c946b5-7eb3-4feb-9f82-79712062ca5c",
+          "vpc_id": "vpc_e413becb1f4a46468f058e32f33a6305",
+          "name": "vm-mvp-main",
+          "description": "Task VM main chain",
+          "cidr": "10.83.0.0/16",
+          "state": "available",
+          "reason": "",
+          "version": 1772,
+          "created_at": "2026-10-23T15:09:27.147145+00:00",
+          "updated_at": "2026-10-23T16:50:21.859543+00:00",
+          "observed_at": "2026-10-23T16:50:21.851179+00:00",
+          "last_operation_id": "c4b7250c-106c-453b-92a4-e811497fe639",
+          "base_connectivity_required": false
+        }
+      ],
+      "rollout": [],
+      "base_connectivity": [],
+      "pools": [],
+      "default_intranet_pools": [],
+      "default_public_pools": [],
+      "gateways": [],
+      "default_vpc_egresses": [],
+      "task_eips": [],
+      "task_snat": []
+    },
+    "error": ""
+  },
+  "existing_shared_identity_at": "2026-10-23T16:51:08.992675+00:00",
+  "existing_shared_identity": {
+    "default_vpc": {
+      "apiVersion": "networking.kubercloud.com/v1",
+      "kind": "VPC",
+      "metadata": {
+        "creationTimestamp": "2026-10-09T04:39:04Z",
+        "finalizers": [
+          "networking.kubercloud.com/finalizer"
+        ],
+        "generation": 1,
+        "name": "kcn-cluster",
+        "namespace": "kcn-system",
+        "resourceVersion": "54374158",
+        "uid": "d0235860-f51a-4e63-8f4f-1ca1b34bc04f"
+      },
+      "spec": {
+        "allowedNamespaces": {
+          "from": "All"
+        },
+        "ipVersion": "IPv4"
+      },
+      "status": {
+        "boundResources": {
+          "chassisNode": "ani-01",
+          "router": "vpc.kcn-system.kcn-cluster"
+        },
+        "conditions": [
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Valid",
+            "status": "True",
+            "type": "Valid"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Initialized",
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastTransitionTime": "2026-10-09T04:38:41Z",
+            "message": "",
+            "reason": "Ready",
+            "status": "True",
+            "type": "Ready"
+          }
+        ],
+        "default": true,
+        "eips": {
+          "kcn-system/ani-default-eip-36b8b4bcec3d4396ae3d5e03dea9466b": "172.16.102.192"
+        },
+        "observedGeneration": 1,
+        "subnets": {
+          "kcn-system/kcn-default": "10.16.0.0/16"
+        }
+      }
+    },
+    "system_subnets": {
+      "apiVersion": "v1",
+      "items": [
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "Subnet",
+          "metadata": {
+            "creationTimestamp": "2026-10-09T04:39:04Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 2,
+            "labels": {
+              "networking.kubercloud.com/gateway": "kcn-system.kcn-default"
+            },
+            "name": "kcn-default",
+            "namespace": "kcn-system",
+            "resourceVersion": "59414157",
+            "uid": "0bfed0f3-70e6-4fa6-b7d2-2d480195fde0"
+          },
+          "spec": {
+            "allowedNamespaces": {
+              "from": "All"
+            },
+            "cidrBlock": "10.16.0.0/16",
+            "excludeIPs": [
+              "10.16.0.1"
+            ],
+            "gateway": "kcn-cluster",
+            "gatewayIP": "10.16.0.1",
+            "ipVersion": "IPv4",
+            "natOutgoing": true,
+            "type": "VPC"
+          },
+          "status": {
+            "boundResources": {
+              "gatewayPort": "vpc.kcn-system.kcn-cluster-kcn-system.kcn-default",
+              "switch": "kcn-system.kcn-default"
+            },
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              }
+            ],
+            "gatewayMac": "fa:00:4b:fe:fa:e1",
+            "observedGeneration": 2,
+            "v4availableIPrange": "10.16.0.2,10.16.0.4,10.16.0.61,10.16.0.114,10.16.0.117,10.16.0.133,10.16.0.181,10.16.0.187,10.16.0.220,10.16.0.242,10.16.0.248,10.16.0.255,10.16.1.2,10.16.1.7-10.16.1.8,10.16.1.11-10.16.1.14,10.16.1.19,10.16.1.23,10.16.1.26-10.16.1.32,10.16.1.34,10.16.1.36,10.16.1.38-10.16.1.42,10.16.1.52,10.16.1.55-10.16.1.60,10.16.1.62-10.16.1.64,10.16.1.66-10.16.1.67,10.16.1.70,10.16.1.76,10.16.1.79-10.16.1.81,10.16.1.83,10.16.1.87,10.16.1.91,10.16.1.94,10.16.1.101-10.16.1.102,10.16.1.104-10.16.1.107,10.16.1.110-10.16.1.158,10.16.1.160-10.16.1.173,10.16.1.175-10.16.1.217,10.16.1.219-10.16.2.48,10.16.2.51-10.16.2.78,10.16.2.80-10.16.2.93,10.16.2.95-10.16.2.106,10.16.2.110-10.16.2.117,10.16.2.119-10.16.255.254",
+            "v4availableIPs": 65220,
+            "v4usingIPrange": "10.16.0.3,10.16.0.5-10.16.0.60,10.16.0.62-10.16.0.113,10.16.0.115-10.16.0.116,10.16.0.118-10.16.0.132,10.16.0.134-10.16.0.180,10.16.0.182-10.16.0.186,10.16.0.188-10.16.0.219,10.16.0.221-10.16.0.241,10.16.0.243-10.16.0.247,10.16.0.249-10.16.0.254,10.16.1.0-10.16.1.1,10.16.1.3-10.16.1.6,10.16.1.9-10.16.1.10,10.16.1.15-10.16.1.18,10.16.1.20-10.16.1.22,10.16.1.24-10.16.1.25,10.16.1.33,10.16.1.35,10.16.1.37,10.16.1.43-10.16.1.51,10.16.1.53-10.16.1.54,10.16.1.61,10.16.1.65,10.16.1.68-10.16.1.69,10.16.1.71-10.16.1.75,10.16.1.77-10.16.1.78,10.16.1.82,10.16.1.84-10.16.1.86,10.16.1.88-10.16.1.90,10.16.1.92-10.16.1.93,10.16.1.95-10.16.1.100,10.16.1.103,10.16.1.108-10.16.1.109,10.16.1.159,10.16.1.174,10.16.1.218,10.16.2.49-10.16.2.50,10.16.2.79,10.16.2.94,10.16.2.107-10.16.2.109,10.16.2.118",
+            "v4usingIPs": 313
+          }
+        },
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "Subnet",
+          "metadata": {
+            "creationTimestamp": "2026-10-22T11:08:26Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 1,
+            "labels": {
+              "network.ani.io/binding-id": "f332a57e-80b9-4254-85aa-47a3a2477c8b",
+              "network.ani.io/managed-by": "ani-network-service",
+              "network.ani.io/resource-id": "pool_bb811753b25a4fe598dff9cedf5afd1d",
+              "networking.kubercloud.com/gateway": "kcn-system.pool-bb811753b25a4fe598dff9cedf5afd1d"
+            },
+            "name": "pool-bb811753b25a4fe598dff9cedf5afd1d",
+            "namespace": "kcn-system",
+            "resourceVersion": "54372851",
+            "uid": "f92a4ccb-5858-4ab7-88a9-ab6026b781bc"
+          },
+          "spec": {
+            "allowedNamespaces": {
+              "from": "All"
+            },
+            "cidrBlock": "172.16.102.0/24",
+            "enableDHCP": false,
+            "excludeIPs": [
+              "172.16.102.1",
+              "172.16.102.1..172.16.102.191",
+              "172.16.102.2",
+              "172.16.102.208..172.16.102.254"
+            ],
+            "gateway": "egw-d6d865fccf9946bb90a8a171975be566",
+            "gatewayIP": "172.16.102.2",
+            "ipVersion": "IPv4",
+            "natOutgoing": false,
+            "type": "Public",
+            "underlayConfig": {
+              "gatewayIP": "172.16.102.1",
+              "vlanNetwork": "vlan-1027ace223cb4339a32121709654d1d4"
+            }
+          },
+          "status": {
+            "boundResources": {
+              "gatewayPort": "gw.egw-d6d865fccf9946bb90a8a171975be566-kcn-system.pool-bb811753b25a4fe598dff9cedf5afd1d",
+              "switch": "kcn-system.pool-bb811753b25a4fe598dff9cedf5afd1d"
+            },
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-22T11:08:26Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-22T11:08:26Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              },
+              {
+                "lastTransitionTime": "2026-10-22T11:08:27Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              }
+            ],
+            "gatewayMac": "fa:00:43:fa:70:e0",
+            "observedGeneration": 1,
+            "underlayState": {
+              "chassisNode": "ani-01,ani-02",
+              "ready": true,
+              "vlanNetwork": "vlan-1027ace223cb4339a32121709654d1d4"
+            },
+            "v4availableIPrange": "172.16.102.193-172.16.102.207",
+            "v4availableIPs": 15,
+            "v4usingIPrange": "172.16.102.192",
+            "v4usingIPs": 1
+          }
+        },
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "Subnet",
+          "metadata": {
+            "creationTimestamp": "2026-10-09T04:39:04Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 1,
+            "labels": {
+              "networking.kubercloud.com/gateway": "kcn-system.sys-service"
+            },
+            "name": "sys-service",
+            "namespace": "kcn-system",
+            "resourceVersion": "57279355",
+            "uid": "fe3365ee-407d-41ab-8b9d-fca9d8b606c9"
+          },
+          "spec": {
+            "cidrBlock": "100.64.0.0/16",
+            "gatewayIP": "100.64.0.1",
+            "ipVersion": "IPv4",
+            "type": "System"
+          },
+          "status": {
+            "boundResources": {
+              "switch": "kcn-system.sys-service"
+            },
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              }
+            ],
+            "gatewayMac": "",
+            "observedGeneration": 1,
+            "v4availableIPrange": "100.64.0.9-100.64.127.254",
+            "v4availableIPs": 32758,
+            "v4usingIPrange": "100.64.0.2-100.64.0.8",
+            "v4usingIPs": 7
+          }
+        },
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "Subnet",
+          "metadata": {
+            "creationTimestamp": "2026-10-09T04:39:04Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 1,
+            "labels": {
+              "networking.kubercloud.com/gateway": "kcn-system.sys-uplink"
+            },
+            "name": "sys-uplink",
+            "namespace": "kcn-system",
+            "resourceVersion": "3113364",
+            "uid": "8c1dbf94-650f-40ab-828b-b83ac8951d16"
+          },
+          "spec": {
+            "cidrBlock": "100.65.0.0/16",
+            "gatewayIP": "100.65.0.1",
+            "ipVersion": "IPv4",
+            "type": "System"
+          },
+          "status": {
+            "boundResources": {
+              "switch": ""
+            },
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              },
+              {
+                "lastTransitionTime": "2026-10-09T04:38:41Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              }
+            ],
+            "gatewayMac": "",
+            "observedGeneration": 1,
+            "v4availableIPrange": "100.65.0.6-100.65.127.254",
+            "v4availableIPs": 32761,
+            "v4usingIPrange": "100.65.0.2-100.65.0.5",
+            "v4usingIPs": 4
+          }
+        }
+      ],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "eipgateways": {
+      "apiVersion": "v1",
+      "items": [
+        {
+          "apiVersion": "networking.kubercloud.com/v1",
+          "kind": "EIPGateway",
+          "metadata": {
+            "creationTimestamp": "2026-10-20T03:52:53Z",
+            "finalizers": [
+              "networking.kubercloud.com/finalizer"
+            ],
+            "generation": 1,
+            "labels": {
+              "network.ani.io/binding-id": "1e66d8ad-eb9f-4c5d-9518-846517f08e80",
+              "network.ani.io/managed-by": "ani-network-service",
+              "network.ani.io/resource-id": "egw_d6d865fccf9946bb90a8a171975be566"
+            },
+            "name": "egw-d6d865fccf9946bb90a8a171975be566",
+            "resourceVersion": "54348690",
+            "uid": "bba756ac-4918-49ae-a0b8-8bdbe6fea243"
+          },
+          "spec": {
+            "egressType": "Host",
+            "scope": "Public"
+          },
+          "status": {
+            "boundResources": {
+              "router": "gw.egw-d6d865fccf9946bb90a8a171975be566"
+            },
+            "conditions": [
+              {
+                "lastTransitionTime": "2026-10-20T03:52:53Z",
+                "message": "",
+                "reason": "Valid",
+                "status": "True",
+                "type": "Valid"
+              },
+              {
+                "lastTransitionTime": "2026-10-20T03:52:53Z",
+                "message": "",
+                "reason": "Initialized",
+                "status": "True",
+                "type": "Initialized"
+              },
+              {
+                "lastTransitionTime": "2026-10-20T03:52:53Z",
+                "message": "",
+                "reason": "Ready",
+                "status": "True",
+                "type": "Ready"
+              }
+            ],
+            "localIP": "100.64.0.8",
+            "subnets": {
+              "kcn-system/pool-bb811753b25a4fe598dff9cedf5afd1d": "172.16.102.0/24"
+            }
+          }
+        }
+      ],
+      "kind": "List",
+      "metadata": {
+        "resourceVersion": ""
+      }
+    },
+    "pod_inventory": [
+      {
+        "name": "ani-node-facts-16394552231564376ef22f49-7df4bbcfcb-xrlnh",
+        "uid": "5e5d9efe-1592-4274-8e93-b98fbbe403e8",
+        "node": "ani-01",
+        "containers": [
+          {
+            "name": "facts",
+            "image": "172.16.101.10:30003/icn-01a15337-release/kcn-nodefacts-resume-20261022@sha256:0bd6f6167b39c567a3e3437758358ba46947f838f2e5ad659e9789357f56f160"
+          }
+        ]
+      },
+      {
+        "name": "ani-node-facts-3031656f3bb1a90adadca726-68d7cd4888-6gsdp",
+        "uid": "30e7fff5-4e23-4654-9226-de82b9164027",
+        "node": "ani-02",
+        "containers": [
+          {
+            "name": "facts",
+            "image": "172.16.101.10:30003/icn-01a15337-release/kcn-nodefacts-resume-20261022@sha256:0bd6f6167b39c567a3e3437758358ba46947f838f2e5ad659e9789357f56f160"
+          }
+        ]
+      },
+      {
+        "name": "ani-node-facts-bdd0c4a5b4a1e569f2f0f2d7-cbd467896-n4cp4",
+        "uid": "0b77a2ff-6c83-4312-8288-891848d7f295",
+        "node": "ani-03",
+        "containers": [
+          {
+            "name": "facts",
+            "image": "172.16.101.10:30003/icn-01a15337-release/kcn-nodefacts-resume-20261022@sha256:0bd6f6167b39c567a3e3437758358ba46947f838f2e5ad659e9789357f56f160"
+          }
+        ]
+      },
+      {
+        "name": "kcn-cni-ds-2zzt2",
+        "uid": "febcc918-bf39-4c67-a32c-5a4b44d3cdca",
+        "node": "ani-01",
+        "containers": [
+          {
+            "name": "kcn-cni-server",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-cni-ds-4dznv",
+        "uid": "0abfc011-447d-412c-896c-1c4e970c9b3b",
+        "node": "ani-03",
+        "containers": [
+          {
+            "name": "kcn-cni-server",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-cni-ds-zzsb6",
+        "uid": "6bc18ff6-06fd-4eae-bf23-0da1c54d557c",
+        "node": "ani-02",
+        "containers": [
+          {
+            "name": "kcn-cni-server",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-controller-77cf4dfdbc-b9rcj",
+        "uid": "672bc56b-a2de-4259-a00b-aad518667b0f",
+        "node": "ani-02",
+        "containers": [
+          {
+            "name": "kcn-controller",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-controller-77cf4dfdbc-bksfw",
+        "uid": "a42ec5d0-cc00-49e9-b21a-fae75f9c037f",
+        "node": "ani-03",
+        "containers": [
+          {
+            "name": "kcn-controller",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-controller-77cf4dfdbc-c4kwl",
+        "uid": "92fb0d38-ef01-4f6b-a869-254d4fba740f",
+        "node": "ani-01",
+        "containers": [
+          {
+            "name": "kcn-controller",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovn-central-85dc666849-5dpwf",
+        "uid": "b899a84b-a7c9-4d59-964c-5b317e6336fd",
+        "node": "ani-02",
+        "containers": [
+          {
+            "name": "ovn-central",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovn-central-85dc666849-65kpl",
+        "uid": "5d5858e2-a635-4943-accf-57696e0896dd",
+        "node": "ani-01",
+        "containers": [
+          {
+            "name": "ovn-central",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovn-central-85dc666849-kbdqg",
+        "uid": "e1ec5101-2b19-4bce-bcdb-427f9635170f",
+        "node": "ani-03",
+        "containers": [
+          {
+            "name": "ovn-central",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovs-ds-k58xm",
+        "uid": "dd914acc-44cd-42b3-b2bd-0f7dc16e648b",
+        "node": "ani-02",
+        "containers": [
+          {
+            "name": "openvswitch",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovs-ds-r6zfs",
+        "uid": "1a67dd91-668e-4a6d-9db7-1d3e4e6f885c",
+        "node": "ani-03",
+        "containers": [
+          {
+            "name": "openvswitch",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      },
+      {
+        "name": "kcn-ovs-ds-rspwx",
+        "uid": "fc3d764a-ae60-4d3b-a67f-d83dda11e39f",
+        "node": "ani-01",
+        "containers": [
+          {
+            "name": "openvswitch",
+            "image": "docker.changqingyun.cn/kubercloud/kc-networking@sha256:494432d2f7b896eb953647166c6aa18d6ea2113b133d40d82127cfcbe416712f"
+          }
+        ]
+      }
+    ]
+  },
+  "task_ovn_router_readonly": {
+    "at": "2026-10-23T16:52:52.896437+00:00",
+    "pod": "kcn-ovn-central-85dc666849-5dpwf",
+    "pod_uid": "b899a84b-a7c9-4d59-964c-5b317e6336fd",
+    "router": "vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305",
+    "read_fields": [
+      "name",
+      "static_routes",
+      "nat",
+      "options"
+    ],
+    "exit": 0,
+    "stdout": "vpc.tenant-b3c946b5-7eb3-4feb-9f82-79712062ca5c.vpc-e413becb1f4a46468f058e32f33a6305\n[]\n[]\n{}\n",
+    "stderr": ""
+  }
+}

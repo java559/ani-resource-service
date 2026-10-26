@@ -1,0 +1,11 @@
+{
+  "scope": "task-only private CA, isolated candidates; no shared trust changes",
+  "certificates": {
+    "ca.crt": "4837f4acf56ad6177b91bcd4172e595d34495b5b291bfc59f27319737f98313a",
+    "resource-server.crt": "95855e799fb5181a370230abc3f508fb9bc180391a5607bf701853f1b59e6ee2",
+    "session-server.crt": "850da39433133c214ca18f9475ddb7263ba4194ea9c484a6295be4a55a49abef",
+    "gov-resource.crt": "0970264d6725e174852159e342907556c2a1b276c2bb58f0236f17ea187c5ddd",
+    "gov-session.crt": "a6784816fcfabb220917b31b80781ec0676c63cb0ef8d590f593abc273ad7e0a",
+    "session-resource.crt": "61c994296bea56aebc9980e11387b1422fb0aca834816bdd00573d82af1680c0"
+  }
+}

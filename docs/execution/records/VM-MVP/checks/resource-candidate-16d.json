@@ -1,0 +1,14 @@
+{
+  "pid": 1708395,
+  "previous_pid": 1623081,
+  "binary": "/home/chabking/workspace/ani-resource-service-runs/vm-mvp-20261023-01a168ce/resource-server.snapshot16d",
+  "binary_sha256": "60ee65b176178e52b5fa928623a0bbdb3eca2af3872ffff87a232c5f8f6c9be3",
+  "source": "isolated resource-stage-16 + snapshot overlays16c/16d; includes disks/media/NoCloud15/backend/snapshot and restore-to-delete cleanup",
+  "code": "PASS",
+  "postgres": "PASS",
+  "build": "PASS",
+  "snapshot_live": "NOT_RUN",
+  "shared_configuration_changed": false,
+  "catalog_changed": false,
+  "status": "task candidate listeners ready; business query follows"
+}

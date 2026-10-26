@@ -1,0 +1,18 @@
+{
+  "result": "VNC_CONNECTED_ISO_LOADING_INSTALLATION_NOT_STARTED",
+  "vm_id": "96575d3e-185d-4939-a01f-b82562d7af08",
+  "product_version": "1",
+  "observed_product_state": "Running",
+  "native_receipt_sha256": "bd28c5d1fc50f1be0225569f288e042c87e35d958dcabb03627a31356c576c1a",
+  "browser_url": "http://127.0.0.1:39188/login",
+  "observed_at": "2026-10-25T00:24:24.080424+00:00",
+  "screenshot": "browser-loading-01.png",
+  "screenshot_sha256": "a3689216eb048475460299f3eded76144d194532a7c78615e10f4b3d49d63c24",
+  "visible_guest_state": "Booting Test this media and start Fedora-KDE-Desktop-Live",
+  "normal_console_reconnection": true,
+  "guest_installation_completed": false,
+  "guest_root_marker_written": false,
+  "browser_session_still_live_for_iso_workflow": true,
+  "Windows_mutations": 0,
+  "public_or_office_probes": 0
+}

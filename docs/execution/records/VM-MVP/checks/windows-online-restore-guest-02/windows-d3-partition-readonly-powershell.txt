@@ -1,0 +1,1 @@
+$ErrorActionPreference='Stop';$d=Get-Disk -Number 1;$all=@(Get-Partition -DiskNumber 1);$all|%{[pscustomobject]@{PN=$_.PartitionNumber;LetterCode=[int]$_.DriveLetter;Type=[string]$_.Type;Basic=($_.Type -eq 'Basic');Boot=$_.IsBoot;System=$_.IsSystem;Size=$_.Size;Guid=$_.Guid}}|ConvertTo-Json -Compress;$d|select Number,SerialNumber,Size,IsOffline,IsReadOnly|ConvertTo-Json -Compress

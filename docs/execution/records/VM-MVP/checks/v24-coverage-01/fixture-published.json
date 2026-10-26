@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-24T09:35:23.649838+00:00",
+  "url": "ssh://git@ssh.github.com:443/zhangzhe-ctrl/ani-governance.git",
+  "ref": "refs/heads/codex/vm-mvp-governance-impl-20261023",
+  "old_commit": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "new_commit": "b7112f7962e1aa23d903db5d557afdd5bb75af4d",
+  "parent": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "tree": "ff251fb116e0ad78c81a17c49b1ddf378dffb74a",
+  "old_blob": "8612be4f16c8afecac25312a6fb7186584ec7ed8",
+  "new_blob": "389143bf644f941d9f99202a63a2212c5a849c90",
+  "changed_paths": [
+    "app/admin/service/internal/service/inference_gpu_pg_test.go"
+  ],
+  "main_merge_tag_release_image_deploy": false,
+  "runtime_image_source_remains": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5",
+  "remote_before": "a64e0ab8ed6b4b17ca364ece044c719917f6e6d5\trefs/heads/codex/vm-mvp-governance-impl-20261023",
+  "push": "NORMAL_FAST_FORWARD",
+  "push_stdout": "To ssh://ssh.github.com:443/zhangzhe-ctrl/ani-governance.git\n \tb7112f7962e1aa23d903db5d557afdd5bb75af4d:refs/heads/codex/vm-mvp-governance-impl-20261023\ta64e0ab..b7112f7\nDone\n",
+  "push_stderr": "",
+  "guard_hook_sha256": "4488c5c26c7fdc84087c2659fe7b95fe325c195a87cb05b7806c4ac80e7bf5f0",
+  "independent_remote_after": "b7112f7962e1aa23d903db5d557afdd5bb75af4d\trefs/heads/codex/vm-mvp-governance-impl-20261023",
+  "local_task_ref_updated_exact_old": true,
+  "original_head_index_unchanged": true,
+  "original_dirty_status_unchanged": true,
+  "temporary_commit_worktree_normal_removed": true,
+  "result": "PASS_EXACT_ONE_TEST_FILE_FAST_FORWARD_PUBLISHED"
+}

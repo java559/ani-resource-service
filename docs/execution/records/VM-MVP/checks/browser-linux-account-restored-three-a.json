@@ -1,0 +1,24 @@
+{
+  "layer": "BROWSER",
+  "status": "PASS_ACCOUNT_PERSISTENCE_SUBCASE",
+  "observed_at_utc": "2026-10-24T07:46:31.085229+00:00",
+  "vm_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "version": 47,
+  "snapshot_id": "cb8710d2-76a0-5ac8-ab99-f959075594b2",
+  "snapshot_native_uid": "8706d234-5ab0-4114-b72e-95102d057017",
+  "authentication": "fresh existing restored new-test password login and actual sudo password prompt; no password value recorded",
+  "username": "aniuser",
+  "no_cloud_instance_id": "55099440-c47b-4f81-afc5-7d8e740d14dc",
+  "root_marker": "VM_MVP_SNAPSHOT_A_ROOT_01a168ce",
+  "data_markers": {
+    "/dev/sda": "VM_MVP_V3_DATA4_A_01a168ce",
+    "/dev/sdb": "VM_MVP_V3_DATA3_A_01a168ce"
+  },
+  "screenshot": "vm-linux-account-restored-new-password-three-a.png",
+  "screenshot_sha256": "31e8d9e4ab48b7fd632d1c001425bc8a588fe88eb9550b6537854b5eb863a748",
+  "guest_content_writes": 0,
+  "logout_confirmed_login_prompt": true,
+  "normal_vnc_disconnect_confirmed": true,
+  "initial_secret_or_original_credential_modified": false,
+  "scope": "V08 account persistence subcase, does not prove final product Delete/network/full backend cleanup"
+}
