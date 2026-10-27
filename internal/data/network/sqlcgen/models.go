@@ -643,6 +643,7 @@ type NetworkPublicPool struct {
 	DefaultVpcName        string
 	DefaultVpcUid         string
 	IntranetNetworks      []string
+	ManagedGateway        bool
 }
 
 type NetworkReconciliation struct {

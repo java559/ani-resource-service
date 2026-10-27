@@ -66,7 +66,9 @@ Network 保存产品身份、平台出口配置、租户归属、占用关系、
 
 **EIPGateway 没有 `type: overlay/underlay` 字段。** 两种模式都使用 `scope: Public`、`egressType: Host`；当前 CRD 仅支持 Host。`egressType` 描述 Overlay 出口方式，Underlay 使用其子网物理路由配置。本方案不使用尚未实现的 `Gateway` 类型或 `gatewayConfig`。
 
-一个 EIPGateway 可以服务两种 Public 池；产品记录每个池的模式和明确的网关引用，不因名称相似自动选择，也不因模式不同强制复制两套网关。同一物理口/VLAN 组合不创建冲突的 VlanNetwork；当前 kc 一个 VlanNetwork 只允许一个 Subnet 占用。
+新建 Public 地址池省略 `gateway_id` 时，Resource 在同一受理事务中为该池创建一个专属受管 EIPGateway，并持久保存引用。后台先等待网关真实就绪，再创建 Public Subnet；重试和重启复用原身份。受管网关不能被其他池引用或单独删除。删除地址池时先确认 Public Subnet 消失，再清理其受管网关，二者清理完成后池删除操作才成功。等待网关期间也允许删除池；原创建操作以 `SUPERSEDED_BY_DELETE` 结束，结果未知的外部创建仍须由原 UID 和直接观测消解，不能按未发送处理。
+
+兼容既有 `gateway_id` 显式引用：其网关可共享，删除池不回收网关；已有池不自动认领为受管网关。产品记录每个池的模式和明确引用，不根据名称相似自动选择。同一物理口/VLAN 组合不创建冲突的 VlanNetwork；当前 kc 一个 VlanNetwork 只允许一个 Subnet 占用。
 
 ```mermaid
 flowchart LR

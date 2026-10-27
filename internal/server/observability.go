@@ -151,6 +151,14 @@ func (o *Observability) Shutdown(ctx context.Context) error {
 }
 
 func (o *Observability) ObserveWork(ctx context.Context, logger *slog.Logger, work biz.Work, progress biz.Progress, err error) {
+	if progress.ProviderError != nil {
+		cause := progress.ProviderError
+		var failure *biz.ProviderError
+		if errors.As(cause, &failure) && failure.Cause != nil {
+			cause = failure.Cause
+		}
+		logger.WarnContext(ctx, "network provider request failed", "resource_type", work.Resource.Kind, "resource_id", work.Resource.ID, "operation_id", work.Operation.ID, "binding_id", work.BindingID, "epoch", work.Epoch, "reason", progress.Reason, "error", cause)
+	}
 	result := "observed"
 	if work.ActiveOperation {
 		result = string(progress.OperationState)
