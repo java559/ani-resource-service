@@ -36,6 +36,6 @@
 
 ## 未执行与运行切换
 
-完整 `make verify` 已 PASS。用户已授权提交/推送/PR、bypass 正常合并及发布到 `100.64.128.12`，切换正在执行；镜像发布、共享环境 migration、原存量 DELETE 恢复、真实 Gov 原账退额及真实 GPU/浏览器尚未执行。PG 纵向 fixture 中只有外部 Kubernetes/Gov/KC 边界使用替身，Resource 持久化、权限、版本/租约、清理决定与 outbox 是真实实现；不能据此宣称生产账本或设备容量恢复。
+完整 `make verify` 已 PASS。用户授权的 PR 正常合并、镜像发布、`100.64.128.12` owner migration 和只读核验结果见唯一[执行状态](../../status.md#container-instance-owner-refund-2026-10-27)与[脱敏发布回执](release-10064.json)。PG 纵向 fixture 中只有外部 Kubernetes/Gov/KC 边界使用替身，Resource 持久化、权限、版本/租约、清理决定与 outbox 是真实实现；不能据此宣称新实例的生产账本或设备容量验收。
 
 上线采用 owner 显式 `-instance-migrate`，先停旧实例 worker/投递，再迁移 schema 7 和切换匹配二进制。旧未 ACK 事件不能直接投递：必须完成原实例清理，保留原事件及 CREATE；旧 ACK 保留，不重复退款。新快照与关闭事实已写入后不得直接混跑旧 reader/worker。目标已有 PR #17 的 ImageRuntime 能力将随固定来源组合保留，本次退额 PR 单独合入 main。
