@@ -1,5 +1,15 @@
 # Network 执行状态
 
+## Container Instance Owner Refund (2026-10-27)
+
+**CODE/FEDORA：PASS；LIVE/PRODUCT：NOT_RUN。** 基于 Resource `ece9d53037404b04034884e5c2d641ee95eb5729`，在隔离分支 `codex/container-owner-refund-20261027` 完成[整改方案](../plans/container-instance-release-without-acc-20261027.md)的代码与受控验证。真实业务代码和独立 PostgreSQL 已跑通受理 DELETE、计算/专属工作盘/网络及借用引用清理、最终清理事实与原事件同事务、独立 Gov 通知、丢 ACK 恢复和本地删除操作完成；Kubernetes 与 Gov RPC 是外部边界 fixture，未运行真实 Gov 账本/集群实例退额。
+
+已移除 ACC ObserveRelease、物理摘要和启动连接门槛，继续复用 Gov `ReportResourceReleased`。历史 Pod UID 直接只读核对防止标签丢失后遗漏残留；未知 CREATE、旧租约、Stop/Start、跨租户及错误 ACK 仍拒绝不当关闭。旧未 ACK 事件先补齐完整清理事实，已 ACK 事件保留原退额事实。新增显式 instance migration 007，并同步 Compute 的完整历史校验；未修改历史 migration/checksum。
+
+Fedora Go 1.26.10 的相关单元测试、真实 PG18.6 定向生命周期/故障/迁移测试、两条 Network 纵向恢复用例、ACK 并发回写保护、相关 `go vet` 和服务构建均通过。首轮传输、tmpfs 配额、Compute 历史校验失败及两条纵向用例早期 skip 均保留，修正后相关用例已实际通过。[命令、快照与证据](records/CONTAINER-OWNER-REFUND-20261027/README.md)。
+
+提交前 Fedora 完整 `make verify` 已通过，含生成/分层/故障构建/tidy、全包测试、vet、build、模块校验及 diff 检查。共享缓存权限、公共 proxy EOF、临时目录 symlink 导致的早期失败均有原始记录；采用独占模块缓存和真实短临时路径后通过，未改业务代码或放宽校验。用户已授权提交 PR、bypass 正常合并（禁止 force push）并发布到 `100.64.128.12`，当前正在执行。共享环境 migration、存量逐笔恢复、真实 Gov 原 charge 退额、真实 GPU/浏览器验收仍为 NOT_RUN。上线须停止旧实例 worker/投递，owner 显式迁移至 schema 7 后切换匹配二进制，不与旧流程混跑。
+
 ## 2026-10-21：KCN 网络平台化 Goal
 
 2026-10-22 当前主链已到 **真实平台登录 → Gov → Res/mTLS/PostgreSQL/worker → 新虚拟交换机、ens35/VLAN 0、Underlay 公网池 → kcn-cluster 独立平台默认出口 → 原消费者 DNS/自身 CA HTTPS 与物理 SNAT `172.16.102.192` 回程**，本次必要重建切片 `PASS`。用户后续明确授权“完全删除，记下网段相关参数，然后再通过res创建一个一样的出来”：旧五个原生对象按 Snat→EIP→Subnet→Gateway→VLAN 正常删除并逐项确认 NotFound；旧 Device `device_94d6…055d` 已 `deleted/retired=true/registration_closed=true`。18:25 的 `blocked/LEGACY_NATIVE_VLAN_IN_USE` 是拆除前历史状态，已由最终退役结果取代。本次没有强删 finalizer、直接 SQL 业务删行或用永久原生对象代替产品链。唯一综合记录见[本轮交付回执](records/KCN-NETWORK-PLATFORM-20261021/resume-delivery-20261022.json)。
