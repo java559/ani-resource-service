@@ -39,10 +39,10 @@ func (s *PlatformDefaultEgressService) DeleteDefaultVPCEgress(ctx context.Contex
 	}
 	return &networkv1.DeleteDefaultVPCEgressResponse{Egress: wireDefaultVPCEgress(v)}, nil
 }
-func (s *PlatformDefaultEgressService) GetCurrentDefaultVPCEgress(ctx context.Context, _ *networkv1.GetCurrentDefaultVPCEgressRequest) (*networkv1.GetDefaultVPCEgressResponse, error) {
+func (s *PlatformDefaultEgressService) GetCurrentDefaultVPCEgress(ctx context.Context, _ *networkv1.GetCurrentDefaultVPCEgressRequest) (*networkv1.GetCurrentDefaultVPCEgressResponse, error) {
 	v, err := s.usecase.GetCurrent(ctx)
 	if err != nil {
 		return nil, rpcError(err)
 	}
-	return &networkv1.GetDefaultVPCEgressResponse{Egress: wireDefaultVPCEgress(v)}, nil
+	return &networkv1.GetCurrentDefaultVPCEgressResponse{Egress: wireDefaultVPCEgress(v)}, nil
 }
