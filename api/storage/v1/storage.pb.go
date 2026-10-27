@@ -761,10 +761,14 @@ func (x *CreateVolumeResponse) GetVolume() *Volume {
 }
 
 type ListVolumesRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
-	Page          uint32                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      uint32                 `protobuf:"varint,3,opt,name=page_size,proto3" json:"page_size,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	TenantId string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	Page     uint32                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize uint32                 `protobuf:"varint,3,opt,name=page_size,proto3" json:"page_size,omitempty"`
+	// 筛选条件在分页前生效；空串表示不按该字段筛选。
+	Name          string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Id            string `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty"`
+	State         string `protobuf:"bytes,6,opt,name=state,proto3" json:"state,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -818,6 +822,27 @@ func (x *ListVolumesRequest) GetPageSize() uint32 {
 		return x.PageSize
 	}
 	return 0
+}
+
+func (x *ListVolumesRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ListVolumesRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ListVolumesRequest) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
 }
 
 type ListVolumesResponse struct {
@@ -1247,8 +1272,11 @@ func (x *Bucket) GetName() string {
 }
 
 type ListBucketsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	TenantId string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	// 筛选条件在分页前生效；空串表示不按该字段筛选。
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Id            string `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1286,6 +1314,20 @@ func (*ListBucketsRequest) Descriptor() ([]byte, []int) {
 func (x *ListBucketsRequest) GetTenantId() string {
 	if x != nil {
 		return x.TenantId
+	}
+	return ""
+}
+
+func (x *ListBucketsRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ListBucketsRequest) GetId() string {
+	if x != nil {
+		return x.Id
 	}
 	return ""
 }
@@ -1904,11 +1946,14 @@ const file_storage_v1_storage_proto_rawDesc = "" +
 	"\vvolume_mode\x18\x06 \x01(\tR\vvolume_mode\x12\"\n" +
 	"\faccess_modes\x18\a \x03(\tR\faccess_modes\"B\n" +
 	"\x14CreateVolumeResponse\x12*\n" +
-	"\x06volume\x18\x01 \x01(\v2\x12.storage.v1.VolumeR\x06volume\"d\n" +
+	"\x06volume\x18\x01 \x01(\v2\x12.storage.v1.VolumeR\x06volume\"\x9e\x01\n" +
 	"\x12ListVolumesRequest\x12\x1c\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\rR\x04page\x12\x1c\n" +
-	"\tpage_size\x18\x03 \x01(\rR\tpage_size\"U\n" +
+	"\tpage_size\x18\x03 \x01(\rR\tpage_size\x12\x12\n" +
+	"\x04name\x18\x04 \x01(\tR\x04name\x12\x0e\n" +
+	"\x02id\x18\x05 \x01(\tR\x02id\x12\x14\n" +
+	"\x05state\x18\x06 \x01(\tR\x05state\"U\n" +
 	"\x13ListVolumesResponse\x12(\n" +
 	"\x05items\x18\x01 \x03(\v2\x12.storage.v1.VolumeR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x03R\x05total\"L\n" +
@@ -1933,9 +1978,11 @@ const file_storage_v1_storage_proto_rawDesc = "" +
 	"\x06volume\x18\x02 \x01(\v2\x12.storage.v1.VolumeR\x06volume\",\n" +
 	"\x06Bucket\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\"2\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"V\n" +
 	"\x12ListBucketsRequest\x12\x1c\n" +
-	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\"?\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\tR\x02id\"?\n" +
 	"\x13ListBucketsResponse\x12(\n" +
 	"\x05items\x18\x01 \x03(\v2\x12.storage.v1.BucketR\x05items\"\xa5\x01\n" +
 	"\x12ListObjectsRequest\x12\x1c\n" +

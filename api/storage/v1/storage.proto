@@ -104,6 +104,10 @@ message ListVolumesRequest {
   string tenant_id = 1 [json_name = "tenant_id"];
   uint32 page = 2;
   uint32 page_size = 3 [json_name = "page_size"];
+  // 筛选条件在分页前生效；空串表示不按该字段筛选。
+  string name = 4;
+  string id = 5;
+  string state = 6;
 }
 
 message ListVolumesResponse {
@@ -151,6 +155,9 @@ message Bucket {
 
 message ListBucketsRequest {
   string tenant_id = 1 [json_name = "tenant_id"];
+  // 筛选条件在分页前生效；空串表示不按该字段筛选。
+  string name = 2;
+  string id = 3;
 }
 
 message ListBucketsResponse {

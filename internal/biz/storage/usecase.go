@@ -144,9 +144,13 @@ func (u *UseCase) replayCreate(tenant string, existing *VolumeRecord, spec Creat
 	return toVolume(existing), nil
 }
 
-// ListVolumes 按受管标签查询并稳定排序后分页；查询失败不返回空列表。
-func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize uint32) ([]Volume, int64, error) {
+// ListVolumes 按受管标签查询，筛选后稳定排序并分页；查询失败不返回空列表。
+func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize uint32, filter VolumeFilter) ([]Volume, int64, error) {
 	page, pageSize, offset, err := pageWindow(page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+	filter, err = NormalizeVolumeFilter(filter)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -160,7 +164,7 @@ func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize
 	}
 	filtered := make([]*VolumeRecord, 0, len(records))
 	for _, record := range records {
-		if owned(record, tenant) {
+		if owned(record, tenant) && matchVolumeFilter(record, filter) {
 			filtered = append(filtered, record)
 		}
 	}
@@ -341,16 +345,24 @@ func (u *UseCase) usage(ctx context.Context, namespace, claimName string) ([]Con
 	return out, nil
 }
 
-// ListBuckets 只返回配置给当前租户的桶，按稳定 ID 排序。
-func (u *UseCase) ListBuckets(tenant string) []Bucket {
+// ListBuckets 只返回配置给当前租户的桶，筛选后按稳定 ID 排序。
+func (u *UseCase) ListBuckets(tenant string, filter BucketFilter) ([]Bucket, error) {
+	filter, err := NormalizeBucketFilter(filter)
+	if err != nil {
+		return nil, err
+	}
 	out := []Bucket{}
 	for _, b := range u.cfg.Buckets {
-		if b.TenantID == tenant {
-			out = append(out, Bucket{ID: b.ID, Name: b.Name})
+		if b.TenantID != tenant {
+			continue
+		}
+		bucket := Bucket{ID: b.ID, Name: b.Name}
+		if matchBucketFilter(bucket, filter) {
+			out = append(out, bucket)
 		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
-	return out
+	return out, nil
 }
 
 // ListObjects 使用领域游标；limit 缺省 100，显式 0 或越界一律 400。

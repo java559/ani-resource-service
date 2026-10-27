@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 
@@ -359,7 +360,7 @@ func TestVolumeOperationsRequireNamespaceOwnership(t *testing.T) {
 		"deleting":       {Name: testNS, ManagedBy: NamespaceOwner, TenantID: testTenant, Deleting: true},
 	} {
 		volumes.namespace = namespace
-		if _, _, err := uc.ListVolumes(ctx, testTenant, 1, 20); !errors.Is(err, ErrNotFound) {
+		if _, _, err := uc.ListVolumes(ctx, testTenant, 1, 20, VolumeFilter{}); !errors.Is(err, ErrNotFound) {
 			t.Fatalf("%s: list must be hidden, got %v", name, err)
 		}
 		if _, err := uc.GetVolume(ctx, testTenant, created.Name); !errors.Is(err, ErrNotFound) {
@@ -385,16 +386,98 @@ func TestListVolumesIsStableAndScoped(t *testing.T) {
 	}
 	foreign := &VolumeRecord{Name: "foreign", UID: "x", Labels: map[string]string{LabelManagedBy: ManagedByValue, LabelTenantID: otherTenant}}
 	volumes.records["foreign"] = foreign
-	items, total, err := uc.ListVolumes(ctx, testTenant, 1, 2)
+	items, total, err := uc.ListVolumes(ctx, testTenant, 1, 2, VolumeFilter{})
 	if err != nil || total != 3 || len(items) != 2 {
 		t.Fatalf("page = %d/%d, %v", len(items), total, err)
 	}
 	if items[0].Name > items[1].Name {
 		t.Fatal("volumes must be sorted")
 	}
-	_, _, err = uc.ListVolumes(ctx, testTenant, 1, 101)
+	_, _, err = uc.ListVolumes(ctx, testTenant, 1, 101, VolumeFilter{})
 	if !errors.Is(err, ErrInvalid) {
 		t.Fatalf("oversized page must be rejected, got %v", err)
+	}
+}
+
+func TestListVolumesFilters(t *testing.T) {
+	ctx := context.Background()
+	volumes := newFake()
+	uc := newUseCase(t, volumes, nil)
+	add := func(name, uid, display, phase string) {
+		volumes.records[name] = &VolumeRecord{
+			Name: name, UID: uid, DisplayName: display, Phase: phase,
+			Labels: map[string]string{LabelManagedBy: ManagedByValue, LabelTenantID: testTenant},
+		}
+	}
+	add("ani-vol-a", "uid-a", "数据盘A", "Pending")
+	add("ani-vol-b", "uid-b", "DATA disk", "Bound")
+	add("ani-vol-c", "uid-c", "日志盘", "Bound")
+
+	cases := []struct {
+		name   string
+		filter VolumeFilter
+		page   uint32
+		size   uint32
+		total  int64
+		keys   []string
+	}{
+		{"name contains", VolumeFilter{Name: "数据"}, 1, 20, 1, []string{"ani-vol-a"}},
+		{"name case insensitive", VolumeFilter{Name: "data"}, 1, 20, 1, []string{"ani-vol-b"}},
+		{"id matches pvc name", VolumeFilter{ID: "ani-vol-b"}, 1, 20, 1, []string{"ani-vol-b"}},
+		{"id matches uid", VolumeFilter{ID: "uid-c"}, 1, 20, 1, []string{"ani-vol-c"}},
+		{"id is exact", VolumeFilter{ID: "ani-vol"}, 1, 20, 0, []string{}},
+		{"state matches phase", VolumeFilter{State: "Bound"}, 1, 20, 2, []string{"ani-vol-b", "ani-vol-c"}},
+		{"combined filter", VolumeFilter{Name: "data", State: "Bound"}, 1, 20, 1, []string{"ani-vol-b"}},
+		{"filtered second page", VolumeFilter{State: "Bound"}, 2, 1, 2, []string{"ani-vol-c"}},
+	}
+	for _, tc := range cases {
+		items, total, err := uc.ListVolumes(ctx, testTenant, tc.page, tc.size, tc.filter)
+		if err != nil || total != tc.total || len(items) != len(tc.keys) {
+			t.Fatalf("%s: total = %d/%d, items = %d, err = %v", tc.name, total, tc.total, len(items), err)
+		}
+		for index, expected := range tc.keys {
+			if items[index].Name != expected {
+				t.Fatalf("%s: items[%d] = %s, want %s", tc.name, index, items[index].Name, expected)
+			}
+		}
+	}
+
+	for _, filter := range []VolumeFilter{
+		{State: "bound"},
+		{State: "Unknown"},
+		{Name: "   "},
+		{ID: "  "},
+		{Name: strings.Repeat("盘", 129)},
+		{ID: strings.Repeat("a", 254)},
+	} {
+		if _, _, err := uc.ListVolumes(ctx, testTenant, 1, 20, filter); !errors.Is(err, ErrInvalid) {
+			t.Fatalf("filter %+v must be rejected, got %v", filter, err)
+		}
+	}
+}
+
+func TestListBucketsFilters(t *testing.T) {
+	uc := newUseCase(t, newFake(), nil)
+	cases := []struct {
+		filter BucketFilter
+		total  int
+	}{
+		{BucketFilter{}, 1},
+		{BucketFilter{Name: "文"}, 1},
+		{BucketFilter{Name: "文", ID: "files"}, 1},
+		{BucketFilter{Name: "xyz"}, 0},
+		{BucketFilter{ID: "file"}, 0},
+	}
+	for _, tc := range cases {
+		items, err := uc.ListBuckets(testTenant, tc.filter)
+		if err != nil || len(items) != tc.total {
+			t.Fatalf("filter %+v: items = %d/%d, err = %v", tc.filter, len(items), tc.total, err)
+		}
+	}
+	for _, filter := range []BucketFilter{{Name: "  "}, {ID: "  "}, {Name: strings.Repeat("桶", 129)}, {ID: strings.Repeat("a", 65)}} {
+		if _, err := uc.ListBuckets(testTenant, filter); !errors.Is(err, ErrInvalid) {
+			t.Fatalf("filter %+v must be rejected, got %v", filter, err)
+		}
 	}
 }
 

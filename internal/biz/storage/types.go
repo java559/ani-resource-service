@@ -156,6 +156,22 @@ type Bucket struct {
 	Name string
 }
 
+// VolumeFilter 是卷列表的筛选条件；空串表示不按该字段筛选。
+// Name 按 display_name 不区分大小写包含匹配；ID 精确匹配 pvc_name 或 uid；
+// State 精确匹配 PVC phase。
+type VolumeFilter struct {
+	Name  string
+	ID    string
+	State string
+}
+
+// BucketFilter 是可见桶列表的筛选条件；空串表示不按该字段筛选。
+// Name 按展示名不区分大小写包含匹配；ID 精确匹配逻辑桶 ID。
+type BucketFilter struct {
+	Name string
+	ID   string
+}
+
 // CreateRequest 是服务层传入的原始创建参数；create_token 是业务重试键。
 type CreateRequest struct {
 	CreateToken      string

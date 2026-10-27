@@ -190,3 +190,66 @@ func validatePrefix(prefix string) error {
 	}
 	return nil
 }
+
+// volumeStates 是 state 筛选允许的 PVC phase 取值。
+var volumeStates = map[string]bool{"Pending": true, "Bound": true, "Lost": true}
+
+// NormalizeVolumeFilter 校验并规范化卷列表筛选；空串表示不按该字段筛选。
+func NormalizeVolumeFilter(filter VolumeFilter) (VolumeFilter, error) {
+	name := strings.TrimSpace(filter.Name)
+	if filter.Name != "" && name == "" {
+		return VolumeFilter{}, ErrInvalid
+	}
+	if utf8.RuneCountInString(name) > 128 {
+		return VolumeFilter{}, ErrInvalid
+	}
+	id := strings.TrimSpace(filter.ID)
+	if filter.ID != "" && id == "" || len(id) > 253 {
+		return VolumeFilter{}, ErrInvalid
+	}
+	if filter.State != "" && !volumeStates[filter.State] {
+		return VolumeFilter{}, ErrInvalid
+	}
+	return VolumeFilter{Name: name, ID: id, State: filter.State}, nil
+}
+
+// NormalizeBucketFilter 校验并规范化可见桶列表筛选；空串表示不按该字段筛选。
+func NormalizeBucketFilter(filter BucketFilter) (BucketFilter, error) {
+	name := strings.TrimSpace(filter.Name)
+	if filter.Name != "" && name == "" {
+		return BucketFilter{}, ErrInvalid
+	}
+	if utf8.RuneCountInString(name) > 128 {
+		return BucketFilter{}, ErrInvalid
+	}
+	id := strings.TrimSpace(filter.ID)
+	if filter.ID != "" && id == "" || len(id) > 64 {
+		return BucketFilter{}, ErrInvalid
+	}
+	return BucketFilter{Name: name, ID: id}, nil
+}
+
+// matchVolumeFilter 判断记录是否满足全部筛选条件（AND）。
+func matchVolumeFilter(record *VolumeRecord, filter VolumeFilter) bool {
+	if filter.Name != "" && !strings.Contains(strings.ToLower(record.DisplayName), strings.ToLower(filter.Name)) {
+		return false
+	}
+	if filter.ID != "" && filter.ID != record.Name && filter.ID != record.UID {
+		return false
+	}
+	if filter.State != "" && filter.State != record.Phase {
+		return false
+	}
+	return true
+}
+
+// matchBucketFilter 判断桶是否满足全部筛选条件（AND）。
+func matchBucketFilter(bucket Bucket, filter BucketFilter) bool {
+	if filter.Name != "" && !strings.Contains(strings.ToLower(bucket.Name), strings.ToLower(filter.Name)) {
+		return false
+	}
+	if filter.ID != "" && filter.ID != bucket.ID {
+		return false
+	}
+	return true
+}
