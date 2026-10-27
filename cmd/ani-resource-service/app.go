@@ -64,24 +64,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 			repository.Close()
 		}
 	}()
-	clientPolicy := data.KCClientPolicy{QPS: 5, Burst: 10}
-	if o := bc.Network.Observation; o != nil {
-		clientPolicy = data.KCClientPolicy{QPS: float32(o.RequestQps), Burst: int(o.RequestBurst)}
-	}
-	provider, err := data.OpenKCProvider(repository, bc.Network.Kubeconfig, clientPolicy)
-	if err != nil {
-		return nil, err
-	}
-	options := data.DefaultObservationOptions()
-	if lb := bc.Network.LoadBalancer; lb != nil {
-		if err = provider.ConfigureLoadBalancer(data.LoadBalancerInstallation{Fingerprint: lb.InstallationFingerprint, ControllerImageID: lb.ControllerImageId, EnvoyImageID: lb.EnvoyImageId, ShutdownImageID: lb.ShutdownImageId, KCImageID: lb.KcImageId}); err != nil {
-			return nil, err
-		}
-	}
-	if o := bc.Network.Observation; o != nil {
-		options = data.ObservationOptions{AuditInterval: o.AuditInterval.AsDuration(), AuditJitter: o.AuditJitter.AsDuration(), AuditTimeout: o.AuditTimeout.AsDuration(), FlushInterval: o.FlushInterval.AsDuration(), QueueCapacity: int(o.QueueCapacity)}
-	}
-	observation, err := provider.EnableObservation(options)
+	provider, observation, err := openNetworkProvider(repository, bc.Network)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +127,9 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 			consumer.Close()
 		}
 	}()
-	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy)
+	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy, func(ctx context.Context, work biz.VirtualSwitchWork, progress biz.VirtualSwitchProgress, err error) {
+		observability.ObserveVirtualSwitchWork(ctx, logger, work, progress, err)
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -187,6 +172,7 @@ func buildApp(bc *conf.Bootstrap, logger *slog.Logger) (*kratos.App, error) {
 	}
 	networkv1.RegisterTenantEgressServiceServer(grpcServer, service.NewTenantEgressService(egress))
 	networkv1.RegisterPlatformNetworkServiceServer(grpcServer, service.NewPlatformNetworkService(egress))
+	networkv1.RegisterPlatformEIPServiceServer(grpcServer, service.NewPlatformEIPService(egress))
 	networkv1.RegisterPlatformDeviceRetirementServiceServer(grpcServer, service.NewPlatformDeviceRetirementService(egress))
 	if defaultService != nil {
 		networkv1.RegisterPlatformDefaultEgressServiceServer(grpcServer, defaultService)

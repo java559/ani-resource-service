@@ -153,6 +153,7 @@ type NetworkDefaultVpcEgress struct {
 	UpdatedAt           time.Time
 	ObservedAt          *time.Time
 	RetiredAt           *time.Time
+	EipID               string
 }
 
 type NetworkDefaultVpcEgressHistory struct {
@@ -643,6 +644,7 @@ type NetworkPublicPool struct {
 	DefaultVpcName        string
 	DefaultVpcUid         string
 	IntranetNetworks      []string
+	ManagedGateway        bool
 }
 
 type NetworkReconciliation struct {

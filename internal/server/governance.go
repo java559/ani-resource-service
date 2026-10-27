@@ -31,6 +31,9 @@ const GovernanceScopeHeader = "x-ani-scope"
 
 // Platform delegation is explicit and mutually exclusive with tenant delegation.
 var governancePlatformMethods = map[string]struct{}{
+	"/network.v1.PlatformEIPService/ListPlatformEIPs":                        {},
+	"/network.v1.PlatformEIPService/GetPlatformEIP":                          {},
+	"/network.v1.PlatformEIPService/ReleasePlatformEIP":                      {},
 	"/network.v1.PlatformNetworkService/ListNodeInterfaces":                  {},
 	"/network.v1.PlatformNetworkService/CreateVirtualSwitch":                 {},
 	"/network.v1.PlatformNetworkService/GetVirtualSwitch":                    {},
@@ -40,6 +43,7 @@ var governancePlatformMethods = map[string]struct{}{
 	"/network.v1.PlatformDeviceRetirementService/GetNetworkDeviceRetirement": {},
 	"/network.v1.PlatformDefaultEgressService/CreateDefaultVPCEgress":        {},
 	"/network.v1.PlatformDefaultEgressService/GetDefaultVPCEgress":           {},
+	"/network.v1.PlatformDefaultEgressService/GetCurrentDefaultVPCEgress":    {},
 	"/network.v1.PlatformDefaultEgressService/DeleteDefaultVPCEgress":        {},
 	"/network.v1.PlatformNetworkService/AdoptNetworkDevice":                  {},
 	"/network.v1.PlatformNetworkService/GetNetworkDevice":                    {},
