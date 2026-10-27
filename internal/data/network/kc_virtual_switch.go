@@ -3,6 +3,8 @@ package data
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net"
 	"net/netip"
 	"slices"
@@ -34,8 +36,12 @@ func virtualSwitchDeleteFenceValue(sw biz.VirtualSwitch) string {
 	return sw.BindingID + ":" + strconv.FormatInt(sw.Version, 10)
 }
 
-func switchConflict() error    { return &biz.ProviderError{Kind: biz.ProviderConflict} }
-func switchUnavailable() error { return &biz.ProviderError{Kind: biz.ProviderTemporary} }
+func switchConflict(causes ...error) error {
+	return &biz.ProviderError{Kind: biz.ProviderConflict, Cause: errors.Join(causes...)}
+}
+func switchUnavailable(causes ...error) error {
+	return &biz.ProviderError{Kind: biz.ProviderTemporary, Cause: errors.Join(causes...)}
+}
 
 func (p *KCProvider) VirtualSwitchInventory(ctx context.Context, cluster string, sw biz.VirtualSwitch, device string) (biz.VirtualSwitchInventory, error) {
 	if cluster == "" || cluster != p.repository.placement.ClusterID || (sw.ClusterID != "" && sw.ClusterID != cluster) || device == "" {
@@ -348,15 +354,15 @@ func validateSwitchMembers(sw biz.VirtualSwitch, nodes []unstructured.Unstructur
 
 func (p *KCProvider) InspectVirtualSwitchNode(ctx context.Context, sw biz.VirtualSwitch, member biz.VirtualSwitchNode) (biz.VirtualSwitchNode, error) {
 	if sw.ClusterID != p.repository.placement.ClusterID || sw.BindingID == "" {
-		return member, switchConflict()
+		return member, switchConflict(fmt.Errorf("virtual switch %s cluster or binding identity invalid", sw.ID))
 	}
-	nodes, maps, _, _, err := p.nodeFactsObjects(ctx)
+	nodes, maps, _, collected, err := p.nodeFactsObjects(ctx)
 	if err != nil {
 		return member, err
 	}
 	if sw.State != biz.Deleting {
 		if err = validateSwitchMembers(sw, nodes); err != nil {
-			return member, err
+			return member, switchConflict(fmt.Errorf("virtual switch %s frozen membership changed: %w", sw.ID, err))
 		}
 		daemons, err := p.listAll(ctx, pods)
 		if err != nil {
@@ -366,13 +372,29 @@ func (p *KCProvider) InspectVirtualSwitchNode(ctx context.Context, sw biz.Virtua
 		if err != nil {
 			return member, readFailure(err)
 		}
-		if err = inspectFrozenSwitchPhysical(sw, nodes, maps, daemons, now); err != nil {
-			return member, err
+		physicalAt, inspectErr := inspectFrozenSwitchPhysical(sw, nodes, maps, daemons, now)
+		if inspectErr != nil {
+			return member, inspectErr
+		}
+		if physicalAt.Before(collected) {
+			collected = physicalAt
+		}
+		if collected.IsZero() || collected.After(now) {
+			return member, switchUnavailable(fmt.Errorf("virtual switch %s has invalid observation time %s", sw.ID, collected))
+		}
+		if !member.LastObservedAt.IsZero() && collected.Before(member.LastObservedAt) {
+			return member, switchUnavailable(fmt.Errorf("virtual switch %s node %s observation moved backwards from %s to %s", sw.ID, member.NodeName, member.LastObservedAt, collected))
 		}
 	}
 	for _, n := range nodes {
 		if n.GetName() == member.NodeName {
 			current, err := inspectSwitchNodeObject(sw, member, &n)
+			if err != nil {
+				return current, switchConflict(fmt.Errorf("virtual switch %s node %s identity, owner or group configuration mismatch: %w", sw.ID, member.NodeName, err))
+			}
+			if err == nil && sw.State != biz.Deleting && current.Applied {
+				current.LastObservedAt = collected
+			}
 			if err != nil || sw.State != biz.Deleting || !current.DeleteFenced || current.Applied {
 				return current, err
 			}
@@ -395,7 +417,7 @@ func (p *KCProvider) InspectVirtualSwitchNode(ctx context.Context, sw biz.Virtua
 			return inspectSwitchNodeCleanup(sw, current, freshNode, freshMaps, freshVlans, devices, now)
 		}
 	}
-	return member, switchConflict()
+	return member, switchConflict(fmt.Errorf("virtual switch %s member node %s missing", sw.ID, member.NodeName))
 }
 
 func inspectSwitchNodeCleanup(sw biz.VirtualSwitch, member biz.VirtualSwitchNode, node *unstructured.Unstructured, maps, vlans []unstructured.Unstructured, devices []sqlcgen.NetworkDeviceAdoption, now time.Time) (biz.VirtualSwitchNode, error) {
@@ -414,7 +436,8 @@ func inspectSwitchNodeCleanup(sw biz.VirtualSwitch, member biz.VirtualSwitchNode
 	return current, nil
 }
 
-func inspectFrozenSwitchPhysical(sw biz.VirtualSwitch, nodes, maps, daemons []unstructured.Unstructured, now time.Time) error {
+func inspectFrozenSwitchPhysical(sw biz.VirtualSwitch, nodes, maps, daemons []unstructured.Unstructured, now time.Time) (time.Time, error) {
+	oldest := now
 	for _, member := range sw.Nodes {
 		var node *unstructured.Unstructured
 		for i := range nodes {
@@ -423,8 +446,11 @@ func inspectFrozenSwitchPhysical(sw biz.VirtualSwitch, nodes, maps, daemons []un
 				break
 			}
 		}
-		if !nodeReady(node) || node.GetAnnotations()["networking.kubercloud.com/chassis"] == "" || !switchDaemonReady(member.NodeName, daemons) {
-			return switchUnavailable()
+		if !nodeReady(node) {
+			return time.Time{}, switchUnavailable(fmt.Errorf("node not ready: %s", member.NodeName))
+		}
+		if node.GetAnnotations()["networking.kubercloud.com/chassis"] == "" || !switchDaemonReady(member.NodeName, daemons) {
+			return time.Time{}, switchUnavailable(fmt.Errorf("node %s chassis or CNI daemon not ready", member.NodeName))
 		}
 		found := 0
 		for _, cm := range maps {
@@ -433,8 +459,17 @@ func inspectFrozenSwitchPhysical(sw biz.VirtualSwitch, nodes, maps, daemons []un
 			}
 			found++
 			var doc NodeFactsDocument
-			if cm.GetUID() == "" || cm.GetResourceVersion() == "" || cm.GetDeletionTimestamp() != nil || json.Unmarshal([]byte(crString(&cm, "data", "facts.json")), &doc) != nil || doc.Version != 1 || doc.NodeName != member.NodeName || doc.NodeUID != member.NodeUID || doc.CollectedAt.IsZero() || doc.CollectedAt.After(now) || now.Sub(doc.CollectedAt) > time.Minute {
-				return switchUnavailable()
+			if cm.GetUID() == "" || cm.GetResourceVersion() == "" || cm.GetDeletionTimestamp() != nil || json.Unmarshal([]byte(crString(&cm, "data", "facts.json")), &doc) != nil || doc.Version != 1 || doc.NodeName != member.NodeName || doc.NodeUID != member.NodeUID {
+				return time.Time{}, switchUnavailable(fmt.Errorf("node %s facts document or identity invalid", member.NodeName))
+			}
+			if doc.CollectedAt.IsZero() || doc.CollectedAt.After(now) {
+				return time.Time{}, switchUnavailable(fmt.Errorf("node %s facts time invalid: collected_at=%s now=%s", member.NodeName, doc.CollectedAt, now))
+			}
+			if now.Sub(doc.CollectedAt) > time.Minute {
+				return time.Time{}, switchUnavailable(fmt.Errorf("node facts expired: %s age=%s", member.NodeName, now.Sub(doc.CollectedAt)))
+			}
+			if doc.CollectedAt.Before(oldest) {
+				oldest = doc.CollectedAt
 			}
 			interfaces := 0
 			for _, v := range doc.Interfaces {
@@ -443,23 +478,23 @@ func inspectFrozenSwitchPhysical(sw biz.VirtualSwitch, nodes, maps, daemons []un
 				}
 				interfaces++
 				if !switchPhysicalSafe(v) {
-					return switchConflict()
+					return time.Time{}, switchConflict(fmt.Errorf("physical interface unsafe: node %s interface %s link_up=%t carrier=%t management=%t default_route=%t", member.NodeName, v.Name, v.LinkUp, v.Carrier, v.Management, v.DefaultRoute))
 				}
 				if v.OVSManaged || v.Master != "" {
 					if node.GetAnnotations()[VirtualSwitchOwnerKey(sw.GroupName)] != sw.BindingID || node.GetLabels()[virtualSwitchGroupPrefix+sw.GroupName] != "100" || !switchWiring(node, v, sw.GroupName) {
-						return switchConflict()
+						return time.Time{}, switchConflict(fmt.Errorf("node %s interface %s virtual switch owner or wiring mismatch", member.NodeName, v.Name))
 					}
 				}
 			}
 			if interfaces != 1 {
-				return switchConflict()
+				return time.Time{}, switchConflict(fmt.Errorf("node %s expected one physical interface for MAC %s, found %d", member.NodeName, member.MAC, interfaces))
 			}
 		}
 		if found != 1 {
-			return switchUnavailable()
+			return time.Time{}, switchUnavailable(fmt.Errorf("node facts missing or duplicated: %s count=%d", member.NodeName, found))
 		}
 	}
-	return nil
+	return oldest, nil
 }
 
 func inspectSwitchNodeObject(sw biz.VirtualSwitch, member biz.VirtualSwitchNode, n *unstructured.Unstructured) (biz.VirtualSwitchNode, error) {

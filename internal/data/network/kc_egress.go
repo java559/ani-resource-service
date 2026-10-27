@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/netip"
 	"reflect"
 	"regexp"
@@ -234,8 +235,11 @@ func (p *KCProvider) resolveEgress(ctx context.Context, t biz.ProviderTarget) (e
 			if err != nil {
 				return r, err
 			}
-			if device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID || sw.State != biz.Available {
-				return r, switchConflict()
+			if device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID {
+				return r, switchConflict(fmt.Errorf("virtual switch %s binding identity does not match device %s", sw.ID, device.ResourceID))
+			}
+			if sw.State != biz.Available {
+				return r, switchUnavailable(fmt.Errorf("virtual switch %s dependency is %s: %s", sw.ID, sw.State, sw.Reason))
 			}
 			r.spec["vClusterName"] = sw.GroupName
 		}
@@ -307,8 +311,11 @@ func (p *KCProvider) resolveEgress(ctx context.Context, t biz.ProviderTarget) (e
 			if err != nil {
 				return r, err
 			}
-			if device.Retired || device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID || sw.State != biz.Available {
-				return r, switchConflict()
+			if device.Retired || device.SwitchBindingID == nil || sw.BindingID != *device.SwitchBindingID || sw.ClusterID != r.binding.ClusterID {
+				return r, switchConflict(fmt.Errorf("virtual switch %s binding identity does not match active device %s", sw.ID, device.ResourceID))
+			}
+			if sw.State != biz.Available {
+				return r, switchUnavailable(fmt.Errorf("virtual switch %s dependency is %s: %s", sw.ID, sw.State, sw.Reason))
 			}
 			r.virtualSwitch = &sw
 			r.switchDevice = device

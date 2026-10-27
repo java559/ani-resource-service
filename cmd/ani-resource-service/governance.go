@@ -128,7 +128,9 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy)
+	switchWorker, err := biz.NewVirtualSwitchWorker(repository, provider, uuid.NewString(), policy, func(ctx context.Context, work biz.VirtualSwitchWork, progress biz.VirtualSwitchProgress, err error) {
+		observability.ObserveVirtualSwitchWork(ctx, logger, work, progress, err)
+	})
 	if err != nil {
 		return err
 	}
