@@ -43,6 +43,7 @@ var governancePlatformMethods = map[string]struct{}{
 	"/network.v1.PlatformDeviceRetirementService/GetNetworkDeviceRetirement": {},
 	"/network.v1.PlatformDefaultEgressService/CreateDefaultVPCEgress":        {},
 	"/network.v1.PlatformDefaultEgressService/GetDefaultVPCEgress":           {},
+	"/network.v1.PlatformDefaultEgressService/GetCurrentDefaultVPCEgress":    {},
 	"/network.v1.PlatformDefaultEgressService/DeleteDefaultVPCEgress":        {},
 	"/network.v1.PlatformNetworkService/AdoptNetworkDevice":                  {},
 	"/network.v1.PlatformNetworkService/GetNetworkDevice":                    {},

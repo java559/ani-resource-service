@@ -153,6 +153,7 @@ type NetworkDefaultVpcEgress struct {
 	UpdatedAt           time.Time
 	ObservedAt          *time.Time
 	RetiredAt           *time.Time
+	EipID               string
 }
 
 type NetworkDefaultVpcEgressHistory struct {

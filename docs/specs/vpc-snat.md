@@ -292,3 +292,9 @@ Provider 调用在事务外，通过现有租约、版本 fencing、稳定名称
 - [2026-09-10 Overlay 实测](../execution/records/KC-OVERLAY-20260910T114200Z/README.md)：只读使用已完成证据，包含原始失败、对照、DNS 未完成和共享 ER 保留差异；本轮没有重跑。
 - [源码输入](../execution/records/KC-OVERLAY-20260910T114200Z/source-snapshot.json)：Network `e481e968d3cc2f17bc4c6a736c438428519b09a0`，kc `a2245883eb2b46a998f041feb3ad0ed3f6cf7c60`；运行镜像与 kc 编译提交的精确关联尚未验证。
 - 当前 [Network RPC](../../api/network/v1/network.proto)只有既有 VPC/Subnet/Attachment/Operation 能力；本文所列 EIP/Snat/平台接口仍是目标设计。
+
+## 平台默认 VPC 出口查询与地址清单
+
+平台默认出口固定作用于部署配置指定的 `kcn-system/kcn-cluster`，不接受调用者传入集群或 VPC 身份。`GetCurrentDefaultVPCEgress` 查询该集群/VPC 尚未退役的唯一出口；未配置返回 `RESOURCE_NOT_FOUND`，删除中的出口继续可见，完成删除后不再作为当前配置返回。创建、按 ID 查询和删除继续复用既有平台出口生命周期。
+
+出口持久保存独立 `eip_id`，与原生 EIP 的 Provider 名称/UID 分开。平台 EIP 列表和详情包含该地址，`managed_by=system`、`scope=public`、租户为空，绑定目标为 `platform_default_egress`。列表计数、组合过滤和分页在同一个只读快照中完成；租户筛选不会包含该地址。它只能随平台出口删除而回收，不能从普通 EIP 释放接口单独删除。
