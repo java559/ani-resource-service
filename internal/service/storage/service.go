@@ -107,7 +107,9 @@ func (s *Service) ListVolumes(ctx context.Context, r *storagev1.ListVolumesReque
 	if r == nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
-	items, total, err := s.uc.ListVolumes(ctx, r.GetTenantId(), r.GetPage(), r.GetPageSize())
+	items, total, err := s.uc.ListVolumes(ctx, r.GetTenantId(), r.GetPage(), r.GetPageSize(), biz.VolumeFilter{
+		Name: r.GetName(), ID: r.GetId(), State: r.GetState(),
+	})
 	if err != nil {
 		return nil, rpcError(err)
 	}
@@ -177,7 +179,10 @@ func (s *Service) ListBuckets(ctx context.Context, r *storagev1.ListBucketsReque
 	if r == nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
-	items := s.uc.ListBuckets(r.GetTenantId())
+	items, err := s.uc.ListBuckets(r.GetTenantId(), biz.BucketFilter{Name: r.GetName(), ID: r.GetId()})
+	if err != nil {
+		return nil, rpcError(err)
+	}
 	response := &storagev1.ListBucketsResponse{Items: make([]*storagev1.Bucket, 0, len(items))}
 	for _, item := range items {
 		response.Items = append(response.Items, &storagev1.Bucket{Id: item.ID, Name: item.Name})
