@@ -632,9 +632,13 @@ func (p *KCProvider) readEgressSetOnce(ctx context.Context, r egressResolved, cr
 	if r.deviceID != "" && !(r.target.Kind == "snat" && !r.snat.DesiredEnabled) {
 		result.deviceRequired = true
 		if r.virtualSwitch != nil {
-			configured, wired, proof, err := p.virtualSwitchDeviceState(ctx, *r.virtualSwitch, r.switchDevice)
+			configured, wired, proof, err := p.virtualSwitchDeviceState(ctx, *r.virtualSwitch, r.switchDevice, result.view)
 			if err != nil {
 				return result, err
+			}
+			result.proof.CollectionStartedAt = result.proof.CollectedAt
+			if proof.CollectionStartedAt.Before(result.proof.CollectionStartedAt) {
+				result.proof.CollectionStartedAt = proof.CollectionStartedAt
 			}
 			result.switchConfigured, result.switchWired = configured, wired
 			result.deviceReady = wired

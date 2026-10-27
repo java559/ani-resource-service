@@ -169,13 +169,30 @@ func virtualSwitchInventoryMode(sw biz.VirtualSwitch, device string, nodes, maps
 	return result, nil
 }
 
-func (p *KCProvider) virtualSwitchDeviceState(ctx context.Context, sw biz.VirtualSwitch, device sqlcgen.NetworkDeviceAdoption) (bool, bool, biz.ObservationProof, error) {
+func (p *KCProvider) virtualSwitchDeviceState(ctx context.Context, sw biz.VirtualSwitch, device sqlcgen.NetworkDeviceAdoption, view *auditView) (bool, bool, biz.ObservationProof, error) {
 	var proof biz.ObservationProof
-	nodes, maps, vlans, collected, err := p.nodeFactsObjects(ctx)
-	if err != nil {
-		return false, false, proof, err
+	var nodes, maps, vlans, daemons []unstructured.Unstructured
+	var collected time.Time
+	var err error
+	if view == nil {
+		nodes, maps, vlans, collected, err = p.nodeFactsObjects(ctx)
+		if err == nil {
+			daemons, err = p.listAll(ctx, pods)
+		}
+	} else {
+		// A dependent check must consume the caller's complete collection.
+		// Starting a second audit can invalidate the parent and starve its proof.
+		if p.observation == nil || !p.observation.valid(view, []string{"node-facts"}) || view.indices[pods] == nil {
+			return false, false, proof, errEgressAuditInvalid
+		}
+		nodes, maps, vlans, collected, err = nodeFactsFromView(view)
+		for _, raw := range view.indices[pods].List() {
+			o := raw.(*unstructured.Unstructured)
+			if o.GetNamespace() == kcSystemNamespace && o.GetLabels()["networking.kubercloud.com/app"] == "cni-ds" {
+				daemons = append(daemons, *o.DeepCopy())
+			}
+		}
 	}
-	daemons, err := p.listAll(ctx, pods)
 	if err != nil {
 		return false, false, proof, err
 	}
@@ -218,12 +235,17 @@ func (p *KCProvider) virtualSwitchDeviceState(ctx context.Context, sw biz.Virtua
 		configured = configured && owned && switchPhysicalSafe(v) && (idle || switchWiring(n, v, sw.GroupName))
 		wired = wired && owned && switchWiring(n, v, sw.GroupName)
 	}
-	proof = biz.ObservationProof{CollectedAt: current.Inventory.CollectedAt, Hash: contentHash(struct {
+	proof = virtualSwitchObservationProof(sw, current.Inventory, collected)
+	return configured, wired && configured, proof, nil
+}
+
+func virtualSwitchObservationProof(sw biz.VirtualSwitch, inventory biz.InterfaceInventory, collected time.Time) biz.ObservationProof {
+	// Keep physical-source freshness separate from the complete API read fence.
+	return biz.ObservationProof{CollectedAt: inventory.CollectedAt, CollectionStartedAt: collected, Hash: contentHash(struct {
 		SwitchID, BindingID, Fingerprint string
 		Version                          int64
 		Inventory                        biz.InterfaceInventory
-	}{sw.ID, sw.BindingID, sw.MembershipFingerprint, sw.BindingVersion, current.Inventory})}
-	return configured, wired && configured, proof, nil
+	}{sw.ID, sw.BindingID, sw.MembershipFingerprint, sw.BindingVersion, inventory})}
 }
 
 func switchPhysicalSafe(v biz.NodeInterface) bool {

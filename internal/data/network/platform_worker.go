@@ -50,6 +50,9 @@ func (p *Postgres) claimPlatform(ctx context.Context, tx pgx.Tx, q *sqlcgen.Quer
 		return biz.Work{}, false, databaseFailure(err)
 	}
 	work := biz.Work{Resource: biz.ResourceWork{ID: r.ResourceID, Kind: r.Kind, State: biz.ResourceState(r.State), Reason: biz.Reason(r.Reason), Version: r.Version, ObservedAt: r.ObservedAt, UpdatedAt: r.UpdatedAt, LastOperationID: r.LastOperationID, Egress: &biz.EgressWorkSpec{Platform: &value}}, Operation: biz.Operation{ID: op.OperationID, ResourceID: r.ResourceID, ResourceType: r.Kind, Kind: op.Kind, State: biz.OperationState(op.State), Reason: biz.Reason(op.Reason)}, ActiveOperation: active, BindingID: r.BindingID, KnownIdentity: r.ProviderUid, PendingAction: r.PendingAction, Owner: owner, Epoch: lease.LeaseEpoch, Attempt: op.Attempt, Now: now, Requirement: biz.ObservationRequirement{RequestedGeneration: lease.RequestedGeneration, AppliedAt: lease.EvidenceAppliedAt, Hash: lease.EvidenceHash}}
+	if r.ObservedAt != nil {
+		work.Requirement.PreviousCollectedAt = *r.ObservedAt
+	}
 	if r.Kind == "public_pool" && r.State == "provisioning" && active {
 		pool, err := q.GetPublicPool(ctx, sqlcgen.GetPublicPoolParams{ClusterID: r.ClusterID, ResourceID: r.ResourceID})
 		if err != nil {
