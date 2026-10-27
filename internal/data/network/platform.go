@@ -508,20 +508,27 @@ func (p *Postgres) poolReady(ctx context.Context, q *sqlcgen.Queries, pool sqlcg
 	if allocation && !pool.AllocationEnabled {
 		return unavailable()
 	}
-	if pool.VerificationExpiresAt == nil || !pool.VerificationExpiresAt.After(now) || len(pool.Verification) == 0 {
-		return unavailable()
-	}
 	topology, err := q.PublicPoolTopology(ctx, sqlcgen.PublicPoolTopologyParams{ClusterID: pool.ClusterID, ResourceID: pool.ResourceID})
 	if err != nil {
 		return databaseFailure(err)
 	}
-	var evidence biz.PublicPoolVerification
-	topologyHash, err := addressPoolTopologyFor(ctx, q, pool, topology)
-	if err != nil {
-		return err
-	}
-	if json.Unmarshal(pool.Verification, &evidence) != nil || evidence.TopologyFingerprint != topologyHash || !sameProviderImages(evidence.ProviderImageDigests, topology.ProviderImages) || biz.ValidatePoolVerificationForScope(evidence, pool.Scope, now) != nil {
+	// Current provider health remains mandatory. Manual forwarding evidence is
+	// optional for public pools; intranet keeps its independent verification.
+	if len(topology.ProviderImages) == 0 {
 		return unavailable()
+	}
+	if pool.Scope != "public" {
+		if pool.VerificationExpiresAt == nil || !pool.VerificationExpiresAt.After(now) || len(pool.Verification) == 0 {
+			return unavailable()
+		}
+		var evidence biz.PublicPoolVerification
+		topologyHash, err := addressPoolTopologyFor(ctx, q, pool, topology)
+		if err != nil {
+			return err
+		}
+		if json.Unmarshal(pool.Verification, &evidence) != nil || evidence.TopologyFingerprint != topologyHash || !sameProviderImages(evidence.ProviderImageDigests, topology.ProviderImages) || biz.ValidatePoolVerificationForScope(evidence, pool.Scope, now) != nil {
+			return unavailable()
+		}
 	}
 	refs := [][2]string{{"public_pool", pool.ResourceID}}
 	if pool.Scope != "intranet" {

@@ -1162,6 +1162,11 @@ func emptyBoundResource(eip *unstructured.Unstructured) bool {
 }
 
 func verifiedEgressExit(r egressResolved, set egressReadSet) bool {
+	// Public admission uses current component readiness, without requiring an
+	// administrator's manual forwarding evidence. Intranet remains independent.
+	if r.pool.Scope == "public" {
+		return len(providerImages(set.all[pods])) > 0
+	}
 	var evidence biz.PublicPoolVerification
 	if json.Unmarshal(r.pool.Verification, &evidence) != nil {
 		return false
