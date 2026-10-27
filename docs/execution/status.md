@@ -1,5 +1,11 @@
 # Network 执行状态
 
+## Public Network Managed Gateway (2026-10-27)
+
+基于最新 main `33ea63b4699e7d47fd0d86bef86ae8461033c869`，代码 `c4472e933c9cdbd943bb6764187f5dd015fd8b72` 已发布到 `100.64.128.12`，镜像摘要 `86e0dcf617ffae46ab15770e7717a47c197e4fb98815fb0f12ce72e0dd4e6d55`，正式 Res 1/1 Ready、重启 0。已用真实 Res mTLS RPC 跑通省略 `gateway_id` 的 Underlay 地址池受理、永久幂等重放、专属网关创建、重启后持续观测、地址池及受管网关清理；临时资源已删除，原有网关 UID 保持。参数为 ens8f1np1、10.10.20.0/22、OVN 地址 .210、上游 10.10.23.254，可分配 .201–.209，未开启分配。
+
+Fedora 相关单元/全包测试、真实 PG Egress/虚拟交换机/恢复回归、vet 和编译通过；观测围栏回归已先失败后通过。复验 132 秒未过期，仍有短暂 `PROVIDER_UNAVAILABLE` 随后恢复；共享观测已同步、审计/Watch 错误 0。`make verify` 未全绿：依赖缓存权限、离线生成器元数据及 main 中归档代码的外仓依赖问题已如实记录。Gov/Boss 浏览器链路、EIP/SNAT 数据面未验收。本轮[唯一验收回执](records/public-network-managed-gateway-20261027.json)区分实际测试范围与未验证项；源码契约见 [VPC SNAT](../specs/vpc-snat.md) 和[持续观测](../specs/cr-observation.md)。
+
 ## Container Instance Owner Refund (2026-10-27)
 
 **CODE/FEDORA：PASS；100.64.128.12 发布/只读核验：PASS；新实例/真实账本及 GPU 产品验收：NOT_RUN。** 基于 Resource `ece9d53037404b04034884e5c2d641ee95eb5729`，在隔离分支 `codex/container-owner-refund-20261027` 完成[整改方案](../plans/container-instance-release-without-acc-20261027.md)的代码与受控验证。真实业务代码和独立 PostgreSQL 已跑通受理 DELETE、计算/专属工作盘/网络及借用引用清理、最终清理事实与原事件同事务、独立 Gov 通知、丢 ACK 恢复和本地删除操作完成；Kubernetes 与 Gov RPC 是外部边界 fixture，未运行新实例的真实 Gov 账本/设备容量验收。
