@@ -2,13 +2,17 @@
 
 ## Container Instance Owner Refund (2026-10-27)
 
-**CODE/FEDORA：PASS；LIVE/PRODUCT：NOT_RUN。** 基于 Resource `ece9d53037404b04034884e5c2d641ee95eb5729`，在隔离分支 `codex/container-owner-refund-20261027` 完成[整改方案](../plans/container-instance-release-without-acc-20261027.md)的代码与受控验证。真实业务代码和独立 PostgreSQL 已跑通受理 DELETE、计算/专属工作盘/网络及借用引用清理、最终清理事实与原事件同事务、独立 Gov 通知、丢 ACK 恢复和本地删除操作完成；Kubernetes 与 Gov RPC 是外部边界 fixture，未运行真实 Gov 账本/集群实例退额。
+**CODE/FEDORA：PASS；100.64.128.12 发布/只读核验：PASS；新实例/真实账本及 GPU 产品验收：NOT_RUN。** 基于 Resource `ece9d53037404b04034884e5c2d641ee95eb5729`，在隔离分支 `codex/container-owner-refund-20261027` 完成[整改方案](../plans/container-instance-release-without-acc-20261027.md)的代码与受控验证。真实业务代码和独立 PostgreSQL 已跑通受理 DELETE、计算/专属工作盘/网络及借用引用清理、最终清理事实与原事件同事务、独立 Gov 通知、丢 ACK 恢复和本地删除操作完成；Kubernetes 与 Gov RPC 是外部边界 fixture，未运行新实例的真实 Gov 账本/设备容量验收。
 
 已移除 ACC ObserveRelease、物理摘要和启动连接门槛，继续复用 Gov `ReportResourceReleased`。历史 Pod UID 直接只读核对防止标签丢失后遗漏残留；未知 CREATE、旧租约、Stop/Start、跨租户及错误 ACK 仍拒绝不当关闭。旧未 ACK 事件先补齐完整清理事实，已 ACK 事件保留原退额事实。新增显式 instance migration 007，并同步 Compute 的完整历史校验；未修改历史 migration/checksum。
 
 Fedora Go 1.26.10 的相关单元测试、真实 PG18.6 定向生命周期/故障/迁移测试、两条 Network 纵向恢复用例、ACK 并发回写保护、相关 `go vet` 和服务构建均通过。首轮传输、tmpfs 配额、Compute 历史校验失败及两条纵向用例早期 skip 均保留，修正后相关用例已实际通过。[命令、快照与证据](records/CONTAINER-OWNER-REFUND-20261027/README.md)。
 
-提交前 Fedora 完整 `make verify` 已通过，含生成/分层/故障构建/tidy、全包测试、vet、build、模块校验及 diff 检查。共享缓存权限、公共 proxy EOF、临时目录 symlink 导致的早期失败均有原始记录；采用独占模块缓存和真实短临时路径后通过，未改业务代码或放宽校验。用户已授权提交 PR、bypass 正常合并（禁止 force push）并发布到 `100.64.128.12`，当前正在执行。共享环境 migration、存量逐笔恢复、真实 Gov 原 charge 退额、真实 GPU/浏览器验收仍为 NOT_RUN。上线须停止旧实例 worker/投递，owner 显式迁移至 schema 7 后切换匹配二进制，不与旧流程混跑。
+提交前 Fedora 完整 `make verify` 已通过，含生成/分层/故障构建/tidy、全包测试、vet、build、模块校验及 diff 检查。共享缓存权限、公共 proxy EOF、临时目录 symlink 导致的早期失败均有原始记录；采用独占模块缓存和真实短临时路径后通过，未改业务代码或放宽校验。[PR #18](https://github.com/zhangzhe-ctrl/ani-resource-service/pull/18) 按用户授权 bypass，以固定 head `632b30d6337a8154518890b22ca21add4dc44fd7` 正常合入 `45d8f0ee3f8f51af66cebc94a13711565278e813`，无 force push/直推 main。GitHub main CI 存在失败，未标全绿、未将 bypass 当作 CI 通过。
+
+`100.64.128.12` 已完成停旧 Resource、独占 PG17.11 custom dump/TOC 校验、owner 显式迁移 instance 1–7、切换新镜像及只读核验。镜像 `4b074baa1df4e439373de375ff8eeb7a7196ca8a2c68351700ebf372313003d3` 对应发布组合 `7d3fbb6272a37697d75c3d77127a0402536e12f1`，两个 parent 为本次 main merge 与目标原已部署的 PR #17 head `7755f6f4b8514cca80ad99886c4e1019fa276eea`；组合无手工源码改动，已单独通过相关启动/镜像接口测试、静态构建及镜像内二进制校验，发布分支可复现，未合并 PR #17。Deployment 仅替换 Resource image 并恢复原 replicas=1，1/1 Ready、精确 imageID、restartCount=0，原 env/端口/mount/19094 镜像接口保留。2026-10-27 04:26:28Z 日志 ERROR/FATAL=0；原 1 条事件及已 ACK 身份保持，待删除/待外部结果/待退额均为 0。临时 Job/Secret 和本任务 owner DSN 文件已清理，私有备份保留。[脱敏发布回执](records/CONTAINER-OWNER-REFUND-20261027/release-10064.json)。
+
+本次未新建用户实例或 GPU 账本；没有待恢复的未 ACK 存量事件，因此不能将发布成功及旧 ACK 保留宣称为新一次真实原 charge 退额或 GPU/浏览器产品验收。后续新快照与关闭事实已写入后，不得仅回退旧二进制或与旧 worker 混跑。
 
 ## 2026-10-21：KCN 网络平台化 Goal
 
