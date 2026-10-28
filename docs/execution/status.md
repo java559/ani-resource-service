@@ -1067,3 +1067,20 @@ The first CPU Unix-socket path failure, Network alias/reproof and full-Stop fail
 Fedora 身份/tenant/日志/配置及真实 TLS 连接定向用例通过。
 LIVE/PRODUCT 未验收；CI 对所有 push/PR 的 Ubuntu 全量门禁与用户约束冲突，未推送或发布。
 准确命令、首次失败及修复后结果见[本次证据](records/IMAGE-REGISTRY-20261026/README.md)。
+
+
+<a id="container-restart-pvc-20261028"></a>
+## 容器 Restart 与 borrowed PVC 挂卸（2026-10-28）
+
+实施中，CP-01。真实 PG 已跑通持久 Restart、重放、DELETE/Fence 接管及 PVC guard；Kubernetes 是明确的外部边界替身。Gov HTTP 联合验证和指定集群 CPU Restart 尚未执行，未部署，不作 LIVE 通过。权威方案：[v2.0](../plans/container-instance-restart-pvc-20261028.md)，来源 SHA-256 `b6dfb17aef74f3d99cc969ecd2ef51b19c77b0a984f82fbe6afd28aa94d41f7a`。
+
+- Resource 工作树 `/home/chabking/.codex/worktrees/container-restart-pvc-20261028/ani-resource-service`，分支 `codex/container-restart-pvc-20261028`，起点 `55092dbf05c284875555d422e75eeb5691cb9cfd`。API-only 提交 `fdb583f0acfb88432054208f7a517885f25227a5` 已普通 SSH/443 推送并核实远端，正式模块 ref `v0.0.0-20261028084146-fdb583f0acfb`；运行时实现仍未提交。
+- Gov 工作树 `/home/chabking/.codex/tasks/container-restart-pvc-20261028/ani-governance`，同名分支，从 SSH 获取的 dev `36707b8d03442b717b6ee9f8a298534b6350d89d` 开始。正式模块消费/定向 CODE/PG/HTTP 验证进行中；未合 dev、未构建或部署新镜像。原 checkout/其他任务保持原状。
+- 重任务仅 `ssh fedora`，任务根 `/home/chabking/workspace/ani-resource-service-runs/container-restart-pvc-20261028/`；指定集群管理仅 `ssh kubercloud@100.64.128.12`。共享重任务锁 `net05a-heavy.lock`，私有 GOMODCACHE，Go1.26.10，GOWORK=off，无本地重任务 fallback。
+- 文件责任：主集成人维护 Resource API/types/PG/worker/migrations/composition；provider agent 维护 Notebook/PVC adapter、升级测试、Gov 联合 fixture；Gov agent 独占 Gov。
+- API-only 提交前门禁 PASS：[完整 make verify](records/CONTAINER-RESTART-PVC-20261028/resource-api-verify.log) / [rc0](records/CONTAINER-RESTART-PVC-20261028/resource-api-verify.rc)，Fedora `resource-api-07`。源归档 SHA `8ae9d0a43cfcfc00295d9bbb1f0c3209549ba4c80542efbf4c13088a033cc457`，补回未改历史 Go 输入增量 SHA `054f57fb4276f9b7737a15eb5ce5ee5fff398e2e184cd93e7bcb262e4542de24`。前序 /tmp quota、共享缓存权限/SSH、sumdb EOF、归档漏输入及长 TMPDIR Unix socket 失败已保留远端日志；未删依赖迁就归档。
+- 运行时定向 CODE / PG PASS：[runtime05](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-05.log) / [rc0](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-05.rc)。源归档 `resource-runtime-04-source.tar.gz` SHA `85fd85d00c958d0b8ea8f3d9f0865f0166f0d91b0486258ce1aa2dc03d66ded1`；sqlc generate、biz/instance、data/instance、service/instance，以及 `INSTANCE_TEST_RUN="^Test(RestartVerticalPG|RestartGuardPG)" scripts/instance-integration ./internal/data/instance` 均通过。包括完整持久 Restart/新Pod验证/原键不二次执行、未知启动 ACK、DELETE/Fence 四顺序、CurrentMounts 空集合/RuntimeDesired 全读、CREATE/Attach 与 Storage 名称 guard 交错和旧 token 保护。前一 PG 轮因 compute schema history 仍为7失败，已补8并由本轮复验。
+- 新增 PASS：[runtime07](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-07.log) / [rc0](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-07.rc) 的 Storage biz/server/cmd 定向测试与五个升级 PG 用例；源归档 SHA `99d9b92cde32a1d67c88acf69d794b9069c7e8d1ed67a41ab586a5a64100382b`。联合 fixture 二进制 SHA `526b9f4758cb1d7edc0b8f33d13695e2a760a50f6dc28058aeb50dee4bbcc53a`（尚为 WIP 来源）。运行时完整 [make verify runtime10](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-10.log) / [rc0](records/CONTAINER-RESTART-PVC-20261028/resource-runtime-10.rc) PASS；输入为 runtime07 + go.mod 显式直接依赖分类增量（归档 SHA `1bf286c1f4b3b61f4e57469b04949ba152006a5e62ae4e6c1267bab612eae4a4`），无依赖版本升级。前轮 runtime09 的 tidy-diff 发现 metrics 测试新增直接 import，修正 direct/indirect 分类后通过。未验证：Gov HTTP/mTLS 联合边界、集群显式迁移/权限登记/CPU/GPU/CSI/Network/CUDA/原账及最终清理。
+- 环境只读盘点：context `kubernetes-admin@ani-kcn-full`，API `https://lb.kubesphere.local:6443`，node1–3 为 `10.10.1.66–68`。A36 外部 PVC 删除保护缺口已确认，用户后续明确暂缓其旁路保护：DEFERRED_USER_SCOPE，不记 PASS，不再阻塞本批挂卸发布/验收；平台内部 guard/引用/恢复要求不削减。没有集群写入/登录/测试负载。
+- 上述候选已包含：旧 Pending/DELETE 元数据补齐后原子释放 work lease、存活 released 标志漏查修复、Storage recovery readiness/指标、升级与 Gov 联合 fixture。部署前只读 PG 盘点：Instance schema1–7、active operation0、work lease0、10实例中2个既有 Running/8个已Deleted、借用refs0，schema owner resource_migrate。下一步发布完整实现不可变 ref，Gov 正式消费并完成 HTTP/mTLS/PG，再按正常合 dev/精确镜像和显式迁移顺序完成首次 CPU LIVE Restart。PVC 新写入口在共同保护底座和必要验证完成前继续关闭。
+- 原始证据入口：[本批记录](records/CONTAINER-RESTART-PVC-20261028/README.md)。

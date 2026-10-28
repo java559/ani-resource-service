@@ -9,8 +9,8 @@ import (
 
 func TestDeleteCleansEntireInstanceBeforeQuotaDelivery(t *testing.T) {
 	repo := &cleanupWorkerRepo{instance: Instance{
-		Spec:    Spec{ComputeType: TypeGPU, NotebookName: "notebook"},
-		Desired: Deleted, Version: 2, LastOperationID: "delete-operation",
+		Spec:           Spec{ComputeType: TypeGPU, NotebookName: "notebook"},
+		RuntimeDesired: Deleted, Desired: Deleted, Version: 2, LastOperationID: "delete-operation",
 		ExternalComputeStarted: true,
 	}}
 	provider := &cleanupWorkerProvider{observation: Observation{
@@ -56,7 +56,7 @@ func TestDeleteCleansEntireInstanceBeforeQuotaDelivery(t *testing.T) {
 
 func TestDeleteWaitsForNetworkReleaseBeforeOwnerCleanup(t *testing.T) {
 	repo := &cleanupWorkerRepo{instance: Instance{
-		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, Desired: Deleted,
+		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, RuntimeDesired: Deleted, Desired: Deleted,
 		ComputeCleaned: true, WorkspaceCleaned: true, VolumeReferencesReleased: true,
 		Network: &NetworkRuntime{State: "closed", DesiredRunState: Deleted, AttachmentID: "attachment", ReleaseStarted: true},
 	}}
@@ -82,7 +82,7 @@ func TestDeleteWaitsForNetworkReleaseBeforeOwnerCleanup(t *testing.T) {
 
 func TestDurableOwnerCleanupSkipsExternalObservation(t *testing.T) {
 	repo := &cleanupWorkerRepo{instance: Instance{
-		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, Desired: Deleted,
+		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, RuntimeDesired: Deleted, Desired: Deleted,
 		ComputeCleaned: true, WorkspaceCleaned: true, VolumeReferencesReleased: true,
 		CleanupCompletedAt: time.Now().UTC(), Network: &NetworkRuntime{Cleaned: true},
 	}}
@@ -99,7 +99,7 @@ func TestDurableOwnerCleanupSkipsExternalObservation(t *testing.T) {
 
 func TestFailedObservationCannotSealStoredCleanupFlags(t *testing.T) {
 	repo := &cleanupWorkerRepo{instance: Instance{
-		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, Desired: Deleted,
+		Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, RuntimeDesired: Deleted, Desired: Deleted,
 		ComputeCleaned: true, WorkspaceCleaned: true, VolumeReferencesReleased: true,
 	}}
 	provider := &cleanupWorkerProvider{observeError: errors.New("Kubernetes unavailable")}
@@ -117,7 +117,7 @@ func TestUnknownCreateStillBlocksOwnerCleanup(t *testing.T) {
 	for _, kind := range []string{"create_notebook", "create_workspace"} {
 		t.Run(kind, func(t *testing.T) {
 			repo := &cleanupWorkerRepo{instance: Instance{
-				Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, Desired: Deleted,
+				Spec: Spec{ComputeType: TypeGPU, NotebookName: "notebook"}, RuntimeDesired: Deleted, Desired: Deleted,
 				Pending: &Mutation{Kind: kind}, CleanupCompletedAt: time.Now().UTC(),
 				ComputeCleaned: true, WorkspaceCleaned: true, VolumeReferencesReleased: true,
 			}}
@@ -138,7 +138,7 @@ func TestOnlyFinalCPUDeleteCompletesWithoutQuotaDelivery(t *testing.T) {
 	for _, desired := range []string{Running, Stopped, Deleted} {
 		t.Run(desired, func(t *testing.T) {
 			repo := &cleanupWorkerRepo{instance: Instance{
-				Spec: Spec{ComputeType: TypeCPU, NotebookName: "notebook"}, Desired: desired,
+				Spec: Spec{ComputeType: TypeCPU, NotebookName: "notebook"}, RuntimeDesired: desired, Desired: desired,
 				ComputeCleaned: true, WorkspaceCleaned: true, VolumeReferencesReleased: true,
 			}}
 			provider := &cleanupWorkerProvider{}
