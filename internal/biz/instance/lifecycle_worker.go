@@ -97,7 +97,12 @@ func (w *Worker) stepLifecycle(ctx context.Context, work Work, provider Lifecycl
 	}
 	rememberObservation(&p, obs)
 	if e.DeadlineAt != nil && !time.Now().Before(*e.DeadlineAt) && e.Phase != "done" {
+		phase := e.Phase
 		recovering(&p, "INSTANCE_OPERATION_DEADLINE_EXCEEDED")
+		if e.Phase != phase {
+			// Persist the recovery phase before a mutation or fence uses its CAS.
+			return finish()
+		}
 	}
 	if i.Pending != nil || i.RecoveryFence != nil {
 		if err = w.resolveLifecycleWrites(ctx, work, &p, obs, provider); err != nil {
