@@ -397,6 +397,18 @@ def metadata(obj, kind, namespace, name=None):
     return meta
 
 
+def same_control_snapshot(before, after):
+    # A status subresource write advances resourceVersion. Accept that change
+    # only after comparing every other field, including full spec, generation,
+    # UID, owners, labels, all annotations and deletion metadata. managedFields
+    # is deliberately retained; this is not an allowlist of business fields.
+    def control_fields(obj):
+        result = {key: value for key, value in obj.items() if key != "status"}
+        result["metadata"] = {key: value for key, value in obj.get("metadata", {}).items() if key != "resourceVersion"}
+        return result
+    return control_fields(before) == control_fields(after)
+
+
 def controlled(obj, group, kind, name, uid):
     controllers = [ref for ref in obj.get("metadata", {}).get("ownerReferences", []) if ref.get("controller") is True]
     return len(controllers) == 1 and controllers[0].get("apiVersion", "").split("/")[0] == group and controllers[0].get("kind") == kind and controllers[0].get("name") == name and controllers[0].get("uid") == uid
@@ -557,10 +569,10 @@ def observe(request, config, transport=None):
         final_meta = metadata(final_pod, "Pod", config.namespace, pod_meta["name"])
         final_nb = kube.get("notebooks.kubeflow.org", name)
         final_nb_meta = metadata(final_nb, "Notebook", config.namespace, name)
-        require(final_meta["uid"] == pod_meta["uid"] and ready(final_pod) and controlled(final_pod, "apps", "StatefulSet", name, sts_meta["uid"]) and final_nb_meta["uid"] == nb_meta["uid"] and final_nb_meta.get("resourceVersion") == nb_meta.get("resourceVersion"), "OBJECT_CHANGED_DURING_OBSERVATION")
+        require(final_meta["uid"] == pod_meta["uid"] and ready(final_pod) and controlled(final_pod, "apps", "StatefulSet", name, sts_meta["uid"]) and final_nb_meta["uid"] == nb_meta["uid"] and same_control_snapshot(pod, final_pod) and same_control_snapshot(notebook, final_nb), "OBJECT_CHANGED_DURING_OBSERVATION")
         final_sts = kube.get("statefulsets.apps", name)
         final_sts_meta = metadata(final_sts, "StatefulSet", config.namespace, name)
-        require(final_sts_meta["uid"] == sts_meta["uid"] and final_sts_meta.get("generation") == sts_meta.get("generation") and controlled(final_sts, "kubeflow.org", "Notebook", name, nb_meta["uid"]) and final_sts.get("spec", {}).get("replicas", 1) == 1, "OBJECT_CHANGED_DURING_OBSERVATION")
+        require(final_sts_meta["uid"] == sts_meta["uid"] and final_sts_meta.get("generation") == sts_meta.get("generation") and controlled(final_sts, "kubeflow.org", "Notebook", name, nb_meta["uid"]) and final_sts.get("spec", {}).get("replicas", 1) == 1 and final_sts.get("status", {}).get("observedGeneration", 0) >= final_sts_meta.get("generation", 1) and same_control_snapshot(sts, final_sts), "OBJECT_CHANGED_DURING_OBSERVATION")
         verify_template(final_pod.get("spec", {}), expected)
         for mount, frozen in zip(request["mounts"], mount_ids):
             claim = "workspace-" + instance_id if mount["ownership"] == "workspace" else mount["pvc_name"]

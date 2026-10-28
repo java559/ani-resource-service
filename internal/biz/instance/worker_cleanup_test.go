@@ -82,7 +82,7 @@ func TestDeleteWaitsForNetworkReleaseBeforeOwnerCleanup(t *testing.T) {
 
 func TestUnknownWorkspaceCreateUsesWorkspaceObservation(t *testing.T) {
 	repo := &cleanupWorkerRepo{instance: Instance{
-		Spec: Spec{ComputeType: TypeCPU, NotebookName: "notebook"},
+		Spec:    Spec{ComputeType: TypeCPU, NotebookName: "notebook"},
 		Desired: Running, RuntimeDesired: Running, Pending: &Mutation{Kind: "create_workspace"},
 	}}
 	provider := &cleanupWorkerProvider{observation: Observation{PVCExists: true, PVCUID: "workspace-uid"}}

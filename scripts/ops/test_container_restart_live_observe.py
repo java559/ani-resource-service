@@ -82,7 +82,7 @@ def template():
 class ClusterBoundary:
     """Only the external kubectl boundary is doubled; observer logic is real."""
 
-    def __init__(self, pod_uid=OLD_POD_UID):
+    def __init__(self, pod_uid=OLD_POD_UID, after_exec=None):
         self.namespace = {
             "kind": "Namespace",
             "metadata": meta(NAMESPACE, NAMESPACE_UID, "", labels={
@@ -113,6 +113,7 @@ class ClusterBoundary:
         self.exec_payloads = []
         self.calls = []
         self.old_pod_lookup = "replacement"
+        self.after_exec = after_exec
 
     def run(self, argv):
         self.calls.append(list(argv))
@@ -165,7 +166,11 @@ class ClusterBoundary:
                 if data["event"] == "before-restart":
                     marker["write_verified"] = True
                 markers.append(marker)
-            return self.output({"markers": markers})
+            response = self.output({"markers": markers})
+            if self.after_exec is not None:
+                callback, self.after_exec = self.after_exec, None
+                callback(self)
+            return response
         raise AssertionError("unexpected kubectl operation")
 
     @staticmethod
@@ -248,6 +253,47 @@ class LiveObservationTest(unittest.TestCase):
         with self.assertRaisesRegex(observer.ObserveError, "^BEFORE_OBSERVATION_REQUIRED$"):
             observer.observe(request("after-restart"), self.config, boundary)
         self.assertEqual(boundary.calls, [])
+
+    def test_status_and_resource_version_churn_during_marker_exec_is_allowed(self):
+        for target in ("notebook", "statefulset", "pod"):
+            with self.subTest(target=target):
+                self.config.state_dir = Path(self.temporary.name) / (target + "-status")
+
+                def status_update(boundary):
+                    obj = getattr(boundary, target)
+                    obj["metadata"]["resourceVersion"] = "32"
+                    obj.setdefault("status", {}).setdefault("conditions", []).append({"type": "ControllerObserved", "status": "True", "lastTransitionTime": "2026-10-28T12:00:00Z"})
+
+                boundary = ClusterBoundary(after_exec=status_update)
+                result = observer.observe(request(), self.config, boundary)
+                self.assertEqual(result["pod_uid"], OLD_POD_UID)
+                self.assertTrue(result["markers"][0]["read_verified"])
+                self.assertEqual(len(boundary.exec_payloads), 1)
+                self.assertIsNone(boundary.after_exec)
+
+    def test_control_changes_during_marker_exec_are_rejected(self):
+        for target in ("notebook", "statefulset", "pod"):
+            for change in ("nonmount_spec", "uid", "mutation_annotation"):
+                with self.subTest(target=target, change=change):
+                    self.config.state_dir = Path(self.temporary.name) / (target + "-" + change)
+
+                    def control_update(boundary):
+                        obj = getattr(boundary, target)
+                        if change == "uid":
+                            obj["metadata"]["uid"] = OTHER_UID
+                        elif change == "mutation_annotation":
+                            obj["metadata"].setdefault("annotations", {})["instance.ani.io/mutation-id"] = OTHER_UID
+                        else:
+                            spec = obj["spec"] if target == "pod" else obj["spec"]["template"]["spec"]
+                            spec["containers"][0]["image"] = "registry.invalid/changed@sha256:" + "c" * 64
+
+                    boundary = ClusterBoundary(after_exec=control_update)
+                    with self.assertRaises(observer.ObserveError):
+                        observer.observe(request(), self.config, boundary)
+                    self.assertEqual(len(boundary.exec_payloads), 1)
+                    self.assertIsNone(boundary.after_exec)
+                    state = self.config.state_dir / (RUN + "-" + INSTANCE + ".json")
+                    self.assertFalse(state.exists(), "a changed control target must not save a successful before proof")
 
 
 class InputSafetyTest(unittest.TestCase):
