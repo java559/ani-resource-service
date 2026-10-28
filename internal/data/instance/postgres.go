@@ -633,6 +633,22 @@ func (p *Postgres) Finish(ctx context.Context, w biz.Work, progress biz.Progress
 		}
 		// A newer intent must not discard an attributable old call result. Keep
 		// the current business version and retain only immutable runtime evidence.
+		// The receipt was matched to Pending above. Retain newly learned owner
+		// identities, while leaving Pending for the current worker to observe.
+		if progress.Receipt != nil {
+			if i.NotebookUID == "" {
+				i.NotebookUID = progress.Instance.NotebookUID
+			}
+			if i.PVCUID == "" {
+				i.PVCUID = progress.Instance.PVCUID
+			}
+			if i.StatefulSetUID == "" {
+				i.StatefulSetUID = progress.Instance.StatefulSetUID
+			}
+			if i.VolumeName == "" {
+				i.VolumeName, i.VolumeUID = progress.Instance.VolumeName, progress.Instance.VolumeUID
+			}
+		}
 		i.GPUPods = biz.MergePodRefs(i.GPUPods, progress.Instance.GPUPods)
 		i.ExternalComputeStarted = i.ExternalComputeStarted || progress.Instance.ExternalComputeStarted
 		mergeNetworkResult(i.Network, progress.Instance.Network)

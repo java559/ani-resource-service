@@ -63,7 +63,11 @@ func (w *Worker) Step(ctx context.Context) (bool, error) {
 	// A DELETE-first tombstone has never accepted an external creation. Its
 	// admission lock prevents any later CREATE from enabling external writes.
 	if i.Spec.NotebookName != "" {
-		if lp, ok := w.provider.(LifecycleProvider); ok && (i.Pending != nil || i.RecoveryFence != nil || i.RuntimeDesired != Running) {
+		// Stopping must remain possible without runtime eligibility. DELETE
+		// additionally requires fresh workspace/PV evidence before it may seal
+		// cleanup; identity-only observation deliberately omits those fields.
+		workspaceRecovery := i.Pending != nil && i.Pending.Kind == "create_workspace"
+		if lp, ok := w.provider.(LifecycleProvider); ok && i.Desired != Deleted && !workspaceRecovery && (i.Pending != nil || i.RecoveryFence != nil || i.RuntimeDesired != Running) {
 			obs, err = lp.ObserveIdentity(ctx, i)
 		} else {
 			obs, err = w.provider.Observe(ctx, i)

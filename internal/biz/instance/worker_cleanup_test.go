@@ -17,7 +17,7 @@ func TestDeleteCleansEntireInstanceBeforeQuotaDelivery(t *testing.T) {
 		NotebookExists: true, NotebookUID: "notebook-uid", PodExists: true,
 		StatefulSetUID: "controller-uid", PVCExists: true, PVCUID: "workspace-uid", VolumeExists: true,
 	}}
-	w, err := NewWorker(repo, provider, "cleanup-worker")
+	w, err := NewWorker(repo, &identityCleanupProvider{cleanupWorkerProvider: provider}, "cleanup-worker")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,6 +77,22 @@ func TestDeleteWaitsForNetworkReleaseBeforeOwnerCleanup(t *testing.T) {
 	stepCleanupWorker(t, w)
 	if !OwnerCleanupReady(repo.instance) || repo.instance.Observed != Deleted || repo.instance.QuotaReturned || repo.instance.Reason != "QUOTA_RETURN_PENDING" {
 		t.Fatal("released network did not permit independent Gov delivery")
+	}
+}
+
+func TestUnknownWorkspaceCreateUsesWorkspaceObservation(t *testing.T) {
+	repo := &cleanupWorkerRepo{instance: Instance{
+		Spec: Spec{ComputeType: TypeCPU, NotebookName: "notebook"},
+		Desired: Running, RuntimeDesired: Running, Pending: &Mutation{Kind: "create_workspace"},
+	}}
+	provider := &cleanupWorkerProvider{observation: Observation{PVCExists: true, PVCUID: "workspace-uid"}}
+	w, err := NewWorker(repo, &identityCleanupProvider{cleanupWorkerProvider: provider}, "workspace-recovery-worker")
+	if err != nil {
+		t.Fatal(err)
+	}
+	stepCleanupWorker(t, w)
+	if repo.instance.Pending != nil || repo.instance.PVCUID != "workspace-uid" || repo.progress.Receipt == nil || repo.progress.Receipt.Outcome != "recovered_by_observation" {
+		t.Fatal("an existing workspace was hidden by identity-only observation", repo.instance, repo.progress.Receipt)
 	}
 }
 
@@ -193,6 +209,20 @@ type cleanupWorkerProvider struct {
 	observation                                 Observation
 	observeError                                error
 	observes, notebookDeletes, workspaceDeletes int
+}
+
+// The real lifecycle adapter keeps identity-only stopping independent from
+// workspace availability. DELETE must use its full workspace observation.
+type identityCleanupProvider struct {
+	*cleanupWorkerProvider
+	LifecycleProvider
+}
+
+func (p *identityCleanupProvider) ObserveIdentity(ctx context.Context, i Instance) (Observation, error) {
+	out, err := p.cleanupWorkerProvider.Observe(ctx, i)
+	out.PVCExists, out.VolumeExists = false, false
+	out.PVCUID, out.VolumeName, out.VolumeUID, out.WorkspaceReason = "", "", "", ""
+	return out, err
 }
 
 func (p *cleanupWorkerProvider) Observe(context.Context, Instance) (Observation, error) {
