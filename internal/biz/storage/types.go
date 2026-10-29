@@ -211,6 +211,20 @@ type ObjectMeta struct {
 	LastModified time.Time
 }
 
+// UploadTicket 是预签名 PUT 的结果；headers 必须由客户端原样发送。
+type UploadTicket struct {
+	URL       string
+	Headers   map[string]string
+	ExpiresAt time.Time
+	Key       string
+}
+
+// 对象删除状态；与 PVC 删除状态区分。
+const (
+	ObjectDeleted = "DELETED"
+	ObjectGone    = "GONE"
+)
+
 // VolumePort 是 Kubernetes 出站端口，全部方法都按可信 namespace 调用。
 type VolumePort interface {
 	GetNamespace(ctx context.Context, name string) (Namespace, error)
@@ -227,10 +241,15 @@ type VolumePort interface {
 	ListEvents(ctx context.Context, namespace, pvcUID string) ([]Event, error)
 }
 
-// ObjectPort 是 S3 出站端口；内部 endpoint 做 List/HEAD，浏览器 endpoint 做预签名。
+// ObjectPort 是 S3 出站端口；内部 endpoint 做 List/HEAD/写，浏览器 endpoint 做预签名。
 type ObjectPort interface {
 	Available() bool
+	ListBuckets(ctx context.Context) ([]string, error)
+	CreateBucket(ctx context.Context, bucket string) error
+	HeadBucket(ctx context.Context, bucket string) error
 	ListObjects(ctx context.Context, bucket, prefix, continuationToken string, limit int32) (ObjectPage, error)
 	HeadObject(ctx context.Context, bucket, key string) (ObjectMeta, error)
 	PresignGetObject(ctx context.Context, bucket, key string, expiry time.Duration) (string, time.Time, error)
+	PresignPutObject(ctx context.Context, bucket, key, contentType string, overwrite bool, expiry time.Duration) (string, map[string]string, time.Time, error)
+	DeleteObject(ctx context.Context, bucket, key, expectedETag string) error
 }

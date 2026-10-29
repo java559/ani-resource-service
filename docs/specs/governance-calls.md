@@ -129,3 +129,13 @@ TRAINING供普通训练与微调共享，INFERENCE只声明公共提供方支持
 日志开流前及 HTTP 开流后分别 GET 同名 Pod 确认 UID；完成后才发送 READY，之后 DATA bytes / END / ERROR。流不跟随替换Pod；观察到变化时以 POD_CHANGED 结束。普通 Kubernetes client 保留15秒整体超时，独立日志client取消整体超时但保留15秒开流等待、10分钟连接期限及逐层取消。单帧16KiB、有界256KiB、发送等待10秒，进程/租户/实例100/10/3并发上限，可经受管 Service.LogLimits 调整。最小只读权限见 [诊断RBAC](../../deployments/instance/README.md)。
 
 静态详情/列表独立读取数据库快照，集群故障只影响诊断读取；诊断不 Patch/Update、不签名、不调用占额/usage或清理。runtime/events 的安全字段、null与事件截断语义见 [实例合同](instance-mvp.md)。Kubernetes GET/LIST单元测试及HTTP pods/log适配测试与真实集群/公开SSE验收分开记录。
+
+## 存储
+
+Storage 方法全部为租户委托、unary RPC，完整清单以 [`internal/server/governance.go`](../../internal/server/governance.go) 的 `storageGovernanceMethods` 为准：
+
+- 独立盘：`ListStorageClasses`、`CreateVolume`、`ListVolumes`、`GetVolume`、`UpdateVolume`、`DeleteVolume`。
+- 对象：`GetDownloadURL`、`ListObjects`、`HeadObject`、`GetUploadURL`、`DeleteObject`。
+- 桶：`CreateBucket`、`ListBuckets`。
+
+请求 `tenant_id` 必须与受信委托一致；存储不接受平台范围、不伪造 namespace/物理桶名。`GetUploadURL` 只返回绑定单个 key 的短期预签名 PUT URL，文件字节由客户端直传 S3；`DeleteObject` 只删单个 key，不递归。`CreateBucket` 的物理名由 `cluster_id` 与租户 UUID 指纹推导，逻辑名只接受 S3 合法小写 ASCII。存储 RPC 均为 unary，不改变已登记的实例和 VM 日志流允许清单。

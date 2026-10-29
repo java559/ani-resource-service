@@ -56,6 +56,20 @@ func rpcError(e error) error {
 		return status.Error(codes.FailedPrecondition, "VOLUME_TERMINATING")
 	case errors.Is(e, biz.ErrDownloadUnavailable):
 		return status.Error(codes.FailedPrecondition, "DOWNLOAD_ENDPOINT_UNAVAILABLE")
+	case errors.Is(e, biz.ErrUploadUnavailable):
+		return status.Error(codes.FailedPrecondition, "UPLOAD_ENDPOINT_UNAVAILABLE")
+	case errors.Is(e, biz.ErrBucketDisabled):
+		return status.Error(codes.FailedPrecondition, "BUCKET_CREATION_DISABLED")
+	case errors.Is(e, biz.ErrBucketLimit):
+		return status.Error(codes.FailedPrecondition, "BUCKET_LIMIT_REACHED")
+	case errors.Is(e, biz.ErrBucketExists):
+		return status.Error(codes.AlreadyExists, "BUCKET_ALREADY_EXISTS")
+	case errors.Is(e, biz.ErrObjectExists):
+		return status.Error(codes.AlreadyExists, "OBJECT_ALREADY_EXISTS")
+	case errors.Is(e, biz.ErrObjectIdentity):
+		return status.Error(codes.AlreadyExists, "OBJECT_IDENTITY_CHANGED")
+	case errors.Is(e, biz.ErrObjectTooLarge):
+		return status.Error(codes.InvalidArgument, "OBJECT_TOO_LARGE")
 	case errors.Is(e, biz.ErrBackendUnavailable):
 		return status.Error(codes.Unavailable, "STORAGE_BACKEND_UNAVAILABLE")
 	default:
@@ -179,7 +193,7 @@ func (s *Service) ListBuckets(ctx context.Context, r *storagev1.ListBucketsReque
 	if r == nil {
 		return nil, rpcError(biz.ErrInvalid)
 	}
-	items, err := s.uc.ListBuckets(r.GetTenantId(), biz.BucketFilter{Name: r.GetName(), ID: r.GetId()})
+	items, err := s.uc.ListBuckets(ctx, r.GetTenantId(), biz.BucketFilter{Name: r.GetName(), ID: r.GetId()})
 	if err != nil {
 		return nil, rpcError(err)
 	}
@@ -188,6 +202,17 @@ func (s *Service) ListBuckets(ctx context.Context, r *storagev1.ListBucketsReque
 		response.Items = append(response.Items, &storagev1.Bucket{Id: item.ID, Name: item.Name})
 	}
 	return response, nil
+}
+
+func (s *Service) CreateBucket(ctx context.Context, r *storagev1.CreateBucketRequest) (*storagev1.CreateBucketResponse, error) {
+	if r == nil {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	bucket, err := s.uc.CreateBucket(ctx, r.GetTenantId(), r.GetName())
+	if err != nil {
+		return nil, rpcError(err)
+	}
+	return &storagev1.CreateBucketResponse{Bucket: &storagev1.Bucket{Id: bucket.ID, Name: bucket.Name}}, nil
 }
 
 func (s *Service) ListObjects(ctx context.Context, r *storagev1.ListObjectsRequest) (*storagev1.ListObjectsResponse, error) {
@@ -235,6 +260,32 @@ func (s *Service) GetDownloadURL(ctx context.Context, r *storagev1.GetDownloadUR
 		return nil, rpcError(err)
 	}
 	return &storagev1.GetDownloadURLResponse{Url: url, ExpiresAt: timestamp(expires)}, nil
+}
+
+func (s *Service) GetUploadURL(ctx context.Context, r *storagev1.GetUploadURLRequest) (*storagev1.GetUploadURLResponse, error) {
+	if r == nil {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	ticket, err := s.uc.UploadURL(ctx, r.GetTenantId(), r.GetBucketId(), r.GetKey(), r.GetContentType(), r.GetSize(), r.GetOverwrite())
+	if err != nil {
+		return nil, rpcError(err)
+	}
+	headers := make(map[string]string, len(ticket.Headers))
+	for key, value := range ticket.Headers {
+		headers[key] = value
+	}
+	return &storagev1.GetUploadURLResponse{Url: ticket.URL, Headers: headers, ExpiresAt: timestamp(ticket.ExpiresAt), Key: ticket.Key}, nil
+}
+
+func (s *Service) DeleteObject(ctx context.Context, r *storagev1.DeleteObjectRequest) (*storagev1.DeleteObjectResponse, error) {
+	if r == nil {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	state, err := s.uc.DeleteObject(ctx, r.GetTenantId(), r.GetBucketId(), r.GetKey(), r.GetExpectedEtag())
+	if err != nil {
+		return nil, rpcError(err)
+	}
+	return &storagev1.DeleteObjectResponse{State: state}, nil
 }
 
 func wireVolume(volume biz.Volume) *storagev1.Volume {

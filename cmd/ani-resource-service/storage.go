@@ -65,10 +65,14 @@ func openStorage(_ context.Context, bc *conf.Bootstrap, instances *instanceCompo
 	}
 	useCase, err := bizstorage.NewUseCase(volumes, objects, bizstorage.Config{
 		ClusterID: bc.GetNetwork().GetClusterId(), DeleteExecutor: uuid.NewString(), BorrowedPVCGuard: guard,
-		ObserveDeleteWrite: observeDeleteWrite,
-		NamespacePrefix:    bc.GetNetwork().GetNamespacePrefix(),
-		Buckets:            bc.GetObjectStorage().Buckets(),
-		DownloadTTL:        storageDownloadTTL,
+		ObserveDeleteWrite:  observeDeleteWrite,
+		NamespacePrefix:     bc.GetNetwork().GetNamespacePrefix(),
+		Buckets:             bc.GetObjectStorage().Buckets(),
+		DownloadTTL:         storageDownloadTTL,
+		TenantBucketPrefix:  bc.GetObjectStorage().GetTenantBucketPrefix(),
+		MaxBucketsPerTenant: int(bc.GetObjectStorage().GetMaxBucketsPerTenant()),
+		MaxUploadBytes:      bc.GetObjectStorage().GetMaxUploadBytes(),
+		UploadTTL:           bc.GetObjectStorage().GetUploadTtl().AsDuration(),
 	})
 	if err != nil {
 		return nil, err

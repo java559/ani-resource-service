@@ -1880,6 +1880,368 @@ func (x *GetDownloadURLResponse) GetExpiresAt() *timestamppb.Timestamp {
 	return nil
 }
 
+type CreateBucketRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	TenantId string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	// 逻辑桶名，同时作为页面展示名；物理桶名由服务端推导。
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateBucketRequest) Reset() {
+	*x = CreateBucketRequest{}
+	mi := &file_storage_v1_storage_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateBucketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateBucketRequest) ProtoMessage() {}
+
+func (x *CreateBucketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateBucketRequest.ProtoReflect.Descriptor instead.
+func (*CreateBucketRequest) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *CreateBucketRequest) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *CreateBucketRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type CreateBucketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Bucket        *Bucket                `protobuf:"bytes,1,opt,name=bucket,proto3" json:"bucket,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateBucketResponse) Reset() {
+	*x = CreateBucketResponse{}
+	mi := &file_storage_v1_storage_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateBucketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateBucketResponse) ProtoMessage() {}
+
+func (x *CreateBucketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateBucketResponse.ProtoReflect.Descriptor instead.
+func (*CreateBucketResponse) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *CreateBucketResponse) GetBucket() *Bucket {
+	if x != nil {
+		return x.Bucket
+	}
+	return nil
+}
+
+type GetUploadURLRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	BucketId      string                 `protobuf:"bytes,2,opt,name=bucket_id,proto3" json:"bucket_id,omitempty"`
+	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	ContentType   string                 `protobuf:"bytes,4,opt,name=content_type,proto3" json:"content_type,omitempty"`
+	Size          int64                  `protobuf:"varint,5,opt,name=size,proto3" json:"size,omitempty"`
+	Overwrite     bool                   `protobuf:"varint,6,opt,name=overwrite,proto3" json:"overwrite,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUploadURLRequest) Reset() {
+	*x = GetUploadURLRequest{}
+	mi := &file_storage_v1_storage_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUploadURLRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUploadURLRequest) ProtoMessage() {}
+
+func (x *GetUploadURLRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUploadURLRequest.ProtoReflect.Descriptor instead.
+func (*GetUploadURLRequest) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *GetUploadURLRequest) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *GetUploadURLRequest) GetBucketId() string {
+	if x != nil {
+		return x.BucketId
+	}
+	return ""
+}
+
+func (x *GetUploadURLRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *GetUploadURLRequest) GetContentType() string {
+	if x != nil {
+		return x.ContentType
+	}
+	return ""
+}
+
+func (x *GetUploadURLRequest) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *GetUploadURLRequest) GetOverwrite() bool {
+	if x != nil {
+		return x.Overwrite
+	}
+	return false
+}
+
+type GetUploadURLResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	Headers       map[string]string      `protobuf:"bytes,2,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,proto3" json:"expires_at,omitempty"`
+	Key           string                 `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUploadURLResponse) Reset() {
+	*x = GetUploadURLResponse{}
+	mi := &file_storage_v1_storage_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUploadURLResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUploadURLResponse) ProtoMessage() {}
+
+func (x *GetUploadURLResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUploadURLResponse.ProtoReflect.Descriptor instead.
+func (*GetUploadURLResponse) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *GetUploadURLResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *GetUploadURLResponse) GetHeaders() map[string]string {
+	if x != nil {
+		return x.Headers
+	}
+	return nil
+}
+
+func (x *GetUploadURLResponse) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+func (x *GetUploadURLResponse) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+type DeleteObjectRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TenantId      string                 `protobuf:"bytes,1,opt,name=tenant_id,proto3" json:"tenant_id,omitempty"`
+	BucketId      string                 `protobuf:"bytes,2,opt,name=bucket_id,proto3" json:"bucket_id,omitempty"`
+	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	ExpectedEtag  string                 `protobuf:"bytes,4,opt,name=expected_etag,proto3" json:"expected_etag,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteObjectRequest) Reset() {
+	*x = DeleteObjectRequest{}
+	mi := &file_storage_v1_storage_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteObjectRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteObjectRequest) ProtoMessage() {}
+
+func (x *DeleteObjectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteObjectRequest.ProtoReflect.Descriptor instead.
+func (*DeleteObjectRequest) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *DeleteObjectRequest) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
+}
+
+func (x *DeleteObjectRequest) GetBucketId() string {
+	if x != nil {
+		return x.BucketId
+	}
+	return ""
+}
+
+func (x *DeleteObjectRequest) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *DeleteObjectRequest) GetExpectedEtag() string {
+	if x != nil {
+		return x.ExpectedEtag
+	}
+	return ""
+}
+
+type DeleteObjectResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// DELETED：本次删除了存在的对象；GONE：对象本来就不存在。
+	State         string `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteObjectResponse) Reset() {
+	*x = DeleteObjectResponse{}
+	mi := &file_storage_v1_storage_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteObjectResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteObjectResponse) ProtoMessage() {}
+
+func (x *DeleteObjectResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_v1_storage_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteObjectResponse.ProtoReflect.Descriptor instead.
+func (*DeleteObjectResponse) Descriptor() ([]byte, []int) {
+	return file_storage_v1_storage_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *DeleteObjectResponse) GetState() string {
+	if x != nil {
+		return x.State
+	}
+	return ""
+}
+
 var File_storage_v1_storage_proto protoreflect.FileDescriptor
 
 const file_storage_v1_storage_proto_rawDesc = "" +
@@ -2024,19 +2386,51 @@ const file_storage_v1_storage_proto_rawDesc = "" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12:\n" +
 	"\n" +
 	"expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"expires_at2\xce\x06\n" +
+	"expires_at\"G\n" +
+	"\x13CreateBucketRequest\x12\x1c\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"B\n" +
+	"\x14CreateBucketResponse\x12*\n" +
+	"\x06bucket\x18\x01 \x01(\v2\x12.storage.v1.BucketR\x06bucket\"\xb9\x01\n" +
+	"\x13GetUploadURLRequest\x12\x1c\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\x1c\n" +
+	"\tbucket_id\x18\x02 \x01(\tR\tbucket_id\x12\x10\n" +
+	"\x03key\x18\x03 \x01(\tR\x03key\x12\"\n" +
+	"\fcontent_type\x18\x04 \x01(\tR\fcontent_type\x12\x12\n" +
+	"\x04size\x18\x05 \x01(\x03R\x04size\x12\x1c\n" +
+	"\toverwrite\x18\x06 \x01(\bR\toverwrite\"\xfb\x01\n" +
+	"\x14GetUploadURLResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12G\n" +
+	"\aheaders\x18\x02 \x03(\v2-.storage.v1.GetUploadURLResponse.HeadersEntryR\aheaders\x12:\n" +
+	"\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"expires_at\x12\x10\n" +
+	"\x03key\x18\x04 \x01(\tR\x03key\x1a:\n" +
+	"\fHeadersEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x89\x01\n" +
+	"\x13DeleteObjectRequest\x12\x1c\n" +
+	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\x1c\n" +
+	"\tbucket_id\x18\x02 \x01(\tR\tbucket_id\x12\x10\n" +
+	"\x03key\x18\x03 \x01(\tR\x03key\x12$\n" +
+	"\rexpected_etag\x18\x04 \x01(\tR\rexpected_etag\",\n" +
+	"\x14DeleteObjectResponse\x12\x14\n" +
+	"\x05state\x18\x01 \x01(\tR\x05state2\xc7\b\n" +
 	"\x0eStorageService\x12c\n" +
 	"\x12ListStorageClasses\x12%.storage.v1.ListStorageClassesRequest\x1a&.storage.v1.ListStorageClassesResponse\x12Q\n" +
 	"\fCreateVolume\x12\x1f.storage.v1.CreateVolumeRequest\x1a .storage.v1.CreateVolumeResponse\x12N\n" +
 	"\vListVolumes\x12\x1e.storage.v1.ListVolumesRequest\x1a\x1f.storage.v1.ListVolumesResponse\x12H\n" +
 	"\tGetVolume\x12\x1c.storage.v1.GetVolumeRequest\x1a\x1d.storage.v1.GetVolumeResponse\x12Q\n" +
 	"\fUpdateVolume\x12\x1f.storage.v1.UpdateVolumeRequest\x1a .storage.v1.UpdateVolumeResponse\x12Q\n" +
-	"\fDeleteVolume\x12\x1f.storage.v1.DeleteVolumeRequest\x1a .storage.v1.DeleteVolumeResponse\x12N\n" +
+	"\fDeleteVolume\x12\x1f.storage.v1.DeleteVolumeRequest\x1a .storage.v1.DeleteVolumeResponse\x12Q\n" +
+	"\fCreateBucket\x12\x1f.storage.v1.CreateBucketRequest\x1a .storage.v1.CreateBucketResponse\x12N\n" +
 	"\vListBuckets\x12\x1e.storage.v1.ListBucketsRequest\x1a\x1f.storage.v1.ListBucketsResponse\x12N\n" +
 	"\vListObjects\x12\x1e.storage.v1.ListObjectsRequest\x1a\x1f.storage.v1.ListObjectsResponse\x12K\n" +
 	"\n" +
 	"HeadObject\x12\x1d.storage.v1.HeadObjectRequest\x1a\x1e.storage.v1.HeadObjectResponse\x12W\n" +
-	"\x0eGetDownloadURL\x12!.storage.v1.GetDownloadURLRequest\x1a\".storage.v1.GetDownloadURLResponseBHZFgithub.com/zhangzhe-ctrl/ani-resource-service/api/storage/v1;storagev1b\x06proto3"
+	"\x0eGetDownloadURL\x12!.storage.v1.GetDownloadURLRequest\x1a\".storage.v1.GetDownloadURLResponse\x12Q\n" +
+	"\fGetUploadURL\x12\x1f.storage.v1.GetUploadURLRequest\x1a .storage.v1.GetUploadURLResponse\x12Q\n" +
+	"\fDeleteObject\x12\x1f.storage.v1.DeleteObjectRequest\x1a .storage.v1.DeleteObjectResponseBHZFgithub.com/zhangzhe-ctrl/ani-resource-service/api/storage/v1;storagev1b\x06proto3"
 
 var (
 	file_storage_v1_storage_proto_rawDescOnce sync.Once
@@ -2050,7 +2444,7 @@ func file_storage_v1_storage_proto_rawDescGZIP() []byte {
 	return file_storage_v1_storage_proto_rawDescData
 }
 
-var file_storage_v1_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
+var file_storage_v1_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
 var file_storage_v1_storage_proto_goTypes = []any{
 	(*StorageClass)(nil),               // 0: storage.v1.StorageClass
 	(*ListStorageClassesRequest)(nil),  // 1: storage.v1.ListStorageClassesRequest
@@ -2081,12 +2475,19 @@ var file_storage_v1_storage_proto_goTypes = []any{
 	(*HeadObjectResponse)(nil),         // 26: storage.v1.HeadObjectResponse
 	(*GetDownloadURLRequest)(nil),      // 27: storage.v1.GetDownloadURLRequest
 	(*GetDownloadURLResponse)(nil),     // 28: storage.v1.GetDownloadURLResponse
-	(*timestamppb.Timestamp)(nil),      // 29: google.protobuf.Timestamp
+	(*CreateBucketRequest)(nil),        // 29: storage.v1.CreateBucketRequest
+	(*CreateBucketResponse)(nil),       // 30: storage.v1.CreateBucketResponse
+	(*GetUploadURLRequest)(nil),        // 31: storage.v1.GetUploadURLRequest
+	(*GetUploadURLResponse)(nil),       // 32: storage.v1.GetUploadURLResponse
+	(*DeleteObjectRequest)(nil),        // 33: storage.v1.DeleteObjectRequest
+	(*DeleteObjectResponse)(nil),       // 34: storage.v1.DeleteObjectResponse
+	nil,                                // 35: storage.v1.GetUploadURLResponse.HeadersEntry
+	(*timestamppb.Timestamp)(nil),      // 36: google.protobuf.Timestamp
 }
 var file_storage_v1_storage_proto_depIdxs = []int32{
 	0,  // 0: storage.v1.ListStorageClassesResponse.items:type_name -> storage.v1.StorageClass
-	29, // 1: storage.v1.VolumeCondition.last_transition_time:type_name -> google.protobuf.Timestamp
-	29, // 2: storage.v1.VolumeEvent.last_timestamp:type_name -> google.protobuf.Timestamp
+	36, // 1: storage.v1.VolumeCondition.last_transition_time:type_name -> google.protobuf.Timestamp
+	36, // 2: storage.v1.VolumeEvent.last_timestamp:type_name -> google.protobuf.Timestamp
 	6,  // 3: storage.v1.VolumeDetail.volume:type_name -> storage.v1.Volume
 	3,  // 4: storage.v1.VolumeDetail.conditions:type_name -> storage.v1.VolumeCondition
 	4,  // 5: storage.v1.VolumeDetail.events:type_name -> storage.v1.VolumeEvent
@@ -2097,36 +2498,45 @@ var file_storage_v1_storage_proto_depIdxs = []int32{
 	6,  // 10: storage.v1.UpdateVolumeResponse.volume:type_name -> storage.v1.Volume
 	6,  // 11: storage.v1.DeleteVolumeResponse.volume:type_name -> storage.v1.Volume
 	18, // 12: storage.v1.ListBucketsResponse.items:type_name -> storage.v1.Bucket
-	29, // 13: storage.v1.ObjectItem.last_modified:type_name -> google.protobuf.Timestamp
+	36, // 13: storage.v1.ObjectItem.last_modified:type_name -> google.protobuf.Timestamp
 	22, // 14: storage.v1.ListObjectsResponse.items:type_name -> storage.v1.ObjectItem
-	29, // 15: storage.v1.ObjectMeta.last_modified:type_name -> google.protobuf.Timestamp
+	36, // 15: storage.v1.ObjectMeta.last_modified:type_name -> google.protobuf.Timestamp
 	25, // 16: storage.v1.HeadObjectResponse.object:type_name -> storage.v1.ObjectMeta
-	29, // 17: storage.v1.GetDownloadURLResponse.expires_at:type_name -> google.protobuf.Timestamp
-	1,  // 18: storage.v1.StorageService.ListStorageClasses:input_type -> storage.v1.ListStorageClassesRequest
-	8,  // 19: storage.v1.StorageService.CreateVolume:input_type -> storage.v1.CreateVolumeRequest
-	10, // 20: storage.v1.StorageService.ListVolumes:input_type -> storage.v1.ListVolumesRequest
-	12, // 21: storage.v1.StorageService.GetVolume:input_type -> storage.v1.GetVolumeRequest
-	14, // 22: storage.v1.StorageService.UpdateVolume:input_type -> storage.v1.UpdateVolumeRequest
-	16, // 23: storage.v1.StorageService.DeleteVolume:input_type -> storage.v1.DeleteVolumeRequest
-	19, // 24: storage.v1.StorageService.ListBuckets:input_type -> storage.v1.ListBucketsRequest
-	21, // 25: storage.v1.StorageService.ListObjects:input_type -> storage.v1.ListObjectsRequest
-	24, // 26: storage.v1.StorageService.HeadObject:input_type -> storage.v1.HeadObjectRequest
-	27, // 27: storage.v1.StorageService.GetDownloadURL:input_type -> storage.v1.GetDownloadURLRequest
-	2,  // 28: storage.v1.StorageService.ListStorageClasses:output_type -> storage.v1.ListStorageClassesResponse
-	9,  // 29: storage.v1.StorageService.CreateVolume:output_type -> storage.v1.CreateVolumeResponse
-	11, // 30: storage.v1.StorageService.ListVolumes:output_type -> storage.v1.ListVolumesResponse
-	13, // 31: storage.v1.StorageService.GetVolume:output_type -> storage.v1.GetVolumeResponse
-	15, // 32: storage.v1.StorageService.UpdateVolume:output_type -> storage.v1.UpdateVolumeResponse
-	17, // 33: storage.v1.StorageService.DeleteVolume:output_type -> storage.v1.DeleteVolumeResponse
-	20, // 34: storage.v1.StorageService.ListBuckets:output_type -> storage.v1.ListBucketsResponse
-	23, // 35: storage.v1.StorageService.ListObjects:output_type -> storage.v1.ListObjectsResponse
-	26, // 36: storage.v1.StorageService.HeadObject:output_type -> storage.v1.HeadObjectResponse
-	28, // 37: storage.v1.StorageService.GetDownloadURL:output_type -> storage.v1.GetDownloadURLResponse
-	28, // [28:38] is the sub-list for method output_type
-	18, // [18:28] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	36, // 17: storage.v1.GetDownloadURLResponse.expires_at:type_name -> google.protobuf.Timestamp
+	18, // 18: storage.v1.CreateBucketResponse.bucket:type_name -> storage.v1.Bucket
+	35, // 19: storage.v1.GetUploadURLResponse.headers:type_name -> storage.v1.GetUploadURLResponse.HeadersEntry
+	36, // 20: storage.v1.GetUploadURLResponse.expires_at:type_name -> google.protobuf.Timestamp
+	1,  // 21: storage.v1.StorageService.ListStorageClasses:input_type -> storage.v1.ListStorageClassesRequest
+	8,  // 22: storage.v1.StorageService.CreateVolume:input_type -> storage.v1.CreateVolumeRequest
+	10, // 23: storage.v1.StorageService.ListVolumes:input_type -> storage.v1.ListVolumesRequest
+	12, // 24: storage.v1.StorageService.GetVolume:input_type -> storage.v1.GetVolumeRequest
+	14, // 25: storage.v1.StorageService.UpdateVolume:input_type -> storage.v1.UpdateVolumeRequest
+	16, // 26: storage.v1.StorageService.DeleteVolume:input_type -> storage.v1.DeleteVolumeRequest
+	29, // 27: storage.v1.StorageService.CreateBucket:input_type -> storage.v1.CreateBucketRequest
+	19, // 28: storage.v1.StorageService.ListBuckets:input_type -> storage.v1.ListBucketsRequest
+	21, // 29: storage.v1.StorageService.ListObjects:input_type -> storage.v1.ListObjectsRequest
+	24, // 30: storage.v1.StorageService.HeadObject:input_type -> storage.v1.HeadObjectRequest
+	27, // 31: storage.v1.StorageService.GetDownloadURL:input_type -> storage.v1.GetDownloadURLRequest
+	31, // 32: storage.v1.StorageService.GetUploadURL:input_type -> storage.v1.GetUploadURLRequest
+	33, // 33: storage.v1.StorageService.DeleteObject:input_type -> storage.v1.DeleteObjectRequest
+	2,  // 34: storage.v1.StorageService.ListStorageClasses:output_type -> storage.v1.ListStorageClassesResponse
+	9,  // 35: storage.v1.StorageService.CreateVolume:output_type -> storage.v1.CreateVolumeResponse
+	11, // 36: storage.v1.StorageService.ListVolumes:output_type -> storage.v1.ListVolumesResponse
+	13, // 37: storage.v1.StorageService.GetVolume:output_type -> storage.v1.GetVolumeResponse
+	15, // 38: storage.v1.StorageService.UpdateVolume:output_type -> storage.v1.UpdateVolumeResponse
+	17, // 39: storage.v1.StorageService.DeleteVolume:output_type -> storage.v1.DeleteVolumeResponse
+	30, // 40: storage.v1.StorageService.CreateBucket:output_type -> storage.v1.CreateBucketResponse
+	20, // 41: storage.v1.StorageService.ListBuckets:output_type -> storage.v1.ListBucketsResponse
+	23, // 42: storage.v1.StorageService.ListObjects:output_type -> storage.v1.ListObjectsResponse
+	26, // 43: storage.v1.StorageService.HeadObject:output_type -> storage.v1.HeadObjectResponse
+	28, // 44: storage.v1.StorageService.GetDownloadURL:output_type -> storage.v1.GetDownloadURLResponse
+	32, // 45: storage.v1.StorageService.GetUploadURL:output_type -> storage.v1.GetUploadURLResponse
+	34, // 46: storage.v1.StorageService.DeleteObject:output_type -> storage.v1.DeleteObjectResponse
+	34, // [34:47] is the sub-list for method output_type
+	21, // [21:34] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_storage_v1_storage_proto_init() }
@@ -2141,7 +2551,7 @@ func file_storage_v1_storage_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_storage_v1_storage_proto_rawDesc), len(file_storage_v1_storage_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   29,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

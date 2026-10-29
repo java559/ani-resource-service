@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"mime"
 	"regexp"
 	"sort"
 	"strings"
@@ -182,6 +183,50 @@ func ValidateObjectKey(key string) error {
 		return ErrInvalid
 	}
 	return nil
+}
+
+const defaultObjectContentType = "application/octet-stream"
+
+// ValidateUploadKey 在传输边界基础上拒绝目录占位 key；上传的是文件，不是目录。
+func ValidateUploadKey(key string) error {
+	if err := ValidateObjectKey(key); err != nil {
+		return err
+	}
+	if strings.HasPrefix(key, "/") || strings.HasSuffix(key, "/") {
+		return ErrInvalid
+	}
+	return nil
+}
+
+// NormalizeContentType 应用默认类型并校验 MIME 形态；空串合法。
+func NormalizeContentType(value string) (string, error) {
+	if value == "" {
+		return defaultObjectContentType, nil
+	}
+	mediaType, _, err := mime.ParseMediaType(value)
+	if err != nil || !strings.Contains(mediaType, "/") || len(value) > 255 || strings.ContainsAny(value, "\r\n\x00") {
+		return "", ErrInvalid
+	}
+	return value, nil
+}
+
+// ValidateUploadSize 校验声明的大小；实际字节数以对象存储结果为准。
+func ValidateUploadSize(size, maximum int64) error {
+	if size <= 0 {
+		return ErrInvalid
+	}
+	if maximum > 0 && size > maximum {
+		return ErrObjectTooLarge
+	}
+	return nil
+}
+
+// NormalizeETag 去掉原始 ETag 外层双引号，供比较使用。
+func NormalizeETag(value string) string {
+	if len(value) >= 2 && value[0] == '"' && value[len(value)-1] == '"' {
+		return value[1 : len(value)-1]
+	}
+	return value
 }
 
 func validatePrefix(prefix string) error {

@@ -37,7 +37,7 @@ network:
     request_burst: ${OBSERVATION_REQUEST_BURST:10}
 object_storage:
   # 对接已有 S3 兼容服务；endpoint 为空表示本期不启用对象浏览。
-  # 新增租户桶需要修改配置并重启，不支持热更新。
+  # 新增配置桶需要修改配置并重启；tenant_bucket_prefix 非空时允许租户建桶。
   endpoint: "${OBJECT_STORAGE_ENDPOINT:}"
   browser_endpoint: "${OBJECT_STORAGE_BROWSER_ENDPOINT:}"
   region: "${OBJECT_STORAGE_REGION:us-east-1}"
@@ -45,3 +45,7 @@ object_storage:
   credentials_file: "${OBJECT_STORAGE_CREDENTIALS_FILE:}"
   ca_file: "${OBJECT_STORAGE_CA_FILE:}"
   managed_buckets: []
+  tenant_bucket_prefix: "${OBJECT_STORAGE_TENANT_BUCKET_PREFIX:}"
+  max_buckets_per_tenant: ${OBJECT_STORAGE_MAX_BUCKETS_PER_TENANT:20}
+  max_upload_bytes: ${OBJECT_STORAGE_MAX_UPLOAD_BYTES:2147483648}
+  upload_ttl: "${OBJECT_STORAGE_UPLOAD_TTL:900s}"
