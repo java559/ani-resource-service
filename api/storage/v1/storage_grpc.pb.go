@@ -32,6 +32,7 @@ const (
 	StorageService_GetDownloadURL_FullMethodName     = "/storage.v1.StorageService/GetDownloadURL"
 	StorageService_GetUploadURL_FullMethodName       = "/storage.v1.StorageService/GetUploadURL"
 	StorageService_DeleteObject_FullMethodName       = "/storage.v1.StorageService/DeleteObject"
+	StorageService_GetBucketStats_FullMethodName     = "/storage.v1.StorageService/GetBucketStats"
 )
 
 // StorageServiceClient is the client API for StorageService service.
@@ -54,6 +55,7 @@ type StorageServiceClient interface {
 	GetDownloadURL(ctx context.Context, in *GetDownloadURLRequest, opts ...grpc.CallOption) (*GetDownloadURLResponse, error)
 	GetUploadURL(ctx context.Context, in *GetUploadURLRequest, opts ...grpc.CallOption) (*GetUploadURLResponse, error)
 	DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error)
+	GetBucketStats(ctx context.Context, in *GetBucketStatsRequest, opts ...grpc.CallOption) (*GetBucketStatsResponse, error)
 }
 
 type storageServiceClient struct {
@@ -194,6 +196,16 @@ func (c *storageServiceClient) DeleteObject(ctx context.Context, in *DeleteObjec
 	return out, nil
 }
 
+func (c *storageServiceClient) GetBucketStats(ctx context.Context, in *GetBucketStatsRequest, opts ...grpc.CallOption) (*GetBucketStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetBucketStatsResponse)
+	err := c.cc.Invoke(ctx, StorageService_GetBucketStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StorageServiceServer is the server API for StorageService service.
 // All implementations must embed UnimplementedStorageServiceServer
 // for forward compatibility.
@@ -214,6 +226,7 @@ type StorageServiceServer interface {
 	GetDownloadURL(context.Context, *GetDownloadURLRequest) (*GetDownloadURLResponse, error)
 	GetUploadURL(context.Context, *GetUploadURLRequest) (*GetUploadURLResponse, error)
 	DeleteObject(context.Context, *DeleteObjectRequest) (*DeleteObjectResponse, error)
+	GetBucketStats(context.Context, *GetBucketStatsRequest) (*GetBucketStatsResponse, error)
 	mustEmbedUnimplementedStorageServiceServer()
 }
 
@@ -262,6 +275,9 @@ func (UnimplementedStorageServiceServer) GetUploadURL(context.Context, *GetUploa
 }
 func (UnimplementedStorageServiceServer) DeleteObject(context.Context, *DeleteObjectRequest) (*DeleteObjectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteObject not implemented")
+}
+func (UnimplementedStorageServiceServer) GetBucketStats(context.Context, *GetBucketStatsRequest) (*GetBucketStatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBucketStats not implemented")
 }
 func (UnimplementedStorageServiceServer) mustEmbedUnimplementedStorageServiceServer() {}
 func (UnimplementedStorageServiceServer) testEmbeddedByValue()                        {}
@@ -518,6 +534,24 @@ func _StorageService_DeleteObject_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StorageService_GetBucketStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBucketStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageServiceServer).GetBucketStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: StorageService_GetBucketStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageServiceServer).GetBucketStats(ctx, req.(*GetBucketStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StorageService_ServiceDesc is the grpc.ServiceDesc for StorageService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -576,6 +610,10 @@ var StorageService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteObject",
 			Handler:    _StorageService_DeleteObject_Handler,
+		},
+		{
+			MethodName: "GetBucketStats",
+			Handler:    _StorageService_GetBucketStats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

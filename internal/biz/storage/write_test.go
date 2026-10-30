@@ -182,6 +182,19 @@ func TestBucketWriteIsolation(t *testing.T) {
 	}
 }
 
+func TestBucketMetadataAndStats(t *testing.T) {
+	objects := &fakeObjects{stats: ObjectStats{ObjectCount: 2, TotalSize: 30, Scanned: 2}}
+	uc := newWriteUseCase(t, objects, func(c *Config) { c.Region = "us-east-1" })
+	bucket, err := uc.CreateBucket(context.Background(), testTenant, "project-a")
+	if err != nil || bucket.Region != "us-east-1" || bucket.StorageClass != StorageClassStandard || bucket.ACL != ACLPrivate {
+		t.Fatalf("bucket metadata = %+v, %v", bucket, err)
+	}
+	stats, err := uc.BucketStats(context.Background(), testTenant, "project-a")
+	if err != nil || stats.ObjectCount != 2 || stats.TotalSize != 30 || stats.Truncated {
+		t.Fatalf("stats = %+v, %v", stats, err)
+	}
+}
+
 func TestListBucketsMergesTenantBuckets(t *testing.T) {
 	project := physicalBucket(t, testTenant, "project-a")
 	foreign, _ := TenantBucketName("ani-t-", "cluster-a", otherTenant, "foreign")

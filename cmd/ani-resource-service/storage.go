@@ -68,6 +68,7 @@ func openStorage(_ context.Context, bc *conf.Bootstrap, instances *instanceCompo
 		ObserveDeleteWrite:  observeDeleteWrite,
 		NamespacePrefix:     bc.GetNetwork().GetNamespacePrefix(),
 		Buckets:             bc.GetObjectStorage().Buckets(),
+		Region:              bc.GetObjectStorage().GetRegion(),
 		DownloadTTL:         storageDownloadTTL,
 		TenantBucketPrefix:  bc.GetObjectStorage().GetTenantBucketPrefix(),
 		MaxBucketsPerTenant: int(bc.GetObjectStorage().GetMaxBucketsPerTenant()),

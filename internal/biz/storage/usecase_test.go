@@ -159,6 +159,8 @@ type fakeObjects struct {
 	meta          ObjectMeta
 	buckets       []string
 	listErr       error
+	stats         ObjectStats
+	statsErr      error
 	createErr     error
 	headBucketErr error
 	deleteErr     error
@@ -167,8 +169,16 @@ type fakeObjects struct {
 }
 
 func (f *fakeObjects) Available() bool { return f.available }
-func (f *fakeObjects) ListBuckets(context.Context) ([]string, error) {
-	return f.buckets, f.listErr
+func (f *fakeObjects) ListBuckets(context.Context) ([]BucketInfo, error) {
+	infos := make([]BucketInfo, 0, len(f.buckets))
+	for _, name := range f.buckets {
+		infos = append(infos, BucketInfo{Name: name})
+	}
+	return infos, f.listErr
+}
+
+func (f *fakeObjects) BucketStats(context.Context, string, int64) (ObjectStats, error) {
+	return f.stats, f.statsErr
 }
 func (f *fakeObjects) CreateBucket(_ context.Context, bucket string) error {
 	if f.createErr != nil {

@@ -25,6 +25,7 @@ type Config struct {
 	BorrowedPVCGuard   BorrowedPVCGuard
 	ObserveDeleteWrite func(string)
 	Buckets            []BucketConfig
+	Region             string
 	DownloadTTL        time.Duration
 	// TenantBucketPrefix 为空表示关闭租户建桶；非空时物理桶名由该前缀推导。
 	TenantBucketPrefix  string
@@ -68,6 +69,9 @@ func NewUseCase(volumes VolumePort, objects ObjectPort, cfg Config) (*UseCase, e
 	}
 	if cfg.UploadTTL < time.Minute || cfg.UploadTTL > maximumUploadTTL {
 		return nil, ErrInvalid
+	}
+	if cfg.Region == "" {
+		cfg.Region = "us-east-1"
 	}
 	if cfg.TenantBucketPrefix != "" {
 		if err := ValidateTenantBucketPrefix(cfg.TenantBucketPrefix); err != nil || objects == nil || strings.TrimSpace(cfg.ClusterID) == "" {
@@ -351,7 +355,7 @@ func (u *UseCase) ListBuckets(ctx context.Context, tenant string, filter BucketF
 			continue
 		}
 		logical[b.ID] = b.Bucket
-		bucket := Bucket{ID: b.ID, Name: b.Name}
+		bucket := Bucket{ID: b.ID, Name: b.Name, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}
 		if matchBucketFilter(bucket, filter) {
 			out = append(out, bucket)
 		}
@@ -363,7 +367,7 @@ func (u *UseCase) ListBuckets(ctx context.Context, tenant string, filter BucketF
 	if u.objects == nil {
 		return nil, ErrBackendUnavailable
 	}
-	names, err := u.objects.ListBuckets(ctx)
+	infos, err := u.objects.ListBuckets(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -371,7 +375,8 @@ func (u *UseCase) ListBuckets(ctx context.Context, tenant string, filter BucketF
 	if err != nil {
 		return nil, err
 	}
-	for _, name := range names {
+	for _, info := range infos {
+		name := info.Name
 		if !strings.HasPrefix(name, prefix) || configured[name] {
 			continue
 		}
@@ -383,7 +388,7 @@ func (u *UseCase) ListBuckets(ctx context.Context, tenant string, filter BucketF
 			return nil, ErrConflict
 		}
 		logical[id] = name
-		bucket := Bucket{ID: id, Name: id}
+		bucket := Bucket{ID: id, Name: id, CreatedAt: info.CreatedAt, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}
 		if matchBucketFilter(bucket, filter) {
 			out = append(out, bucket)
 		}
@@ -415,7 +420,7 @@ func (u *UseCase) CreateBucket(ctx context.Context, tenant, name string) (Bucket
 	if u.objects == nil {
 		return Bucket{}, ErrBackendUnavailable
 	}
-	names, err := u.objects.ListBuckets(ctx)
+	infos, err := u.objects.ListBuckets(ctx)
 	if err != nil {
 		return Bucket{}, err
 	}
@@ -431,11 +436,11 @@ func (u *UseCase) CreateBucket(ctx context.Context, tenant, name string) (Bucket
 		}
 	}
 	count := 0
-	for _, existing := range names {
-		if existing == physical {
-			return Bucket{ID: name, Name: name}, nil
+	for _, info := range infos {
+		if info.Name == physical {
+			return Bucket{ID: name, Name: name, CreatedAt: info.CreatedAt, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}, nil
 		}
-		if strings.HasPrefix(existing, prefix) && !configured[existing] {
+		if strings.HasPrefix(info.Name, prefix) && !configured[info.Name] {
 			count++
 		}
 	}
@@ -445,7 +450,22 @@ func (u *UseCase) CreateBucket(ctx context.Context, tenant, name string) (Bucket
 	if err := u.objects.CreateBucket(ctx, physical); err != nil {
 		return Bucket{}, err
 	}
-	return Bucket{ID: name, Name: name}, nil
+	return Bucket{ID: name, Name: name, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}, nil
+}
+
+// BucketStats 按需统计桶内对象数量与字节数；超过扫描上限时 truncated=true。
+func (u *UseCase) BucketStats(ctx context.Context, tenant, bucketID string) (ObjectStats, error) {
+	bucket, err := u.bucket(tenant, bucketID)
+	if err != nil {
+		return ObjectStats{}, err
+	}
+	if u.objects == nil {
+		return ObjectStats{}, ErrBackendUnavailable
+	}
+	if err := u.objects.HeadBucket(ctx, bucket.Bucket); err != nil {
+		return ObjectStats{}, err
+	}
+	return u.objects.BucketStats(ctx, bucket.Bucket, maxBucketStatsScan)
 }
 
 // UploadURL 签发绑定单个 key 的短期 PUT URL；服务端不承载文件字节。

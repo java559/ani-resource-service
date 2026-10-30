@@ -199,9 +199,16 @@ func (s *Service) ListBuckets(ctx context.Context, r *storagev1.ListBucketsReque
 	}
 	response := &storagev1.ListBucketsResponse{Items: make([]*storagev1.Bucket, 0, len(items))}
 	for _, item := range items {
-		response.Items = append(response.Items, &storagev1.Bucket{Id: item.ID, Name: item.Name})
+		response.Items = append(response.Items, wireBucket(item))
 	}
 	return response, nil
+}
+
+func wireBucket(bucket biz.Bucket) *storagev1.Bucket {
+	return &storagev1.Bucket{
+		Id: bucket.ID, Name: bucket.Name, CreatedAt: timestamp(bucket.CreatedAt),
+		Region: bucket.Region, StorageClass: bucket.StorageClass, Acl: bucket.ACL,
+	}
 }
 
 func (s *Service) CreateBucket(ctx context.Context, r *storagev1.CreateBucketRequest) (*storagev1.CreateBucketResponse, error) {
@@ -212,7 +219,20 @@ func (s *Service) CreateBucket(ctx context.Context, r *storagev1.CreateBucketReq
 	if err != nil {
 		return nil, rpcError(err)
 	}
-	return &storagev1.CreateBucketResponse{Bucket: &storagev1.Bucket{Id: bucket.ID, Name: bucket.Name}}, nil
+	return &storagev1.CreateBucketResponse{Bucket: wireBucket(bucket)}, nil
+}
+
+func (s *Service) GetBucketStats(ctx context.Context, r *storagev1.GetBucketStatsRequest) (*storagev1.GetBucketStatsResponse, error) {
+	if r == nil || r.GetBucketId() == "" {
+		return nil, rpcError(biz.ErrInvalid)
+	}
+	stats, err := s.uc.BucketStats(ctx, r.GetTenantId(), r.GetBucketId())
+	if err != nil {
+		return nil, rpcError(err)
+	}
+	return &storagev1.GetBucketStatsResponse{
+		ObjectCount: stats.ObjectCount, TotalSize: stats.TotalSize, Truncated: stats.Truncated, Scanned: stats.Scanned,
+	}, nil
 }
 
 func (s *Service) ListObjects(ctx context.Context, r *storagev1.ListObjectsRequest) (*storagev1.ListObjectsResponse, error) {

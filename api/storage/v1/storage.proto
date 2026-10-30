@@ -22,6 +22,7 @@ service StorageService {
   rpc GetDownloadURL(GetDownloadURLRequest) returns (GetDownloadURLResponse);
   rpc GetUploadURL(GetUploadURLRequest) returns (GetUploadURLResponse);
   rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
+  rpc GetBucketStats(GetBucketStatsRequest) returns (GetBucketStatsResponse);
 }
 
 message StorageClass {
@@ -154,6 +155,13 @@ message DeleteVolumeResponse {
 message Bucket {
   string id = 1;
   string name = 2;
+  // 创建时间；配置桶没有该信息时为空。
+  google.protobuf.Timestamp created_at = 3 [json_name = "created_at"];
+  string region = 4;
+  // RustFS/S3 兼容后端当前只有标准存储。
+  string storage_class = 5 [json_name = "storage_class"];
+  // 平台创建的桶固定私有。
+  string acl = 6;
 }
 
 message ListBucketsRequest {
@@ -254,4 +262,19 @@ message DeleteObjectRequest {
 message DeleteObjectResponse {
   // DELETED：本次删除了存在的对象；GONE：对象本来就不存在。
   string state = 1;
+}
+
+message GetBucketStatsRequest {
+  string tenant_id = 1 [json_name = "tenant_id"];
+  string bucket_id = 2 [json_name = "bucket_id"];
+}
+
+message GetBucketStatsResponse {
+  // 扫描到的对象数；truncated=true 时是下限。
+  int64 object_count = 1 [json_name = "object_count"];
+  // 扫描到的对象字节总数；truncated=true 时是下限。
+  int64 total_size = 2 [json_name = "total_size"];
+  // 达到扫描上限时为 true，表示统计不完整。
+  bool truncated = 3;
+  int64 scanned = 4;
 }

@@ -8,6 +8,15 @@ import (
 // BytesPerGB 固定 1 GB = 1,000,000,000 bytes，与 Kubernetes Quantity "20G" 等价。
 const BytesPerGB int64 = 1_000_000_000
 
+const (
+	// StorageClassStandard 是 RustFS/S3 兼容后端当前的唯一存储类型。
+	StorageClassStandard = "STANDARD"
+	// ACLPrivate 是平台创建桶的固定权限。
+	ACLPrivate = "private"
+	// maxBucketStatsScan 限制按需统计单桶扫描的对象数，避免全量列举拖垮接口。
+	maxBucketStatsScan int64 = 5000
+)
+
 // 受管标签与注解。label 只放短值；长值或中文放 annotation。
 const (
 	LabelManagedBy   = "storage.ani.io/managed-by"
@@ -152,8 +161,26 @@ type DeleteResult struct {
 }
 
 type Bucket struct {
-	ID   string
-	Name string
+	ID           string
+	Name         string
+	CreatedAt    time.Time
+	Region       string
+	StorageClass string
+	ACL          string
+}
+
+// BucketInfo 是对象存储返回的桶元数据；配置桶没有创建时间。
+type BucketInfo struct {
+	Name      string
+	CreatedAt time.Time
+}
+
+// ObjectStats 是桶统计；Truncated 表示达到扫描上限、数值是下限。
+type ObjectStats struct {
+	ObjectCount int64
+	TotalSize   int64
+	Truncated   bool
+	Scanned     int64
 }
 
 // VolumeFilter 是卷列表的筛选条件；空串表示不按该字段筛选。
@@ -244,9 +271,10 @@ type VolumePort interface {
 // ObjectPort 是 S3 出站端口；内部 endpoint 做 List/HEAD/写，浏览器 endpoint 做预签名。
 type ObjectPort interface {
 	Available() bool
-	ListBuckets(ctx context.Context) ([]string, error)
+	ListBuckets(ctx context.Context) ([]BucketInfo, error)
 	CreateBucket(ctx context.Context, bucket string) error
 	HeadBucket(ctx context.Context, bucket string) error
+	BucketStats(ctx context.Context, bucket string, maxObjects int64) (ObjectStats, error)
 	ListObjects(ctx context.Context, bucket, prefix, continuationToken string, limit int32) (ObjectPage, error)
 	HeadObject(ctx context.Context, bucket, key string) (ObjectMeta, error)
 	PresignGetObject(ctx context.Context, bucket, key string, expiry time.Duration) (string, time.Time, error)

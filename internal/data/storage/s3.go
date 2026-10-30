@@ -145,21 +145,50 @@ func (s *S3) Available() bool {
 	return s != nil && s.presign != nil && s.browser
 }
 
-func (s *S3) ListBuckets(ctx context.Context) ([]string, error) {
+func (s *S3) ListBuckets(ctx context.Context) ([]biz.BucketInfo, error) {
 	pages := s3.NewListBucketsPaginator(s.internal, &s3.ListBucketsInput{})
-	names := []string{}
+	infos := []biz.BucketInfo{}
 	for pages.HasMorePages() {
 		out, err := pages.NextPage(ctx)
 		if err != nil {
 			return nil, s3Error(err)
 		}
 		for _, bucket := range out.Buckets {
-			if bucket.Name != nil {
-				names = append(names, *bucket.Name)
+			if bucket.Name == nil {
+				continue
+			}
+			info := biz.BucketInfo{Name: *bucket.Name}
+			if bucket.CreationDate != nil {
+				info.CreatedAt = *bucket.CreationDate
+			}
+			infos = append(infos, info)
+		}
+	}
+	return infos, nil
+}
+
+// BucketStats 逐页列举对象并累加数量与字节数，达到上限即停止并标记不完整。
+func (s *S3) BucketStats(ctx context.Context, bucket string, maxObjects int64) (biz.ObjectStats, error) {
+	stats := biz.ObjectStats{}
+	pages := s3.NewListObjectsV2Paginator(s.internal, &s3.ListObjectsV2Input{
+		Bucket: aws.String(bucket),
+	})
+	for pages.HasMorePages() {
+		out, err := pages.NextPage(ctx)
+		if err != nil {
+			return biz.ObjectStats{}, s3Error(err)
+		}
+		for _, item := range out.Contents {
+			stats.ObjectCount++
+			stats.TotalSize += aws.ToInt64(item.Size)
+			stats.Scanned++
+			if maxObjects > 0 && stats.Scanned >= maxObjects {
+				stats.Truncated = true
+				return stats, nil
 			}
 		}
 	}
-	return names, nil
+	return stats, nil
 }
 
 func (s *S3) CreateBucket(ctx context.Context, bucket string) error {

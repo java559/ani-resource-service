@@ -122,6 +122,7 @@ var storageGovernanceMethods = map[string]struct{}{
 	"/storage.v1.StorageService/GetDownloadURL":     {},
 	"/storage.v1.StorageService/GetUploadURL":       {},
 	"/storage.v1.StorageService/DeleteObject":       {},
+	"/storage.v1.StorageService/GetBucketStats":     {},
 }
 
 // GetVPCMethod is kept for the vpc-read mode and existing deployment checks.
