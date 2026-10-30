@@ -91,7 +91,7 @@ func (x *Bootstrap) GetObjectStorage() *ObjectStorage {
 }
 
 // ObjectStorage 对接已有 S3 兼容服务；endpoint 为空表示本期不启用对象浏览。
-// 新增租户桶需要修改配置并重启，不支持热更新。
+// 新增配置桶需要修改配置并重启；tenant_bucket_prefix 非空时允许租户在页面上建桶。
 type ObjectStorage struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Endpoint        string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
@@ -101,8 +101,13 @@ type ObjectStorage struct {
 	CredentialsFile string                 `protobuf:"bytes,5,opt,name=credentials_file,json=credentialsFile,proto3" json:"credentials_file,omitempty"`
 	CaFile          string                 `protobuf:"bytes,6,opt,name=ca_file,json=caFile,proto3" json:"ca_file,omitempty"`
 	ManagedBuckets  []*ManagedBucket       `protobuf:"bytes,7,rep,name=managed_buckets,json=managedBuckets,proto3" json:"managed_buckets,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// 为空表示关闭租户建桶；非空时物理桶名为 prefix + cluster/tenant 指纹 + 逻辑名。
+	TenantBucketPrefix  string               `protobuf:"bytes,8,opt,name=tenant_bucket_prefix,json=tenantBucketPrefix,proto3" json:"tenant_bucket_prefix,omitempty"`
+	MaxBucketsPerTenant uint32               `protobuf:"varint,9,opt,name=max_buckets_per_tenant,json=maxBucketsPerTenant,proto3" json:"max_buckets_per_tenant,omitempty"`
+	MaxUploadBytes      int64                `protobuf:"varint,10,opt,name=max_upload_bytes,json=maxUploadBytes,proto3" json:"max_upload_bytes,omitempty"`
+	UploadTtl           *durationpb.Duration `protobuf:"bytes,11,opt,name=upload_ttl,json=uploadTtl,proto3" json:"upload_ttl,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *ObjectStorage) Reset() {
@@ -180,6 +185,34 @@ func (x *ObjectStorage) GetCaFile() string {
 func (x *ObjectStorage) GetManagedBuckets() []*ManagedBucket {
 	if x != nil {
 		return x.ManagedBuckets
+	}
+	return nil
+}
+
+func (x *ObjectStorage) GetTenantBucketPrefix() string {
+	if x != nil {
+		return x.TenantBucketPrefix
+	}
+	return ""
+}
+
+func (x *ObjectStorage) GetMaxBucketsPerTenant() uint32 {
+	if x != nil {
+		return x.MaxBucketsPerTenant
+	}
+	return 0
+}
+
+func (x *ObjectStorage) GetMaxUploadBytes() int64 {
+	if x != nil {
+		return x.MaxUploadBytes
+	}
+	return 0
+}
+
+func (x *ObjectStorage) GetUploadTtl() *durationpb.Duration {
+	if x != nil {
+		return x.UploadTtl
 	}
 	return nil
 }
@@ -1179,7 +1212,7 @@ const file_conf_v1_conf_proto_rawDesc = "" +
 	"\x06server\x18\x01 \x01(\v2\x0f.conf.v1.ServerR\x06server\x12*\n" +
 	"\anetwork\x18\x02 \x01(\v2\x10.conf.v1.NetworkR\anetwork\x12$\n" +
 	"\x05image\x18\x03 \x01(\v2\x0e.conf.v1.ImageR\x05image\x12=\n" +
-	"\x0eobject_storage\x18\x04 \x01(\v2\x16.conf.v1.ObjectStorageR\robjectStorage\"\x92\x02\n" +
+	"\x0eobject_storage\x18\x04 \x01(\v2\x16.conf.v1.ObjectStorageR\robjectStorage\"\xdd\x03\n" +
 	"\rObjectStorage\x12\x1a\n" +
 	"\bendpoint\x18\x01 \x01(\tR\bendpoint\x12)\n" +
 	"\x10browser_endpoint\x18\x02 \x01(\tR\x0fbrowserEndpoint\x12\x16\n" +
@@ -1188,7 +1221,13 @@ const file_conf_v1_conf_proto_rawDesc = "" +
 	"path_style\x18\x04 \x01(\bR\tpathStyle\x12)\n" +
 	"\x10credentials_file\x18\x05 \x01(\tR\x0fcredentialsFile\x12\x17\n" +
 	"\aca_file\x18\x06 \x01(\tR\x06caFile\x12?\n" +
-	"\x0fmanaged_buckets\x18\a \x03(\v2\x16.conf.v1.ManagedBucketR\x0emanagedBuckets\"h\n" +
+	"\x0fmanaged_buckets\x18\a \x03(\v2\x16.conf.v1.ManagedBucketR\x0emanagedBuckets\x120\n" +
+	"\x14tenant_bucket_prefix\x18\b \x01(\tR\x12tenantBucketPrefix\x123\n" +
+	"\x16max_buckets_per_tenant\x18\t \x01(\rR\x13maxBucketsPerTenant\x12(\n" +
+	"\x10max_upload_bytes\x18\n" +
+	" \x01(\x03R\x0emaxUploadBytes\x128\n" +
+	"\n" +
+	"upload_ttl\x18\v \x01(\v2\x19.google.protobuf.DurationR\tuploadTtl\"h\n" +
 	"\rManagedBucket\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
 	"\ttenant_id\x18\x02 \x01(\tR\btenantId\x12\x12\n" +
@@ -1320,33 +1359,34 @@ var file_conf_v1_conf_proto_depIdxs = []int32{
 	3,  // 2: conf.v1.Bootstrap.image:type_name -> conf.v1.Image
 	1,  // 3: conf.v1.Bootstrap.object_storage:type_name -> conf.v1.ObjectStorage
 	2,  // 4: conf.v1.ObjectStorage.managed_buckets:type_name -> conf.v1.ManagedBucket
-	13, // 5: conf.v1.Image.request_timeout:type_name -> google.protobuf.Duration
-	4,  // 6: conf.v1.Image.pull_secret_callers:type_name -> conf.v1.PullSecretCaller
-	9,  // 7: conf.v1.Network.worker:type_name -> conf.v1.Worker
-	8,  // 8: conf.v1.Network.observation:type_name -> conf.v1.Observation
-	7,  // 9: conf.v1.Network.load_balancer:type_name -> conf.v1.LoadBalancer
-	6,  // 10: conf.v1.Network.platform_default_vpc_egress:type_name -> conf.v1.PlatformDefaultVPCEgress
-	13, // 11: conf.v1.Observation.audit_interval:type_name -> google.protobuf.Duration
-	13, // 12: conf.v1.Observation.audit_jitter:type_name -> google.protobuf.Duration
-	13, // 13: conf.v1.Observation.audit_timeout:type_name -> google.protobuf.Duration
-	13, // 14: conf.v1.Observation.flush_interval:type_name -> google.protobuf.Duration
-	13, // 15: conf.v1.Worker.lease:type_name -> google.protobuf.Duration
-	13, // 16: conf.v1.Worker.request_timeout:type_name -> google.protobuf.Duration
-	13, // 17: conf.v1.Worker.observe_every:type_name -> google.protobuf.Duration
-	13, // 18: conf.v1.Worker.stale_after:type_name -> google.protobuf.Duration
-	13, // 19: conf.v1.Worker.retry_min:type_name -> google.protobuf.Duration
-	13, // 20: conf.v1.Worker.retry_max:type_name -> google.protobuf.Duration
-	13, // 21: conf.v1.Worker.poll_interval:type_name -> google.protobuf.Duration
-	11, // 22: conf.v1.Server.grpc:type_name -> conf.v1.Server.GRPC
-	12, // 23: conf.v1.Server.admin:type_name -> conf.v1.Server.Admin
-	13, // 24: conf.v1.Server.shutdown_timeout:type_name -> google.protobuf.Duration
-	13, // 25: conf.v1.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	13, // 26: conf.v1.Server.Admin.timeout:type_name -> google.protobuf.Duration
-	27, // [27:27] is the sub-list for method output_type
-	27, // [27:27] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	13, // 5: conf.v1.ObjectStorage.upload_ttl:type_name -> google.protobuf.Duration
+	13, // 6: conf.v1.Image.request_timeout:type_name -> google.protobuf.Duration
+	4,  // 7: conf.v1.Image.pull_secret_callers:type_name -> conf.v1.PullSecretCaller
+	9,  // 8: conf.v1.Network.worker:type_name -> conf.v1.Worker
+	8,  // 9: conf.v1.Network.observation:type_name -> conf.v1.Observation
+	7,  // 10: conf.v1.Network.load_balancer:type_name -> conf.v1.LoadBalancer
+	6,  // 11: conf.v1.Network.platform_default_vpc_egress:type_name -> conf.v1.PlatformDefaultVPCEgress
+	13, // 12: conf.v1.Observation.audit_interval:type_name -> google.protobuf.Duration
+	13, // 13: conf.v1.Observation.audit_jitter:type_name -> google.protobuf.Duration
+	13, // 14: conf.v1.Observation.audit_timeout:type_name -> google.protobuf.Duration
+	13, // 15: conf.v1.Observation.flush_interval:type_name -> google.protobuf.Duration
+	13, // 16: conf.v1.Worker.lease:type_name -> google.protobuf.Duration
+	13, // 17: conf.v1.Worker.request_timeout:type_name -> google.protobuf.Duration
+	13, // 18: conf.v1.Worker.observe_every:type_name -> google.protobuf.Duration
+	13, // 19: conf.v1.Worker.stale_after:type_name -> google.protobuf.Duration
+	13, // 20: conf.v1.Worker.retry_min:type_name -> google.protobuf.Duration
+	13, // 21: conf.v1.Worker.retry_max:type_name -> google.protobuf.Duration
+	13, // 22: conf.v1.Worker.poll_interval:type_name -> google.protobuf.Duration
+	11, // 23: conf.v1.Server.grpc:type_name -> conf.v1.Server.GRPC
+	12, // 24: conf.v1.Server.admin:type_name -> conf.v1.Server.Admin
+	13, // 25: conf.v1.Server.shutdown_timeout:type_name -> google.protobuf.Duration
+	13, // 26: conf.v1.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	13, // 27: conf.v1.Server.Admin.timeout:type_name -> google.protobuf.Duration
+	28, // [28:28] is the sub-list for method output_type
+	28, // [28:28] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_conf_v1_conf_proto_init() }

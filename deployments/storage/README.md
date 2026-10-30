@@ -77,5 +77,15 @@ RoleBinding），届时取消手工步骤。本期不实现该功能，也不给
 
 ## 对象存储配置
 
-新增租户桶需要修改 Res 配置中的 `object_storage.managed_buckets` 并**重启 Res**；
-本期不支持热更新。
+`object_storage.managed_buckets` 是管理员预置桶：新增/删除仍需修改 Res 配置并**重启 Res**，不支持热更新。
+
+`object_storage.tenant_bucket_prefix` 非空时开启租户建桶：物理桶名为
+`<prefix><sha256(cluster_id|tenant_uuid)[:20]>-<逻辑名>`，建桶不需要改配置或重启，
+逻辑名仅接受 S3 合法小写 ASCII（1–32 字符）。为空时只展示配置桶并关闭租户建桶，不关闭配置桶的对象写入。同一 S3
+账号不应被多个 Res 集群共用而未配置稳定 `cluster_id`，否则租户桶指纹会变化。
+
+S3 服务账号至少需要：`s3:ListAllMyBuckets`、`s3:CreateBucket`、
+`s3:ListBucket`、`s3:GetObject`、`s3:PutObject`、`s3:DeleteObject`；HeadBucket 使用 ListBucket 权限。上传/下载的预签名 URL 使用
+`browser_endpoint`，必须由浏览器可达且证书受终端信任；浏览器上传还需要桶级 CORS
+（允许控制台 Origin 的 `PUT/GET/HEAD` 与 `content-type` 头，暴露 `ETag`）。
+`browser_endpoint` 为空时元数据仍可浏览/删除，上传与下载返回 503。

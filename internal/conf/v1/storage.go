@@ -5,15 +5,25 @@ import (
 	"net/url"
 	"path/filepath"
 	"strings"
+	"time"
 
 	bizstorage "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/storage"
+)
+
+const (
+	defaultMaxBucketsPerTenant = 20
+	defaultMaxUploadBytes      = int64(2 << 30)
+	minimumUploadBytes         = int64(1 << 20)
+	maximumUploadBytes         = int64(5 << 30)
+	minimumUploadTTL           = time.Minute
+	maximumUploadTTL           = time.Hour
 )
 
 // Validate 执行对象存储启动强校验；任何不满足直接启动失败，不进入部分桶可用状态。
 func (c *ObjectStorage) Validate() error {
 	if c == nil || strings.TrimSpace(c.Endpoint) == "" {
-		if c != nil && len(c.ManagedBuckets) > 0 {
-			return fmt.Errorf("object_storage.managed_buckets requires endpoint")
+		if c != nil && (len(c.ManagedBuckets) > 0 || c.TenantBucketPrefix != "") {
+			return fmt.Errorf("object_storage.managed_buckets/tenant_bucket_prefix requires endpoint")
 		}
 		return nil
 	}
@@ -45,6 +55,26 @@ func (c *ObjectStorage) Validate() error {
 	}
 	if err := bizstorage.ValidateBuckets(buckets); err != nil {
 		return err
+	}
+	prefix := c.TenantBucketPrefix
+	if prefix != "" {
+		if err := bizstorage.ValidateTenantBucketPrefix(prefix); err != nil {
+			return fmt.Errorf("object_storage.tenant_bucket_prefix: invalid")
+		}
+	}
+	if c.MaxBucketsPerTenant > 100 {
+		return fmt.Errorf("object_storage.max_buckets_per_tenant exceeds 100")
+	}
+	if c.MaxUploadBytes != 0 && (c.MaxUploadBytes < minimumUploadBytes || c.MaxUploadBytes > maximumUploadBytes) {
+		return fmt.Errorf("object_storage.max_upload_bytes out of range")
+	}
+	if c.UploadTtl != nil {
+		if err := c.UploadTtl.CheckValid(); err != nil {
+			return fmt.Errorf("object_storage.upload_ttl invalid: %w", err)
+		}
+		if ttl := c.UploadTtl.AsDuration(); ttl < minimumUploadTTL || ttl > maximumUploadTTL {
+			return fmt.Errorf("object_storage.upload_ttl out of range")
+		}
 	}
 	return nil
 }

@@ -145,6 +145,16 @@ TRAINING供普通训练与微调共享，INFERENCE只声明公共提供方支持
 
 静态详情/列表独立读取数据库快照，集群故障只影响诊断读取；诊断不 Patch/Update、不签名、不调用占额/usage或清理。runtime/events 的安全字段、null与事件截断语义见 [实例合同](instance-mvp.md)。Kubernetes GET/LIST单元测试及HTTP pods/log适配测试与真实集群/公开SSE验收分开记录。
 
+## 存储
+
+Storage 方法全部为租户委托、unary RPC，完整清单以 [`internal/server/governance.go`](../../internal/server/governance.go) 的 `storageGovernanceMethods` 为准：
+
+- 独立盘：`ListStorageClasses`、`CreateVolume`、`ListVolumes`、`GetVolume`、`UpdateVolume`、`DeleteVolume`。
+- 对象：`GetDownloadURL`、`ListObjects`、`HeadObject`、`GetUploadURL`、`DeleteObject`。
+- 桶：`CreateBucket`、`ListBuckets`、`GetBucketStats`（按需统计，单桶扫描上限 5000）。
+
+请求 `tenant_id` 必须与受信委托一致；存储不接受平台范围、不伪造 namespace/物理桶名。`GetUploadURL` 只返回绑定单个 key 的短期预签名 PUT URL，文件字节由客户端直传 S3；`DeleteObject` 只删单个 key，不递归。`CreateBucket` 的物理名由 `cluster_id` 与租户 UUID 指纹推导，逻辑名只接受 S3 合法小写 ASCII。存储 RPC 均为 unary，不改变已登记的实例和 VM 日志流允许清单。
+
 ## 租户安全组
 
 上述安全组方法使用现有受信租户委托，不允许平台或 owner 范围借用。容器和 VM 创建请求中的 `security_group_ids` 与后续独立 SetSecurityGroups 均在 Resource 核对租户、placement 及组状态；绑定更换不修改不可变 CREATE 意图。规则默认值、应用证据和旧引用释放见[安全组合同](security-groups.md)。

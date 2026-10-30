@@ -15,10 +15,14 @@ service StorageService {
   rpc GetVolume(GetVolumeRequest) returns (GetVolumeResponse);
   rpc UpdateVolume(UpdateVolumeRequest) returns (UpdateVolumeResponse);
   rpc DeleteVolume(DeleteVolumeRequest) returns (DeleteVolumeResponse);
+  rpc CreateBucket(CreateBucketRequest) returns (CreateBucketResponse);
   rpc ListBuckets(ListBucketsRequest) returns (ListBucketsResponse);
   rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse);
   rpc HeadObject(HeadObjectRequest) returns (HeadObjectResponse);
   rpc GetDownloadURL(GetDownloadURLRequest) returns (GetDownloadURLResponse);
+  rpc GetUploadURL(GetUploadURLRequest) returns (GetUploadURLResponse);
+  rpc DeleteObject(DeleteObjectRequest) returns (DeleteObjectResponse);
+  rpc GetBucketStats(GetBucketStatsRequest) returns (GetBucketStatsResponse);
 }
 
 message StorageClass {
@@ -151,6 +155,13 @@ message DeleteVolumeResponse {
 message Bucket {
   string id = 1;
   string name = 2;
+  // 创建时间；配置桶没有该信息时为空。
+  google.protobuf.Timestamp created_at = 3 [json_name = "created_at"];
+  string region = 4;
+  // RustFS/S3 兼容后端当前只有标准存储。
+  string storage_class = 5 [json_name = "storage_class"];
+  // 平台创建的桶固定私有。
+  string acl = 6;
 }
 
 message ListBucketsRequest {
@@ -213,4 +224,57 @@ message GetDownloadURLRequest {
 message GetDownloadURLResponse {
   string url = 1;
   google.protobuf.Timestamp expires_at = 2 [json_name = "expires_at"];
+}
+
+message CreateBucketRequest {
+  string tenant_id = 1 [json_name = "tenant_id"];
+  // 逻辑桶名，同时作为页面展示名；物理桶名由服务端推导。
+  string name = 2;
+}
+
+message CreateBucketResponse {
+  Bucket bucket = 1;
+}
+
+message GetUploadURLRequest {
+  string tenant_id = 1 [json_name = "tenant_id"];
+  string bucket_id = 2 [json_name = "bucket_id"];
+  string key = 3;
+  string content_type = 4 [json_name = "content_type"];
+  int64 size = 5;
+  bool overwrite = 6;
+}
+
+message GetUploadURLResponse {
+  string url = 1;
+  map<string, string> headers = 2;
+  google.protobuf.Timestamp expires_at = 3 [json_name = "expires_at"];
+  string key = 4;
+}
+
+message DeleteObjectRequest {
+  string tenant_id = 1 [json_name = "tenant_id"];
+  string bucket_id = 2 [json_name = "bucket_id"];
+  string key = 3;
+  string expected_etag = 4 [json_name = "expected_etag"];
+}
+
+message DeleteObjectResponse {
+  // DELETED：本次删除了存在的对象；GONE：对象本来就不存在。
+  string state = 1;
+}
+
+message GetBucketStatsRequest {
+  string tenant_id = 1 [json_name = "tenant_id"];
+  string bucket_id = 2 [json_name = "bucket_id"];
+}
+
+message GetBucketStatsResponse {
+  // 扫描到的对象数；truncated=true 时是下限。
+  int64 object_count = 1 [json_name = "object_count"];
+  // 扫描到的对象字节总数；truncated=true 时是下限。
+  int64 total_size = 2 [json_name = "total_size"];
+  // 达到扫描上限时为 true，表示统计不完整。
+  bool truncated = 3;
+  int64 scanned = 4;
 }
