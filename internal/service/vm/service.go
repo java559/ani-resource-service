@@ -586,7 +586,8 @@ func (s *Service) acquireLog(v biz.VM) (func(), error) {
 	}, nil
 }
 
-// StreamVMLogs serves the guest serial console of the running launcher. The
+// StreamVMLogs serves the guest serial console of the running launcher. A VM
+// that is not running yields an empty stream (READY then END EOF). The
 // caller's lifetime owns the stream; frames are only released after READY.
 func (s *Service) StreamVMLogs(r *pb.StreamVMLogsRequest, stream grpc.ServerStreamingServer[pb.VMLogFrame]) error {
 	if r == nil || r.TailLines < 1 || r.TailLines > 1000 {
@@ -623,13 +624,8 @@ func (s *Service) StreamVMLogs(r *pb.StreamVMLogsRequest, stream grpc.ServerStre
 	if e != nil {
 		return rpcError(e)
 	}
-	if !x.Running || x.VMI == nil || x.VM.UID != v.Native.UID {
-		return rpcError(biz.ErrLogTarget)
-	}
 	limits := s.config.LogLimits.Defaults()
-	call, cancel := context.WithTimeout(ctx, time.Duration(limits.LifetimeSeconds)*time.Second)
-	defer cancel()
-	return s.logs.StreamLogs(call, v, x, r.TailLines, r.Follow, func(frame biz.LogFrame) error {
+	emit := func(frame biz.LogFrame) error {
 		if len(frame.Data) > limits.FrameBytes {
 			return biz.ErrInvalid
 		}
@@ -646,5 +642,19 @@ func (s *Service) StreamVMLogs(r *pb.StreamVMLogsRequest, stream grpc.ServerStre
 		case <-timer.C:
 			return status.Error(codes.DeadlineExceeded, "VM_LOG_WRITE_TIMEOUT")
 		}
-	})
+	}
+	if x.VM.UID != v.Native.UID || (x.Running && x.VMI == nil) {
+		return rpcError(biz.ErrLogTarget)
+	}
+	// A VM that is not running (stopped, starting or shutting down) has no
+	// console to read: end the stream empty instead of failing the request.
+	if !x.Running {
+		if e = emit(biz.LogFrame{Kind: "READY"}); e != nil {
+			return e
+		}
+		return emit(biz.LogFrame{Kind: "END", Reason: "EOF"})
+	}
+	call, cancel := context.WithTimeout(ctx, time.Duration(limits.LifetimeSeconds)*time.Second)
+	defer cancel()
+	return s.logs.StreamLogs(call, v, x, r.TailLines, r.Follow, emit)
 }
