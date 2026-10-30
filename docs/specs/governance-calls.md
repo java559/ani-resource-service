@@ -41,6 +41,19 @@ Sandbox 条目定义 Resource RPC 合同和精确接收方 allowlist。Governanc
 | `/network.v1.TenantEgressService/GetVPCSnatBinding` | 查询 |
 | `/network.v1.TenantEgressService/SetVPCSnatEnabled` | 原键及 expected_version |
 | `/network.v1.TenantEgressService/DeleteVPCSnatBinding` | 资源删除 |
+| `/network.v1.NetworkSecurityGroupService/CreateSecurityGroup` | 原键 |
+| `/network.v1.NetworkSecurityGroupService/GetSecurityGroup` | 查询 |
+| `/network.v1.NetworkSecurityGroupService/ListSecurityGroups` | 查询 |
+| `/network.v1.NetworkSecurityGroupService/UpdateSecurityGroup` | 原键及 expected_version |
+| `/network.v1.NetworkSecurityGroupService/DeleteSecurityGroup` | 资源删除，保留引用保护 |
+| `/network.v1.NetworkSecurityGroupService/ListSecurityGroupRules` | 查询，按方向筛选 |
+| `/network.v1.NetworkSecurityGroupService/CreateSecurityGroupRule` | 原键及 expected_version |
+| `/network.v1.NetworkSecurityGroupService/UpdateSecurityGroupRule` | 原键及 expected_version |
+| `/network.v1.NetworkSecurityGroupService/DeleteSecurityGroupRule` | 资源/规则身份幂等删除 |
+| `/network.v1.NetworkSecurityGroupService/ListSecurityGroupBindings` | 查询 |
+| `/network.v1.NetworkSecurityGroupService/GetEIPSecurityGroups` | 查询绑定配置版本 |
+| `/network.v1.NetworkSecurityGroupService/SetEIPSecurityGroups` | 原键及绑定 expected_version |
+| `/network.v1.NetworkSecurityGroupService/GetSecurityGroupOperation` | 查询 |
 | `/network.v1.TenantLoadBalancerService/CreateLoadBalancer` | 原键 |
 | `/network.v1.TenantLoadBalancerService/GetLoadBalancer` | 查询 |
 | `/network.v1.TenantLoadBalancerService/ListLoadBalancers` | 查询 |
@@ -70,6 +83,8 @@ Sandbox 条目定义 Resource RPC 合同和精确接收方 allowlist。Governanc
 | `/instance.v1.InstanceService/DetachPVC` | 当前 mount_path + 显式 restart_if_running；原键 + expected_version |
 | `/instance.v1.InstanceService/ListInstanceMountablePVCs` | 持久实例 placement 的只读候选；删除 guard 活跃时不可选 |
 | `/instance.v1.InstanceService/LookupCommandReplay` | 当前授权后只读原命令 ACK；固定 canonical 数组、无 Kubernetes 解析、无副作用 |
+| `/instance.v1.InstanceService/SetSecurityGroups` | 原键及 expected_version，持久操作 |
+| `/vm.v1.VMService/SetSecurityGroups` | 原键及 expected_version，持久操作 |
 | `/instance.v1.InstanceService/GetInstance` | 查询 |
 | `/instance.v1.InstanceService/ResolveInstanceMetricScope` | 仅持久化范围读取；历史查询不要求当前运行对象 |
 | `/instance.v1.InstanceService/ListInstances` | page/page_size，默认1/20、最大100，items/total；同RR快照Count/List；name 与 id 为子串过滤（id 不区分大小写、最长36），不传 observed_state 时排除 deleted |
@@ -136,6 +151,10 @@ Storage 方法全部为租户委托、unary RPC，完整清单以 [`internal/ser
 
 - 独立盘：`ListStorageClasses`、`CreateVolume`、`ListVolumes`、`GetVolume`、`UpdateVolume`、`DeleteVolume`。
 - 对象：`GetDownloadURL`、`ListObjects`、`HeadObject`、`GetUploadURL`、`DeleteObject`。
-- 桶：`CreateBucket`、`ListBuckets`。
+- 桶：`CreateBucket`、`ListBuckets`、`GetBucketStats`（按需统计，单桶扫描上限 5000）。
 
 请求 `tenant_id` 必须与受信委托一致；存储不接受平台范围、不伪造 namespace/物理桶名。`GetUploadURL` 只返回绑定单个 key 的短期预签名 PUT URL，文件字节由客户端直传 S3；`DeleteObject` 只删单个 key，不递归。`CreateBucket` 的物理名由 `cluster_id` 与租户 UUID 指纹推导，逻辑名只接受 S3 合法小写 ASCII。存储 RPC 均为 unary，不改变已登记的实例和 VM 日志流允许清单。
+
+## 租户安全组
+
+上述安全组方法使用现有受信租户委托，不允许平台或 owner 范围借用。容器和 VM 创建请求中的 `security_group_ids` 与后续独立 SetSecurityGroups 均在 Resource 核对租户、placement 及组状态；绑定更换不修改不可变 CREATE 意图。规则默认值、应用证据和旧引用释放见[安全组合同](security-groups.md)。
