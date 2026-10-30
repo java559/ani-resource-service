@@ -75,7 +75,7 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	if err = repository.ConfigureVPCCIDRPresets(bc.Network.VpcCidrPresets, provider); err != nil {
+	if err = repository.ConfigureVPCCIDRPresets(bc.Network.VpcCidrPresets); err != nil {
 		return err
 	}
 	w := bc.Network.Worker
@@ -146,15 +146,12 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	if err != nil {
 		return err
 	}
-	retirementWorker, err := biz.NewLegacyDeviceRetirementStepper(repository, provider, uuid.NewString(), policy)
-	if err != nil {
-		return err
-	}
+
 	defaultService, defaultWorker, err := wireDefaultVPCEgress(repository, provider, bc.Network, policy)
 	if err != nil {
 		return err
 	}
-	additional := []server.Stepper{attachmentWorker, switchWorker, retirementWorker}
+	additional := []server.Stepper{attachmentWorker, switchWorker}
 	if vms != nil {
 		additional = append(additional, vms.worker)
 	}
@@ -176,7 +173,6 @@ func runGovernance(bc *conf.Bootstrap, logger *slog.Logger) error {
 	networkv1.RegisterTenantEgressServiceServer(gs, networkService.NewTenantEgressService(egress))
 	networkv1.RegisterPlatformNetworkServiceServer(gs, networkService.NewPlatformNetworkService(egress))
 	networkv1.RegisterPlatformEIPServiceServer(gs, networkService.NewPlatformEIPService(egress))
-	networkv1.RegisterPlatformDeviceRetirementServiceServer(gs, networkService.NewPlatformDeviceRetirementService(egress))
 	if defaultService != nil {
 		networkv1.RegisterPlatformDefaultEgressServiceServer(gs, defaultService)
 	}

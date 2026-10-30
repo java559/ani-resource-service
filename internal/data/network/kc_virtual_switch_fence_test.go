@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
-	"github.com/zhangzhe-ctrl/ani-resource-service/internal/data/network/sqlcgen"
 	jsonpatch "gopkg.in/evanphx/json-patch.v4"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -117,22 +116,13 @@ func newSwitchFenceAPI(t *testing.T, node *unstructured.Unstructured, loseWrite 
 	}
 	return &KCProvider{client: client}, api
 }
-func fenceFixture(t *testing.T) (biz.VirtualSwitch, biz.VirtualSwitchNode, *unstructured.Unstructured, []unstructured.Unstructured, []sqlcgen.NetworkDeviceAdoption, time.Time) {
+func fenceFixture(t *testing.T) (biz.VirtualSwitch, biz.VirtualSwitchNode, *unstructured.Unstructured) {
 	t.Helper()
-	sw, nodes, maps, _, _, now := switchFixture(t)
+	sw, nodes, _, _, _, _ := switchFixture(t)
 	sw.BindingID = "binding1"
 	sw.Version = 3
 	sw.State = biz.Deleting
-	member := biz.VirtualSwitchNode{NodeName: "n1", NodeUID: "uid1", MAC: "00:11:22:33:44:55", Priority: 100, Allocated: true, Prepared: true, Unknown: true, ResourceVersion: "1"}
-	var doc NodeFactsDocument
-	if err := json.Unmarshal([]byte(crString(&maps[0], "data", "facts.json")), &doc); err != nil {
-		t.Fatal(err)
-	}
-	accepted, _ := json.Marshal(doc.Interfaces)
-	doc.OVSBridgeMappingsObserved = true
-	doc.OVSBridgeMappings = map[string]string{}
-	body, _ := json.Marshal(doc)
-	_ = unstructured.SetNestedField(maps[0].Object, string(body), "data", "facts.json")
+	member := biz.VirtualSwitchNode{NodeName: "n1", NodeUID: "uid1", Priority: 100, Allocated: true, Prepared: true, Unknown: true, ResourceVersion: "1"}
 	nodes[0].SetAPIVersion("v1")
 	nodes[0].SetKind("Node")
 	labels := nodes[0].GetLabels()
@@ -141,13 +131,13 @@ func fenceFixture(t *testing.T) (biz.VirtualSwitch, biz.VirtualSwitchNode, *unst
 	annotations := nodes[0].GetAnnotations()
 	annotations["protected.example/keep"] = "unchanged"
 	nodes[0].SetAnnotations(annotations)
-	return sw, member, &nodes[0], maps, []sqlcgen.NetworkDeviceAdoption{{DeviceName: "ens35", NodeInventory: accepted}}, now
+	return sw, member, &nodes[0]
 }
 
 func TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch(t *testing.T) {
 	for _, loseWrite := range []int{0, 1, 2} {
 		t.Run(strconv.Itoa(loseWrite), func(t *testing.T) {
-			sw, member, node, maps, devices, now := fenceFixture(t)
+			sw, member, node := fenceFixture(t)
 			provider, api := newSwitchFenceAPI(t, node, loseWrite, true)
 			oldPatch, _ := json.Marshal([]map[string]any{{"op": "test", "path": "/metadata/uid", "value": member.NodeUID}, {"op": "test", "path": "/metadata/resourceVersion", "value": "1"}, {"op": "add", "path": "/metadata/labels/" + jsonPointerKey(virtualSwitchGroupPrefix+sw.GroupName), "value": "100"}, {"op": "add", "path": "/metadata/annotations/" + jsonPointerKey(VirtualSwitchOwnerKey(sw.GroupName)), "value": sw.BindingID}})
 			oldResult := make(chan error, 1)
@@ -161,7 +151,7 @@ func TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch(t *testing.T) {
 			if err := <-oldResult; err == nil {
 				t.Fatal("delayed create did not become uncertain")
 			}
-			current, err := inspectSwitchNodeCleanup(sw, member, api.snapshot(), maps, nil, devices, now)
+			current, err := inspectSwitchNodeCleanup(sw, member, api.snapshot(), nil)
 			if err != nil || current.State == "cleaned" || current.DeleteFenced || !current.Unknown {
 				t.Fatal("absence cleared an unfenced unknown", current, err)
 			}
@@ -177,7 +167,7 @@ func TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch(t *testing.T) {
 			} else if err != nil {
 				t.Fatal(err)
 			}
-			current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), maps, nil, devices, now)
+			current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), nil)
 			if err != nil || !current.DeleteFenced || current.Unknown || current.State != "unfencing" {
 				t.Fatal("exact fence did not recover the barrier", current, err)
 			}
@@ -196,7 +186,7 @@ func TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch(t *testing.T) {
 			} else if err != nil {
 				t.Fatal(err)
 			}
-			current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), maps, nil, devices, now)
+			current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), nil)
 			if err != nil || current.State != "cleaned" || !current.DeleteFenced || current.Unknown {
 				t.Fatal("persisted barrier did not recover unfence", current, err)
 			}
@@ -227,8 +217,8 @@ func TestVirtualSwitchDeleteFenceRejectsDelayedOldPatch(t *testing.T) {
 	}
 }
 
-func TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate(t *testing.T) {
-	sw, member, node, maps, devices, now := fenceFixture(t)
+func TestVirtualSwitchDeleteFenceKeepsKCNReleaseGate(t *testing.T) {
+	sw, member, node := fenceFixture(t)
 	labels := node.GetLabels()
 	labels[virtualSwitchGroupPrefix+sw.GroupName] = "100"
 	node.SetLabels(labels)
@@ -249,19 +239,14 @@ func TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate(t *testing.T) {
 	if _, present := api.snapshot().GetAnnotations()[VirtualSwitchOwnerKey(sw.GroupName)]; present {
 		t.Fatal("owned marker survived the fence CAS")
 	}
-	var doc NodeFactsDocument
-	if err := json.Unmarshal([]byte(crString(&maps[0], "data", "facts.json")), &doc); err != nil {
-		t.Fatal(err)
-	}
-	if doc.OVSBridgeMappings == nil {
-		doc.OVSBridgeMappings = map[string]string{}
-	}
-	doc.OVSBridgeMappings[sw.GroupName+".ens35"] = "br-ens35"
-	body, _ := json.Marshal(doc)
-	_ = unstructured.SetNestedField(maps[0].Object, string(body), "data", "facts.json")
-	current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), maps, nil, devices, now)
+	api.mu.Lock()
+	annotations = api.node.GetAnnotations()
+	annotations[virtualSwitchGroupPrefix+sw.GroupName] = "ens35"
+	api.node.SetAnnotations(annotations)
+	api.mu.Unlock()
+	current, err = inspectSwitchNodeCleanup(sw, current, api.snapshot(), nil)
 	if err != nil || current.State != "cleaning" {
-		t.Fatal("residual mapping bypassed cleanup", current, err)
+		t.Fatal("KCN device acknowledgement bypassed cleanup", current, err)
 	}
 	current.Unknown = true
 	_, err = provider.patchVirtualSwitchDeletionNode(context.Background(), sw, current, api.snapshot())
@@ -269,7 +254,7 @@ func TestVirtualSwitchDeleteFenceKeepsPhysicalCleanupGate(t *testing.T) {
 		t.Fatal(err)
 	}
 	if api.writes != 1 || api.snapshot().GetAnnotations()[virtualSwitchDeleteFenceKey(sw.GroupName)] == "" {
-		t.Fatal("fence removed before physical cleanup")
+		t.Fatal("fence removed before KCN release")
 	}
 	annotations = api.snapshot().GetAnnotations()
 	annotations[virtualSwitchDeleteFenceKey(sw.GroupName)] = "foreign"

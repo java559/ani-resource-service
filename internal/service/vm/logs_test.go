@@ -40,8 +40,20 @@ func (l *logPortFake) StreamLogs(_ context.Context, _ biz.VM, x biz.Observation,
 
 type stoppedNative struct{ biz.NativePort }
 
-func (stoppedNative) Observe(context.Context, biz.VM) (biz.Observation, error) {
-	return biz.Observation{Stopped: true}, nil
+func (stoppedNative) Observe(_ context.Context, v biz.VM) (biz.Observation, error) {
+	return biz.Observation{VM: v.Native, Stopped: true}, nil
+}
+
+type startingNative struct{ biz.NativePort }
+
+func (startingNative) Observe(_ context.Context, v biz.VM) (biz.Observation, error) {
+	return biz.Observation{VM: v.Native, VMI: &biz.ObjectRef{Kind: "VirtualMachineInstance", Namespace: v.Spec.Namespace, Name: v.Native.Name, UID: "vmi-uid"}}, nil
+}
+
+type driftedNative struct{ biz.NativePort }
+
+func (driftedNative) Observe(_ context.Context, v biz.VM) (biz.Observation, error) {
+	return biz.Observation{VM: biz.ObjectRef{Kind: "VirtualMachine", Namespace: v.Spec.Namespace, Name: v.Native.Name, UID: "foreign-uid"}, VMI: &biz.ObjectRef{Kind: "VirtualMachineInstance", Namespace: v.Spec.Namespace, Name: v.Native.Name, UID: "vmi-uid"}, Running: true}, nil
 }
 
 func logServiceFixture(t *testing.T) (*Service, biz.VM, *logPortFake) {
@@ -71,8 +83,8 @@ func TestStreamVMLogsFramesTheObservedLauncher(t *testing.T) {
 	}
 }
 
-func TestStreamVMLogsRejectsInvalidAndStoppedTargets(t *testing.T) {
-	s, v, port := logServiceFixture(t)
+func TestStreamVMLogsRejectsInvalidRequests(t *testing.T) {
+	s, v, _ := logServiceFixture(t)
 	sink := &logStreamSink{ctx: logContext(v.TenantID)}
 	for _, tail := range []uint32{0, 1001} {
 		if e := s.StreamVMLogs(&pb.StreamVMLogsRequest{TenantId: v.TenantID, VmId: v.ID, TailLines: tail}, sink); status.Code(e) != codes.InvalidArgument {
@@ -82,10 +94,33 @@ func TestStreamVMLogsRejectsInvalidAndStoppedTargets(t *testing.T) {
 	if e := s.StreamVMLogs(&pb.StreamVMLogsRequest{TenantId: uuid.NewString(), VmId: v.ID, TailLines: 10}, sink); status.Code(e) != codes.PermissionDenied {
 		t.Fatalf("foreign tenant accepted: %v", e)
 	}
-	s.native = stoppedNative{}
-	e := s.StreamVMLogs(&pb.StreamVMLogsRequest{TenantId: v.TenantID, VmId: v.ID, TailLines: 10}, sink)
+}
+
+func TestStreamVMLogsNotRunningEndsEmpty(t *testing.T) {
+	for name, native := range map[string]biz.NativePort{"stopped": stoppedNative{}, "starting": startingNative{}} {
+		t.Run(name, func(t *testing.T) {
+			s, v, port := logServiceFixture(t)
+			s.native = native
+			sink := &logStreamSink{ctx: logContext(v.TenantID)}
+			if e := s.StreamVMLogs(&pb.StreamVMLogsRequest{TenantId: v.TenantID, VmId: v.ID, TailLines: 10}, sink); e != nil {
+				t.Fatalf("unexpected error: %v", e)
+			}
+			if port.calls != 0 || len(sink.sent) != 2 || sink.sent[0].Kind != pb.VMLogFrame_READY {
+				t.Fatalf("stream not empty: %+v %+v", sink.sent, port)
+			}
+			if end := sink.sent[1]; end.Kind != pb.VMLogFrame_END || end.Reason != "EOF" || len(end.Data) != 0 {
+				t.Fatalf("end frame: %+v", end)
+			}
+		})
+	}
+}
+
+func TestStreamVMLogsOwnershipDriftStillFails(t *testing.T) {
+	s, v, port := logServiceFixture(t)
+	s.native = driftedNative{}
+	e := s.StreamVMLogs(&pb.StreamVMLogsRequest{TenantId: v.TenantID, VmId: v.ID, TailLines: 10}, &logStreamSink{ctx: logContext(v.TenantID)})
 	if status.Code(e) != codes.FailedPrecondition || status.Convert(e).Message() != "VM_LOG_TARGET_UNAVAILABLE" || port.calls != 0 {
-		t.Fatalf("stopped VM served logs: %v %+v", e, port)
+		t.Fatalf("ownership drift served: %v %+v", e, port)
 	}
 }
 

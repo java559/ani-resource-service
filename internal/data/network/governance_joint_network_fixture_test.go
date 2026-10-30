@@ -31,7 +31,6 @@ type networkJointAggregates struct {
 	steppers       []runtime.Stepper
 	defaultService *service.PlatformDefaultEgressService
 	identity       biz.DefaultVPCIdentity
-	legacyDeviceID string
 }
 
 func wireNetworkJointAggregates(t *testing.T, f *lbAdmissionFixture, provider *data.KCProvider, policy biz.WorkerPolicy) *networkJointAggregates {
@@ -43,10 +42,6 @@ func wireNetworkJointAggregates(t *testing.T, f *lbAdmissionFixture, provider *d
 	}
 	f.f.e = e
 	switchWorker, err := biz.NewVirtualSwitchWorker(f.f.p, provider, uuid.NewString(), policy)
-	if err != nil {
-		t.Fatal(err)
-	}
-	retirementWorker, err := biz.NewLegacyDeviceRetirementStepper(f.f.p, provider, uuid.NewString(), policy)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,18 +67,7 @@ func wireNetworkJointAggregates(t *testing.T, f *lbAdmissionFixture, provider *d
 	if err != nil {
 		t.Fatal(err)
 	}
-	// This independent legacy registration has no VLAN/Pool/group reference.
-	// It may be pending when HTTP closes it: the real retirement stepper retains
-	// the existing lease/request drain bound, rather than inventing ready state.
-	inventory, err := e.ListNodeInterfaces(f.f.ctx, "")
-	if err != nil {
-		t.Fatal(err)
-	}
-	legacy, err := e.CreatePlatform(f.f.ctx, biz.PlatformIntent{Kind: "adopt_device", Name: "joint-legacy-retirement", IdempotencyKey: "joint-legacy-retirement", Device: &biz.DeviceConfig{DeviceName: "legacy0", InventoryFingerprint: inventory.Fingerprint}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	return &networkJointAggregates{steppers: []runtime.Stepper{switchWorker, retirementWorker, defaultWorker}, defaultService: service.NewPlatformDefaultEgressService(usecase), identity: identity, legacyDeviceID: legacy.ID}
+	return &networkJointAggregates{steppers: []runtime.Stepper{switchWorker, defaultWorker}, defaultService: service.NewPlatformDefaultEgressService(usecase), identity: identity}
 }
 
 // This is exclusively the external Kubernetes/CNI side. It neither reads nor
@@ -118,12 +102,7 @@ func jointObjects(api *controlled.Server, resource string) []map[string]any {
 }
 func (b *networkJointSwitchBoundary) publishLocked(api *controlled.Server) {
 	node := api.Object("nodes", "", "node-1")
-	cm := api.Object("configmaps", "kcn-system", "node-facts-node-1")
-	if node == nil || cm == nil {
-		return
-	}
-	var doc data.NodeFactsDocument
-	if json.Unmarshal([]byte(cm["data"].(map[string]any)["facts.json"].(string)), &doc) != nil {
+	if node == nil {
 		return
 	}
 	meta := node["metadata"].(map[string]any)
@@ -164,20 +143,11 @@ func (b *networkJointSwitchBoundary) publishLocked(api *controlled.Server) {
 			api.Change("vlannetworks", vlan, false)
 		}
 	}
-	if doc.OVSBridgeMappings == nil {
-		doc.OVSBridgeMappings = map[string]string{}
-	}
-	for network := range doc.OVSBridgeMappings {
-		if strings.HasSuffix(network, ".phys1") {
-			delete(doc.OVSBridgeMappings, network)
-		}
-	}
-	wiredNetworks := []string{}
+	wiredDevice := false
 	for group, wired := range groups {
 		if wired {
 			annotations[jointGroupPrefix+group] = "phys1"
-			doc.OVSBridgeMappings[group+".phys1"] = "br-phys1"
-			wiredNetworks = append(wiredNetworks, group+".phys1")
+			wiredDevice = true
 		} else {
 			delete(annotations, jointGroupPrefix+group)
 		}
@@ -187,7 +157,7 @@ func (b *networkJointSwitchBoundary) publishLocked(api *controlled.Server) {
 		_ = json.Unmarshal([]byte(raw), &managed)
 	}
 	delete(managed, "phys1")
-	if len(wiredNetworks) > 0 {
+	if wiredDevice {
 		managed["phys1"] = true
 	}
 	rawManaged, _ := json.Marshal(managed)
@@ -197,29 +167,6 @@ func (b *networkJointSwitchBoundary) publishLocked(api *controlled.Server) {
 	if string(before) != string(after) {
 		api.Change("nodes", node, false)
 	}
-	doc.CollectedAt = time.Now().UTC()
-	doc.OVSBridgeMappingsObserved = true
-	for index := range doc.Interfaces {
-		v := &doc.Interfaces[index]
-		v.ObservedAt = doc.CollectedAt
-		if v.Name == "phys1" {
-			v.Master = ""
-			v.OVSManaged = false
-			v.KCManaged = false
-			v.KCBridgeReady = false
-			v.KCBridgeNetworks = nil
-			if len(wiredNetworks) > 0 {
-				v.Master = "ovs-system"
-				v.OVSManaged = true
-				v.KCManaged = true
-				v.KCBridgeReady = true
-				v.KCBridgeNetworks = wiredNetworks
-			}
-		}
-	}
-	body, _ := json.Marshal(doc)
-	cm["data"].(map[string]any)["facts.json"] = string(body)
-	api.Change("configmaps", cm, false)
 	b.lastRefresh = time.Now()
 }
 func jointHTTPResponse(w http.ResponseWriter, recorder *httptest.ResponseRecorder) {
@@ -250,14 +197,10 @@ func (b *networkJointSwitchBoundary) http(w http.ResponseWriter, r *http.Request
 	}
 	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	nodePatch := r.Method == http.MethodPatch && len(parts) == 4 && parts[0] == "api" && parts[2] == "nodes"
-	retirementPatch := r.Method == http.MethodPatch && r.URL.Path == "/api/v1/namespaces/kcn-system/configmaps/kcn-config" && r.URL.Query().Get("fieldManager") == "ani-resource-device-retirement"
-	if nodePatch || retirementPatch {
+	if nodePatch {
 		b.mu.Lock()
 		defer b.mu.Unlock()
 		resource, namespace, name := "nodes", "", parts[len(parts)-1]
-		if retirementPatch {
-			resource, namespace, name = "configmaps", "kcn-system", "kcn-config"
-		}
 		object := api.Object(resource, namespace, name)
 		if object == nil {
 			http.Error(w, "not found", 404)

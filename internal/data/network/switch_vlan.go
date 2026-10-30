@@ -94,12 +94,12 @@ func (p *Postgres) acceptSwitchVlan(ctx context.Context, i biz.PlatformIntent, a
 		if textValue(device.VirtualSwitchID) != s.ResourceID || textValue(device.SwitchBindingID) != textValue(s.BindingID) {
 			return biz.PlatformResource{}, biz.Fail(biz.ResourceInUse, "device has an active registration owned by another binding")
 		}
-		var frozenDevice []biz.NodeInterface
+		var frozenDevice []biz.PreparedDeviceNode
 		if err = json.Unmarshal(device.NodeInventory, &frozenDevice); err != nil {
 			return biz.PlatformResource{}, databaseFailure(err)
 		}
 		if !sameSwitchDeviceIdentity(frozenDevice, proof.Inventory.Items) {
-			return biz.PlatformResource{}, biz.Fail(biz.ResourceBusy, "registered device membership or MAC changed")
+			return biz.PlatformResource{}, biz.Fail(biz.ResourceBusy, "registered device membership changed")
 		}
 	} else {
 		id, op := newEgressID("device"), uuid.NewString()
@@ -173,14 +173,14 @@ func sameSwitchMembers(a, b []biz.VirtualSwitchNode) bool {
 	return true
 }
 
-func sameSwitchDeviceIdentity(frozen, current []biz.NodeInterface) bool {
+func sameSwitchDeviceIdentity(frozen, current []biz.PreparedDeviceNode) bool {
 	if len(frozen) == 0 || len(frozen) != len(current) {
 		return false
 	}
-	identities := map[string]biz.NodeInterface{}
+	identities := map[string]biz.PreparedDeviceNode{}
 	for _, n := range frozen {
 		key := n.NodeUID + "/" + n.Name
-		if n.NodeUID == "" || n.Name == "" || n.MAC == "" || identities[key].NodeUID != "" {
+		if n.NodeUID == "" || n.NodeName == "" || n.Name == "" || identities[key].NodeUID != "" {
 			return false
 		}
 		identities[key] = n
@@ -188,7 +188,7 @@ func sameSwitchDeviceIdentity(frozen, current []biz.NodeInterface) bool {
 	for _, n := range current {
 		key := n.NodeUID + "/" + n.Name
 		old, ok := identities[key]
-		if !ok || n.NodeName != old.NodeName || n.MAC != old.MAC {
+		if !ok || n.NodeName != old.NodeName {
 			return false
 		}
 		delete(identities, key)

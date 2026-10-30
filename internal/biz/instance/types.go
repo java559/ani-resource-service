@@ -319,9 +319,16 @@ type QuotaReporter interface {
 	Report(context.Context, Instance) error
 }
 
-type ResolvedImage struct{ Reference, Digest string }
+type ResolvedImage struct{ Reference, Digest, RegistryAuthority string }
 type ImageResolver interface {
 	Resolve(context.Context, string, string, string) (ResolvedImage, error)
+}
+
+// PullSecretEscape is the instance path's handle on the unified Secret writer.
+// Instance owns neither the naming rule nor the credential; it only freezes the
+// derived name into its spec after Ensure succeeds.
+type PullSecretEscape interface {
+	EnsureInstancePullSecret(context.Context, string, string, string) (string, error)
 }
 type EnvironmentValidator interface {
 	ValidateEnvironment(context.Context, string, string, string, string) error
@@ -388,6 +395,7 @@ func validateResources(kind string, gpu GPU) error {
 type ListFilter struct {
 	Page, PageSize                                 uint32
 	InstanceKind, ComputeType, ObservedState, Name string
+	ID                                             string
 }
 
 func PageWindow(page, size uint32) (uint32, uint32, int64, error) {
