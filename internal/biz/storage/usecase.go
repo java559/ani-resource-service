@@ -5,6 +5,7 @@ import (
 	"errors"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -16,7 +17,7 @@ const (
 	defaultDownloadTTL = 10 * time.Minute
 )
 
-// Config 是 Storage 用例的静态配置；新增租户桶需要改配置并重启。
+// Config 是启动期配置；页面建桶不修改静态配置。
 type Config struct {
 	NamespacePrefix    string
 	ClusterID          string
@@ -24,10 +25,16 @@ type Config struct {
 	BorrowedPVCGuard   BorrowedPVCGuard
 	ObserveDeleteWrite func(string)
 	Buckets            []BucketConfig
+	Region             string
 	DownloadTTL        time.Duration
+	// TenantBucketPrefix 为空表示关闭租户建桶；非空时物理桶名由该前缀推导。
+	TenantBucketPrefix  string
+	MaxBucketsPerTenant int
+	MaxUploadBytes      int64
+	UploadTTL           time.Duration
 }
 
-// UseCase 编排独立盘与只读对象用例，不直接依赖 Kratos、Proto 或 SDK。
+// UseCase 编排独立盘与对象存储，不直接依赖 Kratos、Proto 或 SDK。
 type UseCase struct {
 	volumes VolumePort
 	objects ObjectPort
@@ -44,6 +51,32 @@ func NewUseCase(volumes VolumePort, objects ObjectPort, cfg Config) (*UseCase, e
 	}
 	if cfg.DownloadTTL <= 0 || cfg.DownloadTTL > defaultDownloadTTL {
 		cfg.DownloadTTL = defaultDownloadTTL
+	}
+	if cfg.MaxBucketsPerTenant == 0 {
+		cfg.MaxBucketsPerTenant = defaultMaxBucketsPerTenant
+	}
+	if cfg.MaxBucketsPerTenant < 1 || cfg.MaxBucketsPerTenant > 100 {
+		return nil, ErrInvalid
+	}
+	if cfg.MaxUploadBytes == 0 {
+		cfg.MaxUploadBytes = defaultMaxUploadBytes
+	}
+	if cfg.MaxUploadBytes < minimumUploadBytes || cfg.MaxUploadBytes > maximumUploadBytes {
+		return nil, ErrInvalid
+	}
+	if cfg.UploadTTL == 0 {
+		cfg.UploadTTL = defaultUploadTTL
+	}
+	if cfg.UploadTTL < time.Minute || cfg.UploadTTL > maximumUploadTTL {
+		return nil, ErrInvalid
+	}
+	if cfg.Region == "" {
+		cfg.Region = "us-east-1"
+	}
+	if cfg.TenantBucketPrefix != "" {
+		if err := ValidateTenantBucketPrefix(cfg.TenantBucketPrefix); err != nil || objects == nil || strings.TrimSpace(cfg.ClusterID) == "" {
+			return nil, ErrInvalid
+		}
 	}
 	return &UseCase{volumes: volumes, objects: objects, cfg: cfg, now: time.Now}, nil
 }
@@ -304,24 +337,210 @@ func (u *UseCase) usage(ctx context.Context, namespace, claimName string) ([]Con
 	return out, nil
 }
 
-// ListBuckets 只返回配置给当前租户的桶，筛选后按稳定 ID 排序。
-func (u *UseCase) ListBuckets(tenant string, filter BucketFilter) ([]Bucket, error) {
+// ListBuckets 返回配置给当前租户的桶；启用租户建桶时合并 S3 中由本服务创建的桶。
+func (u *UseCase) ListBuckets(ctx context.Context, tenant string, filter BucketFilter) ([]Bucket, error) {
+	if !CanonicalUUID(tenant) {
+		return nil, ErrInvalid
+	}
 	filter, err := NormalizeBucketFilter(filter)
 	if err != nil {
 		return nil, err
 	}
 	out := []Bucket{}
+	configured := map[string]bool{}
+	logical := map[string]string{}
 	for _, b := range u.cfg.Buckets {
+		configured[b.Bucket] = true
 		if b.TenantID != tenant {
 			continue
 		}
-		bucket := Bucket{ID: b.ID, Name: b.Name}
+		logical[b.ID] = b.Bucket
+		bucket := Bucket{ID: b.ID, Name: b.Name, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}
+		if matchBucketFilter(bucket, filter) {
+			out = append(out, bucket)
+		}
+	}
+	if u.cfg.TenantBucketPrefix == "" {
+		sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
+		return out, nil
+	}
+	if u.objects == nil {
+		return nil, ErrBackendUnavailable
+	}
+	infos, err := u.objects.ListBuckets(ctx)
+	if err != nil {
+		return nil, err
+	}
+	prefix, err := tenantBucketPrefix(u.cfg.TenantBucketPrefix, u.cfg.ClusterID, tenant)
+	if err != nil {
+		return nil, err
+	}
+	for _, info := range infos {
+		name := info.Name
+		if !strings.HasPrefix(name, prefix) || configured[name] {
+			continue
+		}
+		id := strings.TrimPrefix(name, prefix)
+		if ValidateBucketID(id) != nil {
+			continue
+		}
+		if previous, exists := logical[id]; exists && previous != name {
+			return nil, ErrConflict
+		}
+		logical[id] = name
+		bucket := Bucket{ID: id, Name: id, CreatedAt: info.CreatedAt, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}
 		if matchBucketFilter(bucket, filter) {
 			out = append(out, bucket)
 		}
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
 	return out, nil
+}
+
+// CreateBucket 在租户前缀下创建物理桶；同名重复创建幂等返回同一个桶。
+func (u *UseCase) CreateBucket(ctx context.Context, tenant, name string) (Bucket, error) {
+	if !CanonicalUUID(tenant) {
+		return Bucket{}, ErrInvalid
+	}
+	if u.cfg.TenantBucketPrefix == "" {
+		return Bucket{}, ErrBucketDisabled
+	}
+	if err := ValidateBucketID(name); err != nil {
+		return Bucket{}, err
+	}
+	for _, b := range u.cfg.Buckets {
+		if b.TenantID == tenant && b.ID == name {
+			return Bucket{}, ErrBucketExists
+		}
+	}
+	physical, err := TenantBucketName(u.cfg.TenantBucketPrefix, u.cfg.ClusterID, tenant, name)
+	if err != nil {
+		return Bucket{}, err
+	}
+	if u.objects == nil {
+		return Bucket{}, ErrBackendUnavailable
+	}
+	infos, err := u.objects.ListBuckets(ctx)
+	if err != nil {
+		return Bucket{}, err
+	}
+	prefix, err := tenantBucketPrefix(u.cfg.TenantBucketPrefix, u.cfg.ClusterID, tenant)
+	if err != nil {
+		return Bucket{}, err
+	}
+	configured := map[string]bool{}
+	for _, b := range u.cfg.Buckets {
+		configured[b.Bucket] = true
+		if b.Bucket == physical {
+			return Bucket{}, ErrBucketExists
+		}
+	}
+	count := 0
+	for _, info := range infos {
+		if info.Name == physical {
+			return Bucket{ID: name, Name: name, CreatedAt: info.CreatedAt, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}, nil
+		}
+		if strings.HasPrefix(info.Name, prefix) && !configured[info.Name] {
+			count++
+		}
+	}
+	if count >= u.cfg.MaxBucketsPerTenant {
+		return Bucket{}, ErrBucketLimit
+	}
+	if err := u.objects.CreateBucket(ctx, physical); err != nil {
+		return Bucket{}, err
+	}
+	return Bucket{ID: name, Name: name, Region: u.cfg.Region, StorageClass: StorageClassStandard, ACL: ACLPrivate}, nil
+}
+
+// BucketStats 按需统计桶内对象数量与字节数；超过扫描上限时 truncated=true。
+func (u *UseCase) BucketStats(ctx context.Context, tenant, bucketID string) (ObjectStats, error) {
+	bucket, err := u.bucket(tenant, bucketID)
+	if err != nil {
+		return ObjectStats{}, err
+	}
+	if u.objects == nil {
+		return ObjectStats{}, ErrBackendUnavailable
+	}
+	if err := u.objects.HeadBucket(ctx, bucket.Bucket); err != nil {
+		return ObjectStats{}, err
+	}
+	return u.objects.BucketStats(ctx, bucket.Bucket, maxBucketStatsScan)
+}
+
+// UploadURL 签发绑定单个 key 的短期 PUT URL；服务端不承载文件字节。
+func (u *UseCase) UploadURL(ctx context.Context, tenant, bucketID, key, contentType string, size int64, overwrite bool) (UploadTicket, error) {
+	if u.objects == nil || !u.objects.Available() {
+		return UploadTicket{}, ErrUploadUnavailable
+	}
+	bucket, err := u.bucket(tenant, bucketID)
+	if err != nil {
+		return UploadTicket{}, err
+	}
+	if err := ValidateUploadKey(key); err != nil {
+		return UploadTicket{}, err
+	}
+	if err := ValidateUploadSize(size, u.cfg.MaxUploadBytes); err != nil {
+		return UploadTicket{}, err
+	}
+	contentType, err = NormalizeContentType(contentType)
+	if err != nil {
+		return UploadTicket{}, err
+	}
+	if err := u.objects.HeadBucket(ctx, bucket.Bucket); err != nil {
+		return UploadTicket{}, err
+	}
+	if !overwrite {
+		_, err := u.objects.HeadObject(ctx, bucket.Bucket, key)
+		if err == nil {
+			return UploadTicket{}, ErrObjectExists
+		}
+		if !errors.Is(err, ErrNotFound) {
+			return UploadTicket{}, err
+		}
+	}
+	url, headers, expires, err := u.objects.PresignPutObject(ctx, bucket.Bucket, key, contentType, overwrite, u.cfg.UploadTTL)
+	if err != nil {
+		return UploadTicket{}, err
+	}
+	return UploadTicket{URL: url, Headers: headers, ExpiresAt: expires, Key: key}, nil
+}
+
+// DeleteObject 删除单个对象；不存在返回 GONE，保持幂等。
+func (u *UseCase) DeleteObject(ctx context.Context, tenant, bucketID, key, expectedETag string) (string, error) {
+	bucket, err := u.bucket(tenant, bucketID)
+	if err != nil {
+		return "", err
+	}
+	if err := ValidateObjectKey(key); err != nil {
+		return "", err
+	}
+	if u.objects == nil {
+		return "", ErrBackendUnavailable
+	}
+	if len(expectedETag) > 256 || strings.ContainsAny(expectedETag, "\r\n\x00") || (expectedETag != "" && NormalizeETag(expectedETag) == "") {
+		return "", ErrInvalid
+	}
+	if err := u.objects.HeadBucket(ctx, bucket.Bucket); err != nil {
+		return "", err
+	}
+	meta, err := u.objects.HeadObject(ctx, bucket.Bucket, key)
+	if errors.Is(err, ErrNotFound) {
+		return ObjectGone, nil
+	}
+	if err != nil {
+		return "", err
+	}
+	if expectedETag != "" && NormalizeETag(expectedETag) != NormalizeETag(meta.ETag) {
+		return "", ErrObjectIdentity
+	}
+	if err := u.objects.DeleteObject(ctx, bucket.Bucket, key, expectedETag); err != nil {
+		if errors.Is(err, ErrNotFound) {
+			return ObjectGone, nil
+		}
+		return "", err
+	}
+	return ObjectDeleted, nil
 }
 
 // ListObjects 使用领域游标；limit 缺省 100，显式 0 或越界一律 400。
@@ -396,6 +615,16 @@ func (u *UseCase) bucket(tenant, id string) (BucketConfig, error) {
 	for _, b := range u.cfg.Buckets {
 		if b.ID == id && b.TenantID == tenant {
 			return b, nil
+		}
+	}
+	if u.cfg.TenantBucketPrefix != "" && ValidateBucketID(id) == nil {
+		if name, err := TenantBucketName(u.cfg.TenantBucketPrefix, u.cfg.ClusterID, tenant, id); err == nil {
+			for _, b := range u.cfg.Buckets {
+				if b.Bucket == name {
+					return BucketConfig{}, ErrNotFound
+				}
+			}
+			return BucketConfig{ID: id, TenantID: tenant, Name: id, Bucket: name}, nil
 		}
 	}
 	return BucketConfig{}, ErrNotFound

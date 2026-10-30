@@ -145,6 +145,82 @@ func (s *S3) Available() bool {
 	return s != nil && s.presign != nil && s.browser
 }
 
+func (s *S3) ListBuckets(ctx context.Context) ([]biz.BucketInfo, error) {
+	pages := s3.NewListBucketsPaginator(s.internal, &s3.ListBucketsInput{})
+	infos := []biz.BucketInfo{}
+	for pages.HasMorePages() {
+		out, err := pages.NextPage(ctx)
+		if err != nil {
+			return nil, s3Error(err)
+		}
+		for _, bucket := range out.Buckets {
+			if bucket.Name == nil {
+				continue
+			}
+			info := biz.BucketInfo{Name: *bucket.Name}
+			if bucket.CreationDate != nil {
+				info.CreatedAt = *bucket.CreationDate
+			}
+			infos = append(infos, info)
+		}
+	}
+	return infos, nil
+}
+
+// BucketStats 逐页列举对象并累加数量与字节数，达到上限即停止并标记不完整。
+func (s *S3) BucketStats(ctx context.Context, bucket string, maxObjects int64) (biz.ObjectStats, error) {
+	stats := biz.ObjectStats{}
+	pages := s3.NewListObjectsV2Paginator(s.internal, &s3.ListObjectsV2Input{
+		Bucket: aws.String(bucket),
+	})
+	for pages.HasMorePages() {
+		out, err := pages.NextPage(ctx)
+		if err != nil {
+			return biz.ObjectStats{}, s3Error(err)
+		}
+		for _, item := range out.Contents {
+			stats.ObjectCount++
+			stats.TotalSize += aws.ToInt64(item.Size)
+			stats.Scanned++
+			if maxObjects > 0 && stats.Scanned >= maxObjects {
+				stats.Truncated = true
+				return stats, nil
+			}
+		}
+	}
+	return stats, nil
+}
+
+func (s *S3) CreateBucket(ctx context.Context, bucket string) error {
+	_, err := s.internal.CreateBucket(ctx, &s3.CreateBucketInput{Bucket: aws.String(bucket)})
+	if err == nil {
+		return nil
+	}
+	var apiErr interface{ ErrorCode() string }
+	if errors.As(err, &apiErr) && apiErr.ErrorCode() == "BucketAlreadyOwnedByYou" {
+		return nil
+	}
+	return s3Error(err)
+}
+
+func (s *S3) HeadBucket(ctx context.Context, bucket string) error {
+	if _, err := s.internal.HeadBucket(ctx, &s3.HeadBucketInput{Bucket: aws.String(bucket)}); err != nil {
+		return s3Error(err)
+	}
+	return nil
+}
+
+func (s *S3) DeleteObject(ctx context.Context, bucket, key, expectedETag string) error {
+	input := &s3.DeleteObjectInput{Bucket: aws.String(bucket), Key: aws.String(key)}
+	if expectedETag != "" {
+		input.IfMatch = aws.String(`"` + biz.NormalizeETag(expectedETag) + `"`)
+	}
+	if _, err := s.internal.DeleteObject(ctx, input); err != nil {
+		return s3Error(err)
+	}
+	return nil
+}
+
 func (s *S3) ListObjects(ctx context.Context, bucket, prefix, continuationToken string, limit int32) (biz.ObjectPage, error) {
 	input := &s3.ListObjectsV2Input{
 		Bucket:    aws.String(bucket),
@@ -205,6 +281,33 @@ func (s *S3) PresignGetObject(ctx context.Context, bucket, key string, expiry ti
 	return presigned.URL, time.Now().Add(expiry), nil
 }
 
+func (s *S3) PresignPutObject(ctx context.Context, bucket, key, contentType string, overwrite bool, expiry time.Duration) (string, map[string]string, time.Time, error) {
+	if s == nil || s.presign == nil {
+		return "", nil, time.Time{}, biz.ErrUploadUnavailable
+	}
+	input := &s3.PutObjectInput{Bucket: aws.String(bucket), Key: aws.String(key)}
+	if contentType != "" {
+		input.ContentType = aws.String(contentType)
+	}
+	if !overwrite {
+		input.IfNoneMatch = aws.String("*")
+	}
+	presigned, err := s.presign.PresignPutObject(ctx, input, s3.WithPresignExpires(expiry))
+	if err != nil {
+		return "", nil, time.Time{}, s3Error(err)
+	}
+	headers := map[string]string{}
+	for name, values := range presigned.SignedHeader {
+		if !strings.EqualFold(name, "host") {
+			headers[name] = strings.Join(values, ",")
+		}
+	}
+	if contentType != "" {
+		headers["Content-Type"] = contentType
+	}
+	return presigned.URL, headers, time.Now().Add(expiry), nil
+}
+
 func s3Error(err error) error {
 	if err == nil {
 		return nil
@@ -216,6 +319,16 @@ func s3Error(err error) error {
 			return biz.ErrNotFound
 		case "AccessDenied", "InvalidAccessKeyId", "SignatureDoesNotMatch", "403":
 			return biz.ErrAccessDenied
+		case "BucketAlreadyExists":
+			return biz.ErrBucketExists
+		case "EntityTooLarge":
+			return biz.ErrObjectTooLarge
+		case "InvalidBucketName":
+			return biz.ErrInvalid
+		case "PreconditionFailed", "412":
+			return biz.ErrObjectIdentity
+		case "ConditionalRequestConflict":
+			return biz.ErrConflict
 		}
 	}
 	var responseErr *awshttp.ResponseError
@@ -225,6 +338,8 @@ func s3Error(err error) error {
 			return biz.ErrNotFound
 		case http.StatusForbidden:
 			return biz.ErrAccessDenied
+		case http.StatusPreconditionFailed:
+			return biz.ErrObjectIdentity
 		}
 	}
 	return fmt.Errorf("%w: %v", biz.ErrBackendUnavailable, err)

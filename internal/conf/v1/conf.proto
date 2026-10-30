@@ -14,7 +14,7 @@ message Bootstrap {
 }
 
 // ObjectStorage 对接已有 S3 兼容服务；endpoint 为空表示本期不启用对象浏览。
-// 新增租户桶需要修改配置并重启，不支持热更新。
+// 新增配置桶需要修改配置并重启；tenant_bucket_prefix 非空时允许租户在页面上建桶。
 message ObjectStorage {
   string endpoint = 1;
   string browser_endpoint = 2;
@@ -23,6 +23,11 @@ message ObjectStorage {
   string credentials_file = 5;
   string ca_file = 6;
   repeated ManagedBucket managed_buckets = 7;
+  // 为空表示关闭租户建桶；非空时物理桶名为 prefix + cluster/tenant 指纹 + 逻辑名。
+  string tenant_bucket_prefix = 8;
+  uint32 max_buckets_per_tenant = 9;
+  int64 max_upload_bytes = 10;
+  google.protobuf.Duration upload_ttl = 11;
 }
 
 message ManagedBucket {

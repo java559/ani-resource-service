@@ -153,12 +153,42 @@ func (f *fakeVolumes) ListEvents(context.Context, string, string) ([]Event, erro
 }
 
 type fakeObjects struct {
-	available bool
-	page      ObjectPage
-	headErr   error
+	available     bool
+	page          ObjectPage
+	headErr       error
+	meta          ObjectMeta
+	buckets       []string
+	listErr       error
+	stats         ObjectStats
+	statsErr      error
+	createErr     error
+	headBucketErr error
+	deleteErr     error
+	lastCreated   string
+	deleted       []string
 }
 
 func (f *fakeObjects) Available() bool { return f.available }
+func (f *fakeObjects) ListBuckets(context.Context) ([]BucketInfo, error) {
+	infos := make([]BucketInfo, 0, len(f.buckets))
+	for _, name := range f.buckets {
+		infos = append(infos, BucketInfo{Name: name})
+	}
+	return infos, f.listErr
+}
+
+func (f *fakeObjects) BucketStats(context.Context, string, int64) (ObjectStats, error) {
+	return f.stats, f.statsErr
+}
+func (f *fakeObjects) CreateBucket(_ context.Context, bucket string) error {
+	if f.createErr != nil {
+		return f.createErr
+	}
+	f.lastCreated = bucket
+	f.buckets = append(f.buckets, bucket)
+	return nil
+}
+func (f *fakeObjects) HeadBucket(context.Context, string) error { return f.headBucketErr }
 func (f *fakeObjects) ListObjects(context.Context, string, string, string, int32) (ObjectPage, error) {
 	return f.page, nil
 }
@@ -166,10 +196,23 @@ func (f *fakeObjects) HeadObject(context.Context, string, string) (ObjectMeta, e
 	if f.headErr != nil {
 		return ObjectMeta{}, f.headErr
 	}
+	if f.meta.Key != "" || f.meta.ETag != "" || f.meta.Size != 0 {
+		return f.meta, nil
+	}
 	return ObjectMeta{Key: "a/b.txt", Size: 3}, nil
 }
 func (f *fakeObjects) PresignGetObject(context.Context, string, string, time.Duration) (string, time.Time, error) {
 	return "https://browser.example/b/k", time.Now().Add(time.Minute), nil
+}
+func (f *fakeObjects) PresignPutObject(_ context.Context, _, key, contentType string, _ bool, expiry time.Duration) (string, map[string]string, time.Time, error) {
+	return "https://browser.example/put/" + key, map[string]string{"Content-Type": contentType}, time.Now().Add(expiry), nil
+}
+func (f *fakeObjects) DeleteObject(_ context.Context, _, key, _ string) error {
+	if f.deleteErr != nil {
+		return f.deleteErr
+	}
+	f.deleted = append(f.deleted, key)
+	return nil
 }
 
 func newUseCase(t *testing.T, volumes VolumePort, objects ObjectPort) *UseCase {
@@ -469,13 +512,13 @@ func TestListBucketsFilters(t *testing.T) {
 		{BucketFilter{ID: "file"}, 0},
 	}
 	for _, tc := range cases {
-		items, err := uc.ListBuckets(testTenant, tc.filter)
+		items, err := uc.ListBuckets(context.Background(), testTenant, tc.filter)
 		if err != nil || len(items) != tc.total {
 			t.Fatalf("filter %+v: items = %d/%d, err = %v", tc.filter, len(items), tc.total, err)
 		}
 	}
 	for _, filter := range []BucketFilter{{Name: "  "}, {ID: "  "}, {Name: strings.Repeat("桶", 129)}, {ID: strings.Repeat("a", 65)}} {
-		if _, err := uc.ListBuckets(testTenant, filter); !errors.Is(err, ErrInvalid) {
+		if _, err := uc.ListBuckets(context.Background(), testTenant, filter); !errors.Is(err, ErrInvalid) {
 			t.Fatalf("filter %+v must be rejected, got %v", filter, err)
 		}
 	}

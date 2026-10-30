@@ -51,6 +51,9 @@ func TestS3ErrorMapping(t *testing.T) {
 		{"AccessDenied", biz.ErrAccessDenied},
 		{"SignatureDoesNotMatch", biz.ErrAccessDenied},
 		{"SlowDown", biz.ErrBackendUnavailable},
+		{"BucketAlreadyExists", biz.ErrBucketExists},
+		{"EntityTooLarge", biz.ErrObjectTooLarge},
+		{"InvalidBucketName", biz.ErrInvalid},
 	}
 	for _, tc := range cases {
 		mapped := s3Error(fakeAPIError{code: tc.code})

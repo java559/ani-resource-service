@@ -1,4 +1,4 @@
-// Package storage owns the independent-volume and read-only object use cases.
+// Package storage owns independent-volume and object-storage use cases.
 // It declares ports only; Kubernetes and S3 details stay in internal/data.
 package storage
 
@@ -20,6 +20,13 @@ var (
 	ErrVolumeTerminating   = errors.New("VOLUME_TERMINATING")
 	ErrDownloadUnavailable = errors.New("DOWNLOAD_ENDPOINT_UNAVAILABLE")
 	ErrBackendUnavailable  = errors.New("STORAGE_BACKEND_UNAVAILABLE")
+	ErrBucketExists        = errors.New("BUCKET_ALREADY_EXISTS")
+	ErrBucketLimit         = errors.New("BUCKET_LIMIT_REACHED")
+	ErrBucketDisabled      = errors.New("BUCKET_CREATION_DISABLED")
+	ErrObjectExists        = errors.New("OBJECT_ALREADY_EXISTS")
+	ErrObjectIdentity      = errors.New("OBJECT_IDENTITY_CHANGED")
+	ErrObjectTooLarge      = errors.New("OBJECT_TOO_LARGE")
+	ErrUploadUnavailable   = errors.New("UPLOAD_ENDPOINT_UNAVAILABLE")
 	// ErrNotInstalled 仅用于区分"CRD 未安装"与其他查询失败，由 data 层返回。
 	ErrNotInstalled = errors.New("STORAGE_CRD_NOT_INSTALLED")
 )
