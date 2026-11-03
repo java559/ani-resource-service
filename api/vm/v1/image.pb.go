@@ -26,13 +26,13 @@ const (
 // never claims an initialization capability, so cloud-init stays unavailable.
 type ImageOS struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OsFamily      string                 `protobuf:"bytes,1,opt,name=os_family,json=osFamily,proto3" json:"os_family,omitempty"`
-	OsVersion     string                 `protobuf:"bytes,2,opt,name=os_version,json=osVersion,proto3" json:"os_version,omitempty"`
+	OsFamily      string                 `protobuf:"bytes,1,opt,name=os_family,proto3" json:"os_family,omitempty"`
+	OsVersion     string                 `protobuf:"bytes,2,opt,name=os_version,proto3" json:"os_version,omitempty"`
 	Architecture  string                 `protobuf:"bytes,3,opt,name=architecture,proto3" json:"architecture,omitempty"`
 	Firmware      string                 `protobuf:"bytes,4,opt,name=firmware,proto3" json:"firmware,omitempty"`
-	RootBus       string                 `protobuf:"bytes,5,opt,name=root_bus,json=rootBus,proto3" json:"root_bus,omitempty"`
-	DataBus       string                 `protobuf:"bytes,6,opt,name=data_bus,json=dataBus,proto3" json:"data_bus,omitempty"`
-	NicModel      string                 `protobuf:"bytes,7,opt,name=nic_model,json=nicModel,proto3" json:"nic_model,omitempty"`
+	RootBus       string                 `protobuf:"bytes,5,opt,name=root_bus,proto3" json:"root_bus,omitempty"`
+	DataBus       string                 `protobuf:"bytes,6,opt,name=data_bus,proto3" json:"data_bus,omitempty"`
+	NicModel      string                 `protobuf:"bytes,7,opt,name=nic_model,proto3" json:"nic_model,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -118,8 +118,8 @@ func (x *ImageOS) GetNicModel() string {
 
 type VMImage struct {
 	state       protoimpl.MessageState `protogen:"open.v1"`
-	ImageId     string                 `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
-	MediaKey    string                 `protobuf:"bytes,2,opt,name=media_key,json=mediaKey,proto3" json:"media_key,omitempty"`
+	ImageId     string                 `protobuf:"bytes,1,opt,name=image_id,proto3" json:"image_id,omitempty"`
+	MediaKey    string                 `protobuf:"bytes,2,opt,name=media_key,proto3" json:"media_key,omitempty"`
 	Name        string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	Description string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
 	// DISK_IMAGE consumes as a cloned system disk; INSTALL_ISO as a read-only CD-ROM.
@@ -129,20 +129,20 @@ type VMImage struct {
 	State  string `protobuf:"bytes,7,opt,name=state,proto3" json:"state,omitempty"`
 	Reason string `protobuf:"bytes,8,opt,name=reason,proto3" json:"reason,omitempty"`
 	// NONE, PENDING, RUNNING, COMPLETE, BLOCKED.
-	CleanupState string `protobuf:"bytes,9,opt,name=cleanup_state,json=cleanupState,proto3" json:"cleanup_state,omitempty"`
+	CleanupState string `protobuf:"bytes,9,opt,name=cleanup_state,proto3" json:"cleanup_state,omitempty"`
 	// Four independent capacity measures. None is derived from another.
-	SourceCapacityGb            int64 `protobuf:"varint,10,opt,name=source_capacity_gb,json=sourceCapacityGb,proto3" json:"source_capacity_gb,omitempty"`
-	SourceRequestedBytes        int64 `protobuf:"varint,11,opt,name=source_requested_bytes,json=sourceRequestedBytes,proto3" json:"source_requested_bytes,omitempty"`
-	ObservedSourceCapacityBytes int64 `protobuf:"varint,12,opt,name=observed_source_capacity_bytes,json=observedSourceCapacityBytes,proto3" json:"observed_source_capacity_bytes,omitempty"`
-	SourceChecksumBytes         int64 `protobuf:"varint,13,opt,name=source_checksum_bytes,json=sourceChecksumBytes,proto3" json:"source_checksum_bytes,omitempty"`
+	SourceCapacityGb            int64 `protobuf:"varint,10,opt,name=source_capacity_gb,proto3" json:"source_capacity_gb,omitempty"`
+	SourceRequestedBytes        int64 `protobuf:"varint,11,opt,name=source_requested_bytes,proto3" json:"source_requested_bytes,omitempty"`
+	ObservedSourceCapacityBytes int64 `protobuf:"varint,12,opt,name=observed_source_capacity_bytes,proto3" json:"observed_source_capacity_bytes,omitempty"`
+	SourceChecksumBytes         int64 `protobuf:"varint,13,opt,name=source_checksum_bytes,proto3" json:"source_checksum_bytes,omitempty"`
 	// Full-length SHA-256 of the CDI-processed source, not of the uploaded file.
-	SourceSha256   string   `protobuf:"bytes,14,opt,name=source_sha256,json=sourceSha256,proto3" json:"source_sha256,omitempty"`
+	SourceSha256   string   `protobuf:"bytes,14,opt,name=source_sha256,proto3" json:"source_sha256,omitempty"`
 	Os             *ImageOS `protobuf:"bytes,15,opt,name=os,proto3" json:"os,omitempty"`
 	Version        int64    `protobuf:"varint,16,opt,name=version,proto3" json:"version,omitempty"`
-	UploadDeadline string   `protobuf:"bytes,17,opt,name=upload_deadline,json=uploadDeadline,proto3" json:"upload_deadline,omitempty"`
-	CreatedBy      string   `protobuf:"bytes,18,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
-	CreatedAt      string   `protobuf:"bytes,19,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt      string   `protobuf:"bytes,20,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UploadDeadline string   `protobuf:"bytes,17,opt,name=upload_deadline,proto3" json:"upload_deadline,omitempty"`
+	CreatedBy      string   `protobuf:"bytes,18,opt,name=created_by,proto3" json:"created_by,omitempty"`
+	CreatedAt      string   `protobuf:"bytes,19,opt,name=created_at,proto3" json:"created_at,omitempty"`
+	UpdatedAt      string   `protobuf:"bytes,20,opt,name=updated_at,proto3" json:"updated_at,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -671,14 +671,14 @@ func (x *CreateUploadSessionRequest) GetIdempotencyKey() string {
 // the file bytes travel from the caller straight to the upload entrypoint.
 type UploadSession struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	ImageId         string                 `protobuf:"bytes,1,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
-	UploadSessionId string                 `protobuf:"bytes,2,opt,name=upload_session_id,json=uploadSessionId,proto3" json:"upload_session_id,omitempty"`
+	ImageId         string                 `protobuf:"bytes,1,opt,name=image_id,proto3" json:"image_id,omitempty"`
+	UploadSessionId string                 `protobuf:"bytes,2,opt,name=upload_session_id,proto3" json:"upload_session_id,omitempty"`
 	Method          string                 `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
-	UploadUrl       string                 `protobuf:"bytes,4,opt,name=upload_url,json=uploadUrl,proto3" json:"upload_url,omitempty"`
-	BearerToken     string                 `protobuf:"bytes,5,opt,name=bearer_token,json=bearerToken,proto3" json:"bearer_token,omitempty"`
-	ExpiresAt       string                 `protobuf:"bytes,6,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
-	ContentType     string                 `protobuf:"bytes,7,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`
-	MaxFileBytes    int64                  `protobuf:"varint,8,opt,name=max_file_bytes,json=maxFileBytes,proto3" json:"max_file_bytes,omitempty"`
+	UploadUrl       string                 `protobuf:"bytes,4,opt,name=upload_url,proto3" json:"upload_url,omitempty"`
+	BearerToken     string                 `protobuf:"bytes,5,opt,name=bearer_token,proto3" json:"bearer_token,omitempty"`
+	ExpiresAt       string                 `protobuf:"bytes,6,opt,name=expires_at,proto3" json:"expires_at,omitempty"`
+	ContentType     string                 `protobuf:"bytes,7,opt,name=content_type,proto3" json:"content_type,omitempty"`
+	MaxFileBytes    int64                  `protobuf:"varint,8,opt,name=max_file_bytes,proto3" json:"max_file_bytes,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -933,41 +933,45 @@ var File_vm_v1_image_proto protoreflect.FileDescriptor
 
 const file_vm_v1_image_proto_rawDesc = "" +
 	"\n" +
-	"\x11vm/v1/image.proto\x12\x05vm.v1\x1a google/protobuf/field_mask.proto\"\xd8\x01\n" +
-	"\aImageOS\x12\x1b\n" +
-	"\tos_family\x18\x01 \x01(\tR\bosFamily\x12\x1d\n" +
+	"\x11vm/v1/image.proto\x12\x05vm.v1\x1a google/protobuf/field_mask.proto\"\xdd\x01\n" +
+	"\aImageOS\x12\x1c\n" +
+	"\tos_family\x18\x01 \x01(\tR\tos_family\x12\x1e\n" +
 	"\n" +
-	"os_version\x18\x02 \x01(\tR\tosVersion\x12\"\n" +
+	"os_version\x18\x02 \x01(\tR\n" +
+	"os_version\x12\"\n" +
 	"\farchitecture\x18\x03 \x01(\tR\farchitecture\x12\x1a\n" +
-	"\bfirmware\x18\x04 \x01(\tR\bfirmware\x12\x19\n" +
-	"\broot_bus\x18\x05 \x01(\tR\arootBus\x12\x19\n" +
-	"\bdata_bus\x18\x06 \x01(\tR\adataBus\x12\x1b\n" +
-	"\tnic_model\x18\a \x01(\tR\bnicModel\"\xb8\x05\n" +
-	"\aVMImage\x12\x19\n" +
-	"\bimage_id\x18\x01 \x01(\tR\aimageId\x12\x1b\n" +
-	"\tmedia_key\x18\x02 \x01(\tR\bmediaKey\x12\x12\n" +
+	"\bfirmware\x18\x04 \x01(\tR\bfirmware\x12\x1a\n" +
+	"\broot_bus\x18\x05 \x01(\tR\broot_bus\x12\x1a\n" +
+	"\bdata_bus\x18\x06 \x01(\tR\bdata_bus\x12\x1c\n" +
+	"\tnic_model\x18\a \x01(\tR\tnic_model\"\xc9\x05\n" +
+	"\aVMImage\x12\x1a\n" +
+	"\bimage_id\x18\x01 \x01(\tR\bimage_id\x12\x1c\n" +
+	"\tmedia_key\x18\x02 \x01(\tR\tmedia_key\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x12\n" +
 	"\x04kind\x18\x05 \x01(\tR\x04kind\x12\x16\n" +
 	"\x06format\x18\x06 \x01(\tR\x06format\x12\x14\n" +
 	"\x05state\x18\a \x01(\tR\x05state\x12\x16\n" +
-	"\x06reason\x18\b \x01(\tR\x06reason\x12#\n" +
-	"\rcleanup_state\x18\t \x01(\tR\fcleanupState\x12,\n" +
+	"\x06reason\x18\b \x01(\tR\x06reason\x12$\n" +
+	"\rcleanup_state\x18\t \x01(\tR\rcleanup_state\x12.\n" +
 	"\x12source_capacity_gb\x18\n" +
-	" \x01(\x03R\x10sourceCapacityGb\x124\n" +
-	"\x16source_requested_bytes\x18\v \x01(\x03R\x14sourceRequestedBytes\x12C\n" +
-	"\x1eobserved_source_capacity_bytes\x18\f \x01(\x03R\x1bobservedSourceCapacityBytes\x122\n" +
-	"\x15source_checksum_bytes\x18\r \x01(\x03R\x13sourceChecksumBytes\x12#\n" +
-	"\rsource_sha256\x18\x0e \x01(\tR\fsourceSha256\x12\x1e\n" +
+	" \x01(\x03R\x12source_capacity_gb\x126\n" +
+	"\x16source_requested_bytes\x18\v \x01(\x03R\x16source_requested_bytes\x12F\n" +
+	"\x1eobserved_source_capacity_bytes\x18\f \x01(\x03R\x1eobserved_source_capacity_bytes\x124\n" +
+	"\x15source_checksum_bytes\x18\r \x01(\x03R\x15source_checksum_bytes\x12$\n" +
+	"\rsource_sha256\x18\x0e \x01(\tR\rsource_sha256\x12\x1e\n" +
 	"\x02os\x18\x0f \x01(\v2\x0e.vm.v1.ImageOSR\x02os\x12\x18\n" +
-	"\aversion\x18\x10 \x01(\x03R\aversion\x12'\n" +
-	"\x0fupload_deadline\x18\x11 \x01(\tR\x0euploadDeadline\x12\x1d\n" +
+	"\aversion\x18\x10 \x01(\x03R\aversion\x12(\n" +
+	"\x0fupload_deadline\x18\x11 \x01(\tR\x0fupload_deadline\x12\x1e\n" +
 	"\n" +
-	"created_by\x18\x12 \x01(\tR\tcreatedBy\x12\x1d\n" +
+	"created_by\x18\x12 \x01(\tR\n" +
+	"created_by\x12\x1e\n" +
 	"\n" +
-	"created_at\x18\x13 \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\x13 \x01(\tR\n" +
+	"created_at\x12\x1e\n" +
 	"\n" +
-	"updated_at\x18\x14 \x01(\tR\tupdatedAt\"\xa5\x01\n" +
+	"updated_at\x18\x14 \x01(\tR\n" +
+	"updated_at\"\xa5\x01\n" +
 	"\x11ListImagesRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\rR\x04page\x12\x1b\n" +
@@ -993,18 +997,20 @@ const file_vm_v1_image_proto_rawDesc = "" +
 	"\x1aCreateUploadSessionRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x19\n" +
 	"\bimage_id\x18\x02 \x01(\tR\aimageId\x12'\n" +
-	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"\x98\x02\n" +
-	"\rUploadSession\x12\x19\n" +
-	"\bimage_id\x18\x01 \x01(\tR\aimageId\x12*\n" +
-	"\x11upload_session_id\x18\x02 \x01(\tR\x0fuploadSessionId\x12\x16\n" +
-	"\x06method\x18\x03 \x01(\tR\x06method\x12\x1d\n" +
+	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"\xa1\x02\n" +
+	"\rUploadSession\x12\x1a\n" +
+	"\bimage_id\x18\x01 \x01(\tR\bimage_id\x12,\n" +
+	"\x11upload_session_id\x18\x02 \x01(\tR\x11upload_session_id\x12\x16\n" +
+	"\x06method\x18\x03 \x01(\tR\x06method\x12\x1e\n" +
 	"\n" +
-	"upload_url\x18\x04 \x01(\tR\tuploadUrl\x12!\n" +
-	"\fbearer_token\x18\x05 \x01(\tR\vbearerToken\x12\x1d\n" +
+	"upload_url\x18\x04 \x01(\tR\n" +
+	"upload_url\x12\"\n" +
+	"\fbearer_token\x18\x05 \x01(\tR\fbearer_token\x12\x1e\n" +
 	"\n" +
-	"expires_at\x18\x06 \x01(\tR\texpiresAt\x12!\n" +
-	"\fcontent_type\x18\a \x01(\tR\vcontentType\x12$\n" +
-	"\x0emax_file_bytes\x18\b \x01(\x03R\fmaxFileBytes\"\x93\x02\n" +
+	"expires_at\x18\x06 \x01(\tR\n" +
+	"expires_at\x12\"\n" +
+	"\fcontent_type\x18\a \x01(\tR\fcontent_type\x12&\n" +
+	"\x0emax_file_bytes\x18\b \x01(\x03R\x0emax_file_bytes\"\x93\x02\n" +
 	"\x12UpdateImageRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x19\n" +
 	"\bimage_id\x18\x02 \x01(\tR\aimageId\x12'\n" +

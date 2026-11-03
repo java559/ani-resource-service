@@ -156,9 +156,20 @@ func wireImage(i biz.Image) *pb.VMImage {
 		SourceCapacityGb: i.SourceCapacityGB, SourceRequestedBytes: i.SourceRequestedBytes,
 		ObservedSourceCapacityBytes: i.ObservedSourceCapacityBytes, SourceChecksumBytes: i.SourceChecksumBytes,
 		SourceSha256: i.SourceSHA256, Version: i.Version, CreatedBy: i.CreatedBy,
+		UploadDeadline: imageTimestamp(i.UploadDeadline),
 		CreatedAt: i.CreatedAt.UTC().Format(time.RFC3339Nano), UpdatedAt: i.UpdatedAt.UTC().Format(time.RFC3339Nano),
 		Os: &pb.ImageOS{OsFamily: i.OS.OSFamily, OsVersion: i.OS.OSVersion, Architecture: i.OS.Architecture,
 			Firmware: i.OS.Firmware, RootBus: i.OS.RootBus, DataBus: i.OS.DataBus, NicModel: i.OS.NICModel}}
+}
+
+// imageTimestamp keeps the absent-vs-zero distinction the upload window needs: an
+// image that is not awaiting an upload has no deadline at all, and that must not be
+// rendered to the client as the epoch.
+func imageTimestamp(value *time.Time) string {
+	if value == nil {
+		return ""
+	}
+	return value.UTC().Format(time.RFC3339Nano)
 }
 
 func wireImageOS(in *pb.ImageOS) (biz.ImageOS, error) {
