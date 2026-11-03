@@ -227,13 +227,9 @@ func wireVMImages(component *vmComponents, cfg service.Config, client dynamic.In
 	if upload.MaxFileBytes < 0 || upload.MaxSourceGB < 0 {
 		return fmt.Errorf("VM image upload limits cannot be negative")
 	}
-	deadline := upload.UploadDeadline
-	if deadline == 0 {
-		deadline = 24 * time.Hour
-	}
-	tokenTTL := upload.TokenTTL
-	if tokenTTL == 0 {
-		tokenTTL = 5 * time.Minute
+	deadline, tokenTTL, e := upload.Durations()
+	if e != nil {
+		return e
 	}
 	nativeConfig := data.ImageUploadConfig{Enabled: upload.Enabled, ExternalUploadOrigin: upload.ExternalUploadOrigin,
 		ValidatorImage: upload.ValidatorImage, UploadDeadline: deadline, MaxFileBytes: upload.MaxFileBytes,
@@ -246,7 +242,7 @@ func wireVMImages(component *vmComponents, cfg service.Config, client dynamic.In
 	logger := slog.Default()
 	imageService, e := service.NewImageService(component.repo, imageNative, component.environment, service.ImageUploadConfig{
 		Enabled: upload.Enabled, ExternalUploadOrigin: upload.ExternalUploadOrigin, ValidatorImage: upload.ValidatorImage,
-		UploadDeadline: deadline, MaxFileBytes: upload.MaxFileBytes, MaxSourceGB: upload.MaxSourceGB, TokenTTL: tokenTTL}, cluster, logger)
+		UploadDeadline: upload.UploadDeadline, MaxFileBytes: upload.MaxFileBytes, MaxSourceGB: upload.MaxSourceGB, TokenTTL: upload.TokenTTL}, cluster, logger)
 	if e != nil {
 		return e
 	}

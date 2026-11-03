@@ -17,14 +17,36 @@ import (
 
 // ImageUploadConfig is the service-facing projection of the deployment block.
 // Every field is fixed by configuration; none may arrive from a request.
+// ImageUploadConfig mirrors the deployment block written in ANI_VM_CONFIG_FILE.
+// Durations stay strings here so the JSON keeps the same human form the rest of
+// the file uses instead of nanosecond integers.
 type ImageUploadConfig struct {
 	Enabled              bool
 	ExternalUploadOrigin string
 	ValidatorImage       string
-	UploadDeadline       time.Duration
+	UploadDeadline       string
+	TokenTTL             string
 	MaxFileBytes         int64
 	MaxSourceGB          int64
-	TokenTTL             time.Duration
+}
+
+// Durations resolves the two deadline inputs with the documented defaults.
+func (c ImageUploadConfig) Durations() (time.Duration, time.Duration, error) {
+	deadline, e := time.ParseDuration(c.UploadDeadline)
+	if c.UploadDeadline == "" {
+		deadline, e = 24*time.Hour, nil
+	}
+	if e != nil || deadline <= 0 {
+		return 0, 0, biz.ErrImageInvalid
+	}
+	ttl, e := time.ParseDuration(c.TokenTTL)
+	if c.TokenTTL == "" {
+		ttl, e = 5*time.Minute, nil
+	}
+	if e != nil || ttl <= 0 || ttl >= deadline {
+		return 0, 0, biz.ErrImageInvalid
+	}
+	return deadline, ttl, nil
 }
 
 // ImageService is the trusted governance adapter for the image catalog.
@@ -34,6 +56,7 @@ type ImageService struct {
 	native      biz.ImageNativePort
 	environment biz.EnvironmentPort
 	upload      ImageUploadConfig
+	tokenTTL    time.Duration
 	cluster     string
 	logger      *slog.Logger
 }
@@ -45,10 +68,12 @@ func NewImageService(repo biz.ImageRepository, native biz.ImageNativePort, envir
 	if upload.Enabled && (!strings.HasPrefix(upload.ExternalUploadOrigin, "https://") || !dataImageNative(upload.ValidatorImage)) {
 		return nil, biz.ErrImageInvalid
 	}
-	if upload.TokenTTL <= 0 || upload.UploadDeadline <= 0 || upload.TokenTTL >= upload.UploadDeadline {
-		return nil, biz.ErrImageInvalid
+	deadline, ttl, e := upload.Durations()
+	if e != nil {
+		return nil, e
 	}
-	return &ImageService{repo: repo, native: native, environment: environment, upload: upload, cluster: cluster, logger: logger}, nil
+	upload.UploadDeadline, upload.TokenTTL = deadline.String(), ttl.String()
+	return &ImageService{repo: repo, native: native, environment: environment, upload: upload, tokenTTL: ttl, cluster: cluster, logger: logger}, nil
 }
 
 func dataImageNative(image string) bool {
@@ -218,7 +243,7 @@ func (s *ImageService) CreateUploadSession(ctx context.Context, r *pb.CreateUplo
 	}
 	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: r.ImageId, Action: biz.ImageSessionAction, Key: r.IdempotencyKey, RequestDigest: digest}
 	session := uuid.NewString()
-	i, e := s.repo.RecordSession(ctx, command, session, time.Now().UTC().Add(s.upload.TokenTTL))
+	i, e := s.repo.RecordSession(ctx, command, session, time.Now().UTC().Add(s.tokenTTL))
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
@@ -227,7 +252,7 @@ func (s *ImageService) CreateUploadSession(ctx context.Context, r *pb.CreateUplo
 		// record instead of the client guessing a native name.
 		return nil, imageRPCError(biz.ErrImageNotReady)
 	}
-	updated, token, expires, e := s.native.CreateUploadToken(ctx, i, session, s.upload.TokenTTL)
+	updated, token, expires, e := s.native.CreateUploadToken(ctx, i, session, s.tokenTTL)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
