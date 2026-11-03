@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
 )
@@ -44,6 +45,41 @@ func TestImageUploadConfigAcceptsDigestPinnedValidator(t *testing.T) {
 	off.ValidatorImage = ""
 	if _, e := NewImageService(nil, nil, nil, off, "cluster", nil); !errors.Is(e, biz.ErrImageInvalid) {
 		t.Errorf("nil ports accepted while disabled: %v", e)
+	}
+}
+
+// TestNewUploadedImageRecordShapesTheRowTheDomainExpects is the regression for the create
+// path that returned VM_IMAGE_INVALID_ARGUMENT for every tenant on the cluster.
+func TestNewUploadedImageRecordShapesTheRowTheDomainExpects(t *testing.T) {
+	tenant, id := uuid.NewString(), uuid.NewString()
+	profile, e := biz.ImageOSProfile("linux", "24.04", "amd64")
+	if e != nil {
+		t.Fatal(e)
+	}
+	request := &pb.CreateImageRequest{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: " e2e qcow2 ",
+		Description: "kept", SourceCapacityGb: 8}
+	record, e := newUploadedImageRecord(request, id, profile, "admin")
+	if e != nil {
+		t.Fatalf("valid create rejected: %v", e)
+	}
+	if record.MediaKey != biz.ImageMediaKey(id) || record.State != biz.StatePreparing ||
+		record.CleanupState != biz.CleanupNone || record.Version != 1 {
+		t.Errorf("record identity/state not stamped: %+v", record)
+	}
+	if record.Name != "e2e qcow2" {
+		t.Errorf("name not trimmed: %q", record.Name)
+	}
+	if record.CreatedBy != "admin" {
+		t.Errorf("actor not recorded as creator: %q", record.CreatedBy)
+	}
+	for _, bad := range []*pb.CreateImageRequest{{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", SourceCapacityGb: 8},
+		{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: strings.Repeat("n", 81), SourceCapacityGb: 8},
+		{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: "x", SourceCapacityGb: 0},
+		{TenantId: tenant, Kind: "INSTALL_ISO", Format: "qcow2", Name: "x", SourceCapacityGb: 8},
+		{TenantId: "not-a-uuid", Kind: "DISK_IMAGE", Format: "qcow2", Name: "x", SourceCapacityGb: 8}} {
+		if _, e := newUploadedImageRecord(bad, id, profile, "admin"); !errors.Is(e, biz.ErrImageInvalid) {
+			t.Errorf("invalid record accepted: %+v -> %v", bad, e)
+		}
 	}
 }
 

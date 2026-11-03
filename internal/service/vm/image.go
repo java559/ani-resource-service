@@ -217,9 +217,7 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 		return nil, imageRPCError(e)
 	}
 	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: id, Action: biz.ImageCreateAction, Key: r.IdempotencyKey, RequestDigest: digest}
-	desired, e := biz.Image{TenantID: r.TenantId, ID: id, Name: strings.TrimSpace(r.Name), Description: r.Description,
-		Kind: r.Kind, Format: r.Format, SourceCapacityGB: r.SourceCapacityGb, OS: profile,
-		CreatedBy: biz.CallerFrom(ctx).Actor}.Validated()
+	desired, e := newUploadedImageRecord(r, id, profile, biz.CallerFrom(ctx).Actor)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
@@ -228,6 +226,18 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 		return nil, imageRPCError(e)
 	}
 	return wireImage(i), nil
+}
+
+// newUploadedImageRecord is the only place a tenant-uploaded image row is shaped: the
+// media key is derived from the id, and the state machine starts at PREPARING with no
+// cleanup work and version 1. Building the record field-by-field at the call site left
+// out MediaKey/State/CleanupState/Version, so every create was rejected by Validated()
+// with VM_IMAGE_INVALID_ARGUMENT while the data-layer tests, which seed a complete
+// record, stayed green.
+func newUploadedImageRecord(r *pb.CreateImageRequest, id string, profile biz.ImageOS, actor string) (biz.Image, error) {
+	return biz.Image{TenantID: r.TenantId, ID: id, MediaKey: biz.ImageMediaKey(id), Name: strings.TrimSpace(r.Name),
+		Description: r.Description, Kind: r.Kind, Format: r.Format, State: biz.StatePreparing, CleanupState: biz.CleanupNone,
+		Version: 1, SourceCapacityGB: r.SourceCapacityGb, OS: profile, CreatedBy: actor}.Validated()
 }
 
 // CreateUploadSession issues a short-lived ticket for one still-uploadable
