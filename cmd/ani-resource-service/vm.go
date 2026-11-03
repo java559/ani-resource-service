@@ -255,7 +255,7 @@ func wireVMImages(component *vmComponents, cfg service.Config, client dynamic.In
 		return e
 	}
 	imageWorker.SetImageClusterID(cluster)
-	referenceWorker, e := biz.NewReferenceWorker(component.repo, imageNative, logger)
+	referenceWorker, e := biz.NewReferenceWorker(component.repo, component.repo, imageNative, logger)
 	if e != nil {
 		return e
 	}

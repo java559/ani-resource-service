@@ -244,7 +244,8 @@ func (p *Postgres) CreateImage(ctx context.Context, desired biz.Image, c biz.Ima
 	desired.CreatedAt, desired.UpdatedAt = now, now
 	deadline := now.Add(defaultImageUploadDeadline)
 	desired.UploadDeadline = &deadline
-	if _, e = tx.Exec(ctx, `INSERT INTO vm.images(`+insertImageColumns+`) VALUES(`+imagePlaceholder(len(imageArgs(desired))+`)`, imageArgs(desired)...); e != nil {
+	columns := insertImageColumns
+	if _, e = tx.Exec(ctx, "INSERT INTO vm.images("+columns+") VALUES("+imagePlaceholder(len(imageArgs(desired)))+")", imageArgs(desired)...); e != nil {
 		return biz.Image{}, e
 	}
 	if e = insertImageRequest(ctx, tx, c, desired); e != nil {

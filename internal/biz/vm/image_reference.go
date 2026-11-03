@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"time"
 )
 
 const (
@@ -23,19 +22,19 @@ type ImageReferencePort interface {
 // lifecycle: an operation that "succeeded" is not evidence that a clone
 // finished, and only real completion or proven retirement releases a pin.
 type ReferenceWorker struct {
-	repo     ImageRepository
+	repo      ImageRepository
+	vm        Repository
 	reference ImageReferencePort
-	native   ImageNativePort
-	logger   *slog.Logger
-	poll     time.Duration
+	native    ImageNativePort
+	logger    *slog.Logger
 }
 
-func NewReferenceWorker(repo ImageRepository, native ImageNativePort, logger *slog.Logger) (*ReferenceWorker, error) {
+func NewReferenceWorker(repo ImageRepository, vm Repository, native ImageNativePort, logger *slog.Logger) (*ReferenceWorker, error) {
 	reference, ok := repo.(ImageReferencePort)
-	if !ok || native == nil || logger == nil {
+	if !ok || vm == nil || native == nil || logger == nil {
 		return nil, ErrInvalid
 	}
-	return &ReferenceWorker{repo: repo, reference: reference, native: native, logger: logger, poll: 10 * time.Second}, nil
+	return &ReferenceWorker{repo: repo, vm: vm, reference: reference, native: native, logger: logger}, nil
 }
 
 func (w *ReferenceWorker) Step(ctx context.Context) (bool, error) {
@@ -70,7 +69,7 @@ func (w *ReferenceWorker) settle(ctx context.Context, ref ImageReference) (bool,
 	if e != nil {
 		return false, e
 	}
-	v, e := w.repo.Get(ctx, ref.TenantID, ref.VMID)
+	v, e := w.vm.Get(ctx, ref.TenantID, ref.VMID)
 	if errors.Is(e, ErrNotFound) {
 		// The VM row is already gone, so its copies cannot still reference it.
 		return true, w.repo.ReleaseImageReference(ctx, ref, ReferenceReleasedRetired)
@@ -78,7 +77,7 @@ func (w *ReferenceWorker) settle(ctx context.Context, ref ImageReference) (bool,
 	if e != nil {
 		return false, e
 	}
-	if biz := ImageSourceFingerprint(i); biz != ref.SourceFingerprint {
+	if ImageSourceFingerprint(i) != ref.SourceFingerprint {
 		return false, ErrImageIdentity
 	}
 	completed, e := w.native.ObserveImageClone(ctx, v, i, ref)

@@ -14,6 +14,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/client-go/dynamic"
 
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
 )
@@ -670,10 +671,6 @@ func uidPointer(uid string) *types.UID {
 func foreground() *metav1.DeletionPropagation {
 	value := metav1.DeletePropagationForeground
 	return &value
-}
-
-func is preconditionFailed(e error) bool {
-	return apierrors.IsConflict(e)
 }
 
 func containsRef(list []biz.ObjectRef, kind, name string) bool {

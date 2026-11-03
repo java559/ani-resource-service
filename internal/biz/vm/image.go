@@ -471,7 +471,7 @@ type ImageNativePort interface {
 	PublishSourceAnnotation(context.Context, Image) error
 	ObserveImageSourceIdentity(context.Context, Image) (Image, error)
 	DeleteImageObjects(context.Context, Image) (Image, bool, error)
-	ObserveImageClone(context.Context, Image, ImageReference) (bool, error)
+	ObserveImageClone(context.Context, VM, Image, ImageReference) (bool, error)
 }
 
 // VerificationResult is what the fixed read-only validator reports back through
