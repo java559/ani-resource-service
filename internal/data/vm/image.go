@@ -278,10 +278,17 @@ func imagePlaceholder(n int) string {
 	return strings.Join(out, ",")
 }
 
-// RecordSession signs a ticket only against a still-uploadable target and keeps
-// the session identity so a replay returns the same recorded outcome.
+// RecordSession stamps a freshly generated session identity onto a target that can
+// still accept bytes.
+//
+// It deliberately does NOT participate in request replay: an upload ticket is
+// single-use and its bearer token is never stored, so replaying a lost response
+// under the same idempotency key cannot return the original ticket. Issuing a new
+// one is the only meaningful replay, and the superseded session's object is already
+// deleted. Recording the request row would instead make the second call return a
+// record with no token attached and fail the confirmation that follows.
 func (p *Postgres) RecordSession(ctx context.Context, c biz.ImageCommand, sessionID string, expiresAt time.Time) (biz.Image, error) {
-	if !imageCommandValid(c) || sessionID == "" || !biz.UUID(sessionID) {
+	if !imageCommandValid(c) || !biz.UUID(sessionID) || expiresAt.Before(time.Now()) {
 		return biz.Image{}, biz.ErrImageInvalid
 	}
 	tx, e := p.pool.Begin(ctx)
@@ -289,11 +296,8 @@ func (p *Postgres) RecordSession(ctx context.Context, c biz.ImageCommand, sessio
 		return biz.Image{}, e
 	}
 	defer tx.Rollback(ctx)
-	if _, e = tx.Exec(ctx, "SELECT pg_advisory_xact_lock(hashtextextended($1,84024))", c.TenantID+"/"+c.Action+"/"+c.Key); e != nil {
+	if _, e = tx.Exec(ctx, "SELECT pg_advisory_xact_lock(hashtextextended($1,84024))", c.TenantID+"/"+c.ImageID); e != nil {
 		return biz.Image{}, e
-	}
-	if replay, x := readImageReplay(ctx, tx, c); !errors.Is(x, biz.ErrNotFound) {
-		return replay, x
 	}
 	i, e := p.findImageLocked(ctx, tx, c.TenantID, c.ImageID, true)
 	if e != nil {
@@ -303,11 +307,11 @@ func (p *Postgres) RecordSession(ctx context.Context, c biz.ImageCommand, sessio
 		return biz.Image{}, biz.ErrImageNotUploadable
 	}
 	i.Native.SessionID = sessionID
+	// expiresAt is returned to the caller and enforced by the ticket object itself;
+	// it is not persisted, so nothing in the database can outlive the token it names.
 	i.UpdatedAt = time.Now().UTC()
-	if e = insertImageRequest(ctx, tx, c, i); e != nil {
-		return biz.Image{}, e
-	}
-	if _, e = tx.Exec(ctx, "UPDATE vm.images SET native=$3,updated_at=now() WHERE tenant_id=$1 AND id=$2", i.TenantID, i.ID, encode(i.Native)); e != nil {
+	if _, e = tx.Exec(ctx, "UPDATE vm.images SET native=$3,updated_at=now() WHERE tenant_id=$1 AND id=$2",
+		i.TenantID, i.ID, encode(i.Native)); e != nil {
 		return biz.Image{}, e
 	}
 	return i, tx.Commit(ctx)
