@@ -78,7 +78,10 @@ func NewImageService(repo biz.ImageRepository, native biz.ImageNativePort, envir
 
 func dataImageNative(image string) bool {
 	at := strings.LastIndex(image, "@")
-	return at > 0 && strings.HasPrefix(image[at+1:], "sha256:") && len(image)-at == 71
+	// "@sha256:<64 hex>" is 72 characters from the '@'; measuring from '@' instead of
+	// after it demanded a 63-hex digest, so every real digest-pinned image was rejected
+	// and the service refused to start as soon as ImageUpload.Enabled became true.
+	return at > 0 && strings.HasPrefix(image[at+1:], "sha256:") && len(image)-at-1 == 71
 }
 
 // imageRPCError keeps one stable reason per business failure and never exposes
