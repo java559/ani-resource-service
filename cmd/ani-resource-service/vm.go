@@ -20,6 +20,7 @@ import (
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/server"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm"
+	"github.com/google/uuid"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -38,6 +39,20 @@ type vmComponents struct {
 	observationWorker *server.VMObservationServer
 	observation       *data.StateObservation
 	console           *server.InstanceTerminalServer
+	imageService      *service.ImageService
+	imageWorker       *biz.ImageWorker
+	referenceWorker   *biz.ReferenceWorker
+	environment       biz.EnvironmentPort
+}
+
+// ImageLanes is the background lane list the composition root appends to the
+// shared worker server, so no second scheduler framework appears. The reference
+// lane runs even when uploads are disabled: an in-flight pin still has to settle.
+func (c *vmComponents) ImageLanes() []server.Stepper {
+	if c == nil || c.imageWorker == nil {
+		return nil
+	}
+	return []server.Stepper{c.imageWorker, c.referenceWorker}
 }
 
 func (c *vmComponents) Close() {
@@ -122,6 +137,9 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 	if e = native.ConfigureLogs(clientConfig, cfg.Service.LogLimits); e != nil {
 		return nil, nil, e
 	}
+	if e = service.ValidateStaticMediaKeys(cfg.Service.Media); e != nil {
+		return nil, nil, e
+	}
 	networkPort, e := data.NewNetwork(attachments, repo, native)
 	if e != nil {
 		return nil, nil, e
@@ -177,7 +195,7 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 	if e != nil {
 		return nil, nil, e
 	}
-	component := &vmComponents{repo: repo, service: handler, worker: worker}
+	component := &vmComponents{repo: repo, service: handler, worker: worker, environment: environment}
 	component.observation, e = data.NewStateObservation(clientConfig, repo)
 	if e != nil {
 		return nil, nil, e
@@ -195,6 +213,53 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 			return nil, nil, e
 		}
 	}
+	if e = wireVMImages(component, cfg.Service, client, c.ClusterId); e != nil {
+		return nil, nil, e
+	}
 	valid = true
 	return component, networkbiz.NewVMConsumerRouter(legacy, networkPort), nil
+}
+
+// wireVMImages attaches the tenant image lane. An absent or disabled block keeps
+// the deployment exactly as it was: no service, no worker, no new permissions.
+func wireVMImages(component *vmComponents, cfg service.Config, client dynamic.Interface, cluster string) error {
+	upload := cfg.ImageUpload
+	if upload.MaxFileBytes < 0 || upload.MaxSourceGB < 0 {
+		return fmt.Errorf("VM image upload limits cannot be negative")
+	}
+	deadline := upload.UploadDeadline
+	if deadline == 0 {
+		deadline = 24 * time.Hour
+	}
+	tokenTTL := upload.TokenTTL
+	if tokenTTL == 0 {
+		tokenTTL = 5 * time.Minute
+	}
+	nativeConfig := data.ImageUploadConfig{Enabled: upload.Enabled, ExternalUploadOrigin: upload.ExternalUploadOrigin,
+		ValidatorImage: upload.ValidatorImage, UploadDeadline: deadline, MaxFileBytes: upload.MaxFileBytes,
+		MaxSourceGB: upload.MaxSourceGB, StorageClass: cfg.MediaStorageClass, ClusterID: cluster, TokenTTL: tokenTTL,
+		VerifierActiveDeadlineSeconds: int64((15 * time.Minute).Seconds()), VerifierBackoffLimit: 0}
+	imageNative, e := data.NewImageNative(client, nativeConfig)
+	if e != nil {
+		return e
+	}
+	logger := slog.Default()
+	imageService, e := service.NewImageService(component.repo, imageNative, component.environment, service.ImageUploadConfig{
+		Enabled: upload.Enabled, ExternalUploadOrigin: upload.ExternalUploadOrigin, ValidatorImage: upload.ValidatorImage,
+		UploadDeadline: deadline, MaxFileBytes: upload.MaxFileBytes, MaxSourceGB: upload.MaxSourceGB, TokenTTL: tokenTTL}, cluster, logger)
+	if e != nil {
+		return e
+	}
+	imageWorker, e := biz.NewImageWorker(component.repo, imageNative, component.environment, uuid.NewString(), func() bool { return upload.Enabled }, logger)
+	if e != nil {
+		return e
+	}
+	imageWorker.SetImageClusterID(cluster)
+	referenceWorker, e := biz.NewReferenceWorker(component.repo, imageNative, logger)
+	if e != nil {
+		return e
+	}
+	component.imageService, component.imageWorker, component.referenceWorker = imageService, imageWorker, referenceWorker
+	component.service.SetImageCatalog(component.repo)
+	return nil
 }

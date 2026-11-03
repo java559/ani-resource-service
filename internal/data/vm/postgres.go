@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -162,6 +163,24 @@ func Migrate(ctx context.Context, dsn, role string) error {
 	if e != nil {
 		return e
 	}
+	body, e = migrations.Files.ReadFile("004_image_management.sql")
+	if e != nil {
+		return e
+	}
+	h = sha256.Sum256(body)
+	checksum = hex.EncodeToString(h[:])
+	e = tx.QueryRow(ctx, "SELECT checksum FROM vm.schema_version WHERE version=4").Scan(&old)
+	if errors.Is(e, pgx.ErrNoRows) {
+		if _, e = tx.Exec(ctx, string(body)); e != nil {
+			return e
+		}
+		_, e = tx.Exec(ctx, "INSERT INTO vm.schema_version VALUES(4,$1)", checksum)
+	} else if e == nil && old != checksum {
+		return fmt.Errorf("VM image management migration checksum differs")
+	}
+	if e != nil {
+		return e
+	}
 	if _, e = tx.Exec(ctx, "GRANT SELECT ON vm.schema_version TO "+pgx.Identifier{role}.Sanitize()); e != nil {
 		return e
 	}
@@ -169,6 +188,9 @@ func Migrate(ctx context.Context, dsn, role string) error {
 		return e
 	}
 	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON vm.observation_work TO "+pgx.Identifier{role}.Sanitize()); e != nil {
+		return e
+	}
+	if _, e = tx.Exec(ctx, "GRANT SELECT,INSERT,UPDATE,DELETE ON vm.images,vm.image_requests,vm.image_source_references TO "+pgx.Identifier{role}.Sanitize()); e != nil {
 		return e
 	}
 	return tx.Commit(ctx)
@@ -279,6 +301,9 @@ func (p *Postgres) AcceptCreate(ctx context.Context, a biz.Acceptance) (biz.Oper
 	if e = saveDisks(ctx, tx, v); e != nil {
 		return biz.Operation{}, e
 	}
+	if e = p.pinImageSources(ctx, tx, v); e != nil {
+		return biz.Operation{}, e
+	}
 	return o, tx.Commit(ctx)
 }
 func (p *Postgres) AcceptDelete(ctx context.Context, a biz.Acceptance) (biz.Operation, error) {
@@ -354,7 +379,48 @@ func (p *Postgres) accept(ctx context.Context, c biz.Command, id, createID strin
 	if e != nil {
 		return biz.Operation{}, e
 	}
+	if e = p.pinImageSources(ctx, tx, v); e != nil {
+		return biz.Operation{}, e
+	}
 	return o, tx.Commit(ctx)
+}
+
+// pinImageSources takes one HELD reference per dynamic image consumer inside the
+// caller's acceptance transaction. Every reference or none is written, the lock
+// order is VM -> image rows by id -> reference rows, and no cluster call happens
+// here, so a slow API server cannot hold row locks open.
+func (p *Postgres) pinImageSources(ctx context.Context, tx pgx.Tx, v biz.VM) error {
+	refs := make([]biz.ImageReference, 0, len(v.Disks)+len(v.MediaCopies))
+	if strings.HasPrefix(v.Spec.Media.Key, biz.ImageMediaKeyPrefix) {
+		for _, disk := range v.Disks {
+			if disk.Role != "system" || disk.Tombstone {
+				continue
+			}
+			ref, e := biz.NewImageReference(v, disk.ID, "SYSTEM_DISK", v.Spec.Media)
+			if e != nil {
+				return e
+			}
+			refs = append(refs, ref)
+		}
+	}
+	for _, copy := range v.MediaCopies {
+		if copy.Tombstone || !strings.HasPrefix(copy.Source.Key, biz.ImageMediaKeyPrefix) {
+			continue
+		}
+		ref, e := biz.NewImageReference(v, copy.ID, "MEDIA_COPY", copy.Source)
+		if e != nil {
+			return e
+		}
+		refs = append(refs, ref)
+	}
+	if len(refs) == 0 {
+		return nil
+	}
+	// Static media keys never reach here, so the legacy path is untouched.
+	if e := p.referenceImageRowsLocked(ctx, tx, refs); e != nil {
+		return e
+	}
+	return insertImageReferences(ctx, tx, refs)
 }
 func (p *Postgres) LookupReplay(ctx context.Context, c biz.Command) (biz.Operation, error) {
 	return readReplay(ctx, p.pool, c)
