@@ -186,26 +186,35 @@ func (s *ImageService) GetImage(ctx context.Context, r *pb.GetImageRequest) (*pb
 
 // CreateImage is idempotent and returns the full record. A replay wins before
 // any state or version check so a retry never forks a second image.
+// rejected is the single exit for a refused write. The published contract carries one
+// reason per class, so on its own it cannot say which bound refused; the stage label is
+// the only extra detail logged, and no request body, tenant, native name or credential
+// ever reaches the log line.
+func (s *ImageService) rejected(ctx context.Context, stage string, e error) error {
+	s.logger.WarnContext(ctx, "VM image write refused", "stage", stage, "reason", e.Error())
+	return imageRPCError(e)
+}
+
 func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest) (*pb.VMImage, error) {
 	if r == nil || r.IdempotencyKey == "" || len(r.IdempotencyKey) > 256 {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "create_idempotency_key", biz.ErrImageInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "create_tenant_scope", e)
 	}
 	if !s.enabled() {
 		return nil, imageRPCError(biz.ErrImageUploadOff)
 	}
 	format, ok := biz.ImageFormatFor(r.Kind)
 	if !ok || r.Format != format {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "create_kind_format", biz.ErrImageInvalid)
 	}
 	if r.SourceCapacityGb < 1 || s.upload.MaxSourceGB > 0 && r.SourceCapacityGb > s.upload.MaxSourceGB {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "create_capacity", biz.ErrImageInvalid)
 	}
 	profile, e := wireImageOS(r.Os)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "create_os_profile", e)
 	}
 	id := uuid.NewString()
 	digest, e := biz.ImageRequestDigest(biz.ImageCreateAction, r.TenantId, id, struct {
@@ -214,16 +223,16 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 		OS                              biz.ImageOS
 	}{strings.TrimSpace(r.Name), r.Description, r.Kind, r.Format, r.SourceCapacityGb, profile}, 0, nil)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "create_digest", e)
 	}
 	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: id, Action: biz.ImageCreateAction, Key: r.IdempotencyKey, RequestDigest: digest}
 	desired, e := newUploadedImageRecord(r, id, profile, biz.CallerFrom(ctx).Actor)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "create_record", e)
 	}
 	i, e := s.repo.CreateImage(ctx, desired, command)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "create_repository", e)
 	}
 	return wireImage(i), nil
 }
