@@ -1,9 +1,11 @@
 package vm
 
 import (
+	"encoding/json"
 	"errors"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
@@ -58,7 +60,8 @@ func TestNewUploadedImageRecordShapesTheRowTheDomainExpects(t *testing.T) {
 	}
 	request := &pb.CreateImageRequest{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: " e2e qcow2 ",
 		Description: "kept", SourceCapacityGb: 8}
-	record, e := newUploadedImageRecord(request, id, profile, "admin")
+	deadline := time.Now().UTC().Add(3 * time.Hour)
+	record, e := newUploadedImageRecord(request, id, profile, "admin", deadline)
 	if e != nil {
 		t.Fatalf("valid create rejected: %v", e)
 	}
@@ -72,14 +75,45 @@ func TestNewUploadedImageRecordShapesTheRowTheDomainExpects(t *testing.T) {
 	if record.CreatedBy != "admin" {
 		t.Errorf("actor not recorded as creator: %q", record.CreatedBy)
 	}
+	// The configured window must travel with the record: the data layer only falls back
+	// to its own default when the service left it unset.
+	if record.UploadDeadline == nil || !record.UploadDeadline.Equal(deadline) {
+		t.Errorf("upload deadline not taken from configuration: %v", record.UploadDeadline)
+	}
 	for _, bad := range []*pb.CreateImageRequest{{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", SourceCapacityGb: 8},
 		{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: strings.Repeat("n", 81), SourceCapacityGb: 8},
 		{TenantId: tenant, Kind: "DISK_IMAGE", Format: "qcow2", Name: "x", SourceCapacityGb: 0},
 		{TenantId: tenant, Kind: "INSTALL_ISO", Format: "qcow2", Name: "x", SourceCapacityGb: 8},
 		{TenantId: "not-a-uuid", Kind: "DISK_IMAGE", Format: "qcow2", Name: "x", SourceCapacityGb: 8}} {
-		if _, e := newUploadedImageRecord(bad, id, profile, "admin"); !errors.Is(e, biz.ErrImageInvalid) {
+		if _, e := newUploadedImageRecord(bad, id, profile, "admin", deadline); !errors.Is(e, biz.ErrImageInvalid) {
 			t.Errorf("invalid record accepted: %+v -> %v", bad, e)
 		}
+	}
+}
+
+// TestImageCommandOfStoresTheDigestedPayload is the second half of the create failure:
+// the data layer rejects a command without a valid intent, so every write that only set
+// RequestDigest returned VM_IMAGE_INVALID_ARGUMENT from the repository.
+func TestImageCommandOfStoresTheDigestedPayload(t *testing.T) {
+	tenant, id, key := uuid.NewString(), uuid.NewString(), uuid.NewString()
+	fields := struct{ Name string }{"first"}
+	command, e := imageCommandOf(biz.ImageCreateAction, tenant, id, key, fields, 0, nil)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if len(command.RequestDigest) != 64 || !json.Valid(command.Intent) {
+		t.Fatalf("digest/intent not stamped: %+v", command)
+	}
+	if string(command.Intent) != `{"Name":"first"}` {
+		t.Fatalf("intent is not the digested value: %s", command.Intent)
+	}
+	other, e := imageCommandOf(biz.ImageCreateAction, tenant, id, key, struct{ Name string }{"second"}, 0, nil)
+	if e != nil || other.RequestDigest == command.RequestDigest {
+		t.Errorf("different payload reused the digest: %v %v", other.RequestDigest, e)
+	}
+	// An action the digest helper rejects must not produce a half-built command.
+	if _, e = imageCommandOf(biz.ImageUpdateAction, tenant, id, key, fields, 1, []string{"", "name"}); e == nil {
+		t.Error("empty mask path accepted")
 	}
 }
 

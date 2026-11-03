@@ -254,8 +254,12 @@ func (p *Postgres) CreateImage(ctx context.Context, desired biz.Image, c biz.Ima
 	desired.CleanupState = biz.CleanupNone
 	desired.NextAttemptAt = now
 	desired.CreatedAt, desired.UpdatedAt = now, now
-	deadline := now.Add(defaultImageUploadDeadline)
-	desired.UploadDeadline = &deadline
+	// The service owns the configured upload window; the default only applies when a
+	// caller left it unset, so a non-default UploadDeadline is not silently discarded.
+	if desired.UploadDeadline == nil {
+		deadline := now.Add(defaultImageUploadDeadline)
+		desired.UploadDeadline = &deadline
+	}
 	columns := insertImageColumns
 	if _, e = tx.Exec(ctx, "INSERT INTO vm.images("+columns+") VALUES("+imagePlaceholder(len(imageArgs(desired)))+")", imageArgs(desired)...); e != nil {
 		return biz.Image{}, e

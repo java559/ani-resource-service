@@ -2,6 +2,7 @@ package vm
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log/slog"
 	"strings"
@@ -52,13 +53,30 @@ func (c ImageUploadConfig) Durations() (time.Duration, time.Duration, error) {
 // ImageService is the trusted governance adapter for the image catalog.
 type ImageService struct {
 	pb.UnimplementedVMImageServiceServer
-	repo        biz.ImageRepository
-	native      biz.ImageNativePort
-	environment biz.EnvironmentPort
-	upload      ImageUploadConfig
-	tokenTTL    time.Duration
-	cluster     string
-	logger      *slog.Logger
+	repo           biz.ImageRepository
+	native         biz.ImageNativePort
+	environment    biz.EnvironmentPort
+	upload         ImageUploadConfig
+	tokenTTL       time.Duration
+	uploadDeadline time.Duration
+	cluster        string
+	logger         *slog.Logger
+}
+
+// imageCommandOf builds one write's replay record. The digest and the stored intent
+// must come from the same normalized value: the data layer refuses a command whose
+// intent is not valid JSON, and a replay is only provable against the original payload.
+func imageCommandOf(action, tenant, id, key string, fields any, version int64, mask []string) (biz.ImageCommand, error) {
+	digest, e := biz.ImageRequestDigest(action, tenant, id, fields, version, mask)
+	if e != nil {
+		return biz.ImageCommand{}, e
+	}
+	intent, e := json.Marshal(fields)
+	if e != nil {
+		return biz.ImageCommand{}, biz.ErrImageInvalid
+	}
+	return biz.ImageCommand{TenantID: tenant, ImageID: id, Action: action, Key: key, RequestDigest: digest,
+		ExpectedVersion: version, Mask: mask, Intent: intent}, nil
 }
 
 func NewImageService(repo biz.ImageRepository, native biz.ImageNativePort, environment biz.EnvironmentPort, upload ImageUploadConfig, cluster string, logger *slog.Logger) (*ImageService, error) {
@@ -73,7 +91,8 @@ func NewImageService(repo biz.ImageRepository, native biz.ImageNativePort, envir
 		return nil, e
 	}
 	upload.UploadDeadline, upload.TokenTTL = deadline.String(), ttl.String()
-	return &ImageService{repo: repo, native: native, environment: environment, upload: upload, tokenTTL: ttl, cluster: cluster, logger: logger}, nil
+	return &ImageService{repo: repo, native: native, environment: environment, upload: upload, tokenTTL: ttl,
+		uploadDeadline: deadline, cluster: cluster, logger: logger}, nil
 }
 
 func dataImageNative(image string) bool {
@@ -217,16 +236,16 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 		return nil, s.rejected(ctx, "create_os_profile", e)
 	}
 	id := uuid.NewString()
-	digest, e := biz.ImageRequestDigest(biz.ImageCreateAction, r.TenantId, id, struct {
+	fields := struct {
 		Name, Description, Kind, Format string
 		Size                            int64
 		OS                              biz.ImageOS
-	}{strings.TrimSpace(r.Name), r.Description, r.Kind, r.Format, r.SourceCapacityGb, profile}, 0, nil)
+	}{strings.TrimSpace(r.Name), r.Description, r.Kind, r.Format, r.SourceCapacityGb, profile}
+	command, e := imageCommandOf(biz.ImageCreateAction, r.TenantId, id, r.IdempotencyKey, fields, 0, nil)
 	if e != nil {
-		return nil, s.rejected(ctx, "create_digest", e)
+		return nil, s.rejected(ctx, "create_command", e)
 	}
-	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: id, Action: biz.ImageCreateAction, Key: r.IdempotencyKey, RequestDigest: digest}
-	desired, e := newUploadedImageRecord(r, id, profile, biz.CallerFrom(ctx).Actor)
+	desired, e := newUploadedImageRecord(r, id, profile, biz.CallerFrom(ctx).Actor, time.Now().UTC().Add(s.uploadDeadline))
 	if e != nil {
 		return nil, s.rejected(ctx, "create_record", e)
 	}
@@ -243,10 +262,10 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 // out MediaKey/State/CleanupState/Version, so every create was rejected by Validated()
 // with VM_IMAGE_INVALID_ARGUMENT while the data-layer tests, which seed a complete
 // record, stayed green.
-func newUploadedImageRecord(r *pb.CreateImageRequest, id string, profile biz.ImageOS, actor string) (biz.Image, error) {
+func newUploadedImageRecord(r *pb.CreateImageRequest, id string, profile biz.ImageOS, actor string, deadline time.Time) (biz.Image, error) {
 	return biz.Image{TenantID: r.TenantId, ID: id, MediaKey: biz.ImageMediaKey(id), Name: strings.TrimSpace(r.Name),
 		Description: r.Description, Kind: r.Kind, Format: r.Format, State: biz.StatePreparing, CleanupState: biz.CleanupNone,
-		Version: 1, SourceCapacityGB: r.SourceCapacityGb, OS: profile, CreatedBy: actor}.Validated()
+		Version: 1, SourceCapacityGB: r.SourceCapacityGb, OS: profile, CreatedBy: actor, UploadDeadline: &deadline}.Validated()
 }
 
 // CreateUploadSession issues a short-lived ticket for one still-uploadable
@@ -261,11 +280,10 @@ func (s *ImageService) CreateUploadSession(ctx context.Context, r *pb.CreateUplo
 	if !s.enabled() {
 		return nil, imageRPCError(biz.ErrImageUploadOff)
 	}
-	digest, e := biz.ImageRequestDigest(biz.ImageSessionAction, r.TenantId, r.ImageId, struct{}{}, 0, nil)
+	command, e := imageCommandOf(biz.ImageSessionAction, r.TenantId, r.ImageId, r.IdempotencyKey, struct{}{}, 0, nil)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
-	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: r.ImageId, Action: biz.ImageSessionAction, Key: r.IdempotencyKey, RequestDigest: digest}
 	session := uuid.NewString()
 	i, e := s.repo.RecordSession(ctx, command, session, time.Now().UTC().Add(s.tokenTTL))
 	if e != nil {
@@ -306,14 +324,11 @@ func (s *ImageService) UpdateImage(ctx context.Context, r *pb.UpdateImageRequest
 		return nil, imageRPCError(e)
 	}
 	name, description := r.Name, r.Description
-	digest, e := biz.ImageRequestDigest(biz.ImageUpdateAction, r.TenantId, r.ImageId, struct {
-		Name, Description string
-	}{name, description}, r.ExpectedVersion, mask)
+	fields := struct{ Name, Description string }{name, description}
+	command, e := imageCommandOf(biz.ImageUpdateAction, r.TenantId, r.ImageId, r.IdempotencyKey, fields, r.ExpectedVersion, mask)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
-	command := biz.ImageCommand{TenantID: r.TenantId, ImageID: r.ImageId, Action: biz.ImageUpdateAction,
-		Key: r.IdempotencyKey, RequestDigest: digest, ExpectedVersion: r.ExpectedVersion, Mask: mask}
 	i, e := s.repo.UpdateImage(ctx, command, name, description, mask)
 	if e != nil {
 		return nil, imageRPCError(e)
@@ -349,12 +364,11 @@ func (s *ImageService) DeleteImage(ctx context.Context, r *pb.DeleteImageRequest
 	}
 	// A delete replays on the stored row even after the upload switch is off, so
 	// the gate deliberately does not apply here.
-	digest, e := biz.ImageRequestDigest(biz.ImageDeleteAction, r.TenantId, r.ImageId, struct{}{}, r.ExpectedVersion, nil)
+	command, e := imageCommandOf(biz.ImageDeleteAction, r.TenantId, r.ImageId, r.IdempotencyKey, struct{}{}, r.ExpectedVersion, nil)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
-	i, e := s.repo.DeleteImage(ctx, biz.ImageCommand{TenantID: r.TenantId, ImageID: r.ImageId, Action: biz.ImageDeleteAction,
-		Key: r.IdempotencyKey, RequestDigest: digest, ExpectedVersion: r.ExpectedVersion})
+	i, e := s.repo.DeleteImage(ctx, command)
 	if e != nil {
 		return nil, imageRPCError(e)
 	}
