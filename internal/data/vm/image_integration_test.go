@@ -327,10 +327,21 @@ func TestVMImageDeleteRefusesWhilePinnedAndRecordsTombstone(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
+	// A pin is anchored to a real VM row, so the fixture creates one the same way
+	// AcceptCreate would: an id, a tenant and a minimal frozen configuration.
+	frozen, e := json.Marshal(biz.VM{TenantID: tenant, ID: vmID, Version: 1, Desired: "Stopped", Observed: "Unknown"})
+	if e != nil {
+		t.Fatal(e)
+	}
+	if _, e = pool.Exec(ctx, `INSERT INTO vm.virtual_machines(tenant_id,id,create_operation_id,request_digest,spec_digest,initial_spec,current_configuration,version)
+		VALUES($1,$2,$3,$4,$5,$6,$6,1)`, tenant, vmID, uuid.NewString(), strings.Repeat("1", 64), strings.Repeat("2", 64), frozen); e != nil {
+		t.Fatalf("fixture VM row: %v", e)
+	}
 	tx, e := pool.Begin(ctx)
 	if e != nil {
 		t.Fatal(e)
 	}
+	defer tx.Rollback(ctx)
 	if e = p.referenceImageRowsLocked(ctx, tx, []biz.ImageReference{ref}); e != nil {
 		t.Fatalf("READY pin refused: %v", e)
 	}
@@ -339,6 +350,22 @@ func TestVMImageDeleteRefusesWhilePinnedAndRecordsTombstone(t *testing.T) {
 	}
 	if e = tx.Commit(ctx); e != nil {
 		t.Fatal(e)
+	}
+	// Re-admitting the same consumer must be a no-op, not a duplicate row: the
+	// re-attach path reuses the frozen identity and never re-pins a released copy.
+	tx2, e := pool.Begin(ctx)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer tx2.Rollback(ctx)
+	if e = insertImageReferences(ctx, tx2, []biz.ImageReference{ref}); e != nil {
+		t.Fatalf("re-pin: %v", e)
+	}
+	if e = tx2.Commit(ctx); e != nil {
+		t.Fatalf("re-pin commit: %v", e)
+	}
+	if held, e := p.CountHeldReferences(ctx, tenant, imageID); e != nil || held != 1 {
+		t.Fatalf("held count after re-pin = %d (%v), want 1", held, e)
 	}
 	if held, e := p.CountHeldReferences(ctx, tenant, imageID); e != nil || held != 1 {
 		t.Fatalf("held count = %d (%v)", held, e)
@@ -424,9 +451,16 @@ func TestVMImageClaimLeaseAndDeadlineCAS(t *testing.T) {
 	if claimed.ID != expiring {
 		t.Fatalf("claimed %s, want the expired record %s", claimed.ID, expiring)
 	}
-	// A second worker cannot take the same record while the lease is live.
-	if _, hold, e = p.ClaimImage(ctx, uuid.NewString(), 30*time.Second); e != nil || hold {
-		t.Errorf("lease was handed out twice: %v %v", e, hold)
+	// Both records are due, so a second worker legitimately takes the other one;
+	// it must never take the record still under the first lease.
+	second, hold, e := p.ClaimImage(ctx, uuid.NewString(), 30*time.Second)
+	if e != nil || !hold || second.ID == claimed.ID {
+		t.Fatalf("second claim = %v %+v (%v)", hold, second, e)
+	}
+	// With both leases live there is nothing left to hand out: an empty claim is the
+	// expected result, and it must not be a lease stolen from another worker.
+	if _, hold, e = p.ClaimImage(ctx, uuid.NewString(), 30*time.Second); hold || (e != nil && !errors.Is(e, biz.ErrNotFound)) {
+		t.Errorf("a leased record was handed out again: hold=%v err=%v", hold, e)
 	}
 	// The expired record must land in FAILED with cleanup queued, never UNAVAILABLE.
 	if current, e := p.FindImage(ctx, tenant, expiring); e != nil || current.State != biz.StateFailed ||

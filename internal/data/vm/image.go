@@ -22,7 +22,10 @@ const imageColumns = `tenant_id,id,media_key,kind,format,name,description,state,
 func imageFrom(row pgx.Row) (biz.Image, error) {
 	var i biz.Image
 	var osRaw, nativeRaw, cleanupRaw []byte
-	var lease, leaseUntil, deadline *time.Time
+	// lease_token is a uuid column: scanning it into a *time.Time only fails once a
+	// lease exists, which is exactly the state a background claim leaves behind.
+	var lease *uuid.UUID
+	var leaseUntil, deadline *time.Time
 	var createdBy *string
 	e := row.Scan(&i.TenantID, &i.ID, &i.MediaKey, &i.Kind, &i.Format, &i.Name, &i.Description, &i.State, &i.Reason, &i.CleanupState,
 		&i.SourceCapacityGB, &i.SourceRequestedBytes, &i.ObservedSourceCapacityBytes, &i.SourceChecksumBytes, &i.SourceSHA256,
@@ -86,7 +89,11 @@ func (p *Postgres) FindImage(ctx context.Context, tenant, id string) (biz.Image,
 	if !biz.UUID(tenant) || !biz.UUID(id) {
 		return biz.Image{}, biz.ErrImageInvalid
 	}
-	return imageFrom(p.pool.QueryRow(ctx, "SELECT "+imageColumns+" FROM vm.images WHERE tenant_id=$1 AND id=$2", tenant, id))
+	i, e := imageFrom(p.pool.QueryRow(ctx, "SELECT "+imageColumns+" FROM vm.images WHERE tenant_id=$1 AND id=$2", tenant, id))
+	if e != nil {
+		return biz.Image{}, notFound(e)
+	}
+	return i, nil
 }
 
 func (p *Postgres) findImageLocked(ctx context.Context, q interface {
@@ -109,6 +116,11 @@ func (p *Postgres) ResolveImageMedia(ctx context.Context, tenant, key string) (b
 	id := strings.TrimPrefix(key, biz.ImageMediaKeyPrefix)
 	i, e := p.FindImage(ctx, tenant, id)
 	if e != nil {
+		return biz.Image{}, biz.ErrImageNotFound
+	}
+	// A tombstone is absent for consumption purposes: resolving it as "not ready"
+	// would tell a caller the record still exists after its lifecycle ended.
+	if i.State == biz.StateDeleted {
 		return biz.Image{}, biz.ErrImageNotFound
 	}
 	if i.State != biz.StateReady || !biz.IsHex(i.SourceSHA256) {
