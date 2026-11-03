@@ -370,6 +370,30 @@ func TestVMImageDeleteRefusesWhilePinnedAndRecordsTombstone(t *testing.T) {
 	if held, e := p.CountHeldReferences(ctx, tenant, imageID); e != nil || held != 1 {
 		t.Fatalf("held count = %d (%v)", held, e)
 	}
+	// The two reference *listings* are the only image queries the CRUD tests do not
+	// share with the workers, and their ORDER BY list is independent of the column
+	// projection: a column that the table does not have aborts the whole service at
+	// startup, because the reference worker runs whether or not uploads are enabled.
+	page, e := p.ListHeldReferences(ctx, 10)
+	if e != nil {
+		t.Fatalf("held reference page: %v", e)
+	}
+	found := false
+	for _, r := range page {
+		if r.ConsumerID == ref.ConsumerID && r.State == "HELD" {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("pin absent from worker page: %+v", page)
+	}
+	listed, e := p.ListImageReferences(ctx, tenant, imageID)
+	if e != nil {
+		t.Fatalf("image reference list: %v", e)
+	}
+	if len(listed) != 1 || listed[0].VMID != vmID {
+		t.Errorf("image reference list = %+v, want the single pin", listed)
+	}
 
 	delete1 := imageCommand(t, biz.ImageDeleteAction, tenant, imageID, uuid.NewString(), ready.Version, nil, struct{}{})
 	if _, e = p.DeleteImage(ctx, delete1); !errors.Is(e, biz.ErrImageInUse) {

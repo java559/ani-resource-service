@@ -500,7 +500,7 @@ func (p *Postgres) ClaimImage(ctx context.Context, token string, d time.Duration
 	row := tx.QueryRow(ctx, `SELECT `+imageColumns+` FROM vm.images
 	 WHERE (state IN ('PREPARING','IMPORTING','VERIFYING','READY','DELETING') OR cleanup_state IN ('PENDING','RUNNING'))
 	   AND next_attempt_at<=now() AND (lease_until IS NULL OR lease_until<now())
-	 ORDER BY next_attempt_at FOR UPDATE SKIP LOCKED LIMIT 1`)
+	 ORDER BY next_attempt_at LIMIT 1 FOR UPDATE SKIP LOCKED`)
 	i, e = imageFrom(row)
 	if e != nil {
 		return biz.Image{}, false, notFound(e)
@@ -554,14 +554,14 @@ func (p *Postgres) ListImageReferences(ctx context.Context, tenant, imageID stri
 	if !biz.UUID(tenant) || !biz.UUID(imageID) {
 		return nil, biz.ErrImageInvalid
 	}
-	return queryImageReferences(ctx, p.pool, "SELECT "+imageReferenceColumns+" FROM vm.image_source_references WHERE tenant_id=$1 AND image_id=$2 ORDER BY created_at,id", []any{tenant, imageID})
+	return queryImageReferences(ctx, p.pool, "SELECT "+imageReferenceColumns+" FROM vm.image_source_references WHERE tenant_id=$1 AND image_id=$2 ORDER BY created_at,vm_id,consumer_kind,consumer_id", []any{tenant, imageID})
 }
 
 func (p *Postgres) ListHeldReferences(ctx context.Context, limit int) ([]biz.ImageReference, error) {
 	if limit < 1 {
 		limit = 50
 	}
-	return queryImageReferences(ctx, p.pool, "SELECT "+imageReferenceColumns+" FROM vm.image_source_references WHERE state='HELD' ORDER BY updated_at,id LIMIT $1", []any{int64(limit)})
+	return queryImageReferences(ctx, p.pool, "SELECT "+imageReferenceColumns+" FROM vm.image_source_references WHERE state='HELD' ORDER BY updated_at,tenant_id,vm_id,consumer_kind,consumer_id LIMIT $1", []any{int64(limit)})
 }
 
 const imageReferenceColumns = `tenant_id,vm_id,consumer_kind,consumer_id,image_id,source_fingerprint,state,reason,created_at,updated_at`
