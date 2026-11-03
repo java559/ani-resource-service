@@ -3695,8 +3695,10 @@ type AssociatedInstance struct {
 	ObservationStale bool                   `protobuf:"varint,11,opt,name=observation_stale,json=observationStale,proto3" json:"observation_stale,omitempty"`
 	ObservedAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=observed_at,json=observedAt,proto3" json:"observed_at,omitempty"`
 	Addresses        []*NetworkAddress      `protobuf:"bytes,13,rep,name=addresses,proto3" json:"addresses,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Every row replays the trusted tenant so the caller can assert scope.
+	TenantId      string `protobuf:"bytes,14,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AssociatedInstance) Reset() {
@@ -3818,6 +3820,13 @@ func (x *AssociatedInstance) GetAddresses() []*NetworkAddress {
 		return x.Addresses
 	}
 	return nil
+}
+
+func (x *AssociatedInstance) GetTenantId() string {
+	if x != nil {
+		return x.TenantId
+	}
+	return ""
 }
 
 // Exactly one of vpc_id or subnet_id scopes the page; supplying both asserts
@@ -4633,7 +4642,7 @@ const file_network_v1_network_proto_rawDesc = "" +
 	"attachment\"E\n" +
 	"\x0eNetworkAddress\x12\x19\n" +
 	"\bnic_name\x18\x01 \x01(\tR\anicName\x12\x18\n" +
-	"\aaddress\x18\x02 \x01(\tR\aaddress\"\x99\x04\n" +
+	"\aaddress\x18\x02 \x01(\tR\aaddress\"\xb6\x04\n" +
 	"\x12AssociatedInstance\x12#\n" +
 	"\rconsumer_type\x18\x01 \x01(\tR\fconsumerType\x12\x1f\n" +
 	"\vconsumer_id\x18\x02 \x01(\tR\n" +
@@ -4651,7 +4660,8 @@ const file_network_v1_network_proto_rawDesc = "" +
 	"\x11observation_stale\x18\v \x01(\bR\x10observationStale\x12;\n" +
 	"\vobserved_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"observedAt\x128\n" +
-	"\taddresses\x18\r \x03(\v2\x1a.network.v1.NetworkAddressR\taddresses\"\xc0\x01\n" +
+	"\taddresses\x18\r \x03(\v2\x1a.network.v1.NetworkAddressR\taddresses\x12\x1b\n" +
+	"\ttenant_id\x18\x0e \x01(\tR\btenantId\"\xc0\x01\n" +
 	"\x1bListNetworkInstancesRequest\x12\x1b\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\btenantId\x12\x15\n" +
 	"\x06vpc_id\x18\x02 \x01(\tR\x05vpcId\x12\x1b\n" +

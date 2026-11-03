@@ -53,7 +53,7 @@ WHERE a.tenant_id=sqlc.arg(tenant_id)
   AND (a.subnet_id=sqlc.arg(subnet_id)::text OR a.vpc_id=sqlc.arg(vpc_id)::text)
   AND (a.state<>'released' OR a.protocol_blocked);
 -- name: ListAttachmentConsumers :many
-SELECT a.attachment_id,a.vpc_id,a.subnet_id,a.slot,a.state,a.reason,a.protocol_blocked,
+SELECT a.tenant_id,a.attachment_id,a.vpc_id,a.subnet_id,a.slot,a.state,a.reason,a.protocol_blocked,
  a.instance_id,a.consumer_type,a.pod_uid,a.observed_at,a.created_at,a.provider_relations,
  coalesce(a.plan->>'WorkloadMode','')::text AS workload_mode,
  coalesce(s.name,'')::text AS subnet_name,

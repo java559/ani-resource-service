@@ -47,6 +47,11 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 	}
 	out := make([]biz.AttachmentConsumerRow, 0, len(rows))
 	for _, row := range rows {
+		if row.TenantID != tenant {
+			// The predicate is tenant-scoped, so a mismatch means the storage
+			// contract broke. Fail closed instead of forwarding a foreign row.
+			return nil, 0, biz.Fail(biz.DependencyUnavailable, "network consumer row carries another tenant")
+		}
 		attachment := biz.Attachment{
 			ID: row.AttachmentID, TenantID: tenant, VPCID: row.VpcID, SubnetID: row.SubnetID, InstanceID: row.InstanceID,
 			ConsumerType: row.ConsumerType, Slot: row.Slot, WorkloadMode: row.WorkloadMode,
@@ -64,7 +69,7 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 			attachment.WorkloadMode = "single_pod"
 		}
 		value := biz.AttachmentConsumerRow{
-			AttachmentID: row.AttachmentID, VPCID: row.VpcID, SubnetID: row.SubnetID, SubnetName: row.SubnetName,
+			TenantID: row.TenantID, AttachmentID: row.AttachmentID, VPCID: row.VpcID, SubnetID: row.SubnetID, SubnetName: row.SubnetName,
 			Slot: row.Slot, ConsumerType: row.ConsumerType, ConsumerID: row.InstanceID, PodUID: row.PodUid,
 			State: row.State, Reason: row.Reason, ProtocolBlocked: row.ProtocolBlocked,
 			CreatedAt: row.CreatedAt, ObservedAt: timeValue(row.ObservedAt), HasObservation: row.ObservedAt != nil,

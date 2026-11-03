@@ -543,7 +543,7 @@ func (q *Queries) InsertAttachmentHistory(ctx context.Context, arg InsertAttachm
 }
 
 const listAttachmentConsumers = `-- name: ListAttachmentConsumers :many
-SELECT a.attachment_id,a.vpc_id,a.subnet_id,a.slot,a.state,a.reason,a.protocol_blocked,
+SELECT a.tenant_id,a.attachment_id,a.vpc_id,a.subnet_id,a.slot,a.state,a.reason,a.protocol_blocked,
  a.instance_id,a.consumer_type,a.pod_uid,a.observed_at,a.created_at,a.provider_relations,
  coalesce(a.plan->>'WorkloadMode','')::text AS workload_mode,
  coalesce(s.name,'')::text AS subnet_name,
@@ -567,6 +567,7 @@ type ListAttachmentConsumersParams struct {
 }
 
 type ListAttachmentConsumersRow struct {
+	TenantID          string
 	AttachmentID      string
 	VpcID             string
 	SubnetID          string
@@ -601,6 +602,7 @@ func (q *Queries) ListAttachmentConsumers(ctx context.Context, arg ListAttachmen
 	for rows.Next() {
 		var i ListAttachmentConsumersRow
 		if err := rows.Scan(
+			&i.TenantID,
 			&i.AttachmentID,
 			&i.VpcID,
 			&i.SubnetID,

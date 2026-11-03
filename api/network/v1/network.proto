@@ -376,6 +376,8 @@ message AssociatedInstance {
  bool observation_stale = 11;
  google.protobuf.Timestamp observed_at = 12;
  repeated NetworkAddress addresses = 13;
+ // Every row replays the trusted tenant so the caller can assert scope.
+ string tenant_id = 14;
 }
 // Exactly one of vpc_id or subnet_id scopes the page; supplying both asserts
 // that the subnet belongs to that VPC. Unknown networks are not found, while a

@@ -28,6 +28,7 @@ type AttachmentConsumerRow struct {
 	AttachmentID, VPCID, SubnetID     string
 	SubnetName, Slot, ConsumerType    string
 	ConsumerID, State, Reason, PodUID string
+	TenantID                          string
 	ObservationStale, ProtocolBlocked bool
 	ObservedAt, CreatedAt             time.Time
 	HasObservation                    bool
@@ -43,6 +44,7 @@ type AttachmentConsumer struct {
 	Addresses                          []AttachmentAddress
 	AttachmentID, SubnetID, SubnetName string
 	Slot, ConsumerType, ConsumerID     string
+	TenantID                           string
 	ConsumerName, ConsumerState        string
 	AttachmentState, AttachmentReason  string
 	ObservedAt                         *time.Time
@@ -95,7 +97,7 @@ func (a *Attachments) ListInstances(ctx context.Context, r ListAttachmentConsume
 		value := AttachmentConsumer{
 			Addresses: row.Addresses, AttachmentID: row.AttachmentID, SubnetID: row.SubnetID, SubnetName: row.SubnetName,
 			Slot: row.Slot, ConsumerID: canonicalConsumerID(row.ConsumerID), ConsumerType: row.ConsumerType,
-			ConsumerState: ConsumerUnknown, AttachmentState: row.State, AttachmentReason: row.Reason,
+			TenantID: row.TenantID, ConsumerState: ConsumerUnknown, AttachmentState: row.State, AttachmentReason: row.Reason,
 			ObservationStale: row.ObservationStale, ProtocolBlocked: row.ProtocolBlocked,
 		}
 		if value.ConsumerType == "" {

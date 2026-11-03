@@ -134,7 +134,7 @@ func TestListInstancesDefaultsToFirstPage(t *testing.T) {
 func TestListInstancesKeepsRowsAndNormalizesStates(t *testing.T) {
 	observed := time.Date(2026, 11, 3, 7, 20, 11, 0, time.UTC)
 	container := AttachmentConsumerRow{
-		AttachmentID: "att_" + strings.Repeat("a", 32), VPCID: consumerVPC, SubnetID: consumerSubnet, SubnetName: "test",
+		TenantID: consumerTenant, AttachmentID: "att_" + strings.Repeat("a", 32), VPCID: consumerVPC, SubnetID: consumerSubnet, SubnetName: "test",
 		Slot: "primary", ConsumerType: ConsumerContainerInstance, ConsumerID: containerOne, State: "attached",
 		ObservedAt: observed, CreatedAt: observed.Add(-time.Hour), HasObservation: true,
 		Addresses: []AttachmentAddress{{NICName: "default", Address: "10.42.1.15"}},
@@ -171,7 +171,7 @@ func TestListInstancesKeepsRowsAndNormalizesStates(t *testing.T) {
 		t.Fatalf("total = %d items = %d", page.Total, len(page.Items))
 	}
 	first := page.Items[0]
-	if first.ConsumerName != "demo-1" || first.ConsumerState != "running" || first.SubnetName != "test" || first.AttachmentState != "attached" || first.ObservationStale {
+	if first.TenantID != consumerTenant || first.ConsumerName != "demo-1" || first.ConsumerState != "running" || first.SubnetName != "test" || first.AttachmentState != "attached" || first.ObservationStale {
 		t.Fatalf("attached row = %+v", first)
 	}
 	if len(first.Addresses) != 1 || first.Addresses[0].NICName != "default" || first.Addresses[0].Address != "10.42.1.15" {

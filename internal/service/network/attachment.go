@@ -68,7 +68,7 @@ func (s *NetworkService) ListNetworkInstances(ctx context.Context, r *networkv1.
 	}
 	result := &networkv1.ListNetworkInstancesResponse{Total: page.Total, Items: make([]*networkv1.AssociatedInstance, 0, len(page.Items))}
 	for _, item := range page.Items {
-		value := &networkv1.AssociatedInstance{ConsumerType: item.ConsumerType, ConsumerId: item.ConsumerID, ConsumerName: item.ConsumerName, ConsumerState: item.ConsumerState, SubnetId: item.SubnetID, SubnetName: item.SubnetName, Slot: item.Slot, AttachmentId: item.AttachmentID, AttachmentState: item.AttachmentState, AttachmentReason: item.AttachmentReason, ObservationStale: item.ObservationStale, ObservedAt: optionalTime(item.ObservedAt), Addresses: make([]*networkv1.NetworkAddress, 0, len(item.Addresses))}
+		value := &networkv1.AssociatedInstance{TenantId: item.TenantID, ConsumerType: item.ConsumerType, ConsumerId: item.ConsumerID, ConsumerName: item.ConsumerName, ConsumerState: item.ConsumerState, SubnetId: item.SubnetID, SubnetName: item.SubnetName, Slot: item.Slot, AttachmentId: item.AttachmentID, AttachmentState: item.AttachmentState, AttachmentReason: item.AttachmentReason, ObservationStale: item.ObservationStale, ObservedAt: optionalTime(item.ObservedAt), Addresses: make([]*networkv1.NetworkAddress, 0, len(item.Addresses))}
 		for _, address := range item.Addresses {
 			value.Addresses = append(value.Addresses, &networkv1.NetworkAddress{NicName: address.NICName, Address: address.Address})
 		}
