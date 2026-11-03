@@ -13,14 +13,14 @@ import (
 // ImageWorker advances one image record per claim. It never holds a database
 // transaction across a cluster call, and every step is re-entrant.
 type ImageWorker struct {
-	repo    ImageRepository
-	native  ImageNativePort
+	repo        ImageRepository
+	native      ImageNativePort
 	environment EnvironmentPort
-	identity  string
-	cluster   string
-	lease     time.Duration
-	poll      time.Duration
-	logger    *slog.Logger
+	identity    string
+	cluster     string
+	lease       time.Duration
+	poll        time.Duration
+	logger      *slog.Logger
 	// enabled gates only new admissions; existing records always drain.
 	enabled func() bool
 }

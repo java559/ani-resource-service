@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	networkbiz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/network"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
 	conf "github.com/zhangzhe-ctrl/ani-resource-service/internal/conf/v1"
@@ -20,7 +21,6 @@ import (
 	data "github.com/zhangzhe-ctrl/ani-resource-service/internal/data/vm"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/server"
 	service "github.com/zhangzhe-ctrl/ani-resource-service/internal/service/vm"
-	"github.com/google/uuid"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/tools/clientcmd"
 )

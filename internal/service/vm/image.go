@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	pb "github.com/zhangzhe-ctrl/ani-resource-service/api/vm/v1"
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
-	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/fieldmaskpb"
@@ -180,8 +180,8 @@ func (s *ImageService) CreateImage(ctx context.Context, r *pb.CreateImageRequest
 	id := uuid.NewString()
 	digest, e := biz.ImageRequestDigest(biz.ImageCreateAction, r.TenantId, id, struct {
 		Name, Description, Kind, Format string
-		Size                             int64
-		OS                               biz.ImageOS
+		Size                            int64
+		OS                              biz.ImageOS
 	}{strings.TrimSpace(r.Name), r.Description, r.Kind, r.Format, r.SourceCapacityGb, profile}, 0, nil)
 	if e != nil {
 		return nil, imageRPCError(e)

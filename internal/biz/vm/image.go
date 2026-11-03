@@ -33,10 +33,10 @@ var (
 const ImageMediaKeyPrefix = "vmimg:"
 
 const (
-	ImageCreateAction = "/vm.v1.VMImageService/CreateImage"
+	ImageCreateAction  = "/vm.v1.VMImageService/CreateImage"
 	ImageSessionAction = "/vm.v1.VMImageService/CreateUploadSession"
-	ImageUpdateAction = "/vm.v1.VMImageService/UpdateImage"
-	ImageDeleteAction = "/vm.v1.VMImageService/DeleteImage"
+	ImageUpdateAction  = "/vm.v1.VMImageService/UpdateImage"
+	ImageDeleteAction  = "/vm.v1.VMImageService/DeleteImage"
 )
 
 const (
@@ -75,19 +75,19 @@ var imageKinds = map[string]string{"DISK_IMAGE": "qcow2", "INSTALL_ISO": "iso"}
 // PVC request, what the cluster reports and how many bytes the hash covers.
 type Image struct {
 	TenantID, ID, MediaKey, Kind, Format, Name, Description string
-	State, Reason, CleanupState                              string
-	SourceCapacityGB, SourceRequestedBytes                   int64
-	ObservedSourceCapacityBytes, SourceChecksumBytes         int64
-	SourceSHA256                                             string
-	OS                                                       ImageOS
-	Native                                                   ImageNative
-	Cleanup                                                  []ObjectRef
-	Version                                                  int64
-	Lease                                                    string
-	LeaseUntil, NextAttemptAt                                time.Time
-	UploadDeadline                                           *time.Time
-	CreatedBy                                                string
-	CreatedAt, UpdatedAt                                     time.Time
+	State, Reason, CleanupState                             string
+	SourceCapacityGB, SourceRequestedBytes                  int64
+	ObservedSourceCapacityBytes, SourceChecksumBytes        int64
+	SourceSHA256                                            string
+	OS                                                      ImageOS
+	Native                                                  ImageNative
+	Cleanup                                                 []ObjectRef
+	Version                                                 int64
+	Lease                                                   string
+	LeaseUntil, NextAttemptAt                               time.Time
+	UploadDeadline                                          *time.Time
+	CreatedBy                                               string
+	CreatedAt, UpdatedAt                                    time.Time
 }
 
 type ImageOS struct {
@@ -97,15 +97,15 @@ type ImageOS struct {
 // ImageNative freezes the name + UID + namespace triple for each owned object.
 // An empty UID means "not observed yet"; it never means "any object matches".
 type ImageNative struct {
-	ClusterID, Namespace, NamespaceUID                string
-	DVName, DVUID, PVCName, PVCUID, PVName, PVUID     string
-	JobName, JobUID, PodUID                           string
-	TokenUID, TokenName, SessionID                    string
-	DVPhase                                           string
-	VerifierImage                                     string
-	SourceVolumeMode, SourceContentType               string
-	AnnotationResourceVersion                         string
-	ReadyPublishedAt                                  time.Time
+	ClusterID, Namespace, NamespaceUID            string
+	DVName, DVUID, PVCName, PVCUID, PVName, PVUID string
+	JobName, JobUID, PodUID                       string
+	TokenUID, TokenName, SessionID                string
+	DVPhase                                       string
+	VerifierImage                                 string
+	SourceVolumeMode, SourceContentType           string
+	AnnotationResourceVersion                     string
+	ReadyPublishedAt                              time.Time
 }
 
 func ImageMediaKey(id string) string { return ImageMediaKeyPrefix + id }

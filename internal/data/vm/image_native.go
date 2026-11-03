@@ -323,7 +323,7 @@ func (n *ImageNative) EnsureImageVerification(ctx context.Context, i biz.Image) 
 		"securityContext": map[string]any{"allowPrivilegeEscalation": false, "privileged": false,
 			"runAsNonRoot": true, "runAsUser": 107, "runAsGroup": 107, "readOnlyRootFilesystem": true,
 			"capabilities": map[string]any{"drop": []any{"ALL"}}},
-		"resources": map[string]any{"limits": limits, "requests": requests},
+		"resources":              map[string]any{"limits": limits, "requests": requests},
 		"terminationMessagePath": "/dev/termination-log", "terminationMessagePolicy": "File"}
 	if block {
 		container["volumeDevices"] = []any{map[string]any{"name": "source", "devicePath": "/dev/source"}}
