@@ -103,7 +103,9 @@ func imageRPCError(e error) error {
 	case errors.Is(e, biz.ErrImageNotReady), errors.Is(e, biz.ErrImageNotUploadable), errors.Is(e, biz.ErrImageKindMismatch), errors.Is(e, biz.ErrImageIdentity):
 		return status.Error(codes.FailedPrecondition, e.Error())
 	case errors.Is(e, biz.ErrImageUploadOff):
-		return status.Error(codes.Unavailable, e.Error())
+		// The capability is switched off, not the dependency: a 503 here would be
+		// indistinguishable from Resource being unreachable, for the BFF and the operator.
+		return status.Error(codes.FailedPrecondition, e.Error())
 	case errors.Is(e, biz.ErrImageDependency), errors.Is(e, biz.ErrDependency), errors.Is(e, biz.ErrChanged), errors.Is(e, biz.ErrOwnership):
 		return status.Error(codes.Unavailable, biz.ErrImageDependency.Error())
 	}
