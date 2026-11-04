@@ -180,8 +180,10 @@ func (w *ImageWorker) importing(ctx context.Context, i Image) error {
 		return w.save(ctx, observed)
 	}
 	if !observed.ReadyForVerification() {
-		observed.NextAttemptAt = time.Now().Add(w.poll)
-		return w.save(ctx, observed)
+		// Waiting for the caller's bytes is not a business change, so the row is not
+		// rewritten: `version` keeps meaning "something the tenant did", and the claim
+		// lease alone paces the next observation instead of a 2s write-per-poll loop.
+		return nil
 	}
 	verified, e := w.native.EnsureImageVerification(ctx, observed)
 	if e != nil {

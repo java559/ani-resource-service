@@ -66,13 +66,15 @@ func (r *workerRepo) ListImageReferences(context.Context, string, string) ([]Ima
 func (r *workerRepo) ReleaseImageReference(context.Context, ImageReference, string) error { return nil }
 
 type workerNative struct {
-	ensureErr  error
-	ensureOK   bool
-	probeRefs  []ObjectRef
-	probeErr   error
-	deleteDone bool
-	deleteErr  error
-	deleted    int
+	ensureErr    error
+	ensureOK     bool
+	observeImage Image
+	observeErr   error
+	probeRefs    []ObjectRef
+	probeErr     error
+	deleteDone   bool
+	deleteErr    error
+	deleted      int
 }
 
 func (n *workerNative) EnsureImageSource(_ context.Context, i Image) (Image, error) {
@@ -90,8 +92,11 @@ func (n *workerNative) EnsureImageSource(_ context.Context, i Image) (Image, err
 func (n *workerNative) CreateUploadToken(context.Context, Image, string, time.Duration) (Image, string, time.Time, error) {
 	return Image{}, "", time.Time{}, ErrInvalid
 }
-func (n *workerNative) ObserveImageSource(context.Context, Image) (Image, error) {
-	return Image{}, ErrInvalid
+func (n *workerNative) ObserveImageSource(_ context.Context, i Image) (Image, error) {
+	if n.observeErr != nil {
+		return i, n.observeErr
+	}
+	return n.observeImage, nil
 }
 func (n *workerNative) EnsureImageVerification(context.Context, Image) (Image, error) {
 	return Image{}, ErrInvalid
@@ -273,5 +278,39 @@ func TestImageWorkerNamespaceFailureParksWithoutLosingTheRecord(t *testing.T) {
 	}
 	if saved.State != StatePreparing {
 		t.Fatalf("namespace failure moved state to %q", saved.State)
+	}
+}
+
+// TestImageWorkerLeavesARecordWaitingForBytesUnwritten keeps `version` meaning a
+// business change. Round 1 inflated an idle IMPORTING record past version 30 because
+// every 2s poll rewrote the row, which also made replay/version assertions meaningless.
+func TestImageWorkerLeavesARecordWaitingForBytesUnwritten(t *testing.T) {
+	i := readyImage(t)
+	i.State = StateImporting
+	i.CleanupState = CleanupNone
+	waiting := i
+	waiting.Native.DVPhase = "UploadReady"
+	repo := &workerRepo{queue: []Image{i}}
+	native := &workerNative{observeImage: waiting}
+	w := newWorker(repo, native, workerEnv{})
+
+	if _, e := w.Step(context.Background()); e != nil {
+		t.Fatalf("waiting step: %v", e)
+	}
+	if len(repo.saved) != 0 {
+		t.Fatalf("a poll with nothing new persisted %d rows (version would move without a business change)", len(repo.saved))
+	}
+
+	// Half-evidence is still not evidence: the DV succeeded but the source volume was
+	// never observed, so the row must stay untouched rather than enter VERIFYING.
+	half := waiting
+	half.Native.DVPhase = "Succeeded"
+	half.Native.PVCUID = ""
+	repo.queue = []Image{i}
+	if _, e := w.Step(context.Background()); e != nil {
+		t.Fatalf("half-evidence step: %v", e)
+	}
+	if len(repo.saved) != 0 {
+		t.Fatalf("incomplete clone evidence persisted %d rows: %+v", len(repo.saved), repo.last())
 	}
 }
