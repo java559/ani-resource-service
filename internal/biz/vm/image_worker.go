@@ -290,8 +290,11 @@ func (w *ImageWorker) cleanup(ctx context.Context, i Image) error {
 	}
 	// The drain chain only owns PersistentVolumeClaim entries; a DataVolume or Job found
 	// by the probe is removed by its own name+UID step, so registering it as a chain
-	// entry would be read as a foreign object and block the tombstone forever.
-	i.Cleanup = appendImageRefs(i.Cleanup, registrableImageRefs(remaining))
+	// entry would be read as a foreign object and block the tombstone forever. Rows
+	// written before that rule carry such entries already, so they are dropped here:
+	// the probe that just ran covers every one of those kinds, and it is the probe,
+	// not the chain, that decides whether the namespace is empty.
+	i.Cleanup = appendImageRefs(drainableImageRefs(i.Cleanup), registrableImageRefs(remaining))
 	if len(remaining) == 0 && len(i.Cleanup) == 0 && i.Native.DVName == "" && i.Native.PVCName == "" &&
 		i.Native.JobName == "" && i.Native.TokenName == "" {
 		i.CleanupState = CleanupComplete
@@ -361,6 +364,20 @@ func registrableImageRefs(found []ObjectRef) []ObjectRef {
 	out := make([]ObjectRef, 0, len(found))
 	for _, ref := range found {
 		if ref.Kind == "PersistentVolumeClaim" {
+			out = append(out, ref)
+		}
+	}
+	return out
+}
+
+// drainableImageRefs keeps the types the registered chain can act on. A record
+// written by an older worker may hold probe kinds there; those objects are still
+// covered by the current probe, and leaving them in would block the chain on a
+// kind it can never remove.
+func drainableImageRefs(existing []ObjectRef) []ObjectRef {
+	out := make([]ObjectRef, 0, len(existing))
+	for _, ref := range existing {
+		if ref.Kind == "PersistentVolumeClaim" || ref.Kind == "PersistentVolume" {
 			out = append(out, ref)
 		}
 	}
