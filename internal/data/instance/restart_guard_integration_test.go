@@ -373,6 +373,8 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	}
 	proof, pe := p.VerifyMountTemplate(ctx, iC, iC.CurrentMounts, iC.CurrentMounts)
 	t.Logf("direct proof: class=%s safe=%v nbUID=%s sts=%v err=%v mounts=%d currentMounts=%d", proof.Class, proof.SafeStopped, proof.NotebookUID, proof.StatefulSetUID, pe, len(p.mounts), len(iC.CurrentMounts))
+	t.Logf("boundary mounts: %v", p.mounts)
+	t.Logf("instance mounts: %v", iC.CurrentMounts)
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
