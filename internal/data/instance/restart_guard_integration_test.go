@@ -365,7 +365,12 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	iC := awaitRestartGuardOperation(t, f, w, c, c.OperationID)
 	stopC := acceptRestartGuardCommand(t, f, c, iC, "stop", "")
 	iC = awaitRestartGuardOperation(t, f, w, c, stopC.OperationID)
-	t.Logf("attach precheck: applied=%d desired=%s observed=%s runtime=%s mountsInit=%v notebookUID=%q version=%d pending=%v activeOp=%v", iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired, iC.MountsInitialized, iC.NotebookUID, iC.Version, iC.Pending != nil, iC.ActiveOperation != nil)
+	// attach 的状态前置要求 AppliedMountVersion 脱离 0；基线证明是独立 worker
+	// 回合，这里推进回合直至置位（生产同样由 worker 完成）。
+	for turn := 0; turn < 10 && iC.AppliedMountVersion == 0; turn++ {
+		iC = step(t, f, w, c)
+		t.Logf("baseline turn %d: applied=%d desired=%s observed=%s runtime=%s", turn, iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired)
+	}
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
