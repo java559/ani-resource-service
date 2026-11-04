@@ -334,9 +334,9 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	if _, err := f.repo.AcceptCreate(ctx, a); err != nil {
 		t.Fatal(err)
 	}
-	p := newRestartGuardBoundary()
-	w, _ := biz.NewWorker(f.repo, p, "restart-guard-occupied")
-	iA := awaitRestartGuardOperation(t, f, w, a, a.OperationID)
+	pA := newRestartGuardBoundary()
+	wA, _ := biz.NewWorker(f.repo, pA, "restart-guard-occupied-a")
+	iA := awaitRestartGuardOperation(t, f, wA, a, a.OperationID)
 
 	// 与 A 同租户/同集群/同 Namespace 的兄弟实例。
 	sibling := func() biz.Create {
@@ -356,25 +356,18 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 
 	// C：带一块占位挂载创建并停止（与 A 同构的状态机路径，挂载基线证明随
 	// CREATE/STOP 回合完成）；停止态实例的 active 引用仍占用 → ATTACH 拒绝。
+	// A 与 C 使用各自的 boundary/worker：boundary 的 mounts 槽位按实例记录。
 	c := sibling()
 	placeholder := biz.VolumeMount{ClusterID: a.Spec.ClusterID, Namespace: a.Spec.Namespace, PVCName: "vol-placeholder", PVCUID: uuid.NewString(), MountPath: "/placeholder", ReadOnly: true, Ownership: "borrowed"}
 	c.Spec.VolumeMounts = []biz.VolumeMount{placeholder}
 	if _, err := f.repo.AcceptCreate(ctx, c); err != nil {
 		t.Fatal(err)
 	}
-	iC := awaitRestartGuardOperation(t, f, w, c, c.OperationID)
+	pC := newRestartGuardBoundary()
+	wC, _ := biz.NewWorker(f.repo, pC, "restart-guard-occupied-c")
+	iC := awaitRestartGuardOperation(t, f, wC, c, c.OperationID)
 	stopC := acceptRestartGuardCommand(t, f, c, iC, "stop", "")
-	iC = awaitRestartGuardOperation(t, f, w, c, stopC.OperationID)
-	// attach 的状态前置要求 AppliedMountVersion 脱离 0；基线证明是独立 worker
-	// 回合，这里推进回合直至置位（生产同样由 worker 完成）。
-	for turn := 0; turn < 10 && iC.AppliedMountVersion == 0; turn++ {
-		iC = step(t, f, w, c)
-		t.Logf("baseline turn %d: applied=%d desired=%s observed=%s runtime=%s", turn, iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired)
-	}
-	proof, pe := p.VerifyMountTemplate(ctx, iC, iC.CurrentMounts, iC.CurrentMounts)
-	t.Logf("direct proof: class=%s safe=%v nbUID=%s sts=%v err=%v mounts=%d currentMounts=%d", proof.Class, proof.SafeStopped, proof.NotebookUID, proof.StatefulSetUID, pe, len(p.mounts), len(iC.CurrentMounts))
-	t.Logf("boundary mounts: %v", p.mounts)
-	t.Logf("instance mounts: %v", iC.CurrentMounts)
+	iC = awaitRestartGuardOperation(t, f, wC, c, stopC.OperationID)
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
@@ -388,9 +381,9 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 
 	// A 停止并卸载 → released 后 C 才能再挂同一块盘。
 	stopA := acceptRestartGuardCommand(t, f, a, iA, "stop", "")
-	iA = awaitRestartGuardOperation(t, f, w, a, stopA.OperationID)
+	iA = awaitRestartGuardOperation(t, f, wA, a, stopA.OperationID)
 	detach := acceptRestartGuardCommand(t, f, a, iA, "detach-pvc", shared.MountPath)
-	iA = awaitRestartGuardOperation(t, f, w, a, detach.OperationID)
+	iA = awaitRestartGuardOperation(t, f, wA, a, detach.OperationID)
 	var state string
 	if err := f.runtime.QueryRow(ctx, `SELECT state FROM instance.borrowed_volume_references WHERE tenant_id=$1 AND instance_id=$2 AND mount_path=$3`, a.TenantID, a.ID, shared.MountPath).Scan(&state); err != nil || state != "released" {
 		t.Fatal("detached reference not released", state, err)
