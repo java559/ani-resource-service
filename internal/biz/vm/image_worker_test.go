@@ -204,8 +204,9 @@ func TestImageWorkerClosesTombstoneOnlyAfterAnEmptyProbe(t *testing.T) {
 	i.Native.DVUID = ""
 	i.Native.PVCUID = ""
 	leftover := ObjectRef{Kind: "PersistentVolumeClaim", Namespace: i.Native.Namespace, Name: "prime-" + i.ID, UID: "prime-uid"}
+	source := ObjectRef{Kind: "DataVolume", Namespace: i.Native.Namespace, Name: "vmi-src-" + i.ID, UID: "dv-uid"}
 	repo := &workerRepo{queue: []Image{i}}
-	native := &workerNative{probeRefs: []ObjectRef{leftover}}
+	native := &workerNative{probeRefs: []ObjectRef{leftover, source}}
 	w := newWorker(repo, native, workerEnv{})
 
 	ctx := context.Background()
@@ -216,8 +217,11 @@ func TestImageWorkerClosesTombstoneOnlyAfterAnEmptyProbe(t *testing.T) {
 	if saved.State == StateDeleted || saved.CleanupState == CleanupComplete {
 		t.Fatalf("tombstone closed with a live leftover: state=%s cleanup=%s", saved.State, saved.CleanupState)
 	}
-	if len(saved.Cleanup) == 0 || saved.Cleanup[0].Name != leftover.Name {
-		t.Fatalf("observed leftover never registered: %+v", saved.Cleanup)
+	if saved.CleanupState == CleanupBlocked {
+		t.Fatalf("probe result blocked the drain chain: reason=%q cleanup=%+v", saved.Reason, saved.Cleanup)
+	}
+	if len(saved.Cleanup) != 1 || saved.Cleanup[0].Name != leftover.Name {
+		t.Fatalf("observed leftover not registered on its own: %+v", saved.Cleanup)
 	}
 
 	// A cluster that cannot answer is not read as "nothing left".

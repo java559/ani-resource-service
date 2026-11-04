@@ -288,8 +288,12 @@ func (w *ImageWorker) cleanup(ctx context.Context, i Image) error {
 	if e != nil {
 		return e
 	}
-	i.Cleanup = appendImageRefs(i.Cleanup, remaining)
-	if len(i.Cleanup) == 0 && i.Native.DVName == "" && i.Native.PVCName == "" && i.Native.JobName == "" && i.Native.TokenName == "" {
+	// The drain chain only owns PersistentVolumeClaim entries; a DataVolume or Job found
+	// by the probe is removed by its own name+UID step, so registering it as a chain
+	// entry would be read as a foreign object and block the tombstone forever.
+	i.Cleanup = appendImageRefs(i.Cleanup, registrableImageRefs(remaining))
+	if len(remaining) == 0 && len(i.Cleanup) == 0 && i.Native.DVName == "" && i.Native.PVCName == "" &&
+		i.Native.JobName == "" && i.Native.TokenName == "" {
 		i.CleanupState = CleanupComplete
 		i.NextAttemptAt = time.Now().Add(w.poll)
 		return w.save(ctx, i)
@@ -319,7 +323,7 @@ func (w *ImageWorker) cleanup(ctx context.Context, i Image) error {
 		return e
 	}
 	if len(recheck) > 0 {
-		observed.Cleanup = appendImageRefs(observed.Cleanup, recheck)
+		observed.Cleanup = appendImageRefs(observed.Cleanup, registrableImageRefs(recheck))
 		observed.NextAttemptAt = time.Now().Add(w.poll)
 		return w.save(ctx, observed)
 	}
@@ -351,6 +355,16 @@ func (w *ImageWorker) probe(ctx context.Context, i Image) ([]ObjectRef, error) {
 		return nil, errImageDeferred
 	}
 	return nil, e
+}
+
+func registrableImageRefs(found []ObjectRef) []ObjectRef {
+	out := make([]ObjectRef, 0, len(found))
+	for _, ref := range found {
+		if ref.Kind == "PersistentVolumeClaim" {
+			out = append(out, ref)
+		}
+	}
+	return out
 }
 
 func appendImageRefs(existing []ObjectRef, found []ObjectRef) []ObjectRef {
