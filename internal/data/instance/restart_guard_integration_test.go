@@ -365,6 +365,7 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	iC := awaitRestartGuardOperation(t, f, w, c, c.OperationID)
 	stopC := acceptRestartGuardCommand(t, f, c, iC, "stop", "")
 	iC = awaitRestartGuardOperation(t, f, w, c, stopC.OperationID)
+	t.Logf("attach precheck: applied=%d desired=%s observed=%s runtime=%s mountsInit=%v notebookUID=%q version=%d pending=%v activeOp=%v", iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired, iC.MountsInitialized, iC.NotebookUID, iC.Version, iC.Pending != nil, iC.ActiveOperation != nil)
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
