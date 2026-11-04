@@ -212,10 +212,19 @@ func readImageReplay(ctx context.Context, q interface {
 		return biz.Image{}, biz.ErrNotFound
 	}
 	// A different digest under one key is a client bug, never a silent overwrite.
-	if digest != c.RequestDigest || imageID != c.ImageID {
+	if digest != c.RequestDigest {
 		return biz.Image{}, biz.ErrImageIdempotency
 	}
-	i, e := imageFrom(q.QueryRow(ctx, "SELECT "+imageColumns+" FROM vm.images WHERE tenant_id=$1 AND id=$2", c.TenantID, c.ImageID))
+	// A create allocates its id on the server, so a retry arrives with a fresh one and
+	// the stored row's id is the authoritative target. Updates and deletes carry the
+	// id in the path: there a changed target is a different request.
+	target := c.ImageID
+	if c.Action == biz.ImageCreateAction {
+		target = imageID
+	} else if imageID != c.ImageID {
+		return biz.Image{}, biz.ErrImageIdempotency
+	}
+	i, e := imageFrom(q.QueryRow(ctx, "SELECT "+imageColumns+" FROM vm.images WHERE tenant_id=$1 AND id=$2", c.TenantID, target))
 	if e != nil {
 		return biz.Image{}, biz.ErrNotFound
 	}
@@ -230,7 +239,11 @@ func insertImageRequest(ctx context.Context, tx pgx.Tx, c biz.ImageCommand, i bi
 // CreateImage allocates the image id and the reserved media key in one step.
 // Replay wins before any version or state check so a retry cannot fork a record.
 func (p *Postgres) CreateImage(ctx context.Context, desired biz.Image, c biz.ImageCommand) (biz.Image, error) {
-	if !imageCommandValid(c) || desired.TenantID != c.TenantID || desired.ID != c.ImageID {
+	// A replay arrives with the id the client was told (fresh per attempt) while the
+	// command's digest deliberately excludes it, so the id is only required to be a
+	// UUID here. The stored request row, not the caller, names the original record.
+	if !imageCommandValid(c) || desired.TenantID != c.TenantID || c.Action != biz.ImageCreateAction ||
+		!biz.UUID(desired.ID) {
 		return biz.Image{}, biz.ErrImageInvalid
 	}
 	if _, e := desired.Validated(); e != nil {

@@ -157,6 +157,40 @@ func TestImageRequestDigestBindingRules(t *testing.T) {
 	}
 }
 
+// TestImageCreateDigestIgnoresTheServerAllocatedID is the A08 guard: a create names no
+// target in the request, so its digest must not depend on the id the server happens to
+// allocate for that attempt. Binding it made every identical replay read as a different
+// request and the retry was refused with 409 instead of returning the first resource.
+func TestImageCreateDigestIgnoresTheServerAllocatedID(t *testing.T) {
+	fields := struct {
+		Name, Description string
+	}{Name: "a", Description: "b"}
+	tenant := "64c5c35a-0000-4000-8000-000000000001"
+	first, e := ImageRequestDigest(ImageCreateAction, tenant, "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, 0, nil)
+	if e != nil {
+		t.Fatalf("digest: %v", e)
+	}
+	second, e := ImageRequestDigest(ImageCreateAction, tenant, "9f8e7d6c-5b4a-4392-8170-6f5e4d3c2b1a", fields, 0, nil)
+	if e != nil {
+		t.Fatalf("digest: %v", e)
+	}
+	if first != second {
+		t.Fatalf("create digest depends on the server-allocated id: %s != %s", first, second)
+	}
+	// Updates and deletes still bind the path target: there the id is client input.
+	update, e := ImageRequestDigest(ImageUpdateAction, tenant, "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, 0, nil)
+	if e != nil {
+		t.Fatalf("update digest: %v", e)
+	}
+	otherUpdate, e := ImageRequestDigest(ImageUpdateAction, tenant, "9f8e7d6c-5b4a-4392-8170-6f5e4d3c2b1a", fields, 0, nil)
+	if e != nil {
+		t.Fatalf("update digest: %v", e)
+	}
+	if update == otherUpdate {
+		t.Fatal("update digest stopped binding its path target")
+	}
+}
+
 func TestImageMediaKeyRoundTrip(t *testing.T) {
 	id := "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11"
 	key := ImageMediaKey(id)

@@ -286,6 +286,14 @@ func ImageRequestDigest(action, tenant, imageID string, fields any, expectedVers
 	if imageID != "" && !UUID(imageID) {
 		return "", ErrImageInvalid
 	}
+	// A create names no target in its request: the server allocates the id. Binding
+	// that allocation into the digest made every identical retry look like a different
+	// request, so a lost response could never be replayed. Updates and deletes keep
+	// binding it: there the id is the client's path target.
+	target := imageID
+	if action == ImageCreateAction {
+		target = ""
+	}
 	payload, e := json.Marshal(struct {
 		Action          string   `json:"action"`
 		Tenant          string   `json:"tenant"`
@@ -293,7 +301,7 @@ func ImageRequestDigest(action, tenant, imageID string, fields any, expectedVers
 		Fields          any      `json:"fields"`
 		ExpectedVersion int64    `json:"expected_version"`
 		Mask            []string `json:"update_mask"`
-	}{action, tenant, imageID, fields, expectedVersion, normalized})
+	}{action, tenant, target, fields, expectedVersion, normalized})
 	if e != nil {
 		return "", ErrImageInvalid
 	}

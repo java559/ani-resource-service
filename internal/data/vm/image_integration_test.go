@@ -207,11 +207,17 @@ func TestVMImageCreateReplayConflictAndTenantIsolation(t *testing.T) {
 	if _, e = p.CreateImage(ctx, imageFixture(tenant, id), other); !errors.Is(e, biz.ErrImageIdempotency) {
 		t.Errorf("digest change accepted: %v", e)
 	}
-	// Same key pointed at another image must conflict too.
-	foreignID := uuid.NewString()
-	targetSwitch := imageCommand(t, biz.ImageCreateAction, tenant, foreignID, command.Key, 0, nil, struct{ Name string }{"integration image"})
-	if _, e = p.CreateImage(ctx, imageFixture(tenant, foreignID), targetSwitch); !errors.Is(e, biz.ErrImageIdempotency) {
-		t.Errorf("target swap under a used key accepted: %v", e)
+	// A retry of an identical create arrives with the fresh id the service allocated for
+	// that attempt. It must replay the original record: the id is not part of the intent,
+	// so treating it as a target swap refused the retry that A08 depends on.
+	replayID := uuid.NewString()
+	replay := imageCommand(t, biz.ImageCreateAction, tenant, replayID, command.Key, 0, nil, struct{ Name string }{"integration image"})
+	got, e := p.CreateImage(ctx, imageFixture(tenant, replayID), replay)
+	if e != nil {
+		t.Fatalf("identical create retry refused: %v", e)
+	}
+	if got.ID != id {
+		t.Fatalf("replay returned %s, want the original %s", got.ID, id)
 	}
 
 	// Another tenant cannot read or resolve the record at all.
