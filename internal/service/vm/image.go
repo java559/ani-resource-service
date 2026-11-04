@@ -157,7 +157,7 @@ func wireImage(i biz.Image) *pb.VMImage {
 		ObservedSourceCapacityBytes: i.ObservedSourceCapacityBytes, SourceChecksumBytes: i.SourceChecksumBytes,
 		SourceSha256: i.SourceSHA256, Version: i.Version, CreatedBy: i.CreatedBy,
 		UploadDeadline: imageTimestamp(i.UploadDeadline),
-		CreatedAt: i.CreatedAt.UTC().Format(time.RFC3339Nano), UpdatedAt: i.UpdatedAt.UTC().Format(time.RFC3339Nano),
+		CreatedAt:      i.CreatedAt.UTC().Format(time.RFC3339Nano), UpdatedAt: i.UpdatedAt.UTC().Format(time.RFC3339Nano),
 		Os: &pb.ImageOS{OsFamily: i.OS.OSFamily, OsVersion: i.OS.OSVersion, Architecture: i.OS.Architecture,
 			Firmware: i.OS.Firmware, RootBus: i.OS.RootBus, DataBus: i.OS.DataBus, NicModel: i.OS.NICModel}}
 }
@@ -283,34 +283,34 @@ func newUploadedImageRecord(r *pb.CreateImageRequest, id string, profile biz.Ima
 // target. The token is returned once and never stored anywhere.
 func (s *ImageService) CreateUploadSession(ctx context.Context, r *pb.CreateUploadSessionRequest) (*pb.UploadSession, error) {
 	if r == nil || r.IdempotencyKey == "" || len(r.IdempotencyKey) > 256 || !biz.UUID(r.ImageId) {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "session_key", biz.ErrImageInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "session_tenant_scope", e)
 	}
 	if !s.enabled() {
-		return nil, imageRPCError(biz.ErrImageUploadOff)
+		return nil, s.rejected(ctx, "session_switch_off", biz.ErrImageUploadOff)
 	}
 	command, e := imageCommandOf(biz.ImageSessionAction, r.TenantId, r.ImageId, r.IdempotencyKey, struct{}{}, 0, nil)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "session_command", e)
 	}
 	session := uuid.NewString()
 	i, e := s.repo.RecordSession(ctx, command, session, time.Now().UTC().Add(s.tokenTTL))
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "session_record", e)
 	}
 	if i.Native.DVUID == "" {
 		// The target is registered but not provisioned yet: the caller polls the
 		// record instead of the client guessing a native name.
-		return nil, imageRPCError(biz.ErrImageNotReady)
+		return nil, s.rejected(ctx, "session_target_pending", biz.ErrImageNotReady)
 	}
 	updated, token, expires, e := s.native.CreateUploadToken(ctx, i, session, s.tokenTTL)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "session_token", e)
 	}
 	if e = s.repo.ConfirmImageSession(ctx, updated); e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "session_confirm", e)
 	}
 	s.logger.Info("VM image upload session issued", "image_id", i.ID, "stage", "upload_ticket", "expires_at", expires.UTC().Format(time.RFC3339Nano))
 	return &pb.UploadSession{ImageId: i.ID, UploadSessionId: session, Method: "PUT", UploadUrl: s.uploadURL(),
@@ -325,24 +325,24 @@ func (s *ImageService) uploadURL() string {
 // UpdateImage accepts only name and description through the field mask.
 func (s *ImageService) UpdateImage(ctx context.Context, r *pb.UpdateImageRequest) (*pb.VMImage, error) {
 	if r == nil || !biz.UUID(r.ImageId) || r.IdempotencyKey == "" || len(r.IdempotencyKey) > 256 || r.ExpectedVersion < 1 {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "update_key", biz.ErrImageInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "update_tenant_scope", e)
 	}
 	mask, e := imageUpdateMask(r.UpdateMask)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "update_mask", e)
 	}
 	name, description := r.Name, r.Description
 	fields := struct{ Name, Description string }{name, description}
 	command, e := imageCommandOf(biz.ImageUpdateAction, r.TenantId, r.ImageId, r.IdempotencyKey, fields, r.ExpectedVersion, mask)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "update_command", e)
 	}
 	i, e := s.repo.UpdateImage(ctx, command, name, description, mask)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "update_repository", e)
 	}
 	return wireImage(i), nil
 }
@@ -368,20 +368,20 @@ func imageUpdateMask(mask *fieldmaskpb.FieldMask) ([]string, error) {
 
 func (s *ImageService) DeleteImage(ctx context.Context, r *pb.DeleteImageRequest) (*pb.VMImage, error) {
 	if r == nil || !biz.UUID(r.ImageId) || r.IdempotencyKey == "" || len(r.IdempotencyKey) > 256 || r.ExpectedVersion < 1 {
-		return nil, imageRPCError(biz.ErrImageInvalid)
+		return nil, s.rejected(ctx, "delete_key", biz.ErrImageInvalid)
 	}
 	if e := biz.RequireTenant(ctx, r.TenantId); e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "delete_tenant_scope", e)
 	}
 	// A delete replays on the stored row even after the upload switch is off, so
 	// the gate deliberately does not apply here.
 	command, e := imageCommandOf(biz.ImageDeleteAction, r.TenantId, r.ImageId, r.IdempotencyKey, struct{}{}, r.ExpectedVersion, nil)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "delete_command", e)
 	}
 	i, e := s.repo.DeleteImage(ctx, command)
 	if e != nil {
-		return nil, imageRPCError(e)
+		return nil, s.rejected(ctx, "delete_repository", e)
 	}
 	return wireImage(i), nil
 }

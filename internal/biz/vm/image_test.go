@@ -132,11 +132,11 @@ func TestImageRequestDigestBindingRules(t *testing.T) {
 		t.Fatalf("mask order changed the digest: %v %s/%s", e, base, reordered)
 	}
 	for name, args := range map[string][]any{
-		"tenant":   {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000002", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(3), []string{"name", "description"}},
-		"target":   {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a12", fields, int64(3), []string{"name", "description"}},
-		"version":  {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(4), []string{"name", "description"}},
-		"action":   {ImageDeleteAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(3), []string{"name", "description"}},
-		"fields":   {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", struct {
+		"tenant":  {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000002", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(3), []string{"name", "description"}},
+		"target":  {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a12", fields, int64(3), []string{"name", "description"}},
+		"version": {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(4), []string{"name", "description"}},
+		"action":  {ImageDeleteAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", fields, int64(3), []string{"name", "description"}},
+		"fields": {ImageUpdateAction, "64c5c35a-0000-4000-8000-000000000001", "2b1f0c2e-6d3a-4f57-9a10-3f7f5c1d8a11", struct {
 			Name, Description string
 		}{"a", "c"}, int64(3), []string{"name", "description"}},
 	} {
@@ -200,7 +200,7 @@ func TestImageSourceFingerprintIsPathIndependent(t *testing.T) {
 func TestVerificationResultValidatedFor(t *testing.T) {
 	i := readyImage(t)
 	i.State = StateVerifying
-	i.Native.JobUID, i.Native.VerifierImage = "job-uid", "registry/ani-vm-image-verify@sha256:" + strings.Repeat("e", 64)
+	i.Native.JobUID, i.Native.VerifierImage = "job-uid", "registry/ani-vm-image-verify@sha256:"+strings.Repeat("e", 64)
 	good := VerificationResult{Pass: true, ImageID: i.ID, Checksum: strings.Repeat("a", 64), Bytes: 1 << 30,
 		VolumeMode: "Block", PVCUID: i.Native.PVCUID, RequestedBytes: 1 << 30, ObservedBytes: 1 << 30,
 		ReadOnlyProof: "O_WRONLY=permission denied,O_RDWR=permission denied", JobUID: "job-uid", PodUID: "pod-uid",

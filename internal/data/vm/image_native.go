@@ -541,6 +541,79 @@ func (n *ImageNative) PublishSourceAnnotation(ctx context.Context, i biz.Image) 
 // the validation Job, then the populator PVCs CDI created, then the target PVC,
 // then the upload DataVolume. Nothing is removed by name pattern, and a name
 // held by a different identity stops the pass instead of being overwritten.
+// ObserveManagedSources is the cleanup proof. Every name here is either derived
+// from the image id or embeds a UID this record already observed, so the probe
+// finds objects a crashed worker created but never registered — and it can never
+// point at another image's assets. Absence is only reported when every probe in
+// the chain returns NotFound.
+func (n *ImageNative) ObserveManagedSources(ctx context.Context, i biz.Image) ([]biz.ObjectRef, error) {
+	if i.Native.Namespace == "" {
+		return nil, biz.ErrImageIdentity
+	}
+	var found []biz.ObjectRef
+	add := func(kind, namespace, name, uid string) {
+		found = append(found, biz.ObjectRef{Kind: kind, Namespace: namespace, Name: name, UID: uid})
+	}
+	get := func(resource schema.GroupVersionResource, name string) (*unstructured.Unstructured, error) {
+		object, e := n.client.Resource(resource).Namespace(i.Native.Namespace).Get(ctx, name, metav1.GetOptions{})
+		if apierrors.IsNotFound(e) {
+			return nil, nil
+		}
+		return object, e
+	}
+	if dv, e := get(dvResource, imageName(i)); e != nil {
+		return nil, e
+	} else if dv != nil {
+		if !matchesImage(dv, i) {
+			return nil, biz.ErrOwnership
+		}
+		add("DataVolume", i.Native.Namespace, dv.GetName(), string(dv.GetUID()))
+	}
+	if job, e := get(jobResource, verifyName(i)); e != nil {
+		return nil, e
+	} else if job != nil {
+		if !matchesImage(job, i) {
+			return nil, biz.ErrOwnership
+		}
+		add("Job", i.Native.Namespace, job.GetName(), string(job.GetUID()))
+	}
+	if i.Native.TokenName != "" {
+		if token, e := get(uploadTokenResource, i.Native.TokenName); e != nil {
+			return nil, e
+		} else if token != nil {
+			add("UploadTokenRequest", i.Native.Namespace, token.GetName(), string(token.GetUID()))
+		}
+	}
+	// The PVC name equals the DV name; its UID is what scopes the CDI children,
+	// so the children are probed only once the parent is actually present.
+	pvcName := imageName(i)
+	if i.Native.PVCName != "" {
+		pvcName = i.Native.PVCName
+	}
+	pvc, e := get(pvcResource, pvcName)
+	if e != nil {
+		return nil, e
+	}
+	if pvc == nil {
+		return found, nil
+	}
+	uid := string(pvc.GetUID())
+	if i.Native.PVCUID != "" && i.Native.PVCUID != uid {
+		return nil, biz.ErrOwnership
+	}
+	add("PersistentVolumeClaim", i.Native.Namespace, pvc.GetName(), uid)
+	for _, child := range []string{"prime-" + uid, "prime-" + uid + "-scratch", pvcName + "-scratch"} {
+		object, e := get(pvcResource, child)
+		if e != nil {
+			return nil, e
+		}
+		if object != nil {
+			add("PersistentVolumeClaim", i.Native.Namespace, object.GetName(), string(object.GetUID()))
+		}
+	}
+	return found, nil
+}
+
 func (n *ImageNative) DeleteImageObjects(ctx context.Context, i biz.Image) (biz.Image, bool, error) {
 	if i.Native.Namespace == "" {
 		return i, i.Native.DVName == "" && i.Native.PVCName == "" && len(i.Cleanup) == 0, nil

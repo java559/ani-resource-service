@@ -17,7 +17,7 @@ import (
 // management, catalog and worker paths.
 const imageColumns = `tenant_id,id,media_key,kind,format,name,description,state,reason,cleanup_state,` +
 	`source_capacity_gb,source_requested_bytes,observed_source_capacity_bytes,source_checksum_bytes,source_sha256,` +
-	`os,native,cleanup,version,lease_token,lease_until,next_attempt_at,upload_deadline,created_by,created_at,updated_at`
+	`os,native,cleanup,version,lease_token,lease_until,next_attempt_at,upload_deadline,attempt_count,created_by,created_at,updated_at`
 
 func imageFrom(row pgx.Row) (biz.Image, error) {
 	var i biz.Image
@@ -29,7 +29,7 @@ func imageFrom(row pgx.Row) (biz.Image, error) {
 	var createdBy *string
 	e := row.Scan(&i.TenantID, &i.ID, &i.MediaKey, &i.Kind, &i.Format, &i.Name, &i.Description, &i.State, &i.Reason, &i.CleanupState,
 		&i.SourceCapacityGB, &i.SourceRequestedBytes, &i.ObservedSourceCapacityBytes, &i.SourceChecksumBytes, &i.SourceSHA256,
-		&osRaw, &nativeRaw, &cleanupRaw, &i.Version, &lease, &leaseUntil, &i.NextAttemptAt, &deadline, &createdBy, &i.CreatedAt, &i.UpdatedAt)
+		&osRaw, &nativeRaw, &cleanupRaw, &i.Version, &lease, &leaseUntil, &i.NextAttemptAt, &deadline, &i.AttemptCount, &createdBy, &i.CreatedAt, &i.UpdatedAt)
 	if e != nil {
 		return i, e
 	}
@@ -471,7 +471,18 @@ func (p *Postgres) SaveImage(ctx context.Context, i biz.Image) error {
 	}
 	// A deadline or delete that won while this step ran closes the record.
 	// A late verification result may never republish READY over it.
-	if current.Native.SessionID != i.Native.SessionID || current.Native.DVUID != i.Native.DVUID {
+	// The guard is an ABA check, not a "nothing changed" check. The DataVolume identity is
+	// empty until prepare observes the source, so an empty→value transition is the first
+	// registration and must be allowed exactly once; a registered identity may be neither
+	// swapped nor erased. The upload session stays strict because RecordSession and
+	// ConfirmImageSession own every change to it.
+	if current.Native.SessionID != i.Native.SessionID {
+		return biz.ErrImageIdentity
+	}
+	switch {
+	case current.Native.DVUID == "":
+	case current.Native.DVUID == i.Native.DVUID:
+	default:
 		return biz.ErrImageIdentity
 	}
 	if _, e = i.Validated(); e != nil {
@@ -479,11 +490,11 @@ func (p *Postgres) SaveImage(ctx context.Context, i biz.Image) error {
 	}
 	if _, e = tx.Exec(ctx, `UPDATE vm.images SET state=$3,reason=$4,cleanup_state=$5,
 	 source_requested_bytes=$6,observed_source_capacity_bytes=$7,source_checksum_bytes=$8,source_sha256=$9,
-	 os=$10,native=$11,cleanup=$12,version=version+1,next_attempt_at=$13,upload_deadline=$14,updated_at=now()
+	 os=$10,native=$11,cleanup=$12,version=version+1,next_attempt_at=$13,upload_deadline=$14,attempt_count=$17,updated_at=now()
 	 WHERE tenant_id=$1 AND id=$2 AND version=$15 AND lease_token=$16 AND lease_until>now()`,
 		i.TenantID, i.ID, i.State, i.Reason, i.CleanupState, i.SourceRequestedBytes, i.ObservedSourceCapacityBytes,
 		i.SourceChecksumBytes, i.SourceSHA256, encode(i.OS), encode(i.Native), encode(emptyRefs(i.Cleanup)),
-		i.NextAttemptAt, i.UploadDeadline, i.Version, uuid.MustParse(i.Lease)); e != nil {
+		i.NextAttemptAt, i.UploadDeadline, i.Version, uuid.MustParse(i.Lease), i.AttemptCount); e != nil {
 		return e
 	}
 	return tx.Commit(ctx)

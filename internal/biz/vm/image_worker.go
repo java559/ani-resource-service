@@ -51,23 +51,48 @@ func (w *ImageWorker) Step(ctx context.Context) (bool, error) {
 	}
 	// A dependency failure keeps the lease holder's classification but must not
 	// stop the lane; back off this record and report the reason code only.
-	i.NextAttemptAt = time.Now().Add(imageBackoff(i))
-	i.Reason = imageFailureReason(e)
-	if save := w.repo.SaveImage(ctx, i); save != nil {
-		return true, save
-	}
-	w.logger.Warn("VM image background step failed", "image_id", i.ID, "state", i.State, "reason", i.Reason)
-	return true, nil
+	return true, w.park(ctx, i, imageFailureReason(e))
 }
 
-// imageBackoff is 2s while work is in flight and widens once a record has
-// repeatedly failed, so a stuck dependency cannot spin the lane.
-func imageBackoff(i Image) time.Duration {
-	if i.State == StateDeleting || i.CleanupState == CleanupPending || i.CleanupState == CleanupRunning {
-		return 5 * time.Second
-	}
-	return 2 * time.Second
+// save persists a step that made progress and clears the failure streak.
+func (w *ImageWorker) save(ctx context.Context, i Image) error {
+	i.AttemptCount = 0
+	return w.repo.SaveImage(ctx, i)
 }
+
+// park persists a step that did not move the record forward: it keeps the state,
+// widens the next attempt and leaves the streak visible for the reader. Without
+// this the lane re-claims the same broken record every 2s forever.
+func (w *ImageWorker) park(ctx context.Context, i Image, reason string) error {
+	i.Reason = reason
+	i.AttemptCount++
+	i.NextAttemptAt = time.Now().Add(imageBackoff(i))
+	err := w.repo.SaveImage(ctx, i)
+	w.logger.Warn("VM image background step parked", "image_id", i.ID, "state", i.State, "reason", reason,
+		"attempt_count", i.AttemptCount, "next_attempt_at", i.NextAttemptAt.UTC().Format(time.RFC3339))
+	return err
+}
+
+// imageBackoff is 2s while work is in flight and 5s during teardown, and it
+// doubles with each consecutive failure of the same record up to 8 minutes.
+func imageBackoff(i Image) time.Duration {
+	base := 2 * time.Second
+	if i.State == StateDeleting || i.CleanupState == CleanupPending ||
+		i.CleanupState == CleanupRunning || i.CleanupState == CleanupBlocked {
+		base = 5 * time.Second
+	}
+	shift := i.AttemptCount
+	if shift > 6 {
+		shift = 6
+	}
+	wait := base << shift
+	if wait > imageBackoffCeiling {
+		return imageBackoffCeiling
+	}
+	return wait
+}
+
+var imageBackoffCeiling = 8 * time.Minute
 
 func imageFailureReason(e error) string {
 	switch {
@@ -109,14 +134,13 @@ func (w *ImageWorker) prepare(ctx context.Context, i Image) error {
 		i.State = StateFailed
 		i.CleanupState = CleanupNone
 		i.UploadDeadline = nil
-		return w.repo.SaveImage(ctx, i)
+		return w.save(ctx, i)
 	}
 	if i.Native.Namespace == "" {
 		ns, e := w.environment.ResolveNamespace(ctx, i.TenantID, "")
 		if e != nil {
 			if errors.Is(e, ErrDependency) || errors.Is(e, ErrNotFound) {
-				i.Reason = "NAMESPACE_INVALID"
-				return w.repo.SaveImage(ctx, i)
+				return w.park(ctx, i, "NAMESPACE_INVALID")
 			}
 			return e
 		}
@@ -132,7 +156,7 @@ func (w *ImageWorker) prepare(ctx context.Context, i Image) error {
 	}
 	observed.State = StateImporting
 	observed.Reason = ""
-	return w.repo.SaveImage(ctx, observed)
+	return w.save(ctx, observed)
 }
 
 func (w *ImageWorker) importing(ctx context.Context, i Image) error {
@@ -145,7 +169,7 @@ func (w *ImageWorker) importing(ctx context.Context, i Image) error {
 			i.State = StateFailed
 			i.CleanupState = CleanupPending
 			i.UploadDeadline = nil
-			return w.repo.SaveImage(ctx, i)
+			return w.save(ctx, i)
 		}
 		return e
 	}
@@ -153,11 +177,11 @@ func (w *ImageWorker) importing(ctx context.Context, i Image) error {
 		observed.State = StateFailed
 		observed.CleanupState = CleanupPending
 		observed.UploadDeadline = nil
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	if !observed.ReadyForVerification() {
 		observed.NextAttemptAt = time.Now().Add(w.poll)
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	verified, e := w.native.EnsureImageVerification(ctx, observed)
 	if e != nil {
@@ -165,7 +189,7 @@ func (w *ImageWorker) importing(ctx context.Context, i Image) error {
 	}
 	verified.State = StateVerifying
 	verified.Reason = ""
-	return w.repo.SaveImage(ctx, verified)
+	return w.save(ctx, verified)
 }
 
 // revalidate keeps READY honest. A source whose identity moved can never back a
@@ -174,7 +198,7 @@ func (w *ImageWorker) revalidate(ctx context.Context, i Image) error {
 	observed, e := w.native.ObserveImageSourceIdentity(ctx, i)
 	observed.NextAttemptAt = time.Now().Add(imageRevalidateInterval)
 	if e == nil {
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	if errors.Is(e, ErrDependency) || errors.Is(e, ErrNotFound) ||
 		errors.Is(e, ErrOwnership) || errors.Is(e, ErrImageIdentity) || errors.Is(e, ErrChanged) {
@@ -182,7 +206,7 @@ func (w *ImageWorker) revalidate(ctx context.Context, i Image) error {
 		i.Reason = "SOURCE_IDENTITY_CHANGED"
 		i.Native.DVPhase = ""
 		i.NextAttemptAt = time.Now().Add(imageRevalidateInterval)
-		return w.repo.SaveImage(ctx, i)
+		return w.save(ctx, i)
 	}
 	return e
 }
@@ -193,7 +217,7 @@ func (w *ImageWorker) verifying(ctx context.Context, i Image) error {
 	observed, result, e := w.native.ObserveImageVerification(ctx, i)
 	if errors.Is(e, ErrDependency) {
 		observed.NextAttemptAt = time.Now().Add(w.poll)
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	if e != nil {
 		if errors.Is(e, ErrImageIdentity) || errors.Is(e, ErrOwnership) {
@@ -201,7 +225,7 @@ func (w *ImageWorker) verifying(ctx context.Context, i Image) error {
 			observed.State = StateFailed
 			observed.CleanupState = CleanupPending
 			observed.UploadDeadline = nil
-			return w.repo.SaveImage(ctx, observed)
+			return w.save(ctx, observed)
 		}
 		return e
 	}
@@ -213,13 +237,13 @@ func (w *ImageWorker) verifying(ctx context.Context, i Image) error {
 		observed.State = StateFailed
 		observed.CleanupState = CleanupPending
 		observed.UploadDeadline = nil
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	if err := w.native.PublishSourceAnnotation(ctx, observed); err != nil {
 		if errors.Is(err, ErrImageVersion) {
 			// Someone else changed the annotation; re-observe before deciding.
 			observed.NextAttemptAt = time.Now().Add(w.poll)
-			return w.repo.SaveImage(ctx, observed)
+			return w.save(ctx, observed)
 		}
 		return err
 	}
@@ -230,54 +254,132 @@ func (w *ImageWorker) verifying(ctx context.Context, i Image) error {
 		observed.State = StateFailed
 		observed.CleanupState = CleanupPending
 		observed.UploadDeadline = nil
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
 	}
 	observed.NextAttemptAt = time.Now().Add(imageRevalidateInterval)
-	return w.repo.SaveImage(ctx, observed)
+	return w.save(ctx, observed)
 }
 
-// cleanup removes exactly the registered chain, then closes the tombstone.
+// cleanup removes exactly the registered chain, then closes the tombstone. The
+// cluster probe is the proof: a worker that died between creating an object and
+// registering it must still show the namespace empty before DELETED is written,
+// otherwise the record vanishes while its volume keeps consuming capacity.
 func (w *ImageWorker) cleanup(ctx context.Context, i Image) error {
 	if i.CleanupState == CleanupComplete {
 		return w.closeDeleted(ctx, i)
 	}
-	if i.Native.DVUID == "" && i.Native.PVCUID == "" && i.Native.JobUID == "" && i.Native.TokenUID == "" && len(i.Cleanup) == 0 && i.Native.Namespace == "" {
+	if i.Native.Namespace == "" {
+		if i.Native.DVUID != "" || i.Native.PVCUID != "" || i.Native.JobUID != "" || i.Native.TokenUID != "" || len(i.Cleanup) > 0 {
+			// A registered identity with no namespace cannot be probed at all, so
+			// the record stays open instead of closing on an assumption.
+			return w.park(ctx, i, "NAMESPACE_INVALID")
+		}
+		// Nothing was ever bound: without a namespace no object of this image can exist.
 		i.CleanupState = CleanupComplete
 		i.NextAttemptAt = time.Now().Add(w.poll)
-		return w.repo.SaveImage(ctx, i)
+		return w.save(ctx, i)
+	}
+	remaining, e := w.probe(ctx, i)
+	if errors.Is(e, errImageDeferred) {
+		return nil
+	}
+	if e != nil {
+		return e
+	}
+	i.Cleanup = appendImageRefs(i.Cleanup, remaining)
+	if len(i.Cleanup) == 0 && i.Native.DVName == "" && i.Native.PVCName == "" && i.Native.JobName == "" && i.Native.TokenName == "" {
+		i.CleanupState = CleanupComplete
+		i.NextAttemptAt = time.Now().Add(w.poll)
+		return w.save(ctx, i)
 	}
 	i.CleanupState = CleanupRunning
 	observed, done, e := w.native.DeleteImageObjects(ctx, i)
 	if e != nil {
 		if errors.Is(e, ErrImageCleanup) || errors.Is(e, ErrOwnership) {
 			observed.CleanupState = CleanupBlocked
-			observed.Reason = "NATIVE_CLEANUP_BLOCKED"
-			if save := w.repo.SaveImage(ctx, observed); save != nil && !errors.Is(save, ErrImageVersion) {
+			if save := w.park(ctx, observed, "NATIVE_CLEANUP_BLOCKED"); save != nil && !errors.Is(save, ErrImageVersion) {
 				return save
 			}
-			w.logger.Warn("VM image native cleanup blocked", "image_id", i.ID, "reason", observed.Reason)
 			return nil
 		}
 		return e
 	}
 	if !done {
 		observed.NextAttemptAt = time.Now().Add(imageBackoff(observed))
-		return w.repo.SaveImage(ctx, observed)
+		return w.save(ctx, observed)
+	}
+	// Deletion reported gone; only a second empty probe may close the tombstone.
+	recheck, e := w.probe(ctx, observed)
+	if errors.Is(e, errImageDeferred) {
+		return nil
+	}
+	if e != nil {
+		return e
+	}
+	if len(recheck) > 0 {
+		observed.Cleanup = appendImageRefs(observed.Cleanup, recheck)
+		observed.NextAttemptAt = time.Now().Add(w.poll)
+		return w.save(ctx, observed)
 	}
 	observed.CleanupState = CleanupComplete
 	return w.closeDeleted(ctx, observed)
 }
 
+// errImageDeferred marks a step that was parked and reported; the lane treats it
+// as handled without letting the caller keep going on an unproven listing.
+var errImageDeferred = errors.New("VM_IMAGE_STEP_DEFERRED")
+
+// probe turns a native listing failure into a parked record. A cluster that
+// cannot answer is never read as "nothing left to clean".
+func (w *ImageWorker) probe(ctx context.Context, i Image) ([]ObjectRef, error) {
+	remaining, e := w.native.ObserveManagedSources(ctx, i)
+	if e == nil {
+		return remaining, nil
+	}
+	if errors.Is(e, ErrOwnership) || errors.Is(e, ErrImageIdentity) {
+		if save := w.park(ctx, i, "SOURCE_IDENTITY_CHANGED"); save != nil {
+			return nil, save
+		}
+		return nil, errImageDeferred
+	}
+	if errors.Is(e, ErrDependency) || errors.Is(e, ErrNotFound) {
+		if save := w.park(ctx, i, "VM_IMAGE_DEPENDENCY_UNAVAILABLE"); save != nil {
+			return nil, save
+		}
+		return nil, errImageDeferred
+	}
+	return nil, e
+}
+
+func appendImageRefs(existing []ObjectRef, found []ObjectRef) []ObjectRef {
+	for _, ref := range found {
+		if ref.Name == "" {
+			continue
+		}
+		duplicate := false
+		for _, item := range existing {
+			if item.Kind == ref.Kind && item.Namespace == ref.Namespace && item.Name == ref.Name {
+				duplicate = true
+				break
+			}
+		}
+		if !duplicate {
+			existing = append(existing, ref)
+		}
+	}
+	return existing
+}
+
 func (w *ImageWorker) closeDeleted(ctx context.Context, i Image) error {
 	if i.State != StateDeleting {
 		i.CleanupState = CleanupComplete
-		return w.repo.SaveImage(ctx, i)
+		return w.save(ctx, i)
 	}
 	i.State = StateDeleted
 	i.Reason = ""
 	i.CleanupState = CleanupComplete
 	i.Cleanup = nil
-	return w.repo.SaveImage(ctx, i)
+	return w.save(ctx, i)
 }
 
 // SetImageClusterID lets the composition root hand the worker the same cluster

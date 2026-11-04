@@ -22,6 +22,10 @@ CREATE TABLE vm.images (
  lease_token uuid, lease_until timestamptz,
  next_attempt_at timestamptz NOT NULL DEFAULT now(),
  upload_deadline timestamptz,
+ -- Consecutive background failures on this record. The worker's backoff grows from it and
+ -- a successful transition resets it, so a stuck dependency cannot spin the lane and the
+ -- observed version numbers keep meaning "business changes" instead of retry noise.
+ attempt_count integer NOT NULL DEFAULT 0 CHECK (attempt_count >= 0),
  created_by text NOT NULL DEFAULT '',
  created_at timestamptz NOT NULL DEFAULT now(),
  updated_at timestamptz NOT NULL DEFAULT now(),

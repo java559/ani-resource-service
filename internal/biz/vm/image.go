@@ -86,6 +86,7 @@ type Image struct {
 	Lease                                                   string
 	LeaseUntil, NextAttemptAt                               time.Time
 	UploadDeadline                                          *time.Time
+	AttemptCount                                            int
 	CreatedBy                                               string
 	CreatedAt, UpdatedAt                                    time.Time
 }
@@ -470,6 +471,10 @@ type ImageNativePort interface {
 	ObserveImageVerification(context.Context, Image) (Image, VerificationResult, error)
 	PublishSourceAnnotation(context.Context, Image) error
 	ObserveImageSourceIdentity(context.Context, Image) (Image, error)
+	// ObserveManagedSources reports the native objects still held for this image,
+	// including ones created but never registered after a crash. Cleanup may only
+	// close the tombstone when it returns nothing.
+	ObserveManagedSources(context.Context, Image) ([]ObjectRef, error)
 	DeleteImageObjects(context.Context, Image) (Image, bool, error)
 	ObserveImageClone(context.Context, VM, Image, ImageReference) (bool, error)
 }

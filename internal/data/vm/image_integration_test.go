@@ -502,3 +502,127 @@ func TestVMImageClaimLeaseAndDeadlineCAS(t *testing.T) {
 		t.Error("a lease-less save succeeded")
 	}
 }
+
+// TestVMImageSaveImageAcceptsFirstSourceRegistration reproduces the cluster failure on a
+// real PostgreSQL: prepare observed the DataVolume and filled Native.DVUID in, and the
+// ABA guard read "empty in the row, non-empty in the step" as an identity conflict. The
+// first registration therefore could never be written, which starved the ticket, the
+// verification Job, every pin, and finally the native cleanup evidence.
+func TestVMImageSaveImageAcceptsFirstSourceRegistration(t *testing.T) {
+	ctx := context.Background()
+	db := newVMImageDatabase(t)
+	if e := Migrate(ctx, db.OwnerDSN, db.RuntimeRole); e != nil {
+		t.Fatal(e)
+	}
+	p, e := OpenPostgres(ctx, db.RuntimeDSN)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer p.Close()
+	tenant, id := uuid.NewString(), uuid.NewString()
+	command := imageCommand(t, biz.ImageCreateAction, tenant, id, uuid.NewString(), 0, nil, struct{ Name string }{"integration image"})
+	if _, e = p.CreateImage(ctx, imageFixture(tenant, id), command); e != nil {
+		t.Fatal(e)
+	}
+	token := uuid.NewString()
+	claimed, hold, e := p.ClaimImage(ctx, token, 60*time.Second)
+	if e != nil || !hold {
+		t.Fatalf("claim: %v %v", e, hold)
+	}
+	if claimed.Native.DVUID != "" {
+		t.Fatalf("a fresh record must not carry a registered DVUID: %+v", claimed.Native)
+	}
+
+	registered := claimed
+	registered.Native.Namespace, registered.Native.NamespaceUID = "tenant-"+tenant, uuid.NewString()
+	registered.Native.ClusterID = "cluster-a"
+	registered.Native.DVName = "vmi-src-" + strings.ReplaceAll(id, "-", "")
+	registered.Native.DVUID = uuid.NewString()
+	registered.Native.SourceVolumeMode, registered.Native.SourceContentType = "Block", "kubevirt"
+	registered.State = biz.StateImporting
+	registered.Reason = ""
+	registered.NextAttemptAt = time.Now().Add(time.Second)
+	if e = p.SaveImage(ctx, registered); e != nil {
+		t.Fatalf("first source registration refused: %v", e)
+	}
+	stored, e := p.FindImage(ctx, tenant, id)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if stored.Native.DVUID != registered.Native.DVUID || stored.Native.DVName != registered.Native.DVName ||
+		stored.Native.Namespace != registered.Native.Namespace {
+		t.Errorf("registration not persisted: %+v", stored.Native)
+	}
+	if stored.State != biz.StateImporting || stored.Version != registered.Version+1 {
+		t.Errorf("state=%s version=%d, want IMPORTING/%d", stored.State, stored.Version, registered.Version+1)
+	}
+
+	// What the guard is actually for: a registered identity may be neither swapped nor
+	// erased by a later step.
+	swapped := stored
+	swapped.Native.DVUID = uuid.NewString()
+	if e = p.SaveImage(ctx, swapped); !errors.Is(e, biz.ErrImageIdentity) {
+		t.Errorf("DVUID swap accepted: %v", e)
+	}
+	erased := stored
+	erased.Native.DVUID = ""
+	if e = p.SaveImage(ctx, erased); !errors.Is(e, biz.ErrImageIdentity) {
+		t.Errorf("DVUID erased to empty accepted: %v", e)
+	}
+}
+
+// TestVMImageSaveImageKeepsSessionStrict bounds the fix: only the DataVolume identity may
+// be filled in once. The upload session stays under RecordSession/ConfirmImageSession, so
+// a step that carries a different session must still be refused.
+func TestVMImageSaveImageKeepsSessionStrict(t *testing.T) {
+	ctx := context.Background()
+	db := newVMImageDatabase(t)
+	if e := Migrate(ctx, db.OwnerDSN, db.RuntimeRole); e != nil {
+		t.Fatal(e)
+	}
+	p, e := OpenPostgres(ctx, db.RuntimeDSN)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer p.Close()
+	tenant, id := uuid.NewString(), uuid.NewString()
+	create := imageCommand(t, biz.ImageCreateAction, tenant, id, uuid.NewString(), 0, nil, struct{ Name string }{"integration image"})
+	if _, e = p.CreateImage(ctx, imageFixture(tenant, id), create); e != nil {
+		t.Fatal(e)
+	}
+	session := uuid.NewString()
+	stamped, e := p.RecordSession(ctx, imageCommand(t, biz.ImageSessionAction, tenant, id, uuid.NewString(), 1, nil, struct{}{}), session, time.Now().UTC().Add(5*time.Minute))
+	if e != nil {
+		t.Fatal(e)
+	}
+	if stamped.Native.SessionID != session {
+		t.Fatalf("RecordSession did not stamp the session: %+v", stamped.Native)
+	}
+	token := uuid.NewString()
+	claimed, hold, e := p.ClaimImage(ctx, token, 60*time.Second)
+	if e != nil || !hold {
+		t.Fatalf("claim: %v %v", e, hold)
+	}
+	if claimed.Native.SessionID != session {
+		t.Fatalf("claimed record lost the session: %+v", claimed.Native)
+	}
+	foreign := claimed
+	foreign.Native.SessionID = uuid.NewString()
+	foreign.NextAttemptAt = time.Now().Add(time.Second)
+	if e = p.SaveImage(ctx, foreign); !errors.Is(e, biz.ErrImageIdentity) {
+		t.Errorf("foreign session save accepted: %v", e)
+	}
+	lost := claimed
+	lost.Native.SessionID = ""
+	lost.NextAttemptAt = time.Now().Add(time.Second)
+	if e = p.SaveImage(ctx, lost); !errors.Is(e, biz.ErrImageIdentity) {
+		t.Errorf("erased session save accepted: %v", e)
+	}
+	kept := claimed
+	kept.State = biz.StateImporting
+	kept.Native.DVUID = uuid.NewString()
+	kept.NextAttemptAt = time.Now().Add(time.Second)
+	if e = p.SaveImage(ctx, kept); e != nil {
+		t.Errorf("same-session save with first DVUID refused: %v", e)
+	}
+}
