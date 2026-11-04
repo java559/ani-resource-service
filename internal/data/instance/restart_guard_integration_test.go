@@ -368,6 +368,7 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	for turn := 0; turn < 5; turn++ {
 		iC = step(t, f, w, c)
 	}
+	t.Logf("attach precheck: applied=%d desired=%s observed=%s runtime=%s mountsInit=%v notebookUID=%q version=%d", iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired, iC.MountsInitialized, iC.NotebookUID, iC.Version)
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
