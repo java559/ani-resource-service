@@ -633,6 +633,25 @@ func (n *ImageNative) DeleteImageObjects(ctx context.Context, i biz.Image) (biz.
 			return i, false, e
 		}
 	}
+	// The DataVolume goes first: while it exists its populator keeps recreating the
+	// child PVCs, so draining the chain before it would chase objects CDI rebuilds
+	// with fresh UIDs on every pass. It also owns the source PVC, so removing it is
+	// the root of the native chain rather than one of its leaves.
+	if i.Native.DVName != "" {
+		dv, e := n.client.Resource(dvResource).Namespace(i.Native.Namespace).Get(ctx, i.Native.DVName, metav1.GetOptions{})
+		if e == nil {
+			if !matchesImage(dv, i) {
+				return i, false, biz.ErrOwnership
+			}
+			e = n.client.Resource(dvResource).Namespace(i.Native.Namespace).Delete(ctx, i.Native.DVName, metav1.DeleteOptions{
+				Preconditions: &metav1.Preconditions{UID: uidPointer(i.Native.DVUID)}, PropagationPolicy: foreground()})
+			if e != nil && !apierrors.IsNotFound(e) {
+				return i, false, e
+			}
+		} else if !apierrors.IsNotFound(e) {
+			return i, false, e
+		}
+	}
 	// Populator and scratch PVCs are removed from the registered list head, so a
 	// partial pass never loses track of what is still outstanding.
 	if len(i.Cleanup) > 0 {
@@ -648,7 +667,15 @@ func (n *ImageNative) DeleteImageObjects(ctx context.Context, i biz.Image) (biz.
 				return i, false, e
 			}
 			if string(object.GetUID()) != ref.UID {
-				return i, false, biz.ErrOwnership
+				// The volume names are derived from this record's own source PVC UID,
+				// so a name match already proves the slot is ours; a changed UID is CDI
+				// rebuilding its child, not a foreign object taking the name. Refresh it
+				// and delete on the identity the cluster reports now.
+				if !cdiChildName(i, ref.Name) {
+					return i, false, biz.ErrOwnership
+				}
+				ref.UID = string(object.GetUID())
+				i.Cleanup[0] = ref
 			}
 			if object.GetDeletionTimestamp() == nil {
 				e = n.client.Resource(pvcResource).Namespace(ref.Namespace).Delete(ctx, ref.Name, metav1.DeleteOptions{
@@ -731,6 +758,21 @@ func (n *ImageNative) DeleteImageObjects(ctx context.Context, i biz.Image) (biz.
 		}
 	}
 	return i, true, nil
+}
+
+// cdiChildName proves the object is a CDI child of this record's own source PVC:
+// both populator PVCs embed the parent's UID, and the scratch PVC is the parent's
+// name with a suffix, so the name alone can only match inside this record's slot.
+func cdiChildName(i biz.Image, name string) bool {
+	parent := i.Native.PVCName
+	if parent == "" {
+		parent = imageName(i)
+	}
+	if i.Native.PVCUID == "" {
+		return false
+	}
+	return name == "prime-"+i.Native.PVCUID || name == "prime-"+i.Native.PVCUID+"-scratch" ||
+		name == parent+"-scratch"
 }
 
 func uidPointer(uid string) *types.UID {
