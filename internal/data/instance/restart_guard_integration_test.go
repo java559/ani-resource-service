@@ -363,6 +363,11 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	iC := awaitRestartGuardOperation(t, f, w, c, c.OperationID)
 	stopC := acceptRestartGuardCommand(t, f, c, iC, "stop", "")
 	iC = awaitRestartGuardOperation(t, f, w, c, stopC.OperationID)
+	// 空挂载实例的挂载基线证明在独立 worker 回合完成；attach 的状态前置
+	// 要求 AppliedMountVersion 脱离 0，这里推进几个回合再受理。
+	for turn := 0; turn < 5; turn++ {
+		iC = step(t, f, w, c)
+	}
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
