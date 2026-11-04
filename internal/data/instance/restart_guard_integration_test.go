@@ -331,6 +331,9 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 	a := restartGuardCreate()
 	shared := biz.VolumeMount{ClusterID: a.Spec.ClusterID, Namespace: a.Spec.Namespace, PVCName: "vol-shared", PVCUID: uuid.NewString(), MountPath: "/shared", ReadOnly: true, Ownership: "borrowed"}
 	a.Spec.VolumeMounts = []biz.VolumeMount{shared}
+	if _, err := f.repo.AcceptCreate(ctx, a); err != nil {
+		t.Fatal(err)
+	}
 	p := newRestartGuardBoundary()
 	w, _ := biz.NewWorker(f.repo, p, "restart-guard-occupied")
 	iA := awaitRestartGuardOperation(t, f, w, a, a.OperationID)
