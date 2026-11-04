@@ -632,3 +632,100 @@ func TestVMImageSaveImageKeepsSessionStrict(t *testing.T) {
 		t.Errorf("same-session save with first DVUID refused: %v", e)
 	}
 }
+
+// TestVMImageSaveImageKeepsVersionWhenOnlyTheScheduleMoved is the DEV-B41 guard.
+// `version` is what a client sends back as expected_version, so it may only advance when
+// the row's business content changed. A drain pass that merely re-armed the next attempt,
+// and a repeated park under the same reason, used to advance it every round: the five
+// blocked records in the cluster had climbed from 13 to 129 while nothing but the
+// schedule moved, which made every replay and stale-version assertion meaningless and
+// gave the console spurious conflicts on DELETING rows.
+func TestVMImageSaveImageKeepsVersionWhenOnlyTheScheduleMoved(t *testing.T) {
+	ctx := context.Background()
+	db := newVMImageDatabase(t)
+	if e := Migrate(ctx, db.OwnerDSN, db.RuntimeRole); e != nil {
+		t.Fatal(e)
+	}
+	p, e := OpenPostgres(ctx, db.RuntimeDSN)
+	if e != nil {
+		t.Fatal(e)
+	}
+	defer p.Close()
+
+	tenant, id := uuid.NewString(), uuid.NewString()
+	command := imageCommand(t, biz.ImageCreateAction, tenant, id, uuid.NewString(), 0, nil, struct{ Name string }{"integration image"})
+	if _, e = p.CreateImage(ctx, imageFixture(tenant, id), command); e != nil {
+		t.Fatal(e)
+	}
+	claimed, hold, e := p.ClaimImage(ctx, uuid.NewString(), 5*time.Minute)
+	if e != nil || !hold {
+		t.Fatalf("claim: %v %v", e, hold)
+	}
+
+	// A waiting pass: same state, same reason, nothing registered — only the schedule moved.
+	waiting := claimed
+	waiting.NextAttemptAt = time.Now().Add(2 * time.Minute)
+	if e = p.SaveImage(ctx, waiting); e != nil {
+		t.Fatalf("waiting save: %v", e)
+	}
+	afterWait, e := p.FindImage(ctx, tenant, id)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if afterWait.Version != claimed.Version {
+		t.Errorf("schedule-only save advanced version %d -> %d", claimed.Version, afterWait.Version)
+	}
+
+	// A repeated park under the same reason must not drift either: attempt_count and the
+	// backoff are scheduler bookkeeping and never reach the client.
+	parked := afterWait
+	parked.Reason = "NATIVE_CLEANUP_BLOCKED"
+	parked.AttemptCount = 1
+	parked.NextAttemptAt = time.Now().Add(4 * time.Minute)
+	if e = p.SaveImage(ctx, parked); e != nil {
+		t.Fatalf("first park: %v", e)
+	}
+	reParked, e := p.FindImage(ctx, tenant, id)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if reParked.Version != afterWait.Version+1 {
+		t.Fatalf("the reason change itself must advance version: %d -> %d", afterWait.Version, reParked.Version)
+	}
+	again := reParked
+	again.AttemptCount = 2
+	again.NextAttemptAt = time.Now().Add(8 * time.Minute)
+	if e = p.SaveImage(ctx, again); e != nil {
+		t.Fatalf("second park: %v", e)
+	}
+	afterAgain, e := p.FindImage(ctx, tenant, id)
+	if e != nil {
+		t.Fatal(e)
+	}
+	if afterAgain.Version != reParked.Version {
+		t.Errorf("same-reason park advanced version %d -> %d", reParked.Version, afterAgain.Version)
+	}
+	if afterAgain.AttemptCount != 2 {
+		t.Errorf("attempt streak not kept: %d", afterAgain.AttemptCount)
+	}
+
+	// The counter-case: real content still moves version, so the guard is not "never write".
+	// The first source registration is exactly this shape and must keep passing.
+	registered := afterAgain
+	registered.Native.Namespace, registered.Native.NamespaceUID = "tenant-"+tenant, uuid.NewString()
+	registered.Native.ClusterID = "cluster-a"
+	registered.Native.DVName = "vmi-src-" + strings.ReplaceAll(id, "-", "")
+	registered.Native.DVUID = uuid.NewString()
+	registered.Native.SourceVolumeMode, registered.Native.SourceContentType = "Block", "kubevirt"
+	registered.State = biz.StateImporting
+	registered.Reason = ""
+	registered.NextAttemptAt = time.Now().Add(time.Second)
+	if e = p.SaveImage(ctx, registered); e != nil {
+		t.Fatalf("first source registration refused: %v", e)
+	}
+	if stored, e := p.FindImage(ctx, tenant, id); e != nil {
+		t.Fatal(e)
+	} else if stored.Version != afterAgain.Version+1 {
+		t.Errorf("content change kept version: %d -> %d", afterAgain.Version, stored.Version)
+	}
+}

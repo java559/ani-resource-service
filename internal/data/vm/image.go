@@ -501,16 +501,47 @@ func (p *Postgres) SaveImage(ctx context.Context, i biz.Image) error {
 	if _, e = i.Validated(); e != nil {
 		return e
 	}
+	// `version` is the token a client sends back as expected_version, so it may only
+	// advance when the row carries something the client could observe. A pass that just
+	// re-armed the schedule (or a repeated park under the same reason) used to advance it
+	// every round, which turned DELETING rows into a stream of false conflicts and made
+	// the replay and stale-version assertions unwinnable.
+	bump := int64(1)
+	if !imageContentChanged(current, i) {
+		bump = 0
+	}
 	if _, e = tx.Exec(ctx, `UPDATE vm.images SET state=$3,reason=$4,cleanup_state=$5,
 	 source_requested_bytes=$6,observed_source_capacity_bytes=$7,source_checksum_bytes=$8,source_sha256=$9,
-	 os=$10,native=$11,cleanup=$12,version=version+1,next_attempt_at=$13,upload_deadline=$14,attempt_count=$17,updated_at=now()
+	 os=$10,native=$11,cleanup=$12,version=version+$18,next_attempt_at=$13,upload_deadline=$14,attempt_count=$17,updated_at=now()
 	 WHERE tenant_id=$1 AND id=$2 AND version=$15 AND lease_token=$16 AND lease_until>now()`,
 		i.TenantID, i.ID, i.State, i.Reason, i.CleanupState, i.SourceRequestedBytes, i.ObservedSourceCapacityBytes,
 		i.SourceChecksumBytes, i.SourceSHA256, encode(i.OS), encode(i.Native), encode(emptyRefs(i.Cleanup)),
-		i.NextAttemptAt, i.UploadDeadline, i.Version, uuid.MustParse(i.Lease), i.AttemptCount); e != nil {
+		i.NextAttemptAt, i.UploadDeadline, i.Version, uuid.MustParse(i.Lease), i.AttemptCount, bump); e != nil {
 		return e
 	}
 	return tx.Commit(ctx)
+}
+
+// imageContentChanged compares only the columns SaveImage can write, encoded the same way
+// they are stored so an absent and an empty cleanup chain do not read as a change.
+// Scheduling columns (next_attempt_at, attempt_count, lease, updated_at) are deliberately
+// absent: they are backend bookkeeping and never appear in the response.
+func imageContentChanged(current, next biz.Image) bool {
+	if current.State != next.State || current.Reason != next.Reason || current.CleanupState != next.CleanupState ||
+		current.SourceRequestedBytes != next.SourceRequestedBytes ||
+		current.ObservedSourceCapacityBytes != next.ObservedSourceCapacityBytes ||
+		current.SourceChecksumBytes != next.SourceChecksumBytes || current.SourceSHA256 != next.SourceSHA256 {
+		return true
+	}
+	if string(encode(current.OS)) != string(encode(next.OS)) ||
+		string(encode(current.Native)) != string(encode(next.Native)) ||
+		string(encode(emptyRefs(current.Cleanup))) != string(encode(emptyRefs(next.Cleanup))) {
+		return true
+	}
+	if (current.UploadDeadline == nil) != (next.UploadDeadline == nil) {
+		return true
+	}
+	return current.UploadDeadline != nil && !current.UploadDeadline.Equal(*next.UploadDeadline)
 }
 
 // ClaimImage takes one due image under a lease. Deleting rows and pending
