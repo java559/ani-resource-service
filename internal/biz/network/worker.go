@@ -18,6 +18,7 @@ const (
 	ProviderUnknown     Reason = "PROVIDER_RESULT_UNKNOWN"
 	ProviderMissing     Reason = "PROVIDER_OBJECT_MISSING"
 	CleanupPending      Reason = "CLEANUP_PENDING"
+	AddressConflict     Reason = "ADDRESS_CONFLICT"
 )
 
 type ProviderFailure string
@@ -41,18 +42,23 @@ func (e *ProviderError) Unwrap() error { return e.Cause }
 // ProviderTarget contains only domain references and an opaque provider object
 // identity. The adapter resolves namespace/name/cluster from its persisted map.
 type ProviderTarget struct {
-	Deleting    bool
-	Egress      *EgressWorkSpec
-	Requirement ObservationRequirement
-	Direct      bool
+	SubnetOptions *SubnetOptions
+	Deleting      bool
+	Egress        *EgressWorkSpec
+	Requirement   ObservationRequirement
+	Direct        bool
 	// Tombstone permits reuse of complete shared absence/dependency evidence
 	// only after deletion and every uncertain mutation have already completed.
 	Tombstone                                            bool
 	TenantID, ResourceID, BindingID, KnownIdentity, CIDR string
+	SubnetID                                             string
 	Kind, VPCID, Gateway                                 string
+	RequestedIP, RequestedMAC                            string
 }
 
 type ProviderObservation struct {
+	RejectionReason                Reason
+	VNic                           *VNicFacts
 	Generation, ObservedGeneration int64
 	SubnetIPRanges                 SubnetIPRanges
 	Egress                         *EgressAppliedFacts
@@ -71,14 +77,21 @@ type ResourceProvider interface {
 
 var ErrLeaseLost = errors.New("resource execution lease lost")
 
+// ErrObservationPending means the local shared observation has not yet covered
+// a read. It carries no new Provider fact and must not renew existing evidence.
+var ErrObservationPending = errors.New("shared resource observation pending")
+
 // ResourceWork is the immutable resource snapshot used by the shared lifecycle
 // worker. Resource kinds are closed at the repository boundary.
 type ResourceWork struct {
+	SubnetOptions                                             *SubnetOptions
 	LoadBalancer                                              *LoadBalancerWork
 	BaseRequired                                              bool
 	SystemManaged                                             bool
 	Egress                                                    *EgressWorkSpec
 	ID, TenantID, Kind, VPCID, CIDR, Gateway, LastOperationID string
+	SubnetID                                                  string
+	RequestedIP, RequestedMAC                                 string
 	State                                                     ResourceState
 	Reason                                                    Reason
 	Version                                                   int64
@@ -104,6 +117,7 @@ type Work struct {
 }
 
 type Progress struct {
+	VNic                                           *VNicFacts
 	ProviderGeneration, ProviderObservedGeneration int64
 	// Diagnostic only; never persisted or returned in the public resource model.
 	ProviderError  error `json:"-"`
@@ -223,6 +237,8 @@ func (w *Worker) Step(ctx context.Context) (worked bool, stepErr error) {
 		Deleting:    work.Resource.State == Deleting || work.Resource.State == Deleted,
 		Requirement: work.Requirement, Direct: work.ActiveOperation || work.PendingAction != "" || (work.Resource.State == Deleted && !tombstone), Tombstone: tombstone,
 		Kind: work.Resource.Kind, VPCID: work.Resource.VPCID, Gateway: work.Resource.Gateway,
+		RequestedIP: work.Resource.RequestedIP, RequestedMAC: work.Resource.RequestedMAC,
+		SubnetOptions: work.Resource.SubnetOptions,
 	}
 	callCtx, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
 	observation, observeErr := w.provider.Observe(callCtx, target)
@@ -244,6 +260,7 @@ func (w *Worker) Step(ctx context.Context) (worked bool, stepErr error) {
 	} else {
 		progress = applyEgressFacts(progress, observation)
 		progress.SubnetIPRanges = observation.SubnetIPRanges
+		progress.VNic = observation.VNic
 		progress.ProviderGeneration, progress.ProviderObservedGeneration = observation.Generation, observation.ObservedGeneration
 		progress.Observed = true
 		progress.Proof = observation.Proof
@@ -268,7 +285,13 @@ func (w *Worker) Step(ctx context.Context) (worked bool, stepErr error) {
 			progress, err = w.ensure(ctx, work, target, observation, progress)
 		}
 	}
-	progress.Backoff = observeErr != nil || (work.ActiveOperation && progress.OperationState != Succeeded && progress.OperationState != OpFailed)
+	// Ordinary readers can briefly outpace the next shared audit. Preserve the
+	// original facts without installing a failure backoff that would also block
+	// the successful audit from waking this resource. Mutations and cleanup keep
+	// their original retry and proof requirements.
+	observationPending := errors.Is(observeErr, ErrObservationPending) && !work.ActiveOperation && work.PendingAction == "" &&
+		(work.Resource.State == Available || work.Resource.State == Degraded)
+	progress.Backoff = (observeErr != nil && !observationPending) || (work.ActiveOperation && progress.OperationState != Succeeded && progress.OperationState != OpFailed)
 	if progress.Backoff {
 		progress.NextDelay = w.retryDelay(work.Attempt)
 	} else if tombstone && progress.State == Deleted && progress.Reason == "" && progress.Observed && progress.ClearPending {
@@ -327,6 +350,12 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		var err error
 		if isEgressKind(target.Kind) {
 			value, err = w.mutateEgress(callCtx, target, false)
+		} else if target.Kind == "vnic" {
+			if provider, ok := w.provider.(VNicProvider); ok {
+				value, err = provider.EnsureVNic(callCtx, target)
+			} else {
+				err = &ProviderError{Kind: ProviderReject}
+			}
 		} else if target.Kind == "subnet" {
 			value, err = w.provider.EnsureSubnet(callCtx, target)
 		} else {
@@ -355,6 +384,7 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		observed = value
 		progress = applyEgressFacts(progress, value)
 		progress.SubnetIPRanges = value.SubnetIPRanges
+		progress.VNic = value.VNic
 		progress.ProviderGeneration, progress.ProviderObservedGeneration = value.Generation, value.ObservedGeneration
 		if !value.Proof.CollectedAt.IsZero() {
 			progress.Proof = value.Proof
@@ -363,7 +393,14 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		progress.ClearPending = true
 	}
 	if observed.NeedsUpdate {
-		if !work.ActiveOperation || work.Operation.Kind != "set_snat_enabled" || target.Kind != "snat" {
+		manualCreate := target.Kind == "vnic" && work.Operation.Kind == "create_vnic"
+		if manualCreate && work.ActiveOperation && (work.KnownIdentity == "" || work.PendingAction == "create") {
+			// Commit the observed original parent UID and resolve its create
+			// before a separately fenced child-allocation mutation can begin.
+			progress.Reason = ProviderNotReady
+			return progress, nil
+		}
+		if !work.ActiveOperation || (!manualCreate && (work.Operation.Kind != "set_snat_enabled" || target.Kind != "snat")) {
 			progress.State, progress.Reason = Degraded, ProviderStateMismatch
 			return progress, nil
 		}
@@ -372,7 +409,17 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		}
 		target.KnownIdentity = observed.Identity
 		callCtx, cancel := context.WithTimeout(ctx, w.policy.RequestTimeout)
-		value, err := w.mutateEgress(callCtx, target, true)
+		var value ProviderObservation
+		var err error
+		if manualCreate {
+			if provider, ok := w.provider.(VNicProvider); ok {
+				value, err = provider.EnsureVNic(callCtx, target)
+			} else {
+				err = &ProviderError{Kind: ProviderReject}
+			}
+		} else {
+			value, err = w.mutateEgress(callCtx, target, true)
+		}
 		cancel()
 		if err != nil {
 			progress.ProviderError = err
@@ -381,6 +428,8 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 			progress.ClearPending = providerKind(err) != ProviderUncertain
 			if providerKind(err) == ProviderConflict {
 				progress.OperationState = Blocked
+			} else if manualCreate && providerKind(err) == ProviderReject {
+				progress.State, progress.OperationState = Failed, OpFailed
 			}
 			return progress, nil
 		}
@@ -393,6 +442,7 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 		observed = value
 		progress = applyEgressFacts(progress, value)
 		progress.SubnetIPRanges = value.SubnetIPRanges
+		progress.VNic = value.VNic
 		progress.ProviderGeneration, progress.ProviderObservedGeneration = value.Generation, value.ObservedGeneration
 		if !value.Proof.CollectedAt.IsZero() {
 			progress.Proof = value.Proof
@@ -401,7 +451,14 @@ func (w *Worker) ensure(ctx context.Context, work Work, target ProviderTarget, o
 	} else if work.PendingAction == "update" {
 		progress.ClearPending = true
 	}
-	if observed.Ready {
+	if observed.RejectionReason != "" {
+		progress.Reason = observed.RejectionReason
+		if work.ActiveOperation {
+			progress.State, progress.OperationState = Failed, OpFailed
+		} else {
+			progress.State = Degraded
+		}
+	} else if observed.Ready {
 		progress.State, progress.Reason = Available, ""
 		if work.ActiveOperation {
 			progress.OperationState = Succeeded
