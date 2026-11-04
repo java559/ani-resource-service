@@ -354,21 +354,17 @@ func TestRestartGuardPGOccupiedVolumeRejectedUntilReleased(t *testing.T) {
 		t.Fatal("CREATE accepted an occupied volume", err)
 	}
 
-	// C：无挂载创建并停止；停止态实例的 active 引用仍占用 → ATTACH 拒绝。
+	// C：带一块占位挂载创建并停止（与 A 同构的状态机路径，挂载基线证明随
+	// CREATE/STOP 回合完成）；停止态实例的 active 引用仍占用 → ATTACH 拒绝。
 	c := sibling()
-	c.Spec.VolumeMounts = nil
+	placeholder := biz.VolumeMount{ClusterID: a.Spec.ClusterID, Namespace: a.Spec.Namespace, PVCName: "vol-placeholder", PVCUID: uuid.NewString(), MountPath: "/placeholder", ReadOnly: true, Ownership: "borrowed"}
+	c.Spec.VolumeMounts = []biz.VolumeMount{placeholder}
 	if _, err := f.repo.AcceptCreate(ctx, c); err != nil {
 		t.Fatal(err)
 	}
 	iC := awaitRestartGuardOperation(t, f, w, c, c.OperationID)
 	stopC := acceptRestartGuardCommand(t, f, c, iC, "stop", "")
 	iC = awaitRestartGuardOperation(t, f, w, c, stopC.OperationID)
-	// 空挂载实例的挂载基线证明在独立 worker 回合完成；attach 的状态前置
-	// 要求 AppliedMountVersion 脱离 0，这里推进几个回合再受理。
-	for turn := 0; turn < 5; turn++ {
-		iC = step(t, f, w, c)
-	}
-	t.Logf("attach precheck: applied=%d desired=%s observed=%s runtime=%s mountsInit=%v notebookUID=%q version=%d", iC.AppliedMountVersion, iC.Desired, iC.Observed, iC.RuntimeDesired, iC.MountsInitialized, iC.NotebookUID, iC.Version)
 	attach := func() biz.Command {
 		raw, err := api.CanonicalCommandIntent("attach-pvc", c.ID, iC.Version, shared.PVCName, "/shared", false, false)
 		if err != nil {
