@@ -55,7 +55,7 @@ func runVMMigration() error {
 	defer cancel()
 	return data.Migrate(ctx, strings.TrimSpace(string(raw)), os.Getenv("ANI_VM_RUNTIME_ROLE"))
 }
-func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, repository *networkdata.Postgres, provider *networkdata.KCProvider, attachments *networkbiz.Attachments, instances *instanceComponents, legacy networkbiz.InstanceConsumer, freshness time.Duration, manualNetwork *networkbiz.Network) (*vmComponents, networkbiz.InstanceConsumer, error) {
+func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, repository *networkdata.Postgres, provider *networkdata.KCProvider, attachments *networkbiz.Attachments, instances *instanceComponents, legacy networkbiz.InstanceConsumer, manualNetwork *networkbiz.Network) (*vmComponents, networkbiz.InstanceConsumer, error) {
 	path := os.Getenv("ANI_VM_CONFIG_FILE")
 	if path == "" {
 		return nil, networkbiz.NewVMConsumerRouter(legacy, nil), nil
@@ -77,7 +77,7 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 	if e = provider.ConfigureVMAutoNetwork(networkdata.VMAutoNetworkConfig{ServiceAccount: cfg.Service.ServiceAccount, ServerSocket: cfg.NetworkServerSocket}); e != nil {
 		return nil, nil, e
 	}
-	if e = repository.SetVMNetworkResolver(provider, freshness); e != nil {
+	if e = repository.SetVMNetworkResolver(provider); e != nil {
 		return nil, nil, e
 	}
 	dsn, e := readImagePrivateFile(cfg.DatabaseDSNFile)
@@ -89,6 +89,7 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 	if e != nil {
 		return nil, nil, e
 	}
+	repo.UseNetworkNotifier(attachments.Notify)
 	valid := false
 	defer func() {
 		if !valid {
@@ -122,37 +123,21 @@ func wireVM(ctx context.Context, c *conf.Network, compute *computeComponents, re
 	if e = native.ConfigureLogs(clientConfig, cfg.Service.LogLimits); e != nil {
 		return nil, nil, e
 	}
-	networkPort, e := data.NewNetwork(attachments, repo, native)
+	networkPort, e := data.NewNetwork(attachments, repo)
 	if e != nil {
 		return nil, nil, e
 	}
 	if e = networkPort.UseManualVNics(manualNetwork); e != nil {
 		return nil, nil, e
 	}
-	environment, e := data.NewEnvironment(native, "tenant-", func(ctx context.Context, tenant, cluster, namespace string, s biz.NetworkSelection) (biz.NetworkSelection, error) {
-		policy, e := provider.LookupManagedVMNetwork(ctx, tenant, s.VPCID, s.SubnetID, cluster, namespace)
-		if e != nil {
-			reason := networkbiz.DependencyUnavailable
-			switch value := networkbiz.ReasonOf(e); value {
-			case networkbiz.NetworkNotReady, networkbiz.PlacementMismatch, networkbiz.AttachmentConflict, networkbiz.ResourceNotFound, networkbiz.DependencyUnavailable:
-				reason = value
-			}
-			slog.WarnContext(ctx, "VM network preflight failed", "tenant_id", tenant, "vpc_id", s.VPCID, "subnet_id", s.SubnetID, "stage", "network_preparation", "reason", string(reason))
-			return biz.NetworkSelection{}, e
-		}
-		if s.NADName != "" && (s.NADName != policy.NADName || s.NADUID != policy.NADUID || s.NADDigest != policy.NADConfigDigest) {
-			slog.WarnContext(ctx, "VM network preflight failed", "tenant_id", tenant, "vpc_id", s.VPCID, "subnet_id", s.SubnetID, "stage", "network_selection", "reason", "VM_DEPENDENCY_CHANGED")
-			return biz.NetworkSelection{}, biz.ErrChanged
-		}
-		plan, e := repository.ResolveVMNetworkSelection(ctx, networkbiz.PrepareAttachment{TenantID: tenant, VPCID: s.VPCID, SubnetID: s.SubnetID, ClusterID: cluster, Namespace: namespace, WorkloadMode: "vm_managed", VMExpectation: &networkbiz.VMNetworkExpectation{NADName: policy.NADName, NADUID: policy.NADUID, NADConfigDigest: policy.NADConfigDigest}}, freshness)
-		if e != nil {
-			return biz.NetworkSelection{}, e
-		}
-		return biz.NetworkSelection{VPCID: s.VPCID, SubnetID: s.SubnetID, NADName: plan.NADName, NADUID: plan.NADUID, NADDigest: plan.NADConfigDigest}, nil
-	})
+	access := vmNetworkAccess{repository: repository, provider: provider}
+	repo.UseNetworkAdmission(access.accept)
+	networkPort.UseTenantPreparation(access.prepare)
+	environment, e := data.NewEnvironment(native, "tenant-", access.resolve)
 	if e != nil {
 		return nil, nil, e
 	}
+	environment.UseExistingNetworkValidator(access.validateExisting)
 	handler, e := service.NewService(repo, compute.service, environment, native, cfg.Service)
 	if e != nil {
 		return nil, nil, e

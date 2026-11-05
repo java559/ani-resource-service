@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/netip"
 	"strings"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -33,13 +32,18 @@ func subnetReplay(ctx context.Context, q *sqlcgen.Queries, intent biz.SubnetInte
 	if value.ID != textValue(prior.SubnetID) || value.TenantID != intent.TenantID || value.LastOperationID != prior.OperationID {
 		return biz.Subnet{}, true, databaseFailure(fmt.Errorf("invalid subnet acceptance snapshot"))
 	}
+	value.OwnerScope = biz.OwnerScopeTenant
+	value.CanManage, value.CanUse = networkManagementOpen(string(value.State), string(value.Reason)), networkManagementOpen(string(value.State), string(value.Reason))
 	return value, true, nil
 }
 
-func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, attribution biz.Attribution, freshness time.Duration) (biz.Subnet, error) {
+func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, attribution biz.Attribution) (biz.Subnet, error) {
 	// The durable replay is checked before any dynamic parent or address rule.
 	if value, found, err := subnetReplay(ctx, p.queries, intent); found || err != nil {
 		return value, err
+	}
+	if err := p.rejectPlatformManagement(ctx, intent.VPCID); err != nil {
+		return biz.Subnet{}, err
 	}
 	tx, err := p.pool.Begin(ctx)
 	if err != nil {
@@ -47,6 +51,7 @@ func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, at
 	}
 	defer tx.Rollback(ctx)
 	q := p.queries.WithTx(tx)
+	ctx = context.WithValue(ctx, admissionQueriesKey{}, q)
 	parent, err := q.LockVPC(ctx, sqlcgen.LockVPCParams{TenantID: intent.TenantID, VpcID: intent.VPCID})
 	if err != nil {
 		return biz.Subnet{}, databaseFailure(err)
@@ -59,6 +64,13 @@ func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, at
 	if value, found, err := subnetReplay(ctx, q, intent); found || err != nil {
 		return value, err
 	}
+	intent.NamespaceIdentity, err = p.tenantNamespaceIdentity(ctx, intent.TenantID)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return biz.Subnet{}, biz.Fail(biz.PlacementMismatch, "tenant namespace is not registered")
+	}
+	if err != nil {
+		return biz.Subnet{}, err
+	}
 	if err := p.acceptTenantNamespace(ctx, q, intent.NamespaceIdentity); err != nil {
 		return biz.Subnet{}, err
 	}
@@ -66,8 +78,8 @@ func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, at
 	if err != nil {
 		return biz.Subnet{}, databaseFailure(err)
 	}
-	if parent.State != string(biz.Available) || parent.ObservedAt == nil || now.Sub(*parent.ObservedAt) > freshness {
-		return biz.Subnet{}, biz.Fail(biz.ParentNotReady, "parent VPC requires a fresh available observation")
+	if !networkManagementOpen(parent.State, parent.Reason) {
+		return biz.Subnet{}, biz.Fail(biz.ParentNotReady, "parent VPC management is closed")
 	}
 	prefix := netip.MustParsePrefix(intent.CIDR)
 	parentPrefix := netip.MustParsePrefix(parent.Cidr)
@@ -117,8 +129,17 @@ func (p *Postgres) AcceptSubnet(ctx context.Context, intent biz.SubnetIntent, at
 	return value, nil
 }
 func (p *Postgres) GetSubnet(ctx context.Context, tenant, id string) (biz.Subnet, error) {
-	row, err := p.queries.GetSubnet(ctx, sqlcgen.GetSubnetParams{TenantID: tenant, SubnetID: id})
-	return subnet(row), databaseFailure(err)
+	row, err := p.readQueries(ctx).GetSubnet(ctx, sqlcgen.GetSubnetParams{TenantID: tenant, SubnetID: id})
+	value := subnet(row.NetworkSubnet)
+	value.ObservationStale = row.NetworkSubnet.ObservedAt == nil || row.ObservationError != ""
+	if err == nil {
+		parent, e := p.readQueries(ctx).GetVPC(ctx, sqlcgen.GetVPCParams{TenantID: tenant, VpcID: value.VPCID})
+		if e != nil {
+			return biz.Subnet{}, databaseFailure(e)
+		}
+		value.CanUse = value.CanUse && networkManagementOpen(parent.NetworkVpc.State, parent.NetworkVpc.Reason)
+	}
+	return value, databaseFailure(err)
 }
 func (p *Postgres) ListSubnets(ctx context.Context, tenant string, f biz.SubnetFilter) ([]biz.Subnet, int64, error) {
 	tx, err := p.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
@@ -137,11 +158,16 @@ func (p *Postgres) ListSubnets(ctx context.Context, tenant string, f biz.SubnetF
 	}
 	values := make([]biz.Subnet, 0, len(rows))
 	for _, row := range rows {
-		values = append(values, subnet(row))
+		value := subnet(row.NetworkSubnet)
+		value.ObservationStale = row.NetworkSubnet.ObservedAt == nil || row.ObservationError != ""
+		values = append(values, value)
 	}
 	return values, total, nil
 }
 func (p *Postgres) DeleteSubnet(ctx context.Context, tenant, id string) (biz.Subnet, error) {
+	if err := p.rejectPlatformManagement(ctx, id); err != nil {
+		return biz.Subnet{}, err
+	}
 	tx, err := p.pool.Begin(ctx)
 	if err != nil {
 		return biz.Subnet{}, databaseFailure(err)
@@ -153,7 +179,7 @@ func (p *Postgres) DeleteSubnet(ctx context.Context, tenant, id string) (biz.Sub
 	if err != nil {
 		return biz.Subnet{}, databaseFailure(err)
 	}
-	if _, err := q.LockVPC(ctx, sqlcgen.LockVPCParams{TenantID: tenant, VpcID: initial.VpcID}); err != nil {
+	if _, err := q.LockVPC(ctx, sqlcgen.LockVPCParams{TenantID: tenant, VpcID: initial.NetworkSubnet.VpcID}); err != nil {
 		return biz.Subnet{}, databaseFailure(err)
 	}
 	row, err := q.LockSubnet(ctx, sqlcgen.LockSubnetParams{TenantID: tenant, SubnetID: id})
@@ -215,7 +241,7 @@ func (p *Postgres) DeleteSubnet(ctx context.Context, tenant, id string) (biz.Sub
 	return subnet(row), nil
 }
 func subnet(row sqlcgen.NetworkSubnet) biz.Subnet {
-	value := biz.Subnet{ID: row.SubnetID, TenantID: row.TenantID, VPCID: row.VpcID, Name: row.Name, Description: row.Description, CIDR: row.Cidr, Gateway: row.Gateway, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: row.LastOperationID}
+	value := biz.Subnet{OwnerScope: biz.OwnerScopeTenant, CanManage: networkManagementOpen(row.State, row.Reason), CanUse: networkManagementOpen(row.State, row.Reason), ID: row.SubnetID, TenantID: row.TenantID, VPCID: row.VpcID, Name: row.Name, Description: row.Description, CIDR: row.Cidr, Gateway: row.Gateway, State: biz.ResourceState(row.State), Reason: biz.Reason(row.Reason), Version: row.Version, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, ObservedAt: row.ObservedAt, LastOperationID: row.LastOperationID}
 	value.AvailableIPRange, value.UsedIPRange = row.AvailableIpRange, row.UsedIpRange
 	value.SubnetOptions = biz.SubnetOptions{ExcludeIPs: row.ExcludeIps, EnableDHCP: row.EnableDhcp, DNSServers: row.DnsServers}
 	return value

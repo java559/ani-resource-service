@@ -18,17 +18,14 @@ import (
 // Addresses and staleness come from Network's own persisted observation. Names
 // and run states are resolved outside this transaction because Instance and VM
 // records live in different databases.
-func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f biz.AttachmentConsumerFilter, freshness time.Duration) ([]biz.AttachmentConsumerRow, int64, error) {
-	if freshness <= 0 {
-		return nil, 0, biz.Fail(biz.DependencyUnavailable, "attachment observation freshness is not configured")
-	}
+func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f biz.AttachmentConsumerFilter) ([]biz.AttachmentConsumerRow, int64, error) {
 	tx, e := p.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly})
 	if e != nil {
 		return nil, 0, databaseFailure(e)
 	}
 	defer tx.Rollback(ctx)
 	q := p.queries.WithTx(tx)
-	if e = verifyAttachmentConsumerScope(ctx, q, tenant, f); e != nil {
+	if e = verifyAttachmentConsumerScope(ctx, q, tenant, p.placement.ClusterID, f); e != nil {
 		return nil, 0, e
 	}
 	total, e := q.CountAttachmentConsumers(ctx, sqlcgen.CountAttachmentConsumersParams{TenantID: tenant, SubnetID: f.SubnetID, VpcID: f.VPCID})
@@ -38,10 +35,6 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 	rows, e := q.ListAttachmentConsumers(ctx, sqlcgen.ListAttachmentConsumersParams{
 		TenantID: tenant, SubnetID: f.SubnetID, VpcID: f.VPCID, MaxResults: f.Limit, PageOffset: f.Offset,
 	})
-	if e != nil {
-		return nil, 0, databaseFailure(e)
-	}
-	now, e := q.DatabaseTime(ctx)
 	if e != nil {
 		return nil, 0, databaseFailure(e)
 	}
@@ -56,7 +49,7 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 			ID: row.AttachmentID, TenantID: tenant, VPCID: row.VpcID, SubnetID: row.SubnetID, InstanceID: row.InstanceID,
 			ConsumerType: row.ConsumerType, Slot: row.Slot, WorkloadMode: row.WorkloadMode,
 			State: biz.AttachmentState(row.State), Reason: biz.Reason(row.Reason),
-			PodUID: row.PodUid, CreatedAt: row.CreatedAt, ObservedAt: row.ObservedAt,
+			CurrentVNicName: row.CurrentVnicName, CurrentVNicUID: row.CurrentVnicUid, CurrentMACAddress: row.CurrentMacAddress, CurrentIPs: row.CurrentIps, PodUID: row.PodUid, CreatedAt: row.CreatedAt, ObservedAt: row.ObservedAt,
 		}
 		if len(row.ConsumerSnapshot) > 0 {
 			var snapshot biz.ConsumerSubmission
@@ -71,17 +64,13 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 		value := biz.AttachmentConsumerRow{
 			TenantID: row.TenantID, AttachmentID: row.AttachmentID, VPCID: row.VpcID, SubnetID: row.SubnetID, SubnetName: row.SubnetName,
 			Slot: row.Slot, ConsumerType: row.ConsumerType, ConsumerID: row.InstanceID, PodUID: row.PodUid,
-			State: row.State, Reason: row.Reason, ProtocolBlocked: row.ProtocolBlocked,
+			State: row.State, Reason: row.Reason,
 			CreatedAt: row.CreatedAt, ObservedAt: timeValue(row.ObservedAt), HasObservation: row.ObservedAt != nil,
-			ObservationStale: row.ObservedAt != nil && now.Sub(*row.ObservedAt) > freshness,
+			ObservationStale: row.ObservedAt == nil || row.ObservationError != "",
 		}
-		if attachment.State == biz.Attached && attachment.Reason == "" && attachment.ObservedAt != nil && now.Sub(*attachment.ObservedAt) <= freshness {
-			if attachment.ConsumerType == biz.ConsumerVirtualMachine || attachment.WorkloadMode == "vm_managed" {
-				for _, address := range vmCurrentAddressRelations(attachment, row.ProviderRelations) {
-					value.Addresses = append(value.Addresses, biz.AttachmentAddress{NICName: address.NICName, Address: address.Address})
-				}
-			} else {
-				value.Addresses = containerAddressRelations(attachment, row.ProviderRelations)
+		if attachment.State == biz.Attached {
+			for _, address := range attachment.CurrentIPs {
+				value.Addresses = append(value.Addresses, biz.AttachmentAddress{NICName: "default", Address: address})
 			}
 		}
 		if value.Addresses == nil {
@@ -95,16 +84,26 @@ func (p *Postgres) ListAttachmentConsumers(ctx context.Context, tenant string, f
 // verifyAttachmentConsumerScope keeps "no such network" distinguishable from
 // "no consumer attached". A subnet row is the authority for VPC membership; the
 // attachment foreign key already guarantees a stored pair is consistent.
-func verifyAttachmentConsumerScope(ctx context.Context, q *sqlcgen.Queries, tenant string, f biz.AttachmentConsumerFilter) error {
+func verifyAttachmentConsumerScope(ctx context.Context, q *sqlcgen.Queries, tenant, cluster string, f biz.AttachmentConsumerFilter) error {
 	if f.SubnetID != "" {
 		subnet, e := q.GetSubnet(ctx, sqlcgen.GetSubnetParams{TenantID: tenant, SubnetID: f.SubnetID})
 		if errors.Is(e, pgx.ErrNoRows) {
-			return biz.Fail(biz.ResourceNotFound, "subnet not found")
+			platform, err := q.GetPlatformSubnet(ctx, sqlcgen.GetPlatformSubnetParams{SubnetID: f.SubnetID})
+			if err != nil {
+				return databaseFailure(err)
+			}
+			if platform.ClusterID != cluster {
+				return biz.Fail(biz.ResourceNotFound, "subnet not found")
+			}
+			if f.VPCID != "" && platform.VpcID != f.VPCID {
+				return biz.Fail(biz.InvalidArgument, "subnet does not belong to requested VPC")
+			}
+			return nil
 		}
 		if e != nil {
 			return databaseFailure(e)
 		}
-		if f.VPCID != "" && subnet.VpcID != f.VPCID {
+		if f.VPCID != "" && subnet.NetworkSubnet.VpcID != f.VPCID {
 			return biz.Fail(biz.InvalidArgument, "subnet does not belong to requested VPC")
 		}
 		return nil
@@ -114,7 +113,14 @@ func verifyAttachmentConsumerScope(ctx context.Context, q *sqlcgen.Queries, tena
 		return databaseFailure(e)
 	}
 	if !found {
-		return biz.Fail(biz.ResourceNotFound, "vpc not found")
+		v, e := q.GetPlatformVPC(ctx, sqlcgen.GetPlatformVPCParams{VpcID: f.VPCID})
+		if e != nil {
+			return databaseFailure(e)
+		}
+		if v.ClusterID != cluster {
+			return biz.Fail(biz.ResourceNotFound, "vpc not found")
+		}
+		return nil
 	}
 	return nil
 }

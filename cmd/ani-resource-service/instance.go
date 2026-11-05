@@ -243,14 +243,16 @@ func instanceClientConnection(address, caFile, certFile, keyFile, serverName str
 
 // Cross-domain wiring stays in the composition root and uses only public use
 // cases plus the Instance read port. Existing external consumers stay routed.
-func wireInstanceNetwork(c *instanceComponents, network *networkbiz.Network, attachments *networkbiz.Attachments, fallback networkbiz.InstanceConsumer, clusterID, prefix string, freshness time.Duration) (networkbiz.InstanceConsumer, error) {
+func wireInstanceNetwork(c *instanceComponents, network *networkbiz.Network, attachments *networkbiz.Attachments, fallback networkbiz.InstanceConsumer, clusterID, prefix string) (networkbiz.InstanceConsumer, error) {
 	if c == nil {
 		return fallback, nil
 	}
-	adapter, err := data.NewInstanceNetwork(network, attachments, clusterID, prefix, freshness)
+	c.repo.UseNetworkNotifier(attachments.Notify)
+	adapter, err := data.NewInstanceNetwork(network, attachments, clusterID, prefix)
 	if err != nil {
 		return nil, err
 	}
+	c.repo.UseNetworkAdmission(adapter.AdmitNewNetwork)
 	if err = c.worker.UseNetwork(adapter); err != nil {
 		return nil, err
 	}

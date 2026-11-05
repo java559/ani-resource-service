@@ -19,6 +19,8 @@ const (
 )
 
 type Subnet struct {
+	OwnerScope        OwnerScope
+	CanManage, CanUse bool
 	SubnetOptions
 	AvailableIPRange, UsedIPRange                         *string
 	ID, TenantID, VPCID, Name, CIDR, Gateway, Description string
@@ -160,11 +162,7 @@ func (n *Network) CreateSubnet(ctx context.Context, request CreateSubnet) (Subne
 	if err := validateAttribution(request.Attribution); err != nil {
 		return Subnet{}, err
 	}
-	intent.NamespaceIdentity, err = n.repository.ResolveTenantNamespace(ctx, intent.TenantID)
-	if err != nil {
-		return Subnet{}, err
-	}
-	return n.repository.AcceptSubnet(ctx, intent, request.Attribution, n.freshness)
+	return n.repository.AcceptSubnet(ctx, intent, request.Attribution)
 }
 func (n *Network) GetSubnet(ctx context.Context, tenant, id string) (Subnet, error) {
 	tenant, err := ParseTenant(tenant)
@@ -174,8 +172,11 @@ func (n *Network) GetSubnet(ctx context.Context, tenant, id string) (Subnet, err
 	if !validSubnetID(id) {
 		return Subnet{}, Fail(ResourceNotFound, "subnet not found")
 	}
+	if visible, ok := n.repository.(VisibleNetworkRepository); ok {
+		return visible.GetVisibleSubnet(ctx, tenant, id)
+	}
 	value, err := n.repository.GetSubnet(ctx, tenant, id)
-	return n.subnetObservation(value), err
+	return value, err
 }
 func (n *Network) DeleteSubnet(ctx context.Context, tenant, id string) (Subnet, error) {
 	tenant, err := ParseTenant(tenant)
@@ -186,11 +187,7 @@ func (n *Network) DeleteSubnet(ctx context.Context, tenant, id string) (Subnet, 
 		return Subnet{}, Fail(ResourceNotFound, "subnet not found")
 	}
 	value, err := n.repository.DeleteSubnet(ctx, tenant, id)
-	return n.subnetObservation(value), err
-}
-func (n *Network) subnetObservation(value Subnet) Subnet {
-	value.ObservationStale = value.Reason == ProviderUnavailable || value.ObservedAt == nil || value.ObservedAt.After(n.now()) || n.now().Sub(*value.ObservedAt) > n.freshness
-	return value
+	return value, err
 }
 func validSubnetID(id string) bool {
 	if len(id) != 39 || !strings.HasPrefix(id, "subnet_") {
@@ -205,6 +202,7 @@ func validSubnetID(id string) bool {
 }
 
 type ListSubnets struct {
+	CanUse, CanManage                    *bool
 	TenantID, VPCID, Name, State, Cursor string
 	Limit                                int
 }
@@ -230,15 +228,20 @@ func (n *Network) ListSubnets(ctx context.Context, r ListSubnets) (SubnetPage, e
 	if r.VPCID != "" && !validVPCID(r.VPCID) {
 		return SubnetPage{}, Fail(InvalidArgument, "invalid VPC filter")
 	}
+	common.CanUse, common.CanManage = r.CanUse, r.CanManage
 	filter := SubnetFilter{VPCFilter: common, VPCID: r.VPCID}
 	if r.Cursor != "" {
 		c, err := n.decodeCursor(r.Cursor)
-		if err != nil || c.Version != 1 || c.Kind != "subnet" || c.TenantID != tenant || c.VPCID != r.VPCID || c.Name != filter.Name || c.State != r.State || !validSubnetID(c.ID) || c.CreatedAt.IsZero() {
+		if err != nil || c.Version != 1 || c.Kind != "subnet" || c.TenantID != tenant || c.VPCID != r.VPCID || c.Name != filter.Name || c.State != r.State || !sameOptionalBool(c.CanUse, r.CanUse) || !sameOptionalBool(c.CanManage, r.CanManage) || !validSubnetID(c.ID) || c.CreatedAt.IsZero() {
 			return SubnetPage{}, Fail(InvalidCursor, "cursor does not match this query")
 		}
 		filter.AfterCreatedAt, filter.AfterID = c.CreatedAt, c.ID
 	}
-	rows, total, err := n.repository.ListSubnets(ctx, tenant, filter)
+	list := n.repository.ListSubnets
+	if visible, ok := n.repository.(VisibleNetworkRepository); ok {
+		list = visible.ListVisibleSubnets
+	}
+	rows, total, err := list(ctx, tenant, filter)
 	if err != nil {
 		return SubnetPage{}, err
 	}
@@ -247,10 +250,10 @@ func (n *Network) ListSubnets(ctx context.Context, r ListSubnets) (SubnetPage, e
 	for i, value := range rows {
 		if i == limit {
 			last := rows[i-1]
-			page.NextCursor = n.encodeCursor(vpcCursor{Version: 1, Kind: "subnet", TenantID: tenant, VPCID: r.VPCID, Name: filter.Name, State: r.State, ID: last.ID, CreatedAt: last.CreatedAt})
+			page.NextCursor = n.encodeCursor(vpcCursor{Version: 1, Kind: "subnet", CanUse: r.CanUse, CanManage: r.CanManage, TenantID: tenant, VPCID: r.VPCID, Name: filter.Name, State: r.State, ID: last.ID, CreatedAt: last.CreatedAt})
 			break
 		}
-		page.Items = append(page.Items, n.subnetObservation(value))
+		page.Items = append(page.Items, value)
 	}
 	return page, nil
 }

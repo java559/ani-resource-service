@@ -49,7 +49,7 @@ func (s *KC) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else if len(parts) > offset+1 {
 		name = parts[offset+1]
 	}
-	kinds := map[string]string{"namespaces": "Namespace", "vpcs": "VPC", "subnets": "Subnet", "vnics": "VNic", "vnicips": "VNicIP", "eips": "EIP", "pods": "Pod", "notebooks": "Notebook", "statefulsets": "StatefulSet", "nics": "Nic", "snats": "Snat", "nats": "Nat", "eipgateways": "EIPGateway", "vlannetworks": "VlanNetwork", "nodes": "Node", "configmaps": "ConfigMap", "services": "Service", "servicecidrs": "ServiceCIDR"}
+	kinds := map[string]string{"basicnetworkisolations": "BasicNetworkIsolation", "namespaces": "Namespace", "vpcs": "VPC", "subnets": "Subnet", "vnics": "VNic", "vnicips": "VNicIP", "eips": "EIP", "pods": "Pod", "notebooks": "Notebook", "statefulsets": "StatefulSet", "nics": "Nic", "snats": "Snat", "nats": "Nat", "eipgateways": "EIPGateway", "vlannetworks": "VlanNetwork", "nodes": "Node", "configmaps": "ConfigMap", "services": "Service", "servicecidrs": "ServiceCIDR"}
 	objectKind, ok := kinds[kind]
 	if !ok {
 		s.Invalid = "unexpected resource " + kind
@@ -153,9 +153,9 @@ func (s *KC) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		meta := o["metadata"].(map[string]any)
-		// Manual VNICs use ordinary background garbage collection for their
-		// KCN-owned IP children; existing VPC/Subnet fixtures remain orphan-only.
-		validPropagation := options.PropagationPolicy == "Orphan" || (kind == "vnics" && (options.PropagationPolicy == "" || options.PropagationPolicy == "Background"))
+		// Native garbage collection owns derived objects. Res still supplies
+		// the original UID and resourceVersion for its declaration deletion.
+		validPropagation := options.PropagationPolicy == "" || options.PropagationPolicy == "Background" || options.PropagationPolicy == "Orphan"
 		if options.Preconditions.UID != meta["uid"] || options.Preconditions.ResourceVersion != meta["resourceVersion"] || !validPropagation {
 			s.Invalid = fmt.Sprintf("unconditional deletion of %s", kind)
 			fail(409, "Conflict")

@@ -1,5 +1,7 @@
 # 容器实例挂载、配置与 VPC 接入合同
 
+> 2026-11-04 网络合同更新：本文件中的网络状态、Ready/时效准入、Attachment 释放、SG 应用及 LB 生成物验收条款以[网络状态消费规格 v3](cr-observation.md)为准；方法/字段变更见[实施方案](../plans/network-management-simplification.md)。实际验证只见执行状态。
+
 日期：2026-10-19。状态：**增量实现合同；实际交付与未验证范围只见[执行状态](../execution/status.md#instance-configuration-and-network-2026-10-19)**。原固定输入的哈希保留在任务源清单中。
 
 2026-10-28 增量以[已审 Restart/PVC v2.0 方案](../plans/container-instance-restart-pvc-20261028.md)为输入；以下当前挂载、引用代际和 Storage 删除协调规则替代旧的创建后卷配置不变与双态引用。当前实施/真实验收只见[唯一状态](../execution/status.md#container-restart-pvc-20261028)，迁移和向前恢复见[运行手册](../runbooks/instance-mvp-fedora.md)。
@@ -232,6 +234,14 @@ composition root 在 `governance`、`full` 实际实例路径装配：Instance N
 Attachment 的独立地址证明只消费 Pod、VNic、VNicIP 和 EIP 事实；同属一个 Notebook 的 Service 更新不能使该证明永久失效。相关对象的旧/新 UID、删除事件以及全局 source continuity/overflow 仍使旧证明失效，Network/LB 原有观察范围不变。
 
 ## 7. 当前配置合同与原账
+
+### 平台基础网络接入
+
+平台与私有目录的所有权、首次受理及原引用规则统一见 [VPC/Subnet](vpc-subnet.md#平台基础网络租户接入)。ValidateSelection 使用统一解析，平台父网络不要求 tenant 等于消费者；Instance 本身和 Namespace 仍为真实租户。真正新的 AcceptCreate 在重放/DELETE-first 之后判断新接入并保存 NetworkReference。
+
+InstanceNetwork.Prepare 使用持久引用调用内部 PrepareAccepted。永久 Attachment replay 必须是首个步骤；只有无原 Attachment 的 accepted 容器分支才登记 Namespace、Ensure BNI，再进入既有事务、slot 锁、第二次 replay 和插入。原 Attachment 已提交但 owner Save 尚未完成时，重放及删除恢复不受 Namespace/BNI 暂时读错影响。
+
+组名保存并随网络 plan 合并，写到 Notebook `metadata.annotations["networking.kubercloud.com/basic-network-isolation"]`；受控 Pod 替换和重启沿原声明继续。切换同子网的已有手动 VNIC 保留原租户、placement、独占和 desired/applied 约束，不重查目录新接入开关。删除只释放自己的 Attachment/VNIC 占用，留存手动 VNIC、BNI、NAD/SA 与平台目录。
 
 容器配置只有唯一格式，公开及内部 Resolve/CreateSpec/配置查询均不提供 `instance_contract_version`。缺省配置只在 Resolve 时解析一次。没有配置版本选择、V2 写入开关或旧格式解码/摘要兼容分支。2026-10-30 开发环境切换按用户要求先删除全部已有容器并清理本域持久记录（包括已删墓碑、操作与引用），停掉旧读写进程，再显式应用 [009](../../migrations/instance/009_unversioned_configuration.sql) 删除配置版本列；账本非空时迁移失败。借用 PVC 不随实例删除；Gov 原账由正常删除与退额先完成，不通过清表制造完成。
 
