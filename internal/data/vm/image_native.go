@@ -847,9 +847,11 @@ func containsRef(list []biz.ObjectRef, kind, name string) bool {
 	return false
 }
 
-// ObserveImageClone proves the consumer's own copy finished. Operation success,
-// PVC binding alone, progress or a timeout are never sufficient evidence.
-func (n *ImageNative) ObserveImageClone(ctx context.Context, v biz.VM, i biz.Image, r biz.ImageReference) (bool, error) {
+// ObserveImageClone proves the consumer's own copy finished, is still pending, or is
+// gone. Operation success, PVC binding alone, progress or a timeout are never
+// sufficient evidence; absence is only evidence for a retiring consumer, which the
+// caller decides.
+func (n *ImageNative) ObserveImageClone(ctx context.Context, v biz.VM, i biz.Image, r biz.ImageReference) (biz.CloneState, error) {
 	target := biz.ObjectRef{}
 	if r.ConsumerKind == "SYSTEM_DISK" {
 		for _, d := range v.Disks {
@@ -865,46 +867,46 @@ func (n *ImageNative) ObserveImageClone(ctx context.Context, v biz.VM, i biz.Ima
 		}
 	}
 	if target.Namespace == "" || target.Name == "" {
-		return false, nil
+		return biz.ClonePending, nil
 	}
 	dv, e := n.client.Resource(dvResource).Namespace(target.Namespace).Get(ctx, target.Name, metav1.GetOptions{})
 	if apierrors.IsNotFound(e) {
-		return false, nil
+		return biz.CloneAbsent, nil
 	}
 	if e != nil {
-		return false, e
+		return biz.ClonePending, e
 	}
 	if target.UID != "" && string(dv.GetUID()) != target.UID {
-		return false, biz.ErrOwnership
+		return biz.ClonePending, biz.ErrOwnership
 	}
 	phase, _, _ := unstructured.NestedString(dv.Object, "status", "phase")
 	if phase != "Succeeded" {
-		return false, nil
+		return biz.ClonePending, nil
 	}
 	namespace, _, _ := unstructured.NestedString(dv.Object, "spec", "source", "pvc", "namespace")
 	name, _, _ := unstructured.NestedString(dv.Object, "spec", "source", "pvc", "name")
 	if namespace != i.Native.Namespace || name != i.Native.PVCName {
-		return false, biz.ErrImageIdentity
+		return biz.ClonePending, biz.ErrImageIdentity
 	}
 	pvc, e := n.client.Resource(pvcResource).Namespace(target.Namespace).Get(ctx, target.Name, metav1.GetOptions{})
 	if e != nil {
 		if apierrors.IsNotFound(e) {
-			return false, nil
+			return biz.ClonePending, nil
 		}
-		return false, e
+		return biz.ClonePending, e
 	}
 	phase, _, _ = unstructured.NestedString(pvc.Object, "status", "phase")
 	mode, _, _ := unstructured.NestedString(pvc.Object, "spec", "volumeMode")
 	if phase != "Bound" || pvc.GetDeletionTimestamp() != nil {
-		return false, nil
+		return biz.ClonePending, nil
 	}
 	if mode == "" {
 		mode = "Filesystem"
 	}
 	if mode != biz.SourceVolumeMode(i.Kind) {
-		return false, biz.ErrImageIdentity
+		return biz.ClonePending, biz.ErrImageIdentity
 	}
-	return true, nil
+	return biz.CloneCompleted, nil
 }
 
 var _ biz.ImageNativePort = (*ImageNative)(nil)
