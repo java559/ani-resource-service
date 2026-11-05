@@ -675,6 +675,27 @@ func (p *Postgres) referenceImageRowsLocked(ctx context.Context, tx pgx.Tx, refs
 	return nil
 }
 
+// accountedImageConsumers lists "<kind>/<consumer id>" for every reference row this VM
+// already owns. A row means the consumer was admitted once, so pinImageSources neither
+// re-checks its source state nor writes the row again. The caller holds the VM row lock,
+// which serialises every acceptance for this VM, so an unlocked read is enough.
+func accountedImageConsumers(ctx context.Context, tx pgx.Tx, tenant, vmID string) (map[string]bool, error) {
+	rows, e := tx.Query(ctx, `SELECT consumer_kind,consumer_id FROM vm.image_source_references WHERE tenant_id=$1 AND vm_id=$2`, tenant, vmID)
+	if e != nil {
+		return nil, notFound(e)
+	}
+	defer rows.Close()
+	out := map[string]bool{}
+	for rows.Next() {
+		var kind, id string
+		if e = rows.Scan(&kind, &id); e != nil {
+			return nil, e
+		}
+		out[kind+"/"+id] = true
+	}
+	return out, rows.Err()
+}
+
 // insertImageReferences takes every pin or none. It runs inside the caller's
 // acceptance transaction and performs no cluster calls.
 func insertImageReferences(ctx context.Context, tx pgx.Tx, refs []biz.ImageReference) error {

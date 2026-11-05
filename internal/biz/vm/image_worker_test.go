@@ -72,6 +72,10 @@ type workerNative struct {
 	observeErr   error
 	probeRefs    []ObjectRef
 	probeErr     error
+	verifyImage  Image
+	verifyResult VerificationResult
+	verifyErr    error
+	annotated    *Image
 	deleteDone   bool
 	deleteErr    error
 	deleted      int
@@ -101,10 +105,23 @@ func (n *workerNative) ObserveImageSource(_ context.Context, i Image) (Image, er
 func (n *workerNative) EnsureImageVerification(context.Context, Image) (Image, error) {
 	return Image{}, ErrInvalid
 }
-func (n *workerNative) ObserveImageVerification(context.Context, Image) (Image, VerificationResult, error) {
-	return Image{}, VerificationResult{}, ErrInvalid
+func (n *workerNative) ObserveImageVerification(_ context.Context, i Image) (Image, VerificationResult, error) {
+	if n.verifyErr != nil {
+		return i, VerificationResult{}, n.verifyErr
+	}
+	if n.verifyResult.Checksum == "" {
+		return i, VerificationResult{}, ErrInvalid
+	}
+	return n.verifyImage, n.verifyResult, nil
 }
-func (n *workerNative) PublishSourceAnnotation(context.Context, Image) error { return ErrInvalid }
+
+// PublishSourceAnnotation records the image it was handed so a test can assert what the
+// annotation would carry, which is the only durable evidence the checksum was known first.
+func (n *workerNative) PublishSourceAnnotation(_ context.Context, i Image) error {
+	copy := i
+	n.annotated = &copy
+	return nil
+}
 func (n *workerNative) ObserveImageSourceIdentity(context.Context, Image) (Image, error) {
 	return Image{}, ErrInvalid
 }

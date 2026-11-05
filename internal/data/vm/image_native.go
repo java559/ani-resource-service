@@ -45,13 +45,17 @@ type ImageNative struct {
 }
 
 func NewImageNative(c dynamic.Interface, cfg ImageUploadConfig) (*ImageNative, error) {
-	if c == nil || cfg.StorageClass == "" || cfg.ClusterID == "" || cfg.UploadDeadline <= 0 || cfg.TokenTTL <= 0 ||
+	if c == nil || cfg.ClusterID == "" || cfg.UploadDeadline <= 0 || cfg.TokenTTL <= 0 ||
 		cfg.TokenTTL >= cfg.UploadDeadline || cfg.VerifierActiveDeadlineSeconds < 60 || cfg.VerifierBackoffLimit < 0 {
 		return nil, biz.ErrImageInvalid
 	}
 	// The validator runs from a digest, never a mutable tag, and the upload
-	// origin is HTTPS so a browser ticket cannot travel in clear text.
-	if cfg.Enabled && (cfg.ValidatorImage == "" || !imageDigestReference(cfg.ValidatorImage) || !strings.HasPrefix(cfg.ExternalUploadOrigin, "https://")) {
+	// origin is HTTPS so a browser ticket cannot travel in clear text. The storage
+	// class is only needed to provision an upload source, so it stays required
+	// exactly where the lane is on: a deployment that never enabled uploads must
+	// keep starting with the configuration it had before this feature existed.
+	if cfg.Enabled && (cfg.StorageClass == "" || cfg.ValidatorImage == "" || !imageDigestReference(cfg.ValidatorImage) ||
+		!strings.HasPrefix(cfg.ExternalUploadOrigin, "https://")) {
 		return nil, biz.ErrImageInvalid
 	}
 	return &ImageNative{client: c, config: cfg}, nil
@@ -64,6 +68,17 @@ func imageDigestReference(image string) bool {
 
 func imageLabels(i biz.Image) map[string]string {
 	return map[string]string{"ani.io/tenant-id": i.TenantID, "vm.ani.io/image-id": i.ID, "vm.ani.io/managed-by": biz.Owner}
+}
+
+// templateLabels copies the labels into the JSON type an unstructured object may hold.
+// A map[string]string inside spec.template.metadata.labels survives a real API call but
+// makes the client-side fake panic on deep copy, so no test could reach this Job.
+func templateLabels(in map[string]string) map[string]any {
+	out := make(map[string]any, len(in))
+	for key, value := range in {
+		out[key] = value
+	}
+	return out
 }
 
 func imageName(i biz.Image) string { return "vmi-src-" + strings.ReplaceAll(i.ID, "-", "") }
@@ -321,7 +336,7 @@ func (n *ImageNative) EnsureImageVerification(ctx context.Context, i biz.Image) 
 		"name": "verify", "image": n.config.ValidatorImage, "imagePullPolicy": "IfNotPresent",
 		"args": []any{"--image-id", i.ID, "--kind", i.Kind, "--volume-mode", i.Native.SourceVolumeMode},
 		"securityContext": map[string]any{"allowPrivilegeEscalation": false, "privileged": false,
-			"runAsNonRoot": true, "runAsUser": 107, "runAsGroup": 107, "readOnlyRootFilesystem": true,
+			"runAsNonRoot": true, "runAsUser": int64(107), "runAsGroup": int64(107), "readOnlyRootFilesystem": true,
 			"capabilities": map[string]any{"drop": []any{"ALL"}}},
 		"resources":              map[string]any{"limits": limits, "requests": requests},
 		"terminationMessagePath": "/dev/termination-log", "terminationMessagePolicy": "File"}
@@ -339,7 +354,7 @@ func (n *ImageNative) EnsureImageVerification(ctx context.Context, i biz.Image) 
 		"metadata": map[string]any{"name": name, "namespace": i.Native.Namespace},
 		"spec": map[string]any{"backoffLimit": int64(n.config.VerifierBackoffLimit), "completionMode": "NonIndexed",
 			"activeDeadlineSeconds": int64(n.config.VerifierActiveDeadlineSeconds), "ttlSecondsAfterFinished": nil,
-			"template": map[string]any{"metadata": map[string]any{"labels": imageLabels(i)}, "spec": pod}}}}
+			"template": map[string]any{"metadata": map[string]any{"labels": templateLabels(imageLabels(i))}, "spec": pod}}}}
 	job.SetLabels(imageLabels(i))
 	created, e := n.client.Resource(jobResource).Namespace(i.Native.Namespace).Create(ctx, job, metav1.CreateOptions{})
 	if apierrors.IsAlreadyExists(e) {
@@ -351,8 +366,37 @@ func (n *ImageNative) EnsureImageVerification(ctx context.Context, i biz.Image) 
 	if e != nil {
 		return i, e
 	}
+	// Freeze the digest the Job actually runs, not the one configured today: the
+	// success path compares the verifying pod's image against this value, so leaving
+	// it empty turned a verification that genuinely passed into
+	// SOURCE_IDENTITY_CHANGED plus source cleanup.
+	ran := verifierImage(created, "spec", "template", "spec")
+	if ran == "" {
+		return i, biz.ErrOwnership
+	}
+	if i.Native.VerifierImage != "" && i.Native.VerifierImage != ran {
+		return i, biz.ErrImageIdentity
+	}
+	i.Native.VerifierImage = ran
 	i.Native.JobName, i.Native.JobUID = name, string(created.GetUID())
 	return i, nil
+}
+
+// verifierImage reads the digest of the verify container out of a Job or a Pod. The
+// pod template sits at a different depth in each, so the caller names where the pod
+// spec starts.
+func verifierImage(o *unstructured.Unstructured, podSpec ...string) string {
+	path := append(append([]string{}, podSpec...), "containers")
+	containers, _, _ := unstructured.NestedSlice(o.Object, path...)
+	for _, value := range containers {
+		item, _ := value.(map[string]any)
+		if name, _ := item["name"].(string); name != "verify" {
+			continue
+		}
+		image, _ := item["image"].(string)
+		return image
+	}
+	return ""
 }
 
 type verifierReport struct {
@@ -418,6 +462,12 @@ func (n *ImageNative) ObserveImageVerification(ctx context.Context, i biz.Image)
 		return i, out, biz.ErrDependency
 	}
 	i.Native.PodUID = string(pod.GetUID())
+	// The result carries the digest that actually ran, so the comparison below checks
+	// the pod against the value frozen at creation instead of the current configuration.
+	ran := verifierImage(pod, "spec")
+	if ran == "" {
+		return i, out, biz.ErrOwnership
+	}
 	report, e := readVerifierReport(pod)
 	if e != nil {
 		out.FailureReason = "SOURCE_VALIDATION_FAILED"
@@ -439,7 +489,7 @@ func (n *ImageNative) ObserveImageVerification(ctx context.Context, i biz.Image)
 	}
 	out = biz.VerificationResult{Pass: report.Pass, Checksum: report.Checksum, Bytes: report.Bytes,
 		VolumeMode: report.VolumeMode, FSType: report.FSType, ReadOnlyProof: report.ReadOnlyProof,
-		JobUID: i.Native.JobUID, PodUID: i.Native.PodUID, VerifierImage: n.config.ValidatorImage,
+		JobUID: i.Native.JobUID, PodUID: i.Native.PodUID, VerifierImage: ran,
 		ImageID: report.ImageID, PVCUID: i.Native.PVCUID, RequestedBytes: i.SourceRequestedBytes,
 		ObservedBytes: i.ObservedSourceCapacityBytes, ObservedAt: time.Now().UTC(), FailureReason: report.Reason}
 	if !report.Pass {

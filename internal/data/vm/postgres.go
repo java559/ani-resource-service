@@ -393,14 +393,24 @@ func (p *Postgres) accept(ctx context.Context, c biz.Command, id, createID strin
 }
 
 // pinImageSources takes one HELD reference per dynamic image consumer inside the
-// caller's acceptance transaction. Every reference or none is written, the lock
-// order is VM -> image rows by id -> reference rows, and no cluster call happens
-// here, so a slow API server cannot hold row locks open.
+// caller's acceptance transaction. Consumers that already have a reference row, HELD
+// or RELEASED, are accounted for: they were admitted once and the VM now owns an
+// independent copy, so a later start, stop or delete must not ask their source to be
+// READY again. Every reference or none is written, the lock order is VM -> image rows
+// by id -> reference rows, and no cluster call happens here, so a slow API server
+// cannot hold row locks open.
 func (p *Postgres) pinImageSources(ctx context.Context, tx pgx.Tx, v biz.VM) error {
+	accounted, e := accountedImageConsumers(ctx, tx, v.TenantID, v.ID)
+	if e != nil {
+		return e
+	}
 	refs := make([]biz.ImageReference, 0, len(v.Disks)+len(v.MediaCopies))
-	if strings.HasPrefix(v.Spec.Media.Key, biz.ImageMediaKeyPrefix) {
+	// Only a DISK_IMAGE is cloned into the system disk; an INSTALL_ISO boots from the
+	// media copy and its system disk stays blank, so pinning that disk would leave a
+	// reference whose release condition can never be met and an ISO stuck in use.
+	if v.Spec.Media.Kind == "DISK_IMAGE" && strings.HasPrefix(v.Spec.Media.Key, biz.ImageMediaKeyPrefix) {
 		for _, disk := range v.Disks {
-			if disk.Role != "system" || disk.Tombstone {
+			if disk.Role != "system" || disk.Tombstone || accounted["SYSTEM_DISK/"+disk.ID] {
 				continue
 			}
 			ref, e := biz.NewImageReference(v, disk.ID, "SYSTEM_DISK", v.Spec.Media)
@@ -411,7 +421,7 @@ func (p *Postgres) pinImageSources(ctx context.Context, tx pgx.Tx, v biz.VM) err
 		}
 	}
 	for _, copy := range v.MediaCopies {
-		if copy.Tombstone || !strings.HasPrefix(copy.Source.Key, biz.ImageMediaKeyPrefix) {
+		if copy.Tombstone || !strings.HasPrefix(copy.Source.Key, biz.ImageMediaKeyPrefix) || accounted["MEDIA_COPY/"+copy.ID] {
 			continue
 		}
 		ref, e := biz.NewImageReference(v, copy.ID, "MEDIA_COPY", copy.Source)

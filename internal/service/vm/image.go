@@ -313,7 +313,7 @@ func (s *ImageService) CreateUploadSession(ctx context.Context, r *pb.CreateUplo
 		return nil, s.rejected(ctx, "session_confirm", e)
 	}
 	s.logger.Info("VM image upload session issued", "image_id", i.ID, "stage", "upload_ticket", "expires_at", expires.UTC().Format(time.RFC3339Nano))
-	return &pb.UploadSession{ImageId: i.ID, UploadSessionId: session, Method: "PUT", UploadUrl: s.uploadURL(),
+	return &pb.UploadSession{ImageId: i.ID, UploadSessionId: session, Method: "POST", UploadUrl: s.uploadURL(),
 		BearerToken: token, ExpiresAt: expires.UTC().Format(time.RFC3339Nano), ContentType: "application/octet-stream",
 		MaxFileBytes: s.upload.MaxFileBytes}, nil
 }

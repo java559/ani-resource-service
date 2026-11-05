@@ -241,6 +241,11 @@ func (w *ImageWorker) verifying(ctx context.Context, i Image) error {
 		observed.UploadDeadline = nil
 		return w.save(ctx, observed)
 	}
+	// The annotation has to carry the digest the verifier reported. Publishing it from a
+	// record that does not hold one yet wrote an empty annotation, and the read-back
+	// check passed because both sides were empty, leaving a READY image the consumer path
+	// rejects for a missing source identity.
+	observed.SourceSHA256 = result.Checksum
 	if err := w.native.PublishSourceAnnotation(ctx, observed); err != nil {
 		if errors.Is(err, ErrImageVersion) {
 			// Someone else changed the annotation; re-observe before deciding.

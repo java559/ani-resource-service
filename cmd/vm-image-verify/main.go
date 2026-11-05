@@ -24,14 +24,18 @@ import (
 )
 
 const (
-	blockSource      = "/dev/source"
-	filesystemSource = "/source/disk.img"
-	terminationLog   = "/dev/termination-log"
-	maxReportBytes   = 4096
+	blockSource    = "/dev/source"
+	terminationLog = "/dev/termination-log"
+	maxReportBytes = 4096
 	// A qcow2 header may legitimately be followed by sparse tail; the accepted
 	// minimum is one 64 KiB cluster rather than an arbitrary magic length.
 	minSourceBytes = 65536
 )
+
+// filesystemSource is the single ordinary file the validator may read. It is a
+// package variable, not a constant, so the behaviour tests can point it at a
+// temporary file; production always reads the mounted path below.
+var filesystemSource = "/source/disk.img"
 
 type report struct {
 	Pass          bool   `json:"pass"`
@@ -141,11 +145,9 @@ func runFilesystem(imageID, kind, volumeMode string, out report) report {
 		}
 		return out
 	}
-	if mode := info.Mode() & 0o7777; mode&0o222 != 0 {
-		out.ReadOnlyProof = "world-writable"
-		out.Reason = "SOURCE_VALIDATION_FAILED"
-		return out
-	}
+	// CDI finishes a filesystem import with os.Chmod(dataFile, 0660) and a read-only
+	// mount leaves those bits on disk, so the mode says nothing about writability.
+	// probeReadOnly below is the only proof used.
 	reason, proof, err := probeReadOnly(filesystemSource)
 	if err != nil {
 		out.Reason, out.ReadOnlyProof = reason, proof
