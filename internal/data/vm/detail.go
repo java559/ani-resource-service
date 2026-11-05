@@ -88,23 +88,6 @@ func (n *Native) ReadRuntime(ctx context.Context, v biz.VM) (biz.Runtime, error)
 		return n.fencedRuntime(ctx, v, vmi, out)
 	}
 	out.AgentState = "CONNECTED"
-	// Guest agent reads dominate the runtime latency. Issue the filesystem read
-	// speculatively in parallel with guestosinfo; its result is consumed only
-	// when the agent reports guest-get-fsinfo support, and its failure keeps
-	// the existing UNAVAILABLE semantics.
-	var files struct {
-		Items []struct {
-			DiskName   string  `json:"diskName"`
-			MountPoint string  `json:"mountPoint"`
-			Type       string  `json:"fileSystemType"`
-			Total      *uint64 `json:"totalBytes"`
-			Used       *uint64 `json:"usedBytes"`
-		} `json:"items"`
-	}
-	filesErr := make(chan error, 1)
-	go func() {
-		filesErr <- n.readGuestSubresource(ctx, v, "filesystemlist", &files)
-	}()
 	var guest struct {
 		Hostname string                                                                   `json:"hostname"`
 		Version  string                                                                   `json:"guestAgentVersion"`
@@ -132,8 +115,17 @@ func (n *Native) ReadRuntime(ctx context.Context, v biz.VM) (biz.Runtime, error)
 		if command.Name != "guest-get-fsinfo" || !command.Enabled {
 			continue
 		}
+		var files struct {
+			Items []struct {
+				DiskName   string  `json:"diskName"`
+				MountPoint string  `json:"mountPoint"`
+				Type       string  `json:"fileSystemType"`
+				Total      *uint64 `json:"totalBytes"`
+				Used       *uint64 `json:"usedBytes"`
+			} `json:"items"`
+		}
 		out.FilesystemsState = "UNAVAILABLE"
-		if <-filesErr == nil {
+		if n.readGuestSubresource(ctx, v, "filesystemlist", &files) == nil {
 			out.FilesystemsState = "AVAILABLE"
 			for _, fs := range files.Items {
 				out.Filesystems = append(out.Filesystems, biz.GuestFilesystem{DiskName: fs.DiskName, MountPoint: fs.MountPoint, FileSystemType: fs.Type, TotalBytes: fs.Total, UsedBytes: fs.Used})
