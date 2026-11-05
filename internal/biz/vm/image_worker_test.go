@@ -153,6 +153,7 @@ func (e workerEnv) ValidateStorage(context.Context, string, string) error { retu
 func (e workerEnv) ValidateNetwork(context.Context, string, string, string, NetworkSelection) (NetworkSelection, error) {
 	return NetworkSelection{}, nil
 }
+func (e workerEnv) ValidateExistingNetwork(context.Context, VM) error { return nil }
 
 func newWorker(repo ImageRepository, native ImageNativePort, environment EnvironmentPort) *ImageWorker {
 	w, e := NewImageWorker(repo, native, environment, "0d1e2f3a-4b5c-4d6e-8f70-112233445566",
