@@ -881,7 +881,19 @@ func (n *ImageNative) retireFailedUploaders(ctx context.Context, i biz.Image) (b
 		if !containsString(pod.GetFinalizers(), "foregroundDeletion") {
 			continue
 		}
-		patch := []byte(`{"metadata":{"finalizers":null}}`)
+		// Merge patch replaces the whole list, so everything that is not ours has to be
+		// sent back. A foreign finalizer is another controller's cleanup contract;
+		// dropping it here would retire work this service cannot know about.
+		var remaining []string
+		for _, finalizer := range pod.GetFinalizers() {
+			if finalizer != "foregroundDeletion" {
+				remaining = append(remaining, finalizer)
+			}
+		}
+		patch, e := json.Marshal(map[string]any{"metadata": map[string]any{"finalizers": remaining}})
+		if e != nil {
+			return false, e
+		}
 		if _, e := n.client.Resource(podResource).Namespace(i.Native.Namespace).Patch(ctx, pod.GetName(),
 			types.MergePatchType, patch, metav1.PatchOptions{}); e != nil && !apierrors.IsNotFound(e) {
 			return false, e
