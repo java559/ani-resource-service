@@ -184,18 +184,20 @@ func Migrate(ctx context.Context, dsn, role string) error {
 	if e != nil {
 		return e
 	}
-	body, e = migrations.Files.ReadFile("005_image_initialization.sql")
+	// Version 5 belongs to the clone-source migration on the clone lane; this
+	// branch carries no 005 so the shared database keeps that checksum intact.
+	body, e = migrations.Files.ReadFile("006_image_initialization.sql")
 	if e != nil {
 		return e
 	}
 	h = sha256.Sum256(body)
 	checksum = hex.EncodeToString(h[:])
-	e = tx.QueryRow(ctx, "SELECT checksum FROM vm.schema_version WHERE version=5").Scan(&old)
+	e = tx.QueryRow(ctx, "SELECT checksum FROM vm.schema_version WHERE version=6").Scan(&old)
 	if errors.Is(e, pgx.ErrNoRows) {
 		if _, e = tx.Exec(ctx, string(body)); e != nil {
 			return e
 		}
-		_, e = tx.Exec(ctx, "INSERT INTO vm.schema_version VALUES(5,$1)", checksum)
+		_, e = tx.Exec(ctx, "INSERT INTO vm.schema_version VALUES(6,$1)", checksum)
 	} else if e == nil && old != checksum {
 		return fmt.Errorf("VM image initialization migration checksum differs")
 	}
