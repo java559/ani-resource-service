@@ -555,15 +555,24 @@ func (n *Native) ApplyCloneTargetConfiguration(ctx context.Context, v biz.VM, r 
 		registeredDisk.Preparation = "Bound"
 		registered = append(registered, registeredDisk)
 	}
-	labels := labelVM(v)
-	for k, x := range v.Network.Labels {
-		labels[k] = x
-	}
+	// Merge target identity into the metadata the filters preserved instead of
+	// replacing whole maps, so native restore/PCI/network markers stay intact.
 	rawLabels := map[string]any{}
-	for k, x := range labels {
+	for k, x := range target.GetLabels() {
+		rawLabels[k] = x
+	}
+	for k, x := range labelVM(v) {
+		rawLabels[k] = x
+	}
+	for k, x := range v.Network.Labels {
 		rawLabels[k] = x
 	}
 	templateAnnotations := map[string]any{}
+	if template, ok, _ := unstructured.NestedMap(target.Object, "spec", "template", "metadata", "annotations"); ok {
+		for k, x := range template {
+			templateAnnotations[k] = x
+		}
+	}
 	if v.Network.KCNSubnetRef != "" {
 		templateAnnotations["networking.kubercloud.com/subnet"] = v.Network.KCNSubnetRef
 	}
