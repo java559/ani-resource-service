@@ -140,7 +140,6 @@ func TestGuestInitializationCapabilityAndWriteOnlyPassword(t *testing.T) {
 		t.Fatal("absent optional fields changed legacy canonical payload")
 	}
 	s.Media.InitializationCapability = CloudInitNoCloud
-	s.Media.InitializationVerified = true
 	s.Intent.GuestInitialization = &GuestInitialization{Method: CloudInitNoCloud, Username: "vmuser", PasswordSet: true, CredentialIntentDigest: Digest([]byte("opaque-test-hmac"))}
 	if e = ValidateGuestCredentials(s, &GuestCredentials{Password: "console-test-123"}); e != nil {
 		t.Fatal(e)
@@ -156,16 +155,13 @@ func TestGuestInitializationCapabilityAndWriteOnlyPassword(t *testing.T) {
 	if e != nil || !proto.Equal(s, decoded) {
 		t.Fatalf("initialization did not round trip: %v", e)
 	}
-	for _, name := range []string{"unverified", "no-capability", "windows", "iso", "root-user", "bad-user", "private-key", "key-options", "no-credentials", "missing-password", "short-password"} {
+	for _, name := range []string{"no-capability", "windows", "iso", "root-user", "bad-user", "private-key", "key-options", "no-credentials", "missing-password", "short-password"} {
 		t.Run(name, func(t *testing.T) {
 			x := proto.Clone(s).(*CreateSpec)
 			credentials := &GuestCredentials{Password: "console-test-123"}
 			switch name {
-			case "unverified":
-				x.Media.InitializationVerified = false
 			case "no-capability":
 				x.Media.InitializationCapability = "NONE"
-				x.Media.InitializationVerified = false
 			case "windows":
 				x.Media.OsFamily = "windows"
 			case "iso":

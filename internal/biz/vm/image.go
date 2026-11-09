@@ -50,6 +50,14 @@ const (
 	StateDeleted   = "DELETED"
 )
 
+// Initialization capabilities a tenant may declare for an uploaded image. The
+// declaration is frozen at create time; an empty stored value (legacy rows and
+// the column default) reads as InitNone everywhere it is projected.
+const (
+	ImageInitNone    = "NONE"
+	ImageInitNoCloud = "CLOUD_INIT_NOCLOUD"
+)
+
 const (
 	CleanupNone     = "NONE"
 	CleanupPending  = "PENDING"
@@ -76,6 +84,7 @@ var imageKinds = map[string]string{"DISK_IMAGE": "qcow2", "INSTALL_ISO": "iso"}
 type Image struct {
 	TenantID, ID, MediaKey, Kind, Format, Name, Description string
 	State, Reason, CleanupState                             string
+	InitializationCapability                                string
 	SourceCapacityGB, SourceRequestedBytes                  int64
 	ObservedSourceCapacityBytes, SourceChecksumBytes        int64
 	SourceSHA256                                            string
@@ -89,6 +98,15 @@ type Image struct {
 	AttemptCount                                            int
 	CreatedBy                                               string
 	CreatedAt, UpdatedAt                                    time.Time
+}
+
+// ImageInitializationCapabilityFor is the single projection of the declared
+// capability: an absent declaration reads as NONE, never as an unknown state.
+func ImageInitializationCapabilityFor(declared string) string {
+	if declared == ImageInitNoCloud {
+		return ImageInitNoCloud
+	}
+	return ImageInitNone
 }
 
 type ImageOS struct {
@@ -145,6 +163,17 @@ func (i Image) Validated() (Image, error) {
 	switch i.CleanupState {
 	case CleanupNone, CleanupPending, CleanupRunning, CleanupComplete, CleanupBlocked:
 	default:
+		return Image{}, ErrImageInvalid
+	}
+	// The declared capability is tenant-attested, not verified by the platform.
+	// NoCloud stays bound to a linux disk image: an ISO or a Windows image has
+	// no guest agent contract this initialization path can rely on.
+	switch i.InitializationCapability {
+	case "", ImageInitNone, ImageInitNoCloud:
+	default:
+		return Image{}, ErrImageInvalid
+	}
+	if i.InitializationCapability == ImageInitNoCloud && (i.Kind != "DISK_IMAGE" || i.OS.OSFamily != "linux") {
 		return Image{}, ErrImageInvalid
 	}
 	if i.Version < 1 {
