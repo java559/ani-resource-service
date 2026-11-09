@@ -89,8 +89,8 @@ func runVMCloneRelease() error {
 	if targetErr != nil && !errors.Is(targetErr, biz.ErrNotFound) {
 		return targetErr
 	}
-	if targetErr == nil && target.CloneProgress != nil && target.CloneProgress.RegistrationCompleted {
-		return fmt.Errorf("clone already registered; release is not allowed")
+	if targetErr == nil && target.CloneProgress != nil && target.CloneProgress.RegistrationCompleted && !target.Closing {
+		return fmt.Errorf("clone already registered and still alive; release is not allowed")
 	}
 	namespace := ""
 	if targetErr == nil {

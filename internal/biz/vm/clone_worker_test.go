@@ -19,10 +19,11 @@ const (
 // cloneTestRepo is the durable fake: Claim returns the last saved state so one
 // test can drive many worker ticks.
 type cloneTestRepo struct {
-	op       Operation
-	vm       VM
-	events   *[]string
-	releases []CloneSourceRelease
+	op         Operation
+	vm         VM
+	events     *[]string
+	releases   []CloneSourceRelease
+	releaseErr error
 }
 
 func (r *cloneTestRepo) AcceptCreate(context.Context, Acceptance) (Operation, error) {
@@ -59,7 +60,7 @@ func (r *cloneTestRepo) UpdateNetwork(context.Context, VM, NetworkPlan) error { 
 func (r *cloneTestRepo) ReleaseCloneSourceHELD(_ context.Context, release CloneSourceRelease) error {
 	r.releases = append(r.releases, release)
 	*r.events = append(*r.events, "release:"+release.Kind)
-	return nil
+	return r.releaseErr
 }
 
 // cloneTestNative scripts the native clone projection and records every step.
@@ -410,6 +411,41 @@ func TestCloneWorkerUnsubmittedCleanup(t *testing.T) {
 	}
 	if hasEvent(*events, "ensure-clone") {
 		t.Fatal("a rejected source reached submission")
+	}
+}
+
+// TestCloneWorkerCancelAfterRegistration covers the race where a delete arrives
+// before the create operation releases the source. The delete must finish the
+// idempotent release instead of leaving a HELD row behind.
+func TestCloneWorkerCancelAfterRegistration(t *testing.T) {
+	ctx := context.Background()
+	for _, test := range []struct {
+		name string
+		err  error
+	}{
+		{name: "release succeeds"},
+		{name: "held row already gone", err: ErrNotFound},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			v := workerCloneVM()
+			v.Closing = true
+			v.Native = ObjectRef{Kind: "VirtualMachine", Namespace: "tenant-a", Name: cloneTestNativeN, UID: "target-uid"}
+			v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid", RegistrationCompleted: true}
+			worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), &cloneTestNative{})
+			repo.releaseErr = test.err
+			if err := worker.RunOnce(ctx); err != nil {
+				t.Fatal(err)
+			}
+			if len(repo.releases) != 1 || repo.releases[0].Kind != "REGISTERED" {
+				t.Fatalf("release = %v", repo.releases)
+			}
+			if hasEvent(*events, "release:CANCELLED") {
+				t.Fatalf("registered target was cancelled: %v", *events)
+			}
+			if repo.vm.CloneProgress == nil || !repo.vm.CloneProgress.CancelHandled {
+				t.Fatal("registered cancel hand-off was not recorded")
+			}
+		})
 	}
 }
 

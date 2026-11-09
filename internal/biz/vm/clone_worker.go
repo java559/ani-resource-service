@@ -377,11 +377,12 @@ func (w *Worker) releaseCloneSourceReason(ctx context.Context, sources CloneSour
 	})
 }
 
-// cancelClone takes over a user Delete that arrived before registration. It
-// reports whether the cancel responsibility is fully finished; false means the
-// same tick should stop and retry after the native producer terminates.
+// cancelClone takes over a user Delete of a clone that still owns a source
+// reference. It reports whether the cancel responsibility is fully finished;
+// false means the same tick should stop and retry after the native producer
+// terminates.
 func (w *Worker) cancelClone(ctx context.Context, o *Operation, v *VM) (bool, error) {
-	if v.CloneProgress == nil || v.CloneProgress.RegistrationCompleted {
+	if v.CloneProgress == nil {
 		return true, nil
 	}
 	if v.CloneProgress.CancelHandled {
@@ -397,6 +398,27 @@ func (w *Worker) cancelClone(ctx context.Context, o *Operation, v *VM) (bool, er
 		return false, ErrDependency
 	}
 	cp := v.CloneProgress
+	if cp.RegistrationCompleted {
+		// A delete may arrive before the create operation finishes its release.
+		// Finishing it here keeps a HELD row from outliving a registered target;
+		// both the clone delete and the release are idempotent.
+		result, e := native.DeleteClone(ctx, *v, cloneRequest(v), cp.UID, "")
+		if e != nil {
+			return false, e
+		}
+		if result.Conflict || !result.Gone {
+			return false, nil
+		}
+		evidence := "target " + v.Native.UID
+		if v.Native.UID == "" {
+			evidence = "registered target absent"
+		}
+		if e = w.releaseCloneSource(ctx, sources, *v, "REGISTERED", evidence); e != nil && !errors.Is(e, ErrNotFound) {
+			return false, e
+		}
+		cp.CancelHandled = true
+		return true, w.repo.Checkpoint(ctx, *o, *v)
+	}
 	req := cloneRequest(v)
 	if cp.UID == "" && !cp.CloneDeleteRequested {
 		// No submission intent was ever checkpointed, so nothing could be in flight.
