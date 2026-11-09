@@ -108,6 +108,9 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 		}
 		cp.UID, cp.Phase = state.UID, state.Phase
 		o.Pending = nil
+		if cp.UID == "" {
+			return fmt.Errorf("%w: clone %s was created without an identity", ErrUnknown, req.Name)
+		}
 		return w.repo.Save(ctx, *o, *v)
 	}
 	if o.Step == cloneStepDelete || o.Step == cloneStepFail {
@@ -124,6 +127,11 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 			return w.finishClone(ctx, o, v, native, sources, req)
 		}
 		return fmt.Errorf("%w: clone disappeared before registration", ErrUnknown)
+	}
+	// A recorded UID is the only object this operation owns; a same-name object
+	// with another UID is never adopted.
+	if cp.UID != "" && cp.UID != state.UID {
+		return ErrOwnership
 	}
 	cp.UID, cp.Phase = state.UID, state.Phase
 	if state.Failed {
@@ -201,6 +209,7 @@ func (w *Worker) finishClone(ctx context.Context, o *Operation, v *VM, native Cl
 		return nil
 	}
 	if v.Spec.StartAfterCreate {
+		o.Step = ""
 		v.Desired = "Running"
 		return w.power(ctx, o, v)
 	}
