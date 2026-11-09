@@ -228,16 +228,10 @@ func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (b
 	return result, nil
 }
 
-// EnsureClone creates the fixed-name clone or adopts the same object by its
-// recorded identity. A same-name object with another UID is never adopted.
-func (n *Native) EnsureClone(ctx context.Context, v biz.VM, r biz.CloneRequest) (biz.CloneObservation, error) {
-	existing, err := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
-	if err == nil {
-		return n.projectClone(ctx, v, r, existing)
-	}
-	if !apierrors.IsNotFound(err) {
-		return biz.CloneObservation{}, err
-	}
+// newCloneObject builds the fixed clone submission. The four metadata filter
+// groups, both explicit typed references and the absence of spec.patches are part
+// of the contract and are asserted by tests.
+func newCloneObject(v biz.VM, r biz.CloneRequest) *unstructured.Unstructured {
 	object := &unstructured.Unstructured{Object: map[string]any{
 		"apiVersion": "clone.kubevirt.io/v1beta1",
 		"kind":       "VirtualMachineClone",
@@ -257,6 +251,20 @@ func (n *Native) EnsureClone(ctx context.Context, v biz.VM, r biz.CloneRequest) 
 	}}
 	object.SetLabels(labelVM(v))
 	object.SetAnnotations(map[string]string{CloneCreateOperationAnnotation: r.OperationID})
+	return object
+}
+
+// EnsureClone creates the fixed-name clone or adopts the same object by its
+// recorded identity. A same-name object with another UID is never adopted.
+func (n *Native) EnsureClone(ctx context.Context, v biz.VM, r biz.CloneRequest) (biz.CloneObservation, error) {
+	existing, err := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
+	if err == nil {
+		return n.projectClone(ctx, v, r, existing)
+	}
+	if !apierrors.IsNotFound(err) {
+		return biz.CloneObservation{}, err
+	}
+	object := newCloneObject(v, r)
 	created, err := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Create(ctx, object, metav1.CreateOptions{})
 	if apierrors.IsAlreadyExists(err) {
 		return n.EnsureClone(ctx, v, r)
