@@ -71,6 +71,29 @@ func (e CloneEligibility) Error() error {
 		return nil
 	}
 	blockers := append(append([]CloneBlocker(nil), e.Unsupported...), e.NotReady...)
+	return fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, blockerText(blockers))
+}
+
+// UnsupportedError is the stable "cannot clone" answer. It is a failed
+// precondition: retrying the same source never helps until it is changed.
+func (e CloneEligibility) UnsupportedError() error {
+	if len(e.Unsupported) == 0 {
+		return nil
+	}
+	return fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, blockerText(e.Unsupported))
+}
+
+// NotReadyError is the recoverable "not observed yet" answer. It must map to an
+// unavailable dependency so the caller may retry the same accepted source.
+func (e CloneEligibility) NotReadyError() error {
+	if len(e.NotReady) == 0 {
+		return nil
+	}
+	return fmt.Errorf("%w: %s", ErrCloneSourceNotReady, blockerText(e.NotReady))
+}
+
+// blockerText renders each blocker with its volume name, never a generic code.
+func blockerText(blockers []CloneBlocker) string {
 	parts := make([]string, 0, len(blockers))
 	for _, b := range blockers {
 		if b.VolumeName != "" {
@@ -79,7 +102,7 @@ func (e CloneEligibility) Error() error {
 		}
 		parts = append(parts, b.Reason)
 	}
-	return fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, strings.Join(parts, "; "))
+	return strings.Join(parts, "; ")
 }
 
 // CloneRequest is the fixed native submission contract of one target.
@@ -107,14 +130,41 @@ type CloneObservation struct {
 	Outputs         []VolumeRef
 }
 
+// CloneDeleteResult is one preconditioned clone delete attempt. A conflict
+// carries the freshly re-read object so the caller re-evaluates its conditions
+// instead of reusing the stale one.
+type CloneDeleteResult struct {
+	Gone     bool
+	Conflict bool
+	Current  CloneObservation
+}
+
 // CloneNativePort is the native adapter for the clone lifecycle. It is optional
 // so existing native consumers are unaffected.
 type CloneNativePort interface {
 	EnsureClone(context.Context, VM, CloneRequest) (CloneObservation, error)
 	ObserveClone(context.Context, VM, CloneRequest) (CloneObservation, error)
-	DeleteClone(context.Context, VM, CloneRequest) (bool, error)
-	ObserveSourceCloneEligibility(context.Context, VM) (CloneEligibility, error)
+	// DeleteClone deletes by UID and, when given, resourceVersion. A conflict
+	// returns the current observation; it is never reported as gone.
+	DeleteClone(context.Context, VM, CloneRequest, string, string) (CloneDeleteResult, error)
+	// ObserveSourceCloneEligibility is the full admission. The source business
+	// record carries the seed and boot facts that the native object cannot prove.
+	ObserveSourceCloneEligibility(context.Context, VM, VM) (CloneEligibility, error)
+	// RecheckCloneSource is the cheap pre-submit recheck: same named source plus
+	// native structure and snapshot capability only. It never re-reads PVC,
+	// StorageClass or Secret because admission already froze those.
+	RecheckCloneSource(context.Context, VM) (CloneEligibility, error)
 	ApplyCloneTargetConfiguration(context.Context, VM, CloneRequest) ([]Disk, ObjectRef, error)
+	// DeleteCloneTarget deletes the failed clone's own target VM and reports
+	// whether it is gone. The target may not carry business labels, so this
+	// check is by name and expected UID, not by the ordinary label matcher.
+	DeleteCloneTarget(context.Context, VM, ObjectRef) (bool, error)
+}
+
+// CloneCleanupPort removes the residual named outputs of a failed clone. It is
+// optional so native ports without clone support stay unaffected.
+type CloneCleanupPort interface {
+	DeleteNamedVolumes(context.Context, VM, []VolumeRef) (bool, error)
 }
 
 // CloneSourceRelease carries the audit columns required by the HELD table.

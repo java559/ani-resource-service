@@ -46,44 +46,40 @@ func cloneNotReady(volume, reason string) biz.CloneBlocker {
 	return biz.CloneBlocker{Kind: "NOT_READY", VolumeName: volume, Reason: reason}
 }
 
-// ObserveSourceCloneEligibility reads the accepted source native VM and checks
-// the first-phase source scope plus the PVC/DV snapshot capability. Only PVC and
-// DataVolume volumes are classified: a platform NoCloud seed is reported as
-// not-snapshot-capable by KubeVirt and must not reject a normal Linux source.
-func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (biz.CloneEligibility, error) {
+// cloneStandardSeedVolume is the fixed template volume of the platform NoCloud
+// one-shot seed.
+const cloneStandardSeedVolume = "guest-initialization"
+
+// classifyCloneSource is the structural source decision. It reads no other
+// object: the business record proves seed ownership and boot intent, while the
+// native template proves volume, device and network structure.
+func classifyCloneSource(source *biz.VM, target biz.VM, native *unstructured.Unstructured) (biz.CloneEligibility, map[string]string) {
 	var result biz.CloneEligibility
-	c := v.Spec.CloneSource
-	if c == nil || c.Native.Name == "" || c.Native.UID == "" {
-		return result, biz.ErrInvalid
+	claims := map[string]string{}
+	if target.Spec.CloneSource == nil {
+		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "clone source is not frozen"))
+		return result, claims
 	}
-	src, err := n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, c.Native.Name, metav1.GetOptions{})
-	if apierrors.IsNotFound(err) {
-		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source VM is gone"))
-		return result, nil
-	}
-	if err != nil {
-		return result, err
-	}
-	if string(src.GetUID()) != c.Native.UID || src.GetLabels()["vm.ani.io/vm-id"] != c.SourceVMID || src.GetNamespace() != v.Spec.Namespace {
-		return result, biz.ErrOwnership
-	}
-	if dvt, found, _ := unstructured.NestedSlice(src.Object, "spec", "dataVolumeTemplates"); found && len(dvt) > 0 {
+	sourceID := target.Spec.CloneSource.SourceVMID
+	seedName := "vm-init-" + sourceID
+	if dvt, found, _ := unstructured.NestedSlice(native.Object, "spec", "dataVolumeTemplates"); found && len(dvt) > 0 {
 		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses dataVolumeTemplates"))
 	}
-	volumes, _, _ := unstructured.NestedSlice(src.Object, "spec", "template", "spec", "volumes")
-	claims := map[string]string{}
+	volumes, _, _ := unstructured.NestedSlice(native.Object, "spec", "template", "spec", "volumes")
 	plan := map[string]bool{}
-	for _, name := range v.FrozenVolumeNames() {
+	for _, name := range target.FrozenVolumeNames() {
 		plan[name] = true
 	}
 	for _, raw := range volumes {
 		vol, ok := raw.(map[string]any)
 		if !ok {
-			return result, biz.ErrChanged
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source volume is not an object"))
+			continue
 		}
 		name, _ := vol["name"].(string)
 		if name == "" {
-			return result, biz.ErrChanged
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source volume has no name"))
+			continue
 		}
 		if pvc, ok := vol["persistentVolumeClaim"].(map[string]any); ok {
 			claim, _ := pvc["claimName"].(string)
@@ -103,11 +99,21 @@ func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (b
 			claims[name] = dvName
 			continue
 		}
-		if name == "guest-initialization" {
+		if name == cloneStandardSeedVolume {
 			ref, _, _ := unstructured.NestedString(vol, "cloudInitNoCloud", "secretRef", "name")
 			netRef, _, _ := unstructured.NestedString(vol, "cloudInitNoCloud", "networkDataSecretRef", "name")
-			if ref != "vm-init-"+c.SourceVMID || netRef != ref {
+			if ref != seedName || netRef != seedName {
 				result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "source uses a non-standard initialization secret"))
+				continue
+			}
+			// The business record proves the seed is the platform one; the native
+			// reference alone cannot tell a managed seed from a caller's Secret.
+			if source != nil {
+				if source.Spec.GuestInitialization == nil {
+					result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "source seed has no business guest initialization"))
+				} else if source.InitializationSecret.Name != "" && source.InitializationSecret.Name != seedName {
+					result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "source initialization secret is not the platform one"))
+				}
 			}
 			continue
 		}
@@ -116,6 +122,16 @@ func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (b
 			continue
 		}
 		result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "unsupported source volume type"))
+	}
+	// Historical media is allowed only after every copy is retired; the source
+	// then boots from the system disk and the template carries no media volume.
+	if source != nil {
+		for _, copy := range source.MediaCopies {
+			if !copy.Tombstone {
+				result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source still has media copies"))
+				break
+			}
+		}
 	}
 	for name := range claims {
 		if !plan[name] {
@@ -127,32 +143,98 @@ func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (b
 			result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "frozen disk volume is absent from the source template"))
 		}
 	}
+	if source != nil {
+		boot := source.CurrentBootDevice
+		if boot == "" {
+			boot = source.Spec.BootDevice
+		}
+		if boot == "" {
+			boot = "SYSTEM_DISK"
+		}
+		if boot != "SYSTEM_DISK" {
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source boot device is not SYSTEM_DISK"))
+		}
+	}
 	// Media devices and multi-NIC/manual VNIC sources stay out of phase 1.
-	disks, _, _ := unstructured.NestedSlice(src.Object, "spec", "template", "spec", "domain", "devices", "disks")
+	disks, _, _ := unstructured.NestedSlice(native.Object, "spec", "template", "spec", "domain", "devices", "disks")
 	for _, raw := range disks {
 		dev, ok := raw.(map[string]any)
 		if !ok {
-			return result, biz.ErrChanged
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source disk device is not an object"))
+			continue
 		}
 		if _, ok := dev["cdrom"]; ok {
 			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source still boots from media"))
 			break
 		}
 	}
-	interfaces, _, _ := unstructured.NestedSlice(src.Object, "spec", "template", "spec", "domain", "devices", "interfaces")
-	networks, _, _ := unstructured.NestedSlice(src.Object, "spec", "template", "spec", "networks")
+	interfaces, _, _ := unstructured.NestedSlice(native.Object, "spec", "template", "spec", "domain", "devices", "interfaces")
+	networks, _, _ := unstructured.NestedSlice(native.Object, "spec", "template", "spec", "networks")
 	if len(interfaces) > 1 || len(networks) > 1 {
 		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses multiple network interfaces"))
 	}
-	annotations := src.GetAnnotations()
+	annotations := native.GetAnnotations()
 	if annotations["networking.kubercloud.com/vnic"] != "" || annotations["kubevirt.io/persistent-state-for"] != "" {
 		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses a manual VNIC or backend storage"))
 	}
-	if pstate := src.GetLabels()["persistent-state-for"]; pstate != "" {
+	if pstate := native.GetLabels()["persistent-state-for"]; pstate != "" {
 		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses backend storage"))
 	}
+	return result, claims
+}
+
+// ObserveSourceCloneEligibility reads the accepted source native VM and checks
+// the first-phase source scope plus the PVC/DV snapshot capability. It is the
+// full admission used by Resolve: it also verifies the platform seed Secret.
+func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, target, source biz.VM) (biz.CloneEligibility, error) {
+	return n.sourceEligibility(ctx, target, &source, true)
+}
+
+// RecheckCloneSource is the pre-submit recheck. It re-reads the same named
+// source and repeats only the native structure and snapshot-capability checks;
+// admission already froze PVC, StorageClass and Secret.
+func (n *Native) RecheckCloneSource(ctx context.Context, target biz.VM) (biz.CloneEligibility, error) {
+	return n.sourceEligibility(ctx, target, nil, false)
+}
+
+func (n *Native) sourceEligibility(ctx context.Context, target biz.VM, source *biz.VM, deep bool) (biz.CloneEligibility, error) {
+	var result biz.CloneEligibility
+	c := target.Spec.CloneSource
+	if c == nil || c.Native.Name == "" || c.Native.UID == "" {
+		return result, biz.ErrInvalid
+	}
+	src, err := n.client.Resource(vmResource).Namespace(target.Spec.Namespace).Get(ctx, c.Native.Name, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source VM is gone"))
+		return result, nil
+	}
+	if err != nil {
+		return result, err
+	}
+	if string(src.GetUID()) != c.Native.UID || src.GetLabels()["vm.ani.io/vm-id"] != c.SourceVMID || src.GetNamespace() != target.Spec.Namespace {
+		return result, biz.ErrOwnership
+	}
+	if source != nil && (source.Native.UID == "" || source.Native.UID != c.Native.UID) {
+		return result, biz.ErrOwnership
+	}
+	structure, claims := classifyCloneSource(source, target, src)
+	result = structure
 	if len(result.Unsupported) > 0 {
 		return result, nil
+	}
+	if deep && source != nil && source.Spec.GuestInitialization != nil {
+		secretName := "vm-init-" + source.ID
+		secret, err := n.client.Resource(secretResource).Namespace(target.Spec.Namespace).Get(ctx, secretName, metav1.GetOptions{})
+		if apierrors.IsNotFound(err) {
+			result.NotReady = append(result.NotReady, cloneNotReady("", "source initialization secret is absent"))
+		} else if err != nil {
+			return result, err
+		} else if !matches(secret, *source) {
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source initialization secret is not owned by this VM"))
+		}
+		if len(result.Unsupported) > 0 || len(result.NotReady) > 0 {
+			return result, nil
+		}
 	}
 	// Field-level capability. KubeVirt reports one entry per volume it can
 	// snapshot; a missing entry is "not reported yet", not "supported".
@@ -181,7 +263,11 @@ func (n *Native) ObserveSourceCloneEligibility(ctx context.Context, v biz.VM) (b
 			}
 			result.NotReady = append(result.NotReady, cloneNotReady(volume, reason))
 		}
-		pvc, err := n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Get(ctx, claim, metav1.GetOptions{})
+		if !deep {
+			// The cheap recheck never re-reads the frozen dependency objects.
+			continue
+		}
+		pvc, err := n.client.Resource(pvcResource).Namespace(target.Spec.Namespace).Get(ctx, claim, metav1.GetOptions{})
 		if apierrors.IsNotFound(err) {
 			result.NotReady = append(result.NotReady, cloneNotReady(volume, "source PVC is absent"))
 			continue
@@ -366,6 +452,13 @@ func (n *Native) projectClone(ctx context.Context, v biz.VM, r biz.CloneRequest,
 	state.Target = biz.ObjectRef{Kind: "VirtualMachine", Namespace: v.Spec.Namespace, Name: targetName}
 	if target, err := n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, targetName, metav1.GetOptions{}); err == nil {
 		state.Target = objectRef(target)
+		// The target's own volume references are the primary cancel hand-off; the
+		// restore list is only a fallback while the target cannot be read.
+		outputs, err := n.cloneTargetOutputs(ctx, v, target)
+		if err != nil {
+			return state, err
+		}
+		state.Outputs = mergeCloneOutputs(outputs, state.Outputs)
 	} else if !apierrors.IsNotFound(err) {
 		return state, err
 	}
@@ -374,9 +467,64 @@ func (n *Native) projectClone(ctx context.Context, v biz.VM, r biz.CloneRequest,
 		if err != nil {
 			return state, err
 		}
-		state.Outputs = outputs
+		state.Outputs = mergeCloneOutputs(state.Outputs, outputs)
 	}
 	return state, nil
+}
+
+// cloneTargetOutputs reads the named PVC volumes the clone target actually
+// references. Only volumes of the frozen plan are returned.
+func (n *Native) cloneTargetOutputs(ctx context.Context, v biz.VM, target *unstructured.Unstructured) ([]biz.VolumeRef, error) {
+	if v.Spec.CloneSource == nil {
+		return nil, nil
+	}
+	frozen := map[string]bool{}
+	for _, name := range v.FrozenVolumeNames() {
+		frozen[name] = true
+	}
+	volumes, _, _ := unstructured.NestedSlice(target.Object, "spec", "template", "spec", "volumes")
+	var outputs []biz.VolumeRef
+	for _, raw := range volumes {
+		volume, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		name, _ := volume["name"].(string)
+		if !frozen[name] {
+			continue
+		}
+		claim, _, _ := unstructured.NestedString(volume, "persistentVolumeClaim", "claimName")
+		if claim == "" {
+			continue
+		}
+		ref := biz.VolumeRef{VolumeName: name, PVCName: claim}
+		if pvc, err := n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Get(ctx, claim, metav1.GetOptions{}); err == nil {
+			ref.PVCUID = string(pvc.GetUID())
+		} else if !apierrors.IsNotFound(err) {
+			return nil, err
+		}
+		outputs = append(outputs, ref)
+	}
+	return outputs, nil
+}
+
+// mergeCloneOutputs keeps the primary list and appends only fallback volumes it
+// does not cover.
+func mergeCloneOutputs(primary, fallback []biz.VolumeRef) []biz.VolumeRef {
+	if len(primary) == 0 {
+		return fallback
+	}
+	seen := map[string]bool{}
+	merged := append([]biz.VolumeRef(nil), primary...)
+	for _, ref := range primary {
+		seen[ref.VolumeName] = true
+	}
+	for _, ref := range fallback {
+		if !seen[ref.VolumeName] {
+			merged = append(merged, ref)
+		}
+	}
+	return merged
 }
 
 // cloneRestoreOutputs reads the named outputs of the clone's own Restore. The
@@ -414,39 +562,142 @@ func (n *Native) cloneRestoreOutputs(ctx context.Context, v biz.VM, name string)
 	return outputs, nil
 }
 
-// DeleteClone deletes the adopted clone by UID with foreground propagation and
-// reports whether the object is gone.
-func (n *Native) DeleteClone(ctx context.Context, v biz.VM, r biz.CloneRequest) (bool, error) {
-	uid, err := n.cloneUID(ctx, v.Spec.Namespace, r.Name)
+// DeleteClone deletes the adopted clone with UID and, when known,
+// resourceVersion preconditions. A conflict returns the freshly re-read object
+// so the caller re-evaluates instead of reusing stale facts.
+func (n *Native) DeleteClone(ctx context.Context, v biz.VM, r biz.CloneRequest, uid, rv string) (biz.CloneDeleteResult, error) {
+	object, err := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		return biz.CloneDeleteResult{Gone: true}, nil
+	}
 	if err != nil {
-		return false, err
+		return biz.CloneDeleteResult{}, err
 	}
-	if uid == "" {
-		return true, nil
+	if uid != "" && string(object.GetUID()) != uid {
+		return biz.CloneDeleteResult{}, biz.ErrOwnership
 	}
-	precondition := types.UID(uid)
+	currentUID := object.GetUID()
+	preconditions := &metav1.Preconditions{UID: &currentUID}
+	if rv != "" {
+		preconditions.ResourceVersion = &rv
+	}
 	policy := metav1.DeletePropagationForeground
-	err = n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Delete(ctx, r.Name, metav1.DeleteOptions{Preconditions: &metav1.Preconditions{UID: &precondition}, PropagationPolicy: &policy})
-	if err != nil && !apierrors.IsNotFound(err) {
-		return false, err
+	err = n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Delete(ctx, r.Name, metav1.DeleteOptions{Preconditions: preconditions, PropagationPolicy: &policy})
+	if apierrors.IsNotFound(err) {
+		return biz.CloneDeleteResult{Gone: true}, nil
 	}
-	uid, err = n.cloneUID(ctx, v.Spec.Namespace, r.Name)
+	if apierrors.IsConflict(err) {
+		fresh, e := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
+		if apierrors.IsNotFound(e) {
+			return biz.CloneDeleteResult{Gone: true}, nil
+		}
+		if e != nil {
+			return biz.CloneDeleteResult{}, e
+		}
+		observation, e := n.projectClone(ctx, v, r, fresh)
+		if e != nil {
+			return biz.CloneDeleteResult{}, e
+		}
+		return biz.CloneDeleteResult{Conflict: true, Current: observation}, nil
+	}
 	if err != nil {
-		return false, err
+		return biz.CloneDeleteResult{}, err
 	}
-	return uid == "", nil
+	object, err = n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		return biz.CloneDeleteResult{Gone: true}, nil
+	}
+	if err != nil {
+		return biz.CloneDeleteResult{}, err
+	}
+	return biz.CloneDeleteResult{}, nil
 }
 
-// cloneUID reads the current clone UID. It returns no error for an absent object.
-func (n *Native) cloneUID(ctx context.Context, namespace, name string) (string, error) {
-	object, err := n.client.Resource(cloneResource).Namespace(namespace).Get(ctx, name, metav1.GetOptions{})
+// DeleteCloneTarget deletes the failed clone's own target VM. The target may not
+// carry business labels, so identity is proven by name and expected UID.
+func (n *Native) DeleteCloneTarget(ctx context.Context, v biz.VM, target biz.ObjectRef) (bool, error) {
+	if target.Name == "" {
+		return true, nil
+	}
+	object, err := n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, target.Name, metav1.GetOptions{})
 	if apierrors.IsNotFound(err) {
-		return "", nil
+		return true, nil
 	}
 	if err != nil {
-		return "", err
+		return false, err
 	}
-	return string(object.GetUID()), nil
+	if target.UID != "" && string(object.GetUID()) != target.UID {
+		return false, biz.ErrOwnership
+	}
+	uid := object.GetUID()
+	policy := metav1.DeletePropagationForeground
+	err = n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Delete(ctx, target.Name, metav1.DeleteOptions{Preconditions: &metav1.Preconditions{UID: &uid}, PropagationPolicy: &policy})
+	if apierrors.IsNotFound(err) {
+		return true, nil
+	}
+	if err != nil && !apierrors.IsConflict(err) {
+		return false, err
+	}
+	object, err = n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, target.Name, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		return true, nil
+	}
+	if err != nil {
+		return false, err
+	}
+	return false, nil
+}
+
+// DeleteNamedVolumes removes the residual PVCs of a failed clone. A PVC is only
+// deleted when it is provably ours: the recorded UID matches or the target VM is
+// an owner. One delete is issued per call; the caller re-observes next tick.
+func (n *Native) DeleteNamedVolumes(ctx context.Context, v biz.VM, refs []biz.VolumeRef) (bool, error) {
+	done := true
+	for _, ref := range refs {
+		if ref.PVCName == "" {
+			continue
+		}
+		object, err := n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Get(ctx, ref.PVCName, metav1.GetOptions{})
+		if apierrors.IsNotFound(err) {
+			continue
+		}
+		if err != nil {
+			return false, err
+		}
+		if !cloneOutputOwned(v, ref, object) {
+			continue
+		}
+		uid := object.GetUID()
+		policy := metav1.DeletePropagationForeground
+		if err = n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Delete(ctx, ref.PVCName, metav1.DeleteOptions{Preconditions: &metav1.Preconditions{UID: &uid}, PropagationPolicy: &policy}); err != nil && !apierrors.IsNotFound(err) && !apierrors.IsConflict(err) {
+			return false, err
+		}
+		if _, err = n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Get(ctx, ref.PVCName, metav1.GetOptions{}); apierrors.IsNotFound(err) {
+			// Foreground deletion may complete before the next tick.
+			continue
+		} else if err != nil {
+			return false, err
+		}
+		done = false
+	}
+	return done, nil
+}
+
+// cloneOutputOwned accepts a PVC by recorded UID or by any owner reference to
+// the target VM (controller or not).
+func cloneOutputOwned(v biz.VM, ref biz.VolumeRef, object *unstructured.Unstructured) bool {
+	if ref.PVCUID != "" && string(object.GetUID()) == ref.PVCUID {
+		return true
+	}
+	if v.Native.UID == "" {
+		return false
+	}
+	for _, owner := range object.GetOwnerReferences() {
+		if owner.Kind == "VirtualMachine" && string(owner.UID) == v.Native.UID {
+			return true
+		}
+	}
+	return false
 }
 
 // ApplyCloneTargetConfiguration adapts the stopped clone target and registers
@@ -498,6 +749,26 @@ func (n *Native) ApplyCloneTargetConfiguration(ctx context.Context, v biz.VM, r 
 		keptDevices = append(keptDevices, device)
 	}
 	newDevices = keptDevices
+	// Unknown extra PVC volumes are never ignored: the target must reference
+	// exactly the frozen plan after the one-shot seed is removed.
+	planned := map[string]bool{}
+	for _, disk := range v.Disks {
+		if disk.Tombstone || !disk.Attached {
+			continue
+		}
+		planned[disk.VolumeName] = true
+	}
+	for _, raw := range newVolumes {
+		volume, ok := raw.(map[string]any)
+		if !ok {
+			return nil, ref, biz.ErrChanged
+		}
+		name, _ := volume["name"].(string)
+		if _, isPVC := volume["persistentVolumeClaim"]; !isPVC || planned[name] {
+			continue
+		}
+		return nil, ref, fmt.Errorf("%w: unexpected target volume %s", biz.ErrChanged, name)
+	}
 	registered := make([]biz.Disk, 0, len(v.Disks))
 	for _, disk := range v.Disks {
 		if disk.Tombstone || !disk.Attached {

@@ -106,6 +106,11 @@ func rpcError(e error) error {
 		code = codes.ResourceExhausted
 	}
 	if code == codes.Unavailable {
+		// A not-ready clone source keeps its stable reason so the caller can tell
+		// "retry later" from "cannot clone"; ordinary dependencies stay generic.
+		if errors.Is(e, biz.ErrCloneSourceNotReady) {
+			return status.Error(code, e.Error())
+		}
 		return status.Error(code, "VM_DEPENDENCY_NOT_READY")
 	}
 	return status.Error(code, e.Error())
@@ -301,12 +306,17 @@ func (s *Service) resolveCloneCreateSpec(ctx context.Context, r *pb.ResolveCreat
 	if !ok {
 		return nil, rpcError(biz.ErrDependency)
 	}
-	result, e := eligibility.ObserveSourceCloneEligibility(ctx, eligibilitySource)
+	result, e := eligibility.ObserveSourceCloneEligibility(ctx, eligibilitySource, src)
 	if e != nil {
 		return nil, rpcError(e)
 	}
-	if !result.Ready() {
-		return nil, rpcError(result.Error())
+	// Structural rejection is a stable failed precondition; a dependency that is
+	// simply not observed yet stays retryable.
+	if len(result.Unsupported) > 0 {
+		return nil, rpcError(result.UnsupportedError())
+	}
+	if len(result.NotReady) > 0 {
+		return nil, rpcError(result.NotReadyError())
 	}
 	digest, e := pb.CreateSpecDigest(spec)
 	if e != nil {

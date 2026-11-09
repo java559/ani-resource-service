@@ -31,6 +31,9 @@ var (
 	// ErrCloneSourceUnavailable reports a source that cannot be cloned under the
 	// first-phase contract. It keeps the native reason and volume name.
 	ErrCloneSourceUnavailable = errors.New("VM_CLONE_SOURCE_UNAVAILABLE")
+	// ErrCloneSourceNotReady reports a source dependency that is not observed
+	// yet. It stays retryable and must never be treated as "cannot clone".
+	ErrCloneSourceNotReady = errors.New("VM_CLONE_SOURCE_NOT_READY")
 )
 
 // NativeNotSubmittedError confirms that a native command did not reach its

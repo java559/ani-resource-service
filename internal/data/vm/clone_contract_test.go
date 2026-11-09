@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"slices"
 	"testing"
 
 	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
@@ -61,22 +62,50 @@ func TestCloneObjectContract(t *testing.T) {
 		{"spec", "template", "labelFilters"},
 		{"spec", "template", "annotationFilters"},
 	}
+	// A06: the 21 dropped keys are compared literally, not by count or shape.
+	expected := []string{
+		"*",
+		"!^vm[.]ani[.]io/vm-id$",
+		"!^vm[.]ani[.]io/create-digest$",
+		"!^vm[.]ani[.]io/clone-create-operation-id$",
+		"!^network[.]ani[.]io/instance-id$",
+		"!^network[.]ani[.]io/attachment-id$",
+		"!^network[.]ani[.]io/submission-id$",
+		"!^network[.]ani[.]io/generation$",
+		"!^network[.]ani[.]io/interface-revision$",
+		"!^networking[.]kubercloud[.]com/vnic$",
+		"!^kubectl[.]kubernetes[.]io/last-applied-configuration$",
+		"!^vm[.]ani[.]io/media-id$",
+		"!^vm[.]ani[.]io/media-source-digest$",
+		"!^vm[.]ani[.]io/initialization-intent$",
+		"!^vm[.]ani[.]io/network-initialization$",
+		"!^vm[.]ani[.]io/snapshot-id$",
+		"!^vm[.]ani[.]io/snapshot-uid$",
+		"!^vm[.]ani[.]io/source-vm-uid$",
+		"!^vm[.]ani[.]io/source-sha256$",
+		"!^verification[.]ani[.]io/run-id$",
+		"!^verification[.]ani[.]io/preparation-method$",
+		"!^verification[.]ani[.]io/origin-vm-uid$",
+	}
+	filters := make([]string, 0, len(cloneFilters))
+	for _, value := range cloneFilters {
+		text, ok := value.(string)
+		if !ok {
+			t.Fatalf("cloneFilters has a non-string entry: %v", value)
+		}
+		filters = append(filters, text)
+	}
+	if !slices.Equal(expected, filters) {
+		t.Fatalf("cloneFilters differ from the contract: %v", filters)
+	}
 	for _, path := range groups {
 		values, found, err := unstructured.NestedStringSlice(object.Object, path...)
 		if err != nil || !found {
 			t.Fatalf("%v missing: %v", path, err)
 		}
-		if len(values) != 22 || values[0] != "*" {
-			t.Fatalf("%v must be '*' plus 21 exclusions, got %v", path, values)
+		if !slices.Equal(expected, values) {
+			t.Fatalf("%v differs from the contract: %v", path, values)
 		}
-		for _, value := range values[1:] {
-			if len(value) < 3 || value[:2] != "!^" || value[len(value)-1] != '$' {
-				t.Fatalf("%v has a non-anchored exclusion %q", path, value)
-			}
-		}
-	}
-	if len(cloneFilters) != 22 {
-		t.Fatalf("cloneFilters length = %d", len(cloneFilters))
 	}
 }
 

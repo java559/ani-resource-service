@@ -1,0 +1,192 @@
+package vm
+
+import (
+	"context"
+	"testing"
+
+	biz "github.com/zhangzhe-ctrl/ani-resource-service/internal/biz/vm"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic/fake"
+	ktesting "k8s.io/client-go/testing"
+)
+
+const classSourceID = "21cf875f-781a-41db-81cf-7063f4f4cfc4"
+
+// classNativeSource is a standard single-NIC Linux source with one system disk
+// and the platform one-shot seed.
+func classNativeSource(sourceID string) *unstructured.Unstructured {
+	return &unstructured.Unstructured{Object: map[string]any{
+		"apiVersion": "kubevirt.io/v1",
+		"kind":       "VirtualMachine",
+		"metadata": map[string]any{
+			"name": "vm-source", "namespace": "tenant-a", "uid": "source-uid",
+			"labels": map[string]any{"vm.ani.io/vm-id": sourceID},
+		},
+		"spec": map[string]any{"template": map[string]any{"spec": map[string]any{
+			"volumes": []any{
+				map[string]any{"name": "disk-sys", "persistentVolumeClaim": map[string]any{"claimName": "pvc-sys"}},
+				map[string]any{"name": "guest-initialization", "cloudInitNoCloud": map[string]any{
+					"secretRef":            map[string]any{"name": "vm-init-" + sourceID},
+					"networkDataSecretRef": map[string]any{"name": "vm-init-" + sourceID},
+				}},
+			},
+			"domain": map[string]any{"devices": map[string]any{
+				"disks":      []any{map[string]any{"name": "disk-sys", "disk": map[string]any{"bus": "virtio"}}},
+				"interfaces": []any{map[string]any{"name": "default", "masquerade": map[string]any{}}},
+			}},
+			"networks": []any{map[string]any{"name": "default", "pod": map[string]any{}}},
+		}}},
+	}}
+}
+
+func classTarget(sourceID string) biz.VM {
+	return biz.VM{ID: "target-vm", Spec: biz.Spec{
+		Namespace: "tenant-a",
+		CloneSource: &biz.CloneSource{
+			SourceVMID: sourceID,
+			Native:     biz.ObjectRef{Kind: "VirtualMachine", Namespace: "tenant-a", Name: "vm-source", UID: "source-uid"},
+			Disks:      []biz.CloneDisk{{SourceDiskID: "disk-1", VolumeName: "disk-sys", Role: "system", Name: "system", SizeGB: 8}},
+		},
+	}}
+}
+
+func classBusinessSource(sourceID string) biz.VM {
+	return biz.VM{
+		ID:       sourceID,
+		TenantID: "64c5c35a-f554-432c-b4bc-7b4f36f08420",
+		Native:   biz.ObjectRef{Kind: "VirtualMachine", Namespace: "tenant-a", Name: "vm-source", UID: "source-uid"},
+		Spec: biz.Spec{
+			Namespace:           "tenant-a",
+			Digest:              "digest",
+			BootDevice:          "SYSTEM_DISK",
+			GuestInitialization: &biz.GuestInitialization{Method: "CLOUD_INIT_NOCLOUD", Username: "ani"},
+		},
+		InitializationSecret: biz.ObjectRef{Kind: "Secret", Namespace: "tenant-a", Name: "vm-init-" + sourceID, UID: "secret-uid"},
+		CurrentBootDevice:    "SYSTEM_DISK",
+	}
+}
+
+func TestClassifyCloneSource(t *testing.T) {
+	target := classTarget(classSourceID)
+	source := classBusinessSource(classSourceID)
+	if result, claims := classifyCloneSource(&source, target, classNativeSource(classSourceID)); !result.Ready() || claims["disk-sys"] != "pvc-sys" {
+		t.Fatalf("standard source rejected: %v %v", result, claims)
+	}
+
+	nonStandard := classNativeSource(classSourceID)
+	volumes, _, _ := unstructured.NestedSlice(nonStandard.Object, "spec", "template", "spec", "volumes")
+	volumes[1].(map[string]any)["cloudInitNoCloud"].(map[string]any)["networkDataSecretRef"] = map[string]any{"name": "caller-secret"}
+	if err := unstructured.SetNestedSlice(nonStandard.Object, volumes, "spec", "template", "spec", "volumes"); err != nil {
+		t.Fatal(err)
+	}
+	if result, _ := classifyCloneSource(&source, target, nonStandard); result.Ready() {
+		t.Fatal("non-standard initialization secret accepted")
+	}
+
+	mediaBoot := source
+	mediaBoot.CurrentBootDevice = "INSTALL_MEDIA"
+	if result, _ := classifyCloneSource(&mediaBoot, target, classNativeSource(classSourceID)); result.Ready() {
+		t.Fatal("source that boots from media accepted")
+	}
+
+	historical := source
+	historical.MediaCopies = []biz.MediaCopy{{ID: "install", Tombstone: true}, {ID: "driver", Tombstone: true}}
+	if result, _ := classifyCloneSource(&historical, target, classNativeSource(classSourceID)); !result.Ready() {
+		t.Fatalf("retired historical media rejected: %v", result)
+	}
+	liveMedia := source
+	liveMedia.MediaCopies = []biz.MediaCopy{{ID: "install"}}
+	if result, _ := classifyCloneSource(&liveMedia, target, classNativeSource(classSourceID)); result.Ready() {
+		t.Fatal("source with a live media copy accepted")
+	}
+
+	noGuest := source
+	noGuest.Spec.GuestInitialization = nil
+	if result, _ := classifyCloneSource(&noGuest, target, classNativeSource(classSourceID)); result.Ready() {
+		t.Fatal("seed without business guest initialization accepted")
+	}
+}
+
+// TestCloneSourceEligibilitySeedAndRecheck covers the Secret dependency of the
+// full admission and the frozen-dependency-free recheck.
+func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
+	ctx := context.Background()
+	target := classTarget(classSourceID)
+	source := classBusinessSource(classSourceID)
+	// Baseline native source with snapshot capability reported.
+	status := classNativeSource(classSourceID)
+	if err := unstructured.SetNestedSlice(status.Object, []any{map[string]any{"name": "disk-sys", "enabled": true}}, "status", "volumeSnapshotStatuses"); err != nil {
+		t.Fatal(err)
+	}
+	secret := &unstructured.Unstructured{Object: map[string]any{
+		"apiVersion": "v1", "kind": "Secret",
+		"metadata": map[string]any{"name": "vm-init-" + classSourceID, "namespace": "tenant-a", "uid": "secret-uid", "labels": toAnyMap(labelVM(source))},
+	}}
+	pvc := &unstructured.Unstructured{Object: map[string]any{
+		"apiVersion": "v1", "kind": "PersistentVolumeClaim",
+		"metadata": map[string]any{"name": "pvc-sys", "namespace": "tenant-a", "uid": "pvc-uid"},
+		"spec":     map[string]any{"volumeMode": "Block", "accessModes": []any{"ReadWriteOnce"}, "storageClassName": "ani-block"},
+		"status":   map[string]any{"phase": "Bound"},
+	}}
+	storageClass := &unstructured.Unstructured{Object: map[string]any{
+		"apiVersion": "storage.k8s.io/v1", "kind": "StorageClass",
+		"metadata":          map[string]any{"name": "ani-block"},
+		"volumeBindingMode": "Immediate",
+	}}
+	kinds := map[schema.GroupVersionResource]string{
+		vmResource:           "VirtualMachineList",
+		secretResource:       "SecretList",
+		pvcResource:          "PersistentVolumeClaimList",
+		storageClassResource: "StorageClassList",
+	}
+	client := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), kinds, copyObject(status), copyObject(secret), copyObject(pvc), copyObject(storageClass))
+	native := NewNativeWithClients(client, nil)
+
+	result, err := native.ObserveSourceCloneEligibility(ctx, target, source)
+	if err != nil || !result.Ready() {
+		t.Fatalf("full admission failed: %v %v", result, err)
+	}
+
+	// The cheap recheck never re-reads PVC or StorageClass.
+	reads := map[string]int{}
+	client.PrependReactor("get", "*", func(action ktesting.Action) (bool, runtime.Object, error) {
+		reads[action.GetResource().Resource]++
+		return false, nil, nil
+	})
+	result, err = native.RecheckCloneSource(ctx, target)
+	if err != nil || !result.Ready() {
+		t.Fatalf("recheck failed: %v %v", result, err)
+	}
+	if reads["persistentvolumeclaims"] != 0 || reads["storageclasses"] != 0 || reads["secrets"] != 0 {
+		t.Fatalf("recheck read a frozen dependency: %v", reads)
+	}
+	if reads["virtualmachines"] == 0 {
+		t.Fatal("recheck did not read the same named source")
+	}
+
+	// A missing platform seed Secret is a recoverable dependency, not a rejection.
+	missing := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), kinds, copyObject(status), copyObject(pvc), copyObject(storageClass))
+	result, err = NewNativeWithClients(missing, nil).ObserveSourceCloneEligibility(ctx, target, source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Unsupported) != 0 || len(result.NotReady) != 1 || result.NotReady[0].Reason != "source initialization secret is absent" {
+		t.Fatalf("missing seed secret misclassified: %v", result)
+	}
+}
+
+// toAnyMap converts typed labels into the map[string]any an unstructured object
+// needs.
+func toAnyMap(values map[string]string) map[string]any {
+	result := make(map[string]any, len(values))
+	for key, value := range values {
+		result[key] = value
+	}
+	return result
+}
+
+func copyObject(object *unstructured.Unstructured) *unstructured.Unstructured {
+	return object.DeepCopy()
+}

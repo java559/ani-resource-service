@@ -10,9 +10,12 @@ import (
 // Clone worker steps. They are stored in the existing Operation.Step field; no
 // new public state schema is introduced.
 const (
-	cloneStepSubmit = "clone-submit"
-	cloneStepDelete = "clone-delete"
-	cloneStepFail   = "clone-failed-cleanup"
+	cloneStepSubmit         = "clone-submit"
+	cloneStepDelete         = "clone-delete"
+	cloneStepFail           = "clone-failed-cleanup"
+	cloneStepCleanupVM      = "clone-cleanup-vm"
+	cloneStepCleanupVolumes = "clone-cleanup-volumes"
+	cloneStepCleanupNetwork = "clone-cleanup-network"
 )
 
 // cloneRequest builds the fixed native submission identity of this target.
@@ -74,20 +77,28 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 		return nil
 	}
 	if o.Step == "" && cp.UID == "" && (o.Pending == nil || o.Pending.Action != cloneStepSubmit) {
-		eligibility, e := native.ObserveSourceCloneEligibility(ctx, *v)
+		// Pre-submit only the cheap recheck runs: admission already read and froze
+		// the source PVCs, StorageClass and Secret.
+		eligibility, e := native.RecheckCloneSource(ctx, *v)
 		if e != nil {
 			return e
 		}
 		if len(eligibility.Unsupported) > 0 {
-			reason := eligibility.Error()
-			if e = w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "unsubmitted: "+reason.Error()); e != nil {
+			cause := eligibility.UnsupportedError()
+			done, e := w.releaseUnsubmitted(ctx, o, v, sources, "unsubmitted: "+cause.Error(), "no submit intent; network released")
+			if e != nil {
 				return e
 			}
-			return fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, reason)
+			if !done {
+				// Keep the accepted operation claimable until the target-owned
+				// network hand-off is really released.
+				return ErrDependency
+			}
+			return cause
 		}
 		if len(eligibility.NotReady) > 0 {
 			// A recoverable native dependency keeps the accepted operation.
-			return fmt.Errorf("%w: %s", ErrDependency, eligibility.Error())
+			return eligibility.NotReadyError()
 		}
 		if e = w.checkpoint(ctx, o, *v, cloneStepSubmit, ObjectRef{Kind: "VirtualMachineClone", Namespace: v.Spec.Namespace, Name: cp.Name}); e != nil {
 			return e
@@ -98,11 +109,17 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 		if e != nil {
 			if errors.Is(e, ErrInvalid) {
 				// The native API definitively rejected the submission: no object can
-				// exist, so close this create and release the source.
-				if x := w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "clone submission rejected"); x != nil {
+				// exist, so close this create, release the network hand-off and then
+				// the source reference.
+				cause := fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, e)
+				done, x := w.releaseUnsubmitted(ctx, o, v, sources, "unsubmitted: "+cause.Error(), "no submit intent; clone submission rejected")
+				if x != nil {
 					return x
 				}
-				return fmt.Errorf("%w: %s", ErrCloneSourceUnavailable, e)
+				if !done {
+					return ErrDependency
+				}
+				return cause
 			}
 			return e
 		}
@@ -113,7 +130,7 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 		}
 		return w.repo.Save(ctx, *o, *v)
 	}
-	if o.Step == cloneStepDelete || o.Step == cloneStepFail {
+	if isCloneFinishStep(o.Step) {
 		return w.finishClone(ctx, o, v, native, sources, req)
 	}
 	state, e := native.ObserveClone(ctx, *v, req)
@@ -181,41 +198,169 @@ func (w *Worker) clone(ctx context.Context, o *Operation, v *VM) error {
 // finishClone deletes the adopted clone, waits for it to be gone, releases the
 // source HELD and then finishes or starts the target. The five-step order is a
 // hard contract: register -> checkpoint delete intent -> delete -> gone -> release.
+// A failed clone additionally removes its own target artifacts before the
+// operation becomes terminal failed; each cleanup step stays claimable.
 func (w *Worker) finishClone(ctx context.Context, o *Operation, v *VM, native CloneNativePort, sources CloneSourcePort, req CloneRequest) error {
 	cp := v.CloneProgress
-	if !cp.CloneDeleteRequested {
-		cp.CloneDeleteRequested = true
+	if o.Step == cloneStepDelete || o.Step == cloneStepFail {
+		if !cp.CloneDeleteRequested {
+			cp.CloneDeleteRequested = true
+			return w.repo.Checkpoint(ctx, *o, *v)
+		}
+		result, e := native.DeleteClone(ctx, *v, req, cp.UID, "")
+		if e != nil {
+			return e
+		}
+		if result.Conflict {
+			// The clone changed between observation and delete. The next tick
+			// re-reads the same object; the recorded UID is still the only owner.
+			return nil
+		}
+		if !result.Gone {
+			return nil
+		}
+		kind, evidence := "REGISTERED", "target "+v.Native.UID
+		if v.Native.UID == "" {
+			evidence = "clone gone; no registered target"
+		}
+		if e = w.releaseCloneSource(ctx, sources, *v, kind, evidence); e != nil {
+			return e
+		}
+		cp.CloneDeleteRequested = false
+		if o.Step == cloneStepFail {
+			return w.cleanupFailedClone(ctx, o, v, native)
+		}
+		if v.Spec.StartAfterCreate {
+			o.Step = ""
+			v.Desired = "Running"
+			return w.power(ctx, o, v)
+		}
+		o.State = "succeeded"
+		o.Step = ""
+		return nil
+	}
+	return w.cleanupFailedClone(ctx, o, v, native)
+}
+
+// isCloneFinishStep reports whether this step belongs to the shared finish path.
+func isCloneFinishStep(step string) bool {
+	switch step {
+	case cloneStepDelete, cloneStepFail, cloneStepCleanupVM, cloneStepCleanupVolumes, cloneStepCleanupNetwork:
+		return true
+	}
+	return false
+}
+
+// cleanupFailedClone removes the target-owned artifacts of a failed clone. It
+// advances one durable step per tick so a crash never hides a residual target.
+func (w *Worker) cleanupFailedClone(ctx context.Context, o *Operation, v *VM, native CloneNativePort) error {
+	cp := v.CloneProgress
+	target := v.Native
+	if target.UID == "" && cp.PendingTargetRef != nil {
+		target = *cp.PendingTargetRef
+	}
+	if target.UID == "" && len(cp.PendingVolumes) == 0 {
+		return w.finishFailedClone(o, v)
+	}
+	if o.Step == cloneStepFail {
+		// Release is complete; enter the target cleanup sequence.
+		o.Step = cloneStepCleanupVM
 		return w.repo.Checkpoint(ctx, *o, *v)
 	}
-	gone, e := native.DeleteClone(ctx, *v, req)
-	if e != nil {
-		return e
+	if o.Step == cloneStepCleanupVM {
+		if target.UID == "" {
+			o.Step = cloneStepCleanupVolumes
+			return w.repo.Checkpoint(ctx, *o, *v)
+		}
+		gone, e := native.DeleteCloneTarget(ctx, *v, target)
+		if e != nil {
+			return e
+		}
+		if !gone {
+			return nil
+		}
+		o.Step = cloneStepCleanupVolumes
+		return w.repo.Checkpoint(ctx, *o, *v)
 	}
-	if !gone {
-		return nil
+	if o.Step == cloneStepCleanupVolumes {
+		cleanup, ok := w.native.(CloneCleanupPort)
+		if !ok {
+			if len(cp.PendingVolumes) > 0 {
+				return ErrDependency
+			}
+		} else {
+			done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
+			if e != nil {
+				return e
+			}
+			if !done {
+				return nil
+			}
+		}
+		o.Step = cloneStepCleanupNetwork
+		return w.repo.Checkpoint(ctx, *o, *v)
 	}
-	kind, evidence := "REGISTERED", "target "+v.Native.UID
-	if v.Native.UID == "" {
-		evidence = "clone gone; no registered target"
+	if o.Step == cloneStepCleanupNetwork {
+		if e := w.checkpoint(ctx, o, *v, "release-network", ObjectRef{}); e != nil {
+			return e
+		}
+		done, e := w.network.Release(ctx, *v)
+		if e != nil {
+			return e
+		}
+		if !done {
+			return nil
+		}
+		if w.securityGroups != nil {
+			if e := w.securityGroups.ReleaseSecurityGroupBinding(ctx, v.TenantID, "vm", v.ID, v.Version); e != nil {
+				return e
+			}
+		} else if len(v.SecurityGroupIDs) > 0 || len(v.Spec.SecurityGroupIDs) > 0 {
+			return ErrDependency
+		}
+		return w.finishFailedClone(o, v)
 	}
-	if e = w.releaseCloneSource(ctx, sources, *v, kind, evidence); e != nil {
-		return e
-	}
-	cp.CloneDeleteRequested = false
-	if o.Step == cloneStepFail {
-		o.State = "failed"
-		o.Step = ""
-		v.Observed = "Failed"
-		return nil
-	}
-	if v.Spec.StartAfterCreate {
-		o.Step = ""
-		v.Desired = "Running"
-		return w.power(ctx, o, v)
-	}
-	o.State = "succeeded"
+	return w.finishFailedClone(o, v)
+}
+
+// finishFailedClone closes the failed operation only after every owned artifact
+// is gone.
+func (w *Worker) finishFailedClone(o *Operation, v *VM) error {
+	o.State = "failed"
 	o.Step = ""
+	o.Pending = nil
+	v.Observed = "Failed"
 	return nil
+}
+
+// releaseUnsubmitted reclaims the target-owned network hand-off and the source
+// HELD of a create that provably never submitted a clone. done=false means a
+// release step is still pending, so the caller keeps the operation claimable.
+func (w *Worker) releaseUnsubmitted(ctx context.Context, o *Operation, v *VM, sources CloneSourcePort, reason, evidence string) (bool, error) {
+	if v.Network.AttachmentID != "" || v.Network.SubmissionID != "" {
+		if e := w.checkpoint(ctx, o, *v, "release-network", ObjectRef{}); e != nil {
+			return false, e
+		}
+		done, e := w.network.Release(ctx, *v)
+		if e != nil {
+			return false, e
+		}
+		if !done {
+			return false, nil
+		}
+	}
+	if w.securityGroups != nil {
+		if e := w.securityGroups.ReleaseSecurityGroupBinding(ctx, v.TenantID, "vm", v.ID, v.Version); e != nil {
+			return false, e
+		}
+	} else if len(v.SecurityGroupIDs) > 0 || len(v.Spec.SecurityGroupIDs) > 0 {
+		return false, ErrDependency
+	}
+	if e := w.releaseCloneSourceReason(ctx, sources, *v, "CANCELLED", reason, evidence); e != nil {
+		return false, e
+	}
+	o.Pending = nil
+	return true, nil
 }
 
 func (w *Worker) releaseCloneSource(ctx context.Context, sources CloneSourcePort, v VM, kind, evidence string) error {
@@ -223,6 +368,10 @@ func (w *Worker) releaseCloneSource(ctx context.Context, sources CloneSourcePort
 	if reason == "" {
 		reason = evidence
 	}
+	return w.releaseCloneSourceReason(ctx, sources, v, kind, reason, evidence)
+}
+
+func (w *Worker) releaseCloneSourceReason(ctx context.Context, sources CloneSourcePort, v VM, kind, reason, evidence string) error {
 	return sources.ReleaseCloneSourceHELD(ctx, CloneSourceRelease{
 		TenantID: v.TenantID, TargetVMID: v.ID, Kind: kind, By: "worker", Reason: reason, Evidence: evidence,
 	})
@@ -261,15 +410,33 @@ func (w *Worker) cancelClone(ctx context.Context, o *Operation, v *VM) (bool, er
 	if e != nil {
 		return false, e
 	}
+	return w.cancelObservedClone(ctx, o, v, native, sources, state, false)
+}
+
+// cancelObservedClone evaluates one clone observation. A delete conflict is
+// never resolved with the stale object: the fresh observation is re-evaluated
+// once, and a second conflict waits for the next tick.
+func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, native CloneNativePort, sources CloneSourcePort, state CloneObservation, retried bool) (bool, error) {
+	cp := v.CloneProgress
+	req := cloneRequest(v)
 	if !state.Exists {
 		if len(cp.PendingVolumes) == 0 {
 			// A submitted clone that vanished without a saved output keeps the HELD
 			// reference; only the controlled CLI may release this case.
 			return false, fmt.Errorf("%w: clone gone before registration without outputs", ErrUnknown)
 		}
-		gone, e := native.DeleteClone(ctx, *v, req)
-		if e != nil || !gone {
+		result, e := native.DeleteClone(ctx, *v, req, state.UID, state.ResourceVersion)
+		if e != nil {
 			return false, e
+		}
+		if result.Conflict {
+			if retried {
+				return false, nil
+			}
+			return w.cancelObservedClone(ctx, o, v, native, sources, result.Current, true)
+		}
+		if !result.Gone {
+			return false, nil
 		}
 		if e = w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "cancel after clone gone"); e != nil {
 			return false, e
@@ -290,12 +457,21 @@ func (w *Worker) cancelClone(ctx context.Context, o *Operation, v *VM) (bool, er
 		cp.PendingTargetRef = &target
 	}
 	cp.CloneDeleteRequested = true
-	if e = w.repo.Checkpoint(ctx, *o, *v); e != nil {
+	if e := w.repo.Checkpoint(ctx, *o, *v); e != nil {
 		return false, e
 	}
-	gone, e := native.DeleteClone(ctx, *v, req)
-	if e != nil || !gone {
+	result, e := native.DeleteClone(ctx, *v, req, state.UID, state.ResourceVersion)
+	if e != nil {
 		return false, e
+	}
+	if result.Conflict {
+		if retried {
+			return false, nil
+		}
+		return w.cancelObservedClone(ctx, o, v, native, sources, result.Current, true)
+	}
+	if !result.Gone {
+		return false, nil
 	}
 	if e = w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "user cancelled clone target"); e != nil {
 		return false, e
