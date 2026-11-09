@@ -414,15 +414,55 @@ func CanonicalCreateSpec(s *CreateSpec) ([]byte, error) {
 	normalized.Intent.Dns, _ = NormalizeDNSSelection(s.Intent.Dns)
 	return canonical(normalized)
 }
+
+// retiredSpecKey names a contract field that older releases froze into stored
+// canonical bytes and that no longer exists on the message. Decoding strips
+// exactly this key so existing records keep loading; every other unknown field
+// still fails the strict parse.
+const retiredSpecKey = "initialization_verified"
+
 func DecodeCreateSpec(b []byte) (*CreateSpec, error) {
+	cleaned, e := stripRetiredSpecFields(b)
+	if e != nil {
+		return nil, e
+	}
 	s := new(CreateSpec)
-	if e := protojson.Unmarshal(b, s); e != nil {
+	if e := protojson.Unmarshal(cleaned, s); e != nil {
 		return nil, e
 	}
 	if e := ValidateCreateSpec(s); e != nil {
 		return nil, e
 	}
 	return s, nil
+}
+
+// stripRetiredSpecFields removes retiredSpecKey from every object level and
+// re-marshals for the strict parse. Numbers stay json.Number so the round trip
+// is byte-faithful for the values the contract allows; the stripped bytes are
+// only parsed, never written back to storage.
+func stripRetiredSpecFields(b []byte) ([]byte, error) {
+	var v any
+	d := json.NewDecoder(bytes.NewReader(b))
+	d.UseNumber()
+	if e := d.Decode(&v); e != nil {
+		return nil, e
+	}
+	stripRetiredSpecKey(v)
+	return json.Marshal(v)
+}
+
+func stripRetiredSpecKey(node any) {
+	switch t := node.(type) {
+	case map[string]any:
+		delete(t, retiredSpecKey)
+		for _, child := range t {
+			stripRetiredSpecKey(child)
+		}
+	case []any:
+		for _, child := range t {
+			stripRetiredSpecKey(child)
+		}
+	}
 }
 func Digest(b []byte) string { s := sha256.Sum256(b); return hex.EncodeToString(s[:]) }
 func CreateSpecDigest(s *CreateSpec) (string, error) {

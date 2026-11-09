@@ -164,8 +164,8 @@ def placement(g, token, require_mapping=False):
     require(len(source) == 1, 'trusted Ubuntu source config ambiguous')
     source = source[0]
     require(source.get('pvc_uid') == SOURCE_UID and source.get('checksum') == SOURCE_SHA and source.get('volume_mode') == 'Block'
-            and source.get('initialization_capability') == 'CLOUD_INIT_NOCLOUD' and source.get('initialization_verified') is True,
-            'verified source UID/hash/capability changed')
+            and source.get('initialization_capability') == 'CLOUD_INIT_NOCLOUD',
+            'declared source UID/hash/capability changed')
     pvc = get('pvc', source['pvc_name'], source['namespace'])
     require(pvc['metadata']['uid'] == SOURCE_UID and pvc['metadata'].get('annotations', {}).get('vm.ani.io/source-sha256') == SOURCE_SHA
             and pvc['spec'].get('volumeMode') == 'Block' and pvc['status'].get('phase') == 'Bound', 'protected source PVC differs')

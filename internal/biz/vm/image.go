@@ -189,8 +189,9 @@ func (i Image) Validated() (Image, error) {
 }
 
 // Source projects a READY image into the existing read-only media contract.
-// Uploaded images never claim an initialization capability, so cloud-init and
-// verified stay absent and the frozen VM contract keeps its own defaults.
+// The initialization capability travels with the image record itself (the
+// tenant's frozen create-time declaration); this projection carries the source
+// identity only, so the fingerprint stays independent of the declaration.
 func (i Image) Source() Source {
 	return Source{Key: i.MediaKey, Kind: i.Kind, ClusterID: i.Native.ClusterID, Namespace: i.Native.Namespace,
 		PVCName: i.Native.PVCName, PVCUID: i.Native.PVCUID, Checksum: i.SourceSHA256,
