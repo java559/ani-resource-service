@@ -56,12 +56,12 @@ func TestFrozenSpecCanonicalRoundTripAndUserDigest(t *testing.T) {
 	}
 }
 
-// TestDecodeCreateSpecStripsRetiredVerifiedKey is the P1 regression: releases
-// before the capability declaration froze "initialization_verified":true into
-// stored canonical bytes. The field no longer exists on the message, so a strict
-// parse of such a record must succeed with the retired key removed while any
-// other unknown field still fails.
-func TestDecodeCreateSpecStripsRetiredVerifiedKey(t *testing.T) {
+// TestDecodeCreateSpecRejectsRetiredVerifiedKey locks the strict contract after
+// migration 007 cleaned the stored bytes: releases before 2026-11-09 froze
+// "initialization_verified":true into canonical specs. The runtime has no
+// compatibility path — a record still carrying the retired key is corrupt data
+// and must fail the parse, never silently load.
+func TestDecodeCreateSpecRejectsRetiredVerifiedKey(t *testing.T) {
 	s := fixedSpec(t)
 	s.Media.InitializationCapability = CloudInitNoCloud
 	s.Intent.GuestInitialization = &GuestInitialization{Method: CloudInitNoCloud, Username: "vmuser", PasswordSet: true, CredentialIntentDigest: Digest([]byte("opaque-test-hmac"))}
@@ -69,24 +69,12 @@ func TestDecodeCreateSpecStripsRetiredVerifiedKey(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
-	// Simulate the pre-retirement frozen shape: the media object carries the key
-	// the old optional projection emitted.
+	if bytes.Contains(b, []byte("initialization_verified")) {
+		t.Fatal("canonical projection must not emit the retired key")
+	}
 	legacy := bytes.Replace(b, []byte(`"media_key":`), []byte(`"initialization_verified":true,"media_key":`), 1)
-	decoded, e := DecodeCreateSpec(legacy)
-	if e != nil {
-		t.Fatalf("legacy frozen spec with retired key rejected: %v", e)
-	}
-	if decoded.Media.InitializationCapability != CloudInitNoCloud || decoded.Intent.GuestInitialization == nil {
-		t.Fatal("retired key stripped but live capability lost")
-	}
-	again, e := CanonicalCreateSpec(decoded)
-	if e != nil || bytes.Contains(again, []byte("initialization_verified")) {
-		t.Fatalf("re-frozen spec must not resurrect the retired key: %s %v", again, e)
-	}
-	// Any other unknown field keeps failing the strict parse.
-	poisoned := bytes.Replace(b, []byte(`"media_key":`), []byte(`"initialization_verifed":true,"media_key":`), 1)
-	if _, e = DecodeCreateSpec(poisoned); e == nil {
-		t.Fatal("unknown non-retired field accepted")
+	if _, e = DecodeCreateSpec(legacy); e == nil {
+		t.Fatal("retired key accepted: the strict decoder must stay the only gate")
 	}
 }
 
