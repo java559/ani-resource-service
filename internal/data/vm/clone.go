@@ -394,6 +394,23 @@ var cloneFilters = []any{
 	"!^verification[.]ani[.]io/origin-vm-uid$",
 }
 
+// ObserveCloneTarget reads the frozen target VM by its fixed name. A clone delete
+// does not delete the target, so a target created between the last clone
+// observation and the delete completing is only visible this way.
+func (n *Native) ObserveCloneTarget(ctx context.Context, v biz.VM, r biz.CloneRequest) (biz.ObjectRef, error) {
+	if r.TargetName == "" {
+		return biz.ObjectRef{}, nil
+	}
+	target, err := n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, r.TargetName, metav1.GetOptions{})
+	if apierrors.IsNotFound(err) {
+		return biz.ObjectRef{}, nil
+	}
+	if err != nil {
+		return biz.ObjectRef{}, err
+	}
+	return objectRef(target), nil
+}
+
 func (n *Native) ObserveClone(ctx context.Context, v biz.VM, r biz.CloneRequest) (biz.CloneObservation, error) {
 	object, err := n.client.Resource(cloneResource).Namespace(v.Spec.Namespace).Get(ctx, r.Name, metav1.GetOptions{})
 	if apierrors.IsNotFound(err) {

@@ -159,6 +159,11 @@ type CloneNativePort interface {
 	// whether it is gone. The target may not carry business labels, so this
 	// check is by name and expected UID, not by the ordinary label matcher.
 	DeleteCloneTarget(context.Context, VM, ObjectRef) (bool, error)
+	// ObserveCloneTarget reads the frozen target name of this clone. It exists so a
+	// cancel that deleted the clone can still take over a target the native restore
+	// created after the last clone observation: deleting the clone never deletes
+	// the target VM. NotFound returns an empty ObjectRef.
+	ObserveCloneTarget(context.Context, VM, CloneRequest) (ObjectRef, error)
 }
 
 // CloneCleanupPort removes the residual named outputs of a failed clone. It is

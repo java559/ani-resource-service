@@ -72,8 +72,13 @@ type cloneTestNative struct {
 	eligibilityE error
 	deleteResult []CloneDeleteResult
 	targetGone   bool
-	volumesDone  bool
-	adopted      []VolumeRef
+	// targets scripts successive frozen-name target reads; target is the stable
+	// answer once the queue is empty.
+	targets          []ObjectRef
+	target           ObjectRef
+	targetObserveErr error
+	volumesDone      bool
+	adopted          []VolumeRef
 }
 
 func (n *cloneTestNative) note(event string) { *n.events = append(*n.events, event) }
@@ -138,6 +143,21 @@ func (n *cloneTestNative) ApplyCloneTargetConfiguration(context.Context, VM, Clo
 func (n *cloneTestNative) DeleteCloneTarget(context.Context, VM, ObjectRef) (bool, error) {
 	n.note("delete-target")
 	return n.targetGone, nil
+}
+
+// ObserveCloneTarget scripts the frozen-name target read used by a cancel whose
+// clone already disappeared.
+func (n *cloneTestNative) ObserveCloneTarget(context.Context, VM, CloneRequest) (ObjectRef, error) {
+	n.note("observe-target")
+	if n.targetObserveErr != nil {
+		return ObjectRef{}, n.targetObserveErr
+	}
+	if len(n.targets) > 0 {
+		next := n.targets[0]
+		n.targets = n.targets[1:]
+		return next, nil
+	}
+	return n.target, nil
 }
 func (n *cloneTestNative) DeleteNamedVolumes(context.Context, VM, []VolumeRef) ([]VolumeRef, bool, error) {
 	n.note("delete-volumes")
@@ -603,6 +623,79 @@ func TestCloneWorkerCancelRemovesUnregisteredTarget(t *testing.T) {
 	}
 	if !repo.vm.CloneProgress.CancelHandled || len(repo.releases) != 1 {
 		t.Fatalf("cancel did not finish: %+v %v", repo.vm.CloneProgress, repo.releases)
+	}
+}
+
+// TestCloneWorkerCancelAdoptsLateTarget covers R3: the last clone observation
+// may run before the native restore creates the target, and deleting the clone
+// never deletes the target. The cancel hand-off therefore reads the frozen target
+// name once, adopts its real UID, and deletes it on a later tick before any disk
+// cleanup or source release.
+func TestCloneWorkerCancelAdoptsLateTarget(t *testing.T) {
+	ctx := context.Background()
+	late := ObjectRef{Kind: "VirtualMachine", Namespace: "tenant-a", Name: cloneTestNativeN, UID: "late-target-uid"}
+	v := workerCloneVM()
+	v.Closing = true
+	v.Native = ObjectRef{}
+	v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid",
+		CloneDeleteRequested: true,
+		PendingVolumes:       []VolumeRef{{VolumeName: "disk-sys", PVCName: "restore-sys", PVCUID: "pvc-uid-1"}}}
+	native := &cloneTestNative{
+		observations: []CloneObservation{{Exists: false}, {Exists: false}},
+		targets:      []ObjectRef{late},
+		targetGone:   true,
+		volumesDone:  true,
+	}
+	worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if !hasEvent(*events, "observe-target") {
+		t.Fatalf("late target was never read: %v", *events)
+	}
+	if hasEvent(*events, "delete-volumes") || hasEvent(*events, "release:CANCELLED") {
+		t.Fatalf("cancel continued before the late target was adopted: %v", *events)
+	}
+	if repo.vm.CloneProgress.PendingTargetRef == nil || repo.vm.CloneProgress.PendingTargetRef.UID != late.UID {
+		t.Fatalf("late target identity was not persisted: %+v", repo.vm.CloneProgress.PendingTargetRef)
+	}
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"observe-target", "delete-target", "delete-volumes", "release:CANCELLED"}
+	if strings.Join(*events, ",") != strings.Join(want, ",") {
+		t.Fatalf("cancel order = %v, want %v", *events, want)
+	}
+	if !repo.vm.CloneProgress.CancelHandled || len(repo.releases) != 1 {
+		t.Fatalf("cancel did not finish: %+v %v", repo.vm.CloneProgress, repo.releases)
+	}
+}
+
+// TestCloneWorkerCancelTargetReadErrorKeepsHeld covers the same hand-off when the
+// frozen target read fails: nothing is deleted or released on a read that proves
+// neither presence nor absence.
+func TestCloneWorkerCancelTargetReadErrorKeepsHeld(t *testing.T) {
+	ctx := context.Background()
+	v := workerCloneVM()
+	v.Closing = true
+	v.Native = ObjectRef{}
+	v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid", CloneDeleteRequested: true,
+		PendingVolumes: []VolumeRef{{VolumeName: "disk-sys", PVCName: "restore-sys", PVCUID: "pvc-uid-1"}}}
+	native := &cloneTestNative{
+		observations:     []CloneObservation{{Exists: false}},
+		targetObserveErr: errors.New("target read failed"),
+		targetGone:       true,
+		volumesDone:      true,
+	}
+	worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if hasEvent(*events, "delete-volumes") || len(repo.releases) != 0 || repo.vm.CloneProgress.CancelHandled {
+		t.Fatalf("failed target read still finished the cancel: %v %v", *events, repo.releases)
+	}
+	if repo.op.State != "running" {
+		t.Fatalf("state = %s", repo.op.State)
 	}
 }
 

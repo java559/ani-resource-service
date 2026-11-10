@@ -538,6 +538,20 @@ func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, n
 // idempotently: the release only happens once every owned artifact is gone.
 func (w *Worker) finishCancelledClone(ctx context.Context, o *Operation, v *VM, native CloneNativePort, sources CloneSourcePort, kind, evidence string) (bool, error) {
 	cp := v.CloneProgress
+	if cp.PendingTargetRef == nil || cp.PendingTargetRef.UID == "" {
+		// The last clone observation may have run before the native restore created
+		// the target, and deleting the clone never deletes the target, so a target
+		// that appeared after that read is only visible by its frozen name. Adopt it
+		// first and delete it on a later tick with the ordinary UID precondition.
+		target, e := native.ObserveCloneTarget(ctx, *v, cloneRequest(v))
+		if e != nil {
+			return false, e
+		}
+		if target.UID != "" {
+			cp.PendingTargetRef = &target
+			return false, w.repo.Checkpoint(ctx, *o, *v)
+		}
+	}
 	if cp.PendingTargetRef != nil && cp.PendingTargetRef.UID != "" {
 		gone, e := native.DeleteCloneTarget(ctx, *v, *cp.PendingTargetRef)
 		if e != nil {

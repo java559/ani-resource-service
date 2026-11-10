@@ -99,6 +99,16 @@ func runVMCloneRelease() error {
 	if targetErr == nil && !target.Closing {
 		return fmt.Errorf("clone target %s is still open; issue a delete for it first so the create cannot submit again", vmCloneTarget)
 	}
+	// Closing stops later create ticks but cannot cancel a clone submission that
+	// was already sent. The worker lease is shorter than every native request
+	// timeout, so waiting out an active lease means no request of that create is
+	// still in flight. Checked before reading the clone so a request that is still
+	// transmitting can never be authorized by an earlier absent observation.
+	if active, e := repo.CloneCreateLeaseActive(ctx, vmCloneTenant, vmCloneTarget, ref.CreateOperationID); e != nil {
+		return e
+	} else if active {
+		return fmt.Errorf("create operation %s still holds an active worker lease; retry after it finishes", ref.CreateOperationID)
+	}
 	namespace := ""
 	if targetErr == nil {
 		namespace = target.Spec.Namespace

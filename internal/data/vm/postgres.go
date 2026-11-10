@@ -447,9 +447,13 @@ func admitCloneSource(ctx context.Context, tx pgx.Tx, tenant, targetID, operatio
 		return biz.ErrVersion
 	}
 	var busy bool
-	// Only work that can still make progress blocks a new clone. A stale running
-	// or unknown operation whose lease already expired is not an active change.
-	if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND (state='accepted' OR (state IN ('running','unknown') AND lease_until IS NOT NULL AND lease_until>now())))", tenant, c.SourceVMID).Scan(&busy); e != nil {
+	// Busy is the same business non-terminal rule as an ordinary command: a source
+	// change is still active while its operation is accepted, running or unknown.
+	// A worker lease only schedules execution and never proves the change ended:
+	// Save releases the SQL lease at the end of every tick while the operation is
+	// still running, and Claim takes such rows again, so a lease-based rule would
+	// let a clone take HELD between two ordinary ticks of an unfinished change.
+	if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND state IN ('accepted','running','unknown'))", tenant, c.SourceVMID).Scan(&busy); e != nil {
 		return e
 	}
 	if busy {

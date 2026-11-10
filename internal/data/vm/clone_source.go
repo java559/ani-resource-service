@@ -67,5 +67,20 @@ func (p *Postgres) SourceHeld(ctx context.Context, tenant, source string) (bool,
 	return held, e
 }
 
+// CloneCreateLeaseActive reports whether the create operation of a clone still
+// holds a live worker lease. A manual release must not open the source while the
+// original create can still send its clone submission: closing fences later
+// ticks but cannot cancel a request that was already sent. The SQL lease column
+// is the scheduling fact; the JSON record copy is stale because Save clears the
+// column on every tick.
+func (p *Postgres) CloneCreateLeaseActive(ctx context.Context, tenant, target, createOperation string) (bool, error) {
+	if !biz.UUID(tenant) || !biz.UUID(target) || !biz.UUID(createOperation) {
+		return false, biz.ErrInvalid
+	}
+	var active bool
+	e := p.pool.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND id=$3 AND lease_until>now())", tenant, target, createOperation).Scan(&active)
+	return active, e
+}
+
 var _ biz.CloneSourcePort = (*Postgres)(nil)
 var _ biz.CloneSourceHeldPort = (*Postgres)(nil)
