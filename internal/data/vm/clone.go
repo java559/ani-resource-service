@@ -154,6 +154,18 @@ func classifyCloneSource(source *biz.VM, target biz.VM, native *unstructured.Uns
 		if boot != "SYSTEM_DISK" {
 			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source boot device is not SYSTEM_DISK"))
 		}
+		// Phase 1 admits only an automatic primary interface and a VM without
+		// native backend state. Both are business facts, not native hints: a
+		// manual VNIC lives in NetworkInterfaces and persistent firmware state is
+		// frozen in Media. A clone can carry neither the source vnic binding nor
+		// its persistent-state volume, so accepting such a source would silently
+		// move it to another network or lose firmware state.
+		if iface := biz.PrimaryNetworkInterface(*source); iface.Desired.Mode == "manual" || iface.Applied.Mode == "manual" {
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses a manual primary network interface"))
+		}
+		if biz.NeedsBackendState(source.Spec) {
+			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses persistent TPM/UEFI backend state"))
+		}
 	}
 	// Media devices and multi-NIC/manual VNIC sources stay out of phase 1.
 	disks, _, _ := unstructured.NestedSlice(native.Object, "spec", "template", "spec", "domain", "devices", "disks")

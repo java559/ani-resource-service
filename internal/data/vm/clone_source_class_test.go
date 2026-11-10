@@ -109,6 +109,66 @@ func TestClassifyCloneSource(t *testing.T) {
 	}
 }
 
+// TestClassifyCloneSourceBusinessScope covers the two source facts that live
+// only in the business record. The native template cannot reveal either one: an
+// automatic profile and a manual VNIC render the same interface, and backend
+// state is a separate PVC that the clone does not reproduce.
+func TestClassifyCloneSourceBusinessScope(t *testing.T) {
+	target := classTarget(classSourceID)
+	for _, test := range []struct {
+		name   string
+		mutate func(*biz.VM)
+		reason string
+	}{
+		{
+			name: "manual desired interface",
+			mutate: func(v *biz.VM) {
+				v.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
+					Desired: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111"},
+					Applied: biz.NetworkInterfaceChoice{Mode: "automatic"}}}
+			},
+			reason: "source uses a manual primary network interface",
+		},
+		{
+			name: "manual applied interface",
+			mutate: func(v *biz.VM) {
+				v.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
+					Desired: biz.NetworkInterfaceChoice{Mode: "automatic"},
+					Applied: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111"}}}
+			},
+			reason: "source uses a manual primary network interface",
+		},
+		{
+			name:   "persistent TPM backend state",
+			mutate: func(v *biz.VM) { v.Spec.Media.PersistentTPM = true },
+			reason: "source uses persistent TPM/UEFI backend state",
+		},
+		{
+			name:   "persistent UEFI backend state",
+			mutate: func(v *biz.VM) { v.Spec.Media.PersistentUEFI = true },
+			reason: "source uses persistent TPM/UEFI backend state",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			source := classBusinessSource(classSourceID)
+			test.mutate(&source)
+			result, _ := classifyCloneSource(&source, target, classNativeSource(classSourceID))
+			if result.Ready() || len(result.Unsupported) != 1 || result.Unsupported[0].Reason != test.reason {
+				t.Fatalf("business scope not rejected precisely: %v", result)
+			}
+		})
+	}
+	// The same business record with an automatic interface and no backend state
+	// stays admitted, so the new rule does not narrow the ordinary source.
+	source := classBusinessSource(classSourceID)
+	source.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
+		Desired: biz.NetworkInterfaceChoice{Mode: "automatic"},
+		Applied: biz.NetworkInterfaceChoice{Mode: "automatic", VNicID: "vnic_11111111111111111111111111111111"}}}
+	if result, _ := classifyCloneSource(&source, target, classNativeSource(classSourceID)); !result.Ready() {
+		t.Fatalf("automatic source rejected: %v", result)
+	}
+}
+
 // TestCloneSourceEligibilitySeedAndRecheck covers the Secret dependency of the
 // full admission and the frozen-dependency-free recheck.
 func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
