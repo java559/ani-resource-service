@@ -186,6 +186,17 @@ type CloneSourcePort interface {
 	ReleaseCloneSourceHELD(context.Context, CloneSourceRelease) error
 }
 
+// CloneSourceHeldPort is the read-only query resolve needs before it hands a
+// clone request to the acceptance path. It is separate from CloneSourcePort so
+// the worker keeps depending only on the release it performs.
+type CloneSourceHeldPort interface {
+	// SourceHeld reports whether another clone still holds this VM as its
+	// source. Resolve reads it so a second clone of a busy source is refused
+	// above the owner instead of being accepted and then dropped during
+	// dispatch. It never takes the reference itself.
+	SourceHeld(context.Context, string, string) (bool, error)
+}
+
 // CloneName is the fixed native name of one target's clone.
 func CloneName(targetID string) string { return "vm-clone-" + targetID }
 

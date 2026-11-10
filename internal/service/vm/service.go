@@ -192,6 +192,17 @@ func (s *Service) ResolveCreateSpec(ctx context.Context, r *pb.ResolveCreateSpec
 	return &pb.ResolveCreateSpecResponse{CreateSpec: spec, VmContractVersion: pb.ContractVersion, SelectionDigest: selection.SelectionDigest, VmCreateDigest: digest}, nil
 }
 
+// cloneSourceHeld reports whether another clone still holds this source. A
+// repository without the read-only port cannot answer, which keeps resolve
+// working for owner implementations that predate the clone table.
+func cloneSourceHeld(ctx context.Context, r biz.Repository, tenant, source string) (bool, error) {
+	sources, ok := r.(biz.CloneSourceHeldPort)
+	if !ok {
+		return false, nil
+	}
+	return sources.SourceHeld(ctx, tenant, source)
+}
+
 // resolveCloneCreateSpec freezes the accepted source business record for a
 // VM_CLONE create. It never queries the current preset catalog, an image, a
 // driver source or today's default DNS.
@@ -205,6 +216,15 @@ func (s *Service) resolveCloneCreateSpec(ctx context.Context, r *pb.ResolveCreat
 	}
 	if src.Closing || src.Version != intent.CloneSource.ExpectedSourceVersion {
 		return nil, rpcError(biz.ErrVersion)
+	}
+	// A source another clone still holds is refused here, before the caller
+	// accepts and accounts for the request. The owner re-checks the same fact
+	// inside acceptance; this read only keeps the common case from being
+	// accepted and then stalling without a landed target.
+	if held, e := cloneSourceHeld(ctx, s.repo, r.TenantId, intent.CloneSource.SourceVmId); e != nil {
+		return nil, rpcError(e)
+	} else if held {
+		return nil, rpcError(biz.ErrBusy)
 	}
 	sourceSpec, e := pb.DecodeCreateSpec(src.Spec.Canonical)
 	if e != nil {

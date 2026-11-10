@@ -54,4 +54,18 @@ func (p *Postgres) CloneSourceReference(ctx context.Context, tenant, target stri
 	return r, nil
 }
 
+// SourceHeld reads the reference table by source. It is the read-only
+// counterpart of the acceptance fence and never takes the HELD reference, so a
+// source that is busy stays busy and a free source is not reserved by a mere
+// resolve.
+func (p *Postgres) SourceHeld(ctx context.Context, tenant, source string) (bool, error) {
+	if !biz.UUID(tenant) || !biz.UUID(source) {
+		return false, biz.ErrInvalid
+	}
+	var held bool
+	e := p.pool.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.clone_source_references WHERE tenant_id=$1 AND source_vm_id=$2 AND state='HELD')", tenant, source).Scan(&held)
+	return held, e
+}
+
 var _ biz.CloneSourcePort = (*Postgres)(nil)
+var _ biz.CloneSourceHeldPort = (*Postgres)(nil)
