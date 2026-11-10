@@ -121,19 +121,10 @@ func TestClassifyCloneSourceBusinessScope(t *testing.T) {
 		reason string
 	}{
 		{
-			name: "manual desired interface",
-			mutate: func(v *biz.VM) {
-				v.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
-					Desired: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111"},
-					Applied: biz.NetworkInterfaceChoice{Mode: "automatic"}}}
-			},
-			reason: "source uses a manual primary network interface",
-		},
-		{
 			name: "manual applied interface",
 			mutate: func(v *biz.VM) {
 				v.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
-					Desired: biz.NetworkInterfaceChoice{Mode: "automatic"},
+					Desired: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111"},
 					Applied: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111"}}}
 			},
 			reason: "source uses a manual primary network interface",
@@ -158,14 +149,17 @@ func TestClassifyCloneSourceBusinessScope(t *testing.T) {
 			}
 		})
 	}
-	// The same business record with an automatic interface and no backend state
-	// stays admitted, so the new rule does not narrow the ordinary source.
+	// The same business record with an applied automatic interface and no backend
+	// state stays admitted, so the new rule does not narrow the ordinary source.
+	// A pending (desired-manual, applied-automatic) switch is the state the live
+	// source `test` is in: the native template still carries the automatic
+	// profile, so it stays admissible until the switch takes effect.
 	source := classBusinessSource(classSourceID)
 	source.NetworkInterfaces = []biz.NetworkInterface{{Slot: "primary",
-		Desired: biz.NetworkInterfaceChoice{Mode: "automatic"},
+		Desired: biz.NetworkInterfaceChoice{Mode: "manual", VNicID: "vnic_11111111111111111111111111111111", Name: "manual"},
 		Applied: biz.NetworkInterfaceChoice{Mode: "automatic", VNicID: "vnic_11111111111111111111111111111111"}}}
 	if result, _ := classifyCloneSource(&source, target, classNativeSource(classSourceID)); !result.Ready() {
-		t.Fatalf("automatic source rejected: %v", result)
+		t.Fatalf("pending manual switch rejected as already applied: %v", result)
 	}
 }
 

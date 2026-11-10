@@ -160,7 +160,12 @@ func classifyCloneSource(source *biz.VM, target biz.VM, native *unstructured.Uns
 		// frozen in Media. A clone can carry neither the source vnic binding nor
 		// its persistent-state volume, so accepting such a source would silently
 		// move it to another network or lose firmware state.
-		if iface := biz.PrimaryNetworkInterface(*source); iface.Desired.Mode == "manual" || iface.Applied.Mode == "manual" {
+		//
+		// Only the applied interface counts. A desired-manual interface that never
+		// took effect (the switch requires a stopped VM) leaves the source on the
+		// automatic profile the clone actually copies, so it is not a manual
+		// source yet.
+		if biz.PrimaryNetworkInterface(*source).Applied.Mode == "manual" {
 			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source uses a manual primary network interface"))
 		}
 		if biz.NeedsBackendState(source.Spec) {
