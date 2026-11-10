@@ -449,6 +449,64 @@ func TestCloneWorkerCancelAfterRegistration(t *testing.T) {
 	}
 }
 
+// TestCloneWorkerCancelRemovesNamedOutputs covers the cancel path counterpart of
+// T1: a clone that never registered wrote no disk row, so the PVCs it already
+// produced are only known from PendingVolumes. They must be removed before the
+// source reference is released, and a pending removal must not release early.
+func TestCloneWorkerCancelRemovesNamedOutputs(t *testing.T) {
+	ctx := context.Background()
+	outputs := []VolumeRef{
+		{VolumeName: "disk-sys", PVCName: "restore-1-disk-sys", PVCUID: "pvc-uid-1"},
+		{VolumeName: "disk-data", PVCName: "restore-1-disk-data", PVCUID: "pvc-uid-2"},
+	}
+	for _, test := range []struct {
+		name        string
+		volumesDone bool
+		wantRelease bool
+		wantState   string
+	}{
+		{name: "volumes still terminating", volumesDone: false, wantRelease: false, wantState: "running"},
+		{name: "volumes gone", volumesDone: true, wantRelease: true, wantState: "running"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			v := workerCloneVM()
+			v.Closing = true
+			v.Native = ObjectRef{}
+			v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid",
+				CloneDeleteRequested: true, PendingVolumes: outputs}
+			native := &cloneTestNative{
+				observations: []CloneObservation{{Exists: false}},
+				volumesDone:  test.volumesDone,
+			}
+			worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+			if err := worker.RunOnce(ctx); err != nil {
+				t.Fatal(err)
+			}
+			if !hasEvent(*events, "delete-volumes") {
+				t.Fatalf("cancel did not remove the named outputs: %v", *events)
+			}
+			if test.wantRelease {
+				if len(repo.releases) != 1 || repo.releases[0].Kind != "CANCELLED" {
+					t.Fatalf("release = %v (%v)", repo.releases, *events)
+				}
+				if repo.vm.CloneProgress == nil || !repo.vm.CloneProgress.CancelHandled {
+					t.Fatal("cancel hand-off was not recorded")
+				}
+				return
+			}
+			if len(repo.releases) != 0 {
+				t.Fatalf("released before the volumes were gone: %v", repo.releases)
+			}
+			if repo.vm.CloneProgress.CancelHandled {
+				t.Fatal("cancel hand-off recorded while volumes remain")
+			}
+			if repo.op.State != test.wantState {
+				t.Fatalf("state = %s, want %s", repo.op.State, test.wantState)
+			}
+		})
+	}
+}
+
 // TestCloneEligibilityErrorKinds keeps the two admission answers distinct.
 func TestCloneEligibilityErrorKinds(t *testing.T) {
 	unsupported := CloneEligibility{Unsupported: []CloneBlocker{{VolumeName: "disk-sys", Reason: "source PVC volumeMode is not Block"}}}

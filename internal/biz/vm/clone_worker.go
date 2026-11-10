@@ -460,11 +460,7 @@ func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, n
 		if !result.Gone {
 			return false, nil
 		}
-		if e = w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "cancel after clone gone"); e != nil {
-			return false, e
-		}
-		cp.CancelHandled = true
-		return true, w.repo.Checkpoint(ctx, *o, *v)
+		return w.finishCancelledClone(ctx, o, v, sources, "CANCELLED", "cancel after clone gone")
 	}
 	early := state.Pending && state.Phase == "" && state.SnapshotName == "" && state.RestoreName == "" && state.Target.UID == "" && len(state.Outputs) == 0
 	if !early && !CloneVolumesCovered(v.FrozenVolumeNames(), state.Outputs) && state.Target.UID == "" {
@@ -495,7 +491,32 @@ func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, n
 	if !result.Gone {
 		return false, nil
 	}
-	if e = w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "user cancelled clone target"); e != nil {
+	return w.finishCancelledClone(ctx, o, v, sources, "CANCELLED", "user cancelled clone target")
+}
+
+// finishCancelledClone removes the named outputs a cancelled clone already
+// produced, then releases the source reference. A clone that never registered
+// wrote no vm.disks row, so the ordinary delete path cannot see these PVCs; the
+// recorded PendingVolumes are the only inventory of what the cancelled clone
+// created. The list is already checkpointed by the caller that recorded it, so
+// this step is retried idempotently: the release only happens once every owned
+// volume is gone.
+func (w *Worker) finishCancelledClone(ctx context.Context, o *Operation, v *VM, sources CloneSourcePort, kind, evidence string) (bool, error) {
+	cp := v.CloneProgress
+	if len(cp.PendingVolumes) > 0 {
+		cleanup, ok := w.native.(CloneCleanupPort)
+		if !ok {
+			return false, ErrDependency
+		}
+		done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
+		if e != nil {
+			return false, e
+		}
+		if !done {
+			return false, nil
+		}
+	}
+	if e := w.releaseCloneSource(ctx, sources, *v, kind, evidence); e != nil {
 		return false, e
 	}
 	cp.CancelHandled = true
