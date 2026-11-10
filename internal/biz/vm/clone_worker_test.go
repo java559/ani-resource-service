@@ -73,6 +73,7 @@ type cloneTestNative struct {
 	deleteResult []CloneDeleteResult
 	targetGone   bool
 	volumesDone  bool
+	adopted      []VolumeRef
 }
 
 func (n *cloneTestNative) note(event string) { *n.events = append(*n.events, event) }
@@ -138,9 +139,9 @@ func (n *cloneTestNative) DeleteCloneTarget(context.Context, VM, ObjectRef) (boo
 	n.note("delete-target")
 	return n.targetGone, nil
 }
-func (n *cloneTestNative) DeleteNamedVolumes(context.Context, VM, []VolumeRef) (bool, error) {
+func (n *cloneTestNative) DeleteNamedVolumes(context.Context, VM, []VolumeRef) ([]VolumeRef, bool, error) {
 	n.note("delete-volumes")
-	return n.volumesDone, nil
+	return n.adopted, n.volumesDone, nil
 }
 
 // cloneTestNetwork is both the network and the security-group port.
@@ -150,14 +151,20 @@ type cloneTestNetwork struct {
 
 func (n *cloneTestNetwork) Prepare(context.Context, VM) (NetworkPlan, error) {
 	*n.events = append(*n.events, "prepare-network")
-	return NetworkPlan{AttachmentID: "att-1", SubmissionID: "sub-1"}, nil
+	return NetworkPlan{AttachmentID: "att-1", SubmissionID: "sub-1", SnapshotRevision: 1,
+		Consumer: &NetworkConsumerState{State: "open", DesiredRunState: "stopped"}}, nil
 }
 func (n *cloneTestNetwork) Confirm(context.Context, VM, Observation) error { return nil }
 func (n *cloneTestNetwork) CurrentAddresses(context.Context, VM) ([]Address, error) {
 	return nil, nil
 }
-func (n *cloneTestNetwork) Release(context.Context, VM) (bool, error) {
+func (n *cloneTestNetwork) Release(_ context.Context, v VM) (bool, error) {
 	*n.events = append(*n.events, "release-network")
+	// The real adapter requires a persisted closed consumer; record whether this
+	// call saw one so a rollback that skips the hand-off cannot pass silently.
+	if v.Network.Consumer == nil || v.Network.Consumer.State != "closed" {
+		*n.events = append(*n.events, "release-network-without-closed-consumer")
+	}
 	return true, nil
 }
 func (n *cloneTestNetwork) ResolveSecurityGroups(context.Context, string, string, string, []string) ([]string, error) {
@@ -194,7 +201,8 @@ func workerCloneVM() VM {
 				},
 			},
 		},
-		Network: NetworkPlan{AttachmentID: "att-1", SubmissionID: "sub-1"},
+		Network: NetworkPlan{AttachmentID: "att-1", SubmissionID: "sub-1", SnapshotRevision: 1,
+			Consumer: &NetworkConsumerState{State: "open", DesiredRunState: "stopped"}},
 	}
 	v.Disks = []Disk{{VolumeName: "disk-sys", Role: "system", Attached: true, Serial: "serial-sys"}}
 	return v
@@ -354,7 +362,7 @@ func TestCloneWorkerCancelNegatives(t *testing.T) {
 		{name: "restore exists", state: CloneObservation{Exists: true, UID: "clone-uid", Pending: true, RestoreName: "restore-1"}, wantState: "running"},
 		{name: "snapshot in progress", state: CloneObservation{Exists: true, UID: "clone-uid", Pending: true, SnapshotName: "snap-1"}, wantState: "running"},
 		{name: "outputs incomplete", state: CloneObservation{Exists: true, UID: "clone-uid", Pending: true, Outputs: []VolumeRef{{VolumeName: "disk-sys", PVCName: "pvc-sys"}}}, wantState: "running"},
-		{name: "failed undetermined", state: CloneObservation{Exists: true, UID: "clone-uid", Failed: true}, wantState: "running"},
+		{name: "failed undetermined", state: CloneObservation{Exists: true, UID: "clone-uid", Failed: true}, wantState: "unknown"},
 		{name: "api unreadable", observeErr: ErrDependency, wantState: "running"},
 		{name: "foreign uid", observeErr: ErrOwnership, wantState: "failed"},
 	}
@@ -505,6 +513,195 @@ func TestCloneWorkerCancelRemovesNamedOutputs(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestCloneWorkerSubmitIntentCancelsByIdentity covers R1: a delete that carries
+// the persisted clone submission intent must adopt the fixed-name clone even
+// though no UID was ever saved. An empty UID never proves nothing was submitted.
+func TestCloneWorkerSubmitIntentCancelsByIdentity(t *testing.T) {
+	ctx := context.Background()
+	v := workerCloneVM()
+	v.Closing = true
+	v.Native = ObjectRef{}
+	v.CloneProgress = &CloneProgress{Name: CloneName(v.ID)}
+	native := &cloneTestNative{observations: []CloneObservation{{
+		Exists: true, UID: "clone-uid", ResourceVersion: "5", Pending: true, Phase: "SnapshotInProgress", SnapshotName: "snap-1",
+	}}}
+	o := workerCloneOp(v, DeleteAction)
+	o.Pending = &Mutation{Action: cloneStepSubmit, Submitted: true, Target: ObjectRef{Kind: "VirtualMachineClone", Namespace: "tenant-a", Name: CloneName(v.ID)}}
+	worker, repo, events := newCloneWorker(t, v, o, native)
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if len(repo.releases) != 0 || hasEvent(*events, "release:CANCELLED") {
+		t.Fatalf("submitted clone was treated as unsubmitted: %v %v", *events, repo.releases)
+	}
+	if hasEvent(*events, "delete-clone") {
+		t.Fatalf("clone was deleted while it could still produce outputs: %v", *events)
+	}
+	if repo.vm.CloneProgress.UID != "clone-uid" {
+		t.Fatalf("fixed-name clone was not adopted: %+v", repo.vm.CloneProgress)
+	}
+}
+
+// TestCloneWorkerCancelAdoptsLateOutput covers R2: an output whose recorded UID
+// is still empty is adopted by name and persisted before any release, and an
+// unfinished identity hand-off never counts as cleaned.
+func TestCloneWorkerCancelAdoptsLateOutput(t *testing.T) {
+	ctx := context.Background()
+	v := workerCloneVM()
+	v.Closing = true
+	v.Native = ObjectRef{}
+	v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid", CloneDeleteRequested: true,
+		PendingVolumes: []VolumeRef{{VolumeName: "disk-sys", PVCName: "restore-sys"}, {VolumeName: "disk-data", PVCName: "restore-data"}}}
+	native := &cloneTestNative{
+		observations: []CloneObservation{{Exists: false}},
+		volumesDone:  false,
+		adopted:      []VolumeRef{{VolumeName: "disk-sys", PVCName: "restore-sys", PVCUID: "late-uid"}},
+	}
+	worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if len(repo.releases) != 0 {
+		t.Fatalf("released while a late output was unresolved: %v", repo.releases)
+	}
+	if repo.vm.CloneProgress.CancelHandled {
+		t.Fatal("cancel recorded complete while a late output was unresolved")
+	}
+	adopted := false
+	for _, ref := range repo.vm.CloneProgress.PendingVolumes {
+		adopted = adopted || (ref.PVCName == "restore-sys" && ref.PVCUID == "late-uid")
+	}
+	if !adopted {
+		t.Fatalf("adopted identity was not persisted: %+v", repo.vm.CloneProgress.PendingVolumes)
+	}
+	if !hasEvent(*events, "delete-volumes") {
+		t.Fatalf("cleanup was not retried: %v", *events)
+	}
+}
+
+// TestCloneWorkerCancelRemovesUnregisteredTarget covers R3: a cancelled clone
+// that already created its target VM removes that target before the source
+// reference is released.
+func TestCloneWorkerCancelRemovesUnregisteredTarget(t *testing.T) {
+	ctx := context.Background()
+	v := workerCloneVM()
+	v.Closing = true
+	v.Native = ObjectRef{}
+	target := ObjectRef{Kind: "VirtualMachine", Namespace: "tenant-a", Name: cloneTestNativeN, UID: "pending-target-uid"}
+	v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid",
+		CloneDeleteRequested: true, PendingTargetRef: &target}
+	native := &cloneTestNative{observations: []CloneObservation{{Exists: false}}, targetGone: true, volumesDone: true}
+	worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+	if err := worker.RunOnce(ctx); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"delete-target", "release:CANCELLED"}
+	if strings.Join(*events, ",") != strings.Join(want, ",") {
+		t.Fatalf("cancel order = %v", *events)
+	}
+	if !repo.vm.CloneProgress.CancelHandled || len(repo.releases) != 1 {
+		t.Fatalf("cancel did not finish: %+v %v", repo.vm.CloneProgress, repo.releases)
+	}
+}
+
+// TestCloneWorkerCancelGoneAfterOwnDelete covers R4: our own delete completing
+// is a legitimate early cancel, while an unrecorded disappearance keeps HELD.
+func TestCloneWorkerCancelGoneAfterOwnDelete(t *testing.T) {
+	ctx := context.Background()
+	for _, test := range []struct {
+		name         string
+		deleteAsked  bool
+		pending      []VolumeRef
+		wantRelease  bool
+		wantCanceled bool
+	}{
+		{name: "our own delete completed", deleteAsked: true, wantRelease: true, wantCanceled: true},
+		{name: "recorded outputs without delete intent", pending: []VolumeRef{{VolumeName: "disk-sys", PVCName: "pvc-sys", PVCUID: "uid-1"}}, wantRelease: true, wantCanceled: true},
+		{name: "unrecorded disappearance", wantRelease: false},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			v := workerCloneVM()
+			v.Closing = true
+			v.Native = ObjectRef{}
+			v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid",
+				CloneDeleteRequested: test.deleteAsked, PendingVolumes: test.pending}
+			native := &cloneTestNative{observations: []CloneObservation{{Exists: false}}, volumesDone: true}
+			worker, repo, _ := newCloneWorker(t, v, workerCloneOp(v, DeleteAction), native)
+			if err := worker.RunOnce(ctx); err != nil {
+				t.Fatal(err)
+			}
+			if test.wantRelease {
+				if len(repo.releases) != 1 || repo.releases[0].Kind != "CANCELLED" {
+					t.Fatalf("release = %v", repo.releases)
+				}
+				if repo.vm.CloneProgress.CancelHandled != test.wantCanceled {
+					t.Fatalf("cancel flag = %v", repo.vm.CloneProgress.CancelHandled)
+				}
+				return
+			}
+			if len(repo.releases) != 0 || repo.op.State != "unknown" {
+				t.Fatalf("unrecorded disappearance was released: %v %s", repo.releases, repo.op.State)
+			}
+		})
+	}
+}
+
+// TestCloneWorkerRollbackClosesConsumer covers R5: both rollback paths hand the
+// Network consumer off as closed before releasing the Attachment, because the
+// real adapter refuses a release while the persisted consumer is still open.
+func TestCloneWorkerRollbackClosesConsumer(t *testing.T) {
+	ctx := context.Background()
+	check := func(t *testing.T, events []string) {
+		t.Helper()
+		for _, event := range events {
+			if event == "release-network-without-closed-consumer" {
+				t.Fatalf("release ran before the consumer was closed: %v", events)
+			}
+		}
+		if !hasEvent(events, "release-network") {
+			t.Fatalf("network was never released: %v", events)
+		}
+	}
+	t.Run("unsubmitted rollback", func(t *testing.T) {
+		v := workerCloneVM()
+		v.Native = ObjectRef{}
+		native := &cloneTestNative{eligibility: CloneEligibility{Unsupported: []CloneBlocker{
+			{Kind: "UNSUPPORTED", Reason: "source uses dataVolumeTemplates"},
+		}}}
+		worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, CreateAction), native)
+		for i := 0; i < 5 && repo.op.State != "failed"; i++ {
+			if err := worker.RunOnce(ctx); err != nil {
+				t.Fatal(err)
+			}
+		}
+		check(t, *events)
+	})
+	t.Run("failed clone cleanup", func(t *testing.T) {
+		v := workerCloneVM()
+		v.Native = ObjectRef{}
+		outputs := []VolumeRef{
+			{VolumeName: "disk-sys", PVCName: "pvc-sys", PVCUID: "uid-1"},
+			{VolumeName: "disk-data", PVCName: "pvc-data", PVCUID: "uid-2"},
+		}
+		v.CloneProgress = &CloneProgress{Name: CloneName(v.ID), UID: "clone-uid", CloneDeleteRequested: true,
+			PendingVolumes: outputs}
+		native := &cloneTestNative{
+			observations: []CloneObservation{{Exists: true, UID: "clone-uid", Failed: true, Reason: "boom", Outputs: outputs}},
+			targetGone:   true, volumesDone: true,
+		}
+		worker, repo, events := newCloneWorker(t, v, workerCloneOp(v, CreateAction), native)
+		for i := 0; i < 12 && repo.op.State != "failed"; i++ {
+			if err := worker.RunOnce(ctx); err != nil {
+				t.Fatal(err)
+			}
+		}
+		if repo.op.State != "failed" {
+			t.Fatalf("failed cleanup did not finish: %s %v", repo.op.State, *events)
+		}
+		check(t, *events)
+	})
 }
 
 // TestCloneEligibilityErrorKinds keeps the two admission answers distinct.

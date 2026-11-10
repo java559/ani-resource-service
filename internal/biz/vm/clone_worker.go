@@ -289,9 +289,13 @@ func (w *Worker) cleanupFailedClone(ctx context.Context, o *Operation, v *VM, na
 				return ErrDependency
 			}
 		} else {
-			done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
+			adopted, done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
 			if e != nil {
 				return e
+			}
+			if len(adopted) > 0 {
+				cp.PendingVolumes = mergeVolumeRefs(cp.PendingVolumes, adopted)
+				return w.repo.Checkpoint(ctx, *o, *v)
 			}
 			if !done {
 				return nil
@@ -301,6 +305,9 @@ func (w *Worker) cleanupFailedClone(ctx context.Context, o *Operation, v *VM, na
 		return w.repo.Checkpoint(ctx, *o, *v)
 	}
 	if o.Step == cloneStepCleanupNetwork {
+		if e := w.closeNetworkConsumer(ctx, o, v); e != nil {
+			return e
+		}
 		if e := w.checkpoint(ctx, o, *v, "release-network", ObjectRef{}); e != nil {
 			return e
 		}
@@ -338,6 +345,9 @@ func (w *Worker) finishFailedClone(o *Operation, v *VM) error {
 // release step is still pending, so the caller keeps the operation claimable.
 func (w *Worker) releaseUnsubmitted(ctx context.Context, o *Operation, v *VM, sources CloneSourcePort, reason, evidence string) (bool, error) {
 	if v.Network.AttachmentID != "" || v.Network.SubmissionID != "" {
+		if e := w.closeNetworkConsumer(ctx, o, v); e != nil {
+			return false, e
+		}
 		if e := w.checkpoint(ctx, o, *v, "release-network", ObjectRef{}); e != nil {
 			return false, e
 		}
@@ -375,6 +385,23 @@ func (w *Worker) releaseCloneSourceReason(ctx context.Context, sources CloneSour
 	return sources.ReleaseCloneSourceHELD(ctx, CloneSourceRelease{
 		TenantID: v.TenantID, TargetVMID: v.ID, Kind: kind, By: "worker", Reason: reason, Evidence: evidence,
 	})
+}
+
+// cloneSubmitIntended reports whether this delete already carries the create's
+// persisted clone submission intent. Such an intent proves the native request
+// may have been sent, so an empty clone UID never means "unsubmitted".
+func cloneSubmitIntended(o *Operation) bool {
+	return o.Pending != nil && o.Pending.Action == cloneStepSubmit
+}
+
+// closeNetworkConsumer records the never-started target's consumer as closed
+// before the Attachment is released. Network's release contract requires the
+// persisted closed state, and a clone target has no launcher to wait for.
+func (w *Worker) closeNetworkConsumer(ctx context.Context, o *Operation, v *VM) error {
+	if !CloseNetworkSubmission(v, time.Now()) {
+		return nil
+	}
+	return w.repo.Checkpoint(ctx, *o, *v)
 }
 
 // cancelClone takes over a user Delete of a clone that still owns a source
@@ -420,7 +447,7 @@ func (w *Worker) cancelClone(ctx context.Context, o *Operation, v *VM) (bool, er
 		return true, w.repo.Checkpoint(ctx, *o, *v)
 	}
 	req := cloneRequest(v)
-	if cp.UID == "" && !cp.CloneDeleteRequested {
+	if cp.UID == "" && !cp.CloneDeleteRequested && !cloneSubmitIntended(o) {
 		// No submission intent was ever checkpointed, so nothing could be in flight.
 		if e := w.releaseCloneSource(ctx, sources, *v, "CANCELLED", "cancel before submit"); e != nil {
 			return false, e
@@ -442,28 +469,37 @@ func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, n
 	cp := v.CloneProgress
 	req := cloneRequest(v)
 	if !state.Exists {
-		if len(cp.PendingVolumes) == 0 {
-			// A submitted clone that vanished without a saved output keeps the HELD
-			// reference; only the controlled CLI may release this case.
+		if !cp.CloneDeleteRequested && len(cp.PendingVolumes) == 0 {
+			// A producer that vanished without our delete intent and without a saved
+			// output keeps the HELD reference; only the controlled CLI may release it.
 			return false, fmt.Errorf("%w: clone gone before registration without outputs", ErrUnknown)
 		}
-		result, e := native.DeleteClone(ctx, *v, req, state.UID, state.ResourceVersion)
-		if e != nil {
-			return false, e
+		// Our own earlier delete completed: this is the legitimate early cancel.
+		return w.finishCancelledClone(ctx, o, v, native, sources, "CANCELLED", "cancel after clone gone")
+	}
+	if cp.UID == "" {
+		// The fixed name and its operation annotation already proved ownership, so
+		// this is the object a submission whose receipt was lost produced.
+		cp.UID = state.UID
+	}
+	if state.Failed {
+		cp.PendingVolumes = mergeVolumeRefs(cp.PendingVolumes, state.Outputs)
+		if state.Target.UID != "" {
+			target := state.Target
+			cp.PendingTargetRef = &target
 		}
-		if result.Conflict {
-			if retried {
-				return false, nil
+		if state.Target.UID == "" && !CloneVolumesCovered(v.FrozenVolumeNames(), cp.PendingVolumes) {
+			// A failed producer with no usable target and no complete named output:
+			// keep the HELD reference and hand the residual case to explicit disposal.
+			cp.Phase = state.Phase
+			if e := w.repo.Checkpoint(ctx, *o, *v); e != nil {
+				return false, e
 			}
-			return w.cancelObservedClone(ctx, o, v, native, sources, result.Current, true)
+			return false, fmt.Errorf("%w: clone failed without usable outputs: %s", ErrUnknown, state.Reason)
 		}
-		if !result.Gone {
-			return false, nil
-		}
-		return w.finishCancelledClone(ctx, o, v, sources, "CANCELLED", "cancel after clone gone")
 	}
 	early := state.Pending && state.Phase == "" && state.SnapshotName == "" && state.RestoreName == "" && state.Target.UID == "" && len(state.Outputs) == 0
-	if !early && !CloneVolumesCovered(v.FrozenVolumeNames(), state.Outputs) && state.Target.UID == "" {
+	if !state.Failed && !early && !CloneVolumesCovered(v.FrozenVolumeNames(), state.Outputs) && state.Target.UID == "" {
 		// Still in a phase that may produce named outputs; keep the same clone and
 		// wait instead of guessing zero volumes.
 		cp.Phase = state.Phase
@@ -491,26 +527,40 @@ func (w *Worker) cancelObservedClone(ctx context.Context, o *Operation, v *VM, n
 	if !result.Gone {
 		return false, nil
 	}
-	return w.finishCancelledClone(ctx, o, v, sources, "CANCELLED", "user cancelled clone target")
+	return w.finishCancelledClone(ctx, o, v, native, sources, "CANCELLED", "user cancelled clone target")
 }
 
-// finishCancelledClone removes the named outputs a cancelled clone already
-// produced, then releases the source reference. A clone that never registered
-// wrote no vm.disks row, so the ordinary delete path cannot see these PVCs; the
-// recorded PendingVolumes are the only inventory of what the cancelled clone
-// created. The list is already checkpointed by the caller that recorded it, so
-// this step is retried idempotently: the release only happens once every owned
-// volume is gone.
-func (w *Worker) finishCancelledClone(ctx context.Context, o *Operation, v *VM, sources CloneSourcePort, kind, evidence string) (bool, error) {
+// finishCancelledClone removes the target VM and named outputs a cancelled clone
+// already produced, then releases the source reference. A clone that never
+// registered wrote no vm.disks row, so the ordinary delete path cannot see these
+// objects; the recorded PendingTargetRef and PendingVolumes are the only
+// inventory of what the cancelled clone created. Every step is retried
+// idempotently: the release only happens once every owned artifact is gone.
+func (w *Worker) finishCancelledClone(ctx context.Context, o *Operation, v *VM, native CloneNativePort, sources CloneSourcePort, kind, evidence string) (bool, error) {
 	cp := v.CloneProgress
+	if cp.PendingTargetRef != nil && cp.PendingTargetRef.UID != "" {
+		gone, e := native.DeleteCloneTarget(ctx, *v, *cp.PendingTargetRef)
+		if e != nil {
+			return false, e
+		}
+		if !gone {
+			return false, nil
+		}
+	}
 	if len(cp.PendingVolumes) > 0 {
 		cleanup, ok := w.native.(CloneCleanupPort)
 		if !ok {
 			return false, ErrDependency
 		}
-		done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
+		adopted, done, e := cleanup.DeleteNamedVolumes(ctx, *v, cp.PendingVolumes)
 		if e != nil {
 			return false, e
+		}
+		if len(adopted) > 0 {
+			// Persist the identity hand-off of a late output before its deletion so
+			// the next tick deletes an object it can prove is ours.
+			cp.PendingVolumes = mergeVolumeRefs(cp.PendingVolumes, adopted)
+			return false, w.repo.Checkpoint(ctx, *o, *v)
 		}
 		if !done {
 			return false, nil

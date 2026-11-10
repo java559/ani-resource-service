@@ -447,9 +447,11 @@ func admitCloneSource(ctx context.Context, tx pgx.Tx, tenant, targetID, operatio
 		return biz.ErrVersion
 	}
 	var busy bool
-	// Only work that can still make progress blocks a new clone. A stale running
-	// or unknown operation whose lease already expired is not an active change.
-	if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND (state='accepted' OR (state IN ('running','unknown') AND lease_until IS NOT NULL AND lease_until>now())))", tenant, c.SourceVMID).Scan(&busy); e != nil {
+	// Busy is the same business non-terminal rule as an ordinary command: a source
+	// change is still active while its operation is accepted, running or unknown.
+	// A worker lease only schedules execution and never proves the change ended, so
+	// it must not be used as the mutex.
+	if e = tx.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND state IN ('accepted','running','unknown'))", tenant, c.SourceVMID).Scan(&busy); e != nil {
 		return e
 	}
 	if busy {
@@ -550,9 +552,12 @@ func (p *Postgres) accept(ctx context.Context, c biz.Command, id, createID strin
 	v.Version++
 	v.LastOperationID = id
 	o := biz.Operation{TenantID: c.TenantID, ID: id, VMID: c.VMID, Action: c.Action, Key: c.Key, RequestDigest: c.RequestDigest, Intent: c.Intent, IntentVersion: v.Version, State: "accepted"}
-	if c.Action == biz.DeleteAction && v.Network.AttachmentID == "" && v.Network.NADUID != "" {
+	if c.Action == biz.DeleteAction && ((v.Network.AttachmentID == "" && v.Network.NADUID != "") || v.Spec.CloneSource != nil) {
 		// A completed first-round save alone has sent no Attachment. Carry only
 		// the existing second-round send checkpoint into Delete recovery.
+		// A clone create additionally carries its own submission intent: an empty
+		// clone UID never proves nothing was sent, so Delete must be able to adopt
+		// the fixed-name clone and cancel it normally.
 		var raw []byte
 		if e = tx.QueryRow(ctx, "SELECT record FROM vm.operations WHERE tenant_id=$1 AND vm_id=$2 AND id=$3", v.TenantID, v.ID, v.CreateOperationID).Scan(&raw); e != nil {
 			return biz.Operation{}, e
@@ -561,8 +566,17 @@ func (p *Postgres) accept(ctx context.Context, c biz.Command, id, createID strin
 		if err != nil {
 			return biz.Operation{}, err
 		}
-		if create.Pending != nil && create.Pending.Action == "prepare-network" && create.Pending.Submitted {
-			o.Pending = create.Pending
+		if create.Pending != nil && create.Pending.Submitted {
+			switch create.Pending.Action {
+			case "clone-submit":
+				if v.Spec.CloneSource != nil {
+					o.Pending = create.Pending
+				}
+			case "prepare-network":
+				if v.Network.AttachmentID == "" && v.Network.NADUID != "" {
+					o.Pending = create.Pending
+				}
+			}
 		}
 	}
 	if e = biz.ApplyAcceptedMedia(&v, &o); e != nil {

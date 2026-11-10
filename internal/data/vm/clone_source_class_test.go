@@ -91,15 +91,27 @@ func TestClassifyCloneSource(t *testing.T) {
 		t.Fatal("source that boots from media accepted")
 	}
 
+	// A retired or still-recorded historical media copy is normal history: Eject
+	// only unbinds the mount, so neither may gate a source whose template carries
+	// no media volume. Only the template and the boot device decide.
 	historical := source
 	historical.MediaCopies = []biz.MediaCopy{{ID: "install", Tombstone: true}, {ID: "driver", Tombstone: true}}
 	if result, _ := classifyCloneSource(&historical, target, classNativeSource(classSourceID)); !result.Ready() {
 		t.Fatalf("retired historical media rejected: %v", result)
 	}
-	liveMedia := source
-	liveMedia.MediaCopies = []biz.MediaCopy{{ID: "install"}}
-	if result, _ := classifyCloneSource(&liveMedia, target, classNativeSource(classSourceID)); result.Ready() {
-		t.Fatal("source with a live media copy accepted")
+	ejectedMedia := source
+	ejectedMedia.MediaCopies = []biz.MediaCopy{{ID: "install"}}
+	if result, _ := classifyCloneSource(&ejectedMedia, target, classNativeSource(classSourceID)); !result.Ready() {
+		t.Fatalf("an ejected historical copy blocked the clone: %v", result)
+	}
+	mountedMedia := classNativeSource(classSourceID)
+	volumes, _, _ = unstructured.NestedSlice(mountedMedia.Object, "spec", "template", "spec", "volumes")
+	volumes = append(volumes, map[string]any{"name": "media-install", "persistentVolumeClaim": map[string]any{"claimName": "pvc-media"}})
+	if err := unstructured.SetNestedSlice(mountedMedia.Object, volumes, "spec", "template", "spec", "volumes"); err != nil {
+		t.Fatal(err)
+	}
+	if result, _ := classifyCloneSource(&source, target, mountedMedia); result.Ready() {
+		t.Fatal("source with a mounted media volume accepted")
 	}
 
 	noGuest := source
@@ -163,8 +175,9 @@ func TestClassifyCloneSourceBusinessScope(t *testing.T) {
 	}
 }
 
-// TestCloneSourceEligibilitySeedAndRecheck covers the Secret dependency of the
-// full admission and the frozen-dependency-free recheck.
+// TestCloneSourceEligibilitySeedAndRecheck covers the full admission and the
+// frozen-dependency-free recheck. The source's own one-shot initialization Secret
+// is not a clone input, so its absence must not gate the disk copy.
 func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
 	ctx := context.Background()
 	target := classTarget(classSourceID)
@@ -174,10 +187,6 @@ func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
 	if err := unstructured.SetNestedSlice(status.Object, []any{map[string]any{"name": "disk-sys", "enabled": true}}, "status", "volumeSnapshotStatuses"); err != nil {
 		t.Fatal(err)
 	}
-	secret := &unstructured.Unstructured{Object: map[string]any{
-		"apiVersion": "v1", "kind": "Secret",
-		"metadata": map[string]any{"name": "vm-init-" + classSourceID, "namespace": "tenant-a", "uid": "secret-uid", "labels": toAnyMap(labelVM(source))},
-	}}
 	pvc := &unstructured.Unstructured{Object: map[string]any{
 		"apiVersion": "v1", "kind": "PersistentVolumeClaim",
 		"metadata": map[string]any{"name": "pvc-sys", "namespace": "tenant-a", "uid": "pvc-uid"},
@@ -195,7 +204,7 @@ func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
 		pvcResource:          "PersistentVolumeClaimList",
 		storageClassResource: "StorageClassList",
 	}
-	client := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), kinds, copyObject(status), copyObject(secret), copyObject(pvc), copyObject(storageClass))
+	client := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), kinds, copyObject(status), copyObject(pvc), copyObject(storageClass))
 	native := NewNativeWithClients(client, nil)
 
 	result, err := native.ObserveSourceCloneEligibility(ctx, target, source)
@@ -203,7 +212,7 @@ func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
 		t.Fatalf("full admission failed: %v %v", result, err)
 	}
 
-	// The cheap recheck never re-reads PVC or StorageClass.
+	// The cheap recheck never re-reads PVC, StorageClass or the source Secret.
 	reads := map[string]int{}
 	client.PrependReactor("get", "*", func(action ktesting.Action) (bool, runtime.Object, error) {
 		reads[action.GetResource().Resource]++
@@ -218,16 +227,6 @@ func TestCloneSourceEligibilitySeedAndRecheck(t *testing.T) {
 	}
 	if reads["virtualmachines"] == 0 {
 		t.Fatal("recheck did not read the same named source")
-	}
-
-	// A missing platform seed Secret is a recoverable dependency, not a rejection.
-	missing := fake.NewSimpleDynamicClientWithCustomListKinds(runtime.NewScheme(), kinds, copyObject(status), copyObject(pvc), copyObject(storageClass))
-	result, err = NewNativeWithClients(missing, nil).ObserveSourceCloneEligibility(ctx, target, source)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(result.Unsupported) != 0 || len(result.NotReady) != 1 || result.NotReady[0].Reason != "source initialization secret is absent" {
-		t.Fatalf("missing seed secret misclassified: %v", result)
 	}
 }
 

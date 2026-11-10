@@ -164,7 +164,11 @@ type CloneNativePort interface {
 // CloneCleanupPort removes the residual named outputs of a failed clone. It is
 // optional so native ports without clone support stay unaffected.
 type CloneCleanupPort interface {
-	DeleteNamedVolumes(context.Context, VM, []VolumeRef) (bool, error)
+	// DeleteNamedVolumes returns the refs whose identity it adopted by the
+	// registered name (previous UID empty), whether every owned volume is gone,
+	// and any error. An output that exists but whose identity hand-off is still
+	// incomplete is never reported as cleaned.
+	DeleteNamedVolumes(context.Context, VM, []VolumeRef) ([]VolumeRef, bool, error)
 }
 
 // CloneSourceRelease carries the audit columns required by the HELD table.

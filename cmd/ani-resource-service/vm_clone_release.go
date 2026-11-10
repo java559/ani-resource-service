@@ -92,6 +92,13 @@ func runVMCloneRelease() error {
 	if targetErr == nil && target.CloneProgress != nil && target.CloneProgress.RegistrationCompleted && !target.Closing {
 		return fmt.Errorf("clone already registered and still alive; release is not allowed")
 	}
+	// A manual release must not leave the original create able to submit later.
+	// Either the target row is gone, or the VM is closing because a Delete was
+	// accepted, which fences every later create tick. A bare "clone absent" read
+	// or an expired lease proves neither.
+	if targetErr == nil && !target.Closing {
+		return fmt.Errorf("clone target %s is still open; issue a delete for it first so the create cannot submit again", vmCloneTarget)
+	}
 	namespace := ""
 	if targetErr == nil {
 		namespace = target.Spec.Namespace

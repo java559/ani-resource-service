@@ -123,16 +123,10 @@ func classifyCloneSource(source *biz.VM, target biz.VM, native *unstructured.Uns
 		}
 		result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "unsupported source volume type"))
 	}
-	// Historical media is allowed only after every copy is retired; the source
-	// then boots from the system disk and the template carries no media volume.
-	if source != nil {
-		for _, copy := range source.MediaCopies {
-			if !copy.Tombstone {
-				result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source still has media copies"))
-				break
-			}
-		}
-	}
+	// A retired media copy is normal history: Eject only unbinds the current
+	// mount and the copy stays until the VM is deleted, so its presence must not
+	// gate cloning. Only media that is still mounted is rejected, by the volume
+	// name and the cdrom device checks below.
 	for name := range claims {
 		if !plan[name] {
 			result.Unsupported = append(result.Unsupported, cloneUnsupported(name, "source volume is not part of the frozen disk plan"))
@@ -239,20 +233,10 @@ func (n *Native) sourceEligibility(ctx context.Context, target biz.VM, source *b
 	if len(result.Unsupported) > 0 {
 		return result, nil
 	}
-	if deep && source != nil && source.Spec.GuestInitialization != nil {
-		secretName := "vm-init-" + source.ID
-		secret, err := n.client.Resource(secretResource).Namespace(target.Spec.Namespace).Get(ctx, secretName, metav1.GetOptions{})
-		if apierrors.IsNotFound(err) {
-			result.NotReady = append(result.NotReady, cloneNotReady("", "source initialization secret is absent"))
-		} else if err != nil {
-			return result, err
-		} else if !matches(secret, *source) {
-			result.Unsupported = append(result.Unsupported, cloneUnsupported("", "source initialization secret is not owned by this VM"))
-		}
-		if len(result.Unsupported) > 0 || len(result.NotReady) > 0 {
-			return result, nil
-		}
-	}
+	// The source's one-shot initialization Secret is not a clone input: a standard
+	// NoCloud target removes the seed and never replays source initialization, so
+	// that Secret's presence or readability must not gate the disk copy. The
+	// standard structure itself is still required and checked above.
 	// Field-level capability. KubeVirt reports one entry per volume it can
 	// snapshot; a missing entry is "not reported yet", not "supported".
 	statuses, _, _ := unstructured.NestedSlice(src.Object, "status", "volumeSnapshotStatuses")
@@ -631,10 +615,14 @@ func (n *Native) DeleteClone(ctx context.Context, v biz.VM, r biz.CloneRequest, 
 }
 
 // DeleteCloneTarget deletes the failed clone's own target VM. The target may not
-// carry business labels, so identity is proven by name and expected UID.
+// carry business labels, so identity is proven by name and expected UID. An
+// empty UID is never accepted: a same-name object could be an unrelated VM.
 func (n *Native) DeleteCloneTarget(ctx context.Context, v biz.VM, target biz.ObjectRef) (bool, error) {
 	if target.Name == "" {
 		return true, nil
+	}
+	if target.UID == "" {
+		return false, biz.ErrOwnership
 	}
 	object, err := n.client.Resource(vmResource).Namespace(v.Spec.Namespace).Get(ctx, target.Name, metav1.GetOptions{})
 	if apierrors.IsNotFound(err) {
@@ -643,7 +631,7 @@ func (n *Native) DeleteCloneTarget(ctx context.Context, v biz.VM, target biz.Obj
 	if err != nil {
 		return false, err
 	}
-	if target.UID != "" && string(object.GetUID()) != target.UID {
+	if string(object.GetUID()) != target.UID {
 		return false, biz.ErrOwnership
 	}
 	uid := object.GetUID()
@@ -667,9 +655,15 @@ func (n *Native) DeleteCloneTarget(ctx context.Context, v biz.VM, target biz.Obj
 
 // DeleteNamedVolumes removes the residual PVCs of a failed clone. A PVC is only
 // deleted when it is provably ours: the recorded UID matches or the target VM is
-// an owner. One delete is issued per call; the caller re-observes next tick.
-func (n *Native) DeleteNamedVolumes(ctx context.Context, v biz.VM, refs []biz.VolumeRef) (bool, error) {
+// an owner. A registered output whose recorded UID is still empty is adopted by
+// its registered name first and reported back to the caller so it can be
+// persisted; that output is not reported as cleaned until its identity hand-off
+// is complete. A recorded UID that no longer matches means our object is already
+// gone, so it is skipped instead of touching a foreign same-name PVC. One delete
+// is issued per call; the caller re-observes next tick.
+func (n *Native) DeleteNamedVolumes(ctx context.Context, v biz.VM, refs []biz.VolumeRef) ([]biz.VolumeRef, bool, error) {
 	done := true
+	adopted := make([]biz.VolumeRef, 0, len(refs))
 	for _, ref := range refs {
 		if ref.PVCName == "" {
 			continue
@@ -679,7 +673,17 @@ func (n *Native) DeleteNamedVolumes(ctx context.Context, v biz.VM, refs []biz.Vo
 			continue
 		}
 		if err != nil {
-			return false, err
+			return adopted, false, err
+		}
+		if ref.PVCUID == "" {
+			// The name came from the native output list, so this object is the one our
+			// clone produced. Persist its real identity first: an output whose
+			// identity hand-off is still incomplete is never deleted or reported as
+			// cleaned in the same tick.
+			ref.PVCUID = string(object.GetUID())
+			adopted = append(adopted, ref)
+			done = false
+			continue
 		}
 		if !cloneOutputOwned(v, ref, object) {
 			continue
@@ -687,17 +691,17 @@ func (n *Native) DeleteNamedVolumes(ctx context.Context, v biz.VM, refs []biz.Vo
 		uid := object.GetUID()
 		policy := metav1.DeletePropagationForeground
 		if err = n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Delete(ctx, ref.PVCName, metav1.DeleteOptions{Preconditions: &metav1.Preconditions{UID: &uid}, PropagationPolicy: &policy}); err != nil && !apierrors.IsNotFound(err) && !apierrors.IsConflict(err) {
-			return false, err
+			return adopted, false, err
 		}
 		if _, err = n.client.Resource(pvcResource).Namespace(v.Spec.Namespace).Get(ctx, ref.PVCName, metav1.GetOptions{}); apierrors.IsNotFound(err) {
 			// Foreground deletion may complete before the next tick.
 			continue
 		} else if err != nil {
-			return false, err
+			return adopted, false, err
 		}
 		done = false
 	}
-	return done, nil
+	return adopted, done, nil
 }
 
 // cloneOutputOwned accepts a PVC by recorded UID or by any owner reference to
