@@ -163,19 +163,19 @@ type PatchImage struct {
 // ExpiredCandidateRecoveryInput is the local operator recovery input. It never
 // carries a scope or tenant: the real scope is read from the stored space.
 type ExpiredCandidateRecoveryInput struct {
-	SpaceID, CommandID                                                 string
+	SpaceID, CommandID                                                  string
 	ExpectedCommandVersion, ExpectedCredentialVersion, CandidateRobotID int64
-	EvidenceSHA256                                                     string
+	EvidenceSHA256                                                      string
 }
 
 // CandidateExpiryRecoveryRecord is the bounded operator evidence appended to a
 // terminated candidate command.
 type CandidateExpiryRecoveryRecord struct {
-	Operator, EvidenceSHA256                                    string
-	ExpectedCommandVersion, ExpectedCredentialVersion           int64
-	CandidateRobotID, PreviousRobotID                           int64
-	PreviousCredentialDisposition                               string
-	ObservedAt                                                  time.Time
+	Operator, EvidenceSHA256                          string
+	ExpectedCommandVersion, ExpectedCredentialVersion int64
+	CandidateRobotID, PreviousRobotID                 int64
+	PreviousCredentialDisposition                     string
+	ObservedAt                                        time.Time
 }
 
 // CandidateRecoveryResult is the recovery outcome. It never contains a secret.

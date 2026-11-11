@@ -257,4 +257,3 @@ func (p *Platform) TerminateExpiredCandidate(ctx context.Context, in ExpiredCand
 	}
 	return p.engine.TerminateExpiredCandidate(ctx, in)
 }
-

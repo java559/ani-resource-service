@@ -337,4 +337,3 @@ func ApplyPatch(current Metadata, p PatchImage) (Metadata, error) {
 	}
 	return NormalizeMetadata(out)
 }
-
