@@ -148,6 +148,9 @@ func (l *Lifecycle) EnsureImageSpace(ctx context.Context, in EnableSpace) (Space
 		if e = l.checkSpace(s); e != nil {
 			return e
 		}
+		if e = recoveredCandidate(c); e != nil {
+			return e
+		}
 		if _, e = l.platform(ctx); e != nil {
 			return e
 		}
@@ -312,6 +315,9 @@ func (l *Lifecycle) changePublisher(ctx context.Context, in IssueCredential, kin
 			delivery, e = l.replayDelivery(ctx, s, c)
 			return e
 		}
+		if e = recoveredCandidate(c); e != nil {
+			return e
+		}
 		if _, e = l.platform(ctx); e != nil {
 			return e
 		}
@@ -337,6 +343,16 @@ func (l *Lifecycle) changePublisher(ctx context.Context, in IssueCredential, kin
 }
 func (l *Lifecycle) credentialActive(c CredentialInfo) bool {
 	return c.State == "active" && c.Generation > 0 && (c.ExpiresAt == nil || c.ExpiresAt.After(l.now()))
+}
+
+// recoveredCandidate rejects a resume of a command whose expired candidate was
+// already terminated by the local operator recovery. The same idempotency key
+// may never create a second identity after that decision.
+func recoveredCandidate(c Command) error {
+	if c.State == "failed" && c.Reason == CandidateExpiredRecovered {
+		return Fail(CandidateRecoveryCompleted, "expired candidate already recovered")
+	}
+	return nil
 }
 func (l *Lifecycle) candidateAAD(s Space, c Command) SecretAAD {
 	return SecretAAD{InstallationID: s.InstallationID, TenantID: s.TenantID, SpaceID: s.ID, Scope: s.Scope, Purpose: c.Candidate.Purpose, Generation: c.Candidate.Generation, CommandID: c.ID}

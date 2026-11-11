@@ -127,6 +127,9 @@ func (p *Platform) IssuePlatformPublisher(ctx context.Context, in IssuePlatformC
 			delivery, e = p.engine.replayDelivery(ctx, s, c)
 			return e
 		}
+		if e = recoveredCandidate(c); e != nil {
+			return e
+		}
 		if _, e = p.engine.platform(ctx); e != nil {
 			return e
 		}
