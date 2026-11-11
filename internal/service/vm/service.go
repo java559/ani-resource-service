@@ -16,6 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -495,10 +496,27 @@ func (s *Service) GetVM(ctx context.Context, r *pb.GetVMRequest) (*pb.VirtualMac
 }
 func wireVM(v biz.VM) (*pb.VirtualMachine, error) {
 	spec, e := pb.DecodeCreateSpec(v.Spec.Canonical)
+	queryReason := ""
 	if e != nil {
-		return nil, rpcError(e)
+		// A stored, already accepted spec is a read projection, not a new
+		// admission request. A newer writer may have fields or source kinds
+		// this reader does not implement. Project known fields without
+		// rewriting the original canonical bytes or weakening command validation.
+		queryReason = "VM_STORED_SPEC_COMPATIBILITY"
+		spec = new(pb.CreateSpec)
+		if err := (protojson.UnmarshalOptions{DiscardUnknown: true}).Unmarshal(v.Spec.Canonical, spec); err != nil {
+			// Keep the row's identity/state visible even when a known field has
+			// an unreadable type; never present a partially decoded frozen spec.
+			spec = nil
+			queryReason = "VM_STORED_SPEC_UNREADABLE"
+		}
+		// Do not log stored payloads or parser errors which can quote their values.
+		slog.Warn("vm stored spec query projection", "tenant_id", v.TenantID, "vm_id", v.ID, "reason", queryReason)
 	}
 	out := &pb.VirtualMachine{SecurityGroupIds: append([]string(nil), v.SecurityGroupIDs...), Id: v.ID, Name: v.Name, Version: v.Version, OsFamily: v.Spec.Media.OSFamily, OsVersion: v.Spec.Media.OSVersion, FrozenSpec: spec, DesiredState: v.Desired, ObservedState: v.Observed, Reason: v.Reason, ObservedAt: observed(v.ObservedAt), LastOperationId: v.LastOperationID, Closing: v.Closing, BootDevice: v.Spec.BootDevice, CreatedAt: observed(v.CreatedAt)}
+	if out.Reason == "" {
+		out.Reason = queryReason
+	}
 	if !v.SecurityGroupsInitialized {
 		out.SecurityGroupIds = append([]string(nil), v.Spec.SecurityGroupIDs...)
 	}
