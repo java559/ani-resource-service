@@ -140,7 +140,9 @@ func (l *Lifecycle) terminateExpiredCandidate(ctx context.Context, s Space, in E
 	if err != nil {
 		return CandidateRecoveryResult{}, err
 	}
-	if err = l.verifyCandidate(robot, c, want); err != nil {
+	// 恢复路径允许候选已被停用：上一次恢复可能已把 robot 停用，但事务随后
+	// 失败回滚，此时若仍按“必须启用”校验，这条命令永远无法终结。
+	if err = l.verifyCandidateIdentity(robot, c, want); err != nil {
 		return CandidateRecoveryResult{}, err
 	}
 	if robot.ExpiresAt == -1 || robot.ExpiresAt == 0 || !time.Unix(robot.ExpiresAt, 0).UTC().Before(l.now()) {
@@ -208,7 +210,9 @@ func (l *Lifecycle) credentialDisposition(ctx context.Context, s Space, c Comman
 		if err = validatePreviousIdentity(previous, s, info, c.Candidate, perms); err != nil {
 			return "", err
 		}
-		if !previous.Disabled && previous.ExpiresAt != 0 && previous.ExpiresAt != -1 && time.Unix(previous.ExpiresAt, 0).UTC().After(l.now()) {
+		// -1 表示永不过期（allow_never_expires 或 pull 的 PullDays=-1）：这类旧
+		// 凭据依然可用，不能因为“没设过期时间”就当成失效去停用。
+		if !previous.Disabled && previous.ExpiresAt != 0 && (previous.ExpiresAt == -1 || time.Unix(previous.ExpiresAt, 0).UTC().After(l.now())) {
 			// The previous publisher is still valid: leave it exactly as it is.
 			return "unchanged", nil
 		}

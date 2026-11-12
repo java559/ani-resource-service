@@ -57,7 +57,10 @@ func (p *Postgres) FailExpiredTenantCandidate(ctx context.Context, c biz.Command
 	if err != nil {
 		return biz.Command{}, biz.CredentialInfo{}, err
 	}
-	if info.Version != record.ExpectedCredentialVersion || info.Generation != c.Candidate.Generation || info.RobotID != c.Candidate.RobotID {
+	// 事务内校验的是“候选之前的旧凭据行”，与业务层 recoverySnapshot 读到的
+	// 是同一行。候选自身从未写进 credentials 表（只有 phase 推进），因此这里
+	// 不能要求 info 等于候选代次，否则 CAS 恒失败、命令永远无法终结。
+	if info.Version != record.ExpectedCredentialVersion || info.Generation != c.Candidate.Generation-1 || info.RobotID != record.PreviousRobotID {
 		return biz.Command{}, biz.CredentialInfo{}, biz.Fail(biz.VersionConflict, "credential changed")
 	}
 	switch record.PreviousCredentialDisposition {
@@ -135,7 +138,8 @@ func (p *Postgres) FailExpiredPlatformCandidate(ctx context.Context, c biz.Comma
 		if e != nil {
 			return e
 		}
-		if info.Version != record.ExpectedCredentialVersion || info.Generation != c.Candidate.Generation || info.RobotID != c.Candidate.RobotID {
+		// 与租户路径同一条 CAS：校验的是候选之前的旧凭据行。
+		if info.Version != record.ExpectedCredentialVersion || info.Generation != c.Candidate.Generation-1 || info.RobotID != record.PreviousRobotID {
 			return biz.Fail(biz.VersionConflict, "credential changed")
 		}
 		switch record.PreviousCredentialDisposition {

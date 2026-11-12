@@ -222,6 +222,12 @@ func (p *Postgres) OffsetTenantRegistrations(ctx context.Context, tenant string,
 	q := sqlcgen.New(tx)
 	stored, err := q.GetTenantSpace(ctx, sqlcgen.GetTenantSpaceParams{TenantID: &tenant})
 	if err != nil {
+		// 未开通镜像空间的租户应当得到空列表，而不是 404。databaseError 会把
+		// ErrNoRows 一律折成 IMAGE_NOT_FOUND，这里必须单独给出 SPACE_NOT_FOUND，
+		// 业务层的空页分支才能命中。
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, 0, biz.Fail(biz.SpaceNotFound, "image space not found")
+		}
 		return nil, 0, databaseError(err)
 	}
 	total, err := q.CountTenantRegistrations(ctx, sqlcgen.CountTenantRegistrationsParams{TenantID: &tenant, SearchText: f.Search, SearchPattern: searchPattern(f.Search), Purposes: f.Purposes, Accelerator: f.Accelerator})
@@ -373,7 +379,7 @@ func (p *Postgres) ApplyTenantRegistrationPatch(ctx context.Context, c biz.Comma
 	if err != nil {
 		return biz.Registration{}, databaseError(err)
 	}
-	if locked.SpaceID != c.SpaceID || locked.UnregisteredAt != nil {
+	if locked.SpaceID != c.SpaceID {
 		return biz.Registration{}, biz.Fail(biz.ImageNotFound, "image not found")
 	}
 	stored, err := reserveTenantCommand(ctx, q, c)
@@ -386,6 +392,11 @@ func (p *Postgres) ApplyTenantRegistrationPatch(ctx context.Context, c biz.Comma
 			return biz.Registration{}, biz.Fail(biz.InternalError, "invalid stored patch result")
 		}
 		return *result, nil
+	}
+	// 已注销只在“新写入”时拒绝。同 key 重放必须先返回首次结果：PATCH 可能已
+	// 提交但响应丢失，随后管理员注销了该镜像，此时重试不应变成 404。
+	if locked.UnregisteredAt != nil {
+		return biz.Registration{}, biz.Fail(biz.ImageNotFound, "image not found")
 	}
 	if stored.State != "pending" {
 		return biz.Registration{}, biz.Fail(biz.RequestInProgress, "catalog request is not pending")

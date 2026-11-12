@@ -165,9 +165,6 @@ func (p *Postgres) ApplyPlatformRegistrationPatch(ctx context.Context, c biz.Com
 		if e != nil {
 			return databaseError(e)
 		}
-		if locked.UnregisteredAt != nil {
-			return biz.Fail(biz.ImageNotFound, "image not found")
-		}
 		stored, e := reservePlatformCommand(ctx, q, c)
 		if e != nil {
 			return e
@@ -179,6 +176,11 @@ func (p *Postgres) ApplyPlatformRegistrationPatch(ctx context.Context, c biz.Com
 			}
 			result = *saved
 			return nil
+		}
+		// 已注销只拒绝新写入。同 key 重放必须先返回首次结果：PATCH 可能已提交
+		// 但响应丢失，随后镜像被注销，此时重试不应变成 404。
+		if locked.UnregisteredAt != nil {
+			return biz.Fail(biz.ImageNotFound, "image not found")
 		}
 		if stored.State != "pending" {
 			return biz.Fail(biz.RequestInProgress, "catalog request is not pending")

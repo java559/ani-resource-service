@@ -83,6 +83,7 @@ func NewService(r biz.Repository, c ComputeResolver, e biz.EnvironmentPort, n bi
 	}
 	return s, nil
 }
+
 // rpcStatus builds the wire status for a rejected VM request. The stable
 // reason rides an errdetails.ErrorInfo detail so gateway encoders (Kratos
 // errors.FromError) lift it into the public `reason` field instead of leaving

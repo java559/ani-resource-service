@@ -401,7 +401,20 @@ func logicalRobotName(ownership string) string {
 	return "i-" + hex.EncodeToString(digest[:20])
 }
 func (l *Lifecycle) verifyCandidate(r Robot, c Command, want RobotRequest) error {
-	if r.ID != c.Candidate.RobotID || r.Name != c.Candidate.RobotName || r.Username != c.Candidate.Username || r.Description != want.Description || r.DurationDays != want.DurationDays || r.Disabled {
+	if err := l.verifyCandidateIdentity(r, c, want); err != nil {
+		return err
+	}
+	if r.Disabled {
+		return Fail(PermissionDenied, "candidate robot identity mismatch")
+	}
+	return nil
+}
+
+// verifyCandidateIdentity 只校验候选身份、描述、过期时长与权限，不关心是否已
+// 启用。过期候选恢复需要它：上一次恢复可能已停用 robot 但事务随后回滚，重试时
+// 仍要能认出这就是同一条候选，否则这条命令永远无法终结。
+func (l *Lifecycle) verifyCandidateIdentity(r Robot, c Command, want RobotRequest) error {
+	if r.ID != c.Candidate.RobotID || r.Name != c.Candidate.RobotName || r.Username != c.Candidate.Username || r.Description != want.Description || r.DurationDays != want.DurationDays {
 		return Fail(PermissionDenied, "candidate robot identity mismatch")
 	}
 	return ValidateRobotPermissions(r.Permissions, want.Permissions)
