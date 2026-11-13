@@ -84,7 +84,7 @@ func openStorage(_ context.Context, bc *conf.Bootstrap, instances *instanceCompo
 	}
 	out := &storageComponents{service: handler}
 	if instances != nil {
-		out.worker = server.NewStorageDeleteWorker(useCase, instances.repo.CheckReady, slog.Default())
+		out.worker = server.NewStorageDeleteWorker(useCase, slog.Default())
 	}
 	return out, nil
 }

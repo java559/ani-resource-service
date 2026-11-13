@@ -63,7 +63,8 @@ type BorrowedPVCGuard interface {
 	ReserveDelete(context.Context, PVCIdentity, string, time.Duration) (DeleteRecord, bool, error)
 	ClaimDeleteRecovery(context.Context, string, time.Duration) (*DeleteRecord, error)
 	MarkDeleteWriteStarted(context.Context, PVCIdentity, DeleteToken) error
-	// Record releases this turn's lease. Terminal proof calls Complete directly.
+	// Record releases this turn's lease. A terminal observation/result calls
+	// Complete directly.
 	RecordDeleteObservation(context.Context, PVCIdentity, DeleteToken, DeleteObservation) error
 	CancelUnsentDelete(context.Context, PVCIdentity, DeleteToken, string) error
 	CompleteDelete(context.Context, PVCIdentity, DeleteToken, DeleteObservation) error

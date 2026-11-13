@@ -43,13 +43,17 @@ func NewKubernetes(client dynamic.Interface) (*Kubernetes, error) {
 
 // backendError 保留分类，不把 Kubernetes 原始对象细节当作页面文案。
 func backendError(err error) error {
+	// The stable business sentinel stays first on the wrap chain so the public
+	// classification is unchanged; the native Kubernetes error rides along as
+	// a second %w so telemetry/logfields can still extract its real source and
+	// code at the logging site.
 	switch {
 	case apierrors.IsNotFound(err):
-		return biz.ErrNotFound
+		return fmt.Errorf("%w: %w", biz.ErrNotFound, err)
 	case apierrors.IsForbidden(err):
-		return biz.ErrAccessDenied
+		return fmt.Errorf("%w: %w", biz.ErrAccessDenied, err)
 	case apierrors.IsConflict(err), apierrors.IsAlreadyExists(err):
-		return biz.ErrConflict
+		return fmt.Errorf("%w: %w", biz.ErrConflict, err)
 	default:
 		return fmt.Errorf("%w: %v", biz.ErrBackendUnavailable, err)
 	}
@@ -73,18 +77,14 @@ func (k *Kubernetes) GetNamespace(ctx context.Context, name string) (biz.Namespa
 	}, nil
 }
 
+// GetVolume 只做一次 PVC GET -> volumeRecord；回收策略等衍生信息由详情
+// 用例的专用读取负责（C07），删除路径也不依赖 StorageClass 附加查询。
 func (k *Kubernetes) GetVolume(ctx context.Context, namespace, name string) (*biz.VolumeRecord, error) {
 	pvc, err := k.client.Resource(pvcGVR).Namespace(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, backendError(err)
 	}
-	record := volumeRecord(pvc)
-	if record.StorageClassName != "" {
-		if class, err := k.GetStorageClass(ctx, record.StorageClassName); err == nil {
-			record.ClassReclaim, record.ClassKnown = class.ReclaimPolicy, true
-		}
-	}
-	return record, nil
+	return volumeRecord(pvc), nil
 }
 
 func (k *Kubernetes) CreateVolume(ctx context.Context, namespace string, spec biz.CreateSpec) (*biz.VolumeRecord, error) {

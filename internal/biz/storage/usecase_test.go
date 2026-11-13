@@ -32,6 +32,8 @@ type fakeVolumes struct {
 	events       []Event
 	eventErr     error
 	pv           *PVRecord
+	getErr       error
+	classGets    int
 }
 
 func newFake() *fakeVolumes {
@@ -47,6 +49,9 @@ func (f *fakeVolumes) GetNamespace(context.Context, string) (Namespace, error) {
 }
 
 func (f *fakeVolumes) GetVolume(_ context.Context, _, name string) (*VolumeRecord, error) {
+	if f.getErr != nil {
+		return nil, f.getErr
+	}
 	record, ok := f.records[name]
 	if !ok {
 		return nil, ErrNotFound
@@ -114,6 +119,7 @@ func (f *fakeVolumes) ListStorageClasses(context.Context) ([]Class, error) {
 }
 
 func (f *fakeVolumes) GetStorageClass(_ context.Context, name string) (*Class, error) {
+	f.classGets++
 	class, ok := f.classes[name]
 	if !ok {
 		return nil, ErrNotFound

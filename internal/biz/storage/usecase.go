@@ -3,7 +3,9 @@ package storage
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/zhangzhe-ctrl/ani-resource-service/internal/tenantnamespace"
+	"log/slog"
 	"sort"
 	"strconv"
 	"strings"
@@ -33,6 +35,8 @@ type Config struct {
 	MaxBucketsPerTenant int
 	MaxUploadBytes      int64
 	UploadTTL           time.Duration
+	// Logger 为空时回落 slog.Default()；仅用于 C08 定义的诊断日志输出。
+	Logger *slog.Logger
 }
 
 // UseCase 编排独立盘与对象存储，不直接依赖 Kratos、Proto 或 SDK。
@@ -41,6 +45,7 @@ type UseCase struct {
 	objects ObjectPort
 	cfg     Config
 	now     func() time.Time
+	logger  *slog.Logger
 }
 
 func NewUseCase(volumes VolumePort, objects ObjectPort, cfg Config) (*UseCase, error) {
@@ -79,7 +84,11 @@ func NewUseCase(volumes VolumePort, objects ObjectPort, cfg Config) (*UseCase, e
 			return nil, ErrInvalid
 		}
 	}
-	return &UseCase{volumes: volumes, objects: objects, cfg: cfg, now: time.Now}, nil
+	logger := cfg.Logger
+	if logger == nil {
+		logger = slog.Default()
+	}
+	return &UseCase{volumes: volumes, objects: objects, cfg: cfg, now: time.Now, logger: logger}, nil
 }
 
 func (u *UseCase) namespace(tenant string) (string, error) {
@@ -235,44 +244,156 @@ func (u *UseCase) ListVolumes(ctx context.Context, tenant string, page, pageSize
 	return out, total, nil
 }
 
-// GetVolume 返回 spec/status、conditions、事件、绑定 PV 回收策略与可观察使用方。
+// volumeDetailOperation marks the structured log records of the GetVolume RPC.
+const volumeDetailOperation = "storage.volume_detail"
+
+// C04 固定码：辅助组查询失败时 VolumeDetail 对应组的 error_code 取值。
+const (
+	VolumeEventsGroupUnavailableCode    = "VOLUME_EVENTS_UNAVAILABLE"
+	VolumeConsumersGroupUnavailableCode = "VOLUME_CONSUMERS_UNAVAILABLE"
+)
+
+// volumeDetailAuxTimeout caps each auxiliary read group when the parent
+// request carries no deadline.
+const volumeDetailAuxTimeout = 2 * time.Second
+
+// volumeDetailAuxContext derives one auxiliary group's child context from the
+// parent once per request: with a remaining parent budget R each group gets
+// min(2s, R/4), keeping a quarter for response encoding and outbound work. A
+// parent that is already cancelled or expired returns its own error so no
+// auxiliary read starts against a dead request.
+func volumeDetailAuxContext(ctx context.Context) (context.Context, context.CancelFunc, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, nil, err
+	}
+	budget := volumeDetailAuxTimeout
+	if deadline, ok := ctx.Deadline(); ok {
+		if quarter := time.Until(deadline) / 4; quarter < budget {
+			budget = quarter
+		}
+	}
+	call, cancel := context.WithTimeout(ctx, budget)
+	return call, cancel, nil
+}
+
+// detailLogLevel demotes the caller's own cancellation/deadline to DEBUG;
+// unexpected failures stay ERROR. Normal NotFound results are not logged.
+func detailLogLevel(err error) slog.Level {
+	switch {
+	case errors.Is(err, context.Canceled), errors.Is(err, context.DeadlineExceeded):
+		return slog.LevelDebug
+	default:
+		return slog.LevelError
+	}
+}
+
+// GetVolume 返回 spec/status、conditions、事件、可观察使用方与回收策略展示。
+// 主读取用父 ctx；consumers、events、reclaim 三组按 C05 顺序执行，共享请求级
+// 一次性派生预算，组结束立即 cancel；任何一组失败只降级本组，不拖垮整个详情。
 func (u *UseCase) GetVolume(ctx context.Context, tenant, name string) (VolumeDetail, error) {
 	namespace, err := u.ensureNamespace(ctx, tenant)
 	if err != nil {
+		if !errors.Is(err, ErrNotFound) {
+			logDeleteStep(u.logger, detailLogLevel(err), ctx, volumeDetailOperation, "storage volume detail namespace resolve failed",
+				PVCIdentity{TenantID: tenant, ClusterID: u.cfg.ClusterID, PVCName: name}, err)
+		}
 		return VolumeDetail{}, err
 	}
+	id := PVCIdentity{TenantID: tenant, ClusterID: u.cfg.ClusterID, Namespace: namespace, PVCName: name}
 	record, err := u.volumes.GetVolume(ctx, namespace, name)
 	if err != nil {
+		if !errors.Is(err, ErrNotFound) {
+			logDeleteStep(u.logger, detailLogLevel(err), ctx, volumeDetailOperation, "storage volume detail main read failed", id, err)
+		}
 		return VolumeDetail{}, err
 	}
 	if !owned(record, tenant) {
 		return VolumeDetail{}, ErrNotFound
 	}
-	consumers, err := u.usage(ctx, namespace, name)
-	if err != nil {
+	detail := VolumeDetail{Volume: toVolume(record), Conditions: record.Conditions}
+
+	call, cancel, auxErr := volumeDetailAuxContext(ctx)
+	if auxErr != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, auxErr)
+		return VolumeDetail{}, auxErr
+	}
+	consumers, usageErr := u.usage(call, namespace, name)
+	cancel()
+	if usageErr != nil {
+		logDeleteStep(u.logger, slog.LevelWarn, ctx, volumeDetailOperation, "storage volume detail consumers group failed", id, usageErr)
+		detail.Consumers, detail.ConsumersKnown, detail.ConsumersErrorCode = []Consumer{}, false, VolumeConsumersGroupUnavailableCode
+	} else {
+		if consumers == nil {
+			consumers = []Consumer{}
+		}
+		detail.Consumers, detail.ConsumersKnown, detail.ConsumersErrorCode = consumers, true, ""
+	}
+	if err := ctx.Err(); err != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, err)
 		return VolumeDetail{}, err
 	}
-	events, err := u.volumes.ListEvents(ctx, namespace, record.UID)
-	if err != nil {
+
+	call, cancel, auxErr = volumeDetailAuxContext(ctx)
+	if auxErr != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, auxErr)
+		return VolumeDetail{}, auxErr
+	}
+	events, eventsErr := u.volumes.ListEvents(call, namespace, record.UID)
+	cancel()
+	if eventsErr != nil {
+		logDeleteStep(u.logger, slog.LevelWarn, ctx, volumeDetailOperation, "storage volume detail events group failed", id, eventsErr)
+		detail.Events, detail.EventsKnown, detail.EventsErrorCode = []Event{}, false, VolumeEventsGroupUnavailableCode
+	} else {
+		if events == nil {
+			events = []Event{}
+		}
+		detail.Events, detail.EventsKnown, detail.EventsErrorCode = events, true, ""
+	}
+	if err := ctx.Err(); err != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, err)
 		return VolumeDetail{}, err
 	}
-	volume := toVolume(record)
-	volume.ReclaimPolicy, volume.ReclaimPolicyKnown = reclaim(record, func(name string) (*PVRecord, error) {
-		return u.volumes.GetPersistentVolume(ctx, name)
-	})
-	return VolumeDetail{Volume: volume, Conditions: record.Conditions, Events: events, Consumers: consumers}, nil
+
+	call, cancel, auxErr = volumeDetailAuxContext(ctx)
+	if auxErr != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, auxErr)
+		return VolumeDetail{}, auxErr
+	}
+	detail.Volume.ReclaimPolicy, detail.Volume.ReclaimPolicyKnown = u.readReclaimPolicy(call, record)
+	cancel()
+	if err := ctx.Err(); err != nil {
+		logDeleteStep(u.logger, slog.LevelDebug, ctx, volumeDetailOperation, "storage volume detail interrupted by parent context", id, err)
+		return VolumeDetail{}, err
+	}
+	return detail, nil
 }
 
-func reclaim(record *VolumeRecord, get func(string) (*PVRecord, error)) (string, bool) {
+// readReclaimPolicy 只读当前回收策略展示：优先已绑定 PV 的实际策略；无绑定
+// PV 名时展示明确 StorageClass 的当前配置。查不到即为 unknown，不再 fallback
+// 到其它来源，也不承诺未来 PV 的实际策略。
+func (u *UseCase) readReclaimPolicy(ctx context.Context, record *VolumeRecord) (policy string, known bool) {
 	if record.PVName != "" {
-		pv, err := get(record.PVName)
-		if err != nil || pv == nil || pv.ReclaimPolicy == "" {
+		pv, err := u.volumes.GetPersistentVolume(ctx, record.PVName)
+		if err != nil {
+			logDeleteStep(u.logger, slog.LevelWarn, ctx, volumeDetailOperation, "storage volume detail reclaim policy read failed",
+				PVCIdentity{PVCName: record.Name}, err)
 			return "", false
 		}
-		return pv.ReclaimPolicy, true
+		if pv != nil && pv.ReclaimPolicy != "" {
+			return pv.ReclaimPolicy, true
+		}
+		return "", false
 	}
-	if record.ClassKnown && record.ClassReclaim != "" {
-		return record.ClassReclaim, true
+	if record.StorageClassName != "" {
+		class, err := u.volumes.GetStorageClass(ctx, record.StorageClassName)
+		if err != nil {
+			logDeleteStep(u.logger, slog.LevelWarn, ctx, volumeDetailOperation, "storage volume detail reclaim policy read failed",
+				PVCIdentity{PVCName: record.Name}, err)
+			return "", false
+		}
+		if class != nil && class.ReclaimPolicy != "" {
+			return class.ReclaimPolicy, true
+		}
 	}
 	return "", false
 }
@@ -337,11 +458,11 @@ func (u *UseCase) DeleteVolume(ctx context.Context, tenant, name, expectedUID st
 func (u *UseCase) usage(ctx context.Context, namespace, claimName string) ([]Consumer, error) {
 	pods, err := u.volumes.ListPodConsumers(ctx, namespace, claimName)
 	if err != nil {
-		return nil, ErrUsageUnknown
+		return nil, fmt.Errorf("%w: %v", ErrUsageUnknown, err)
 	}
 	notebooks, err := u.volumes.ListNotebookConsumers(ctx, namespace, claimName)
 	if err != nil && !errors.Is(err, ErrNotInstalled) {
-		return nil, ErrUsageUnknown
+		return nil, fmt.Errorf("%w: %v", ErrUsageUnknown, err)
 	}
 	out := make([]Consumer, 0, len(pods)+len(notebooks))
 	out = append(out, pods...)

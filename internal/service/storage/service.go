@@ -140,9 +140,19 @@ func (s *Service) GetVolume(ctx context.Context, r *storagev1.GetVolumeRequest) 
 	}
 	detail, err := s.uc.GetVolume(ctx, r.GetTenantId(), r.GetPvcName())
 	if err != nil {
+		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+			// 父请求取消/截止按标准 gRPC context 状态返回，不落入业务分类。
+			return nil, status.FromContextError(err).Err()
+		}
 		return nil, rpcError(err)
 	}
-	response := &storagev1.GetVolumeResponse{Detail: &storagev1.VolumeDetail{Volume: wireVolume(detail.Volume)}}
+	response := &storagev1.GetVolumeResponse{Detail: &storagev1.VolumeDetail{
+		Volume:             wireVolume(detail.Volume),
+		EventsKnown:        detail.EventsKnown,
+		ConsumersKnown:     detail.ConsumersKnown,
+		EventsErrorCode:    detail.EventsErrorCode,
+		ConsumersErrorCode: detail.ConsumersErrorCode,
+	}}
 	for _, condition := range detail.Conditions {
 		response.Detail.Conditions = append(response.Detail.Conditions, &storagev1.VolumeCondition{
 			Type: condition.Type, Status: condition.Status, Reason: condition.Reason, Message: condition.Message,

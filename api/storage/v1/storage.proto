@@ -87,6 +87,12 @@ message VolumeDetail {
   repeated VolumeCondition conditions = 2;
   repeated VolumeEvent events = 3;
   repeated VolumeConsumer consumers = 4;
+  // known=false 表示本组查询未知，空集合不表达“没有”。
+  bool events_known = 5 [json_name = "events_known"];
+  bool consumers_known = 6 [json_name = "consumers_known"];
+  // C04 固定码：VOLUME_EVENTS_UNAVAILABLE / VOLUME_CONSUMERS_UNAVAILABLE，成功为空。
+  string events_error_code = 7 [json_name = "events_error_code"];
+  string consumers_error_code = 8 [json_name = "consumers_error_code"];
 }
 
 message CreateVolumeRequest {

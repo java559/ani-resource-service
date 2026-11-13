@@ -1,11 +1,18 @@
 package storage
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"log/slog"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
+
+	"github.com/zhangzhe-ctrl/ani-resource-service/internal/telemetry"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 // This is only the owner port's boundary double. SQL/lease/guard concurrency is
@@ -14,6 +21,9 @@ type testDeleteGuard struct {
 	records                   map[string]DeleteRecord
 	reserveErr                error
 	markErr                   error
+	claimErr                  error
+	recordErr                 error
+	completeErr               error
 	reserveCalls, markCalls   int
 	recordCalls, cancelCalls  int
 	completeCalls, claimCalls int
@@ -52,6 +62,9 @@ func (g *testDeleteGuard) ReserveDelete(_ context.Context, id PVCIdentity, owner
 
 func (g *testDeleteGuard) ClaimDeleteRecovery(ctx context.Context, owner string, ttl time.Duration) (*DeleteRecord, error) {
 	g.claimCalls++
+	if g.claimErr != nil {
+		return nil, g.claimErr
+	}
 	for _, record := range g.records {
 		if record.Phase == "completed" || record.Phase == "cancelled" || record.Token.LeaseUntil.After(time.Now()) {
 			continue
@@ -89,6 +102,9 @@ func (g *testDeleteGuard) MarkDeleteWriteStarted(_ context.Context, id PVCIdenti
 
 func (g *testDeleteGuard) RecordDeleteObservation(_ context.Context, id PVCIdentity, token DeleteToken, observation DeleteObservation) error {
 	g.recordCalls++
+	if g.recordErr != nil {
+		return g.recordErr
+	}
 	record, err := g.check(id, token)
 	if err != nil {
 		return err
@@ -115,6 +131,9 @@ func (g *testDeleteGuard) CancelUnsentDelete(_ context.Context, id PVCIdentity, 
 
 func (g *testDeleteGuard) CompleteDelete(_ context.Context, id PVCIdentity, token DeleteToken, observation DeleteObservation) error {
 	g.completeCalls++
+	if g.completeErr != nil {
+		return g.completeErr
+	}
 	record, err := g.check(id, token)
 	if err != nil {
 		return err
@@ -288,5 +307,62 @@ func TestGuardedDeleteRecoveryCompletesOldTicketWithoutDeletingNewUID(t *testing
 	}
 	if _, err := u.DeleteVolume(context.Background(), id.TenantID, id.PVCName, id.TargetUID); !errors.Is(err, ErrIdentityChanged) {
 		t.Fatal("public old-UID call reported replacement as its result", err)
+	}
+}
+
+func TestStepDeleteRecoveryClaimFailureLogsRealCause(t *testing.T) {
+	u, _, guard, _ := guardedDeleteFixture(t)
+	var out bytes.Buffer
+	u.logger = slog.New(slog.NewJSONHandler(&out, nil))
+	guard.claimErr = errors.New("owner database unavailable")
+	worked, err := u.StepDeleteRecovery(context.Background())
+	if worked || err == nil || !strings.Contains(err.Error(), "owner database unavailable") {
+		t.Fatal("claim failure was swallowed", worked, err)
+	}
+	if !strings.Contains(out.String(), "storage PVC delete recovery claim failed") || !strings.Contains(out.String(), "owner database unavailable") {
+		t.Fatal("claim failure was not logged with its real cause", out.String())
+	}
+}
+
+// ST02: a ticket saved with a usable telemetry context resumes the persisted
+// trace without raising a context event, and business advancement is unchanged.
+func TestStepDeleteRecoveryResumesUsableTelemetryContext(t *testing.T) {
+	previousPropagator := otel.GetTextMapPropagator()
+	otel.SetTextMapPropagator(propagation.TraceContext{})
+	defer otel.SetTextMapPropagator(previousPropagator)
+	u, _, guard, id := guardedDeleteFixture(t)
+	var out bytes.Buffer
+	u.logger = slog.New(slog.NewJSONHandler(&out, nil))
+	guard.records[deleteTestKey(id)] = DeleteRecord{
+		Identity: id, Phase: "observing", WriteStarted: true,
+		Token:            DeleteToken{TicketID: "ticket-" + id.PVCName, GuardEpoch: 1, LeaseEpoch: 1, LeaseOwner: u.cfg.DeleteExecutor},
+		TelemetryContext: telemetry.TelemetryContext{Traceparent: "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"},
+	}
+	worked, err := u.StepDeleteRecovery(context.Background())
+	if !worked || err != nil || guard.completeCalls != 1 || guard.records[deleteTestKey(id)].Phase != "completed" {
+		t.Fatal("ticket with usable telemetry context did not advance", worked, err)
+	}
+	if strings.Contains(out.String(), "telemetry.context") {
+		t.Fatal("usable telemetry context must not raise a context event", out.String())
+	}
+}
+
+// ST02: a ticket whose saved telemetry metadata failed to decode still advances
+// business state; only the one telemetry.context_invalid WARN differs.
+func TestStepDeleteRecoveryInvalidTelemetryContextStillAdvances(t *testing.T) {
+	u, _, guard, id := guardedDeleteFixture(t)
+	var out bytes.Buffer
+	u.logger = slog.New(slog.NewJSONHandler(&out, nil))
+	guard.records[deleteTestKey(id)] = DeleteRecord{
+		Identity: id, Phase: "observing", WriteStarted: true,
+		Token:                 DeleteToken{TicketID: "ticket-" + id.PVCName, GuardEpoch: 1, LeaseEpoch: 1, LeaseOwner: u.cfg.DeleteExecutor},
+		TelemetryContextError: errors.New("telemetry metadata decode failed"),
+	}
+	worked, err := u.StepDeleteRecovery(context.Background())
+	if !worked || err != nil || guard.completeCalls != 1 || guard.records[deleteTestKey(id)].Phase != "completed" {
+		t.Fatal("decode failure changed the business outcome", worked, err)
+	}
+	if !strings.Contains(out.String(), "telemetry.context_invalid") {
+		t.Fatal("decode failure was not reported as a context event", out.String())
 	}
 }

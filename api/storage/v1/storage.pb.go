@@ -556,13 +556,19 @@ func (x *Volume) GetReclaimPolicyKnown() bool {
 }
 
 type VolumeDetail struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Volume        *Volume                `protobuf:"bytes,1,opt,name=volume,proto3" json:"volume,omitempty"`
-	Conditions    []*VolumeCondition     `protobuf:"bytes,2,rep,name=conditions,proto3" json:"conditions,omitempty"`
-	Events        []*VolumeEvent         `protobuf:"bytes,3,rep,name=events,proto3" json:"events,omitempty"`
-	Consumers     []*VolumeConsumer      `protobuf:"bytes,4,rep,name=consumers,proto3" json:"consumers,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Volume     *Volume                `protobuf:"bytes,1,opt,name=volume,proto3" json:"volume,omitempty"`
+	Conditions []*VolumeCondition     `protobuf:"bytes,2,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	Events     []*VolumeEvent         `protobuf:"bytes,3,rep,name=events,proto3" json:"events,omitempty"`
+	Consumers  []*VolumeConsumer      `protobuf:"bytes,4,rep,name=consumers,proto3" json:"consumers,omitempty"`
+	// known=false 表示本组查询未知，空集合不表达“没有”。
+	EventsKnown    bool `protobuf:"varint,5,opt,name=events_known,proto3" json:"events_known,omitempty"`
+	ConsumersKnown bool `protobuf:"varint,6,opt,name=consumers_known,proto3" json:"consumers_known,omitempty"`
+	// C04 固定码：VOLUME_EVENTS_UNAVAILABLE / VOLUME_CONSUMERS_UNAVAILABLE，成功为空。
+	EventsErrorCode    string `protobuf:"bytes,7,opt,name=events_error_code,proto3" json:"events_error_code,omitempty"`
+	ConsumersErrorCode string `protobuf:"bytes,8,opt,name=consumers_error_code,proto3" json:"consumers_error_code,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *VolumeDetail) Reset() {
@@ -621,6 +627,34 @@ func (x *VolumeDetail) GetConsumers() []*VolumeConsumer {
 		return x.Consumers
 	}
 	return nil
+}
+
+func (x *VolumeDetail) GetEventsKnown() bool {
+	if x != nil {
+		return x.EventsKnown
+	}
+	return false
+}
+
+func (x *VolumeDetail) GetConsumersKnown() bool {
+	if x != nil {
+		return x.ConsumersKnown
+	}
+	return false
+}
+
+func (x *VolumeDetail) GetEventsErrorCode() string {
+	if x != nil {
+		return x.EventsErrorCode
+	}
+	return ""
+}
+
+func (x *VolumeDetail) GetConsumersErrorCode() string {
+	if x != nil {
+		return x.ConsumersErrorCode
+	}
+	return ""
 }
 
 type CreateVolumeRequest struct {
@@ -2449,14 +2483,18 @@ const file_storage_v1_storage_proto_rawDesc = "" +
 	"\x05phase\x18\v \x01(\tR\x05phase\x12\x1a\n" +
 	"\bdeleting\x18\f \x01(\bR\bdeleting\x12&\n" +
 	"\x0ereclaim_policy\x18\r \x01(\tR\x0ereclaim_policy\x122\n" +
-	"\x14reclaim_policy_known\x18\x0e \x01(\bR\x14reclaim_policy_known\"\xe2\x01\n" +
+	"\x14reclaim_policy_known\x18\x0e \x01(\bR\x14reclaim_policy_known\"\x92\x03\n" +
 	"\fVolumeDetail\x12*\n" +
 	"\x06volume\x18\x01 \x01(\v2\x12.storage.v1.VolumeR\x06volume\x12;\n" +
 	"\n" +
 	"conditions\x18\x02 \x03(\v2\x1b.storage.v1.VolumeConditionR\n" +
 	"conditions\x12/\n" +
 	"\x06events\x18\x03 \x03(\v2\x17.storage.v1.VolumeEventR\x06events\x128\n" +
-	"\tconsumers\x18\x04 \x03(\v2\x1a.storage.v1.VolumeConsumerR\tconsumers\"\x93\x02\n" +
+	"\tconsumers\x18\x04 \x03(\v2\x1a.storage.v1.VolumeConsumerR\tconsumers\x12\"\n" +
+	"\fevents_known\x18\x05 \x01(\bR\fevents_known\x12(\n" +
+	"\x0fconsumers_known\x18\x06 \x01(\bR\x0fconsumers_known\x12,\n" +
+	"\x11events_error_code\x18\a \x01(\tR\x11events_error_code\x122\n" +
+	"\x14consumers_error_code\x18\b \x01(\tR\x14consumers_error_code\"\x93\x02\n" +
 	"\x13CreateVolumeRequest\x12\x1c\n" +
 	"\ttenant_id\x18\x01 \x01(\tR\ttenant_id\x12\"\n" +
 	"\fcreate_token\x18\x02 \x01(\tR\fcreate_token\x12\"\n" +

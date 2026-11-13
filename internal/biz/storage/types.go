@@ -75,8 +75,6 @@ type VolumeRecord struct {
 	Deleting          bool
 	ResourceVersion   string
 	PVName            string
-	ClassReclaim      string
-	ClassKnown        bool
 	Conditions        []Condition
 	Labels            map[string]string
 	Annotations       map[string]string
@@ -148,6 +146,12 @@ type VolumeDetail struct {
 	Conditions []Condition
 	Events     []Event
 	Consumers  []Consumer
+	// known=false 表示本组查询未知，空集合不表达“没有”；error_code 为
+	// C04 固定码，成功时为空字符串。
+	EventsKnown        bool
+	ConsumersKnown     bool
+	EventsErrorCode    string
+	ConsumersErrorCode string
 }
 
 // DeletionState 区分删除提交、删除中与原对象不存在。
